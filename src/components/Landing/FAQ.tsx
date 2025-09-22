@@ -51,29 +51,19 @@ const FAQ: React.FC = () => {
   return (
     <section id="faq" className="py-24 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
             Frequently Asked Questions
           </h2>
           <p className="text-xl text-gray-600">
             Everything you need to know about ElevatED's personalized learning platform
           </p>
-        </motion.div>
+        </div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
               className="bg-gray-50 rounded-2xl overflow-hidden"
             >
               <button
@@ -103,17 +93,11 @@ const FAQ: React.FC = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-center mt-16"
-        >
+        <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Still have questions?</h3>
             <p className="text-gray-600 mb-6">
@@ -128,7 +112,7 @@ const FAQ: React.FC = () => {
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden">
+    <div className="relative min-h-screen bg-white overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-teal-400/20 rounded-full blur-3xl animate-float" />
@@ -26,12 +26,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20">
         {/* Main Hero Content */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8"
-          >
+          <div className="mb-8">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
               Smart Learning.
               <br />
@@ -43,14 +38,9 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
               Transform education with adaptive assessments, intelligent tutoring, and real-time progress tracking. 
               Personalized learning paths that grow with every student.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
-          >
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <button
               onClick={onGetStarted}
               className="group bg-gradient-to-r from-teal-500 to-blue-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center"
@@ -65,16 +55,11 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
               <Play className="h-5 w-5 group-hover:scale-110 transition-transform" />
               <span>Try Demo</span>
             </button>
-          </motion.div>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-sm text-gray-500"
-          >
+          <p className="text-sm text-gray-500">
             Free tier available • No credit card required • Start in 2 minutes
-          </motion.p>
+          </p>
         </div>
 
         {/* Hero Stats */}

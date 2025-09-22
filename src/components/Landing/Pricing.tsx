@@ -25,11 +25,10 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
         'Basic gamification: XP, streaks, up to 3 badges',
         'AI chatbot: 3 questions per week'
       ],
-      perfectFor: 'Exploring the platform and building daily learning habits',
+      perfectFor: 'Perfect for trying out ElevatED and establishing a daily learning routine',
       buttonText: 'Start Free',
       buttonStyle: 'bg-gray-600 hover:bg-gray-700',
-      popular: false,
-      gradient: 'from-gray-500 to-gray-600'
+      popular: false
     },
     {
       name: 'Pro Plan',
@@ -85,29 +84,19 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
   return (
     <section id="pricing" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
             Choose Your Learning Plan
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Flexible pricing designed to grow with your learning needs
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
               className={`relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 ${
                 plan.popular ? 'ring-2 ring-blue-500 scale-105' : ''
               }`}
@@ -124,7 +113,7 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
               <div className="p-8">
                 {/* Header */}
                 <div className="text-center mb-8">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${plan.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
+                  <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <plan.icon className="h-8 w-8 text-white" />
                   </div>
                   <div className="flex items-center justify-center space-x-2 mb-2">
@@ -179,18 +168,12 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
                   {plan.buttonText}
                 </button>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-center mt-16"
-        >
+        <div className="text-center mt-16">
           <div className="bg-white rounded-2xl p-8 shadow-lg max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Why Choose ElevatED?</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -222,7 +205,7 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
