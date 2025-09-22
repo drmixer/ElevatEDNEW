@@ -38,7 +38,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
             <img 
               src="https://i.imgur.com/tBePI5o.png" 
               alt="ElevatED Logo" 
-              className="h-64 w-auto"
+              className="h-10 w-auto"
             />
           </motion.div>
 
