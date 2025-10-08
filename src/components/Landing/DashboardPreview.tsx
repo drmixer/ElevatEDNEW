@@ -12,10 +12,10 @@ const DashboardPreview: React.FC = () => {
     streak: 12,
     badges: 15,
     subjects: [
-      { name: 'Math', progress: 85, color: 'from-blue-500 to-blue-600' },
-      { name: 'English', progress: 92, color: 'from-green-500 to-green-600' },
-      { name: 'Science', progress: 78, color: 'from-purple-500 to-purple-600' },
-      { name: 'History', progress: 65, color: 'from-orange-500 to-orange-600' }
+      { name: 'Math', progress: 85, color: 'from-brand-secondary to-brand-primary' },
+      { name: 'English', progress: 92, color: 'from-brand-success to-brand-secondary' },
+      { name: 'Science', progress: 78, color: 'from-brand-primary to-brand-tertiary' },
+      { name: 'History', progress: 65, color: 'from-brand-accent to-brand-secondary' }
     ],
     recentLessons: [
       { subject: 'Math', topic: 'Quadratic Equations', xp: 75, completed: true },
@@ -41,7 +41,7 @@ const DashboardPreview: React.FC = () => {
   };
 
   return (
-    <section id="dashboard-preview" className="py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+    <section id="dashboard-preview" className="py-24 bg-brand-canvas">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
@@ -58,7 +58,7 @@ const DashboardPreview: React.FC = () => {
                 onClick={() => setActiveTab('student')}
                 className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                   activeTab === 'student'
-                    ? 'bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent text-white shadow-lg'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -68,7 +68,7 @@ const DashboardPreview: React.FC = () => {
                 onClick={() => setActiveTab('parent')}
                 className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                   activeTab === 'parent'
-                    ? 'bg-gradient-to-r from-violet-500 to-pink-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-brand-primary to-brand-accent text-white shadow-lg'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -105,16 +105,16 @@ const DashboardPreview: React.FC = () => {
               <div className="p-8">
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
+                  <div className="rounded-xl border border-white/60 bg-white/80 p-6 shadow-inner">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-2xl font-bold text-blue-600">{studentData.level}</div>
+                        <div className="text-2xl font-bold text-brand-primary">{studentData.level}</div>
                         <div className="text-sm text-gray-600">Current Level</div>
                       </div>
-                      <Star className="h-8 w-8 text-blue-500" />
+                      <Star className="h-8 w-8 text-brand-primary" />
                     </div>
                   </div>
-                  <div className="bg-gradient-to-br from-violet-50 to-violet-100 rounded-xl p-6">
+                  <div className="rounded-xl border border-white/60 bg-white/80 p-6 shadow-inner">
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-2xl font-bold text-violet-600">{studentData.streak}</div>
@@ -123,13 +123,13 @@ const DashboardPreview: React.FC = () => {
                       <div className="text-2xl">🔥</div>
                     </div>
                   </div>
-                  <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-6">
+                  <div className="rounded-xl border border-white/60 bg-white/80 p-6 shadow-inner">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-2xl font-bold text-teal-600">{studentData.badges}</div>
+                        <div className="text-2xl font-bold text-brand-secondary">{studentData.badges}</div>
                         <div className="text-sm text-gray-600">Badges Earned</div>
                       </div>
-                      <Trophy className="h-8 w-8 text-teal-500" />
+                      <Trophy className="h-8 w-8 text-brand-secondary" />
                     </div>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6">
@@ -170,14 +170,14 @@ const DashboardPreview: React.FC = () => {
                     <h4 className="text-xl font-bold text-gray-900 mb-6">Today's Lessons</h4>
                     <div className="space-y-4">
                       {studentData.recentLessons.map((lesson, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                        <div key={index} className="flex items-center justify-between rounded-xl border border-white/60 bg-white/80 p-4">
                           <div className="flex items-center space-x-4">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              lesson.completed ? 'bg-green-100' : 'bg-blue-100'
+                              lesson.completed ? 'bg-brand-success/20' : 'bg-brand-soft'
                             }`}>
                               {lesson.completed ? 
-                                <Trophy className="h-5 w-5 text-green-600" /> :
-                                <Play className="h-5 w-5 text-blue-600" />
+                                <Trophy className="h-5 w-5 text-brand-success" /> :
+                                <Play className="h-5 w-5 text-brand-primary" />
                               }
                             </div>
                             <div>
@@ -186,9 +186,9 @@ const DashboardPreview: React.FC = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm font-medium text-teal-600">+{lesson.xp} XP</div>
+                            <div className="text-sm font-medium text-brand-primary">+{lesson.xp} XP</div>
                             {!lesson.completed && (
-                              <button className="mt-1 bg-teal-500 text-white px-3 py-1 rounded-lg text-xs font-medium">
+                              <button className="mt-1 bg-brand-secondary text-white px-3 py-1 rounded-lg text-xs font-medium shadow-sm shadow-brand-secondary/30">
                                 Start
                               </button>
                             )}
