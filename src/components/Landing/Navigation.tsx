@@ -248,7 +248,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
             </div>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       <AnimatePresence>
         {isMenuOpen && (

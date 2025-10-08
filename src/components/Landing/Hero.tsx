@@ -80,6 +80,9 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
           </p>
         </div>
 
+        {/* Features Grid */}
+        <div className="grid lg:grid-cols-12 gap-12 items-start">
+          <div className="lg:col-span-6">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
               <button
                 onClick={onGetStarted}
@@ -117,7 +120,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
               </div>
             </div>
 
-            <div className="grid gap-4 rounded-3xl border border-white/60 bg-white/80 p-6 backdrop-blur lg:max-w-xl">
+            <motion.div className="grid gap-4 rounded-3xl border border-white/60 bg-white/80 p-6 backdrop-blur lg:max-w-xl">
               {highlights.map((item, index) => (
                 <motion.div
                   key={item.title}
@@ -135,8 +138,8 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
                   </div>
                 </motion.div>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
           <div className="relative lg:col-span-6">
             <div className="absolute -left-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-brand-primary/40 to-brand-secondary/40 blur-2xl" />
@@ -235,7 +238,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
