@@ -21,6 +21,30 @@ type ProcessEnv = Record<string, string | undefined>;
 const getProcessEnv = (): ProcessEnv =>
   ((globalThis as typeof globalThis & { process?: { env?: ProcessEnv } }).process?.env) ?? {};
 
+const getBrowserEnv = (): ProcessEnv => {
+  try {
+    const meta = (typeof import.meta !== 'undefined' ? import.meta : undefined) as {
+      env?: ProcessEnv;
+    } | undefined;
+
+    return meta?.env ?? {};
+  } catch {
+    return {};
+  }
+};
+
+const resolveApiKey = (): string | undefined => {
+  const browserEnv = getBrowserEnv();
+  const processEnv = getProcessEnv();
+
+  return (
+    browserEnv?.VITE_OPENROUTER_API_KEY ??
+    browserEnv?.OPENROUTER_API_KEY ??
+    processEnv?.VITE_OPENROUTER_API_KEY ??
+    processEnv?.OPENROUTER_API_KEY
+  );
+};
+
 const buildMessages = (prompt: string, systemPrompt?: string) => {
   const messages: Array<{ role: 'system' | 'user'; content: string }> = [];
 
@@ -78,10 +102,12 @@ export async function getTutorResponse(
     throw new Error('Prompt must be a non-empty string.');
   }
 
-  const apiKey = getProcessEnv().OPENROUTER_API_KEY;
+  const apiKey = resolveApiKey();
 
   if (!apiKey) {
-    throw new Error('OPENROUTER_API_KEY is not set in the environment.');
+    throw new Error(
+      'OPENROUTER_API_KEY is not set. Add VITE_OPENROUTER_API_KEY to your environment to enable AI responses.',
+    );
   }
 
   try {
