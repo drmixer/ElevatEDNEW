@@ -2,36 +2,46 @@ import React from 'react';
 import { UserPlus, Brain, BookOpen, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const connectorOffset = '3.25rem';
+
 const HowItWorks: React.FC = () => {
   const steps = [
     {
       icon: UserPlus,
       title: 'Sign Up & Choose Role',
       description: 'Create your account as a student or parent. Students can link to parent accounts for comprehensive tracking.',
-      color: 'from-teal-500 to-blue-600'
+      color: 'from-brand-secondary to-brand-primary'
     },
     {
       icon: Brain,
       title: 'Take Diagnostic Assessment',
       description: 'Complete our adaptive assessment across core subjects. Skip to start at grade level if preferred.',
-      color: 'from-blue-600 to-violet-600'
+      color: 'from-brand-primary to-brand-tertiary'
     },
     {
       icon: BookOpen,
       title: 'Follow Personalized Path',
       description: 'Learn through adaptive lessons that adjust difficulty based on your performance and mastery.',
-      color: 'from-violet-600 to-pink-600'
+      color: 'from-brand-primary to-brand-accent'
     },
     {
       icon: TrendingUp,
       title: 'Track Progress & Grow',
       description: 'Monitor advancement through detailed analytics, earn badges, and celebrate achievements.',
-      color: 'from-pink-600 to-teal-500'
+      color: 'from-brand-accent to-brand-secondary'
     }
   ];
 
   return (
-    <section id="how-it-works" className="py-24 bg-white">
+    <section id="how-it-works" className="relative isolate overflow-hidden py-24">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-[#f6f5ff] to-white" />
+        <div className="pointer-events-none absolute inset-0 bg-grid-soft opacity-40 mix-blend-soft-light" />
+        <div className="pointer-events-none absolute inset-0 bg-noise-soft opacity-[0.35] mix-blend-overlay" />
+        <div className="pointer-events-none absolute -left-[18%] top-[6%] h-[24rem] w-[24rem] shape-square-soft rotate-[-6deg]" />
+        <div className="pointer-events-none absolute right-[-10%] bottom-[-14%] h-[26rem] w-[26rem] shape-triangle-soft rotate-[24deg]" />
+        <div className="pointer-events-none absolute left-[58%] top-[34%] h-[17rem] w-[17rem] -translate-x-1/2 shape-circle-soft" />
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -40,7 +50,7 @@ const HowItWorks: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent mb-6">
             How ElevatED Works
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -49,10 +59,13 @@ const HowItWorks: React.FC = () => {
         </motion.div>
 
         <div className="relative">
-          {/* Connection Lines */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500 via-blue-600 via-violet-600 to-pink-600 transform -translate-y-1/2" />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+          {/* Connection Line */}
+          <div
+            className="pointer-events-none hidden lg:block absolute left-[4%] right-[4%] h-px rounded-full bg-gradient-to-r from-brand-secondary via-brand-primary via-brand-accent to-brand-success opacity-80"
+            style={{ bottom: connectorOffset }}
+          />
+
+          <div className="relative grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 pb-16">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
@@ -60,14 +73,17 @@ const HowItWorks: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="text-center relative"
+                className="relative flex h-full flex-col items-center rounded-3xl border border-white/60 bg-white/70 p-6 text-center shadow-[0_24px_50px_rgba(20,60,120,0.08)] backdrop-blur"
               >
-                <div className={`w-20 h-20 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg relative z-10`}>
+                <div className={`relative z-10 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br ${step.color} shadow-[0_18px_38px_rgba(58,120,189,0.25)]`}>
                   <step.icon className="h-10 w-10 text-white" />
                 </div>
-                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white rounded-full border-4 border-gray-200 hidden lg:block z-20" />
-                <h3 className="text-xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                <h3 className="mb-4 text-xl font-bold text-gray-900">{step.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                <div
+                  className="pointer-events-none absolute hidden h-4 w-4 -translate-x-1/2 rounded-full border-[6px] border-white bg-brand-soft shadow-md lg:block"
+                  style={{ bottom: `calc(${connectorOffset} - 0.5rem)`, left: '50%' }}
+                />
               </motion.div>
             ))}
           </div>
@@ -80,10 +96,10 @@ const HowItWorks: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-center mt-16"
         >
-          <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl p-8">
+          <div className="bg-gradient-to-r from-brand-soft to-[#FCEFD3] rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Transform Learning?</h3>
             <p className="text-gray-600 mb-6">Join thousands of students and parents already using ElevatED</p>
-            <button className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <button className="bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
               Start Your Free Trial
             </button>
           </div>
