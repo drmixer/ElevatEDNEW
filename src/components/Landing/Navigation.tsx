@@ -97,26 +97,46 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 px-4 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: -24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className={`mx-auto max-w-7xl ${isCondensed ? 'pt-4' : 'pt-8'}`}
-      >
-        <div className="relative">
-          <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-brand-secondary/25 via-brand-primary/20 to-brand-accent/25 blur-lg" />
-          <motion.div
-            className="flex items-center justify-between rounded-[28px] border bg-white/85 backdrop-blur-lg overflow-visible"
-            style={{
-              paddingTop: containerPaddingTop,
-              paddingBottom: containerPaddingBottom,
-              paddingLeft: containerPaddingLeft,
-              paddingRight: containerPaddingRight,
-              gap: containerGap,
-              borderColor: containerBorderColor,
-              boxShadow: containerShadow,
-            }}
+    <nav className="bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-6">
+          {/* Logo - Large Size */}
+          <motion.div 
+            className="flex items-center"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <img 
+              src="https://i.imgur.com/tBePI5o.png" 
+              alt="ElevatED Logo" 
+              className="h-10 w-auto"
+            />
+          </motion.div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item, index) => (
+              <motion.button
+                key={item.name}
+                onClick={() => scrollToSection(item.href)}
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative group"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-teal-500 to-blue-600 group-hover:w-full transition-all duration-300" />
+              </motion.button>
+            ))}
+          </div>
+
+          {/* CTA Button */}
+          <motion.div 
+            className="hidden md:flex items-center space-x-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <motion.a
               href="#"

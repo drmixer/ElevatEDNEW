@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
               <img 
                 src="https://i.imgur.com/tBePI5o.png" 
                 alt="ElevatED Logo" 
-                className="h-40 w-auto"
+                className="h-10 w-auto"
               />
               <div>
                 <h3 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
