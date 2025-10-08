@@ -66,14 +66,20 @@ const LessonPreview: React.FC = () => {
   return (
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
             Interactive Learning Experience
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             See how our adaptive lessons guide students through concepts with personalized explanations and instant feedback
           </p>
-        </div>
+        </motion.div>
 
         <div className="max-w-4xl mx-auto">
           {/* Lesson Progress */}

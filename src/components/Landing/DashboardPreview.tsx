@@ -43,8 +43,14 @@ const DashboardPreview: React.FC = () => {
   return (
     <section id="dashboard-preview" className="py-24 bg-brand-canvas">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent mb-6">
             See ElevatED in Action
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -76,7 +82,7 @@ const DashboardPreview: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <AnimatePresence mode="wait">
           {activeTab === 'student' ? (
