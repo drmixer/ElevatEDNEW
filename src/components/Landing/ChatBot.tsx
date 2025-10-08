@@ -2,6 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatMessage } from '../../types';
+import getTutorResponse from '../../services/getTutorResponse';
+
+const MARKETING_SYSTEM_PROMPT =
+  'You are ElevatED, the friendly marketing assistant for the ElevatED learning platform. ' +
+  'Answer questions about features, pricing, onboarding, and the value the platform provides. ' +
+  'Be concise, upbeat, and informative. If you are unsure about something, encourage the user to contact support for more details.';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +62,7 @@ const ChatBot: React.FC = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || isTyping) return;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -69,18 +75,33 @@ const ChatBot: React.FC = () => {
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulate AI response delay
-    setTimeout(() => {
+    let assistantContent = '';
+
+    try {
+      assistantContent = await getTutorResponse(userMessage.content, MARKETING_SYSTEM_PROMPT);
+    } catch (error) {
+      console.error('[ElevatED Landing Chatbot] Failed to fetch AI response.', error);
+      assistantContent = `${getAIResponse(
+        userMessage.content,
+      )}\n\nPs: Our live assistant is momentarily unavailable, so I shared our standard overview instead.`;
+    } finally {
+      if (!assistantContent) {
+        assistantContent = getAIResponse(userMessage.content);
+      }
+
+      // Add a short delay so the typing indicator feels natural.
+      await new Promise(resolve => setTimeout(resolve, 400));
+
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: getAIResponse(inputMessage),
+        content: assistantContent,
         isUser: false,
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [...prev, aiResponse]);
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
