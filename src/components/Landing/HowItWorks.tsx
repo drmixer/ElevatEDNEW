@@ -39,16 +39,25 @@ const HowItWorks: React.FC = () => {
         <div className="pointer-events-none absolute left-[58%] top-[34%] h-[17rem] w-[17rem] -translate-x-1/2 shape-circle-soft" />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                className="text-center relative"
-              >
-                <div className="w-20 h-20 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg relative z-10">
-                  <step.icon className="h-10 w-10 text-white" />
-                </div>
-                <h3 className="mb-4 text-xl font-bold text-gray-900">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{step.description}</p>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">How ElevatED Works</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Three simple steps to unlock your child's learning potential
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+          {steps.map((step, index) => (
+            <div key={step.title}
+              className="text-center relative"
+            >
+              <div className="w-20 h-20 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg relative z-10">
+                <step.icon className="h-10 w-10 text-white" />
               </div>
-            ))}
-          </div>
+              <h3 className="mb-4 text-xl font-bold text-gray-900">{step.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{step.description}</p>
+            </div>
+          ))}
         </div>
 
         <div className="text-center mt-16">
