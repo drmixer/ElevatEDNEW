@@ -93,12 +93,17 @@ const ChatBot: React.FC = () => {
   return (
     <>
       {/* Chat Button */}
-      <button
+      <motion.button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-brand-teal to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        animate={{ 
+          boxShadow: isOpen ? "0 0 0 4px rgba(51, 217, 193, 0.3)" : "0 10px 25px rgba(0, 0, 0, 0.2)"
+        }}
       >
         <MessageCircle className="h-6 w-6" />
-      </button>
+      </motion.button>
 
       {/* Chat Window */}
       <AnimatePresence>

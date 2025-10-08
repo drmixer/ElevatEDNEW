@@ -6,70 +6,105 @@ const Features: React.FC = () => {
   const features = [
     {
       icon: Brain,
-      title: 'Adaptive Learning Paths',
-      description: 'Our AI identifies knowledge gaps and creates personalized learning sequences that adapt to each student\'s pace and style.',
+      title: 'AI-Powered Adaptive Learning',
+      description: 'Intelligent algorithms adjust difficulty in real-time based on student performance, ensuring optimal challenge levels.',
+      gradient: 'from-brand-secondary to-brand-primary'
     },
     {
       icon: Target,
-      title: 'Precision Diagnostics',
-      description: 'Detailed assessments that map exactly where students need support, pinpointing specific concepts for targeted improvement.',
+      title: 'Diagnostic Assessments',
+      description: 'Comprehensive evaluations across Math, English, Science, and Social Studies to create personalized learning paths.',
+      gradient: 'from-brand-primary to-brand-tertiary'
     },
     {
       icon: Users,
-      title: 'Parent Progress Hub',
-      description: 'Clear visualizations of learning progress with actionable insights to support your child\'s educational journey at home.',
+      title: 'Parent Dashboard',
+      description: 'Real-time progress tracking, performance insights, and weekly AI-generated summaries for complete visibility.',
+      gradient: 'from-brand-primary to-brand-accent'
     },
     {
       icon: Trophy,
-      title: 'Motivational System',
-      description: 'Thoughtfully designed reward mechanics that encourage consistent learning without creating unhealthy competition.',
+      title: 'Gamified Experience',
+      description: 'XP points, achievement badges, streak counters, and level progression keep students motivated and engaged.',
+      gradient: 'from-brand-accent to-brand-secondary'
     },
     {
       icon: BarChart3,
-      title: 'Learning Analytics',
-      description: 'Track mastery over time with detailed reports showing improvement patterns and areas needing continued attention.',
+      title: 'Advanced Analytics',
+      description: 'Detailed performance metrics, concept mastery tracking, and learning trend analysis for data-driven insights.',
+      gradient: 'from-brand-secondary to-brand-primary'
     },
     {
       icon: MessageCircle,
-      title: '24/7 Learning Coach',
-      description: 'Intelligent tutoring that explains concepts in multiple ways, answers questions, and provides encouragement when stuck.',
+      title: 'AI Learning Assistant',
+      description: 'Context-aware tutoring bot that provides step-by-step guidance, study tips, and personalized motivation.',
+      gradient: 'from-brand-primary to-brand-tertiary'
     },
     {
       icon: BookOpen,
-      title: 'Standards-Aligned Content',
-      description: 'Comprehensive K-12 curriculum built on state and national standards, regularly updated by education specialists.',
+      title: 'Comprehensive Curriculum',
+      description: 'K-12 content across core subjects with adaptive difficulty and concept-specific reinforcement.',
+      gradient: 'from-brand-primary to-brand-accent'
     },
     {
       icon: Zap,
-      title: 'Real-Time Guidance',
-      description: 'Immediate feedback on exercises with explanations that help students understand not just the answer, but the reasoning.',
+      title: 'Instant Feedback',
+      description: 'Immediate quiz results, detailed explanations, and smart suggestions for review or advancement.',
+      gradient: 'from-brand-accent to-brand-secondary'
     }
   ];
 
   return (
-    <section id="features" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-violet-600 bg-clip-text text-transparent mb-6">
+    <section id="features" className="relative isolate overflow-hidden bg-brand-canvas py-28">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-brand-canvas" />
+        <div className="pointer-events-none absolute inset-0 bg-grid-soft opacity-[0.35] mix-blend-soft-light" />
+        <div className="pointer-events-none absolute inset-0 bg-noise-soft opacity-[0.35] mix-blend-overlay" />
+
+        <div className="pointer-events-none absolute -left-[20%] top-[-16%] h-[28rem] w-[28rem] shape-triangle-soft rotate-[-12deg]" />
+        <div className="pointer-events-none absolute right-[-12%] bottom-[-18%] h-[26rem] w-[26rem] shape-circle-soft blur-[2px]" />
+        <div className="pointer-events-none absolute left-[55%] top-[16%] h-[18rem] w-[18rem] -translate-x-1/2 shape-square-soft rotate-[8deg]" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent mb-6">
             Powerful Features for Modern Learning
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Everything you need to create personalized, engaging, and effective learning experiences
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
-              className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="group relative overflow-hidden rounded-3xl border border-white/60 bg-white/80 p-6 shadow-[0_22px_45px_rgba(15,40,80,0.08)] backdrop-blur transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_32px_65px_rgba(20,60,120,0.16)]"
             >
-              <div className="w-14 h-14 bg-gradient-to-r from-teal-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-30">
-                <feature.icon className="h-7 w-7 text-white" />
+              <div className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-20`} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-            </div>
+              <div className={`relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg transition-transform duration-500 group-hover:scale-110`}>
+                <feature.icon className="h-7 w-7" />
+              </div>
+              <h3 className="relative mt-6 text-xl font-semibold text-slate-900">{feature.title}</h3>
+              <p className="relative mt-3 text-sm leading-relaxed text-slate-600">{feature.description}</p>
+              <span className="relative mt-6 inline-flex items-center gap-1 text-sm font-semibold text-sky-600 transition-transform duration-500 group-hover:translate-x-1">
+                <span>Learn more</span>
+                <span aria-hidden="true">&rarr;</span>
+              </span>
+            </motion.div>
           ))}
         </div>
       </div>
