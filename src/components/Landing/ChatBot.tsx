@@ -5,9 +5,22 @@ import { ChatMessage } from '../../types';
 import getTutorResponse from '../../services/getTutorResponse';
 
 const MARKETING_SYSTEM_PROMPT =
-  'You are ElevatED, the friendly marketing assistant for the ElevatED learning platform. ' +
-  'Answer questions about features, pricing, onboarding, and the value the platform provides. ' +
-  'Be concise, upbeat, and informative. If you are unsure about something, encourage the user to contact support for more details.';
+  'You are ElevatED, the official marketing assistant for ElevatED—an adaptive K-12 learning platform. ' +
+  'Always sound warm, encouraging, and confident. Only answer using the product facts provided to you. ' +
+  'If you do not see the answer in the facts, say you are unsure and suggest contacting ElevatED support.';
+
+const MARKETING_KNOWLEDGE = `
+Product: ElevatED is a K-12 learning platform that gives every student a private AI mentor.
+Audience: Families, students, and educators seeking personalized instruction across Math, English, Science, and Social Studies.
+Core approach: Adaptive diagnostics determine each learner's starting point, then AI adjusts lesson difficulty, hints, and feedback in real time.
+Student experience: Gamified journey with XP, streaks, badges, and story-driven missions that celebrate progress and keep motivation high.
+AI Learning Assistant: Context-aware tutor that offers step-by-step guidance, study tips, and motivational check-ins aligned to each learner's profile.
+Parent experience: Parent dashboard delivers real-time progress tracking, weekly AI-generated summaries, alerts for missed sessions, and detailed analytics on concept mastery.
+Curriculum: Comprehensive K-12 coverage with concept-specific reinforcement, instant quiz feedback, and suggested review activities when learners struggle.
+Pricing: Free tier with limited daily lessons and core subject access. Premium tier unlocks full adaptive content, AI assistant, detailed reports, and discounted add-on seats for additional children (starting at $9.99/month or $99/year).
+Mission: Make adaptive, joyful learning accessible, with actionable insights that keep families involved.
+Support: Encourage visitors to reach out through the contact options on the site for specifics like implementation timelines or school partnerships.
+`;
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +71,7 @@ const ChatBot: React.FC = () => {
       return "Our AI engine creates truly personalized learning! It uses diagnostic results to assign difficulty levels per concept, adapts in real-time based on quiz performance, provides context-aware tutoring, and generates custom content that matches each student's reading level and learning style. The AI assistant knows exactly where each student is in their learning journey.";
     }
     
-    return "That's a great question! ElevatED is designed to make learning engaging and effective for students while giving parents the insights they need. Would you like to know more about our features, pricing, or how to get started? I'm here to help with any specific questions about the platform!";
+    return "ElevatED is an adaptive K-12 learning platform that pairs every student with a private AI mentor. Families get diagnostic assessments, personalized lesson paths, instant feedback, gamified motivation, and a parent dashboard with weekly AI summaries. Ask about pricing, onboarding, or specific features and I’ll share the details.";
   };
 
   const handleSendMessage = async () => {
@@ -78,7 +91,14 @@ const ChatBot: React.FC = () => {
     let assistantContent = '';
 
     try {
-      assistantContent = await getTutorResponse(userMessage.content, MARKETING_SYSTEM_PROMPT);
+      const marketingPrompt = [
+        'Use the following ElevatED product facts when answering visitor questions.',
+        MARKETING_KNOWLEDGE.trim(),
+        `Visitor question: ${userMessage.content.trim()}`,
+        'Craft a concise, friendly answer that stays within these facts.',
+      ].join('\n\n');
+
+      assistantContent = await getTutorResponse(marketingPrompt, MARKETING_SYSTEM_PROMPT);
     } catch (error) {
       console.error('[ElevatED Landing Chatbot] Failed to fetch AI response.', error);
       assistantContent = `${getAIResponse(
