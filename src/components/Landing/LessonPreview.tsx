@@ -1,49 +1,141 @@
 import React, { useState } from 'react';
-import { Play, CheckCircle, ArrowRight, Brain, Lightbulb, Target } from 'lucide-react';
+import {
+  CheckCircle,
+  ArrowRight,
+  Brain,
+  Lightbulb,
+  Target,
+  ChevronLeft,
+  ChevronRight,
+  FlaskConical,
+  BookOpen,
+  Globe2
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LessonPreview: React.FC = () => {
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const lessonSteps = [
+  const lessons = [
     {
-      type: 'intro',
-      title: 'Multiplication Basics',
-      subtitle: 'Understanding Products',
-      content: 'Today we\'ll learn the fundamentals of multiplication. It\'s a key skill for everyday math!',
-      icon: Brain
+      subject: 'Math',
+      grade: 'Grade 3',
+      focus: 'Multiplication Basics',
+      steps: [
+        {
+          type: 'intro' as const,
+          title: 'Multiplication Basics',
+          subtitle: 'Understanding Products',
+          content: 'Today we\'ll learn the fundamentals of multiplication. It\'s a key skill for everyday math!',
+          icon: Brain,
+          emoji: '✖️'
+        },
+        {
+          type: 'concept' as const,
+          title: 'Multiplication as Repeated Addition',
+          subtitle: 'A simple way to think about it',
+          content: 'Multiplication is a quick way to do repeated addition. For example, 3 × 4 means adding 3 four times: 3 + 3 + 3 + 3 = 12.',
+          explanation: 'This concept helps us understand why multiplication works and makes it easier to solve problems.',
+          icon: Lightbulb,
+          visual: '3 × 4 = 3 + 3 + 3 + 3 = 12'
+        },
+        {
+          type: 'practice' as const,
+          title: 'Practice Problem',
+          subtitle: 'Let\'s apply what we learned',
+          question: 'What is 7 × 8?',
+          options: ['54', '56', '63', '72'],
+          correct: 1,
+          explanation: '7 × 8 means adding 7 eight times, or adding 8 seven times. Both result in 56.',
+          icon: Target
+        }
+      ]
     },
     {
-      type: 'concept',
-      title: 'Multiplication as Repeated Addition',
-      subtitle: 'A simple way to think about it',
-      content: 'Multiplication is a quick way to do repeated addition. For example, 3 × 4 means adding 3 four times: 3 + 3 + 3 + 3 = 12.',
-      explanation: 'This concept helps us understand why multiplication works and makes it easier to solve problems.',
-      icon: Lightbulb
+      subject: 'Science',
+      grade: 'Grade 5',
+      focus: 'Ecosystem Energy Flow',
+      steps: [
+        {
+          type: 'intro' as const,
+          title: 'Ecosystems in Balance',
+          subtitle: 'Tracking How Energy Moves',
+          content: 'Let\'s explore how energy passes through an ecosystem and why each organism has an important role.',
+          icon: Globe2,
+          emoji: '🌿'
+        },
+        {
+          type: 'concept' as const,
+          title: 'Food Chain Roles',
+          subtitle: 'Producers, consumers, and predators',
+          content: 'Energy starts with the Sun, moves to producers, and then to consumers. Each arrow shows who gets energy next.',
+          explanation: 'Understanding each role helps us predict what happens if one population changes or disappears.',
+          icon: FlaskConical,
+          visual: 'Sun → Grass → Grasshopper → Frog → Hawk'
+        },
+        {
+          type: 'practice' as const,
+          title: 'Check Your Understanding',
+          subtitle: 'Identify the role',
+          question: 'In this food chain, which organism is the primary consumer?',
+          options: ['Sun', 'Grass', 'Grasshopper', 'Hawk'],
+          correct: 2,
+          explanation: 'Primary consumers eat producers. The grasshopper eats the grass, so it is the primary consumer.',
+          icon: Target
+        }
+      ]
     },
     {
-      type: 'practice',
-      title: 'Practice Problem',
-      subtitle: 'Let\'s apply what we learned',
-      question: 'What is 7 × 8?',
-      options: [
-        '54',
-        '56',
-        '63',
-        '72'
-      ],
-      correct: 1,
-      explanation: '7 × 8 means adding 7 eight times, or adding 8 seven times. Both result in 56.',
-      icon: Target
+      subject: 'ELA',
+      grade: 'Grade 7',
+      focus: 'Finding the Theme',
+      steps: [
+        {
+          type: 'intro' as const,
+          title: 'Discovering Theme',
+          subtitle: 'Looking beyond the plot',
+          content: 'Themes are the big ideas that stories explore. We can find them by paying attention to how characters change.',
+          icon: BookOpen,
+          emoji: '📚'
+        },
+        {
+          type: 'concept' as const,
+          title: 'Theme Clues',
+          subtitle: 'Character growth reveals big ideas',
+          content: 'Watch how characters respond to challenges. Their choices and lessons hint at what the author wants us to learn.',
+          explanation: 'When a character learns to rely on friends, the theme might be about the strength of teamwork.',
+          icon: Lightbulb,
+          visual: '"Teamwork helps characters overcome what they cannot face alone."'
+        },
+        {
+          type: 'practice' as const,
+          title: 'Apply the Strategy',
+          subtitle: 'Spot the big idea',
+          question:
+            'After failing alone, Maya finally asks her debate partner for help and they win together. What theme best fits this story?',
+          options: [
+            'Hard work always leads to success',
+            'Teamwork provides strength',
+            'Competition makes people better',
+            'Leaders never rely on others'
+          ],
+          correct: 1,
+          explanation: 'The turning point is when Maya chooses to collaborate, showing that teamwork provides the support needed to succeed.',
+          icon: Target
+        }
+      ]
     }
   ];
 
-  const currentLesson = lessonSteps[currentStep];
+  const currentLesson = lessons[currentLessonIndex];
+  const lessonSteps = currentLesson.steps;
+  const currentLessonStep = lessonSteps[currentStep];
 
   const handleAnswerSelect = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex.toString());
+    setSelectedAnswer(answerIndex);
     setTimeout(() => {
       setShowExplanation(true);
     }, 500);
@@ -61,6 +153,22 @@ const LessonPreview: React.FC = () => {
     setCurrentStep(0);
     setSelectedAnswer(null);
     setShowExplanation(false);
+  };
+
+  const goToLesson = (index: number) => {
+    const normalizedIndex = (index + lessons.length) % lessons.length;
+    setCurrentLessonIndex(normalizedIndex);
+    setCurrentStep(0);
+    setSelectedAnswer(null);
+    setShowExplanation(false);
+  };
+
+  const goToNextLesson = () => {
+    goToLesson(currentLessonIndex + 1);
+  };
+
+  const goToPreviousLesson = () => {
+    goToLesson(currentLessonIndex - 1);
   };
 
   return (
@@ -84,8 +192,32 @@ const LessonPreview: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           {/* Lesson Progress */}
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Math • Grade 3</h3>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {currentLesson.subject} • {currentLesson.grade}
+                </h3>
+                <p className="text-sm text-gray-600">{currentLesson.focus}</p>
+              </div>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={goToPreviousLesson}
+                  className="p-2 rounded-full border border-gray-200 text-gray-600 hover:text-teal-600 hover:border-teal-300 transition-colors"
+                  aria-label="Previous lesson example"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <div className="text-sm text-gray-600">
+                  Lesson {currentLessonIndex + 1} of {lessons.length}
+                </div>
+                <button
+                  onClick={goToNextLesson}
+                  className="p-2 rounded-full border border-gray-200 text-gray-600 hover:text-teal-600 hover:border-teal-300 transition-colors"
+                  aria-label="Next lesson example"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
               <div className="text-sm text-gray-600">
                 Step {currentStep + 1} of {lessonSteps.length}
               </div>
@@ -110,11 +242,11 @@ const LessonPreview: React.FC = () => {
             <div className="bg-gradient-to-r from-teal-500 to-blue-600 p-8 text-white">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-                  <currentLesson.icon className="h-8 w-8" />
+                  <currentLessonStep.icon className="h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold mb-2">{currentLesson.title}</h3>
-                  <p className="opacity-90">{currentLesson.subtitle}</p>
+                  <h3 className="text-2xl font-bold mb-2">{currentLessonStep.title}</h3>
+                  <p className="opacity-90">{currentLessonStep.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -122,16 +254,16 @@ const LessonPreview: React.FC = () => {
             {/* Content */}
             <div className="p-8">
               <AnimatePresence mode="wait">
-                {currentLesson.type === 'intro' && (
+                {currentLessonStep.type === 'intro' && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     className="text-center"
                   >
-                    <div className="text-6xl mb-6">✖️</div>
+                    <div className="text-6xl mb-6">{currentLessonStep.emoji ?? '✨'}</div>
                     <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                      {currentLesson.content}
+                      {currentLessonStep.content}
                     </p>
                     <button
                       onClick={nextStep}
@@ -143,20 +275,22 @@ const LessonPreview: React.FC = () => {
                   </motion.div>
                 )}
 
-                {currentLesson.type === 'concept' && (
+                {currentLessonStep.type === 'concept' && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                   >
                     <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8 mb-8">
-                      <div className="text-center mb-6">
-                        <div className="text-3xl font-mono bg-white rounded-xl p-4 inline-block shadow-lg">
-                          3 × 4 = 3 + 3 + 3 + 3 = 12
+                      {currentLessonStep.visual && (
+                        <div className="text-center mb-6">
+                          <div className="text-2xl font-semibold bg-white rounded-xl p-4 inline-block shadow-lg">
+                            {currentLessonStep.visual}
+                          </div>
                         </div>
-                      </div>
+                      )}
                       <p className="text-lg text-gray-700 leading-relaxed text-center">
-                        {currentLesson.explanation}
+                        {currentLessonStep.explanation}
                       </p>
                     </div>
                     <div className="text-center">
@@ -171,7 +305,7 @@ const LessonPreview: React.FC = () => {
                   </motion.div>
                 )}
 
-                {currentLesson.type === 'practice' && (
+                {currentLessonStep.type === 'practice' && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -179,10 +313,10 @@ const LessonPreview: React.FC = () => {
                   >
                     <div className="mb-8">
                       <h4 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                        {currentLesson.question}
+                        {currentLessonStep.question}
                       </h4>
                       <div className="space-y-4">
-                        {currentLesson.options?.map((option, index) => (
+                        {currentLessonStep.options?.map((option, index) => (
                           <motion.button
                             key={index}
                             onClick={() => handleAnswerSelect(index)}
@@ -190,11 +324,11 @@ const LessonPreview: React.FC = () => {
                             className={`w-full p-4 text-left border-2 rounded-xl transition-all duration-300 ${
                               selectedAnswer === null
                                 ? 'border-gray-200 hover:border-teal-500 hover:bg-teal-50'
-                                : selectedAnswer === index.toString()
-                                ? index === currentLesson.correct
+                                : selectedAnswer === index
+                                ? index === currentLessonStep.correct
                                   ? 'border-green-500 bg-green-50 text-green-800'
                                   : 'border-red-500 bg-red-50 text-red-800'
-                                : index === currentLesson.correct
+                                : index === currentLessonStep.correct
                                 ? 'border-green-500 bg-green-50 text-green-800'
                                 : 'border-gray-200 bg-gray-50 opacity-50'
                             }`}
@@ -205,15 +339,15 @@ const LessonPreview: React.FC = () => {
                               <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
                                 selectedAnswer === null
                                   ? 'bg-gray-100 text-gray-700'
-                                  : selectedAnswer === index.toString()
-                                  ? index === currentLesson.correct
+                                  : selectedAnswer === index
+                                  ? index === currentLessonStep.correct
                                     ? 'bg-green-500 text-white'
                                     : 'bg-red-500 text-white'
-                                  : index === currentLesson.correct
+                                  : index === currentLessonStep.correct
                                   ? 'bg-green-500 text-white'
                                   : 'bg-gray-100 text-gray-700'
                               }`}>
-                                {selectedAnswer !== null && index === currentLesson.correct ? (
+                                {selectedAnswer !== null && index === currentLessonStep.correct ? (
                                   <CheckCircle className="h-5 w-5" />
                                 ) : (
                                   String.fromCharCode(65 + index)
@@ -240,7 +374,7 @@ const LessonPreview: React.FC = () => {
                             </div>
                             <div>
                               <h5 className="font-semibold text-blue-900 mb-2">Explanation</h5>
-                              <p className="text-blue-800 leading-relaxed">{currentLesson.explanation}</p>
+                              <p className="text-blue-800 leading-relaxed">{currentLessonStep.explanation}</p>
                             </div>
                           </div>
                         </motion.div>
@@ -255,10 +389,16 @@ const LessonPreview: React.FC = () => {
                             <span className="font-semibold">+75 XP Earned!</span>
                           </div>
                           <button
-                            onClick={resetLesson}
+                            onClick={goToNextLesson}
                             className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-6 py-2 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                           >
                             Try Another Lesson
+                          </button>
+                          <button
+                            onClick={resetLesson}
+                            className="px-6 py-2 rounded-xl font-semibold border border-teal-200 text-teal-600 hover:bg-teal-50 transition-all duration-300"
+                          >
+                            Replay This Lesson
                           </button>
                         </div>
                       </div>
@@ -293,8 +433,7 @@ const LessonPreview: React.FC = () => {
                 </div>
                 <div className="flex-1">
                   <p className="text-gray-800 leading-relaxed">
-                    "Great job on that multiplication problem! I noticed you're getting stronger with basic multiplication facts. 
-                    Would you like to try some more challenging problems, or shall we review the times tables to build your speed?"
+                    {`"Great job exploring ${currentLesson.focus.toLowerCase()}! I can tee up a tougher challenge or revisit the fundamentals whenever you're ready."`}
                   </p>
                 </div>
               </div>
