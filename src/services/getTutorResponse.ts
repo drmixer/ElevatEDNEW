@@ -21,25 +21,15 @@ type ProcessEnv = Record<string, string | undefined>;
 const getProcessEnv = (): ProcessEnv =>
   ((globalThis as typeof globalThis & { process?: { env?: ProcessEnv } }).process?.env) ?? {};
 
-const getBrowserEnv = (): ProcessEnv => {
-  try {
-    const meta = (typeof import.meta !== 'undefined' ? import.meta : undefined) as {
-      env?: ProcessEnv;
-    } | undefined;
-
-    return meta?.env ?? {};
-  } catch {
-    return {};
-  }
-};
-
 const resolveApiKey = (): string | undefined => {
-  const browserEnv = getBrowserEnv();
   const processEnv = getProcessEnv();
+  const browserApiKey =
+    typeof import.meta !== 'undefined'
+      ? import.meta.env?.VITE_OPENROUTER_API_KEY ?? import.meta.env?.OPENROUTER_API_KEY
+      : undefined;
 
   return (
-    browserEnv?.VITE_OPENROUTER_API_KEY ??
-    browserEnv?.OPENROUTER_API_KEY ??
+    browserApiKey ??
     processEnv?.VITE_OPENROUTER_API_KEY ??
     processEnv?.OPENROUTER_API_KEY
   );
