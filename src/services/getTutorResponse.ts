@@ -63,12 +63,19 @@ const requestModel = async (
   apiKey: string,
   systemPrompt?: string,
 ): Promise<string> => {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+  };
+
+  if (typeof window !== 'undefined') {
+    headers['HTTP-Referer'] = window.location.origin;
+    headers['X-Title'] = 'ElevatED';
+  }
+
   const response = await fetch(OPENROUTER_ENDPOINT, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({
       model,
       messages: buildMessages(prompt, systemPrompt),
