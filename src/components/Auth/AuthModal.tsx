@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Eye, EyeOff, Mail, Lock, User, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import type { UserRole } from '../../types';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     email: '',
     password: '',
     name: '',
-    role: 'student' as 'student' | 'parent',
+    role: 'student' as UserRole,
     grade: 1
   });
   const [loading, setLoading] = useState(false);

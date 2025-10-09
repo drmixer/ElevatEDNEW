@@ -1,8 +1,10 @@
+export type UserRole = 'student' | 'parent';
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'student' | 'parent';
+  role: UserRole;
   avatar?: string;
   grade?: number;
   xp?: number;
