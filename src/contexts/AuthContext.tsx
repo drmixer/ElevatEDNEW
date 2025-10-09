@@ -1,12 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Student, Parent } from '../types';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import supabase from '../lib/supabaseClient';
+import type { User, UserRole } from '../types';
+import { fetchUserProfile } from '../services/profileService';
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, name: string, role: 'student' | 'parent', grade?: number) => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    name: string,
+    role: UserRole,
+    grade?: number,
+  ) => Promise<void>;
   logout: () => void;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,94 +32,124 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Check for existing session
-    const savedUser = localStorage.getItem('elevated_user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+  const loadProfile = useCallback(async (userId: string) => {
+    try {
+      const profile = await fetchUserProfile(userId);
+      setUser(profile);
+    } catch (error) {
+      console.error('[Auth] Failed to load profile', error);
+      setUser(null);
+      throw error;
     }
-    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    const initialise = async () => {
+      setLoading(true);
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error('[Auth] Failed to get session', error);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      if (session?.user) {
+        try {
+          await loadProfile(session.user.id);
+        } catch {
+          // loadProfile handles logging
+        }
+      } else {
+        setUser(null);
+      }
+
+      setLoading(false);
+    };
+
+    initialise();
+
+    const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        setLoading(true);
+        try {
+          await loadProfile(session.user.id);
+        } catch {
+          // handled inside loadProfile
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => {
+      subscription?.subscription.unsubscribe();
+    };
+  }, [loadProfile]);
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user data - in production, this would come from your backend
-      const mockUser: Student = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-        role: 'student',
-        grade: 8,
-        xp: 1250,
-        level: 5,
-        badges: [
-          {
-            id: '1',
-            name: 'First Steps',
-            description: 'Completed your first lesson!',
-            icon: '🎯',
-            earnedAt: new Date(),
-            rarity: 'common'
-          }
-        ],
-        streakDays: 7,
-        strengths: ['Algebra', 'Grammar'],
-        weaknesses: ['Geometry', 'Vocabulary'],
-        learningPath: [],
-        assessmentCompleted: false
-      };
-      
-      setUser(mockUser);
-      localStorage.setItem('elevated_user', JSON.stringify(mockUser));
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error || !data.user) {
+        throw error ?? new Error('Supabase did not return a user session.');
+      }
+
+      await loadProfile(data.user.id);
     } catch (error) {
+      console.error('[Auth] Login failed', error);
+      setUser(null);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error('Login failed');
     } finally {
       setLoading(false);
     }
   };
 
-  const register = async (email: string, password: string, name: string, role: 'student' | 'parent', grade?: number) => {
+  const register = async (email: string, password: string, name: string, role: UserRole, grade?: number) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const newUser: Student | Parent = role === 'student' ? {
-        id: Math.random().toString(36).substr(2, 9),
+      const emailRedirectTo =
+        typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
+
+      const { data, error } = await supabase.auth.signUp({
         email,
-        name,
-        role: 'student',
-        grade: grade || 1,
-        xp: 0,
-        level: 1,
-        badges: [],
-        streakDays: 0,
-        strengths: [],
-        weaknesses: [],
-        learningPath: [],
-        assessmentCompleted: false
-      } : {
-        id: Math.random().toString(36).substr(2, 9),
-        email,
-        name,
-        role: 'parent',
-        children: [],
-        subscriptionTier: 'free',
-        notifications: {
-          weeklyReports: true,
-          missedSessions: true,
-          lowScores: true,
-          majorProgress: true
-        }
-      };
-      
-      setUser(newUser);
-      localStorage.setItem('elevated_user', JSON.stringify(newUser));
+        password,
+        options: {
+          emailRedirectTo,
+          data: {
+            full_name: name,
+            role,
+            grade,
+          },
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data.session || !data.user) {
+        setUser(null);
+        throw new Error('Sign-up successful. Please check your email to confirm your account.');
+      }
+
+      await loadProfile(data.user.id);
     } catch (error) {
+      console.error('[Auth] Registration failed', error);
+      setUser(null);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error('Registration failed');
     } finally {
       setLoading(false);
@@ -119,11 +158,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('elevated_user');
+    supabase.auth.signOut().catch((error) => {
+      console.error('[Auth] Logout failed', error);
+    });
+  };
+
+  const refreshUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error('[Auth] Failed to refresh user', error);
+      return;
+    }
+
+    if (data.user) {
+      await loadProfile(data.user.id);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
