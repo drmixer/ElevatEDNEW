@@ -16,12 +16,13 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
       students: '1 student',
       description: 'Everything you need to start',
       icon: BookOpen,
+      valueHook: 'Start building daily learning habits for free.',
       features: [
-        'Access to all 4 subjects (K–12)',
+        'Access to all 4 core subjects (K-12)',
         'Adaptive diagnostic assessment',
         'Personalized daily lesson plan (1 lesson per subject/day)',
         'Short mixed quizzes with instant feedback',
-        'Basic parent dashboard (view recent activity & quiz score)',
+        'Basic parent dashboard (recent activity & quiz score)',
         'Basic gamification: XP, streaks, up to 3 badges',
         'AI chatbot: 3 questions per week'
       ],
@@ -34,25 +35,25 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
     {
       name: 'Pro Plan',
       subtitle: 'Accelerated Growth',
-      price: '$15',
+      price: '$9.99',
       period: 'month per student',
-      yearlyPrice: '$144/year – 2 months free',
+      yearlyPrice: '$99/year (save 17%)',
       students: 'Per student',
       description: 'Includes everything in Free, plus',
       icon: Brain,
+      valueHook: 'Personalized K-12 tutoring with weekly progress reports.',
       features: [
-        'Unlimited daily lessons & quizzes',
-        'Unlimited AI chatbot support',
-        'Real-time adaptive difficulty adjustments by concept',
-        'Quiz explanations and concept insights',
-        'Full badge and avatar customization',
-        'Weekly AI-generated performance report for parents',
-        'AI-driven study tips and review recommendations',
-        'Parent alerts for missed lessons or low scores',
-        'Lesson scheduling and priority support'
+        'Unlimited adaptive lessons across every subject',
+        'Always-on AI learning assistant with follow-up questions',
+        'Concept-level insights plus guided step-by-step solutions',
+        'Deep-dive parent dashboard with weekly AI progress summaries',
+        'Achievement hub with full badge, streak, and avatar customization',
+        'Smart study tips, review refreshers, and weekend boosts',
+        'Parent alerts for missed lessons or flagged concepts',
+        'Priority support and early access to new features'
       ],
       perfectFor: 'Families ready to commit to steady academic advancement',
-      buttonText: 'Start Pro Plan',
+      buttonText: 'Start 7-day Free Trial',
       buttonStyle: 'bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-lg transform hover:scale-105',
       popular: true,
       gradient: 'from-teal-500 to-blue-600'
@@ -60,25 +61,59 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
     {
       name: 'Family Plan',
       subtitle: 'Learning Together',
-      price: '$15',
+      price: '$9.99',
       period: 'month for first student',
-      additionalPrice: '+ $8/month for each additional',
-      yearlyPrice: '$144/year + $69/year per extra student',
+      additionalPrice: '+ $5/month each additional student',
+      yearlyPrice: '$99/year + $49/year per extra student',
       students: 'Multiple children',
       description: 'Everything in Pro, plus',
       icon: Users,
+      valueHook: 'Shared family dashboard with sibling discounts built in.',
       features: [
-        'Unified family dashboard',
-        'Side-by-side progress comparisons',
-        'Parent-defined challenges (e.g., "Complete 10 lessons this week")',
-        'Multi-child AI performance summary',
-        'Family billing with volume discounts'
+        'Unified family dashboard with side-by-side progress',
+        'Shared challenges and family learning quests',
+        'Multi-student AI performance summaries each week',
+        'Parent controls for goals, rewards, and screen time',
+        'Flexible billing with discounted add-on seats'
       ],
       perfectFor: 'Households with 2+ kids who want shared learning oversight',
-      buttonText: 'Start Family Plan',
+      buttonText: 'Start Family Trial',
       buttonStyle: 'bg-gradient-to-r from-violet-500 to-pink-600 hover:shadow-lg transform hover:scale-105',
       popular: false,
       gradient: 'from-violet-500 to-pink-600'
+    }
+  ];
+
+  const comparisonRows = [
+    {
+      label: 'Monthly price',
+      free: '$0',
+      pro: '$9.99 (per student)',
+      family: '$9.99 first student + $5 each additional'
+    },
+    {
+      label: 'Annual price',
+      free: '$0',
+      pro: '$99',
+      family: '$99 first student + $49 each additional'
+    },
+    {
+      label: 'Adaptive lessons',
+      free: 'Daily lesson plan',
+      pro: 'Unlimited',
+      family: 'Unlimited for every student'
+    },
+    {
+      label: 'AI assistant',
+      free: '3 questions/week',
+      pro: 'Unlimited threads',
+      family: 'Unlimited threads & shared history'
+    },
+    {
+      label: 'Parent insights',
+      free: 'Recent activity snapshot',
+      pro: 'Full reports & alerts',
+      family: 'All Pro insights plus multi-student summaries'
     }
   ];
 
@@ -148,6 +183,9 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
                   </div>
                   
                   <p className="text-gray-600 font-medium">{plan.description}</p>
+                  {plan.valueHook && (
+                    <p className="mt-3 text-sm text-gray-700">{plan.valueHook}</p>
+                  )}
                 </div>
 
                 {/* Features */}
@@ -183,6 +221,35 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
           ))}
         </div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-16 max-w-5xl mx-auto overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-lg"
+        >
+          <table className="w-full text-left text-sm text-gray-700">
+            <thead className="bg-gradient-to-r from-blue-50 to-blue-100 uppercase text-xs font-semibold tracking-wide text-gray-500">
+              <tr>
+                <th className="px-6 py-4">Plan Snapshot</th>
+                <th className="px-6 py-4">Free</th>
+                <th className="px-6 py-4">Pro</th>
+                <th className="px-6 py-4">Family</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonRows.map((row, rowIndex) => (
+                <tr key={row.label} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                  <td className="px-6 py-4 font-semibold text-gray-900">{row.label}</td>
+                  <td className="px-6 py-4">{row.free}</td>
+                  <td className="px-6 py-4">{row.pro}</td>
+                  <td className="px-6 py-4">{row.family}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </motion.div>
+
         {/* Additional Info */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -192,28 +259,28 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
           className="text-center mt-16"
         >
           <div className="bg-white rounded-2xl p-8 shadow-lg max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Why Choose ElevatED?</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">What You Get</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">AI-Powered Adaptation</h4>
-                <p className="text-sm text-gray-600">Content adjusts in real-time to each student's learning pace and style</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Adaptive Lessons</h4>
+                <p className="text-sm text-gray-600">Every activity adjusts in real time to keep students challenged but confident.</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-violet-600 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Users className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Family-Focused</h4>
-                <p className="text-sm text-gray-600">Comprehensive parent insights and multi-child management</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Live Feedback</h4>
+                <p className="text-sm text-gray-600">Students get instant hints, chat support, and step-by-step explanations.</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-violet-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Trophy className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Proven Results</h4>
-                <p className="text-sm text-gray-600">98% of students show measurable improvement within 30 days</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Parent Dashboard</h4>
+                <p className="text-sm text-gray-600">Track progress, set goals, and celebrate wins from a single family view.</p>
               </div>
             </div>
             <div className="mt-8 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl">

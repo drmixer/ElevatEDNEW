@@ -17,7 +17,7 @@ Student experience: Gamified journey with XP, streaks, badges, and story-driven 
 AI Learning Assistant: Context-aware tutor that offers step-by-step guidance, study tips, and motivational check-ins aligned to each learner's profile.
 Parent experience: Parent dashboard delivers real-time progress tracking, weekly AI-generated summaries, alerts for missed sessions, and detailed analytics on concept mastery.
 Curriculum: Comprehensive K-12 coverage with concept-specific reinforcement, instant quiz feedback, and suggested review activities when learners struggle.
-Pricing: Free tier with limited daily lessons and core subject access. Premium tier unlocks full adaptive content, AI assistant, detailed reports, and discounted add-on seats for additional children (starting at $9.99/month or $99/year).
+Pricing: Free tier with limited daily lessons and core subject access. Premium tier unlocks full adaptive content, AI assistant, detailed reports, and discounted add-on seats for additional children (starting at $9.99/month or $99/year for the first student, $5/month per additional student).
 Mission: Make adaptive, joyful learning accessible, with actionable insights that keep families involved.
 Support: Encourage visitors to reach out through the contact options on the site for specifics like implementation timelines or school partnerships.
 `;
@@ -48,7 +48,7 @@ const ChatBot: React.FC = () => {
     const message = userMessage.toLowerCase();
     
     if (message.includes('pricing') || message.includes('cost') || message.includes('price')) {
-      return "ElevatED offers a free tier with limited daily lessons and core subjects, plus a premium tier with full access to adaptive content, AI learning assistant, and detailed parent reports. Premium pricing starts at $9.99/month or $99/year. Parents can add additional children at a discounted rate!";
+      return "ElevatED offers a free tier with core access, plus a premium tier with full adaptive lessons, unlimited AI support, and detailed parent reports. Premium pricing is $9.99/month (or $99/year) for the first student, and $5/month for each additional student. Families can cancel anytime during the 7-day free trial.";
     }
     
     if (message.includes('feature') || message.includes('what') || message.includes('how')) {
