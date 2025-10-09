@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCircle, Send, X, Bot, Lightbulb, Target, BookOpen } from 'lucide-react';
+import { Send, X, Bot, Lightbulb, Target, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student } from '../../types';

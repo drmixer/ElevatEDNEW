@@ -1,5 +1,13 @@
 import supabase from '../lib/supabaseClient';
-import type { Badge, Parent, Student, User } from '../types';
+import type {
+  Admin,
+  Badge,
+  Parent,
+  ParentChildSnapshot,
+  ParentWeeklyReport,
+  Student,
+  User,
+} from '../types';
 
 type StudentProfileRow = {
   grade: number | null;
@@ -18,14 +26,35 @@ type ParentProfileRow = {
   notifications: Record<string, boolean> | null;
 };
 
+type AdminProfileRow = {
+  title: string | null;
+  permissions: string[] | null;
+};
+
 type ProfileRow = {
   id: string;
   email: string;
   full_name: string | null;
-  role: 'student' | 'parent';
+  role: 'student' | 'parent' | 'admin';
   avatar_url: string | null;
   student_profiles?: StudentProfileRow | StudentProfileRow[] | null;
   parent_profiles?: ParentProfileRow | ParentProfileRow[] | null;
+  admin_profiles?: AdminProfileRow | AdminProfileRow[] | null;
+};
+
+type ParentDashboardChildRow = {
+  student_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  grade: number | null;
+  level: number | null;
+  xp: number | null;
+  streak_days: number | null;
+  strengths: string[] | null;
+  weaknesses: string[] | null;
+  lessons_completed_week: number | null;
+  practice_minutes_week: number | null;
+  xp_earned_week: number | null;
 };
 
 const normalizeStudentProfile = (
@@ -41,6 +70,16 @@ const normalizeStudentProfile = (
 const normalizeParentProfile = (
   input: ProfileRow['parent_profiles'],
 ): ParentProfileRow | null => {
+  if (Array.isArray(input)) {
+    return input[0] ?? null;
+  }
+
+  return input ?? null;
+};
+
+const normalizeAdminProfile = (
+  input: ProfileRow['admin_profiles'],
+): AdminProfileRow | null => {
   if (Array.isArray(input)) {
     return input[0] ?? null;
   }
@@ -73,6 +112,18 @@ const castBadges = (badges: unknown): Badge[] => {
   });
 };
 
+const castStringArray = (input: unknown): string[] => {
+  if (Array.isArray(input)) {
+    return input.filter((item): item is string => typeof item === 'string');
+  }
+
+  if (typeof input === 'string' && input.trim().length > 0) {
+    return [input.trim()];
+  }
+
+  return [];
+};
+
 export const fetchUserProfile = async (userId: string): Promise<User> => {
   const { data, error } = await supabase
     .from('profiles')
@@ -97,6 +148,10 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       parent_profiles(
         subscription_tier,
         notifications
+      ),
+      admin_profiles(
+        title,
+        permissions
       )
     `,
     )
@@ -134,7 +189,79 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
     return student;
   }
 
+  const adminDetails = normalizeAdminProfile(profile.admin_profiles);
+
+  if (profile.role === 'admin') {
+    const admin: Admin = {
+      id: profile.id,
+      email: profile.email,
+      name: displayName,
+      role: 'admin',
+      avatar: profile.avatar_url ?? undefined,
+      title: adminDetails?.title ?? 'Platform Admin',
+      permissions: adminDetails?.permissions ?? [],
+    };
+
+    return admin;
+  }
+
   const parentDetails = normalizeParentProfile(profile.parent_profiles);
+
+  let children: ParentChildSnapshot[] = [];
+  let weeklyReport: ParentWeeklyReport | null = null;
+
+  if (profile.role === 'parent') {
+    const [
+      { data: childRows, error: childrenError },
+      { data: weeklyReportRow, error: weeklyError },
+    ] = await Promise.all([
+      supabase
+        .from('parent_dashboard_children')
+        .select('*')
+        .eq('parent_id', profile.id),
+      supabase
+        .from('parent_weekly_reports')
+        .select('*')
+        .eq('parent_id', profile.id)
+        .order('week_start', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+    ]);
+
+    if (childrenError) {
+      console.error('[Supabase] Failed to load parent children', childrenError);
+    }
+
+    if (weeklyError) {
+      console.error('[Supabase] Failed to load parent weekly report', weeklyError);
+    }
+
+    children =
+      childRows?.map((child: ParentDashboardChildRow) => ({
+        id: child.student_id,
+        name: [child.first_name, child.last_name].filter(Boolean).join(' ') || 'Student',
+        grade: child.grade ?? 1,
+        level: child.level ?? 1,
+        xp: child.xp ?? 0,
+        streakDays: child.streak_days ?? 0,
+        strengths: child.strengths ?? [],
+        focusAreas: child.weaknesses ?? [],
+        lessonsCompletedWeek: child.lessons_completed_week ?? 0,
+        practiceMinutesWeek: child.practice_minutes_week ?? 0,
+        xpEarnedWeek: child.xp_earned_week ?? 0,
+        masteryBySubject: [],
+        recentActivity: [],
+      })) ?? [];
+
+    weeklyReport = weeklyReportRow
+      ? {
+          weekStart: weeklyReportRow.week_start,
+          summary: weeklyReportRow.summary ?? '',
+          highlights: castStringArray(weeklyReportRow.highlights),
+          recommendations: castStringArray(weeklyReportRow.recommendations),
+        }
+      : null;
+  }
 
   const parent: Parent = {
     id: profile.id,
@@ -142,7 +269,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
     name: displayName,
     role: 'parent',
     avatar: profile.avatar_url ?? undefined,
-    children: [],
+    children,
     subscriptionTier: parentDetails?.subscription_tier ?? 'free',
     notifications: {
       weeklyReports: parentDetails?.notifications?.weeklyReports ?? true,
@@ -150,6 +277,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       lowScores: parentDetails?.notifications?.lowScores ?? true,
       majorProgress: parentDetails?.notifications?.majorProgress ?? true,
     },
+    weeklyReport,
   };
 
   return parent;

@@ -1,7 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ArrowLeft, Clock, CheckCircle, Brain, Target } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Assessment, Question, Answer, Subject } from '../../types';
+import { ArrowRight, Clock, CheckCircle, Brain, Target } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Assessment, Question, Answer } from '../../types';
+
+const mockQuestions: Question[] = [
+  {
+    id: '1',
+    type: 'multiple_choice',
+    question: 'What is 12 × 15?',
+    options: ['160', '180', '200', '220'],
+    correctAnswer: '180',
+    explanation:
+      '12 × 15 = 180. Break it down: 12 × 10 = 120, 12 × 5 = 60, so 120 + 60 = 180.',
+    difficulty: 5,
+    concept: 'multiplication',
+  },
+  {
+    id: '2',
+    type: 'multiple_choice',
+    question: 'Which sentence is grammatically correct?',
+    options: [
+      'Me and my friend went to the store.',
+      'My friend and I went to the store.',
+      'My friend and me went to the store.',
+      'I and my friend went to the store.',
+    ],
+    correctAnswer: 'My friend and I went to the store.',
+    explanation:
+      'Use "I" when it\'s the subject of the sentence. A good test is to remove the other person and see if it still sounds correct.',
+    difficulty: 4,
+    concept: 'grammar',
+  },
+  {
+    id: '3',
+    type: 'multiple_choice',
+    question: 'What happens to water when it freezes?',
+    options: [
+      'It becomes denser',
+      'It becomes less dense',
+      'Its density stays the same',
+      'It turns into a gas',
+    ],
+    correctAnswer: 'It becomes less dense',
+    explanation:
+      'When water freezes, it expands and becomes less dense. This is why ice floats on water.',
+    difficulty: 3,
+    concept: 'states of matter',
+  },
+  {
+    id: '4',
+    type: 'multiple_choice',
+    question: 'The American Revolution ended in which year?',
+    options: ['1776', '1781', '1783', '1787'],
+    correctAnswer: '1783',
+    explanation:
+      'The American Revolution officially ended with the Treaty of Paris in 1783, although fighting largely ceased after the Battle of Yorktown in 1781.',
+    difficulty: 4,
+    concept: 'american history',
+  },
+];
 
 interface AssessmentFlowProps {
   onComplete: () => void;
@@ -12,60 +69,6 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [timeSpent, setTimeSpent] = useState(0);
   const [startTime, setStartTime] = useState<Date | null>(null);
-
-  // Mock questions for the assessment
-  const mockQuestions: Question[] = [
-    {
-      id: '1',
-      type: 'multiple_choice',
-      question: 'What is 12 × 15?',
-      options: ['160', '180', '200', '220'],
-      correctAnswer: '180',
-      explanation: '12 × 15 = 180. Break it down: 12 × 10 = 120, 12 × 5 = 60, so 120 + 60 = 180.',
-      difficulty: 5,
-      concept: 'multiplication'
-    },
-    {
-      id: '2',
-      type: 'multiple_choice',
-      question: 'Which sentence is grammatically correct?',
-      options: [
-        'Me and my friend went to the store.',
-        'My friend and I went to the store.',
-        'My friend and me went to the store.',
-        'I and my friend went to the store.'
-      ],
-      correctAnswer: 'My friend and I went to the store.',
-      explanation: 'Use "I" when it\'s the subject of the sentence. A good test is to remove the other person and see if it still sounds correct.',
-      difficulty: 4,
-      concept: 'grammar'
-    },
-    {
-      id: '3',
-      type: 'multiple_choice',
-      question: 'What happens to water when it freezes?',
-      options: [
-        'It becomes denser',
-        'It becomes less dense',
-        'Its density stays the same',
-        'It turns into a gas'
-      ],
-      correctAnswer: 'It becomes less dense',
-      explanation: 'When water freezes, it expands and becomes less dense. This is why ice floats on water.',
-      difficulty: 3,
-      concept: 'states of matter'
-    },
-    {
-      id: '4',
-      type: 'multiple_choice',
-      question: 'The American Revolution ended in which year?',
-      options: ['1776', '1781', '1783', '1787'],
-      correctAnswer: '1783',
-      explanation: 'The American Revolution officially ended with the Treaty of Paris in 1783, although fighting largely ceased after the Battle of Yorktown in 1781.',
-      difficulty: 4,
-      concept: 'american history'
-    }
-  ];
 
   useEffect(() => {
     if (currentStep === 'assessment' && !assessment) {
@@ -80,7 +83,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
       });
       setStartTime(new Date());
     }
-  }, [currentStep]);
+  }, [currentStep, assessment]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

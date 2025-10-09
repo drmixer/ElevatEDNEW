@@ -1,30 +1,84 @@
-import React, { useState } from 'react';
-import { BookOpen, Brain, Trophy, Target, Clock, Star, Play, CheckCircle } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  AlertTriangle,
+  Brain,
+  CheckCircle,
+  Clock,
+  Play,
+  RefreshCw,
+  Sparkles,
+  Star,
+  Target,
+  TrendingUp,
+  Trophy,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
-import { Student, Subject } from '../../types';
+import { Student, StudentDashboardData } from '../../types';
 import LearningAssistant from './LearningAssistant';
 import AssessmentFlow from './AssessmentFlow';
+import { fetchStudentDashboardData } from '../../services/dashboardService';
 
 const StudentDashboard: React.FC = () => {
   const { user } = useAuth();
-  const student = user as Student;
+  const student = user as Student | null;
   const [activeView, setActiveView] = useState<'dashboard' | 'assessment' | 'lesson'>('dashboard');
+  const [dashboard, setDashboard] = useState<StudentDashboardData | null>(null);
+  const [loadingDashboard, setLoadingDashboard] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const subjects: { name: Subject; icon: string; color: string; progress: number }[] = [
-    { name: 'math', icon: '🔢', color: 'bg-blue-500', progress: 75 },
-    { name: 'english', icon: '📚', color: 'bg-green-500', progress: 60 },
-    { name: 'science', icon: '🔬', color: 'bg-purple-500', progress: 45 },
-    { name: 'social_studies', icon: '🌍', color: 'bg-orange-500', progress: 30 }
-  ];
+  const loadDashboard = useCallback(async () => {
+    if (!student) return;
+    setLoadingDashboard(true);
+    setError(null);
+    try {
+      const data = await fetchStudentDashboardData({ ...student });
+      setDashboard(data);
+    } catch (err) {
+      console.error('[StudentDashboard] load failed', err);
+      setError('We could not reach the learning analytics service. Showing your latest cached data instead.');
+    } finally {
+      setLoadingDashboard(false);
+    }
+  }, [student]);
 
-  const todayLessons = [
-    { id: '1', subject: 'Math', topic: 'Quadratic Equations', difficulty: 'Medium', xp: 50, completed: false },
-    { id: '2', subject: 'English', topic: 'Essay Writing', difficulty: 'Hard', xp: 75, completed: true },
-    { id: '3', subject: 'Science', topic: 'Photosynthesis', difficulty: 'Easy', xp: 25, completed: false },
-  ];
+  useEffect(() => {
+    void loadDashboard();
+  }, [loadDashboard]);
 
-  const recentBadges = student.badges.slice(0, 3);
+  const activityChartData = useMemo(() => {
+    if (!dashboard) return [];
+    return dashboard.dailyActivity.map((entry) => ({
+      label: new Date(entry.date).toLocaleDateString(undefined, { weekday: 'short' }),
+      lessons: entry.lessonsCompleted,
+      minutes: entry.practiceMinutes,
+      xp: entry.xpEarned,
+    }));
+  }, [dashboard]);
+
+  const masteryDisplay = useMemo(() => {
+    if (!dashboard) return [];
+    return dashboard.subjectMastery.map((item) => ({
+      ...item,
+      label:
+        item.subject === 'social_studies'
+          ? 'Social Studies'
+          : item.subject.charAt(0).toUpperCase() + item.subject.slice(1),
+    }));
+  }, [dashboard]);
+
+  if (!student) {
+    return null;
+  }
 
   if (activeView === 'assessment') {
     return <AssessmentFlow onComplete={() => setActiveView('dashboard')} />;
@@ -42,16 +96,26 @@ const StudentDashboard: React.FC = () => {
           <div className="bg-gradient-to-r from-brand-teal to-brand-blue rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold mb-2">
-                  Welcome back, {student.name}! 🌟
-                </h1>
+                <h1 className="text-2xl font-bold mb-2">Welcome back, {student.name}! 🌟</h1>
                 <p className="opacity-90">
-                  Ready to continue your learning journey? You're doing amazing!
+                  Your AI tutor has fresh insights lined up—let’s keep the momentum going.
                 </p>
               </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold">{student.xp}</div>
-                <div className="text-sm opacity-90">Total XP</div>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => loadDashboard()}
+                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
+                  disabled={loadingDashboard}
+                >
+                  <RefreshCw className={`h-4 w-4 ${loadingDashboard ? 'animate-spin' : ''}`} />
+                  <span>{loadingDashboard ? 'Refreshing' : 'Refresh'}</span>
+                </button>
+                <div className="text-right">
+                  <div className="text-3xl font-bold">
+                    {dashboard?.quickStats.totalXp ?? student.xp}
+                  </div>
+                  <div className="text-sm opacity-90">Total XP</div>
+                </div>
               </div>
             </div>
           </div>
@@ -67,7 +131,9 @@ const StudentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-brand-blue">{student.level}</div>
+                <div className="text-2xl font-bold text-brand-blue">
+                  {dashboard?.quickStats.level ?? student.level}
+                </div>
                 <div className="text-sm text-gray-600">Current Level</div>
               </div>
               <div className="w-12 h-12 bg-brand-light-blue rounded-full flex items-center justify-center">
@@ -79,7 +145,9 @@ const StudentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-brand-violet">{student.streakDays}</div>
+                <div className="text-2xl font-bold text-brand-violet">
+                  {dashboard?.quickStats.streakDays ?? student.streakDays}
+                </div>
                 <div className="text-sm text-gray-600">Day Streak</div>
               </div>
               <div className="w-12 h-12 bg-brand-light-violet rounded-full flex items-center justify-center">
@@ -91,7 +159,9 @@ const StudentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-brand-teal">{student.badges.length}</div>
+                <div className="text-2xl font-bold text-brand-teal">
+                  {dashboard?.recentBadges.length ?? student.badges.length}
+                </div>
                 <div className="text-sm text-gray-600">Badges Earned</div>
               </div>
               <div className="w-12 h-12 bg-brand-light-teal rounded-full flex items-center justify-center">
@@ -100,10 +170,12 @@ const StudentDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm">
+  <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-gray-800">12</div>
+                <div className="text-2xl font-bold text-gray-800">
+                  {dashboard?.quickStats.hoursThisWeek ?? 0}h
+                </div>
                 <div className="text-sm text-gray-600">Hours This Week</div>
               </div>
               <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -113,11 +185,21 @@ const StudentDashboard: React.FC = () => {
           </div>
         </motion.div>
 
+        {error && (
+          <div className="mb-8 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex items-start space-x-3">
+            <AlertTriangle className="h-5 w-5 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium">Heads up!</p>
+              <p className="text-sm">{error}</p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Quick Actions */}
-            {!student.assessmentCompleted && (
+            {/* Assessment CTA */}
+            {!(dashboard?.quickStats.assessmentCompleted ?? student.assessmentCompleted) && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -128,7 +210,7 @@ const StudentDashboard: React.FC = () => {
                   <div>
                     <h3 className="text-xl font-bold mb-2">Complete Your Assessment</h3>
                     <p className="opacity-90 mb-4">
-                      Take our adaptive diagnostic to get your personalized learning path!
+                      Take our adaptive diagnostic to unlock a precision learning path tailored by AI.
                     </p>
                     <button
                       onClick={() => setActiveView('assessment')}
@@ -144,7 +226,7 @@ const StudentDashboard: React.FC = () => {
               </motion.div>
             )}
 
-            {/* Today's Lessons */}
+            {/* Today's Focus */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -152,40 +234,47 @@ const StudentDashboard: React.FC = () => {
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Today's Lessons</h3>
+                <h3 className="text-xl font-bold text-gray-900">Today's Focus</h3>
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <Target className="h-4 w-4" />
-                  <span>3 lessons planned</span>
+                  <span>{dashboard?.todaysPlan.length ?? 0} lessons queued</span>
                 </div>
               </div>
 
               <div className="space-y-4">
-                {todayLessons.map((lesson, index) => (
+                {(dashboard?.todaysPlan ?? []).map((lesson, index) => (
                   <motion.div
                     key={lesson.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
+                    transition={{ delay: 0.4 + index * 0.08 }}
                     className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        lesson.completed ? 'bg-green-100' : 'bg-gray-100'
-                      }`}>
-                        {lesson.completed ? 
-                          <CheckCircle className="h-6 w-6 text-green-600" /> :
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                          lesson.status === 'completed' ? 'bg-green-100' : 'bg-gray-100'
+                        }`}
+                      >
+                        {lesson.status === 'completed' ? (
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                        ) : (
                           <Play className="h-6 w-6 text-gray-600" />
-                        }
+                        )}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{lesson.topic}</h4>
+                        <h4 className="font-semibold text-gray-900">{lesson.title}</h4>
                         <div className="flex items-center space-x-3 text-sm text-gray-600">
-                          <span>{lesson.subject}</span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            lesson.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
-                            lesson.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                          <span className="capitalize">{lesson.subject.replace('_', ' ')}</span>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs ${
+                              lesson.difficulty === 'easy'
+                                ? 'bg-green-100 text-green-800'
+                                : lesson.difficulty === 'medium'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}
+                          >
                             {lesson.difficulty}
                           </span>
                         </div>
@@ -193,9 +282,20 @@ const StudentDashboard: React.FC = () => {
                     </div>
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
-                        <div className="text-sm font-medium text-brand-teal">+{lesson.xp} XP</div>
+                        <div className="text-sm font-medium text-brand-teal">
+                          +{lesson.xpReward} XP
+                        </div>
+                        {lesson.dueAt && (
+                          <div className="text-xs text-gray-500">
+                            Due{' '}
+                            {new Date(lesson.dueAt).toLocaleTimeString([], {
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            })}
+                          </div>
+                        )}
                       </div>
-                      {!lesson.completed && (
+                      {lesson.status !== 'completed' && (
                         <button className="bg-brand-teal text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-blue transition-colors">
                           Start
                         </button>
@@ -203,107 +303,245 @@ const StudentDashboard: React.FC = () => {
                     </div>
                   </motion.div>
                 ))}
+                {(dashboard?.todaysPlan?.length ?? 0) === 0 && (
+                  <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center">
+                    <p className="text-sm text-gray-600">
+                      Your AI coach will assign fresh lessons after you complete the diagnostic.
+                    </p>
+                  </div>
+                )}
               </div>
             </motion.div>
 
-            {/* Subject Progress */}
+            {/* Weekly Activity */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Subject Progress</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {subjects.map((subject, index) => (
-                  <motion.div
-                    key={subject.name}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                    className="p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-2xl">{subject.icon}</div>
-                        <h4 className="font-semibold text-gray-900 capitalize">
-                          {subject.name.replace('_', ' ')}
-                        </h4>
-                      </div>
-                      <span className="text-sm font-medium text-gray-600">{subject.progress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-brand-teal to-brand-blue h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${subject.progress}%` }}
-                      />
-                    </div>
-                  </motion.div>
-                ))}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Weekly Activity Pulse</h3>
+                <div className="flex items-center text-sm text-gray-500 space-x-2">
+                  <Sparkles className="h-4 w-4" />
+                  <span>Adaptive streak insights</span>
+                </div>
+              </div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={activityChartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
+                    <XAxis dataKey="label" stroke="#6B7280" />
+                    <YAxis stroke="#6B7280" />
+                    <Tooltip
+                      contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
+                      labelStyle={{ color: '#1F2937', fontWeight: 600 }}
+                    />
+                    <defs>
+                      <linearGradient id="activityGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#33D9C1" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#33D9C1" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <Area
+                      type="monotone"
+                      dataKey="minutes"
+                      stroke="#33D9C1"
+                      fill="url(#activityGradient)"
+                      strokeWidth={3}
+                      dot={{ r: 4 }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </motion.div>
-          </div>
 
-          {/* Sidebar */}
-          <div className="space-y-8">
-            {/* Recent Badges */}
+            {/* Upcoming Assessments */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Badges</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Upcoming Milestones</h3>
+                <div className="flex items-center text-sm text-gray-500 space-x-2">
+                  <Sparkles className="h-4 w-4" />
+                  <span>Stay assessment-ready</span>
+                </div>
+              </div>
               <div className="space-y-4">
-                {recentBadges.map((badge, index) => (
-                  <motion.div
-                    key={badge.id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
-                    className="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl"
+                {(dashboard?.upcomingAssessments ?? []).map((assessment) => (
+                  <div
+                    key={assessment.id}
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
                   >
-                    <div className="text-2xl">{badge.icon}</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">{badge.name}</h4>
-                      <p className="text-sm text-gray-600">{badge.description}</p>
+                      <h4 className="font-semibold text-gray-900">{assessment.title}</h4>
+                      <p className="text-sm text-gray-600">
+                        {assessment.scheduledAt
+                          ? `Scheduled ${new Date(assessment.scheduledAt).toLocaleString([], {
+                              weekday: 'short',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            })}`
+                          : 'Flexible timing'}
+                      </p>
                     </div>
-                  </motion.div>
+                    <div className="text-right">
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                          assessment.status === 'completed'
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : assessment.status === 'overdue'
+                            ? 'bg-rose-100 text-rose-600'
+                            : 'bg-blue-100 text-blue-600'
+                        }`}
+                      >
+                        {assessment.status === 'completed'
+                          ? 'Completed'
+                          : assessment.status === 'overdue'
+                          ? 'Overdue'
+                          : 'Scheduled'}
+                      </span>
+                      {assessment.masteryTarget && (
+                        <div className="text-xs text-gray-500 mt-1">
+                          Target mastery: {assessment.masteryTarget}%
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {(dashboard?.upcomingAssessments?.length ?? 0) === 0 && (
+                  <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center">
+                    <p className="text-sm text-gray-600">
+                      No assessments scheduled yet. Complete today’s focus to unlock your next diagnostic.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-8">
+            {/* Subject Mastery */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="bg-white rounded-2xl p-6 shadow-sm"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Subject Mastery</h3>
+              <div className="space-y-4">
+                {masteryDisplay.map((subject) => (
+                  <div key={subject.subject}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        <TrendingUp className="h-4 w-4 text-brand-blue" />
+                        <span className="font-semibold text-gray-900">{subject.label}</span>
+                      </div>
+                      <span className="text-sm text-gray-600">
+                        {Math.round(subject.mastery)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-gradient-to-r from-brand-teal to-brand-blue h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(subject.mastery, 100)}%` }}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Strengths & Weaknesses */}
+            {/* Recent Badges */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Learning Insights</h3>
-              
-              <div className="mb-6">
-                <h4 className="font-semibold text-green-600 mb-3">💪 Strengths</h4>
-                <div className="space-y-2">
-                  {student.strengths.map((strength, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full" />
-                      <span className="text-sm text-gray-700">{strength}</span>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Achievements</h3>
+              <div className="space-y-4">
+                {(dashboard?.recentBadges ?? []).map((badge, index) => (
+                  <motion.div
+                    key={badge.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.08 }}
+                    className="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl"
+                  >
+                    <div className="text-2xl">{badge.icon}</div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{badge.name}</h4>
+                      <p className="text-sm text-gray-600">{badge.description}</p>
+                      <p className="text-xs text-gray-400">
+                        {badge.earnedAt ? new Date(badge.earnedAt).toLocaleString() : ''}
+                      </p>
                     </div>
-                  ))}
-                </div>
+                  </motion.div>
+                ))}
+                {(dashboard?.recentBadges?.length ?? 0) === 0 && (
+                  <p className="text-sm text-gray-600">
+                    Your next badge is within reach—complete lessons to unlock it.
+                  </p>
+                )}
               </div>
+            </motion.div>
 
-              <div>
-                <h4 className="font-semibold text-orange-600 mb-3">🎯 Focus Areas</h4>
-                <div className="space-y-2">
-                  {student.weaknesses.map((weakness, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full" />
-                      <span className="text-sm text-gray-700">{weakness}</span>
+            {/* AI Recommendations */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40"
+            >
+              <div className="flex items-center space-x-3 mb-4">
+                <Sparkles className="h-5 w-5 text-brand-violet" />
+                <h3 className="text-xl font-bold text-gray-900">AI Insights</h3>
+              </div>
+              <div className="space-y-3">
+                {(dashboard?.aiRecommendations ?? []).map((tip, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start space-x-3 bg-white/80 border border-white rounded-xl p-3 shadow-sm"
+                  >
+                    <div className="mt-1 text-brand-violet">✶</div>
+                    <p className="text-sm text-gray-700">{tip}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* XP Timeline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="bg-white rounded-2xl p-6 shadow-sm"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-6">XP Timeline</h3>
+              <div className="space-y-4">
+                {(dashboard?.xpTimeline ?? []).map((event) => (
+                  <div key={event.date} className="flex items-start space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-brand-light-teal flex items-center justify-center text-brand-teal font-semibold">
+                      +{event.xpEarned}
                     </div>
-                  ))}
-                </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{event.description}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(event.date).toLocaleString([], {
+                          month: 'short',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>
