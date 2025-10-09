@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Star, Trophy, Brain, BookOpen, TrendingUp, Users, BarChart3 } from 'lucide-react';
+import { Play, Star, Trophy, TrendingUp, Users, BarChart3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DashboardPreview: React.FC = () => {

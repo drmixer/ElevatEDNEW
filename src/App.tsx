@@ -6,6 +6,7 @@ import AuthModal from './components/Auth/AuthModal';
 import Header from './components/Layout/Header';
 import StudentDashboard from './components/Student/StudentDashboard';
 import ParentDashboard from './components/Parent/ParentDashboard';
+import AdminDashboard from './components/Admin/AdminDashboard';
 
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
@@ -58,7 +59,7 @@ const AppContent: React.FC = () => {
           >
             <StudentDashboard />
           </motion.div>
-        ) : (
+        ) : user.role === 'parent' ? (
           <motion.div
             key="parent"
             initial={{ opacity: 0, y: 20 }}
@@ -67,6 +68,16 @@ const AppContent: React.FC = () => {
             transition={{ duration: 0.3 }}
           >
             <ParentDashboard />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="admin"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <AdminDashboard />
           </motion.div>
         )}
       </AnimatePresence>

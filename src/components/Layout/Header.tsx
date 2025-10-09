@@ -2,6 +2,7 @@ import React from 'react';
 import { User, LogOut, Settings, Bell } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
+import type { Admin, Parent, Student } from '../../types';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -26,7 +27,11 @@ const Header: React.FC = () => {
             <div>
               <h1 className="text-xl font-bold text-brand-blue">ElevatED</h1>
               <p className="text-xs text-gray-500">
-                {user.role === 'student' ? 'Student Dashboard' : 'Parent Dashboard'}
+                {user.role === 'student'
+                  ? 'Student Dashboard'
+                  : user.role === 'parent'
+                  ? 'Family Dashboard'
+                  : 'Admin Command Center'}
               </p>
             </div>
           </div>
@@ -36,19 +41,37 @@ const Header: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 bg-brand-light-teal px-3 py-1 rounded-full">
                   <span className="text-sm font-medium text-brand-blue">
-                    Level {(user as any).level}
+                    Level {(user as Student).level}
                   </span>
                   <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-brand-teal transition-all duration-300"
-                      style={{ width: `${((user as any).xp % 100)}%` }}
+                      style={{ width: `${((user as Student).xp % 100)}%` }}
                     />
                   </div>
                 </div>
                 <div className="flex items-center space-x-1 text-brand-violet">
                   <span className="text-lg">🔥</span>
-                  <span className="text-sm font-medium">{(user as any).streakDays}</span>
+                  <span className="text-sm font-medium">{(user as Student).streakDays}</span>
                 </div>
+              </div>
+            )}
+            {user.role === 'parent' && (
+              <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+                <div className="px-3 py-1 rounded-full bg-brand-light-teal/40 text-brand-teal font-medium">
+                  {(user as Parent).subscriptionTier === 'premium' ? 'Premium Parent' : 'Family Plan'}
+                </div>
+                <div className="flex items-center space-x-1 text-brand-violet">
+                  <span className="text-lg">👨‍👩‍👧‍👦</span>
+                  <span className="font-medium">{(user as Parent).children.length} learners</span>
+                </div>
+              </div>
+            )}
+            {user.role === 'admin' && (
+              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
+                <span className="px-3 py-1 rounded-full bg-brand-light-blue/40 text-brand-blue font-medium">
+                  {(user as Admin).title ?? 'Platform Admin'}
+                </span>
               </div>
             )}
             

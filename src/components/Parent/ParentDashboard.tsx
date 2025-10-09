@@ -1,73 +1,98 @@
-import React, { useState } from 'react';
-import { Users, TrendingUp, Clock, Star, Calendar, Settings, Plus, Bell } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  AlertTriangle,
+  Bell,
+  Calendar,
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  Sparkles,
+  Star,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  BarChart,
+  Bar,
+} from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
-import { Parent, Student, PerformanceData } from '../../types';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { Parent, ParentChildSnapshot, ParentDashboardData } from '../../types';
+import { fetchParentDashboardData } from '../../services/dashboardService';
 
 const ParentDashboard: React.FC = () => {
   const { user } = useAuth();
-  const parent = user as Parent;
-  const [selectedChild, setSelectedChild] = useState<Student | null>(null);
+  const parent = user as Parent | null;
+  const [dashboard, setDashboard] = useState<ParentDashboardData | null>(null);
+  const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data for demonstration
-  const mockChildren: Student[] = [
-    {
-      id: '1',
-      email: 'child1@example.com',
-      name: 'Emma Johnson',
-      role: 'student',
-      parentId: parent.id,
-      grade: 8,
-      xp: 1250,
-      level: 5,
-      badges: [
-        { id: '1', name: 'Math Master', description: 'Completed 50 math lessons', icon: '🔢', earnedAt: new Date(), rarity: 'rare' }
-      ],
-      streakDays: 7,
-      strengths: ['Algebra', 'Grammar'],
-      weaknesses: ['Geometry', 'Vocabulary'],
-      learningPath: [],
-      assessmentCompleted: true
-    },
-    {
-      id: '2',
-      email: 'child2@example.com',
-      name: 'Alex Johnson',
-      role: 'student',
-      parentId: parent.id,
-      grade: 5,
-      xp: 800,
-      level: 3,
-      badges: [
-        { id: '2', name: 'Science Explorer', description: 'Completed first science unit', icon: '🔬', earnedAt: new Date(), rarity: 'common' }
-      ],
-      streakDays: 3,
-      strengths: ['Reading', 'Addition'],
-      weaknesses: ['Multiplication', 'Writing'],
-      learningPath: [],
-      assessmentCompleted: true
+  const loadDashboard = useCallback(async () => {
+    if (!parent) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchParentDashboardData({ ...parent });
+      setDashboard(data);
+      if (!selectedChildId && data.children.length) {
+        setSelectedChildId(data.children[0].id);
+      }
+    } catch (err) {
+      console.error('[ParentDashboard] load failed', err);
+      setError('We could not refresh the family insights. Displaying cached metrics instead.');
+    } finally {
+      setLoading(false);
     }
-  ];
+  }, [parent, selectedChildId]);
 
-  const weeklyProgressData = [
-    { day: 'Mon', lessons: 3, timeSpent: 45 },
-    { day: 'Tue', lessons: 2, timeSpent: 30 },
-    { day: 'Wed', lessons: 4, timeSpent: 60 },
-    { day: 'Thu', lessons: 3, timeSpent: 40 },
-    { day: 'Fri', lessons: 2, timeSpent: 25 },
-    { day: 'Sat', lessons: 1, timeSpent: 15 },
-    { day: 'Sun', lessons: 2, timeSpent: 30 }
-  ];
+  useEffect(() => {
+    void loadDashboard();
+  }, [loadDashboard]);
 
-  const subjectPerformance = [
-    { subject: 'Math', mastery: 85 },
-    { subject: 'English', mastery: 92 },
-    { subject: 'Science', mastery: 78 },
-    { subject: 'Social Studies', mastery: 70 }
-  ];
+  const currentChild: ParentChildSnapshot | null = useMemo(() => {
+    if (!dashboard?.children.length) return null;
+    return (
+      dashboard.children.find((child) => child.id === selectedChildId) ?? dashboard.children[0]
+    );
+  }, [dashboard, selectedChildId]);
 
-  const currentChild = selectedChild || mockChildren[0];
+  useEffect(() => {
+    if (dashboard?.children.length && !selectedChildId) {
+      setSelectedChildId(dashboard.children[0].id);
+    }
+  }, [dashboard, selectedChildId]);
+
+  const familyActivityData = useMemo(() => {
+    if (!dashboard) return [];
+    return dashboard.activitySeries.map((point) => ({
+      label: new Date(point.date).toLocaleDateString(undefined, { weekday: 'short' }),
+      lessons: point.lessonsCompleted,
+      minutes: point.practiceMinutes,
+    }));
+  }, [dashboard]);
+
+  const childMasteryData = useMemo(() => {
+    if (!currentChild) return [];
+    return currentChild.masteryBySubject.map((subject) => ({
+      subject:
+        subject.subject === 'social_studies'
+          ? 'Social Studies'
+          : subject.subject.charAt(0).toUpperCase() + subject.subject.slice(1),
+      mastery: Math.round(subject.mastery),
+    }));
+  }, [currentChild]);
+
+  if (!parent) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -81,25 +106,37 @@ const ParentDashboard: React.FC = () => {
           <div className="bg-gradient-to-r from-brand-violet to-brand-blue rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold mb-2">
-                  Parent Dashboard
-                </h1>
+                <h1 className="text-2xl font-bold mb-2">Family Command Center</h1>
                 <p className="opacity-90">
-                  Track your children's learning progress and achievements
+                  Track progress, celebrate wins, and keep everyone aligned in one dashboard.
                 </p>
               </div>
               <div className="flex items-center space-x-4">
-                <button className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors">
-                  <Plus className="h-4 w-4" />
-                  <span>Add Child</span>
+                <button
+                  onClick={() => loadDashboard()}
+                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
+                  disabled={loading}
+                >
+                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                  <span>{loading ? 'Refreshing' : 'Refresh'}</span>
                 </button>
                 <button className="bg-white/20 hover:bg-white/30 p-2 rounded-xl transition-colors">
-                  <Settings className="h-5 w-5" />
+                  <Bell className="h-5 w-5" />
                 </button>
               </div>
             </div>
           </div>
         </motion.div>
+
+        {error && (
+          <div className="mb-8 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex items-start space-x-3">
+            <AlertTriangle className="h-5 w-5 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium">Heads up!</p>
+              <p className="text-sm">{error}</p>
+            </div>
+          </div>
+        )}
 
         {/* Child Selector */}
         <motion.div
@@ -108,13 +145,13 @@ const ParentDashboard: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <div className="flex space-x-4">
-            {mockChildren.map((child) => (
+          <div className="flex flex-wrap gap-4">
+            {(dashboard?.children ?? []).map((child) => (
               <button
                 key={child.id}
-                onClick={() => setSelectedChild(child)}
+                onClick={() => setSelectedChildId(child.id)}
                 className={`flex items-center space-x-3 px-6 py-4 rounded-2xl transition-all ${
-                  currentChild.id === child.id
+                  currentChild?.id === child.id
                     ? 'bg-white shadow-lg border-2 border-brand-teal'
                     : 'bg-white shadow-sm hover:shadow-md'
                 }`}
@@ -124,7 +161,9 @@ const ParentDashboard: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <div className="font-semibold text-gray-900">{child.name}</div>
-                  <div className="text-sm text-gray-600">Grade {child.grade} • Level {child.level}</div>
+                  <div className="text-sm text-gray-600">
+                    Grade {child.grade} • Level {child.level}
+                  </div>
                 </div>
               </button>
             ))}
@@ -141,7 +180,7 @@ const ParentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-brand-blue">{currentChild.level}</div>
+                <div className="text-2xl font-bold text-brand-blue">{currentChild?.level ?? 0}</div>
                 <div className="text-sm text-gray-600">Current Level</div>
               </div>
               <div className="w-12 h-12 bg-brand-light-blue rounded-full flex items-center justify-center">
@@ -153,7 +192,7 @@ const ParentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-brand-teal">{currentChild.xp}</div>
+                <div className="text-2xl font-bold text-brand-teal">{currentChild?.xp ?? 0}</div>
                 <div className="text-sm text-gray-600">Total XP</div>
               </div>
               <div className="w-12 h-12 bg-brand-light-teal rounded-full flex items-center justify-center">
@@ -165,7 +204,9 @@ const ParentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-brand-violet">{currentChild.streakDays}</div>
+                <div className="text-2xl font-bold text-brand-violet">
+                  {currentChild?.streakDays ?? 0}
+                </div>
                 <div className="text-sm text-gray-600">Day Streak</div>
               </div>
               <div className="w-12 h-12 bg-brand-light-violet rounded-full flex items-center justify-center">
@@ -177,11 +218,13 @@ const ParentDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-gray-800">15h</div>
-                <div className="text-sm text-gray-600">This Week</div>
+                <div className="text-2xl font-bold text-gray-800">
+                  {currentChild?.lessonsCompletedWeek ?? 0}
+                </div>
+                <div className="text-sm text-gray-600">Lessons This Week</div>
               </div>
               <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                <Clock className="h-6 w-6 text-gray-600" />
+                <Users className="h-6 w-6 text-gray-600" />
               </div>
             </div>
           </div>
@@ -190,50 +233,45 @@ const ParentDashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Weekly Progress Chart */}
+            {/* Family activity */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Weekly Learning Activity</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Weekly Learning Activity</h3>
+                <div className="text-sm text-gray-500 flex items-center space-x-2">
+                  <Clock className="h-4 w-4" />
+                  <span>Last 7 days</span>
+                </div>
+              </div>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={weeklyProgressData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="lessons" 
-                      stroke="#33D9C1" 
+                  <LineChart data={familyActivityData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
+                    <XAxis dataKey="label" stroke="#6B7280" />
+                    <YAxis stroke="#6B7280" />
+                    <Tooltip
+                      contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
+                      labelStyle={{ color: '#1F2937', fontWeight: 600 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="minutes"
+                      stroke="#33D9C1"
                       strokeWidth={3}
-                      dot={{ fill: '#33D9C1', strokeWidth: 2, r: 4 }}
+                      dot={{ r: 4 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="lessons"
+                      stroke="#6366F1"
+                      strokeWidth={3}
+                      dot={{ r: 4 }}
                     />
                   </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-
-            {/* Subject Performance */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Subject Mastery</h3>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={subjectPerformance}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="subject" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="mastery" fill="#971CB5" radius={[4, 4, 0, 0]} />
-                  </BarChart>
                 </ResponsiveContainer>
               </div>
             </motion.div>
@@ -242,118 +280,180 @@ const ParentDashboard: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.4 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Activity</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Recent Activity • {currentChild?.name}
+                </h3>
+                <div className="flex items-center text-sm text-gray-500 space-x-2">
+                  <Sparkles className="h-4 w-4" />
+                  <span>AI-curated highlights</span>
+                </div>
+              </div>
               <div className="space-y-4">
-                {[
-                  { activity: 'Completed "Quadratic Equations" lesson', subject: 'Math', time: '2 hours ago', xp: 50 },
-                  { activity: 'Earned "Grammar Expert" badge', subject: 'English', time: '1 day ago', xp: 100 },
-                  { activity: 'Finished Science quiz with 85% score', subject: 'Science', time: '2 days ago', xp: 25 }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
+                {(currentChild?.recentActivity ?? []).map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
+                  >
                     <div className="flex items-center space-x-4">
                       <div className="w-10 h-10 bg-brand-light-teal rounded-full flex items-center justify-center">
-                        {item.subject === 'Math' && '🔢'}
-                        {item.subject === 'English' && '📚'}
-                        {item.subject === 'Science' && '🔬'}
+                        <CheckCircle className="h-5 w-5 text-brand-teal" />
                       </div>
                       <div>
-                        <div className="font-medium text-gray-900">{item.activity}</div>
-                        <div className="text-sm text-gray-600">{item.time}</div>
+                        <div className="font-medium text-gray-900">{item.description}</div>
+                        <div className="text-sm text-gray-600">
+                          {new Date(item.occurredAt).toLocaleString()}
+                        </div>
                       </div>
                     </div>
                     <div className="text-brand-teal font-medium">+{item.xp} XP</div>
                   </div>
                 ))}
+                {(currentChild?.recentActivity?.length ?? 0) === 0 && (
+                  <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center">
+                    <p className="text-sm text-gray-600">
+                      We’ll surface highlights once new learning moments are completed.
+                    </p>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-8">
-            {/* Learning Insights */}
+            {/* AI Weekly Summary */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40"
+            >
+              <div className="flex items-center space-x-3 mb-4">
+                <Sparkles className="h-5 w-5 text-brand-violet" />
+                <h3 className="text-xl font-bold text-gray-900">Weekly AI Summary</h3>
+              </div>
+              <p className="text-sm text-gray-700 mb-4">
+                {dashboard?.weeklyReport?.summary ??
+                  'Adaptive summary not available yet—complete a few lessons to train the AI.'}
+              </p>
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold text-brand-violet mb-2">Highlights</h4>
+                <ul className="space-y-2">
+                  {(dashboard?.weeklyReport?.highlights ?? []).map((highlight, index) => (
+                    <li key={index} className="flex items-start space-x-2 text-sm text-gray-700">
+                      <span className="mt-0.5 text-brand-violet">•</span>
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-brand-blue mb-2">Recommended Next Steps</h4>
+                <ul className="space-y-2">
+                  {(dashboard?.weeklyReport?.recommendations ?? []).map((recommendation, index) => (
+                    <li key={index} className="flex items-start space-x-2 text-sm text-gray-700">
+                      <span className="mt-0.5 text-brand-blue">→</span>
+                      <span>{recommendation}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Subject Mastery */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Learning Insights</h3>
-              
-              <div className="mb-6">
-                <h4 className="font-semibold text-green-600 mb-3">💪 Strengths</h4>
-                <div className="space-y-2">
-                  {currentChild.strengths.map((strength, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full" />
-                      <span className="text-sm text-gray-700">{strength}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-orange-600 mb-3">🎯 Focus Areas</h4>
-                <div className="space-y-2">
-                  {currentChild.weaknesses.map((weakness, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full" />
-                      <span className="text-sm text-gray-700">{weakness}</span>
-                    </div>
-                  ))}
-                </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">
+                Mastery by Subject • {currentChild?.name}
+              </h3>
+              <div className="h-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={childMasteryData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
+                    <XAxis dataKey="subject" stroke="#6B7280" />
+                    <YAxis stroke="#6B7280" />
+                    <Tooltip
+                      contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
+                      labelStyle={{ color: '#1F2937', fontWeight: 600 }}
+                    />
+                    <Bar dataKey="mastery" fill="#971CB5" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </motion.div>
 
-            {/* Recent Badges */}
+            {/* Focus Areas */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Achievements</h3>
-              <div className="space-y-4">
-                {currentChild.badges.map((badge, index) => (
-                  <div key={badge.id} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl">
-                    <div className="text-2xl">{badge.icon}</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Focus Areas</h3>
+              <div className="space-y-3">
+                {(currentChild?.focusAreas ?? []).map((area, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                    </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">{badge.name}</h4>
-                      <p className="text-sm text-gray-600">{badge.description}</p>
+                      <p className="text-sm font-semibold text-gray-900">{area}</p>
+                      <p className="text-xs text-gray-500">
+                        AI recommends a practice set or concept review this week.
+                      </p>
                     </div>
                   </div>
                 ))}
+                {(currentChild?.focusAreas?.length ?? 0) === 0 && (
+                  <p className="text-sm text-gray-600">
+                    No focus flags this week—keep reinforcing the strengths!
+                  </p>
+                )}
               </div>
             </motion.div>
 
-            {/* Notifications Settings */}
+            {/* Alert Center */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Notification Settings</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Alert Center</h3>
+                <Calendar className="h-5 w-5 text-gray-400" />
+              </div>
               <div className="space-y-4">
-                {[
-                  { label: 'Weekly Progress Reports', enabled: true },
-                  { label: 'Missed Learning Sessions', enabled: true },
-                  { label: 'Low Quiz Scores', enabled: false },
-                  { label: 'Achievement Unlocked', enabled: true }
-                ].map((setting, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">{setting.label}</span>
-                    <div className={`w-12 h-6 rounded-full transition-colors ${
-                      setting.enabled ? 'bg-brand-teal' : 'bg-gray-300'
-                    }`}>
-                      <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform mt-0.5 ${
-                        setting.enabled ? 'translate-x-6' : 'translate-x-0.5'
-                      }`} />
-                    </div>
+                {(dashboard?.alerts ?? []).map((alert) => (
+                  <div
+                    key={alert.id}
+                    className={`p-4 rounded-xl border ${
+                      alert.type === 'warning'
+                        ? 'bg-amber-50 border-amber-200 text-amber-800'
+                        : alert.type === 'success'
+                        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                        : 'bg-blue-50 border-blue-200 text-blue-700'
+                    }`}
+                  >
+                    <p className="text-sm font-semibold">{alert.message}</p>
+                    <p className="text-xs mt-1 opacity-80">
+                      {new Date(alert.createdAt).toLocaleString()}
+                    </p>
                   </div>
                 ))}
+                {(dashboard?.alerts?.length ?? 0) === 0 && (
+                  <p className="text-sm text-gray-600">
+                    No alerts right now. We’ll notify you when the AI spots something important.
+                  </p>
+                )}
               </div>
             </motion.div>
           </div>
