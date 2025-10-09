@@ -60,7 +60,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
             </div>
 
             <h1 className="text-5xl font-semibold text-slate-900 sm:text-6xl lg:text-7xl">
-              A private AI mentor for every student.
+              A private AI tutor for every student.
               <span className="flex bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent">
                 Built for curiosity.
               </span>

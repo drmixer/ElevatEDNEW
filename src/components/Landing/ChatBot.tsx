@@ -10,7 +10,7 @@ const MARKETING_SYSTEM_PROMPT =
   'If you do not see the answer in the facts, say you are unsure and suggest contacting ElevatED support.';
 
 const MARKETING_KNOWLEDGE = `
-Product: ElevatED is a K-12 learning platform that gives every student a private AI mentor.
+Product: ElevatED is a K-12 learning platform that gives every student a private AI tutor.
 Audience: Families, students, and educators seeking personalized instruction across Math, English, Science, and Social Studies.
 Core approach: Adaptive diagnostics determine each learner's starting point, then AI adjusts lesson difficulty, hints, and feedback in real time.
 Student experience: Gamified journey with XP, streaks, badges, and story-driven missions that celebrate progress and keep motivation high.
@@ -71,7 +71,7 @@ const ChatBot: React.FC = () => {
       return "Our AI engine creates truly personalized learning! It uses diagnostic results to assign difficulty levels per concept, adapts in real-time based on quiz performance, provides context-aware tutoring, and generates custom content that matches each student's reading level and learning style. The AI assistant knows exactly where each student is in their learning journey.";
     }
     
-    return "ElevatED is an adaptive K-12 learning platform that pairs every student with a private AI mentor. Families get diagnostic assessments, personalized lesson paths, instant feedback, gamified motivation, and a parent dashboard with weekly AI summaries. Ask about pricing, onboarding, or specific features and I’ll share the details.";
+    return "ElevatED is an adaptive K-12 learning platform that pairs every student with a private AI tutor. Families get diagnostic assessments, personalized lesson paths, instant feedback, gamified motivation, and a parent dashboard with weekly AI summaries. Ask about pricing, onboarding, or specific features and I’ll share the details.";
   };
 
   const handleSendMessage = async () => {
