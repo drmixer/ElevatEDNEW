@@ -31,7 +31,7 @@ type StandardMap = Map<string, number>;
 const DEFAULT_FILE = path.resolve(process.cwd(), 'mappings/module_standards.json');
 const BATCH_SIZE = 200;
 
-const normalizeString = (value: unknown): string | null => {
+export const normalizeString = (value: unknown): string | null => {
   if (typeof value === 'string') {
     const trimmed = value.trim();
     return trimmed.length > 0 ? trimmed : null;
@@ -42,7 +42,7 @@ const normalizeString = (value: unknown): string | null => {
   return String(value).trim() || null;
 };
 
-const parseStandardToken = (token: string): { framework: string; code: string } => {
+export const parseStandardToken = (token: string): { framework: string; code: string } => {
   const parts = token.split(':').map((part) => part.trim());
   if (parts.length === 2) {
     return { framework: parts[0], code: parts[1] };
@@ -53,7 +53,7 @@ const parseStandardToken = (token: string): { framework: string; code: string } 
   throw new Error(`Unable to parse standard token "${token}"`);
 };
 
-const normalizeEntry = (
+export const normalizeEntry = (
   moduleSlug: string,
   input: ModuleStandardsInput,
   defaultFramework: string | null,
@@ -103,7 +103,7 @@ const normalizeEntry = (
   };
 };
 
-const loadModuleStandards = async (
+export const loadModuleStandards = async (
   filePath: string,
 ): Promise<{ moduleSlug: string; entries: NormalizedModuleStandard[] }[]> => {
   const payload = await loadStructuredFile<Record<string, ModuleStandardsInput[] | ModuleStandardsInput>>(

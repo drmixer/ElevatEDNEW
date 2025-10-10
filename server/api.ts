@@ -31,6 +31,7 @@ import {
   fetchImportRuns,
   toApiModel,
 } from './importRuns.js';
+import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
 
 type ApiContext = {
   supabase: SupabaseClient;
@@ -311,6 +312,11 @@ export const createApiHandler = (context: ApiContext) => {
           const result = await createModuleAssignment(supabase, body);
           sendJson(res, 200, result);
         } catch (error) {
+          captureServerException(error, {
+            route: url.pathname,
+            moduleId: body.moduleId,
+            creatorId: body.creatorId,
+          });
           console.error('[api] assign module failed', error);
           sendJson(res, 500, {
             error: error instanceof Error ? error.message : 'Unable to assign module.',
@@ -510,6 +516,10 @@ export const createApiHandler = (context: ApiContext) => {
       sendJson(res, 404, { error: 'Not found' });
       return true;
     } catch (error) {
+      captureServerException(error, {
+        route: url.pathname,
+        method: req.method,
+      });
       console.error('[api] error', error);
       sendJson(res, 500, {
         error: error instanceof Error ? error.message : 'Internal server error',
@@ -526,11 +536,14 @@ export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787'
     logger: (entry) => {
       const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
       console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
+      if (entry.level === 'error') {
+        captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, 'error');
+      }
     },
   });
 
   const server = createServer(async (req, res) => {
-    const handled = await handler(req, res);
+    const handled = await withRequestScope(req, () => handler(req, res));
     if (!handled) {
       res.statusCode = 404;
       res.end('Not Found');
