@@ -12,6 +12,7 @@ const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard'));
 const CatalogPage = lazy(() => import('./pages/CatalogPage'));
 const ModulePage = lazy(() => import('./pages/ModulePage'));
 const AdminImportPage = lazy(() => import('./pages/AdminImportPage'));
+const LessonPlayerPage = lazy(() => import('./pages/LessonPlayerPage'));
 
 const DashboardView: React.FC = () => {
   const { user } = useAuth();
@@ -101,6 +102,7 @@ const AppContent: React.FC = () => {
           />
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/module/:id" element={<ModulePage />} />
+          <Route path="/lesson/:id" element={<LessonPlayerPage />} />
           <Route
             path="/admin/import"
             element={user ? <AdminImportPage /> : <Navigate to="/" replace />}

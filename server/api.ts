@@ -23,7 +23,7 @@ import {
   type OpenStaxMapping,
 } from '../scripts/import_openstax.js';
 import { getRecommendations } from './recommendations.js';
-import { getModuleAssessment, getModuleDetail, listModules, type ModuleFilters } from './modules.js';
+import { getLessonDetail, getModuleAssessment, getModuleDetail, listModules, type ModuleFilters } from './modules.js';
 import { ImportQueue } from './importQueue.js';
 import {
   createImportRun,
@@ -78,11 +78,38 @@ const createFilters = (query: Record<string, string | string[] | undefined>): Mo
     return parsed != null ? Math.max(1, Math.floor(parsed)) : undefined;
   };
 
+  const toBoolean = (key: string) => {
+    const value = toStringValue(key);
+    if (!value) return undefined;
+    const normalized = value.toLowerCase();
+    if (['1', 'true', 'yes', 'on'].includes(normalized)) {
+      return true;
+    }
+    if (['0', 'false', 'no', 'off'].includes(normalized)) {
+      return false;
+    }
+    return undefined;
+  };
+
+  const toStringArray = (key: string) => {
+    const value = query[key];
+    if (!value) return undefined;
+    const raw = Array.isArray(value) ? value.join(',') : value;
+    const items = raw
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+    return items.length > 0 ? items : undefined;
+  };
+
   return {
     subject: toStringValue('subject'),
     grade: toStringValue('grade'),
     strand: toStringValue('strand'),
     topic: toStringValue('topic'),
+    standards: toStringArray('standards'),
+    openTrack: toBoolean('openTrack'),
+    sort: toStringValue('sort'),
     search: toStringValue('search'),
     page: toNumber('page'),
     pageSize: toNumber('pageSize'),
@@ -118,6 +145,26 @@ export const createApiHandler = (context: ApiContext) => {
         const result = await listModules(supabase, filters);
         sendJson(res, 200, result);
         return true;
+      }
+
+      if (req.method === 'GET' && url.pathname?.startsWith('/api/lessons/')) {
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (parts.length === 3) {
+          const lessonId = Number.parseInt(parts[2] ?? '', 10);
+          if (Number.isNaN(lessonId)) {
+            sendJson(res, 400, { error: 'Lesson id must be numeric.' });
+            return true;
+          }
+
+          const detail = await getLessonDetail(supabase, lessonId);
+          if (!detail) {
+            sendJson(res, 404, { error: 'Lesson not found.' });
+            return true;
+          }
+
+          sendJson(res, 200, { lesson: detail });
+          return true;
+        }
       }
 
       if (req.method === 'GET' && url.pathname === '/api/import/providers') {
