@@ -18,6 +18,7 @@
     "import:federal": "tsx scripts/import_federal_pd.ts",
     "audit:licenses": "tsx scripts/audit_licenses.ts",
     "audit:completeness": "tsx scripts/audit_completeness.ts",
+    "seed:lessons": "tsx scripts/seed_lessons.ts",
     "api:dev": "tsx server/index.ts"
   },
   "dependencies": {
@@ -27,8 +28,10 @@
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^6.30.1",
     "recharts": "^2.8.0",
+    "remark-gfm": "^4.0.1",
     "yaml": "^2.8.1"
   },
   "devDependencies": {

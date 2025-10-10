@@ -25,3 +25,29 @@ export function composeAttribution(parts: AttributionParts): string {
 }
 
 export default composeAttribution;
+
+export const splitAttributionBlock = (block: string | null | undefined): string[] => {
+  if (!block) {
+    return [];
+  }
+  return block
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+};
+
+export const buildAttributionBlock = (segments: Iterable<string>): string => {
+  const uniqueSegments: string[] = [];
+  const seen = new Set<string>();
+
+  for (const segment of segments) {
+    const value = segment.trim();
+    if (value.length === 0 || seen.has(value)) {
+      continue;
+    }
+    seen.add(value);
+    uniqueSegments.push(value);
+  }
+
+  return uniqueSegments.join('\n');
+};
