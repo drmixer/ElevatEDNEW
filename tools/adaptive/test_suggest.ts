@@ -413,7 +413,7 @@ const run = async () => {
       },
     ]);
     const reinforcement = await supabase.rpc('suggest_next_lessons', {
-      student_id: studentId,
+      p_student_id: studentId,
       limit_count: 3,
     });
     if (reinforcement.error) {
@@ -432,7 +432,7 @@ const run = async () => {
       },
     ]);
     const advance = await supabase.rpc('suggest_next_lessons', {
-      student_id: studentId,
+      p_student_id: studentId,
       limit_count: 3,
     });
     if (advance.error) {
@@ -451,7 +451,7 @@ const run = async () => {
       },
     ]);
     const complete = await supabase.rpc('suggest_next_lessons', {
-      student_id: studentId,
+      p_student_id: studentId,
       limit_count: 3,
     });
     if (complete.error) {

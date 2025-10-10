@@ -13,7 +13,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 const { data, error } = await supabase.rpc('suggest_next_lessons', {
-  student_id: '00000000-0000-0000-0000-000000000000',
+  p_student_id: '00000000-0000-0000-0000-000000000000',
   limit_count: 3,
 });
 ```
