@@ -139,10 +139,38 @@ const fallbackStudentLessons = (): DashboardLesson[] => [
 ];
 
 const fallbackStudentMastery = (): SubjectMastery[] => [
-  { subject: 'math', mastery: 68, trend: 'up' },
-  { subject: 'english', mastery: 82, trend: 'steady' },
-  { subject: 'science', mastery: 57, trend: 'up' },
-  { subject: 'social_studies', mastery: 45, trend: 'down' },
+  {
+    subject: 'math',
+    mastery: 68,
+    trend: 'up',
+    cohortAverage: 62,
+    goal: 80,
+    delta: 6,
+  },
+  {
+    subject: 'english',
+    mastery: 82,
+    trend: 'steady',
+    cohortAverage: 78,
+    goal: 85,
+    delta: -3,
+  },
+  {
+    subject: 'science',
+    mastery: 57,
+    trend: 'up',
+    cohortAverage: 50,
+    goal: 75,
+    delta: 7,
+  },
+  {
+    subject: 'social_studies',
+    mastery: 45,
+    trend: 'down',
+    cohortAverage: 52,
+    goal: 70,
+    delta: -7,
+  },
 ];
 
 const fallbackStudentActivity = (): StudentDailyActivity[] => {
@@ -178,6 +206,7 @@ const fallbackParentWeeklyReport = (parentName: string): ParentWeeklyReport => {
       'Schedule a 20-minute review session on geometry fundamentals for Emma.',
       'Celebrate Alex’s consistency streak to reinforce positive study habits.',
     ],
+    aiGenerated: true,
   };
 };
 
@@ -211,6 +240,8 @@ const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => [
         occurredAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
       },
     ],
+    goalProgress: 78,
+    cohortComparison: 64,
   },
 ];
 
@@ -353,6 +384,7 @@ const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
         : 'not_started',
     difficulty: difficultyFromValue(item.difficulty),
     xpReward: item.xpReward,
+    launchUrl: `/app/lessons/${item.id}`,
   }));
 };
 
@@ -460,6 +492,20 @@ const deriveAiRecommendations = (mastery: SubjectMastery[], lessons: DashboardLe
   return recommendations;
 };
 
+const toStringArray = (input: unknown): string[] => {
+  if (Array.isArray(input)) {
+    return input
+      .map((item) => (typeof item === 'string' ? item : typeof item === 'number' ? item.toString() : null))
+      .filter((item): item is string => item !== null);
+  }
+
+  if (typeof input === 'string' && input.trim().length > 0) {
+    return [input.trim()];
+  }
+
+  return [];
+};
+
 const aggregateParentActivity = (
   rows: StudentDailyActivityRow[],
   childIds: string[],
@@ -522,6 +568,38 @@ const deriveParentAlerts = (children: ParentChildSnapshot[]): ParentAlert[] => {
   }
 
   return alerts;
+};
+
+export const buildParentDownloadableReport = (
+  parent: Parent,
+  report: ParentWeeklyReport,
+  children: ParentChildSnapshot[],
+): string => {
+  const weekLabel = new Date(report.weekStart).toLocaleDateString(undefined, {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+  const childLines = children
+    .map((child) => {
+      const masterySummary = child.masteryBySubject
+        .map((subject) => {
+          const label = subject.subject.replace('_', ' ');
+          const masteryValue = Math.round(subject.mastery);
+          const goalDetail = subject.goal ? ` (goal ${subject.goal}%)` : '';
+          return `${label} ${masteryValue}%${goalDetail}`;
+        })
+        .join(', ');
+
+      return `- ${child.name}: ${child.lessonsCompletedWeek} lessons, ${child.practiceMinutesWeek} minutes, ${child.xpEarnedWeek} XP | Mastery: ${masterySummary}`;
+    })
+    .join('\n');
+
+  const highlights = report.highlights.map((item) => `• ${item}`).join('\n');
+  const recommendations = report.recommendations.map((item) => `• ${item}`).join('\n');
+
+  return `ElevatED Weekly Family Report\nParent: ${parent.name}\nWeek of ${weekLabel}\n\nSummary:\n${report.summary}\n\nHighlights:\n${highlights}\n\nLearner Details:\n${childLines}\n\nRecommended Next Steps:\n${recommendations}`;
 };
 
 const buildAdminAlerts = (
@@ -641,6 +719,7 @@ export const fetchStudentDashboardData = async (
       : fallbackStudentMastery();
 
     const todaysPlan = buildLessonsFromLearningPath(student);
+    const activeLesson = todaysPlan.find((lesson) => lesson.status !== 'completed') ?? todaysPlan[0] ?? null;
     const xpTimeline = buildXpTimeline((xpRows as XpEventRow[]) ?? []);
     const assessments = buildAssessmentsSummary((assignmentsRows as StudentAssignmentRow[]) ?? []);
     const aiRecommendations = deriveAiRecommendations(subjectMastery, todaysPlan);
@@ -656,6 +735,8 @@ export const fetchStudentDashboardData = async (
       xpTimeline,
       aiRecommendations,
       upcomingAssessments: assessments,
+      activeLessonId: activeLesson?.id ?? null,
+      nextLessonUrl: activeLesson?.launchUrl ?? null,
     };
   } catch (error) {
     console.error('[Dashboard] Student dashboard fallback engaged', error);
@@ -669,6 +750,8 @@ export const fetchStudentDashboardData = async (
       xpTimeline: buildXpTimeline([]),
       aiRecommendations: deriveAiRecommendations(fallbackStudentMastery(), fallbackStudentLessons()),
       upcomingAssessments: buildAssessmentsSummary([]),
+      activeLessonId: null,
+      nextLessonUrl: null,
     };
   }
 };
@@ -677,6 +760,12 @@ export const fetchParentDashboardData = async (
   parent: Parent,
 ): Promise<ParentDashboardData> => {
   try {
+    try {
+      await supabase.rpc('refresh_dashboard_rollups');
+    } catch (rollupError) {
+      console.warn('[Dashboard] Rollup refresh failed', rollupError);
+    }
+
     const childIds = parent.children.map((child) => child.id);
 
     const [
@@ -751,7 +840,17 @@ export const fetchParentDashboardData = async (
     });
 
     const enrichedChildren: ParentChildSnapshot[] = parent.children.map((child) => {
-      const mastery = childMasteryById.get(child.id) ?? fallbackStudentMastery();
+      const masteryFromLive = childMasteryById.get(child.id) ?? [];
+      const viewMastery = child.masteryBySubject?.length ? child.masteryBySubject : fallbackStudentMastery();
+      const mastery = viewMastery.map((entry) => {
+        const live = masteryFromLive.find((item) => item.subject === entry.subject);
+        return {
+          ...entry,
+          mastery: live?.mastery ?? entry.mastery,
+          trend: live?.trend ?? entry.trend,
+        } satisfies SubjectMastery;
+      });
+
       const xpEvents = xpByChild.get(child.id) ?? [];
       const recentActivity = xpEvents.slice(0, 4).map((event) => ({
         id: event.id.toString(),
@@ -762,9 +861,27 @@ export const fetchParentDashboardData = async (
         occurredAt: formatIsoDate(event.created_at),
       }));
 
+      const goalProgress =
+        mastery.reduce((acc, item) => {
+          if (item.goal && item.goal > 0) {
+            return acc + Math.min((item.mastery / item.goal) * 100, 150);
+          }
+          return acc + item.mastery;
+        }, 0) / (mastery.length || 1);
+
+      const cohortComparison =
+        mastery.reduce((acc, item) => {
+          if (item.cohortAverage !== undefined) {
+            return acc + (item.mastery - item.cohortAverage);
+          }
+          return acc;
+        }, 0) / (mastery.length || 1);
+
       return {
         ...child,
         masteryBySubject: mastery,
+        goalProgress: Math.round(goalProgress * 10) / 10,
+        cohortComparison: Math.round(cohortComparison * 10) / 10,
         recentActivity: recentActivity.length ? recentActivity : child.recentActivity,
       };
     });
@@ -782,14 +899,17 @@ export const fetchParentDashboardData = async (
         ? {
             weekStart: weeklyReportRow.week_start,
             summary: weeklyReportRow.summary ?? '',
-            highlights: Array.isArray(weeklyReportRow.highlights)
-              ? (weeklyReportRow.highlights as string[])
-              : [],
-            recommendations: Array.isArray(weeklyReportRow.recommendations)
-              ? (weeklyReportRow.recommendations as string[])
-              : [],
+            highlights: toStringArray(weeklyReportRow.highlights),
+            recommendations: toStringArray(weeklyReportRow.recommendations),
+            aiGenerated: weeklyReportRow.ai_generated ?? undefined,
           }
         : fallbackParentWeeklyReport(parent.name));
+
+    const downloadableReport = buildParentDownloadableReport(
+      parent,
+      weeklyReport,
+      enrichedChildren.length ? enrichedChildren : parent.children,
+    );
 
     return {
       parent,
@@ -797,21 +917,31 @@ export const fetchParentDashboardData = async (
       alerts,
       activitySeries: parentActivitySeries,
       weeklyReport,
+      downloadableReport,
     };
   } catch (error) {
     console.error('[Dashboard] Parent dashboard fallback engaged', error);
+    const fallbackChildren = fallbackParentChildren(parent.name);
+    const fallbackReport = fallbackParentWeeklyReport(parent.name);
     return {
       parent,
-      children: fallbackParentChildren(parent.name),
+      children: fallbackChildren,
       alerts: fallbackParentAlerts(),
       activitySeries: aggregateParentActivity([], []),
-      weeklyReport: fallbackParentWeeklyReport(parent.name),
+      weeklyReport: fallbackReport,
+      downloadableReport: buildParentDownloadableReport(parent, fallbackReport, fallbackChildren),
     };
   }
 };
 
 export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashboardData> => {
   try {
+    try {
+      await supabase.rpc('refresh_dashboard_rollups');
+    } catch (rollupError) {
+      console.warn('[Dashboard] Admin rollup refresh failed', rollupError);
+    }
+
     const [
       { data: metricsRow, error: metricsError },
       { data: growthRows, error: growthError },
@@ -916,6 +1046,19 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       }));
 
     const alerts = buildAdminAlerts(metrics, subjectPerformance, admin);
+
+    try {
+      await supabase.rpc('log_admin_event', {
+        p_event_type: 'dashboard.view',
+        p_metadata: {
+          activeStudents7d: metrics.activeStudents7d,
+          practiceMinutes7d: metrics.practiceMinutes7d,
+          timestamp: new Date().toISOString(),
+        },
+      });
+    } catch (logError) {
+      console.warn('[Dashboard] Failed to log admin event', logError);
+    }
 
     return {
       admin,

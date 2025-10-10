@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/Landing/LandingPage';
 import AuthModal from './components/Auth/AuthModal';
 import Header from './components/Layout/Header';
-import StudentDashboard from './components/Student/StudentDashboard';
-import ParentDashboard from './components/Parent/ParentDashboard';
-import AdminDashboard from './components/Admin/AdminDashboard';
+
+const StudentDashboard = lazy(() => import('./components/Student/StudentDashboard'));
+const ParentDashboard = lazy(() => import('./components/Parent/ParentDashboard'));
+const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard'));
 
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
@@ -48,39 +49,47 @@ const AppContent: React.FC = () => {
   return (
     <div className="font-inter">
       <Header />
-      <AnimatePresence mode="wait">
-        {user.role === 'student' ? (
-          <motion.div
-            key="student"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <StudentDashboard />
-          </motion.div>
-        ) : user.role === 'parent' ? (
-          <motion.div
-            key="parent"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ParentDashboard />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="admin"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <AdminDashboard />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Suspense
+        fallback={
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="animate-pulse text-gray-500 text-sm">Loading dashboard…</div>
+          </div>
+        }
+      >
+        <AnimatePresence mode="wait">
+          {user.role === 'student' ? (
+            <motion.div
+              key="student"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <StudentDashboard />
+            </motion.div>
+          ) : user.role === 'parent' ? (
+            <motion.div
+              key="parent"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ParentDashboard />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="admin"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AdminDashboard />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 };
