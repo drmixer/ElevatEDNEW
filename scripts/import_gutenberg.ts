@@ -3,13 +3,16 @@ import process from 'node:process';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import composeAttribution from './utils/attribution.js';
+import composeAttribution, { buildAttributionBlock, splitAttributionBlock } from './utils/attribution.js';
 import { loadStructuredFile } from './utils/files.js';
 import { assertLicenseAllowed } from './utils/license.js';
 import {
   createServiceRoleClient,
   fetchContentSourcesByName,
   resolveModules,
+  fetchLessonsByModuleIds,
+  findLessonForModule,
+  updateLessonAttributionBlocks,
 } from './utils/supabase.js';
 
 export type GutenbergMappingValue =
@@ -19,12 +22,15 @@ export type GutenbergMappingValue =
     title?: string;
     description?: string;
     tags?: string[];
+    lessonSlug?: string;
+    lessonTitle?: string;
   };
 
 export type GutenbergMapping = Record<string, GutenbergMappingValue[]>;
 
 export type AssetInsert = {
   module_id: number;
+  lesson_id: number | null;
   source_id: number;
   url: string;
   title: string | null;
@@ -40,9 +46,15 @@ export type AssetInsert = {
 const DEFAULT_MAPPING_FILE = path.resolve(process.cwd(), 'mappings/gutenberg.json');
 const BATCH_SIZE = 100;
 
-export const normalizeGutenbergEntries = (
-  value: GutenbergMappingValue[],
-): Array<Omit<AssetInsert, 'module_id' | 'source_id' | 'license' | 'license_url' | 'attribution_text'>> =>
+type NormalizedGutenbergEntry = Omit<
+  AssetInsert,
+  'module_id' | 'source_id' | 'license' | 'license_url' | 'attribution_text' | 'lesson_id'
+> & {
+  lessonSlug?: string | null;
+  lessonTitle?: string | null;
+};
+
+export const normalizeGutenbergEntries = (value: GutenbergMappingValue[]): NormalizedGutenbergEntry[] =>
   value.map((entry) => {
     if (typeof entry === 'string') {
       return {
@@ -52,6 +64,8 @@ export const normalizeGutenbergEntries = (
         kind: 'link',
         metadata: {},
         tags: [],
+        lessonSlug: null,
+        lessonTitle: null,
       };
     }
     return {
@@ -61,6 +75,8 @@ export const normalizeGutenbergEntries = (
       kind: 'link',
       metadata: entry,
       tags: entry.tags ?? [],
+      lessonSlug: entry.lessonSlug?.trim() ?? null,
+      lessonTitle: entry.lessonTitle?.trim() ?? null,
     };
   });
 
@@ -106,6 +122,25 @@ export const importGutenbergMapping = async (
     attribution_text: gutenberg.attribution_text ?? undefined,
   });
 
+  const moduleRecords = Array.from(
+    new Map(Array.from(supaModules.values()).map((record) => [record.id, record])).values(),
+  );
+  const lessonsByModule = await fetchLessonsByModuleIds(
+    supabase,
+    moduleRecords.map((record) => record.id),
+  );
+  const originalBlocks = new Map<number, string>();
+  const attributionSets = new Map<number, Set<string>>();
+  const touchedLessons = new Set<number>();
+
+  for (const lessonList of lessonsByModule.values()) {
+    for (const lesson of lessonList) {
+      const segments = splitAttributionBlock(lesson.attribution_block);
+      attributionSets.set(lesson.id, new Set(segments));
+      originalBlocks.set(lesson.id, buildAttributionBlock(segments));
+    }
+  }
+
   const assets: AssetInsert[] = [];
 
   for (const [moduleKey, entries] of Object.entries(mapping)) {
@@ -115,8 +150,36 @@ export const importGutenbergMapping = async (
     }
 
     for (const entry of normalizeGutenbergEntries(entries)) {
+      let lessonId: number | null = null;
+      if ((entry.lessonSlug && entry.lessonSlug.length > 0) || (entry.lessonTitle && entry.lessonTitle.length > 0)) {
+        const lesson = findLessonForModule(lessonsByModule, moduleRecord.id, {
+          slug: entry.lessonSlug ?? undefined,
+          title: entry.lessonTitle ?? undefined,
+        });
+        if (!lesson) {
+          throw new Error(
+            `Lesson "${entry.lessonSlug ?? entry.lessonTitle}" not found for module "${moduleKey}".`,
+          );
+        }
+        lessonId = lesson.id;
+
+        let set = attributionSets.get(lessonId);
+        if (!set) {
+          const existingSegments = splitAttributionBlock(lesson.attribution_block);
+          set = new Set(existingSegments);
+          attributionSets.set(lessonId, set);
+          originalBlocks.set(lessonId, buildAttributionBlock(existingSegments));
+        }
+        const before = set.size;
+        set.add(attribution);
+        if (set.size !== before) {
+          touchedLessons.add(lessonId);
+        }
+      }
+
       assets.push({
         module_id: moduleRecord.id,
+        lesson_id: lessonId,
         source_id: gutenberg.id,
         url: entry.url,
         title: entry.title,
@@ -129,6 +192,8 @@ export const importGutenbergMapping = async (
           ...entry.metadata,
           importer: 'gutenberg',
           imported_at: new Date().toISOString(),
+          ...(entry.lessonSlug ? { lesson_slug: entry.lessonSlug } : {}),
+          ...(entry.lessonTitle ? { lesson_title: entry.lessonTitle } : {}),
         },
         tags: entry.tags,
       });
@@ -140,6 +205,24 @@ export const importGutenbergMapping = async (
   }
 
   await upsertAssets(supabase, assets);
+  if (touchedLessons.size > 0) {
+    const updates = new Map<number, string>();
+    for (const lessonId of touchedLessons) {
+      const set = attributionSets.get(lessonId);
+      if (!set) {
+        continue;
+      }
+      const merged = buildAttributionBlock(set);
+      const existing = originalBlocks.get(lessonId) ?? '';
+      if (merged.length > 0 && merged !== existing) {
+        updates.set(lessonId, merged);
+      }
+    }
+    if (updates.size > 0) {
+      await updateLessonAttributionBlocks(supabase, updates);
+    }
+  }
+
   return assets.length;
 };
 

@@ -3,13 +3,16 @@ import process from 'node:process';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import composeAttribution from './utils/attribution.js';
+import composeAttribution, { buildAttributionBlock, splitAttributionBlock } from './utils/attribution.js';
 import { loadStructuredFile } from './utils/files.js';
 import { assertLicenseAllowed } from './utils/license.js';
 import {
   createServiceRoleClient,
   fetchContentSourcesByName,
   resolveModules,
+  fetchLessonsByModuleIds,
+  findLessonForModule,
+  updateLessonAttributionBlocks,
 } from './utils/supabase.js';
 
 export type FederalMappingValue =
@@ -19,6 +22,8 @@ export type FederalMappingValue =
     title?: string;
     description?: string;
     tags?: string[];
+    lessonSlug?: string;
+    lessonTitle?: string;
   };
 
 export type ProviderKey = 'NASA' | 'NOAA' | 'NARA' | 'LOC';
@@ -29,6 +34,7 @@ export type FederalMapping = Record<string, ProviderMapping>;
 
 export type AssetInsert = {
   module_id: number;
+  lesson_id: number | null;
   source_id: number;
   url: string;
   title: string | null;
@@ -50,9 +56,15 @@ const PROVIDER_NAMES: Record<ProviderKey, string> = {
   LOC: 'LOC',
 };
 
-export const normalizeFederalEntries = (
-  value: FederalMappingValue[],
-): Array<Omit<AssetInsert, 'module_id' | 'source_id' | 'license' | 'license_url' | 'attribution_text'>> =>
+type NormalizedFederalEntry = Omit<
+  AssetInsert,
+  'module_id' | 'source_id' | 'license' | 'license_url' | 'attribution_text' | 'lesson_id'
+> & {
+  lessonSlug?: string | null;
+  lessonTitle?: string | null;
+};
+
+export const normalizeFederalEntries = (value: FederalMappingValue[]): NormalizedFederalEntry[] =>
   value.map((entry) => {
     if (typeof entry === 'string') {
       return {
@@ -62,6 +74,8 @@ export const normalizeFederalEntries = (
         kind: 'link',
         metadata: {},
         tags: [],
+        lessonSlug: null,
+        lessonTitle: null,
       };
     }
     return {
@@ -71,6 +85,8 @@ export const normalizeFederalEntries = (
       kind: 'link',
       metadata: entry,
       tags: entry.tags ?? [],
+      lessonSlug: entry.lessonSlug?.trim() ?? null,
+      lessonTitle: entry.lessonTitle?.trim() ?? null,
     };
   });
 
@@ -125,6 +141,25 @@ export const importFederalMapping = async (
     }
   }
 
+  const moduleRecords = Array.from(
+    new Map(Array.from(modules.values()).map((record) => [record.id, record])).values(),
+  );
+  const lessonsByModule = await fetchLessonsByModuleIds(
+    supabase,
+    moduleRecords.map((record) => record.id),
+  );
+  const originalBlocks = new Map<number, string>();
+  const attributionSets = new Map<number, Set<string>>();
+  const touchedLessons = new Set<number>();
+
+  for (const lessonList of lessonsByModule.values()) {
+    for (const lesson of lessonList) {
+      const segments = splitAttributionBlock(lesson.attribution_block);
+      attributionSets.set(lesson.id, new Set(segments));
+      originalBlocks.set(lesson.id, buildAttributionBlock(segments));
+    }
+  }
+
   const assets: AssetInsert[] = [];
 
   for (const [moduleKey, providerEntries] of Object.entries(mapping)) {
@@ -147,8 +182,38 @@ export const importFederalMapping = async (
       const attribution = attributionByProvider.get(providerKey) ?? null;
 
       for (const entry of normalizeFederalEntries(entries)) {
+        let lessonId: number | null = null;
+        if ((entry.lessonSlug && entry.lessonSlug.length > 0) || (entry.lessonTitle && entry.lessonTitle.length > 0)) {
+          const lesson = findLessonForModule(lessonsByModule, moduleRecord.id, {
+            slug: entry.lessonSlug ?? undefined,
+            title: entry.lessonTitle ?? undefined,
+          });
+          if (!lesson) {
+            throw new Error(
+              `Lesson "${entry.lessonSlug ?? entry.lessonTitle}" not found for module "${moduleKey}".`,
+            );
+          }
+          lessonId = lesson.id;
+
+          if (attribution && attribution.length > 0) {
+            let set = attributionSets.get(lessonId);
+            if (!set) {
+              const existingSegments = splitAttributionBlock(lesson.attribution_block);
+              set = new Set(existingSegments);
+              attributionSets.set(lessonId, set);
+              originalBlocks.set(lessonId, buildAttributionBlock(existingSegments));
+            }
+            const before = set.size;
+            set.add(attribution);
+            if (set.size !== before) {
+              touchedLessons.add(lessonId);
+            }
+          }
+        }
+
         assets.push({
           module_id: moduleRecord.id,
+          lesson_id: lessonId,
           source_id: sourceRecord.id,
           url: entry.url,
           title: entry.title,
@@ -162,6 +227,8 @@ export const importFederalMapping = async (
             importer: 'federal_pd',
             provider: providerName,
             imported_at: new Date().toISOString(),
+            ...(entry.lessonSlug ? { lesson_slug: entry.lessonSlug } : {}),
+            ...(entry.lessonTitle ? { lesson_title: entry.lessonTitle } : {}),
           },
           tags: entry.tags,
         });
@@ -174,6 +241,24 @@ export const importFederalMapping = async (
   }
 
   await upsertAssets(supabase, assets);
+  if (touchedLessons.size > 0) {
+    const updates = new Map<number, string>();
+    for (const lessonId of touchedLessons) {
+      const set = attributionSets.get(lessonId);
+      if (!set) {
+        continue;
+      }
+      const merged = buildAttributionBlock(set);
+      const existing = originalBlocks.get(lessonId) ?? '';
+      if (merged.length > 0 && merged !== existing) {
+        updates.set(lessonId, merged);
+      }
+    }
+    if (updates.size > 0) {
+      await updateLessonAttributionBlocks(supabase, updates);
+    }
+  }
+
   return assets.length;
 };
 

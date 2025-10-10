@@ -2,11 +2,15 @@ import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { BookOpen, LinkIcon, Loader2, Sparkles } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { fetchModuleDetail, fetchRecommendations } from '../services/catalogService';
 
 const formatMinutes = (value: number | null): string =>
   value && Number.isFinite(value) ? `${value} min` : 'Flexible';
+
+const MARKDOWN_PLUGINS = [remarkGfm];
 
 const ModulePage: React.FC = () => {
   const params = useParams<{ id: string }>();
@@ -151,10 +155,12 @@ const ModulePage: React.FC = () => {
                   </div>
                 </summary>
                 <div className="px-5 pb-5 space-y-4">
-                  <div
+                  <ReactMarkdown
                     className="prose prose-sm max-w-none text-slate-700"
-                    dangerouslySetInnerHTML={{ __html: lesson.content }}
-                  />
+                    remarkPlugins={MARKDOWN_PLUGINS}
+                  >
+                    {lesson.content}
+                  </ReactMarkdown>
                   {lesson.assets.length > 0 && (
                     <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                       {lesson.assets.map((asset) => (
@@ -175,9 +181,12 @@ const ModulePage: React.FC = () => {
                     </div>
                   )}
                   {lesson.attributionBlock && (
-                    <div className="text-xs text-slate-500 border-t border-slate-200 pt-3">
+                    <ReactMarkdown
+                      className="text-xs text-slate-500 border-t border-slate-200 pt-3 [&_a]:text-brand-blue [&_a]:underline"
+                      remarkPlugins={MARKDOWN_PLUGINS}
+                    >
                       {lesson.attributionBlock}
-                    </div>
+                    </ReactMarkdown>
                   )}
                 </div>
               </details>

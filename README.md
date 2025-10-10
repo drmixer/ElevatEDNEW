@@ -42,6 +42,23 @@ Database & Schema
    npm run seed:skeleton
    ```
 
+Lesson Data
+-----------
+
+- `public.lessons` is the canonical store for classroom-ready lesson plans. Required fields are:
+  - `module_id` – links the lesson to a curriculum module. Lesson detail pages only surface lessons with a populated `module_id`.
+  - `title` – human-friendly heading used in catalog views.
+  - `content` – Markdown body containing the structured lesson plan. The API renders this body to HTML for the UI.
+  - `visibility` – enum (`draft`, `private`, `public`) that controls publication state.
+  - `open_track` – boolean flag indicating if the lesson is approved for an open-track sequence.
+  - `attribution_block` – Markdown snippet that aggregates attribution strings for the lesson’s supporting assets.
+- Optional metadata:
+  - `estimated_duration_minutes`, `media_url`, and `ai_hint_context` enrich time estimates and adaptive experiences.
+  - `metadata` (JSONB) can store importer breadcrumbs and authoring notes.
+  - `created_by` back-references a profile when lessons are authored through the app.
+- Assets connect to lessons through `public.assets.lesson_id`. When assets are attached to a lesson, their aggregated attribution is stored on the lesson’s `attribution_block`.
+- Open-track lessons are also surfaced at the module level; make sure to set both the module and lesson `open_track` flags when authoring.
+
 Content Importers
 -----------------
 
