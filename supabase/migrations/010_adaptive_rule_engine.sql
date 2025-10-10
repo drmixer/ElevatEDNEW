@@ -57,7 +57,7 @@ from progress p
 group by p.student_id, p.topic_id;
 
 create or replace function public.suggest_next_lessons(
-  p_student_id uuid,
+  student_id uuid,
   limit_count int default 3
 )
 returns table (
@@ -100,12 +100,12 @@ begin
     select sp.attempts
     from public.student_progress sp
     join public.lessons l on l.id = sp.lesson_id
-    where sp.student_id = p_student_id
+    where sp.student_id = student_id
       and l.topic_id = v.topic_id
     order by sp.last_activity_at desc
     limit 1
   ) as latest_attempts(attempts) on true
-  where v.student_id = p_student_id
+  where v.student_id = student_id
   order by v.last_activity_at desc nulls last
   limit 1;
 
@@ -133,7 +133,7 @@ begin
       0.650::numeric(4, 3) as confidence
     from public.lessons l
     left join public.student_progress sp
-      on sp.lesson_id = l.id and sp.student_id = p_student_id
+      on sp.lesson_id = l.id and sp.student_id = student_id
     where l.topic_id = current_topic_id
       and l.is_published = true
       and (sp.id is null or coalesce(sp.mastery_pct, 0) < review_threshold)
@@ -151,7 +151,7 @@ begin
     from public.topics next_topic
     join public.lessons l on l.topic_id = next_topic.id
     left join public.student_progress sp
-      on sp.lesson_id = l.id and sp.student_id = p_student_id
+      on sp.lesson_id = l.id and sp.student_id = student_id
     where l.is_published = true
       and (sp.mastery_pct is null or sp.mastery_pct < min_mastery)
       and next_topic.id <> current_topic_id
@@ -173,7 +173,7 @@ begin
         from public.topic_prerequisites tp
         left join public.v_student_topic_mastery vm
           on vm.topic_id = tp.prerequisite_id
-         and vm.student_id = p_student_id
+         and vm.student_id = student_id
         where tp.topic_id = next_topic.id
           and coalesce(vm.topic_mastery_pct, 0) < min_mastery
       )
@@ -189,7 +189,7 @@ begin
       0.700::numeric(4, 3) as confidence
     from public.lessons l
     left join public.student_progress sp
-      on sp.lesson_id = l.id and sp.student_id = p_student_id
+      on sp.lesson_id = l.id and sp.student_id = student_id
     where l.topic_id = current_topic_id
       and l.is_published = true
       and (sp.id is null or coalesce(sp.mastery_pct, 0) < min_mastery)
