@@ -33,5 +33,33 @@ export default defineConfig(({ command }) => {
     optimizeDeps: {
       exclude: ['lucide-react'],
     },
+    build: {
+      chunkSizeWarningLimit: 900,
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              if (id.includes('@tanstack/react-query')) {
+                return 'react-query';
+              }
+              if (id.includes('react-markdown') || id.includes('remark')) {
+                return 'markdown';
+              }
+              if (id.includes('recharts')) {
+                return 'charts';
+              }
+              if (id.includes('framer-motion')) {
+                return 'motion';
+              }
+              if (id.includes('lucide-react')) {
+                return 'icons';
+              }
+              return 'vendor';
+            }
+            return undefined;
+          },
+        },
+      },
+    },
   };
 });

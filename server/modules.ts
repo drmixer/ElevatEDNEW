@@ -108,9 +108,114 @@ export type ModuleFilters = {
   grade?: string;
   strand?: string;
   topic?: string;
+  standards?: string[];
+  openTrack?: boolean;
+  sort?: 'featured' | 'title-asc' | 'title-desc' | 'grade-asc' | 'grade-desc';
   search?: string;
   page?: number;
   pageSize?: number;
+};
+
+export type LessonDetail = {
+  lesson: {
+    id: number;
+    title: string;
+    content: string;
+    estimated_duration_minutes: number | null;
+    attribution_block: string;
+    open_track: boolean;
+    assets: AssetSummary[];
+  };
+  module: ModuleListItem;
+  module_lessons: Array<{
+    id: number;
+    title: string;
+    estimated_duration_minutes: number | null;
+    open_track: boolean;
+  }>;
+  standards: ModuleStandard[];
+};
+
+type LessonRow = {
+  id: number;
+  module_id: number;
+  title: string;
+  content: string;
+  estimated_duration_minutes: number | null;
+  attribution_block: string | null;
+  open_track: boolean | null;
+};
+
+type LessonNavRow = {
+  id: number;
+  title: string;
+  estimated_duration_minutes: number | null;
+  open_track: boolean | null;
+};
+
+type ModuleStandardRow = {
+  standard_id: number;
+  alignment_strength: string | null;
+  metadata: Record<string, unknown> | null;
+};
+
+type AssessmentRow = {
+  id: number;
+  title: string;
+  description: string | null;
+  estimated_duration_minutes: number | null;
+  metadata: Record<string, unknown> | null;
+};
+
+type AssessmentSectionRow = {
+  id: number;
+  assessment_id: number;
+};
+
+type AssessmentQuestionRow = {
+  id: number;
+  section_id: number;
+};
+
+type AssessmentAttemptRow = {
+  assessment_id: number;
+  status: string;
+  total_score: number | null;
+  mastery_pct: number | null;
+};
+
+type AssessmentSectionDetail = {
+  id: number;
+  title: string;
+  instructions: string | null;
+  section_order: number | null;
+};
+
+type AssessmentQuestionLinkRow = {
+  id: number;
+  section_id: number;
+  question_id: number;
+  question_order: number;
+  metadata: Record<string, unknown> | null;
+};
+
+type QuestionBankRow = {
+  id: number;
+  prompt: string;
+  question_type: string;
+  difficulty: number | null;
+  solution_explanation: string | null;
+  metadata: Record<string, unknown> | null;
+  tags: string[] | null;
+};
+
+type QuestionOptionRow = {
+  id: number;
+  question_id: number;
+  option_order: number;
+  content: string;
+  is_correct: boolean;
+  feedback: string | null;
 };
 
 export const listModules = async (
@@ -122,6 +227,9 @@ export const listModules = async (
     grade,
     strand,
     topic,
+    standards,
+    openTrack,
+    sort,
     search,
     page = 1,
     pageSize = 12,
@@ -130,11 +238,64 @@ export const listModules = async (
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
+  let moduleIdFilter: number[] | null = null;
+
+  if (Array.isArray(standards) && standards.length > 0) {
+    const normalizedCodes = standards
+      .map((code) => code.trim())
+      .filter((code) => code.length > 0);
+
+    if (normalizedCodes.length > 0) {
+      const { data: standardRows, error: standardsError } = await supabase
+        .from('standards')
+        .select('id')
+        .in('code', normalizedCodes);
+
+      if (standardsError) {
+        throw new Error(`Failed to resolve standards filter: ${standardsError.message}`);
+      }
+
+      const standardIds = (standardRows ?? [])
+        .map((row) => (row as { id: number | null }).id)
+        .filter((value): value is number => typeof value === 'number');
+
+      if (standardIds.length === 0) {
+        return { data: [], total: 0 };
+      }
+
+      const { data: moduleStandardsRows, error: moduleStandardsError } = await supabase
+        .from('module_standards')
+        .select('module_id')
+        .in('standard_id', standardIds);
+
+      if (moduleStandardsError) {
+        throw new Error(`Failed to filter modules by standards: ${moduleStandardsError.message}`);
+      }
+
+      const moduleIds = new Set<number>();
+      for (const entry of moduleStandardsRows ?? []) {
+        const moduleId = (entry as { module_id: number | null }).module_id;
+        if (typeof moduleId === 'number') {
+          moduleIds.add(moduleId);
+        }
+      }
+
+      if (moduleIds.size === 0) {
+        return { data: [], total: 0 };
+      }
+
+      moduleIdFilter = Array.from(moduleIds);
+    }
+  }
+
   let query = supabase
     .from('modules')
     .select('id, slug, title, summary, grade_band, subject, strand, topic, open_track, suggested_source_category, example_source', { count: 'exact' })
     .eq('visibility', 'public');
 
+  if (moduleIdFilter) {
+    query = query.in('id', moduleIdFilter);
+  }
   if (subject) {
     query = query.eq('subject', subject);
   }
@@ -147,6 +308,9 @@ export const listModules = async (
   if (topic) {
     query = query.ilike('topic', `%${topic}%`);
   }
+  if (openTrack === true) {
+    query = query.eq('open_track', true);
+  }
   if (search) {
     query = query.or(
       [
@@ -158,10 +322,22 @@ export const listModules = async (
     );
   }
 
-  const { data, error, count } = await query
-    .order('grade_band', { ascending: true })
-    .order('title', { ascending: true })
-    .range(from, to);
+  const sortKey = sort ?? 'featured';
+
+  if (sortKey === 'title-asc') {
+    query = query.order('title', { ascending: true }).order('grade_band', { ascending: true });
+  } else if (sortKey === 'title-desc') {
+    query = query.order('title', { ascending: false }).order('grade_band', { ascending: true });
+  } else if (sortKey === 'grade-desc') {
+    query = query.order('grade_band', { ascending: false }).order('title', { ascending: true });
+  } else if (sortKey === 'grade-asc') {
+    query = query.order('grade_band', { ascending: true }).order('title', { ascending: true });
+  } else {
+    // Featured ordering keeps a balanced grade progression
+    query = query.order('grade_band', { ascending: true }).order('title', { ascending: true });
+  }
+
+  const { data, error, count } = await query.range(from, to);
 
   if (error) {
     throw new Error(`Failed to list modules: ${error.message}`);
@@ -255,49 +431,7 @@ export const getModuleDetail = async (
   }
 
   const moduleStandardsRaw = (moduleStandardsResult.data ?? []) as ModuleStandardRow[];
-  let standards: ModuleStandard[] = [];
-
-  if (moduleStandardsRaw.length > 0) {
-    const uniqueStandardIds = Array.from(new Set(moduleStandardsRaw.map((entry) => entry.standard_id)));
-    if (uniqueStandardIds.length > 0) {
-      const { data: standardRows, error: standardsError } = await supabase
-        .from('standards')
-        .select('id, framework, code, description')
-        .in('id', uniqueStandardIds);
-
-      if (standardsError) {
-        throw new Error(`Failed to load standards for module ${moduleId}: ${standardsError.message}`);
-      }
-
-      const lookup = new Map<number, { framework: string; code: string; description: string | null }>();
-      for (const standard of standardRows ?? []) {
-        lookup.set(standard.id as number, {
-          framework: standard.framework as string,
-          code: standard.code as string,
-          description: (standard.description as string | null) ?? null,
-        });
-      }
-
-      standards = moduleStandardsRaw
-        .map((entry) => {
-          const standard = lookup.get(entry.standard_id);
-          if (!standard) {
-            return null;
-          }
-          const metadata = (entry.metadata ?? {}) as Record<string, unknown>;
-          const notes = typeof metadata.notes === 'string' ? metadata.notes : null;
-          return {
-            id: entry.standard_id,
-            framework: standard.framework,
-            code: standard.code,
-            description: standard.description,
-            alignment_strength: entry.alignment_strength ?? null,
-            notes,
-          } satisfies ModuleStandard;
-        })
-        .filter((value): value is ModuleStandard => value !== null);
-    }
-  }
+  const standards = await expandModuleStandards(supabase, moduleId, moduleStandardsRaw);
 
   const assessmentsRaw = (assessmentsResult.data ?? []) as AssessmentRow[];
   let assessments: ModuleAssessmentSummary[] = [];
@@ -407,6 +541,92 @@ export const getModuleDetail = async (
     moduleAssets,
     standards,
     assessments,
+  };
+};
+
+export const getLessonDetail = async (
+  supabase: SupabaseClient,
+  lessonId: number,
+): Promise<LessonDetail | null> => {
+  const { data: lessonData, error: lessonError } = await supabase
+    .from('lessons')
+    .select('id, module_id, title, content, estimated_duration_minutes, attribution_block, open_track')
+    .eq('id', lessonId)
+    .eq('visibility', 'public')
+    .single();
+
+  if (lessonError) {
+    if (lessonError.code === 'PGRST116') {
+      return null;
+    }
+    throw new Error(`Failed to load lesson ${lessonId}: ${lessonError.message}`);
+  }
+
+  if (!lessonData) {
+    return null;
+  }
+
+  const moduleId = lessonData.module_id;
+  if (!moduleId) {
+    return null;
+  }
+
+  const [moduleResult, assetsResult, moduleLessonsResult] = await Promise.all([
+    supabase
+      .from('modules')
+      .select('id, slug, title, summary, grade_band, subject, strand, topic, open_track, suggested_source_category, example_source')
+      .eq('id', moduleId)
+      .eq('visibility', 'public')
+      .single(),
+    supabase
+      .from('assets')
+      .select('id, lesson_id, title, description, url, kind, license, license_url, attribution_text, tags')
+      .eq('lesson_id', lessonId)
+      .order('id', { ascending: true }),
+    supabase
+      .from('lessons')
+      .select('id, title, estimated_duration_minutes, open_track')
+      .eq('module_id', moduleId)
+      .eq('visibility', 'public')
+      .order('id', { ascending: true }),
+  ]);
+
+  if (moduleResult.error) {
+    if (moduleResult.error.code === 'PGRST116') {
+      return null;
+    }
+    throw new Error(`Failed to load module for lesson ${lessonId}: ${moduleResult.error.message}`);
+  }
+  if (assetsResult.error) {
+    throw new Error(`Failed to load lesson assets: ${assetsResult.error.message}`);
+  }
+  if (moduleLessonsResult.error) {
+    throw new Error(`Failed to load module lessons: ${moduleLessonsResult.error.message}`);
+  }
+
+  const standards = await expandModuleStandards(supabase, moduleId);
+
+  const assets = (assetsResult.data ?? []) as AssetSummary[];
+  const moduleLessonsRaw = (moduleLessonsResult.data ?? []) as LessonNavRow[];
+
+  return {
+    lesson: {
+      id: lessonData.id,
+      title: lessonData.title,
+      content: lessonData.content,
+      estimated_duration_minutes: lessonData.estimated_duration_minutes ?? null,
+      attribution_block: lessonData.attribution_block ?? '',
+      open_track: lessonData.open_track ?? false,
+      assets,
+    },
+    module: moduleResult.data as ModuleListItem,
+    module_lessons: moduleLessonsRaw.map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      estimated_duration_minutes: lesson.estimated_duration_minutes ?? null,
+      open_track: lesson.open_track ?? false,
+    })),
+    standards,
   };
 };
 
@@ -574,6 +794,73 @@ export const getModuleAssessment = async (
   };
 };
 
+const expandModuleStandards = async (
+  supabase: SupabaseClient,
+  moduleId: number,
+  moduleStandardsRaw?: ModuleStandardRow[],
+): Promise<ModuleStandard[]> => {
+  let entries = moduleStandardsRaw;
+
+  if (!entries) {
+    const { data, error } = await supabase
+      .from('module_standards')
+      .select('standard_id, alignment_strength, metadata')
+      .eq('module_id', moduleId);
+
+    if (error) {
+      throw new Error(`Failed to load module standards: ${error.message}`);
+    }
+
+    entries = (data ?? []) as ModuleStandardRow[];
+  }
+
+  if (!entries || entries.length === 0) {
+    return [];
+  }
+
+  const uniqueStandardIds = Array.from(new Set(entries.map((entry) => entry.standard_id)));
+  if (uniqueStandardIds.length === 0) {
+    return [];
+  }
+
+  const { data: standardRows, error: standardsError } = await supabase
+    .from('standards')
+    .select('id, framework, code, description')
+    .in('id', uniqueStandardIds);
+
+  if (standardsError) {
+    throw new Error(`Failed to load standards for module ${moduleId}: ${standardsError.message}`);
+  }
+
+  const lookup = new Map<number, { framework: string; code: string; description: string | null }>();
+  for (const standard of standardRows ?? []) {
+    lookup.set(standard.id as number, {
+      framework: standard.framework as string,
+      code: standard.code as string,
+      description: (standard.description as string | null) ?? null,
+    });
+  }
+
+  return entries
+    .map((entry) => {
+      const standard = lookup.get(entry.standard_id);
+      if (!standard) {
+        return null;
+      }
+      const metadata = (entry.metadata ?? {}) as Record<string, unknown>;
+      const notes = typeof metadata.notes === 'string' ? metadata.notes : null;
+      return {
+        id: entry.standard_id,
+        framework: standard.framework,
+        code: standard.code,
+        description: standard.description,
+        alignment_strength: entry.alignment_strength ?? null,
+        notes,
+      } satisfies ModuleStandard;
+    })
+    .filter((value): value is ModuleStandard => value !== null);
+};
+
 const extractPurpose = (metadata: unknown): string | null => {
   if (!metadata || typeof metadata !== 'object') {
     return null;
@@ -588,78 +875,4 @@ const extractPurpose = (metadata: unknown): string | null => {
     return kind.trim();
   }
   return null;
-};
-
-type LessonRow = {
-  id: number;
-  title: string;
-  content: string;
-  estimated_duration_minutes: number | null;
-  attribution_block: string | null;
-  open_track: boolean | null;
-};
-
-type ModuleStandardRow = {
-  standard_id: number;
-  alignment_strength: string | null;
-  metadata: Record<string, unknown> | null;
-};
-
-type AssessmentRow = {
-  id: number;
-  title: string;
-  description: string | null;
-  estimated_duration_minutes: number | null;
-  metadata: Record<string, unknown> | null;
-};
-
-type AssessmentSectionRow = {
-  id: number;
-  assessment_id: number;
-};
-
-type AssessmentQuestionRow = {
-  id: number;
-  section_id: number;
-};
-
-type AssessmentAttemptRow = {
-  assessment_id: number;
-  status: string;
-  total_score: number | null;
-  mastery_pct: number | null;
-};
-
-type AssessmentSectionDetail = {
-  id: number;
-  title: string;
-  instructions: string | null;
-  section_order: number | null;
-};
-
-type AssessmentQuestionLinkRow = {
-  id: number;
-  section_id: number;
-  question_id: number;
-  question_order: number;
-  metadata: Record<string, unknown> | null;
-};
-
-type QuestionBankRow = {
-  id: number;
-  prompt: string;
-  question_type: string;
-  difficulty: number | null;
-  solution_explanation: string | null;
-  metadata: Record<string, unknown> | null;
-  tags: string[] | null;
-};
-
-type QuestionOptionRow = {
-  id: number;
-  question_id: number;
-  option_order: number;
-  content: string;
-  is_correct: boolean;
-  feedback: string | null;
 };

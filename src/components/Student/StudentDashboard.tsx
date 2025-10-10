@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { Suspense, lazy, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   AlertTriangle,
@@ -25,8 +25,8 @@ import {
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
 import type { DashboardLesson, Student } from '../../types';
-import LearningAssistant from './LearningAssistant';
-import AssessmentFlow from './AssessmentFlow';
+const AssessmentFlow = lazy(() => import('./AssessmentFlow'));
+const LearningAssistant = lazy(() => import('./LearningAssistant'));
 import { fetchStudentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
 
@@ -80,7 +80,17 @@ const StudentDashboard: React.FC = () => {
   }
 
   if (activeView === 'assessment') {
-    return <AssessmentFlow onComplete={() => setActiveView('dashboard')} />;
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-gray-50 text-sm text-gray-500">
+            Loading assessment experience…
+          </div>
+        }
+      >
+        <AssessmentFlow onComplete={() => setActiveView('dashboard')} />
+      </Suspense>
+    );
   }
 
   const todaysPlan = dashboard?.todaysPlan ?? [];
@@ -614,7 +624,9 @@ const StudentDashboard: React.FC = () => {
         </div>
       </div>
 
-      <LearningAssistant />
+      <Suspense fallback={<div className="px-4 py-8 text-sm text-gray-500">Loading assistant…</div>}>
+        <LearningAssistant />
+      </Suspense>
     </div>
   );
 };

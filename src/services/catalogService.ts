@@ -1,6 +1,8 @@
 import type {
   CatalogFilters,
   CatalogModule,
+  LessonDetail,
+  LessonNavigationItem,
   ModuleAsset,
   ModuleAssessmentDetail,
   ModuleAssessmentSection,
@@ -49,6 +51,13 @@ type ApiLesson = {
   attribution_block: string | null;
   open_track: boolean | null;
   assets?: ApiAsset[];
+};
+
+type ApiLessonNav = {
+  id: number;
+  title: string;
+  estimated_duration_minutes: number | null;
+  open_track: boolean | null;
 };
 
 type ApiModuleStandard = {
@@ -134,6 +143,14 @@ type ModuleDetailResponse = {
   assessments: ApiModuleAssessmentSummary[];
 };
 type RecommendationsResponse = { recommendations: ApiRecommendation[] };
+type LessonDetailResponse = {
+  lesson: {
+    lesson: ApiLesson;
+    module: ApiModule;
+    module_lessons: ApiLessonNav[];
+    standards: ApiModuleStandard[];
+  };
+};
 
 const mapModule = (item: ApiModule): CatalogModule => ({
   id: item.id,
@@ -179,6 +196,13 @@ const mapStandard = (standard: ApiModuleStandard): ModuleStandard => ({
   description: standard.description ?? null,
   alignmentStrength: standard.alignment_strength ?? null,
   notes: standard.notes ?? null,
+});
+
+const mapLessonNav = (lesson: ApiLessonNav): LessonNavigationItem => ({
+  id: lesson.id,
+  title: lesson.title,
+  estimatedDurationMinutes: lesson.estimated_duration_minutes ?? null,
+  openTrack: lesson.open_track ?? false,
 });
 
 const mapAssessmentSummary = (assessment: ApiModuleAssessmentSummary): ModuleAssessmentSummary => ({
@@ -252,6 +276,13 @@ const buildQueryString = (filters: CatalogFilters): string => {
   if (filters.grade) params.set('grade', filters.grade);
   if (filters.strand) params.set('strand', filters.strand);
   if (filters.topic) params.set('topic', filters.topic);
+  if (Array.isArray(filters.standards) && filters.standards.length > 0) {
+    params.set('standards', filters.standards.join(','));
+  }
+  if (typeof filters.openTrack === 'boolean') {
+    params.set('openTrack', String(filters.openTrack));
+  }
+  if (filters.sort) params.set('sort', filters.sort);
   if (filters.search) params.set('search', filters.search);
   if (filters.page) params.set('page', String(filters.page));
   if (filters.pageSize) params.set('pageSize', String(filters.pageSize));
@@ -333,4 +364,23 @@ export const fetchRecommendations = async (
   return Array.isArray(payload.recommendations)
     ? payload.recommendations.map(mapRecommendation)
     : [];
+};
+
+export const fetchLessonDetail = async (lessonId: number): Promise<LessonDetail> => {
+  const response = await fetch(`/api/lessons/${lessonId}`);
+  if (response.status === 404) {
+    throw new Error('Lesson not found');
+  }
+
+  const payload = await handleResponse<LessonDetailResponse>(response);
+  const detail = payload.lesson;
+
+  return {
+    lesson: mapLesson(detail.lesson),
+    module: mapModule(detail.module),
+    moduleLessons: Array.isArray(detail.module_lessons)
+      ? detail.module_lessons.map(mapLessonNav)
+      : [],
+    standards: Array.isArray(detail.standards) ? detail.standards.map(mapStandard) : [],
+  };
 };

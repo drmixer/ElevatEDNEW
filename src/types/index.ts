@@ -203,6 +203,9 @@ export interface CatalogFilters {
   grade?: string;
   strand?: string;
   topic?: string;
+  standards?: string[];
+  openTrack?: boolean;
+  sort?: 'featured' | 'title-asc' | 'title-desc' | 'grade-asc' | 'grade-desc';
   search?: string;
   page?: number;
   pageSize?: number;
@@ -243,6 +246,20 @@ export interface ModuleLesson {
   attributionBlock: string;
   openTrack: boolean;
   assets: ModuleAsset[];
+}
+
+export interface LessonNavigationItem {
+  id: number;
+  title: string;
+  estimatedDurationMinutes: number | null;
+  openTrack: boolean;
+}
+
+export interface LessonDetail {
+  lesson: ModuleLesson;
+  module: CatalogModule;
+  moduleLessons: LessonNavigationItem[];
+  standards: ModuleStandard[];
 }
 
 export interface ModuleStandard {

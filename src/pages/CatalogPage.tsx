@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 
 import { fetchCatalogModules } from '../services/catalogService';
@@ -14,6 +14,20 @@ const SUBJECT_OPTIONS = [
   'Electives',
 ];
 const GRADE_OPTIONS = ['Pre-K', 'K', ...Array.from({ length: 12 }, (_, index) => String(index + 1))];
+const SORT_OPTIONS = [
+  { value: 'featured', label: 'Featured' },
+  { value: 'title-asc', label: 'Title A → Z' },
+  { value: 'title-desc', label: 'Title Z → A' },
+  { value: 'grade-asc', label: 'Grade Low → High' },
+  { value: 'grade-desc', label: 'Grade High → Low' },
+];
+
+const createDefaultFilters = (): CatalogFilters => ({
+  page: 1,
+  pageSize,
+  sort: 'featured',
+  standards: [],
+});
 
 const pageSize = 12;
 
@@ -52,8 +66,43 @@ const ModuleCard: React.FC<{ module: CatalogModule }> = ({ module }) => (
 );
 
 const CatalogPage: React.FC = () => {
-  const [filters, setFilters] = useState<CatalogFilters>({ page: 1, pageSize });
-  const [searchTerm, setSearchTerm] = useState('');
+  const queryClient = useQueryClient();
+
+  type CatalogFilterCache = {
+    filters: CatalogFilters;
+    searchTerm: string;
+  };
+
+  const cachedState = queryClient.getQueryData<CatalogFilterCache>(['catalog-filters']);
+
+  const [filters, setFilters] = useState<CatalogFilters>(() => {
+    if (cachedState?.filters) {
+      return {
+        ...createDefaultFilters(),
+        ...cachedState.filters,
+        standards: Array.isArray(cachedState.filters.standards)
+          ? [...cachedState.filters.standards]
+          : [],
+      };
+    }
+    return createDefaultFilters();
+  });
+  const [searchTerm, setSearchTerm] = useState(
+    cachedState?.searchTerm ?? cachedState?.filters.search ?? '',
+  );
+  const [standardInput, setStandardInput] = useState('');
+
+  useEffect(() => {
+    queryClient.setQueryData(['catalog-filters'], {
+      filters: {
+        ...filters,
+        standards: Array.isArray(filters.standards) ? [...filters.standards] : [],
+      },
+      searchTerm,
+    });
+  }, [filters, searchTerm, queryClient]);
+
+  const resolvedStandards = Array.isArray(filters.standards) ? filters.standards : [];
 
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ['catalog-modules', filters],
@@ -66,21 +115,87 @@ const CatalogPage: React.FC = () => {
 
   const totalPages = useMemo(() => (total > 0 ? Math.ceil(total / pageSize) : 1), [total]);
 
-  const handleFilterChange = (field: keyof CatalogFilters, value: string | undefined) => {
-    setFilters((previous) => ({
-      ...previous,
-      [field]: value && value.length > 0 ? value : undefined,
-      page: 1,
-    }));
+  const handleTextFilterChange = (
+    field: 'subject' | 'grade' | 'strand' | 'topic',
+    value: string,
+  ) => {
+    const trimmed = value.trim();
+    setFilters((previous) =>
+      ({
+        ...previous,
+        [field]: trimmed.length > 0 ? trimmed : undefined,
+        page: 1,
+      }) as CatalogFilters,
+    );
   };
 
   const applySearch = () => {
-    handleFilterChange('search', searchTerm.trim() || undefined);
+    const trimmed = searchTerm.trim();
+    setFilters((previous) =>
+      ({
+        ...previous,
+        search: trimmed.length > 0 ? trimmed : undefined,
+        page: 1,
+      }) as CatalogFilters,
+    );
+  };
+
+  const handleSortChange = (value: string) => {
+    setFilters((previous) =>
+      ({
+        ...previous,
+        sort: value as CatalogFilters['sort'],
+        page: 1,
+      }) as CatalogFilters,
+    );
+  };
+
+  const handleOpenTrackToggle = (value: boolean) => {
+    setFilters((previous) =>
+      ({
+        ...previous,
+        openTrack: value ? true : undefined,
+        page: 1,
+      }) as CatalogFilters,
+    );
+  };
+
+  const handleAddStandard = () => {
+    const trimmed = standardInput.trim();
+    if (!trimmed) {
+      return;
+    }
+    const normalized = trimmed.toUpperCase();
+    setFilters((previous) => {
+      const current = Array.isArray(previous.standards) ? previous.standards : [];
+      if (current.includes(normalized)) {
+        return previous;
+      }
+      return {
+        ...previous,
+        standards: [...current, normalized],
+        page: 1,
+      } as CatalogFilters;
+    });
+    setStandardInput('');
+  };
+
+  const handleRemoveStandard = (code: string) => {
+    setFilters((previous) => {
+      const current = Array.isArray(previous.standards) ? previous.standards : [];
+      const nextStandards = current.filter((standard) => standard !== code);
+      return {
+        ...previous,
+        standards: nextStandards,
+        page: 1,
+      } as CatalogFilters;
+    });
   };
 
   const clearFilters = () => {
-    setFilters({ page: 1, pageSize });
+    setFilters(createDefaultFilters());
     setSearchTerm('');
+    setStandardInput('');
   };
 
   return (
@@ -104,7 +219,7 @@ const CatalogPage: React.FC = () => {
               </label>
               <select
                 value={filters.subject ?? ''}
-                onChange={(event) => handleFilterChange('subject', event.target.value)}
+                onChange={(event) => handleTextFilterChange('subject', event.target.value)}
                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
               >
                 <option value="">All subjects</option>
@@ -122,7 +237,7 @@ const CatalogPage: React.FC = () => {
               </label>
               <select
                 value={filters.grade ?? ''}
-                onChange={(event) => handleFilterChange('grade', event.target.value)}
+                onChange={(event) => handleTextFilterChange('grade', event.target.value)}
                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
               >
                 <option value="">All grades</option>
@@ -140,7 +255,7 @@ const CatalogPage: React.FC = () => {
               </label>
               <input
                 value={filters.strand ?? ''}
-                onChange={(event) => handleFilterChange('strand', event.target.value)}
+                onChange={(event) => handleTextFilterChange('strand', event.target.value)}
                 placeholder="e.g. Earth & Space"
                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
               />
@@ -152,15 +267,79 @@ const CatalogPage: React.FC = () => {
               </label>
               <input
                 value={filters.topic ?? ''}
-                onChange={(event) => handleFilterChange('topic', event.target.value)}
+                onChange={(event) => handleTextFilterChange('topic', event.target.value)}
                 placeholder="Topic keyword"
                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
               />
             </div>
           </div>
 
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="md:col-span-3">
+              <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                Standards
+              </label>
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
+                <input
+                  value={standardInput}
+                  onChange={(event) => setStandardInput(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      handleAddStandard();
+                    }
+                  }}
+                  placeholder="Add standard code (e.g. NGSS-MS-PS2-1)"
+                  className="w-full md:flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddStandard}
+                  disabled={standardInput.trim().length === 0}
+                  className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-blue/90 disabled:cursor-not-allowed disabled:bg-brand-blue/50"
+                >
+                  Add
+                </button>
+              </div>
+              {resolvedStandards.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {resolvedStandards.map((standard) => (
+                    <span
+                      key={standard}
+                      className="inline-flex items-center gap-2 rounded-full bg-brand-blue/10 px-3 py-1 text-xs font-semibold text-brand-blue"
+                    >
+                      {standard}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStandard(standard)}
+                        className="text-brand-blue/70 transition-colors hover:text-rose-500"
+                        aria-label={`Remove standard ${standard}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                Open Track
+              </label>
+              <div className="flex items-center gap-3 rounded-lg border border-gray-200 px-3 py-2">
+                <input
+                  type="checkbox"
+                  checked={Boolean(filters.openTrack)}
+                  onChange={(event) => handleOpenTrackToggle(event.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300 text-brand-blue focus:ring-brand-blue"
+                />
+                <span className="text-sm text-gray-600">Show modules with open track lessons</span>
+              </div>
+            </div>
+          </div>
+
           <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center">
               <div className="relative flex-1 md:w-64">
                 <input
                   value={searchTerm}
@@ -188,9 +367,22 @@ const CatalogPage: React.FC = () => {
                 Reset
               </button>
             </div>
-
-            <div className="text-sm text-gray-500">
-              {isFetching ? 'Updating results…' : `${total} modules available`}
+            <div className="flex flex-col gap-2 text-sm text-gray-500 md:text-right">
+              <label className="inline-flex items-center gap-2 text-gray-500">
+                <span className="text-xs font-semibold uppercase">Sort</span>
+                <select
+                  value={filters.sort ?? 'featured'}
+                  onChange={(event) => handleSortChange(event.target.value)}
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                >
+                  {SORT_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div>{isFetching ? 'Updating results…' : `${total} modules available`}</div>
             </div>
           </div>
         </div>
