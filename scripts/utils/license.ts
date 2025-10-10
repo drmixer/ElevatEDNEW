@@ -1,6 +1,8 @@
 export const ALLOWED_LICENSES = new Map<string, string>([
   ['cc by', 'CC BY'],
   ['cc by-sa', 'CC BY-SA'],
+  ['cc by-nc', 'CC BY-NC'],
+  ['cc by-nc-sa', 'CC BY-NC-SA'],
   ['cc0', 'CC0'],
   ['public domain', 'Public Domain'],
 ]);
@@ -17,6 +19,19 @@ export function normalizeLicense(rawLicense: string): string {
   const fallback = ALLOWED_LICENSES.get(compact);
   if (fallback) {
     return fallback;
+  }
+
+  const withoutVersion = normalized.replace(/\s*\d+(\.\d+)?$/u, '').trim();
+  if (withoutVersion.length > 0) {
+    const versionResolved = ALLOWED_LICENSES.get(withoutVersion);
+    if (versionResolved) {
+      return versionResolved;
+    }
+    const versionCompact = withoutVersion.replace(/[\s_-]+/g, ' ');
+    const compactResolved = ALLOWED_LICENSES.get(versionCompact);
+    if (compactResolved) {
+      return compactResolved;
+    }
   }
 
   return rawLicense.trim();
@@ -39,5 +54,18 @@ export function isAllowedLicense(rawLicense: string): boolean {
     return true;
   }
   const compact = key.replace(/[\s_-]+/g, ' ');
-  return ALLOWED_LICENSES.has(compact);
+  if (ALLOWED_LICENSES.has(compact)) {
+    return true;
+  }
+  const withoutVersion = key.replace(/\s*\d+(\.\d+)?$/u, '').trim();
+  if (withoutVersion.length > 0) {
+    if (ALLOWED_LICENSES.has(withoutVersion)) {
+      return true;
+    }
+    const versionCompact = withoutVersion.replace(/[\s_-]+/g, ' ');
+    if (ALLOWED_LICENSES.has(versionCompact)) {
+      return true;
+    }
+  }
+  return false;
 }

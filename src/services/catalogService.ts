@@ -334,20 +334,3 @@ export const fetchRecommendations = async (
     ? payload.recommendations.map(mapRecommendation)
     : [];
 };
-
-export const runImporter = async (
-  provider: 'openstax' | 'gutenberg' | 'federal',
-  mapping: Record<string, unknown>,
-): Promise<{ inserted: number }> => {
-  const response = await fetch(`/api/import/${provider}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ mapping }),
-  });
-  const payload = await handleResponse<{ inserted: number }>(response);
-  return {
-    inserted: payload.inserted ?? 0,
-  };
-};
