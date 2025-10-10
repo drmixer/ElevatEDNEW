@@ -49,10 +49,10 @@ end
 $$;
 
 -- Grant usage on the enums to the standard Supabase roles.
-grant usage on type user_role to authenticated, service_role, anon;
-grant usage on type progress_status to authenticated, service_role, anon;
-grant usage on type subscription_status to authenticated, service_role, anon;
-grant usage on type payment_status to authenticated, service_role, anon;
+grant usage on type user_role to authenticated, service_role, anon, supabase_auth_admin;
+grant usage on type progress_status to authenticated, service_role, anon, supabase_auth_admin;
+grant usage on type subscription_status to authenticated, service_role, anon, supabase_auth_admin;
+grant usage on type payment_status to authenticated, service_role, anon, supabase_auth_admin;
 
 -- Ensure the profiles table has the required role column.
 alter table public.profiles
