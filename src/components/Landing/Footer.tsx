@@ -55,10 +55,10 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <img 
-                src="https://i.imgur.com/tBePI5o.png" 
-                alt="ElevatED Logo" 
-                className="h-40 w-auto"
+              <img
+                src="/elevated-logo.png"
+                alt="ElevatED Logo"
+                className="h-20 w-auto"
               />
               <div>
                 <h3 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
