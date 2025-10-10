@@ -206,7 +206,13 @@ const main = async () => {
   console.log(`Upserted ${inserted} federal public-domain assets from ${file}`);
 };
 
-main().catch((error: unknown) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+const invokedFromCli =
+  process.argv[1]?.includes('import_federal_pd.ts') ||
+  process.argv[1]?.includes('import_federal_pd.js');
+
+if (invokedFromCli) {
+  main().catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

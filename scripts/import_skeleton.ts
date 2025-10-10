@@ -159,7 +159,12 @@ const main = async () => {
   console.log(`Upserted ${modules.length} modules from skeleton file ${file}`);
 };
 
-main().catch((error: unknown) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+const invokedFromCli =
+  process.argv[1]?.includes('import_skeleton.ts') || process.argv[1]?.includes('import_skeleton.js');
+
+if (invokedFromCli) {
+  main().catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

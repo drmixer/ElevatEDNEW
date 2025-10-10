@@ -173,7 +173,12 @@ const main = async () => {
   console.log(`Upserted ${inserted} Project Gutenberg assets from ${file}`);
 };
 
-main().catch((error: unknown) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+const invokedFromCli =
+  process.argv[1]?.includes('import_gutenberg.ts') || process.argv[1]?.includes('import_gutenberg.js');
+
+if (invokedFromCli) {
+  main().catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
