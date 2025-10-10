@@ -68,17 +68,18 @@ create or replace function public.handle_new_auth_user()
 returns trigger
 language plpgsql
 security definer
+set search_path = public
 as $$
 declare
   meta_role text;
-  resolved_role user_role;
+  resolved_role public.user_role;
   resolved_name text;
 begin
   meta_role := coalesce(new.raw_user_meta_data->>'role', 'student');
   if meta_role = 'parent' then
-    resolved_role := 'parent';
+    resolved_role := 'parent'::public.user_role;
   else
-    resolved_role := 'student';
+    resolved_role := 'student'::public.user_role;
   end if;
 
   resolved_name := coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1));
@@ -91,7 +92,7 @@ begin
         full_name = excluded.full_name,
         avatar_url = excluded.avatar_url;
 
-  if resolved_role = 'parent' then
+  if resolved_role = 'parent'::public.user_role then
     insert into public.parent_profiles (id, full_name)
     values (new.id, resolved_name)
     on conflict (id) do update
