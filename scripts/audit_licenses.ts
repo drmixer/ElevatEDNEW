@@ -1,6 +1,7 @@
 import process from 'node:process';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { splitAttributionBlock } from './utils/attribution.js';
 import { isAllowedLicense, normalizeLicense } from './utils/license.js';
 import { createServiceRoleClient } from './utils/supabase.js';
 
@@ -15,11 +16,24 @@ type AssetRecord = {
 };
 
 type AuditIssue = {
-  asset_id: number;
+  asset_id: number | null;
+  lesson_id: number | null;
   module_id: number | null;
-  issue: 'invalid_license' | 'missing_license_url' | 'missing_attribution' | 'dead_url';
-  url: string;
+  issue:
+    | 'invalid_license'
+    | 'missing_license_url'
+    | 'missing_attribution'
+    | 'dead_url'
+    | 'lesson_missing_attribution'
+    | 'lesson_invalid_license';
+  url: string | null;
   details: string;
+};
+
+type LessonRecord = {
+  id: number;
+  module_id: number | null;
+  attribution_block: string | null;
 };
 
 const CONCURRENCY = 5;
@@ -107,6 +121,18 @@ const fetchAssets = async (supabase: SupabaseClient): Promise<AssetRecord[]> => 
   return (data ?? []) as AssetRecord[];
 };
 
+const fetchLessons = async (supabase: SupabaseClient): Promise<LessonRecord[]> => {
+  const { data, error } = await supabase
+    .from('lessons')
+    .select('id, module_id, attribution_block');
+
+  if (error) {
+    throw new Error(`Failed to fetch lessons: ${error.message}`);
+  }
+
+  return (data ?? []) as LessonRecord[];
+};
+
 const auditAssets = async (assets: AssetRecord[]): Promise<AuditIssue[]> => {
   const issues: AuditIssue[] = [];
   const urlStatuses = await checkUrls(assets);
@@ -116,6 +142,7 @@ const auditAssets = async (assets: AssetRecord[]): Promise<AuditIssue[]> => {
     if (!isAllowedLicense(normalizedLicense)) {
       issues.push({
         asset_id: asset.id,
+        lesson_id: null,
         module_id: asset.module_id,
         issue: 'invalid_license',
         url: asset.url,
@@ -126,6 +153,7 @@ const auditAssets = async (assets: AssetRecord[]): Promise<AuditIssue[]> => {
     if (!asset.license_url || asset.license_url.trim().length === 0) {
       issues.push({
         asset_id: asset.id,
+        lesson_id: null,
         module_id: asset.module_id,
         issue: 'missing_license_url',
         url: asset.url,
@@ -136,6 +164,7 @@ const auditAssets = async (assets: AssetRecord[]): Promise<AuditIssue[]> => {
     if (!asset.attribution_text || asset.attribution_text.trim().length === 0) {
       issues.push({
         asset_id: asset.id,
+        lesson_id: null,
         module_id: asset.module_id,
         issue: 'missing_attribution',
         url: asset.url,
@@ -147,6 +176,7 @@ const auditAssets = async (assets: AssetRecord[]): Promise<AuditIssue[]> => {
     if (status && !status.ok) {
       issues.push({
         asset_id: asset.id,
+        lesson_id: null,
         module_id: asset.module_id,
         issue: 'dead_url',
         url: asset.url,
@@ -158,20 +188,86 @@ const auditAssets = async (assets: AssetRecord[]): Promise<AuditIssue[]> => {
   return issues;
 };
 
+const extractLessonLicenses = (segments: string[]): string[] => {
+  const results = new Set<string>();
+  for (const segment of segments) {
+    const bracketMatch = /\[([^\]]+)\]\(([^)]+)\)/.exec(segment);
+    if (bracketMatch?.[1]) {
+      results.add(bracketMatch[1].trim());
+    }
+
+    const parts = segment.split('·');
+    for (const part of parts) {
+      const candidate = part.trim();
+      if (candidate.length === 0) {
+        continue;
+      }
+      if (isAllowedLicense(candidate) || isAllowedLicense(normalizeLicense(candidate))) {
+        results.add(candidate);
+      }
+    }
+  }
+  return Array.from(results);
+};
+
+const auditLessons = (lessons: LessonRecord[]): AuditIssue[] => {
+  const issues: AuditIssue[] = [];
+
+  for (const lesson of lessons) {
+    const segments = splitAttributionBlock(lesson.attribution_block);
+    if (segments.length === 0) {
+      issues.push({
+        asset_id: null,
+        lesson_id: lesson.id,
+        module_id: lesson.module_id,
+        issue: 'lesson_missing_attribution',
+        url: null,
+        details: 'Lesson is missing attribution_block content.',
+      });
+      continue;
+    }
+
+    const licenses = extractLessonLicenses(segments);
+    const hasAllowedLicense = licenses.some((license) => isAllowedLicense(normalizeLicense(license)));
+
+    if (!hasAllowedLicense) {
+      const detail = licenses.length
+        ? `Unapproved license tokens found: ${licenses.join(', ')}`
+        : 'No recognizable license token found in attribution block.';
+
+      issues.push({
+        asset_id: null,
+        lesson_id: lesson.id,
+        module_id: lesson.module_id,
+        issue: 'lesson_invalid_license',
+        url: null,
+        details: detail,
+      });
+    }
+  }
+
+  return issues;
+};
+
 const main = async () => {
   const supabase = createServiceRoleClient();
   const assets = await fetchAssets(supabase);
+  const lessons = await fetchLessons(supabase);
   if (assets.length === 0) {
     console.log('No assets found.');
-    return;
   }
 
-  const issues = await auditAssets(assets);
+  const [assetIssues, lessonIssues] = await Promise.all([
+    auditAssets(assets),
+    Promise.resolve(auditLessons(lessons)),
+  ]);
+  const issues = [...assetIssues, ...lessonIssues];
 
-  console.log(['asset_id', 'module_id', 'issue', 'url', 'details'].map(escapeCsv).join(','));
+  console.log(['asset_id', 'lesson_id', 'module_id', 'issue', 'url', 'details'].map(escapeCsv).join(','));
   for (const issue of issues) {
     console.log([
       escapeCsv(issue.asset_id),
+      escapeCsv(issue.lesson_id),
       escapeCsv(issue.module_id),
       escapeCsv(issue.issue),
       escapeCsv(issue.url),
@@ -179,11 +275,7 @@ const main = async () => {
     ].join(','));
   }
 
-  if (issues.length === 0) {
-    console.error('No license issues detected.');
-  } else {
-    console.error(`Audit complete: ${issues.length} issues found.`);
-  }
+  console.error(`Audit complete: ${issues.length === 0 ? 'No issues detected.' : `${issues.length} issues found.`}`);
 };
 
 main().catch((error: unknown) => {
