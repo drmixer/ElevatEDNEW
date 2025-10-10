@@ -64,6 +64,50 @@ set role = coalesce(role, 'student'::user_role);
 alter table public.profiles
   alter column role set not null;
 
+create or replace function public.handle_new_auth_user()
+returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  meta_role text;
+  resolved_role user_role;
+  resolved_name text;
+begin
+  meta_role := coalesce(new.raw_user_meta_data->>'role', 'student');
+  if meta_role = 'parent' then
+    resolved_role := 'parent';
+  else
+    resolved_role := 'student';
+  end if;
+
+  resolved_name := coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1));
+
+  insert into public.profiles (id, role, email, full_name, avatar_url)
+  values (new.id, resolved_role, new.email, resolved_name, new.raw_user_meta_data->>'avatar_url')
+  on conflict (id) do update
+    set role = excluded.role,
+        email = excluded.email,
+        full_name = excluded.full_name,
+        avatar_url = excluded.avatar_url;
+
+  if resolved_role = 'parent' then
+    insert into public.parent_profiles (id, full_name)
+    values (new.id, resolved_name)
+    on conflict (id) do update
+      set full_name = excluded.full_name;
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute procedure public.handle_new_auth_user();
+
 do
 $$
 begin
