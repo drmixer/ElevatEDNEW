@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangle,
   Bell,
   Calendar,
   CheckCircle,
+  ClipboardList,
   Clock,
   Download,
+  Loader2,
   RefreshCw,
   Sparkles,
   Star,
@@ -26,9 +28,11 @@ import {
   Bar,
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
-import type { Parent, ParentChildSnapshot } from '../../types';
+import type { AssignmentStatus, Parent, ParentChildSnapshot } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
+import { assignModuleToStudents, fetchChildAssignments } from '../../services/assignmentService';
+import { fetchCatalogModules } from '../../services/catalogService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -37,7 +41,13 @@ const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
 const ParentDashboard: React.FC = () => {
   const { user } = useAuth();
   const parent = (user as Parent) ?? null;
+  const queryClient = useQueryClient();
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+  const [moduleSearch, setModuleSearch] = useState('');
+  const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
+  const [dueDate, setDueDate] = useState('');
+  const [assignMessage, setAssignMessage] = useState<string | null>(null);
+  const [assignErrorMessage, setAssignErrorMessage] = useState<string | null>(null);
 
   const {
     data: dashboard,
@@ -96,6 +106,100 @@ const ParentDashboard: React.FC = () => {
   }, [currentChild]);
 
   const showSkeleton = isLoading && !dashboard;
+
+  const childProgress = currentChild?.progressSummary;
+  const completedLessons = childProgress?.completed ?? currentChild?.lessonsCompletedWeek ?? 0;
+  const inProgressLessons = childProgress?.inProgress ?? 0;
+
+  const modulesQuery = useQuery({
+    queryKey: ['assignable-modules', moduleSearch],
+    queryFn: () =>
+      fetchCatalogModules({
+        page: 1,
+        pageSize: 6,
+        sort: 'featured',
+        search: moduleSearch || undefined,
+      }),
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const moduleOptions = modulesQuery.data?.data ?? [];
+
+  useEffect(() => {
+    if (!moduleOptions.length) {
+      return;
+    }
+    if (!moduleOptions.some((module) => module.id === selectedModuleId)) {
+      setSelectedModuleId(moduleOptions[0].id);
+    }
+  }, [moduleOptions, selectedModuleId]);
+
+  const {
+    data: childAssignments,
+    isFetching: assignmentsLoading,
+    refetch: refetchAssignments,
+  } = useQuery({
+    queryKey: ['child-assignments', selectedChildId],
+    queryFn: () => fetchChildAssignments(selectedChildId ?? ''),
+    enabled: Boolean(selectedChildId),
+    staleTime: 1000 * 60,
+  });
+
+  const assignmentsList = childAssignments ?? [];
+
+  const assignModuleMutation = useMutation({
+    mutationFn: assignModuleToStudents,
+    onSuccess: (result) => {
+      setAssignMessage(
+        `Assigned ${result.assignedStudents} learner${result.assignedStudents === 1 ? '' : 's'} (${result.lessonsAttached} lessons attached).`,
+      );
+      setAssignErrorMessage(null);
+      setDueDate('');
+      refetchAssignments();
+      queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
+    },
+    onError: (error) => {
+      console.error('[Assignments] failed to assign module', error);
+      setAssignErrorMessage(error instanceof Error ? error.message : 'Unable to assign module.');
+      setAssignMessage(null);
+    },
+  });
+
+  const handleAssignModule = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!parent || !selectedChildId || !selectedModuleId || assignModuleMutation.isLoading) {
+      if (!selectedChildId) {
+        setAssignErrorMessage('Select a learner before assigning a module.');
+      }
+      return;
+    }
+
+    setAssignMessage(null);
+    setAssignErrorMessage(null);
+
+    const dueAtIso = dueDate ? new Date(`${dueDate}T23:59:00`).toISOString() : undefined;
+
+    await assignModuleMutation.mutateAsync({
+      moduleId: selectedModuleId,
+      studentIds: [selectedChildId],
+      creatorId: parent.id,
+      creatorRole: 'parent',
+      dueAt: dueAtIso,
+    });
+
+    trackEvent('parent_assign_module', {
+      parentId: parent.id,
+      studentId: selectedChildId,
+      moduleId: selectedModuleId,
+    });
+    await refetch({ throwOnError: false });
+  };
+
+  const statusBadgeStyles: Record<AssignmentStatus, string> = {
+    completed: 'bg-emerald-100 text-emerald-700',
+    in_progress: 'bg-amber-100 text-amber-700',
+    not_started: 'bg-slate-200 text-slate-600',
+  };
 
   if (!parent) {
     return null;
@@ -270,10 +374,9 @@ const ParentDashboard: React.FC = () => {
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-2xl font-bold text-gray-800">
-                      {currentChild?.lessonsCompletedWeek ?? 0}
-                    </div>
-                    <div className="text-sm text-gray-600">Lessons This Week</div>
+                    <div className="text-2xl font-bold text-gray-800">{completedLessons}</div>
+                    <div className="text-sm text-gray-600">Completed Lessons</div>
+                    <p className="text-xs text-gray-500 mt-1">In progress: {inProgressLessons}</p>
                   </div>
                   <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
                     <Users className="h-6 w-6 text-gray-600" />
@@ -387,6 +490,161 @@ const ParentDashboard: React.FC = () => {
           </div>
 
           <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <ClipboardList className="h-5 w-5 text-brand-blue" />
+                  <h3 className="text-xl font-bold text-gray-900">Module Assignments</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => modulesQuery.refetch()}
+                  className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                  disabled={modulesQuery.isFetching}
+                >
+                  <RefreshCw className={`h-4 w-4 ${modulesQuery.isFetching ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+              <form onSubmit={handleAssignModule} className="space-y-4">
+                <div>
+                  <label htmlFor="assignment-child" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    Learner
+                  </label>
+                  <select
+                    id="assignment-child"
+                    value={selectedChildId ?? ''}
+                    onChange={(event) => setSelectedChildId(event.target.value || null)}
+                    className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    disabled={showSkeleton || !dashboard?.children.length}
+                  >
+                    {(dashboard?.children ?? []).map((child) => (
+                      <option key={child.id} value={child.id}>
+                        {child.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor="assignment-module" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                      Module
+                    </label>
+                    <select
+                      id="assignment-module"
+                      value={selectedModuleId ?? ''}
+                      onChange={(event) => setSelectedModuleId(Number(event.target.value))}
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                      disabled={!moduleOptions.length || modulesQuery.isLoading}
+                    >
+                      {moduleOptions.map((module) => (
+                        <option key={module.id} value={module.id}>
+                          {module.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="assignment-due" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                      Due date (optional)
+                    </label>
+                    <input
+                      id="assignment-due"
+                      type="date"
+                      value={dueDate}
+                      onChange={(event) => setDueDate(event.target.value)}
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="assignment-search" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    Search library
+                  </label>
+                  <input
+                    id="assignment-search"
+                    type="search"
+                    value={moduleSearch}
+                    onChange={(event) => setModuleSearch(event.target.value)}
+                    placeholder="Fractions, writing prompts, STEM"
+                    className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!selectedChildId || !selectedModuleId || assignModuleMutation.isLoading}
+                  className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                >
+                  {assignModuleMutation.isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Assigning…
+                    </>
+                  ) : (
+                    'Assign module'
+                  )}
+                </button>
+              </form>
+
+              {assignMessage && (
+                <p className="mt-3 text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                  {assignMessage}
+                </p>
+              )}
+              {assignErrorMessage && (
+                <p className="mt-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                  {assignErrorMessage}
+                </p>
+              )}
+
+              <div className="mt-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-sm font-semibold text-gray-900">
+                    Assignments for {currentChild?.name ?? '—'}
+                  </h4>
+                  <span className="text-xs text-gray-500">
+                    {assignmentsList.length} total
+                  </span>
+                </div>
+                {assignmentsLoading ? (
+                  <SkeletonCard className="h-16" />
+                ) : assignmentsList.length ? (
+                  <ul className="space-y-3">
+                    {assignmentsList.map((assignment) => (
+                      <li
+                        key={assignment.id}
+                        className="rounded-xl border border-slate-200 px-4 py-3 flex items-start justify-between gap-3"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">{assignment.title}</p>
+                          <p className="text-xs text-gray-500">
+                            {assignment.moduleTitle ?? 'Module'}
+                            {assignment.dueAt ? ` • Due ${new Date(assignment.dueAt).toLocaleDateString()}` : ''}
+                          </p>
+                        </div>
+                        <span
+                          className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${statusBadgeStyles[assignment.status]}`}
+                        >
+                          {assignment.status.replace('_', ' ')}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-gray-600">
+                    No assignments yet. Pick a module and send it their way.
+                  </p>
+                )}
+              </div>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

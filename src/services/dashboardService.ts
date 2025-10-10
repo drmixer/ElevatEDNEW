@@ -68,6 +68,36 @@ type StudentAssignmentRow = {
   } | null;
 };
 
+type StudentProgressLessonRow = {
+  lesson_id: number;
+  status: 'not_started' | 'in_progress' | 'completed';
+  mastery_pct: number | null;
+  attempts: number | null;
+  last_activity_at: string | null;
+  lessons: {
+    id: number;
+    title: string;
+    estimated_duration_minutes: number | null;
+    open_track: boolean | null;
+    module_id: number | null;
+    modules: {
+      id: number;
+      title: string;
+      subject: string | null;
+    } | null;
+  } | null;
+};
+
+type LessonMetadataEntry = {
+  lessonId: number;
+  title: string;
+  subject: Subject | null;
+  moduleTitle: string | null;
+  estimatedDuration: number | null;
+  status: 'not_started' | 'in_progress' | 'completed';
+  masteryPct: number | null;
+};
+
 const SUBJECT_LABELS: Record<Subject, string> = {
   math: 'Mathematics',
   english: 'English Language Arts',
@@ -87,6 +117,14 @@ const normalizeSubject = (input: string | null | undefined): Subject | null => {
 const difficultyFromValue = (value: number | undefined | null): 'easy' | 'medium' | 'hard' => {
   if (!value || value <= 2) return 'easy';
   if (value === 3) return 'medium';
+  return 'hard';
+};
+
+const difficultyFromDuration = (
+  minutes: number | undefined | null,
+): 'easy' | 'medium' | 'hard' => {
+  if (!minutes || minutes <= 10) return 'easy';
+  if (minutes <= 20) return 'medium';
   return 'hard';
 };
 
@@ -388,6 +426,119 @@ const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
   }));
 };
 
+const mapProgressLessons = (
+  rows: StudentProgressLessonRow[],
+): {
+  lessons: DashboardLesson[];
+  metadata: Map<number, LessonMetadataEntry>;
+} => {
+  if (!rows.length) {
+    return { lessons: [], metadata: new Map() };
+  }
+
+  const metadata = new Map<number, LessonMetadataEntry>();
+
+  rows.forEach((row) => {
+    const lesson = row.lessons;
+    if (!lesson) return;
+    const subject = normalizeSubject(lesson.modules?.subject ?? null);
+    metadata.set(lesson.id, {
+      lessonId: lesson.id,
+      title: lesson.title,
+      subject,
+      moduleTitle: lesson.modules?.title ?? null,
+      estimatedDuration: lesson.estimated_duration_minutes ?? null,
+      status: row.status,
+      masteryPct: row.mastery_pct ?? null,
+    });
+  });
+
+  const rank: Record<'not_started' | 'in_progress' | 'completed', number> = {
+    in_progress: 0,
+    not_started: 1,
+    completed: 2,
+  };
+
+  const sorted = rows
+    .filter((row) => row.lessons)
+    .sort((a, b) => {
+      const statusCompare = rank[a.status] - rank[b.status];
+      if (statusCompare !== 0) return statusCompare;
+      const timeA = a.last_activity_at ? new Date(a.last_activity_at).getTime() : 0;
+      const timeB = b.last_activity_at ? new Date(b.last_activity_at).getTime() : 0;
+      return timeB - timeA;
+    })
+    .slice(0, 6);
+
+  const lessons: DashboardLesson[] = sorted.map((row) => {
+    const lesson = row.lessons!;
+    const normalizedSubject = (metadata.get(lesson.id)?.subject ?? 'math') as Subject;
+    const xpReward = Math.max(30, (lesson.estimated_duration_minutes ?? 15) * 3);
+
+    return {
+      id: lesson.id.toString(),
+      subject: normalizedSubject,
+      title: lesson.title,
+      status: row.status,
+      difficulty: difficultyFromDuration(lesson.estimated_duration_minutes),
+      xpReward,
+      launchUrl: `/lesson/${lesson.id}`,
+      completedAt: row.status === 'completed' ? row.last_activity_at ?? null : null,
+    } satisfies DashboardLesson;
+  });
+
+  return { lessons, metadata };
+};
+
+type SuggestionRow = {
+  lesson_id: number | null;
+  reason: string | null;
+  confidence: number | null;
+};
+
+const buildAdaptiveMessages = (
+  suggestions: SuggestionRow[],
+  metadata: Map<number, LessonMetadataEntry>,
+): string[] => {
+  if (!suggestions.length) {
+    return [];
+  }
+
+  return suggestions
+    .map((suggestion) => {
+      const lessonId = suggestion.lesson_id;
+      if (!lessonId) return null;
+      const entry = metadata.get(lessonId);
+      if (!entry) return null;
+
+      const subject = entry.subject ? SUBJECT_LABELS[entry.subject] : 'this subject';
+      const lessonTitle = entry.title ?? 'the lesson';
+      const status = entry.status;
+      const confidencePct = suggestion.confidence != null
+        ? Math.round(Number(suggestion.confidence) * 100)
+        : null;
+
+      const confidenceText = confidencePct != null ? ` (${confidencePct}% confidence)` : '';
+
+      const statusPrefix = status === 'completed'
+        ? 'Review'
+        : status === 'in_progress'
+        ? 'Resume'
+        : 'Start';
+
+      const reason = suggestion.reason ?? 'advance_next_topic';
+
+      if (reason === 'reinforcement') {
+        return `${statusPrefix} "${lessonTitle}" to reinforce ${subject}${confidenceText}.`;
+      }
+      if (reason === 'complete_topic') {
+        return `${statusPrefix} "${lessonTitle}" to wrap up your current ${subject} topic${confidenceText}.`;
+      }
+      return `${statusPrefix} "${lessonTitle}" to explore the next ${subject} concept${confidenceText}.`;
+    })
+    .filter((message): message is string => Boolean(message));
+};
+
 const mapDailyActivity = (rows: StudentDailyActivityRow[]): StudentDailyActivity[] => {
   if (!rows.length) {
     return fallbackStudentActivity();
@@ -542,6 +693,16 @@ const deriveParentAlerts = (children: ParentChildSnapshot[]): ParentAlert[] => {
   const alerts: ParentAlert[] = [];
 
   children.forEach((child) => {
+    if (child.progressSummary && child.progressSummary.notStarted >= child.progressSummary.completed + 3) {
+      alerts.push({
+        id: `${child.id}-backlog`,
+        type: 'info',
+        message: `${child.name} has ${child.progressSummary.notStarted} lessons waiting to be started. Consider scheduling a focus block.`,
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+        studentId: child.id,
+      });
+    }
+
     if (child.focusAreas.length >= 2) {
       alerts.push({
         id: `${child.id}-focus`,
@@ -606,6 +767,7 @@ const buildAdminAlerts = (
   metrics: AdminDashboardMetrics,
   subjectPerformance: AdminSubjectPerformance[],
   admin: Admin,
+  lessonCompletionRate?: number | null,
 ): AdminAlert[] => {
   const alerts: AdminAlert[] = [];
 
@@ -630,6 +792,18 @@ const buildAdminAlerts = (
         lowestSubject.mastery,
       )}%. Review lesson pacing and diagnostics for struggling cohorts.`,
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
+    });
+  }
+
+  if (lessonCompletionRate != null && lessonCompletionRate < 0.5) {
+    alerts.push({
+      id: 'admin-completion',
+      severity: 'medium',
+      title: 'Lesson Completion Lag',
+      description: `Lesson completion is tracking at ${Math.round(
+        lessonCompletionRate * 100,
+      )}%. Consider reinforcing pacing expectations or additional supports.`,
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
     });
   }
 
@@ -668,7 +842,15 @@ export const fetchStudentDashboardData = async (
 
     const activity = activityError ? fallbackStudentActivity() : mapDailyActivity(activityRows ?? []);
 
-    const [{ data: masteryRows, error: masteryError }, { data: xpRows, error: xpError }, { data: assignmentsRows, error: assignmentsError }, { data: skillRows, error: skillError }, { data: subjectRows, error: subjectError }] =
+    const [
+      { data: masteryRows, error: masteryError },
+      { data: xpRows, error: xpError },
+      { data: assignmentsRows, error: assignmentsError },
+      { data: skillRows, error: skillError },
+      { data: subjectRows, error: subjectError },
+      { data: progressRows, error: progressError },
+      { data: suggestionRows, error: suggestionError },
+    ] =
       await Promise.all([
         supabase
           .from('student_mastery')
@@ -692,6 +874,26 @@ export const fetchStudentDashboardData = async (
         supabase
           .from('subjects')
           .select('id, name'),
+        supabase
+          .from('student_progress')
+          .select(
+            `lesson_id, status, mastery_pct, attempts, last_activity_at,
+             lessons (
+               id,
+               title,
+               estimated_duration_minutes,
+               open_track,
+               module_id,
+               modules ( id, title, subject )
+             )`,
+          )
+          .eq('student_id', student.id)
+          .order('last_activity_at', { ascending: false })
+          .limit(20),
+        supabase.rpc('suggest_next_lessons', {
+          p_student_id: student.id,
+          limit_count: 3,
+        }),
       ]);
 
     if (masteryError) {
@@ -709,6 +911,12 @@ export const fetchStudentDashboardData = async (
     if (subjectError) {
       console.error('[Dashboard] Failed to load subject references', subjectError);
     }
+    if (progressError) {
+      console.error('[Dashboard] Failed to load lesson progress', progressError);
+    }
+    if (suggestionError) {
+      console.error('[Dashboard] Failed to load adaptive suggestions', suggestionError);
+    }
 
     const subjectMastery = masteryRows && skillRows && subjectRows
       ? groupMasteryBySubject(
@@ -718,11 +926,83 @@ export const fetchStudentDashboardData = async (
         )
       : fallbackStudentMastery();
 
-    const todaysPlan = buildLessonsFromLearningPath(student);
+    const progressData = (progressRows as StudentProgressLessonRow[]) ?? [];
+    const { lessons: progressLessons, metadata: lessonMetadata } = mapProgressLessons(progressData);
+
+    const todaysPlan: DashboardLesson[] = (() => {
+      const plan = [...progressLessons];
+      if (plan.length < 4) {
+        const fallbackLessons = buildLessonsFromLearningPath(student);
+        const existing = new Set(plan.map((lesson) => lesson.id));
+        fallbackLessons.forEach((lesson) => {
+          if (plan.length >= 4) return;
+          if (!existing.has(lesson.id)) {
+            plan.push(lesson);
+          }
+        });
+      }
+      if (plan.length === 0) {
+        return fallbackStudentLessons();
+      }
+      return plan;
+    })();
+
+    todaysPlan.forEach((lesson) => {
+      const numericId = Number.parseInt(lesson.id, 10);
+      if (!Number.isNaN(numericId)) {
+        if (!lessonMetadata.has(numericId)) {
+          lessonMetadata.set(numericId, {
+            lessonId: numericId,
+            title: lesson.title,
+            subject: lesson.subject,
+            moduleTitle: null,
+            estimatedDuration: null,
+            status: lesson.status,
+            masteryPct: null,
+          });
+        }
+      }
+    });
+
+    const suggestionData = (suggestionRows as SuggestionRow[]) ?? [];
+
+    const missingSuggestionIds = suggestionData
+      .map((row) => (row.lesson_id ?? null))
+      .filter((id): id is number => typeof id === 'number' && !lessonMetadata.has(id));
+
+    if (missingSuggestionIds.length) {
+      const { data: suggestionLessonRows, error: suggestionLessonsError } = await supabase
+        .from('lessons')
+        .select(
+          'id, title, estimated_duration_minutes, open_track, module_id, modules ( id, title, subject )',
+        )
+        .in('id', missingSuggestionIds);
+
+      if (suggestionLessonsError) {
+        console.error('[Dashboard] Failed to hydrate suggested lessons', suggestionLessonsError);
+      } else {
+        (suggestionLessonRows ?? []).forEach((lesson) => {
+          const subject = normalizeSubject(lesson.modules?.subject ?? null);
+          lessonMetadata.set(lesson.id as number, {
+            lessonId: lesson.id as number,
+            title: (lesson.title as string) ?? 'Lesson',
+            subject: subject,
+            moduleTitle: (lesson.modules?.title as string | null) ?? null,
+            estimatedDuration: (lesson.estimated_duration_minutes as number | null) ?? null,
+            status: 'not_started',
+            masteryPct: null,
+          });
+        });
+      }
+    }
+
     const activeLesson = todaysPlan.find((lesson) => lesson.status !== 'completed') ?? todaysPlan[0] ?? null;
     const xpTimeline = buildXpTimeline((xpRows as XpEventRow[]) ?? []);
     const assessments = buildAssessmentsSummary((assignmentsRows as StudentAssignmentRow[]) ?? []);
-    const aiRecommendations = deriveAiRecommendations(subjectMastery, todaysPlan);
+    let aiRecommendations = buildAdaptiveMessages(suggestionData, lessonMetadata);
+    if (!aiRecommendations.length) {
+      aiRecommendations = deriveAiRecommendations(subjectMastery, todaysPlan);
+    }
     const recentBadges = student.badges.slice(0, 3);
 
     return {
@@ -774,6 +1054,7 @@ export const fetchParentDashboardData = async (
       { data: activityRows, error: activityError },
       { data: skillRows, error: skillError },
       { data: subjectRows, error: subjectError },
+      { data: progressRows, error: progressError },
       { data: weeklyReportRow, error: weeklyError },
     ] = await Promise.all([
       childIds.length
@@ -799,6 +1080,15 @@ export const fetchParentDashboardData = async (
         : Promise.resolve({ data: [] as StudentDailyActivityRow[], error: null }),
       supabase.from('skills').select('id, subject_id'),
       supabase.from('subjects').select('id, name'),
+      childIds.length
+        ? supabase
+            .from('student_progress')
+            .select('student_id, status')
+            .in('student_id', childIds)
+        : Promise.resolve({
+            data: [] as Array<{ student_id: string; status: 'not_started' | 'in_progress' | 'completed' }>,
+            error: null,
+          }),
       parent.weeklyReport
         ? Promise.resolve({ data: null, error: null })
         : supabase
@@ -815,6 +1105,7 @@ export const fetchParentDashboardData = async (
     if (activityError) console.error('[Dashboard] Parent activity fetch failed', activityError);
     if (skillError) console.error('[Dashboard] Skill reference fetch failed', skillError);
     if (subjectError) console.error('[Dashboard] Subject reference fetch failed', subjectError);
+    if (progressError) console.error('[Dashboard] Parent progress fetch failed', progressError);
     if (weeklyError) console.error('[Dashboard] Parent weekly report fetch failed', weeklyError);
 
     const skillMap = (skillRows as SkillRow[]) ?? [];
@@ -831,6 +1122,25 @@ export const fetchParentDashboardData = async (
     masteryByStudent.forEach((rows, studentId) => {
       childMasteryById.set(studentId, groupMasteryBySubject(rows, skillMap, subjectMap));
     });
+
+    const progressSummaryByStudent = new Map<
+      string,
+      { completed: number; inProgress: number; notStarted: number }
+    >();
+    (progressRows as { student_id: string; status: 'not_started' | 'in_progress' | 'completed' }[]).forEach(
+      (row) => {
+        const entry =
+          progressSummaryByStudent.get(row.student_id) ?? {
+            completed: 0,
+            inProgress: 0,
+            notStarted: 0,
+          };
+        if (row.status === 'completed') entry.completed += 1;
+        else if (row.status === 'in_progress') entry.inProgress += 1;
+        else entry.notStarted += 1;
+        progressSummaryByStudent.set(row.student_id, entry);
+      },
+    );
 
     const xpByChild = new Map<string, XpEventRow[]>();
     (xpRows as (XpEventRow & { student_id: string })[]).forEach((row) => {
@@ -883,6 +1193,11 @@ export const fetchParentDashboardData = async (
         goalProgress: Math.round(goalProgress * 10) / 10,
         cohortComparison: Math.round(cohortComparison * 10) / 10,
         recentActivity: recentActivity.length ? recentActivity : child.recentActivity,
+        progressSummary: progressSummaryByStudent.get(child.id) ?? {
+          completed: 0,
+          inProgress: 0,
+          notStarted: 0,
+        },
       };
     });
 
@@ -949,6 +1264,9 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       { data: skillRows, error: skillError },
       { data: subjectRows, error: subjectError },
       { data: topRows, error: topError },
+      completedProgressResult,
+      inProgressProgressResult,
+      notStartedProgressResult,
     ] = await Promise.all([
       supabase.from('admin_dashboard_metrics').select('*').single(),
       supabase
@@ -962,6 +1280,18 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         .from('student_daily_activity')
         .select('student_id, activity_date, xp_earned, lessons_completed')
         .gte('activity_date', new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString()),
+      supabase
+        .from('student_progress')
+        .select('status', { count: 'exact', head: true })
+        .eq('status', 'completed'),
+      supabase
+        .from('student_progress')
+        .select('status', { count: 'exact', head: true })
+        .eq('status', 'in_progress'),
+      supabase
+        .from('student_progress')
+        .select('status', { count: 'exact', head: true })
+        .eq('status', 'not_started'),
     ]);
 
     if (metricsError) {
@@ -973,6 +1303,20 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
     if (skillError) console.error('[Dashboard] Admin skill fetch failed', skillError);
     if (subjectError) console.error('[Dashboard] Admin subject fetch failed', subjectError);
     if (topError) console.error('[Dashboard] Admin top students fetch failed', topError);
+    if (completedProgressResult.error)
+      console.error('[Dashboard] Admin completion count failed', completedProgressResult.error);
+    if (inProgressProgressResult.error)
+      console.error('[Dashboard] Admin in-progress count failed', inProgressProgressResult.error);
+    if (notStartedProgressResult.error)
+      console.error('[Dashboard] Admin not-started count failed', notStartedProgressResult.error);
+
+    const completedLessons = completedProgressResult.count ?? 0;
+    const inProgressLessons = inProgressProgressResult.count ?? 0;
+    const notStartedLessons = notStartedProgressResult.count ?? 0;
+    const totalTrackedLessons = completedLessons + inProgressLessons + notStartedLessons;
+    const lessonCompletionRate = totalTrackedLessons
+      ? completedLessons / totalTrackedLessons
+      : null;
 
     const metrics: AdminDashboardMetrics = {
       totalStudents: metricsRow.total_students ?? 0,
@@ -984,6 +1328,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       xpEarned30d: metricsRow.xp_earned_30d ?? 0,
       averageStudentXp: metricsRow.average_student_xp ?? 0,
       activeSubscriptions: metricsRow.active_subscriptions ?? 0,
+      lessonCompletionRate: lessonCompletionRate ?? undefined,
     };
 
     const growthGrouped = new Map<string, { newStudents: number; activeStudents: number }>();
@@ -1045,7 +1390,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         lessonsCompletedWeek: stats.lessons,
       }));
 
-    const alerts = buildAdminAlerts(metrics, subjectPerformance, admin);
+    const alerts = buildAdminAlerts(metrics, subjectPerformance, admin, lessonCompletionRate);
 
     try {
       await supabase.rpc('log_admin_event', {

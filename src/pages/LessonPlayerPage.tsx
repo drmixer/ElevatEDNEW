@@ -19,6 +19,7 @@ import remarkGfm from 'remark-gfm';
 
 import { fetchLessonDetail } from '../services/catalogService';
 import { useLessonProgress } from '../lib/useLessonProgress';
+import { useAuth } from '../contexts/AuthContext';
 
 const MARKDOWN_PLUGINS = [remarkGfm];
 
@@ -96,6 +97,7 @@ const isOpenLicense = (license: string | null | undefined): boolean => {
 
 const LessonPlayerPage: React.FC = () => {
   const params = useParams<{ id: string }>();
+  const { user } = useAuth();
   const lessonId = Number.parseInt(params.id ?? '', 10);
   const [showOpenOnly, setShowOpenOnly] = useState(false);
 
@@ -159,10 +161,23 @@ const LessonPlayerPage: React.FC = () => {
     [progressItems],
   );
 
+  const studentId = user?.role === 'student' ? user.id : null;
+
   const progressController = useLessonProgress(
     isLessonIdValid ? lessonId : null,
     progressItemIds,
+    lessonDetail && studentId
+      ? {
+          studentId,
+          moduleId: lessonDetail.module.id,
+          moduleTitle: lessonDetail.module.title,
+          lessonTitle: lessonDetail.lesson.title,
+          subject: lessonDetail.module.subject,
+        }
+      : { studentId: null },
   );
+
+  const progressDisabled = progressController.isLoading || progressController.isSaving;
 
   const sectionLookup = useMemo(() => {
     const map = new Map<string, { id: string; label: string }>();
@@ -237,6 +252,7 @@ const LessonPlayerPage: React.FC = () => {
           {progressId && (
             <button
               type="button"
+              disabled={progressDisabled}
               onClick={() => progressController.toggleItem(progressId)}
               aria-pressed={progressController.isComplete(progressId)}
               className="mt-1 inline-flex items-center justify-center rounded-full border border-slate-200 p-2 text-slate-400 hover:text-brand-blue hover:border-brand-blue/40"
@@ -338,9 +354,15 @@ const LessonPlayerPage: React.FC = () => {
                 style={{ width: `${progressController.progress}%` }}
               />
             </div>
+            {(progressController.isLoading || progressController.isSaving) && (
+              <p className="mt-2 text-xs text-slate-400">
+                {progressController.isLoading ? 'Loading saved progress…' : 'Syncing progress…'}
+              </p>
+            )}
             <div className="mt-4 flex flex-wrap gap-3">
               <button
                 type="button"
+                disabled={progressDisabled}
                 onClick={progressController.markComplete}
                 className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90"
               >
@@ -349,7 +371,7 @@ const LessonPlayerPage: React.FC = () => {
               <button
                 type="button"
                 onClick={progressController.reset}
-                disabled={progressController.progress === 0}
+                disabled={progressDisabled || progressController.progress === 0}
                 className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50"
               >
                 Reset
@@ -360,6 +382,7 @@ const LessonPlayerPage: React.FC = () => {
                 <li key={item.id}>
                   <button
                     type="button"
+                    disabled={progressDisabled}
                     onClick={() => progressController.toggleItem(item.id)}
                     aria-pressed={progressController.isComplete(item.id)}
                     className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors ${
@@ -528,7 +551,7 @@ const LessonPlayerPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            if (!progressController.isComplete('assets')) {
+                            if (!progressDisabled && !progressController.isComplete('assets')) {
                               progressController.toggleItem('assets');
                             }
                             window.open(asset.url, '_blank', 'noopener,noreferrer');
@@ -571,6 +594,7 @@ const LessonPlayerPage: React.FC = () => {
               </div>
               <button
                 type="button"
+                disabled={progressDisabled}
                 onClick={() => progressController.toggleItem('reflection')}
                 className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
                   progressController.isComplete('reflection')

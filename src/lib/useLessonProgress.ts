@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import {
+  completeLessonSession,
+  fetchLessonProgress,
+  startLessonSession,
+  updateLessonProgress,
+  type LessonProgressStatus,
+} from '../services/progressService';
 
 type LessonProgressEntry = {
   completed: string[];
@@ -39,12 +47,68 @@ const writeStorage = (payload: Record<string, LessonProgressEntry>) => {
   }
 };
 
-export const useLessonProgress = (lessonId: number | null, itemIds: string[]) => {
+type LessonProgressOptions = {
+  studentId?: string | null;
+  moduleId?: number | null;
+  moduleTitle?: string | null;
+  lessonTitle?: string | null;
+  subject?: string | null;
+};
+
+type SessionState = {
+  sessionId: number | null;
+  startedAt: string | null;
+  attempts: number;
+  completed: boolean;
+};
+
+const defaultSessionState: SessionState = {
+  sessionId: null,
+  startedAt: null,
+  attempts: 0,
+  completed: false,
+};
+
+const computeStatus = (
+  completedCount: number,
+  totalCount: number,
+): LessonProgressStatus => {
+  if (totalCount === 0 || completedCount === 0) return 'not_started';
+  if (completedCount >= totalCount) return 'completed';
+  return 'in_progress';
+};
+
+export const useLessonProgress = (
+  lessonId: number | null,
+  itemIds: string[],
+  options: LessonProgressOptions = {},
+) => {
   const [completedItems, setCompletedItems] = useState<Set<string>>(new Set());
+  const [status, setStatus] = useState<LessonProgressStatus>('not_started');
+  const [initialised, setInitialised] = useState<boolean>(
+    !(options.studentId && lessonId != null),
+  );
+  const [saving, setSaving] = useState(false);
+  const [forceLocal, setForceLocal] = useState(false);
+  const sessionRef = useRef<SessionState>({ ...defaultSessionState });
+
+  const persistent = Boolean(options.studentId && lessonId != null && !forceLocal);
+  const totalCount = itemIds.length;
+  const itemKey = useMemo(() => itemIds.join('|'), [itemIds]);
 
   useEffect(() => {
+    setForceLocal(false);
+  }, [lessonId, options.studentId]);
+
+  // Local fallback loading
+  useEffect(() => {
+    if (persistent) {
+      return;
+    }
+
     if (lessonId == null) {
       setCompletedItems(new Set());
+      setStatus('not_started');
       return;
     }
 
@@ -52,16 +116,20 @@ export const useLessonProgress = (lessonId: number | null, itemIds: string[]) =>
     const entry = storage[String(lessonId)];
     if (!entry) {
       setCompletedItems(new Set());
+      setStatus('not_started');
       return;
     }
 
     const validItems = new Set(itemIds);
     const restored = entry.completed.filter((item) => validItems.has(item));
-    setCompletedItems(new Set(restored));
-  }, [lessonId, itemIds.join('|')]);
+    const restoredSet = new Set(restored);
+    setCompletedItems(restoredSet);
+    setStatus(computeStatus(restoredSet.size, totalCount));
+  }, [persistent, lessonId, itemKey, totalCount]);
 
+  // Local persistence
   useEffect(() => {
-    if (lessonId == null) {
+    if (persistent || lessonId == null) {
       return;
     }
 
@@ -71,13 +139,150 @@ export const useLessonProgress = (lessonId: number | null, itemIds: string[]) =>
       updatedAt: new Date().toISOString(),
     };
     writeStorage(storage);
-  }, [lessonId, completedItems]);
+  }, [persistent, lessonId, completedItems]);
+
+  // Supabase-backed initialisation
+  useEffect(() => {
+    if (!persistent || lessonId == null || !options.studentId) {
+      if (!persistent) {
+        sessionRef.current = { ...defaultSessionState };
+        setInitialised(true);
+      }
+      return;
+    }
+
+    let cancelled = false;
+
+    const initialise = async () => {
+      setInitialised(false);
+      setSaving(true);
+      try {
+        const snapshot = await fetchLessonProgress({
+          studentId: options.studentId,
+          lessonId,
+          moduleId: options.moduleId ?? null,
+          moduleTitle: options.moduleTitle ?? null,
+          lessonTitle: options.lessonTitle ?? null,
+          subject: options.subject ?? null,
+        });
+
+        if (cancelled) return;
+
+        const validItems = new Set(itemIds);
+        const restored = snapshot.completedItems.filter((item) => validItems.has(item));
+        const restoredSet = new Set(restored);
+        setCompletedItems(restoredSet);
+
+        const derivedStatus = computeStatus(restoredSet.size, totalCount);
+        setStatus(snapshot.status ?? derivedStatus);
+
+        const session = await startLessonSession({
+          studentId: options.studentId,
+          lessonId,
+          moduleId: options.moduleId ?? null,
+          moduleTitle: options.moduleTitle ?? null,
+          lessonTitle: options.lessonTitle ?? null,
+          subject: options.subject ?? null,
+          initialCompletedItems: Array.from(restoredSet),
+          baselineAttempts: snapshot.attempts ?? 0,
+        });
+
+        if (cancelled) return;
+
+        sessionRef.current = {
+          sessionId: session.sessionId,
+          startedAt: session.startedAt,
+          attempts: session.attempts,
+          completed: snapshot.status === 'completed' || derivedStatus === 'completed',
+        };
+      } catch (error) {
+        if (!cancelled) {
+          console.warn('[progress] falling back to local tracking', error);
+          sessionRef.current = { ...defaultSessionState };
+          setForceLocal(true);
+        }
+      } finally {
+        if (!cancelled) {
+          setInitialised(true);
+          setSaving(false);
+        }
+      }
+    };
+
+    initialise();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [persistent, lessonId, itemKey, totalCount, options.studentId, options.moduleId, options.moduleTitle, options.lessonTitle, options.subject, itemIds]);
+
+  const persistProgress = useCallback(
+    async (nextSet: Set<string>) => {
+      if (!persistent || !lessonId || !options.studentId) {
+        return;
+      }
+      const session = sessionRef.current;
+      if (!session.sessionId) {
+        return;
+      }
+
+      const completedList = Array.from(nextSet);
+      const progressPct = totalCount
+        ? Math.round((completedList.length / totalCount) * 100)
+        : 0;
+      const nextStatus = computeStatus(nextSet.size, totalCount);
+
+      setSaving(true);
+      try {
+        await updateLessonProgress({
+          studentId: options.studentId,
+          lessonId,
+          moduleId: options.moduleId ?? null,
+          moduleTitle: options.moduleTitle ?? null,
+          lessonTitle: options.lessonTitle ?? null,
+          subject: options.subject ?? null,
+          sessionId: session.sessionId,
+          completedItems: completedList,
+          progressPct,
+          status: nextStatus,
+          attempts: session.attempts,
+        });
+
+        if (nextStatus === 'completed' && !session.completed) {
+          await completeLessonSession({
+            studentId: options.studentId,
+            lessonId,
+            moduleId: options.moduleId ?? null,
+            moduleTitle: options.moduleTitle ?? null,
+            lessonTitle: options.lessonTitle ?? null,
+            subject: options.subject ?? null,
+            sessionId: session.sessionId,
+            startedAt: session.startedAt ?? new Date().toISOString(),
+            completedItems: completedList,
+            progressPct,
+            attempts: session.attempts,
+          });
+          sessionRef.current = { ...sessionRef.current, completed: true };
+        } else if (nextStatus !== 'completed' && session.completed) {
+          sessionRef.current = { ...sessionRef.current, completed: false };
+        }
+
+        setStatus(nextStatus);
+      } catch (error) {
+        console.warn('[progress] failed to persist lesson progress', error);
+      } finally {
+        setSaving(false);
+      }
+    },
+    [persistent, lessonId, options.studentId, options.moduleId, options.moduleTitle, options.lessonTitle, options.subject, totalCount],
+  );
 
   const toggleItem = useCallback(
     (itemId: string) => {
       if (!itemIds.includes(itemId)) {
         return;
       }
+
       setCompletedItems((previous) => {
         const next = new Set(previous);
         if (next.has(itemId)) {
@@ -85,22 +290,37 @@ export const useLessonProgress = (lessonId: number | null, itemIds: string[]) =>
         } else {
           next.add(itemId);
         }
+
+        if (persistent && initialised) {
+          void persistProgress(next);
+        }
+
+        setStatus(computeStatus(next.size, totalCount));
         return next;
       });
     },
-    [itemIds],
+    [itemIds, persistent, initialised, persistProgress, totalCount],
   );
 
   const markComplete = useCallback(() => {
-    setCompletedItems(new Set(itemIds));
-  }, [itemIds]);
+    const next = new Set(itemIds);
+    setCompletedItems(next);
+    setStatus(computeStatus(next.size, totalCount));
+    if (persistent && initialised) {
+      void persistProgress(next);
+    }
+  }, [itemIds, totalCount, persistent, initialised, persistProgress]);
 
   const reset = useCallback(() => {
-    setCompletedItems(new Set());
-  }, []);
+    const next = new Set<string>();
+    setCompletedItems(next);
+    setStatus('not_started');
+    if (persistent && initialised) {
+      void persistProgress(next);
+    }
+  }, [persistent, initialised, persistProgress]);
 
   const completedCount = completedItems.size;
-  const totalCount = itemIds.length;
 
   const progress = useMemo(() => {
     if (totalCount === 0) {
@@ -119,6 +339,9 @@ export const useLessonProgress = (lessonId: number | null, itemIds: string[]) =>
     completedCount,
     totalCount,
     progress,
+    status,
+    isLoading: !initialised,
+    isSaving: saving,
     toggleItem,
     markComplete,
     reset,
