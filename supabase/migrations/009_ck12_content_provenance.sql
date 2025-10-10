@@ -67,7 +67,7 @@ using (
   )
 );
 
--- Extend lessons with CK-12 metadata.
+-- Extend lessons with OER metadata.
 alter table public.lessons
   add column if not exists external_id text,
   add column if not exists slug text,

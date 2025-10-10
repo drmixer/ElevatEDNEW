@@ -201,6 +201,9 @@ end;
 $$;
 
 comment on function public.suggest_next_lessons(uuid, int)
-is 'Returns suggested next lessons for a student. Call via supabase.rpc("suggest_next_lessons", { student_id, limit_count }).';
+is 'Returns suggested next lessons for a student. Call via supabase.rpc("suggest_next_lessons", { p_student_id, limit_count }).';
+
+grant select on public.v_student_topic_mastery to authenticated, service_role;
+grant execute on function public.suggest_next_lessons(uuid, int) to authenticated, service_role;
 
 commit;

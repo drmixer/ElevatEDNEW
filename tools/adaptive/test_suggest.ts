@@ -38,9 +38,9 @@ const insertSubject = async (supabase: ReturnType<typeof createClient>, name: st
       name,
       description: 'Adaptive rule engine test subject',
       source: 'test-harness',
-      source_url: 'https://example.com',
-      license: 'CC BY-NC',
-      attribution: 'CK-12 Foundation (ck12.org)',
+      source_url: 'https://example.org/open-numeracy',
+      license: 'CC BY',
+      attribution: 'Open Numeracy Initiative',
     })
     .select()
     .single();
@@ -66,9 +66,9 @@ const insertTopics = async (
       difficulty_level: 1,
       external_id: `demo:foundations:${suffix}`,
       source: 'test-harness',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
-      source_url: 'https://example.com/foundations',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
+      source_url: 'https://example.org/foundations',
     },
     {
       subject_id: subjectId,
@@ -78,9 +78,9 @@ const insertTopics = async (
       difficulty_level: 2,
       external_id: `demo:practice:${suffix}`,
       source: 'test-harness',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
-      source_url: 'https://example.com/practice',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
+      source_url: 'https://example.org/practice',
     },
     {
       subject_id: subjectId,
@@ -90,9 +90,9 @@ const insertTopics = async (
       difficulty_level: 3,
       external_id: `demo:extensions:${suffix}`,
       source: 'test-harness',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
-      source_url: 'https://example.com/extensions',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
+      source_url: 'https://example.org/extensions',
     },
   ];
 
@@ -125,9 +125,9 @@ const insertLessons = async (
       media: [],
       metadata: { tag: 'warmup' },
       source: 'test-harness',
-      source_url: 'https://example.com/foundations/1',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
+      source_url: 'https://example.org/foundations/1',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
       is_published: true,
     },
     {
@@ -140,9 +140,9 @@ const insertLessons = async (
       media: [],
       metadata: { tag: 'practice' },
       source: 'test-harness',
-      source_url: 'https://example.com/foundations/2',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
+      source_url: 'https://example.org/foundations/2',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
       is_published: true,
     },
     {
@@ -155,9 +155,9 @@ const insertLessons = async (
       media: [],
       metadata: { tag: 'applied' },
       source: 'test-harness',
-      source_url: 'https://example.com/practice/1',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
+      source_url: 'https://example.org/practice/1',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
       is_published: true,
     },
     {
@@ -170,9 +170,9 @@ const insertLessons = async (
       media: [],
       metadata: { tag: 'review' },
       source: 'test-harness',
-      source_url: 'https://example.com/practice/2',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
+      source_url: 'https://example.org/practice/2',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
       is_published: true,
     },
     {
@@ -185,9 +185,9 @@ const insertLessons = async (
       media: [],
       metadata: { tag: 'challenge' },
       source: 'test-harness',
-      source_url: 'https://example.com/extensions/1',
-      license: 'CC BY-NC',
-      attribution: 'Demo Attribution',
+      source_url: 'https://example.org/extensions/1',
+      license: 'CC BY',
+      attribution: 'Demo OER Attribution',
       is_published: true,
     },
   ];
@@ -413,7 +413,7 @@ const run = async () => {
       },
     ]);
     const reinforcement = await supabase.rpc('suggest_next_lessons', {
-      student_id: studentId,
+      p_student_id: studentId,
       limit_count: 3,
     });
     if (reinforcement.error) {
@@ -432,7 +432,7 @@ const run = async () => {
       },
     ]);
     const advance = await supabase.rpc('suggest_next_lessons', {
-      student_id: studentId,
+      p_student_id: studentId,
       limit_count: 3,
     });
     if (advance.error) {
@@ -451,7 +451,7 @@ const run = async () => {
       },
     ]);
     const complete = await supabase.rpc('suggest_next_lessons', {
-      student_id: studentId,
+      p_student_id: studentId,
       limit_count: 3,
     });
     if (complete.error) {
