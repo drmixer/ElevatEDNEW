@@ -1,0 +1,27 @@
+{
+  "6-science-earth-and-space-earth-history": [
+    "https://openstax.org/books/earth-science-2e/pages/7-introduction",
+    {
+      "url": "https://openstax.org/books/earth-science-2e/pages/7-1-geologic-time-and-stratigraphy",
+      "title": "Geologic Time and Stratigraphy",
+      "description": "OpenStax Earth Science 2e, Chapter 7.1",
+      "tags": ["earth-history", "geology"]
+    }
+  ],
+  "9-mathematics-algebra-hs-pathways-linear-quadratic-functions": [
+    "https://openstax.org/books/algebra-and-trigonometry/pages/3-6-graphs-of-linear-functions",
+    {
+      "url": "https://openstax.org/books/algebra-and-trigonometry/pages/4-4-graphs-of-quadratic-functions",
+      "title": "Graphs of Quadratic Functions",
+      "tags": ["algebra", "quadratic"]
+    }
+  ],
+  "10-science-life-science-molecular-genetics": [
+    "https://openstax.org/books/biology-2e/pages/14-introduction",
+    {
+      "url": "https://openstax.org/books/biology-2e/pages/14-2-dna-structure-and-function",
+      "title": "DNA Structure and Function",
+      "tags": ["genetics", "biology"]
+    }
+  ]
+}

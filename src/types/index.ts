@@ -198,6 +198,88 @@ export interface ParentChildSnapshot {
   cohortComparison?: number;
 }
 
+export interface CatalogFilters {
+  subject?: string;
+  grade?: string;
+  strand?: string;
+  topic?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface CatalogModule {
+  id: number;
+  slug: string;
+  title: string;
+  summary: string | null;
+  gradeBand: string;
+  subject: string;
+  strand: string | null;
+  topic: string | null;
+  openTrack: boolean;
+  suggestedSourceCategory: string | null;
+  exampleSource: string | null;
+}
+
+export interface ModuleAsset {
+  id: number;
+  lessonId: number | null;
+  title: string | null;
+  description: string | null;
+  url: string;
+  kind: string;
+  license: string;
+  licenseUrl: string | null;
+  attributionText: string | null;
+  tags: string[];
+}
+
+export interface ModuleLesson {
+  id: number;
+  title: string;
+  content: string;
+  estimatedDurationMinutes: number | null;
+  attributionBlock: string;
+  openTrack: boolean;
+  assets: ModuleAsset[];
+}
+
+export interface ModuleDetail {
+  module: {
+    id: number;
+    slug: string;
+    title: string;
+    summary: string | null;
+    description: string | null;
+    notes: string | null;
+    gradeBand: string;
+    subject: string;
+    strand: string | null;
+    topic: string | null;
+    openTrack: boolean;
+    suggestedSourceCategory: string | null;
+    exampleSource: string | null;
+    licenseRequirement: string | null;
+  };
+  lessons: ModuleLesson[];
+  moduleAssets: ModuleAsset[];
+}
+
+export interface RecommendationItem {
+  id: number;
+  slug: string;
+  title: string;
+  subject: string;
+  strand: string | null;
+  topic: string | null;
+  gradeBand: string;
+  summary: string | null;
+  openTrack: boolean;
+  reason: string;
+  fallback: boolean;
+}
+
 export interface ParentChildActivity {
   id: string;
   description: string;

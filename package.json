@@ -10,7 +10,15 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest watch",
-    "import:oer": "tsx tools/importers/oer/index.ts"
+    "import:oer": "tsx tools/importers/oer/index.ts",
+    "db:migrate": "supabase migration up",
+    "seed:skeleton": "tsx scripts/import_skeleton.ts",
+    "import:openstax": "tsx scripts/import_openstax.ts",
+    "import:gutenberg": "tsx scripts/import_gutenberg.ts",
+    "import:federal": "tsx scripts/import_federal_pd.ts",
+    "audit:licenses": "tsx scripts/audit_licenses.ts",
+    "audit:completeness": "tsx scripts/audit_completeness.ts",
+    "api:dev": "tsx server/index.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.74.0",
@@ -19,7 +27,9 @@
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "recharts": "^2.8.0"
+    "react-router-dom": "^6.30.1",
+    "recharts": "^2.8.0",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
@@ -36,10 +46,10 @@
     "jsdom": "^27.0.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2",
-    "vitest": "^3.2.4",
-    "tsx": "^4.19.1"
+    "vitest": "^3.2.4"
   }
 }
