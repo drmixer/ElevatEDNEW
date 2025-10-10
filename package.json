@@ -16,14 +16,18 @@
     "import:openstax": "tsx scripts/import_openstax.ts",
     "import:gutenberg": "tsx scripts/import_gutenberg.ts",
     "import:federal": "tsx scripts/import_federal_pd.ts",
+    "import:standards": "tsx scripts/import_standards.ts",
+    "import:module-standards": "tsx scripts/import_module_standards.ts",
     "audit:licenses": "tsx scripts/audit_licenses.ts",
     "audit:completeness": "tsx scripts/audit_completeness.ts",
     "seed:lessons": "tsx scripts/seed_lessons.ts",
+    "seed:module-assessments": "tsx scripts/seed_module_assessments.ts",
     "api:dev": "tsx server/index.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.74.0",
     "@tanstack/react-query": "^5.90.2",
+    "csv-parse": "^5.6.0",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",

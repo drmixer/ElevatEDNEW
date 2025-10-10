@@ -1,0 +1,123 @@
+{
+  "6-science-earth-space-plate-tectonics": {
+    "title": "Plate Tectonics Baseline Quiz",
+    "description": "Quick pulse-check on prior knowledge of tectonic processes before students dive into investigations.",
+    "estimatedDuration": 8,
+    "sectionTitle": "Earth Systems Readiness",
+    "standards": [
+      "NGSS:MS-ESS2-2",
+      "NGSS:MS-ESS2-3"
+    ],
+    "questions": [
+      {
+        "id": "pt-q1",
+        "prompt": "Which layer of Earth consists of solid rock plates that move over the asthenosphere?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "NGSS:MS-ESS2-2"
+        ],
+        "options": [
+          { "text": "Inner core", "isCorrect": false },
+          { "text": "Outer core", "isCorrect": false },
+          { "text": "Lithosphere", "isCorrect": true, "feedback": "Tectonic plates are sections of the lithosphere." },
+          { "text": "Mesosphere", "isCorrect": false }
+        ],
+        "explanation": "The lithosphere is Earth’s rigid outer shell made of the crust and upper mantle."
+      },
+      {
+        "id": "pt-q2",
+        "prompt": "Which evidence best supports the theory that continents were once connected?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "NGSS:MS-ESS2-3"
+        ],
+        "options": [
+          { "text": "Similar climate zones exist on different continents today.", "isCorrect": false },
+          { "text": "Identical fossils are found on continents separated by oceans.", "isCorrect": true, "feedback": "Matching fossils across oceans provide strong evidence of continental drift." },
+          { "text": "Volcanoes occur along plate boundaries.", "isCorrect": false },
+          { "text": "Earthquakes happen on every continent.", "isCorrect": false }
+        ],
+        "explanation": "Identical fossils on distant continents indicate those land masses were once connected."
+      },
+      {
+        "id": "pt-q3",
+        "prompt": "What is most likely happening at a convergent plate boundary between an oceanic and continental plate?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "NGSS:MS-ESS2-2",
+          "NGSS:MS-ESS2-3"
+        ],
+        "options": [
+          { "text": "New crust is forming as magma rises.", "isCorrect": false },
+          { "text": "The plates slide past each other without vertical movement.", "isCorrect": false },
+          { "text": "The oceanic plate subducts beneath the continental plate.", "isCorrect": true, "feedback": "Denser oceanic crust dives beneath continental crust, forming trenches and volcanoes." },
+          { "text": "Both plates break apart forming a rift valley.", "isCorrect": false }
+        ],
+        "explanation": "Convergent plate boundaries with oceanic-continental interaction typically result in subduction."
+      }
+    ]
+  },
+  "6-mathematics-number-operations-ratios-proportional-reasoning": {
+    "title": "Ratios & Proportions Warm-Up",
+    "description": "Baseline check on ratio representations to personalize practice sets.",
+    "estimatedDuration": 7,
+    "sectionTitle": "Ratio Sense Maker",
+    "standards": [
+      "Common Core Math:6.RP.A.1",
+      "Common Core Math:6.RP.A.3"
+    ],
+    "questions": [
+      {
+        "id": "rp-q1",
+        "prompt": "The ratio of cats to dogs in a shelter is 3 to 5. Which statement correctly describes this ratio?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "Common Core Math:6.RP.A.1"
+        ],
+        "options": [
+          { "text": "For every 3 cats there are 5 dogs.", "isCorrect": true, "feedback": "Ratios compare quantities in order; 3 cats correspond with 5 dogs." },
+          { "text": "There are 8 more dogs than cats.", "isCorrect": false },
+          { "text": "For every 5 cats there are 3 dogs.", "isCorrect": false },
+          { "text": "There are 3 cats and 5 dogs total.", "isCorrect": false }
+        ],
+        "explanation": "Ratios use the order of numbers to describe relationships."
+      },
+      {
+        "id": "rp-q2",
+        "prompt": "A smoothie recipe uses 2 cups of strawberries for every 3 cups of yogurt. How many cups of strawberries are needed with 9 cups of yogurt?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "Common Core Math:6.RP.A.3"
+        ],
+        "options": [
+          { "text": "4 cups", "isCorrect": false },
+          { "text": "6 cups", "isCorrect": true, "feedback": "Multiply both parts of the ratio by 3 to maintain the proportion." },
+          { "text": "8 cups", "isCorrect": false },
+          { "text": "12 cups", "isCorrect": false }
+        ],
+        "explanation": "The ratio 2:3 scales to 6:9 when multiplied by 3."
+      },
+      {
+        "id": "rp-q3",
+        "prompt": "A car travels 180 miles on 6 gallons of gas. What is the unit rate in miles per gallon?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "Common Core Math:6.RP.A.3"
+        ],
+        "options": [
+          { "text": "15 miles per gallon", "isCorrect": false },
+          { "text": "20 miles per gallon", "isCorrect": false },
+          { "text": "30 miles per gallon", "isCorrect": true, "feedback": "Compute 180 ÷ 6 to find 30 miles per gallon." },
+          { "text": "36 miles per gallon", "isCorrect": false }
+        ],
+        "explanation": "Divide total miles by gallons (180 ÷ 6) to obtain the 30 mpg unit rate."
+      }
+    ]
+  }
+}

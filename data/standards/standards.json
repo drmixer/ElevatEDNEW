@@ -1,0 +1,30 @@
+[
+  {
+    "framework": "NGSS",
+    "code": "MS-ESS2-2",
+    "description": "Construct an explanation based on evidence for how geoscience processes have changed Earth's surface at varying time and spatial scales.",
+    "subject": "Science",
+    "grade_band": "6-8"
+  },
+  {
+    "framework": "NGSS",
+    "code": "MS-ESS2-3",
+    "description": "Analyze and interpret data on the distribution of fossils and rocks, continental shapes, and seafloor structures to provide evidence of past plate motions.",
+    "subject": "Science",
+    "grade_band": "6-8"
+  },
+  {
+    "framework": "Common Core Math",
+    "code": "6.RP.A.1",
+    "description": "Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities.",
+    "subject": "Mathematics",
+    "grade_band": "6"
+  },
+  {
+    "framework": "Common Core Math",
+    "code": "6.RP.A.3",
+    "description": "Use ratio and rate reasoning to solve real-world and mathematical problems, including solving unit rate problems and converting measurement units.",
+    "subject": "Mathematics",
+    "grade_band": "6"
+  }
+]

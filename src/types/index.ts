@@ -245,6 +245,62 @@ export interface ModuleLesson {
   assets: ModuleAsset[];
 }
 
+export interface ModuleStandard {
+  id: number;
+  framework: string;
+  code: string;
+  description: string | null;
+  alignmentStrength: string | null;
+  notes: string | null;
+}
+
+export interface ModuleAssessmentSummary {
+  id: number;
+  title: string;
+  description: string | null;
+  estimatedDurationMinutes: number | null;
+  questionCount: number;
+  attemptCount: number;
+  completionRate: number;
+  averageScore: number | null;
+  purpose: string | null;
+}
+
+export interface ModuleAssessmentOption {
+  id: number;
+  order: number;
+  content: string;
+  isCorrect: boolean;
+  feedback: string | null;
+}
+
+export interface ModuleAssessmentQuestion {
+  id: number;
+  prompt: string;
+  type: string;
+  difficulty: number | null;
+  explanation: string | null;
+  standards: string[];
+  tags: string[];
+  options: ModuleAssessmentOption[];
+}
+
+export interface ModuleAssessmentSection {
+  id: number;
+  title: string;
+  instructions: string | null;
+  questions: ModuleAssessmentQuestion[];
+}
+
+export interface ModuleAssessmentDetail {
+  id: number;
+  title: string;
+  description: string | null;
+  estimatedDurationMinutes: number | null;
+  purpose: string | null;
+  sections: ModuleAssessmentSection[];
+}
+
 export interface ModuleDetail {
   module: {
     id: number;
@@ -264,6 +320,8 @@ export interface ModuleDetail {
   };
   lessons: ModuleLesson[];
   moduleAssets: ModuleAsset[];
+  standards: ModuleStandard[];
+  assessments: ModuleAssessmentSummary[];
 }
 
 export interface RecommendationItem {

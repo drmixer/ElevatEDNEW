@@ -77,6 +77,15 @@ npm run import:federal
 
 Each importer validates licenses via `assertLicenseAllowed`. If a mapping contains a disallowed license the command fails with a descriptive error.
 
+Standards & Assessments Integration
+-----------------------------------
+
+- `npm run import:standards` – loads frameworks and codes from `data/standards/standards.json` (JSON or CSV supported via `--file`).
+- `npm run import:module-standards` – attaches standards to modules using `mappings/module_standards.json` (module slug → standard codes).
+- `npm run seed:module-assessments` – seeds baseline quizzes per module from `data/assessments/module_quizzes.json`, creating question bank items, sections, and assessment links.
+
+Module detail pages now return aligned standards, baseline assessment summaries, and the `/api/modules/:id/assessment` endpoint exposes the full quiz structure for previewing in the UI.
+
 QA Scripts
 ----------
 

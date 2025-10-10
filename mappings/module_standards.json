@@ -1,0 +1,32 @@
+{
+  "6-science-earth-space-plate-tectonics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "code": "MS-ESS2-2",
+        "alignment": "anchor",
+        "notes": "Core phenomenon investigation driving the module sequence."
+      },
+      {
+        "code": "MS-ESS2-3",
+        "alignment": "reinforce",
+        "notes": "Students compare evidence sources across lessons to build toward mastery."
+      }
+    ]
+  },
+  "6-mathematics-number-operations-ratios-proportional-reasoning": {
+    "framework": "Common Core Math",
+    "standards": [
+      {
+        "code": "6.RP.A.1",
+        "alignment": "priority",
+        "notes": "Launch lesson establishes ratio language with visual models."
+      },
+      {
+        "code": "6.RP.A.3",
+        "alignment": "practice",
+        "notes": "Practice set and exit ticket extend to unit rate problem solving."
+      }
+    ]
+  }
+}
