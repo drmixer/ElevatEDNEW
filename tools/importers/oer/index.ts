@@ -11,10 +11,11 @@ type CLIOptions = {
   dryRun: boolean;
   limit?: number;
   subject?: string;
+  source?: string;
   triggeredBy?: UUID;
 };
 
-type CK12Lesson = {
+type OerLesson = {
   external_id: string;
   title: string;
   slug?: string;
@@ -27,28 +28,29 @@ type CK12Lesson = {
   attribution?: string;
 };
 
-type CK12Topic = {
+type OerTopic = {
   external_id: string;
   name: string;
   slug?: string;
   description?: string;
   prerequisites?: string[];
   difficulty_level?: number;
-  lessons: CK12Lesson[];
+  lessons: OerLesson[];
   license?: string;
   source_url?: string;
   attribution?: string;
 };
 
-type CK12File = {
+type OerDataset = {
   subject: {
     name: string;
     description?: string;
     license?: string;
     source_url?: string;
     attribution?: string;
+    source?: string;
   };
-  topics: CK12Topic[];
+  topics: OerTopic[];
 };
 
 type EntityMetrics = { created: number; updated: number };
@@ -66,8 +68,8 @@ type TopicPrerequisiteLink = {
   prerequisiteExternalId: string;
 };
 
-const SOURCE_NAME = 'CK-12';
 const DEFAULT_BATCH_SIZE = 5;
+const DEFAULT_SOURCE_LABEL = 'OER';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -92,7 +94,7 @@ const clampDifficulty = (value?: number | null): number | null => {
 const parseArgs = (): CLIOptions => {
   const args = process.argv.slice(2);
   const options: CLIOptions = {
-    path: path.resolve(process.cwd(), './data/ck12'),
+    path: path.resolve(process.cwd(), './data/oer'),
     dryRun: false,
   };
 
@@ -144,6 +146,15 @@ const parseArgs = (): CLIOptions => {
         i += 1;
         break;
       }
+      case '--source': {
+        const next = args[i + 1];
+        if (!next) {
+          throw new Error('Expected value after --source');
+        }
+        options.source = next;
+        i += 1;
+        break;
+      }
       default:
         throw new Error(`Unknown argument: ${arg}`);
     }
@@ -184,10 +195,10 @@ const readJsonFiles = async (directory: string): Promise<string[]> => {
   return entries.filter((entry) => entry.isFile() && entry.name.endsWith('.json')).map((entry) => path.join(directory, entry.name));
 };
 
-const loadCk12File = async (filePath: string): Promise<CK12File> => {
+const loadDatasetFile = async (filePath: string): Promise<OerDataset> => {
   const raw = await fs.readFile(filePath, 'utf8');
   try {
-    return JSON.parse(raw) as CK12File;
+    return JSON.parse(raw) as OerDataset;
   } catch (error) {
     throw new Error(`Failed to parse ${filePath}: ${(error as Error).message}`);
   }
@@ -206,14 +217,15 @@ const increment = (metrics: EntityMetrics, key: keyof EntityMetrics, delta = 1) 
 
 const upsertSubject = async (
   client: SupabaseClient,
-  file: CK12File,
+  dataset: OerDataset,
   options: CLIOptions,
   metrics: ImportMetrics,
+  sourceLabel: string,
 ): Promise<number | null> => {
-  const { subject } = file;
+  const { subject } = dataset;
   const name = subject.name.trim();
   const normalizedDescription = subject.description ?? null;
-  const fallbackAttribution = subject.attribution ?? `${SOURCE_NAME} (ck12.org)`;
+  const fallbackAttribution = subject.attribution ?? `Provided by ${sourceLabel}`;
 
   const { data: existing, error: selectError } = await client
     .from('subjects')
@@ -233,7 +245,7 @@ const upsertSubject = async (
   const payload = {
     name,
     description: normalizedDescription,
-    source: SOURCE_NAME,
+    source: sourceLabel,
     source_url: subject.source_url ?? null,
     license: subject.license ?? null,
     attribution: fallbackAttribution,
@@ -303,9 +315,10 @@ const processLessons = async (
   options: CLIOptions,
   metrics: ImportMetrics,
   errors: string[],
-  subject: CK12File['subject'],
-  topic: CK12Topic,
+  subject: OerDataset['subject'],
+  topic: OerTopic,
   topicId: number,
+  sourceLabel: string,
 ): Promise<void> => {
   if (!topic.lessons.length) {
     return;
@@ -322,7 +335,7 @@ const processLessons = async (
     const lesson = topic.lessons[i];
     const slug = lessonSlugs[i];
     const existing = existingMap.get(slug);
-    const attribution = lesson.attribution ?? topic.attribution ?? `${SOURCE_NAME} (ck12.org)`;
+    const attribution = lesson.attribution ?? topic.attribution ?? subject.attribution ?? `Provided by ${sourceLabel}`;
     const payload = {
       topic_id: topicId,
       slug,
@@ -332,8 +345,8 @@ const processLessons = async (
       estimated_duration_minutes: lesson.estimated_duration_minutes ?? null,
       media: Array.isArray(lesson.media) ? lesson.media : [],
       metadata: lesson.metadata ?? {},
-      source: SOURCE_NAME,
-      source_url: lesson.source_url ?? topic.source_url ?? null,
+      source: sourceLabel,
+      source_url: lesson.source_url ?? topic.source_url ?? subject.source_url ?? null,
       license: lesson.license ?? topic.license ?? subject.license ?? null,
       attribution,
       is_published: true,
@@ -370,11 +383,12 @@ const processTopics = async (
   options: CLIOptions,
   metrics: ImportMetrics,
   errors: string[],
-  subject: CK12File['subject'],
-  topics: CK12Topic[],
+  subject: OerDataset['subject'],
+  topics: OerTopic[],
   subjectId: number,
   topicIdByExternalId: Map<string, number>,
   pendingPrereqs: TopicPrerequisiteLink[],
+  sourceLabel: string,
 ): Promise<void> => {
   if (!topics.length) {
     return;
@@ -402,7 +416,7 @@ const processTopics = async (
       chunk.map(async ({ topic, slug }) => {
         const existing = existingMap.get(slug);
         const difficulty = clampDifficulty(topic.difficulty_level);
-        const attribution = topic.attribution ?? subject.attribution ?? `${SOURCE_NAME} (ck12.org)`;
+        const attribution = topic.attribution ?? subject.attribution ?? `Provided by ${sourceLabel}`;
 
         const payload = {
           subject_id: subjectId,
@@ -411,7 +425,7 @@ const processTopics = async (
           slug,
           external_id: topic.external_id ?? existing?.external_id ?? null,
           difficulty_level: difficulty,
-          source: SOURCE_NAME,
+          source: sourceLabel,
           source_url: topic.source_url ?? subject.source_url ?? null,
           license: topic.license ?? subject.license ?? null,
           attribution,
@@ -469,7 +483,7 @@ const processTopics = async (
           }
         }
 
-        await processLessons(client, options, metrics, errors, subject, topic, topicId);
+        await processLessons(client, options, metrics, errors, subject, topic, topicId, sourceLabel);
       }),
     );
   }
@@ -557,13 +571,14 @@ const startImportRun = async (
   client: SupabaseClient,
   options: CLIOptions,
   totals: ImportMetrics,
+  runSource: string,
 ): Promise<number | null> => {
   if (options.dryRun) {
     return null;
   }
 
   const payload = {
-    source: SOURCE_NAME,
+    source: runSource,
     totals,
     triggered_by: options.triggeredBy ?? null,
     errors: [],
@@ -605,6 +620,7 @@ const finalizeImportRun = async (
 const run = async () => {
   const startedAt = Date.now();
   const options = parseArgs();
+  const runSource = options.source ?? DEFAULT_SOURCE_LABEL;
 
   const supabaseUrl = requireEnv('SUPABASE_URL');
   const supabaseKey = requireEnv('SUPABASE_SERVICE_ROLE_KEY');
@@ -617,14 +633,14 @@ const run = async () => {
 
   const files = await readJsonFiles(options.path);
   if (!files.length) {
-    console.warn(`No CK-12 JSON files found in ${options.path}`);
+    console.warn(`No dataset JSON files found in ${options.path}`);
     return;
   }
 
-  console.log(`Found ${files.length} CK-12 file(s). Starting import...`);
+  console.log(`Found ${files.length} dataset file(s). Starting import...`);
 
   let remainingTopics = options.limit ?? Number.POSITIVE_INFINITY;
-  const importRunId = await startImportRun(supabase, options, metrics);
+  const importRunId = await startImportRun(supabase, options, metrics, runSource);
 
   try {
     for (const filePath of files) {
@@ -633,7 +649,8 @@ const run = async () => {
         break;
       }
 
-      const dataset = await loadCk12File(filePath);
+      const dataset = await loadDatasetFile(filePath);
+      const sourceLabel = options.source ?? dataset.subject.source ?? DEFAULT_SOURCE_LABEL;
       const subjectNameMatch = options.subject
         ? dataset.subject.name.toLowerCase() === options.subject
         : true;
@@ -643,8 +660,8 @@ const run = async () => {
         continue;
       }
 
-      console.log(`Processing ${filePath} (subject: ${dataset.subject.name})`);
-      const subjectId = await upsertSubject(supabase, dataset, options, metrics);
+      console.log(`Processing ${filePath} (subject: ${dataset.subject.name} | source: ${sourceLabel})`);
+      const subjectId = await upsertSubject(supabase, dataset, options, metrics, sourceLabel);
       if (subjectId == null) {
         console.warn(`Subject "${dataset.subject.name}" unresolved in dry-run; skipping topics.`);
         continue;
@@ -663,6 +680,7 @@ const run = async () => {
         subjectId,
         topicIdByExternalId,
         pendingPrereqs,
+        sourceLabel,
       );
     }
 

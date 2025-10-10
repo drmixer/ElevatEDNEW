@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest watch",
-    "import:ck12": "tsx tools/importers/ck12/index.ts"
+    "import:oer": "tsx tools/importers/oer/index.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.74.0",

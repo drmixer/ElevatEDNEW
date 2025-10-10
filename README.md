@@ -1,10 +1,10 @@
 ElevatEDNEW
 ===
 
-## CK-12 Importer
-- Place CK-12 JSON dumps in `data/ck12/`.
-- Run `pnpm tsx tools/importers/ck12/index.ts --path ./data/ck12`.
-- Optional flags: `--dryRun`, `--limit <n>`, `--subject "<Name>"`, `--triggeredBy <uuid>`.
+## OER Importer
+- Place normalized JSON datasets in `data/oer/`.
+- Run `pnpm tsx tools/importers/oer/index.ts --path ./data/oer`.
+- Optional flags: `--dryRun`, `--limit <n>`, `--subject "<Name>"`, `--triggeredBy <uuid>`, `--source "<Provider>"`.
 
 ## Adaptive Suggestions
 Call the Supabase RPC from Node:
@@ -22,5 +22,5 @@ The helper script `pnpm tsx tools/adaptive/test_suggest.ts` seeds demo data and 
 
 ## License & Attribution Notes
 - New provenance columns (`source`, `source_url`, `license`, `attribution`, plus `external_id`, `slug`, `media`, `metadata`) exist on subjects/topics/lessons.
-- Always persist CK-12’s license (often **CC BY-NC**) and attribution string on every imported record.
-- Keep NC-licensed material out of paid experiences unless you have explicit permission.
+- Always persist the provider’s license and attribution string on every imported record.
+- Keep NC-licensed or otherwise restricted material out of paid experiences unless you have explicit permission.
