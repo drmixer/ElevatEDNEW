@@ -119,6 +119,25 @@ Local Development
 
 The Vite dev server proxies API requests to the same service-role powered handlers used in production.
 
+Progress Tracking & Assignments
+-------------------------------
+
+- Lesson progress persists to Supabase via `student_progress`, `practice_sessions`, and `practice_events`. The lesson player now records session starts, inline checkpoints, and completions so dashboards render live data.
+- When running the UI locally (or executing Vitest) provide `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` environment variables so the Supabase client can be initialised without throwing.
+- Module assignments can be created programmatically by issuing a `POST /api/assignments/assign` request with:
+
+  ```json
+  {
+    "moduleId": 123,
+    "studentIds": ["uuid-1", "uuid-2"],
+    "creatorId": "parent-or-admin-user-id",
+    "creatorRole": "parent",
+    "dueAt": "2024-12-01T23:59:00.000Z"
+  }
+  ```
+
+  The endpoint links every lesson from the module to a new assignment, upserts the `student_assignments`, and refreshes analytics rollups. The same handler is used by the Parent and Admin dashboards to issue assignments.
+
 ```bash
 # Start Vite + API proxy on http://localhost:5173
 npm run dev

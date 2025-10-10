@@ -196,6 +196,42 @@ export interface ParentChildSnapshot {
   recentActivity: ParentChildActivity[];
   goalProgress?: number;
   cohortComparison?: number;
+  progressSummary?: {
+    completed: number;
+    inProgress: number;
+    notStarted: number;
+  };
+}
+
+export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';
+
+export interface AssignmentSummary {
+  id: number;
+  title: string;
+  status: AssignmentStatus;
+  dueAt: string | null;
+  moduleId?: number | null;
+  moduleTitle?: string | null;
+  studentId: string;
+}
+
+export interface AdminAssignmentOverview {
+  assignmentId: number;
+  moduleId: number | null;
+  moduleTitle: string | null;
+  assignedCount: number;
+  completedCount: number;
+  inProgressCount: number;
+  notStartedCount: number;
+  dueAt: string | null;
+  createdAt: string | null;
+}
+
+export interface AdminStudent {
+  id: string;
+  grade: number | null;
+  firstName: string | null;
+  lastName: string | null;
 }
 
 export interface CatalogFilters {
@@ -404,6 +440,7 @@ export interface AdminDashboardMetrics {
   xpEarned30d: number;
   averageStudentXp: number;
   activeSubscriptions: number;
+  lessonCompletionRate?: number;
 }
 
 export interface AdminSubjectPerformance {

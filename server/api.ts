@@ -36,6 +36,158 @@ type ApiContext = {
   supabase: SupabaseClient;
 };
 
+type AssignModulePayload = {
+  moduleId: number;
+  studentIds: string[];
+  creatorId: string;
+  creatorRole?: 'parent' | 'admin';
+  dueAt?: string | null;
+  title?: string;
+};
+
+const ensureParentProfile = async (supabase: SupabaseClient, creatorId: string) => {
+  const { data, error } = await supabase
+    .from('parent_profiles')
+    .select('id')
+    .eq('id', creatorId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to verify parent profile: ${error.message}`);
+  }
+
+  if (!data) {
+    const { data: profileRow, error: profileError } = await supabase
+      .from('profiles')
+      .select('full_name, email')
+      .eq('id', creatorId)
+      .maybeSingle();
+
+    if (profileError) {
+      throw new Error(`Unable to resolve creator profile: ${profileError.message}`);
+    }
+
+    const fullName = (profileRow?.full_name as string | null) ?? (profileRow?.email as string | null) ?? 'Family Admin';
+
+    const { error: insertError } = await supabase
+      .from('parent_profiles')
+      .insert({ id: creatorId, full_name: fullName });
+
+    if (insertError) {
+      throw new Error(`Failed to provision parent profile: ${insertError.message}`);
+    }
+  }
+};
+
+const createModuleAssignment = async (
+  supabase: SupabaseClient,
+  payload: AssignModulePayload,
+) => {
+  const studentIds = Array.from(new Set(payload.studentIds.filter((id) => typeof id === 'string' && id.trim().length)));
+  if (!studentIds.length) {
+    throw new Error('At least one student must be provided.');
+  }
+
+  const { data: moduleRow, error: moduleError } = await supabase
+    .from('modules')
+    .select('id, title')
+    .eq('id', payload.moduleId)
+    .maybeSingle();
+
+  if (moduleError) {
+    throw new Error(`Unable to load module: ${moduleError.message}`);
+  }
+  if (!moduleRow) {
+    throw new Error('Module not found.');
+  }
+
+  const { data: lessonRows, error: lessonError } = await supabase
+    .from('lessons')
+    .select('id')
+    .eq('module_id', payload.moduleId)
+    .eq('visibility', 'public');
+
+  if (lessonError) {
+    throw new Error(`Unable to load module lessons: ${lessonError.message}`);
+  }
+
+  await ensureParentProfile(supabase, payload.creatorId);
+
+  const assignmentTitle = payload.title && payload.title.trim().length
+    ? payload.title.trim()
+    : `${moduleRow.title} module focus`;
+
+  const { data: assignmentRow, error: assignmentError } = await supabase
+    .from('assignments')
+    .insert({
+      title: assignmentTitle,
+      description: `Module assignment for ${moduleRow.title}`,
+      creator_id: payload.creatorId,
+      status: 'published',
+      due_at: payload.dueAt ?? null,
+      metadata: {
+        module_id: payload.moduleId,
+        module_title: moduleRow.title,
+        assigned_by_role: payload.creatorRole ?? 'parent',
+      },
+    })
+    .select('id')
+    .single();
+
+  if (assignmentError || !assignmentRow) {
+    throw new Error(
+      assignmentError ? `Failed to create assignment: ${assignmentError.message}` : 'Assignment could not be created.',
+    );
+  }
+
+  if ((lessonRows ?? []).length) {
+    const lessonPayload = (lessonRows ?? []).map((lesson) => ({
+      assignment_id: assignmentRow.id as number,
+      lesson_id: lesson.id as number,
+    }));
+
+    const { error: attachError } = await supabase
+      .from('assignment_lessons')
+      .upsert(lessonPayload, { onConflict: 'assignment_id,lesson_id' });
+
+    if (attachError) {
+      throw new Error(`Failed to attach lessons: ${attachError.message}`);
+    }
+  }
+
+  const studentPayload = studentIds.map((studentId) => ({
+    assignment_id: assignmentRow.id as number,
+    student_id: studentId,
+    status: 'not_started',
+    due_at: payload.dueAt ?? null,
+    metadata: {
+      module_id: payload.moduleId,
+      module_title: moduleRow.title,
+    },
+  }));
+
+  const { data: assignedRows, error: assignError } = await supabase
+    .from('student_assignments')
+    .upsert(studentPayload, { onConflict: 'assignment_id,student_id' })
+    .select('id');
+
+  if (assignError) {
+    throw new Error(`Failed to assign module to learners: ${assignError.message}`);
+  }
+
+  try {
+    await supabase.rpc('refresh_dashboard_rollups');
+  } catch (rollupError) {
+    console.warn('[api] Unable to refresh rollups after assignment', rollupError);
+  }
+
+  return {
+    assignmentId: assignmentRow.id as number,
+    lessonsAttached: (lessonRows ?? []).length,
+    assignedStudents: assignedRows?.length ?? studentIds.length,
+  } satisfies { assignmentId: number; lessonsAttached: number; assignedStudents: number };
+};
+
 const sendJson = (res: ServerResponse, status: number, payload: unknown) => {
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json');
@@ -137,6 +289,33 @@ export const createApiHandler = (context: ApiContext) => {
 
         const { recommendations } = await getRecommendations(supabase, moduleId, lastScore);
         sendJson(res, 200, { recommendations });
+        return true;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/assignments/assign') {
+        const body = await readJsonBody<AssignModulePayload>(req);
+        if (
+          !body ||
+          typeof body.moduleId !== 'number' ||
+          !Array.isArray(body.studentIds) ||
+          body.studentIds.length === 0 ||
+          typeof body.creatorId !== 'string'
+        ) {
+          sendJson(res, 400, {
+            error: 'moduleId, studentIds, and creatorId are required to assign a module.',
+          });
+          return true;
+        }
+
+        try {
+          const result = await createModuleAssignment(supabase, body);
+          sendJson(res, 200, result);
+        } catch (error) {
+          console.error('[api] assign module failed', error);
+          sendJson(res, 500, {
+            error: error instanceof Error ? error.message : 'Unable to assign module.',
+          });
+        }
         return true;
       }
 
