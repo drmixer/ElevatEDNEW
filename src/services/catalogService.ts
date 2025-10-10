@@ -2,8 +2,12 @@ import type {
   CatalogFilters,
   CatalogModule,
   ModuleAsset,
+  ModuleAssessmentDetail,
+  ModuleAssessmentSection,
+  ModuleAssessmentSummary,
   ModuleDetail,
   ModuleLesson,
+  ModuleStandard,
   RecommendationItem,
 } from '../types';
 
@@ -47,6 +51,62 @@ type ApiLesson = {
   assets?: ApiAsset[];
 };
 
+type ApiModuleStandard = {
+  id: number;
+  framework: string;
+  code: string;
+  description: string | null;
+  alignment_strength: string | null;
+  notes: string | null;
+};
+
+type ApiModuleAssessmentSummary = {
+  id: number;
+  title: string;
+  description: string | null;
+  estimated_duration_minutes: number | null;
+  question_count: number;
+  attempt_count: number;
+  completion_rate: number;
+  average_score: number | null;
+  purpose: string | null;
+};
+
+type ApiAssessmentOption = {
+  id: number;
+  order: number;
+  content: string;
+  is_correct: boolean;
+  feedback: string | null;
+};
+
+type ApiAssessmentQuestion = {
+  id: number;
+  prompt: string;
+  type: string;
+  difficulty: number | null;
+  explanation: string | null;
+  standards: string[] | null;
+  tags: string[] | null;
+  options: ApiAssessmentOption[];
+};
+
+type ApiAssessmentSection = {
+  id: number;
+  title: string;
+  instructions: string | null;
+  questions: ApiAssessmentQuestion[];
+};
+
+type ApiModuleAssessmentDetail = {
+  id: number;
+  title: string;
+  description: string | null;
+  estimated_duration_minutes: number | null;
+  purpose: string | null;
+  sections: ApiAssessmentSection[];
+};
+
 type ApiRecommendation = {
   id: number;
   slug: string;
@@ -70,6 +130,8 @@ type ModuleDetailResponse = {
   };
   lessons: ApiLesson[];
   moduleAssets: ApiAsset[];
+  standards: ApiModuleStandard[];
+  assessments: ApiModuleAssessmentSummary[];
 };
 type RecommendationsResponse = { recommendations: ApiRecommendation[] };
 
@@ -108,6 +170,66 @@ const mapLesson = (lesson: ApiLesson): ModuleLesson => ({
   attributionBlock: lesson.attribution_block ?? '',
   openTrack: lesson.open_track ?? false,
   assets: Array.isArray(lesson.assets) ? lesson.assets.map(mapAsset) : [],
+});
+
+const mapStandard = (standard: ApiModuleStandard): ModuleStandard => ({
+  id: standard.id,
+  framework: standard.framework,
+  code: standard.code,
+  description: standard.description ?? null,
+  alignmentStrength: standard.alignment_strength ?? null,
+  notes: standard.notes ?? null,
+});
+
+const mapAssessmentSummary = (assessment: ApiModuleAssessmentSummary): ModuleAssessmentSummary => ({
+  id: assessment.id,
+  title: assessment.title,
+  description: assessment.description ?? null,
+  estimatedDurationMinutes: assessment.estimated_duration_minutes ?? null,
+  questionCount: assessment.question_count ?? 0,
+  attemptCount: assessment.attempt_count ?? 0,
+  completionRate: assessment.completion_rate ?? 0,
+  averageScore: assessment.average_score ?? null,
+  purpose: assessment.purpose ?? null,
+});
+
+const mapAssessmentOption = (option: ApiAssessmentOption): ModuleAssessmentOption => ({
+  id: option.id,
+  order: option.order,
+  content: option.content,
+  isCorrect: option.is_correct,
+  feedback: option.feedback ?? null,
+});
+
+const mapAssessmentQuestion = (question: ApiAssessmentQuestion): ModuleAssessmentQuestion => ({
+  id: question.id,
+  prompt: question.prompt,
+  type: question.type,
+  difficulty: question.difficulty ?? null,
+  explanation: question.explanation ?? null,
+  standards: Array.isArray(question.standards) ? question.standards : [],
+  tags: Array.isArray(question.tags) ? question.tags : [],
+  options: Array.isArray(question.options) ? question.options.map(mapAssessmentOption) : [],
+});
+
+const mapAssessmentSection = (section: ApiAssessmentSection): ModuleAssessmentSection => ({
+  id: section.id,
+  title: section.title,
+  instructions: section.instructions ?? null,
+  questions: Array.isArray(section.questions)
+    ? section.questions.map(mapAssessmentQuestion)
+    : [],
+});
+
+const mapAssessmentDetail = (payload: ApiModuleAssessmentDetail): ModuleAssessmentDetail => ({
+  id: payload.id,
+  title: payload.title,
+  description: payload.description ?? null,
+  estimatedDurationMinutes: payload.estimated_duration_minutes ?? null,
+  purpose: payload.purpose ?? null,
+  sections: Array.isArray(payload.sections)
+    ? payload.sections.map(mapAssessmentSection)
+    : [],
 });
 
 const mapRecommendation = (item: ApiRecommendation): RecommendationItem => ({
@@ -180,7 +302,22 @@ export const fetchModuleDetail = async (moduleId: number): Promise<ModuleDetail>
     moduleAssets: Array.isArray(payload.moduleAssets)
       ? payload.moduleAssets.map(mapAsset)
       : [],
+    standards: Array.isArray(payload.standards) ? payload.standards.map(mapStandard) : [],
+    assessments: Array.isArray(payload.assessments)
+      ? payload.assessments.map(mapAssessmentSummary)
+      : [],
   };
+};
+
+export const fetchModuleAssessment = async (
+  moduleId: number,
+): Promise<ModuleAssessmentDetail | null> => {
+  const response = await fetch(`/api/modules/${moduleId}/assessment`);
+  if (response.status === 404) {
+    return null;
+  }
+  const payload = await handleResponse<ApiModuleAssessmentDetail>(response);
+  return mapAssessmentDetail(payload);
 };
 
 export const fetchRecommendations = async (

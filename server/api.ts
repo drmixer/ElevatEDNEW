@@ -17,7 +17,7 @@ import {
   type OpenStaxMapping,
 } from '../scripts/import_openstax.js';
 import { getRecommendations } from './recommendations.js';
-import { getModuleDetail, listModules, type ModuleFilters } from './modules.js';
+import { getModuleAssessment, getModuleDetail, listModules, type ModuleFilters } from './modules.js';
 
 type ApiContext = {
   supabase: SupabaseClient;
@@ -104,6 +104,27 @@ export const createApiHandler = (context: ApiContext) => {
         const filters = createFilters(url.query);
         const result = await listModules(supabase, filters);
         sendJson(res, 200, result);
+        return true;
+      }
+
+      if (
+        req.method === 'GET' &&
+        url.pathname?.startsWith('/api/modules/') &&
+        url.pathname?.endsWith('/assessment')
+      ) {
+        const parts = url.pathname.split('/');
+        const idPart = parts[3];
+        const moduleId = Number.parseInt(idPart ?? '', 10);
+        if (!Number.isFinite(moduleId)) {
+          sendJson(res, 400, { error: 'Module id must be numeric' });
+          return true;
+        }
+        const detail = await getModuleAssessment(supabase, moduleId);
+        if (!detail) {
+          sendJson(res, 404, { error: 'Module assessment not found' });
+          return true;
+        }
+        sendJson(res, 200, detail);
         return true;
       }
 
