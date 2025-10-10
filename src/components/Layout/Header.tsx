@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { User, LogOut, Settings, Bell } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
@@ -18,22 +19,34 @@ const Header: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-4">
-            <img 
-              src="https://i.imgur.com/tBePI5o.png" 
-              alt="ElevatED Logo" 
-              className="h-8 w-auto"
-            />
-            <div>
-              <h1 className="text-xl font-bold text-brand-blue">ElevatED</h1>
-              <p className="text-xs text-gray-500">
-                {user.role === 'student'
-                  ? 'Student Dashboard'
-                  : user.role === 'parent'
-                  ? 'Family Dashboard'
-                  : 'Admin Command Center'}
-              </p>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
+              <img 
+                src="https://i.imgur.com/tBePI5o.png" 
+                alt="ElevatED Logo" 
+                className="h-8 w-auto"
+              />
+              <div>
+                <h1 className="text-xl font-bold text-brand-blue">ElevatED</h1>
+                <p className="text-xs text-gray-500">
+                  {user.role === 'student'
+                    ? 'Student Dashboard'
+                    : user.role === 'parent'
+                    ? 'Family Dashboard'
+                    : 'Admin Command Center'}
+                </p>
+              </div>
             </div>
+            <nav className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+              <Link to="/catalog" className="hover:text-brand-blue transition-colors">
+                Catalog
+              </Link>
+              {user.role === 'admin' && (
+                <Link to="/admin/import" className="hover:text-brand-blue transition-colors">
+                  Import console
+                </Link>
+              )}
+            </nav>
           </div>
 
           <div className="flex items-center space-x-4">

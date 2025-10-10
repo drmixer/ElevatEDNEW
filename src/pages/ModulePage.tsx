@@ -1,0 +1,241 @@
+import React, { useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { BookOpen, LinkIcon, Loader2, Sparkles } from 'lucide-react';
+
+import { fetchModuleDetail, fetchRecommendations } from '../services/catalogService';
+
+const formatMinutes = (value: number | null): string =>
+  value && Number.isFinite(value) ? `${value} min` : 'Flexible';
+
+const ModulePage: React.FC = () => {
+  const params = useParams<{ id: string }>();
+  const moduleId = Number.parseInt(params.id ?? '', 10);
+  const [lastScore, setLastScore] = useState<number>(80);
+
+  const detailQuery = useQuery({
+    queryKey: ['module-detail', moduleId],
+    queryFn: () => fetchModuleDetail(moduleId),
+    enabled: Number.isFinite(moduleId),
+  });
+
+  const recommendationsQuery = useQuery({
+    queryKey: ['module-recommendations', moduleId, lastScore],
+    queryFn: () => fetchRecommendations(moduleId, lastScore),
+    enabled: Number.isFinite(moduleId),
+  });
+
+  const moduleDetail = detailQuery.data;
+  const recommendations = recommendationsQuery.data ?? [];
+
+  const pageTitle = moduleDetail?.module.title ?? 'Module';
+
+  const openTrackTag = useMemo(() => {
+    if (!moduleDetail?.module.openTrack) return null;
+    return (
+      <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-100 text-emerald-600 text-xs font-semibold">
+        <Sparkles className="h-3 w-3 mr-1" />
+        Open Track
+      </span>
+    );
+  }, [moduleDetail?.module.openTrack]);
+
+  if (!Number.isFinite(moduleId)) {
+    return (
+      <div className="max-w-4xl mx-auto px-6 py-16 text-center text-gray-500">
+        Invalid module identifier.
+      </div>
+    );
+  }
+
+  if (detailQuery.isLoading || !moduleDetail) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh] text-brand-blue">
+        <Loader2 className="h-6 w-6 animate-spin mr-2" />
+        Loading module…
+      </div>
+    );
+  }
+
+  const { module: core, lessons, moduleAssets } = moduleDetail;
+
+  return (
+    <div className="bg-slate-50 min-h-screen pb-16">
+      <header className="bg-white border-b border-slate-200 py-10">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col gap-3">
+          <div className="text-sm text-brand-blue uppercase tracking-wide font-semibold">
+            {core.subject} · Grade {core.gradeBand}
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900">{pageTitle}</h1>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
+            {core.strand && <span>Strand: {core.strand}</span>}
+            {core.topic && <span>Topic: {core.topic}</span>}
+            {openTrackTag}
+          </div>
+          <p className="text-slate-600 max-w-3xl">
+            {core.summary ??
+              'Curated lesson sequence with fully vetted open-licensed assets and ready-to-go classroom activities.'}
+          </p>
+          {core.licenseRequirement && (
+            <div className="text-xs text-slate-500">
+              License requirements: {core.licenseRequirement}
+            </div>
+          )}
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              className="px-4 py-2 bg-brand-blue text-white rounded-lg text-sm font-semibold hover:bg-brand-blue/90 transition-colors"
+            >
+              Try quiz
+            </button>
+            <a
+              href="/catalog"
+              className="px-4 py-2 border border-brand-blue/30 text-brand-blue rounded-lg text-sm font-semibold hover:bg-brand-blue/10 transition-colors"
+            >
+              Back to catalog
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-6 mt-10 space-y-10">
+        {moduleAssets.length > 0 && (
+          <section>
+            <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <LinkIcon className="h-5 w-5 text-brand-blue" />
+              Module assets
+            </h2>
+            <div className="bg-white border border-slate-200 rounded-2xl divide-y divide-slate-100 shadow-sm">
+              {moduleAssets.map((asset) => (
+                <div key={asset.id} className="p-4 flex flex-col sm:flex-row sm:items-center">
+                  <div className="flex-1">
+                    <a
+                      className="text-brand-blue font-medium hover:underline"
+                      href={asset.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {asset.title ?? asset.url}
+                    </a>
+                    {asset.description && (
+                      <p className="text-sm text-slate-500 mt-1">{asset.description}</p>
+                    )}
+                  </div>
+                  <div className="text-xs text-slate-400 mt-2 sm:mt-0 sm:ml-4">
+                    {asset.license} · {asset.kind}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section>
+          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-brand-blue" />
+            Lessons ({lessons.length})
+          </h2>
+          <div className="space-y-4">
+            {lessons.map((lesson) => (
+              <details key={lesson.id} className="bg-white border border-slate-200 rounded-2xl">
+                <summary className="list-none px-5 py-4 cursor-pointer flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <div className="text-base font-semibold text-slate-900">{lesson.title}</div>
+                    <div className="text-xs text-slate-500">
+                      {formatMinutes(lesson.estimatedDurationMinutes)} ·{' '}
+                      {lesson.openTrack ? 'Open Track friendly' : 'Core lesson'}
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-400">
+                    {lesson.assets.length} supporting asset{lesson.assets.length === 1 ? '' : 's'}
+                  </div>
+                </summary>
+                <div className="px-5 pb-5 space-y-4">
+                  <div
+                    className="prose prose-sm max-w-none text-slate-700"
+                    dangerouslySetInnerHTML={{ __html: lesson.content }}
+                  />
+                  {lesson.assets.length > 0 && (
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                      {lesson.assets.map((asset) => (
+                        <div key={asset.id} className="text-sm">
+                          <a
+                            className="text-brand-blue font-medium hover:underline"
+                            href={asset.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {asset.title ?? asset.url}
+                          </a>
+                          <div className="text-xs text-slate-500">
+                            {asset.license} · {asset.attributionText ?? 'Attribution available'}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {lesson.attributionBlock && (
+                    <div className="text-xs text-slate-500 border-t border-slate-200 pt-3">
+                      {lesson.attributionBlock}
+                    </div>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">Adaptive recommendations</h2>
+              <p className="text-sm text-slate-500">
+                Provide a recent assessment score to personalize the next module suggestions.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="text-sm text-slate-600">Last score:</label>
+              <input
+                type="number"
+                min={0}
+                max={100}
+                value={lastScore}
+                onChange={(event) => setLastScore(Number.parseInt(event.target.value, 10) || 0)}
+                className="w-20 rounded-lg border border-slate-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {recommendationsQuery.isLoading ? (
+            <div className="flex items-center gap-2 text-brand-blue mt-4">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Calculating…
+            </div>
+          ) : recommendations.length === 0 ? (
+            <div className="text-sm text-slate-500 mt-4">No recommendations available yet.</div>
+          ) : (
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {recommendations.map((recommendation) => (
+                <div
+                  key={recommendation.id}
+                  className="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col gap-2"
+                >
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">
+                    Grade {recommendation.gradeBand}
+                  </div>
+                  <div className="text-base font-semibold text-slate-900">{recommendation.title}</div>
+                  <div className="text-xs text-slate-500">{recommendation.reason}</div>
+                  {recommendation.fallback && (
+                    <div className="text-[11px] text-amber-600 font-medium">Subject fallback</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
+  );
+};
+
+export default ModulePage;

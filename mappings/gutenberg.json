@@ -1,0 +1,26 @@
+{
+  "7-english-language-arts-reading-literature-novellas-short-novels-pd": [
+    "https://www.gutenberg.org/ebooks/215",
+    {
+      "url": "https://www.gutenberg.org/ebooks/155",
+      "title": "The Jungle Book",
+      "tags": ["novella", "adventure"]
+    }
+  ],
+  "7-english-language-arts-reading-informational-historical-documents-pd": [
+    "https://www.gutenberg.org/ebooks/3",
+    {
+      "url": "https://www.gutenberg.org/ebooks/6",
+      "title": "The Rights of Man",
+      "description": "Thomas Paine public-domain pamphlet"
+    }
+  ],
+  "8-english-language-arts-reading-literature-poetry-and-drama-pd": [
+    "https://www.gutenberg.org/ebooks/1041",
+    {
+      "url": "https://www.gutenberg.org/ebooks/979",
+      "title": "Poems by Emily Dickinson, Series One",
+      "tags": ["poetry", "american-literature"]
+    }
+  ]
+}

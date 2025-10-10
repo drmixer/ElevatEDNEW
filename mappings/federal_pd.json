@@ -1,0 +1,56 @@
+{
+  "6-science-earth-and-space-astronomy-stars-galaxies": {
+    "NASA": [
+      "https://images.nasa.gov/details-PIA01322",
+      {
+        "url": "https://solarsystem.nasa.gov/resources/3109/milky-way-galaxy/",
+        "title": "Milky Way Galaxy Overview",
+        "tags": ["astronomy", "galaxy"]
+      }
+    ],
+    "NOAA": [
+      "https://www.climate.gov/maps-data",
+      {
+        "url": "https://oceanservice.noaa.gov/facts/galaxy.html",
+        "title": "Star Formation and Our Galaxy"
+      }
+    ]
+  },
+  "7-science-earth-and-space-weather-climate-systems": {
+    "NASA": [
+      "https://www.nasa.gov/science/earth-science/"
+    ],
+    "NOAA": [
+      {
+        "url": "https://www.noaa.gov/education/resource-collections/weather-atmosphere-education-resources",
+        "title": "NOAA Weather & Atmosphere Resources",
+        "tags": ["weather", "climate"]
+      }
+    ],
+    "NARA": [
+      "https://catalog.archives.gov/id/1667751"
+    ],
+    "LOC": [
+      {
+        "url": "https://www.loc.gov/item/2016648123/",
+        "title": "Weather Map of North America, 1899"
+      }
+    ]
+  },
+  "8-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "NARA": [
+      "https://catalog.archives.gov/id/1667750",
+      {
+        "url": "https://www.archives.gov/founding-docs/constitution-transcript",
+        "title": "Transcript of the U.S. Constitution"
+      }
+    ],
+    "LOC": [
+      {
+        "url": "https://www.loc.gov/exhibits/creating-the-united-states/constitution-and-bill-of-rights.html",
+        "title": "Creating the United States: Constitution",
+        "tags": ["civics"]
+      }
+    ]
+  }
+}
