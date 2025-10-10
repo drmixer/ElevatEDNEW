@@ -3,6 +3,8 @@ import { Send, X, Bot, Lightbulb, Target, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student } from '../../types';
+import getTutorResponse from '../../services/getTutorResponse';
+import trackEvent from '../../lib/analytics';
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
@@ -13,11 +15,13 @@ const LearningAssistant: React.FC = () => {
       id: '1',
       content: `Hi ${student.name}! I'm your personal learning assistant. I know you're currently working on ${student.strengths[0] || 'various topics'} and I can help you with questions, study tips, or just provide motivation. What would you like to work on today?`,
       isUser: false,
-      timestamp: new Date()
+      timestamp: new Date(),
+      role: 'assistant',
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [assistantError, setAssistantError] = useState<string | null>(null);
 
   const quickActions = [
     { icon: Lightbulb, text: 'Get a study tip', action: 'study-tip' },
@@ -73,37 +77,77 @@ const LearningAssistant: React.FC = () => {
         break;
     }
     if (message) {
-      setInputMessage(message);
-      handleSendMessage(message);
+      void handleSendMessage(message);
     }
   };
 
   const handleSendMessage = async (customMessage?: string) => {
-    const messageToSend = customMessage || inputMessage;
+    const messageToSend = (customMessage ?? inputMessage).trim();
     if (!messageToSend.trim()) return;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content: messageToSend,
       isUser: true,
-      timestamp: new Date()
+      timestamp: new Date(),
+      role: 'user',
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsTyping(true);
+    setAssistantError(null);
+    trackEvent('learning_assistant_message_sent', {
+      studentId: student.id,
+      length: messageToSend.length,
+    });
 
-    setTimeout(() => {
+    try {
+      const contextWindow = [...messages, userMessage]
+        .slice(-6)
+        .map((entry) => `${entry.isUser ? 'Student' : 'Assistant'}: ${entry.content}`)
+        .join('\n');
+
+      const systemPrompt = `Student profile: Name ${student.name}, grade ${student.grade}, level ${student.level}, strengths ${student.strengths.join(', ')}, focus areas ${student.weaknesses.join(', ')}.`;
+
+      const response = await getTutorResponse(
+        `${contextWindow}\nAssistant:`,
+        systemPrompt,
+      );
+
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
+        content: response,
+        isUser: false,
+        timestamp: new Date(),
+        role: 'assistant',
+      };
+
+      setMessages(prev => [...prev, aiResponse]);
+      trackEvent('learning_assistant_message_received', {
+        studentId: student.id,
+        source: 'openrouter',
+      });
+    } catch (err) {
+      console.error('[LearningAssistant] AI response failed', err);
+      setAssistantError('The assistant is unavailable right now. Please try again in a moment.');
+
+      const fallbackResponse: ChatMessage = {
+        id: (Date.now() + 2).toString(),
         content: getContextualResponse(messageToSend),
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
+        role: 'assistant',
       };
-      
-      setMessages(prev => [...prev, aiResponse]);
+
+      setMessages(prev => [...prev, fallbackResponse]);
+      trackEvent('learning_assistant_message_received', {
+        studentId: student.id,
+        source: 'rules-engine',
+      });
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }
   };
 
   return (
@@ -185,6 +229,11 @@ const LearningAssistant: React.FC = () => {
                   </div>
                 </motion.div>
               ))}
+              {assistantError && (
+                <div className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                  {assistantError}
+                </div>
+              )}
               
               {isTyping && (
                 <motion.div
@@ -210,7 +259,12 @@ const LearningAssistant: React.FC = () => {
                   type="text"
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      void handleSendMessage();
+                    }
+                  }}
                   placeholder="Ask me anything about your studies..."
                   className="flex-1 p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-violet text-sm"
                 />

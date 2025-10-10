@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   Activity,
   AlertTriangle,
@@ -21,34 +22,32 @@ import {
   Bar,
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
-import { Admin, AdminDashboardData } from '../../types';
+import type { Admin } from '../../types';
 import { fetchAdminDashboardData } from '../../services/dashboardService';
+import trackEvent from '../../lib/analytics';
+
+const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
+);
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
-  const admin = user as Admin | null;
-  const [dashboard, setDashboard] = useState<AdminDashboardData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const admin = (user as Admin) ?? null;
 
-  const loadDashboard = useCallback(async () => {
-    if (!admin) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchAdminDashboardData({ ...admin });
-      setDashboard(data);
-    } catch (err) {
-      console.error('[AdminDashboard] load failed', err);
-      setError('We could not refresh platform analytics. Showing cached metrics instead.');
-    } finally {
-      setLoading(false);
-    }
-  }, [admin]);
+  const {
+    data: dashboard,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['admin-dashboard', admin?.id],
+    queryFn: () => fetchAdminDashboardData({ ...(admin as Admin) }),
+    enabled: Boolean(admin),
+    staleTime: 1000 * 60 * 5,
+  });
 
-  useEffect(() => {
-    void loadDashboard();
-  }, [loadDashboard]);
+  const showSkeleton = isLoading && !dashboard;
 
   const growthData = useMemo(() => {
     if (!dashboard) return [];
@@ -61,6 +60,7 @@ const AdminDashboard: React.FC = () => {
       activeStudents: point.activeStudents,
     }));
   }, [dashboard]);
+
   const subjectPerformanceData = useMemo(() => {
     if (!dashboard) return [];
     return dashboard.subjectPerformance.map((subject) => ({
@@ -80,14 +80,13 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
           <div className="bg-gradient-to-r from-brand-teal to-brand-blue rounded-2xl p-6 text-white">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold mb-2">Platform Control Tower</h1>
                 <p className="opacity-90">
@@ -96,12 +95,15 @@ const AdminDashboard: React.FC = () => {
               </div>
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={() => loadDashboard()}
+                  onClick={() => {
+                    trackEvent('admin_dashboard_refresh', { adminId: admin.id });
+                    refetch({ throwOnError: false });
+                  }}
                   className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
-                  disabled={loading}
+                  disabled={isFetching}
                 >
-                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                  <span>{loading ? 'Refreshing' : 'Refresh'}</span>
+                  <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+                  <span>{isFetching ? 'Refreshing' : 'Refresh'}</span>
                 </button>
                 <div className="text-right">
                   <div className="text-sm opacity-90">{admin.title ?? 'Platform Admin'}</div>
@@ -117,90 +119,100 @@ const AdminDashboard: React.FC = () => {
             <AlertTriangle className="h-5 w-5 mt-0.5" />
             <div>
               <p className="text-sm font-medium">Analytics temporarily unavailable</p>
-              <p className="text-sm">{error}</p>
+              <p className="text-sm">We could not refresh platform analytics. Showing cached metrics instead.</p>
             </div>
           </div>
         )}
 
-        {/* KPI Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8"
         >
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">Students</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {dashboard?.metrics.totalStudents ?? 0}
-                </p>
+          {showSkeleton ? (
+            <>
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+            </>
+          ) : (
+            <>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Students</p>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      {dashboard?.metrics.totalStudents ?? 0}
+                    </p>
+                  </div>
+                  <Users className="h-6 w-6 text-brand-blue" />
+                </div>
               </div>
-              <Users className="h-6 w-6 text-brand-blue" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">Parents</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {dashboard?.metrics.totalParents ?? 0}
-                </p>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Parents</p>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      {dashboard?.metrics.totalParents ?? 0}
+                    </p>
+                  </div>
+                  <ClipboardList className="h-6 w-6 text-brand-teal" />
+                </div>
               </div>
-              <ClipboardList className="h-6 w-6 text-brand-teal" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">Active 7d</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {dashboard?.metrics.activeStudents7d ?? 0}
-                </p>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Active 7d</p>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      {dashboard?.metrics.activeStudents7d ?? 0}
+                    </p>
+                  </div>
+                  <Activity className="h-6 w-6 text-brand-violet" />
+                </div>
               </div>
-              <Activity className="h-6 w-6 text-brand-violet" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">Practice Minutes</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {dashboard?.metrics.practiceMinutes7d ?? 0}
-                </p>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Practice Minutes</p>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      {dashboard?.metrics.practiceMinutes7d ?? 0}
+                    </p>
+                  </div>
+                  <Clock className="h-6 w-6 text-brand-blue" />
+                </div>
               </div>
-              <Clock className="h-6 w-6 text-brand-blue" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">Assessments 30d</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {dashboard?.metrics.assessments30d ?? 0}
-                </p>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Assessments 30d</p>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      {dashboard?.metrics.assessments30d ?? 0}
+                    </p>
+                  </div>
+                  <Shield className="h-6 w-6 text-brand-teal" />
+                </div>
               </div>
-              <Shield className="h-6 w-6 text-brand-teal" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">Active Plans</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {dashboard?.metrics.activeSubscriptions ?? 0}
-                </p>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Active Plans</p>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      {dashboard?.metrics.activeSubscriptions ?? 0}
+                    </p>
+                  </div>
+                  <BarChart3 className="h-6 w-6 text-brand-violet" />
+                </div>
               </div>
-              <BarChart3 className="h-6 w-6 text-brand-violet" />
-            </div>
-          </div>
+            </>
+          )}
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Growth Trends */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -212,36 +224,39 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-sm text-gray-500">Trailing 8 weeks</p>
               </div>
               <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={growthData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
-                    <XAxis dataKey="label" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
-                    <Tooltip
-                      contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
-                      labelStyle={{ color: '#1F2937', fontWeight: 600 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="activeStudents"
-                      stroke="#33D9C1"
-                      strokeWidth={3}
-                      dot={{ r: 4 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="newStudents"
-                      stroke="#6366F1"
-                      strokeWidth={3}
-                      strokeDasharray="4 4"
-                      dot={{ r: 4 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                {showSkeleton ? (
+                  <SkeletonCard className="h-full" />
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={growthData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
+                      <XAxis dataKey="label" stroke="#6B7280" />
+                      <YAxis stroke="#6B7280" />
+                      <Tooltip
+                        contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
+                        labelStyle={{ color: '#1F2937', fontWeight: 600 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="activeStudents"
+                        stroke="#33D9C1"
+                        strokeWidth={3}
+                        dot={{ r: 4 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="newStudents"
+                        stroke="#6366F1"
+                        strokeWidth={3}
+                        strokeDasharray="4 4"
+                        dot={{ r: 4 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </motion.div>
 
-            {/* Alerts */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -253,36 +268,36 @@ const AdminDashboard: React.FC = () => {
                 <AlertTriangle className="h-5 w-5 text-amber-500" />
               </div>
               <div className="space-y-4">
-                {(dashboard?.alerts ?? []).map((alert) => (
-                  <div
-                    key={alert.id}
-                    className={`p-4 border rounded-xl ${
-                      alert.severity === 'high'
-                        ? 'border-rose-200 bg-rose-50 text-rose-700'
-                        : alert.severity === 'medium'
-                        ? 'border-amber-200 bg-amber-50 text-amber-700'
-                        : 'border-blue-200 bg-blue-50 text-blue-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm font-semibold">{alert.title}</p>
-                      <span className="text-xs uppercase tracking-wide">
-                        {alert.severity} priority
-                      </span>
-                    </div>
-                    <p className="text-sm">{alert.description}</p>
-                    <p className="text-xs opacity-80 mt-2">
-                      {new Date(alert.createdAt).toLocaleString()}
-                    </p>
-                  </div>
-                ))}
+                {showSkeleton
+                  ? [0, 1, 2].map((idx) => <SkeletonCard key={idx} className="h-20" />)
+                  : (dashboard?.alerts ?? []).map((alert) => (
+                      <div
+                        key={alert.id}
+                        className={`p-4 border rounded-xl ${
+                          alert.severity === 'high'
+                            ? 'border-rose-200 bg-rose-50 text-rose-700'
+                            : alert.severity === 'medium'
+                            ? 'border-amber-200 bg-amber-50 text-amber-700'
+                            : 'border-blue-200 bg-blue-50 text-blue-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm font-semibold">{alert.title}</p>
+                          <span className="text-xs uppercase tracking-wide">
+                            {alert.severity} priority
+                          </span>
+                        </div>
+                        <p className="text-sm">{alert.description}</p>
+                        <p className="text-xs opacity-80 mt-2">
+                          {new Date(alert.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                    ))}
               </div>
             </motion.div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-8">
-            {/* Subject Performance */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -291,22 +306,25 @@ const AdminDashboard: React.FC = () => {
             >
               <h3 className="text-xl font-bold text-gray-900 mb-6">Subject Mastery Overview</h3>
               <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={subjectPerformanceData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
-                    <XAxis dataKey="subject" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
-                    <Tooltip
-                      contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
-                      labelStyle={{ color: '#1F2937', fontWeight: 600 }}
-                    />
-                    <Bar dataKey="mastery" fill="#971CB5" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                {showSkeleton ? (
+                  <SkeletonCard className="h-full" />
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={subjectPerformanceData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
+                      <XAxis dataKey="subject" stroke="#6B7280" />
+                      <YAxis stroke="#6B7280" />
+                      <Tooltip
+                        contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
+                        labelStyle={{ color: '#1F2937', fontWeight: 600 }}
+                      />
+                      <Bar dataKey="mastery" fill="#971CB5" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </motion.div>
 
-            {/* Top Students */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -315,25 +333,27 @@ const AdminDashboard: React.FC = () => {
             >
               <h3 className="text-xl font-bold text-gray-900 mb-6">Top Movers This Week</h3>
               <div className="space-y-4">
-                {(dashboard?.topStudents ?? []).map((studentEntry) => (
-                  <div
-                    key={studentEntry.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
-                  >
-                    <div>
-                      <p className="font-semibold text-gray-900">{studentEntry.name}</p>
-                      <p className="text-sm text-gray-600">Grade {studentEntry.grade}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-brand-teal">
-                        +{studentEntry.xpEarnedWeek} XP
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {studentEntry.lessonsCompletedWeek} lessons
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                {showSkeleton
+                  ? [0, 1, 2].map((idx) => <SkeletonCard key={idx} className="h-20" />)
+                  : (dashboard?.topStudents ?? []).map((studentEntry) => (
+                      <div
+                        key={studentEntry.id}
+                        className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
+                      >
+                        <div>
+                          <p className="font-semibold text-gray-900">{studentEntry.name}</p>
+                          <p className="text-sm text-gray-600">Grade {studentEntry.grade}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-brand-teal">
+                            +{studentEntry.xpEarnedWeek} XP
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {studentEntry.lessonsCompletedWeek} lessons
+                          </p>
+                        </div>
+                      </div>
+                    ))}
               </div>
             </motion.div>
           </div>

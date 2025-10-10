@@ -96,6 +96,7 @@ export interface ChatMessage {
   content: string;
   isUser: boolean;
   timestamp: Date;
+  role?: 'user' | 'assistant';
 }
 
 export interface PerformanceData {
@@ -124,12 +125,16 @@ export interface DashboardLesson {
   xpReward: number;
   dueAt?: string | null;
   completedAt?: string | null;
+  launchUrl?: string | null;
 }
 
 export interface SubjectMastery {
   subject: Subject;
   mastery: number;
   trend: 'up' | 'down' | 'steady';
+  cohortAverage?: number;
+  goal?: number;
+  delta?: number;
 }
 
 export interface StudentDailyActivity {
@@ -171,6 +176,8 @@ export interface StudentDashboardData {
   xpTimeline: XPTimelinePoint[];
   aiRecommendations: string[];
   upcomingAssessments: AssessmentSummary[];
+  activeLessonId?: string | null;
+  nextLessonUrl?: string | null;
 }
 
 export interface ParentChildSnapshot {
@@ -187,6 +194,8 @@ export interface ParentChildSnapshot {
   xpEarnedWeek: number;
   masteryBySubject: SubjectMastery[];
   recentActivity: ParentChildActivity[];
+  goalProgress?: number;
+  cohortComparison?: number;
 }
 
 export interface ParentChildActivity {
@@ -210,6 +219,7 @@ export interface ParentWeeklyReport {
   summary: string;
   highlights: string[];
   recommendations: string[];
+  aiGenerated?: boolean;
 }
 
 export interface ParentDashboardData {
@@ -218,6 +228,7 @@ export interface ParentDashboardData {
   alerts: ParentAlert[];
   activitySeries: ParentActivityPoint[];
   weeklyReport?: ParentWeeklyReport | null;
+  downloadableReport?: string;
 }
 
 export interface ParentActivityPoint {

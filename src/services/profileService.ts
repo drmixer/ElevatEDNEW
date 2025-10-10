@@ -6,6 +6,8 @@ import type {
   ParentChildSnapshot,
   ParentWeeklyReport,
   Student,
+  Subject,
+  SubjectMastery,
   User,
 } from '../types';
 
@@ -55,6 +57,7 @@ type ParentDashboardChildRow = {
   lessons_completed_week: number | null;
   practice_minutes_week: number | null;
   xp_earned_week: number | null;
+  mastery_breakdown: unknown;
 };
 
 const normalizeStudentProfile = (
@@ -122,6 +125,25 @@ const castStringArray = (input: unknown): string[] => {
   }
 
   return [];
+};
+
+const averageFromBreakdown = (input: unknown, property: 'goal' | 'cohortAverage'): number | undefined => {
+  if (!Array.isArray(input)) return undefined;
+  const values = input
+    .map((entry) => (entry as Record<string, unknown>)?.[property])
+    .filter((value): value is number => typeof value === 'number');
+  if (!values.length) return undefined;
+  const total = values.reduce((acc, value) => acc + value, 0);
+  return Math.round((total / values.length) * 100) / 100;
+};
+
+const toSubjectKey = (value: unknown): Subject | null => {
+  if (typeof value !== 'string') return null;
+  const normalized = value.toLowerCase().replace(/\s+/g, '_');
+  if (['math', 'english', 'science', 'social_studies'].includes(normalized)) {
+    return normalized as Subject;
+  }
+  return null;
 };
 
 export const fetchUserProfile = async (userId: string): Promise<User> => {
@@ -237,21 +259,61 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
     }
 
     children =
-      childRows?.map((child: ParentDashboardChildRow) => ({
-        id: child.student_id,
-        name: [child.first_name, child.last_name].filter(Boolean).join(' ') || 'Student',
-        grade: child.grade ?? 1,
-        level: child.level ?? 1,
-        xp: child.xp ?? 0,
-        streakDays: child.streak_days ?? 0,
-        strengths: child.strengths ?? [],
-        focusAreas: child.weaknesses ?? [],
-        lessonsCompletedWeek: child.lessons_completed_week ?? 0,
-        practiceMinutesWeek: child.practice_minutes_week ?? 0,
-        xpEarnedWeek: child.xp_earned_week ?? 0,
-        masteryBySubject: [],
-        recentActivity: [],
-      })) ?? [];
+      childRows?.map((child: ParentDashboardChildRow) => {
+        const masteryBreakdown = Array.isArray(child.mastery_breakdown)
+          ? (child.mastery_breakdown as SubjectMastery[])
+          : [];
+
+        const masteryBySubject = masteryBreakdown
+          .map((entry) => {
+            const subject = toSubjectKey((entry as SubjectMastery).subject);
+            if (!subject) {
+              return null;
+            }
+            const mastery = (entry as SubjectMastery).mastery ?? 0;
+            const cohortAverage = (entry as SubjectMastery).cohortAverage;
+            const goal = (entry as SubjectMastery).goal;
+            const delta =
+              cohortAverage !== undefined
+                ? Math.round((mastery - cohortAverage) * 100) / 100
+                : undefined;
+            const trend: SubjectMastery['trend'] = delta === undefined
+              ? 'steady'
+              : delta > 0.5
+                ? 'up'
+                : delta < -0.5
+                  ? 'down'
+                  : 'steady';
+
+            return {
+              subject,
+              mastery,
+              trend,
+              cohortAverage,
+              goal,
+              delta,
+            } satisfies SubjectMastery;
+          })
+          .filter((entry): entry is SubjectMastery => Boolean(entry));
+
+        return {
+          id: child.student_id,
+          name: [child.first_name, child.last_name].filter(Boolean).join(' ') || 'Student',
+          grade: child.grade ?? 1,
+          level: child.level ?? 1,
+          xp: child.xp ?? 0,
+          streakDays: child.streak_days ?? 0,
+          strengths: child.strengths ?? [],
+          focusAreas: child.weaknesses ?? [],
+          lessonsCompletedWeek: child.lessons_completed_week ?? 0,
+          practiceMinutesWeek: child.practice_minutes_week ?? 0,
+          xpEarnedWeek: child.xp_earned_week ?? 0,
+          masteryBySubject,
+          recentActivity: [],
+          goalProgress: averageFromBreakdown(child.mastery_breakdown, 'goal'),
+          cohortComparison: averageFromBreakdown(child.mastery_breakdown, 'cohortAverage'),
+        } satisfies ParentChildSnapshot;
+      }) ?? [];
 
     weeklyReport = weeklyReportRow
       ? {
@@ -259,6 +321,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
           summary: weeklyReportRow.summary ?? '',
           highlights: castStringArray(weeklyReportRow.highlights),
           recommendations: castStringArray(weeklyReportRow.recommendations),
+          aiGenerated: weeklyReportRow.ai_generated ?? undefined,
         }
       : null;
   }
