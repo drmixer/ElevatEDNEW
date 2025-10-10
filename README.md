@@ -77,6 +77,23 @@ npm run import:federal
 
 Each importer validates licenses via `assertLicenseAllowed`. If a mapping contains a disallowed license the command fails with a descriptive error.
 
+For providers that publish bulk datasets you can normalize their raw exports with the provider CLI:
+
+```bash
+# Normalize raw dumps into the shared dataset format
+npm run import:provider -- --provider c3teachers --input data/providers/c3_teachers_raw.json --output dist/imports/c3_teachers.dataset.json --pretty
+```
+
+Supported `--provider` values: `openstax`, `c3teachers`, `siyavula`, and `nasa_noaa`. The CLI emits JSON ready for the Admin import console.
+
+Queued Import Workflow
+----------------------
+
+- `/api/import/runs` persists every job with `pending → running → success|error` status, metrics, and append-only logs.
+- The Node API boots an in-process worker (`ImportQueue`) that claims pending runs, performs license QA (including optional URL health checks), and records warnings/errors back onto the run.
+- Supabase Edge functions can reuse the same processor to run imports on a schedule or via webhooks.
+- Set `SKIP_IMPORT_URL_CHECKS=true` to bypass external link checks when running in an offline environment.
+
 Standards & Assessments Integration
 -----------------------------------
 
@@ -115,7 +132,7 @@ UI Highlights
 
 - `/catalog` – grade, subject, strand, and topic filters with pagination.
 - `/module/:id` – lesson list, linked assets with attribution, and adaptive recommendations based on the most recent assessment score.
-- `/admin/import` – upload JSON mapping files and trigger the importers via API. Validation errors bubble up from the license guard.
+- `/admin/import` – upload mapping or dataset files, queue provider runs, and monitor job logs / status without blocking the UI.
 
 Adaptive Recommendations API
 ----------------------------

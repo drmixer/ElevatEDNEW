@@ -582,6 +582,14 @@ const startImportRun = async (
     totals,
     triggered_by: options.triggeredBy ?? null,
     errors: [],
+    status: 'running',
+    logs: [
+      {
+        timestamp: new Date().toISOString(),
+        level: 'info' as const,
+        message: `Started CLI import for ${runSource}.`,
+      },
+    ],
   };
 
   const { data, error } = await client.from('import_runs').insert(payload).select().single();
@@ -605,6 +613,7 @@ const finalizeImportRun = async (
     finished_at: new Date().toISOString(),
     totals,
     errors,
+    status: errors.length > 0 ? 'error' : 'success',
   };
 
   const { error } = await client

@@ -5,6 +5,12 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient } from '../scripts/utils/supabase.js';
 import {
+  IMPORT_PROVIDERS,
+  IMPORT_PROVIDER_MAP,
+  isImportProviderId,
+  type ImportProviderId,
+} from '../shared/import-providers.js';
+import {
   importFederalMapping,
   type FederalMapping,
 } from '../scripts/import_federal_pd.js';
@@ -18,6 +24,13 @@ import {
 } from '../scripts/import_openstax.js';
 import { getRecommendations } from './recommendations.js';
 import { getModuleAssessment, getModuleDetail, listModules, type ModuleFilters } from './modules.js';
+import { ImportQueue } from './importQueue.js';
+import {
+  createImportRun,
+  fetchImportRunById,
+  fetchImportRuns,
+  toApiModel,
+} from './importRuns.js';
 
 type ApiContext = {
   supabase: SupabaseClient;
@@ -107,6 +120,96 @@ export const createApiHandler = (context: ApiContext) => {
         return true;
       }
 
+      if (req.method === 'GET' && url.pathname === '/api/import/providers') {
+        const providers = IMPORT_PROVIDERS.map((provider) => ({
+          id: provider.id,
+          label: provider.label,
+          description: provider.description,
+          samplePath: provider.samplePath ?? null,
+          importKind: provider.importKind,
+          defaultLicense: provider.defaultLicense,
+          notes: provider.notes ?? null,
+        }));
+        sendJson(res, 200, { providers });
+        return true;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/import/runs') {
+        const runs = await fetchImportRuns(supabase, 25);
+        sendJson(res, 200, { runs: runs.map(toApiModel) });
+        return true;
+      }
+
+      if (req.method === 'GET' && url.pathname?.startsWith('/api/import/runs/')) {
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (parts.length === 4) {
+          const idPart = parts[3];
+          const runId = Number.parseInt(idPart ?? '', 10);
+          if (Number.isNaN(runId)) {
+            sendJson(res, 400, { error: 'Import run id must be numeric.' });
+            return true;
+          }
+          const run = await fetchImportRunById(supabase, runId);
+          if (!run) {
+            sendJson(res, 404, { error: 'Import run not found.' });
+            return true;
+          }
+          sendJson(res, 200, { run: toApiModel(run) });
+          return true;
+        }
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/import/runs') {
+        type CreateRunBody = {
+          provider?: string;
+          mapping?: Record<string, unknown>;
+          dataset?: Record<string, unknown>;
+          input?: Record<string, unknown>;
+          fileName?: string;
+          notes?: string;
+          triggeredBy?: string;
+        };
+
+        const body = await readJsonBody<CreateRunBody>(req);
+        if (!body.provider || !isImportProviderId(body.provider)) {
+          sendJson(res, 400, { error: 'Valid provider is required.' });
+          return true;
+        }
+
+        const provider = body.provider as ImportProviderId;
+        const providerDefinition = IMPORT_PROVIDER_MAP.get(provider);
+        if (!providerDefinition) {
+          sendJson(res, 400, { error: `Provider "${provider}" is not supported.` });
+          return true;
+        }
+
+        const inputPayload: Record<string, unknown> = {
+          provider,
+          fileName: typeof body.fileName === 'string' ? body.fileName : null,
+          mapping: body.mapping && typeof body.mapping === 'object' ? body.mapping : null,
+          dataset: body.dataset && typeof body.dataset === 'object' ? body.dataset : null,
+          extraInput: body.input && typeof body.input === 'object' ? body.input : null,
+          notes: typeof body.notes === 'string' ? body.notes : null,
+        };
+
+        const run = await createImportRun(supabase, {
+          source: provider,
+          status: 'pending',
+          input: inputPayload,
+          triggered_by: typeof body.triggeredBy === 'string' ? body.triggeredBy : null,
+          logs: [
+            {
+              timestamp: new Date().toISOString(),
+              level: 'info',
+              message: `Queued ${providerDefinition.label} import.`,
+            },
+          ],
+        });
+
+        sendJson(res, 201, { run: toApiModel(run) });
+        return true;
+      }
+
       if (
         req.method === 'GET' &&
         url.pathname?.startsWith('/api/modules/') &&
@@ -193,6 +296,12 @@ export const createApiHandler = (context: ApiContext) => {
 export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787', 10)) => {
   const supabase = createServiceRoleClient();
   const handler = createApiHandler({ supabase });
+  const queue = new ImportQueue(supabase, {
+    logger: (entry) => {
+      const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
+      console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
+    },
+  });
 
   const server = createServer(async (req, res) => {
     const handled = await handler(req, res);
@@ -206,5 +315,14 @@ export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787'
     console.log(`ElevatED API listening on http://localhost:${port}`);
   });
 
-  return server;
+  queue.start();
+
+  return {
+    server,
+    queue,
+    close: () => {
+      queue.stop();
+      server.close();
+    },
+  };
 };
