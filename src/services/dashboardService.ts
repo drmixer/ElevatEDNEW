@@ -1,4 +1,5 @@
 import supabase from '../lib/supabaseClient';
+import { describeSuggestionReason } from './adaptiveService';
 import type {
   Admin,
   AdminAlert,
@@ -9,6 +10,7 @@ import type {
   AdminTopStudent,
   AssessmentSummary,
   DashboardLesson,
+  LearningPathItem,
   Parent,
   ParentActivityPoint,
   ParentAlert,
@@ -496,47 +498,57 @@ type SuggestionRow = {
   confidence: number | null;
 };
 
-const buildAdaptiveMessages = (
+const buildSuggestionPlan = (
   suggestions: SuggestionRow[],
   metadata: Map<number, LessonMetadataEntry>,
-): string[] => {
+): { lessons: DashboardLesson[]; messages: string[]; learningPath: LearningPathItem[] } => {
   if (!suggestions.length) {
-    return [];
+    return { lessons: [], messages: [], learningPath: [] };
   }
 
-  return suggestions
-    .map((suggestion) => {
-      const lessonId = suggestion.lesson_id;
-      if (!lessonId) return null;
-      const entry = metadata.get(lessonId);
-      if (!entry) return null;
+  const lessons: DashboardLesson[] = [];
+  const messages: string[] = [];
+  const learningPath: LearningPathItem[] = [];
 
-      const subject = entry.subject ? SUBJECT_LABELS[entry.subject] : 'this subject';
-      const lessonTitle = entry.title ?? 'the lesson';
-      const status = entry.status;
-      const confidencePct = suggestion.confidence != null
-        ? Math.round(Number(suggestion.confidence) * 100)
-        : null;
+  suggestions.forEach((suggestion) => {
+    if (!suggestion.lesson_id) return;
+    const entry = metadata.get(suggestion.lesson_id);
+    if (!entry) return;
 
-      const confidenceText = confidencePct != null ? ` (${confidencePct}% confidence)` : '';
+    const subject = (entry.subject ?? 'math') as Subject;
+    const message = describeSuggestionReason(
+      suggestion.reason,
+      entry.title,
+      subject,
+      suggestion.confidence,
+    );
 
-      const statusPrefix = status === 'completed'
-        ? 'Review'
-        : status === 'in_progress'
-        ? 'Resume'
-        : 'Start';
+    messages.push(message);
 
-      const reason = suggestion.reason ?? 'advance_next_topic';
+    lessons.push({
+      id: suggestion.lesson_id.toString(),
+      subject,
+      title: entry.title,
+      status: entry.status ?? 'not_started',
+      difficulty: difficultyFromDuration(entry.estimatedDuration),
+      xpReward: Math.max(30, (entry.estimatedDuration ?? 15) * 3),
+      launchUrl: `/lesson/${suggestion.lesson_id}`,
+      suggestionReason: message,
+      suggestionConfidence: suggestion.confidence ?? null,
+    });
 
-      if (reason === 'reinforcement') {
-        return `${statusPrefix} "${lessonTitle}" to reinforce ${subject}${confidenceText}.`;
-      }
-      if (reason === 'complete_topic') {
-        return `${statusPrefix} "${lessonTitle}" to wrap up your current ${subject} topic${confidenceText}.`;
-      }
-      return `${statusPrefix} "${lessonTitle}" to explore the next ${subject} concept${confidenceText}.`;
-    })
-    .filter((message): message is string => Boolean(message));
+    learningPath.push({
+      id: suggestion.lesson_id.toString(),
+      subject,
+      topic: entry.moduleTitle ?? entry.title,
+      concept: suggestion.reason ?? 'adaptive_recommendation',
+      difficulty: entry.estimatedDuration ?? 15,
+      status: entry.status ?? 'not_started',
+      xpReward: Math.max(30, (entry.estimatedDuration ?? 15) * 3),
+    });
+  });
+
+  return { lessons, messages, learningPath };
 };
 
 const mapDailyActivity = (rows: StudentDailyActivityRow[]): StudentDailyActivity[] => {
@@ -929,41 +941,6 @@ export const fetchStudentDashboardData = async (
     const progressData = (progressRows as StudentProgressLessonRow[]) ?? [];
     const { lessons: progressLessons, metadata: lessonMetadata } = mapProgressLessons(progressData);
 
-    const todaysPlan: DashboardLesson[] = (() => {
-      const plan = [...progressLessons];
-      if (plan.length < 4) {
-        const fallbackLessons = buildLessonsFromLearningPath(student);
-        const existing = new Set(plan.map((lesson) => lesson.id));
-        fallbackLessons.forEach((lesson) => {
-          if (plan.length >= 4) return;
-          if (!existing.has(lesson.id)) {
-            plan.push(lesson);
-          }
-        });
-      }
-      if (plan.length === 0) {
-        return fallbackStudentLessons();
-      }
-      return plan;
-    })();
-
-    todaysPlan.forEach((lesson) => {
-      const numericId = Number.parseInt(lesson.id, 10);
-      if (!Number.isNaN(numericId)) {
-        if (!lessonMetadata.has(numericId)) {
-          lessonMetadata.set(numericId, {
-            lessonId: numericId,
-            title: lesson.title,
-            subject: lesson.subject,
-            moduleTitle: null,
-            estimatedDuration: null,
-            status: lesson.status,
-            masteryPct: null,
-          });
-        }
-      }
-    });
-
     const suggestionData = (suggestionRows as SuggestionRow[]) ?? [];
 
     const missingSuggestionIds = suggestionData
@@ -996,10 +973,70 @@ export const fetchStudentDashboardData = async (
       }
     }
 
+    const suggestionPlan = buildSuggestionPlan(suggestionData, lessonMetadata);
+
+    if (suggestionPlan.learningPath.length) {
+      const existingPath = JSON.stringify(student.learningPath ?? []);
+      const nextPath = JSON.stringify(suggestionPlan.learningPath);
+      if (existingPath !== nextPath) {
+        student.learningPath = suggestionPlan.learningPath;
+        try {
+          await supabase.from('student_profiles').update({ learning_path: suggestionPlan.learningPath }).eq('id', student.id);
+        } catch (pathError) {
+          console.warn('[Dashboard] Failed to persist learning path suggestions', pathError);
+        }
+      }
+    }
+
+    const todaysPlan: DashboardLesson[] = (() => {
+      const plan: DashboardLesson[] = [];
+      const seen = new Set<string>();
+
+      const pushLesson = (lesson: DashboardLesson) => {
+        if (seen.has(lesson.id)) return;
+        seen.add(lesson.id);
+        plan.push(lesson);
+      };
+
+      suggestionPlan.lessons.forEach(pushLesson);
+      progressLessons.forEach(pushLesson);
+
+      if (plan.length < 4) {
+        const fallbackLessons = buildLessonsFromLearningPath(student);
+        fallbackLessons.forEach((lesson) => {
+          if (plan.length >= 4) return;
+          pushLesson(lesson);
+        });
+      }
+
+      if (plan.length === 0) {
+        return fallbackStudentLessons();
+      }
+
+      return plan;
+    })();
+
+    todaysPlan.forEach((lesson) => {
+      const numericId = Number.parseInt(lesson.id, 10);
+      if (!Number.isNaN(numericId)) {
+        if (!lessonMetadata.has(numericId)) {
+          lessonMetadata.set(numericId, {
+            lessonId: numericId,
+            title: lesson.title,
+            subject: lesson.subject,
+            moduleTitle: null,
+            estimatedDuration: null,
+            status: lesson.status,
+            masteryPct: null,
+          });
+        }
+      }
+    });
+
     const activeLesson = todaysPlan.find((lesson) => lesson.status !== 'completed') ?? todaysPlan[0] ?? null;
     const xpTimeline = buildXpTimeline((xpRows as XpEventRow[]) ?? []);
     const assessments = buildAssessmentsSummary((assignmentsRows as StudentAssignmentRow[]) ?? []);
-    let aiRecommendations = buildAdaptiveMessages(suggestionData, lessonMetadata);
+    let aiRecommendations = suggestionPlan.messages;
     if (!aiRecommendations.length) {
       aiRecommendations = deriveAiRecommendations(subjectMastery, todaysPlan);
     }

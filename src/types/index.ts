@@ -80,6 +80,8 @@ export interface Answer {
   userAnswer: string;
   isCorrect: boolean;
   timeSpent: number;
+  optionId?: number | null;
+  bankQuestionId?: number;
 }
 
 export interface NotificationPreferences {
@@ -126,6 +128,8 @@ export interface DashboardLesson {
   dueAt?: string | null;
   completedAt?: string | null;
   launchUrl?: string | null;
+  suggestionReason?: string | null;
+  suggestionConfidence?: number | null;
 }
 
 export interface SubjectMastery {
