@@ -13,13 +13,20 @@ import {
   PlayCircle,
   Sparkles,
   Video,
+  XCircle,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 import { fetchLessonDetail } from '../services/catalogService';
+import {
+  calculateMasteryPct,
+  fetchLessonCheckQuestions,
+  recordLessonQuestionAttempt,
+} from '../services/lessonPracticeService';
 import { useLessonProgress } from '../lib/useLessonProgress';
 import { useAuth } from '../contexts/AuthContext';
+import type { LessonPracticeQuestion, Subject } from '../types';
 
 const MARKDOWN_PLUGINS = [remarkGfm];
 
@@ -100,6 +107,16 @@ const LessonPlayerPage: React.FC = () => {
   const { user } = useAuth();
   const lessonId = Number.parseInt(params.id ?? '', 10);
   const [showOpenOnly, setShowOpenOnly] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionStart, setQuestionStart] = useState<number | null>(null);
+  const [questionFeedback, setQuestionFeedback] = useState<{ isCorrect: boolean; explanation?: string | null } | null>(
+    null,
+  );
+  const [questionResponses, setQuestionResponses] = useState<
+    Map<number, { selectedOptionId: number; isCorrect: boolean }>
+  >(new Map());
+  const [questionSaving, setQuestionSaving] = useState(false);
+  const studentId = user?.role === 'student' ? user.id : null;
 
   const isLessonIdValid = Number.isFinite(lessonId);
 
@@ -115,6 +132,19 @@ const LessonPlayerPage: React.FC = () => {
   }, [lessonId]);
 
   const lessonDetail = lessonQuery.data ?? null;
+
+  const practiceQuestionQuery = useQuery({
+    queryKey: ['lesson-questions', lessonId, lessonDetail?.module.subject],
+    queryFn: () =>
+      fetchLessonCheckQuestions(
+        lessonId,
+        (lessonDetail?.module.subject as Subject | null) ?? null,
+      ),
+    enabled: isLessonIdValid && Boolean(studentId) && Boolean(lessonDetail),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const practiceQuestions: LessonPracticeQuestion[] = practiceQuestionQuery.data ?? [];
 
   const sections = useMemo(() => {
     if (!lessonDetail) {
@@ -144,6 +174,15 @@ const LessonPlayerPage: React.FC = () => {
     return extracted;
   }, [lessonDetail?.lesson.content]);
 
+  const questionProgressItems = useMemo(
+    () =>
+      practiceQuestions.map((question, index) => ({
+        id: `question:${question.id}`,
+        label: `Check-in question ${index + 1}`,
+      })),
+    [practiceQuestions],
+  );
+
   const progressItems = useMemo(() => {
     if (!lessonDetail) {
       return [] as Array<{ id: string; label: string }>;
@@ -152,16 +191,15 @@ const LessonPlayerPage: React.FC = () => {
     if (lessonDetail.lesson.assets.length > 0) {
       items.push({ id: 'assets', label: 'Supporting resources explored' });
     }
+    questionProgressItems.forEach((item) => items.push(item));
     items.push({ id: 'reflection', label: 'Reflection logged' });
     return items;
-  }, [lessonDetail, sections]);
+  }, [lessonDetail, questionProgressItems, sections]);
 
   const progressItemIds = useMemo(
     () => progressItems.map((item) => item.id),
     [progressItems],
   );
-
-  const studentId = user?.role === 'student' ? user.id : null;
 
   const progressController = useLessonProgress(
     isLessonIdValid ? lessonId : null,
@@ -178,6 +216,28 @@ const LessonPlayerPage: React.FC = () => {
   );
 
   const progressDisabled = progressController.isLoading || progressController.isSaving;
+
+  useEffect(() => {
+    setQuestionIndex(0);
+    setQuestionResponses(new Map());
+    setQuestionFeedback(null);
+    setQuestionStart(practiceQuestions.length ? Date.now() : null);
+  }, [practiceQuestions.length]);
+
+  useEffect(() => {
+    if (!practiceQuestions.length) {
+      return;
+    }
+    if (questionIndex >= practiceQuestions.length) {
+      setQuestionIndex(practiceQuestions.length - 1);
+      return;
+    }
+    const current = practiceQuestions[questionIndex] ?? null;
+    if (current && !questionResponses.has(current.id)) {
+      setQuestionFeedback(null);
+      setQuestionStart(Date.now());
+    }
+  }, [practiceQuestions, questionIndex, questionResponses]);
 
   const sectionLookup = useMemo(() => {
     const map = new Map<string, { id: string; label: string }>();
@@ -204,6 +264,82 @@ const LessonPlayerPage: React.FC = () => {
     }
     return lessonDetail.lesson.assets.filter((asset) => isOpenLicense(asset.license));
   }, [lessonDetail, showOpenOnly]);
+
+  const currentPracticeQuestion = practiceQuestions[questionIndex] ?? null;
+  const answeredCount = questionResponses.size;
+  const correctCount = useMemo(
+    () =>
+      Array.from(questionResponses.values()).reduce(
+        (total, entry) => total + (entry.isCorrect ? 1 : 0),
+        0,
+      ),
+    [questionResponses],
+  );
+  const masteryPct = calculateMasteryPct(correctCount, practiceQuestions.length);
+
+  const handleQuestionAnswer = async (optionId: number) => {
+    if (!currentPracticeQuestion || questionSaving) {
+      return;
+    }
+
+    if (questionResponses.has(currentPracticeQuestion.id)) {
+      return;
+    }
+
+    const selectedOption = currentPracticeQuestion.options.find((opt) => opt.id === optionId);
+    const isCorrect = Boolean(selectedOption?.isCorrect);
+    const elapsedSeconds = questionStart ? Math.max(1, Math.round((Date.now() - questionStart) / 1000)) : 1;
+
+    const updatedResponses = new Map(questionResponses);
+    updatedResponses.set(currentPracticeQuestion.id, { selectedOptionId: optionId, isCorrect });
+    setQuestionResponses(updatedResponses);
+    setQuestionSaving(true);
+
+    const correctAfter = correctCount + (isCorrect ? 1 : 0);
+    const answeredAfter = updatedResponses.size;
+    const masteryAfter = calculateMasteryPct(correctAfter, practiceQuestions.length);
+    const status: 'completed' | 'in_progress' =
+      answeredAfter >= practiceQuestions.length ? 'completed' : 'in_progress';
+
+    if (!progressController.isComplete(`question:${currentPracticeQuestion.id}`)) {
+      progressController.toggleItem(`question:${currentPracticeQuestion.id}`);
+    }
+
+    try {
+      const eventOrder = progressController.allocateEventOrder();
+      await recordLessonQuestionAttempt({
+        studentId,
+        lessonId,
+        sessionId: progressController.sessionId ?? null,
+        questionId: currentPracticeQuestion.id,
+        optionId,
+        isCorrect,
+        timeSpentSeconds: elapsedSeconds,
+        skillIds: currentPracticeQuestion.skillIds,
+        masteryPct: masteryAfter,
+        status,
+        attempts: progressController.attempts ?? 1,
+        eventOrder: eventOrder ?? undefined,
+      });
+    } catch (error) {
+      console.warn('[lesson] Failed to sync practice answer', error);
+    } finally {
+      setQuestionSaving(false);
+    }
+
+    setQuestionFeedback({
+      isCorrect,
+      explanation: selectedOption?.feedback ?? currentPracticeQuestion.explanation ?? null,
+    });
+  };
+
+  const handleNextQuestion = () => {
+    if (questionIndex < practiceQuestions.length - 1) {
+      setQuestionIndex((prev) => prev + 1);
+      setQuestionFeedback(null);
+      setQuestionStart(Date.now());
+    }
+  };
 
   if (!isLessonIdValid) {
     return (
@@ -486,6 +622,135 @@ const LessonPlayerPage: React.FC = () => {
                 {lessonDetail.lesson.attributionBlock}
               </ReactMarkdown>
             )}
+          </article>
+
+          <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900">Lesson check-in</h2>
+                <p className="text-sm text-slate-500">
+                  Get quick feedback on the core concept before moving on.
+                </p>
+              </div>
+              <div className="text-sm font-semibold text-brand-blue">
+                {answeredCount}/{practiceQuestions.length || 0} answered
+              </div>
+            </div>
+
+            {practiceQuestionQuery.isLoading ? (
+              <div className="mt-6 flex items-center gap-2 text-slate-500">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Loading practice questions…</span>
+              </div>
+            ) : practiceQuestionQuery.isError ? (
+              <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 mt-0.5" />
+                <span>We couldn&apos;t load check-in questions right now.</span>
+              </div>
+            ) : practiceQuestions.length === 0 ? (
+              <div className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
+                No quick-check questions are linked to this lesson yet.
+              </div>
+            ) : currentPracticeQuestion ? (
+              <div className="mt-6 space-y-5">
+                <div className="text-sm text-slate-600">
+                  Current score {masteryPct}% · keep momentum with immediate feedback.
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-slate-900">{currentPracticeQuestion.prompt}</h3>
+                  <div className="space-y-3">
+                    {currentPracticeQuestion.options.map((option, index) => {
+                      const response = questionResponses.get(currentPracticeQuestion.id);
+                      const answered = Boolean(response);
+                      const isSelected = response?.selectedOptionId === option.id;
+                      const isCorrect = option.isCorrect;
+                      const baseClasses =
+                        'w-full rounded-xl border px-4 py-3 text-left transition-colors flex items-start gap-3';
+                      const stateClasses = !answered
+                        ? 'border-slate-200 hover:border-brand-blue/40 hover:bg-brand-blue/5'
+                        : isSelected && isCorrect
+                        ? 'border-emerald-200 bg-emerald-50'
+                        : isSelected
+                        ? 'border-rose-200 bg-rose-50'
+                        : 'border-slate-200 bg-slate-50';
+                      return (
+                        <button
+                          key={option.id}
+                          type="button"
+                          disabled={answered || questionSaving}
+                          onClick={() => handleQuestionAnswer(option.id)}
+                          className={`${baseClasses} ${stateClasses}`}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-600">
+                            {String.fromCharCode(65 + index)}
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <div className="font-medium text-slate-800">{option.text}</div>
+                            {answered && option.feedback && isSelected && (
+                              <p className="text-xs text-slate-600">{option.feedback}</p>
+                            )}
+                          </div>
+                          {answered && isSelected && (
+                            isCorrect ? (
+                              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                            ) : (
+                              <XCircle className="h-5 w-5 text-rose-500" />
+                            )
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {questionFeedback && (
+                    <div
+                      className={`rounded-xl border px-4 py-3 text-sm ${
+                        questionFeedback.isCorrect
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                          : 'border-rose-200 bg-rose-50 text-rose-700'
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        {questionFeedback.isCorrect ? (
+                          <CheckCircle2 className="h-4 w-4 mt-0.5" />
+                        ) : (
+                          <AlertTriangle className="h-4 w-4 mt-0.5" />
+                        )}
+                        <div>
+                          <p className="font-semibold">
+                            {questionFeedback.isCorrect ? 'Nice work! Correct answer.' : 'Not quite—review the explanation.'}
+                          </p>
+                          {questionFeedback.explanation && (
+                            <p className="text-xs mt-1">{questionFeedback.explanation}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div className="text-sm text-slate-500">
+                      Answered {answeredCount} of {practiceQuestions.length} · Correct {correctCount}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {questionIndex < practiceQuestions.length - 1 && (
+                        <button
+                          type="button"
+                          onClick={handleNextQuestion}
+                          disabled={!questionResponses.has(currentPracticeQuestion.id)}
+                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue disabled:opacity-60"
+                        >
+                          Next question <ArrowRight className="h-4 w-4" />
+                        </button>
+                      )}
+                      {answeredCount === practiceQuestions.length && (
+                        <span className="text-sm font-semibold text-emerald-600">
+                          Check-in complete · {masteryPct}% mastery
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </article>
 
           <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">

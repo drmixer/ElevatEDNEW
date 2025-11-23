@@ -38,6 +38,7 @@ export type LessonProgressSnapshot = {
     startedAt: string;
     endedAt: string | null;
     metadata: LessonSessionMetadata;
+    lastEventOrder: number | null;
   } | null;
 };
 
@@ -90,6 +91,23 @@ export const fetchLessonProgress = async (
   const sessionRow = (sessionResult.data ?? null) as PracticeSessionRow | null;
 
   const metadata = (sessionRow?.metadata ?? null) as LessonSessionMetadata | null;
+  let lastEventOrder: number | null = null;
+
+  if (sessionRow?.id) {
+    const { data: lastEventRow, error: lastEventError } = await supabase
+      .from('practice_events')
+      .select('event_order')
+      .eq('session_id', sessionRow.id)
+      .order('event_order', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (lastEventError) {
+      console.warn('[progress] failed to load latest practice event', lastEventError);
+    } else if (lastEventRow?.event_order != null) {
+      lastEventOrder = Number(lastEventRow.event_order) || null;
+    }
+  }
 
   return {
     status: progressRow?.status ?? 'not_started',
@@ -103,6 +121,7 @@ export const fetchLessonProgress = async (
           startedAt: sessionRow.started_at,
           endedAt: sessionRow.ended_at,
           metadata: metadata ?? {},
+          lastEventOrder,
         }
       : null,
   };

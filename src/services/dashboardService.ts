@@ -25,6 +25,11 @@ import type {
   XPTimelinePoint,
 } from '../types';
 
+const allowSyntheticDashboardData =
+  typeof import.meta !== 'undefined' &&
+  typeof import.meta.env !== 'undefined' &&
+  (import.meta.env.DEV || import.meta.env.VITE_ALLOW_FAKE_DASHBOARD_DATA === 'true');
+
 type SubjectRow = {
   id: number;
   name: string;
@@ -47,6 +52,11 @@ type XpEventRow = {
   xp_change: number;
   reason: string | null;
   created_at: string;
+};
+
+type AssessmentAttemptRow = {
+  status: 'in_progress' | 'completed' | 'abandoned' | null;
+  completed_at: string | null;
 };
 
 type StudentDailyActivityRow = {
@@ -151,69 +161,76 @@ const ensureStudentQuickStats = (
   };
 };
 
-const fallbackStudentLessons = (): DashboardLesson[] => [
-  {
-    id: 'fallback-math',
-    subject: 'math',
-    title: 'Adaptive Algebra Warm-up',
-    status: 'in_progress',
-    difficulty: 'medium',
-    xpReward: 45,
-  },
-  {
-    id: 'fallback-english',
-    subject: 'english',
-    title: 'Compare & Contrast Passages',
-    status: 'not_started',
-    difficulty: 'hard',
-    xpReward: 60,
-  },
-  {
-    id: 'fallback-science',
-    subject: 'science',
-    title: 'Photosynthesis Interactive Lab',
-    status: 'completed',
-    difficulty: 'easy',
-    xpReward: 25,
-  },
-];
+const fallbackStudentLessons = (): DashboardLesson[] => {
+  if (!allowSyntheticDashboardData) return [];
+  return [
+    {
+      id: 'fallback-math',
+      subject: 'math',
+      title: 'Adaptive Algebra Warm-up',
+      status: 'in_progress',
+      difficulty: 'medium',
+      xpReward: 45,
+    },
+    {
+      id: 'fallback-english',
+      subject: 'english',
+      title: 'Compare & Contrast Passages',
+      status: 'not_started',
+      difficulty: 'hard',
+      xpReward: 60,
+    },
+    {
+      id: 'fallback-science',
+      subject: 'science',
+      title: 'Photosynthesis Interactive Lab',
+      status: 'completed',
+      difficulty: 'easy',
+      xpReward: 25,
+    },
+  ];
+};
 
-const fallbackStudentMastery = (): SubjectMastery[] => [
-  {
-    subject: 'math',
-    mastery: 68,
-    trend: 'up',
-    cohortAverage: 62,
-    goal: 80,
-    delta: 6,
-  },
-  {
-    subject: 'english',
-    mastery: 82,
-    trend: 'steady',
-    cohortAverage: 78,
-    goal: 85,
-    delta: -3,
-  },
-  {
-    subject: 'science',
-    mastery: 57,
-    trend: 'up',
-    cohortAverage: 50,
-    goal: 75,
-    delta: 7,
-  },
-  {
-    subject: 'social_studies',
-    mastery: 45,
-    trend: 'down',
-    cohortAverage: 52,
-    goal: 70,
-    delta: -7,
-  },
-];
+const fallbackStudentMastery = (): SubjectMastery[] => {
+  if (!allowSyntheticDashboardData) return [];
+  return [
+    {
+      subject: 'math',
+      mastery: 68,
+      trend: 'up',
+      cohortAverage: 62,
+      goal: 80,
+      delta: 6,
+    },
+    {
+      subject: 'english',
+      mastery: 82,
+      trend: 'steady',
+      cohortAverage: 78,
+      goal: 85,
+      delta: -3,
+    },
+    {
+      subject: 'science',
+      mastery: 57,
+      trend: 'up',
+      cohortAverage: 50,
+      goal: 75,
+      delta: 7,
+    },
+    {
+      subject: 'social_studies',
+      mastery: 45,
+      trend: 'down',
+      cohortAverage: 52,
+      goal: 70,
+      delta: -7,
+    },
+  ];
+};
 
 const fallbackStudentActivity = (): StudentDailyActivity[] => {
+  if (!allowSyntheticDashboardData) return [];
   const today = new Date();
   return Array.from({ length: 7 }).map((_, index) => {
     const date = new Date(today);
@@ -235,6 +252,17 @@ const fallbackParentWeeklyReport = (parentName: string): ParentWeeklyReport => {
   const day = monday.getDay();
   const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
   monday.setDate(diff);
+
+  if (!allowSyntheticDashboardData) {
+    return {
+      weekStart: monday.toISOString(),
+      summary: 'No weekly report available yet.',
+      highlights: [],
+      recommendations: [],
+      aiGenerated: false,
+    };
+  }
+
   return {
     weekStart: monday.toISOString(),
     summary: `${parentName}'s crew stayed engaged this week with steady progress across core subjects.`,
@@ -250,118 +278,133 @@ const fallbackParentWeeklyReport = (parentName: string): ParentWeeklyReport => {
   };
 };
 
-const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => [
-  {
-    id: 'fallback-child-1',
-    name: `${parentName.split(' ')[0]} Jr.`,
-    grade: 6,
-    level: 5,
-    xp: 1325,
-    streakDays: 8,
-    strengths: ['Algebraic Reasoning', 'Reading Comprehension'],
-    focusAreas: ['Geometry', 'Scientific Method'],
-    lessonsCompletedWeek: 9,
-    practiceMinutesWeek: 240,
-    xpEarnedWeek: 310,
-    masteryBySubject: fallbackStudentMastery(),
-    recentActivity: [
-      {
-        id: 'act-1',
-        description: 'Completed Diagnostic Review with 92%',
-        subject: 'math',
-        xp: 120,
-        occurredAt: new Date().toISOString(),
-      },
-      {
-        id: 'act-2',
-        description: 'Asked for AI hint during Essay Planning lesson',
-        subject: 'english',
-        xp: 20,
-        occurredAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-      },
-    ],
-    goalProgress: 78,
-    cohortComparison: 64,
-  },
-];
+const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => {
+  if (!allowSyntheticDashboardData) return [];
+  return [
+    {
+      id: 'fallback-child-1',
+      name: `${parentName.split(' ')[0]} Jr.`,
+      grade: 6,
+      level: 5,
+      xp: 1325,
+      streakDays: 8,
+      strengths: ['Algebraic Reasoning', 'Reading Comprehension'],
+      focusAreas: ['Geometry', 'Scientific Method'],
+      lessonsCompletedWeek: 9,
+      practiceMinutesWeek: 240,
+      xpEarnedWeek: 310,
+      masteryBySubject: fallbackStudentMastery(),
+      recentActivity: [
+        {
+          id: 'act-1',
+          description: 'Completed Diagnostic Review with 92%',
+          subject: 'math',
+          xp: 120,
+          occurredAt: new Date().toISOString(),
+        },
+        {
+          id: 'act-2',
+          description: 'Asked for AI hint during Essay Planning lesson',
+          subject: 'english',
+          xp: 20,
+          occurredAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+        },
+      ],
+      goalProgress: 78,
+      cohortComparison: 64,
+    },
+  ];
+};
 
-const fallbackParentAlerts = (): ParentAlert[] => [
-  {
-    id: 'alert-1',
-    type: 'warning',
-    message: 'Emma missed her scheduled science practice yesterday. Encourage a make-up session.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-    studentId: 'fallback-child-1',
-  },
-  {
-    id: 'alert-2',
-    type: 'info',
-    message: 'Alex is close to earning the “Math Momentum” badge. 2 more lessons to go!',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
-    studentId: 'fallback-child-1',
-  },
-];
+const fallbackParentAlerts = (): ParentAlert[] => {
+  if (!allowSyntheticDashboardData) return [];
+  return [
+    {
+      id: 'alert-1',
+      type: 'warning',
+      message: 'Emma missed her scheduled science practice yesterday. Encourage a make-up session.',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+      studentId: 'fallback-child-1',
+    },
+    {
+      id: 'alert-2',
+      type: 'info',
+      message: 'Alex is close to earning the “Math Momentum” badge. 2 more lessons to go!',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
+      studentId: 'fallback-child-1',
+    },
+  ];
+};
 
 const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   admin,
   metrics: {
-    totalStudents: 2480,
-    totalParents: 940,
-    totalAdmins: 6,
-    activeStudents7d: 1860,
-    practiceMinutes7d: 68450,
-    assessments30d: 742,
-    xpEarned30d: 912330,
-    averageStudentXp: 1285,
-    activeSubscriptions: 812,
+    totalStudents: allowSyntheticDashboardData ? 2480 : 0,
+    totalParents: allowSyntheticDashboardData ? 940 : 0,
+    totalAdmins: allowSyntheticDashboardData ? 6 : 0,
+    activeStudents7d: allowSyntheticDashboardData ? 1860 : 0,
+    practiceMinutes7d: allowSyntheticDashboardData ? 68450 : 0,
+    assessments30d: allowSyntheticDashboardData ? 742 : 0,
+    xpEarned30d: allowSyntheticDashboardData ? 912330 : 0,
+    averageStudentXp: allowSyntheticDashboardData ? 1285 : 0,
+    activeSubscriptions: allowSyntheticDashboardData ? 812 : 0,
+    lessonCompletionRate: undefined,
   },
-  growthSeries: Array.from({ length: 8 }).map((_, index) => {
-    const pointDate = new Date();
-    pointDate.setDate(pointDate.getDate() - (7 - index) * 7);
-    return {
-      date: pointDate.toISOString(),
-      newStudents: 120 + Math.round(Math.random() * 40),
-      activeStudents: 1600 + Math.round(Math.random() * 200),
-    };
-  }),
-  subjectPerformance: [
-    { subject: 'math', mastery: 68, trend: 4 },
-    { subject: 'english', mastery: 74, trend: 2 },
-    { subject: 'science', mastery: 59, trend: 5 },
-    { subject: 'social_studies', mastery: 62, trend: -1 },
-  ],
-  alerts: [
-    {
-      id: 'admin-alert-1',
-      severity: 'medium',
-      title: 'Rising Support Tickets',
-      description: 'Support volume increased 18% week-over-week. Investigate onboarding emails.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-    },
-    {
-      id: 'admin-alert-2',
-      severity: 'high',
-      title: 'Assessment Completion Dip',
-      description: 'Grade 6 science assessments dropped below 60% completion in the last 7 days.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-    },
-  ],
-  topStudents: [
-    {
-      id: 'top-1',
-      name: 'Avery Chen',
-      grade: 7,
-      xpEarnedWeek: 680,
-      lessonsCompletedWeek: 14,
-    },
-    {
-      id: 'top-2',
-      name: 'Mateo Rivera',
-      grade: 5,
-      xpEarnedWeek: 540,
-      lessonsCompletedWeek: 11,
-    },
-  ],
+  growthSeries: allowSyntheticDashboardData
+    ? Array.from({ length: 8 }).map((_, index) => {
+        const pointDate = new Date();
+        pointDate.setDate(pointDate.getDate() - (7 - index) * 7);
+        return {
+          date: pointDate.toISOString(),
+          newStudents: 120 + Math.round(Math.random() * 40),
+          activeStudents: 1600 + Math.round(Math.random() * 200),
+        };
+      })
+    : [],
+  subjectPerformance: allowSyntheticDashboardData
+    ? [
+        { subject: 'math', mastery: 68, trend: 4 },
+        { subject: 'english', mastery: 74, trend: 2 },
+        { subject: 'science', mastery: 59, trend: 5 },
+        { subject: 'social_studies', mastery: 62, trend: -1 },
+      ]
+    : [],
+  alerts: allowSyntheticDashboardData
+    ? [
+        {
+          id: 'admin-alert-1',
+          severity: 'medium',
+          title: 'Rising Support Tickets',
+          description: 'Support volume increased 18% week-over-week. Investigate onboarding emails.',
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+        },
+        {
+          id: 'admin-alert-2',
+          severity: 'high',
+          title: 'Assessment Completion Dip',
+          description: 'Grade 6 science assessments dropped below 60% completion in the last 7 days.',
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+        },
+      ]
+    : [],
+  topStudents: allowSyntheticDashboardData
+    ? [
+        {
+          id: 'top-1',
+          name: 'Avery Chen',
+          grade: 7,
+          xpEarnedWeek: 680,
+          lessonsCompletedWeek: 14,
+        },
+        {
+          id: 'top-2',
+          name: 'Mateo Rivera',
+          grade: 5,
+          xpEarnedWeek: 540,
+          lessonsCompletedWeek: 11,
+        },
+      ]
+    : [],
 });
 
 const groupMasteryBySubject = (
@@ -570,18 +613,20 @@ const mapDailyActivity = (rows: StudentDailyActivityRow[]): StudentDailyActivity
 
 const buildXpTimeline = (rows: XpEventRow[]): XPTimelinePoint[] => {
   if (!rows.length) {
-    return [
-      {
-        date: new Date().toISOString(),
-        xpEarned: 120,
-        description: 'Completed adaptive assessment with 92% mastery.',
-      },
-      {
-        date: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-        xpEarned: 45,
-        description: 'Unlocked Algebra practice streak bonus.',
-      },
-    ];
+    return allowSyntheticDashboardData
+      ? [
+          {
+            date: new Date().toISOString(),
+            xpEarned: 120,
+            description: 'Completed adaptive assessment with 92% mastery.',
+          },
+          {
+            date: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+            xpEarned: 45,
+            description: 'Unlocked Algebra practice streak bonus.',
+          },
+        ]
+      : [];
   }
 
   return rows.map((row) => ({
@@ -593,22 +638,24 @@ const buildXpTimeline = (rows: XpEventRow[]): XPTimelinePoint[] => {
 
 const buildAssessmentsSummary = (rows: StudentAssignmentRow[]): AssessmentSummary[] => {
   if (!rows.length) {
-    return [
-      {
-        id: 'upcoming-1',
-        title: 'Math Benchmark Checkpoint',
-        scheduledAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-        status: 'scheduled',
-        masteryTarget: 75,
-      },
-      {
-        id: 'upcoming-2',
-        title: 'Science Concept Review',
-        scheduledAt: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(),
-        status: 'scheduled',
-        masteryTarget: 70,
-      },
-    ];
+    return allowSyntheticDashboardData
+      ? [
+          {
+            id: 'upcoming-1',
+            title: 'Math Benchmark Checkpoint',
+            scheduledAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+            status: 'scheduled',
+            masteryTarget: 75,
+          },
+          {
+            id: 'upcoming-2',
+            title: 'Science Concept Review',
+            scheduledAt: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(),
+            status: 'scheduled',
+            masteryTarget: 70,
+          },
+        ]
+      : [];
   }
 
   return rows.map((row) => {
@@ -826,7 +873,11 @@ export const fetchStudentDashboardData = async (
   student: Student,
 ): Promise<StudentDashboardData> => {
   try {
-    const [{ data: profileRow, error: profileError }, { data: activityRows, error: activityError }] =
+    const [
+      { data: profileRow, error: profileError },
+      { data: activityRows, error: activityError },
+      { data: assessmentAttemptRow, error: assessmentAttemptError },
+    ] =
       await Promise.all([
         supabase
           .from('student_profiles')
@@ -838,6 +889,13 @@ export const fetchStudentDashboardData = async (
           .select('*')
           .eq('student_id', student.id)
           .gte('activity_date', new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString()),
+        supabase
+          .from('student_assessment_attempts')
+          .select('status, completed_at')
+          .eq('student_id', student.id)
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ]);
 
     if (profileError) {
@@ -850,6 +908,14 @@ export const fetchStudentDashboardData = async (
       if (profileRow.learning_path) {
         student.learningPath = profileRow.learning_path as Student['learningPath'];
       }
+    }
+
+    const assessmentAttempt = (assessmentAttemptRow as AssessmentAttemptRow | null) ?? null;
+    if (assessmentAttemptError) {
+      console.error('[Dashboard] Failed to check assessment attempt status', assessmentAttemptError);
+    }
+    if (assessmentAttempt) {
+      student.assessmentCompleted = assessmentAttempt.status === 'completed';
     }
 
     const activity = activityError ? fallbackStudentActivity() : mapDailyActivity(activityRows ?? []);
