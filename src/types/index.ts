@@ -84,6 +84,22 @@ export interface Answer {
   bankQuestionId?: number;
 }
 
+export interface LessonPracticeOption {
+  id: number;
+  text: string;
+  isCorrect: boolean;
+  feedback?: string | null;
+}
+
+export interface LessonPracticeQuestion {
+  id: number;
+  prompt: string;
+  type: Question['type'] | 'essay';
+  explanation?: string | null;
+  options: LessonPracticeOption[];
+  skillIds: number[];
+}
+
 export interface NotificationPreferences {
   weeklyReports: boolean;
   missedSessions: boolean;

@@ -60,6 +60,7 @@ type SessionState = {
   startedAt: string | null;
   attempts: number;
   completed: boolean;
+  eventOrder: number | null;
 };
 
 const defaultSessionState: SessionState = {
@@ -67,6 +68,7 @@ const defaultSessionState: SessionState = {
   startedAt: null,
   attempts: 0,
   completed: false,
+  eventOrder: null,
 };
 
 const computeStatus = (
@@ -194,6 +196,7 @@ export const useLessonProgress = (
           startedAt: session.startedAt,
           attempts: session.attempts,
           completed: snapshot.status === 'completed' || derivedStatus === 'completed',
+          eventOrder: 1,
         };
       } catch (error) {
         if (!cancelled) {
@@ -334,18 +337,30 @@ export const useLessonProgress = (
     [completedItems],
   );
 
+  const allocateEventOrder = useCallback((): number | null => {
+    if (!sessionRef.current.sessionId) {
+      return null;
+    }
+    const nextOrder = (sessionRef.current.eventOrder ?? 1) + 1;
+    sessionRef.current = { ...sessionRef.current, eventOrder: nextOrder };
+    return nextOrder;
+  }, []);
+
   return {
     completedItems,
     completedCount,
     totalCount,
     progress,
     status,
+    sessionId: sessionRef.current.sessionId,
+    attempts: sessionRef.current.attempts,
     isLoading: !initialised,
     isSaving: saving,
     toggleItem,
     markComplete,
     reset,
     isComplete,
+    allocateEventOrder,
   };
 };
 
