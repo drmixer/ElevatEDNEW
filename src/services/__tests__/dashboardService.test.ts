@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildParentDownloadableReport } from '../dashboardService';
+import { buildParentDownloadableReport, calculateChildGoalProgress } from '../dashboardService';
 import type { Parent, ParentChildSnapshot, ParentWeeklyReport } from '../../types';
 
 const mockParent: Parent = {
@@ -56,5 +56,39 @@ describe('buildParentDownloadableReport', () => {
     expect(report).toContain('Avery');
     expect(report.toLowerCase()).toContain('lessons');
     expect(report).toContain('Recommended Next Steps');
+  });
+});
+
+describe('calculateChildGoalProgress', () => {
+  it('blends lesson, practice, and mastery targets into a single progress indicator', () => {
+    const progress = calculateChildGoalProgress({
+      ...mockChildren[0],
+      lessonsCompletedWeek: 3,
+      practiceMinutesWeek: 100,
+      goals: {
+        weeklyLessons: 6,
+        practiceMinutes: 200,
+        masteryTargets: { math: 80 },
+      },
+      masteryBySubject: [
+        { subject: 'math', mastery: 60, trend: 'steady', goal: 80 },
+      ],
+    });
+
+    expect(progress).toBeCloseTo(58.3, 1);
+  });
+
+  it('returns undefined when no goal anchors are provided', () => {
+    const progress = calculateChildGoalProgress({
+      ...mockChildren[0],
+      goals: {
+        weeklyLessons: null,
+        practiceMinutes: null,
+        masteryTargets: {},
+      },
+      masteryBySubject: [{ subject: 'math', mastery: 72, trend: 'steady' }],
+    });
+
+    expect(progress).toBeUndefined();
   });
 });
