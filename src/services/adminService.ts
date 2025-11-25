@@ -1,4 +1,5 @@
 import { authenticatedFetch, handleApiResponse } from '../lib/apiClient';
+import supabase from '../lib/supabaseClient';
 
 export type AdminSummary = {
   id: string;
@@ -60,4 +61,22 @@ export const demoteAdmin = async (
     role: string;
     remainingAdmins?: number | null;
   }>(response);
+};
+
+export const logAdminAuditEvent = async (
+  adminId: string,
+  eventType: string,
+  metadata?: Record<string, unknown>,
+): Promise<void> => {
+  if (!adminId) return;
+  const { error } = await supabase.from('admin_audit_logs').insert({
+    admin_id: adminId,
+    event_type: eventType,
+    metadata: metadata ?? {},
+  });
+
+  if (error) {
+    // Avoid blocking the UI if audit logging fails; surface in console only.
+    console.warn('[Admin] Failed to record audit event', error);
+  }
 };

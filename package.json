@@ -23,6 +23,7 @@
     "audit:completeness": "tsx scripts/audit_completeness.ts",
     "seed:lessons": "tsx scripts/seed_lessons.ts",
     "seed:module-assessments": "tsx scripts/seed_module_assessments.ts",
+    "import:worker": "tsx server/importWorker.ts",
     "api:dev": "tsx server/index.ts"
   },
   "dependencies": {

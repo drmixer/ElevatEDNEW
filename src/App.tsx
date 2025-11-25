@@ -14,6 +14,9 @@ const CatalogPage = lazy(() => import('./pages/CatalogPage'));
 const ModulePage = lazy(() => import('./pages/ModulePage'));
 const AdminImportPage = lazy(() => import('./pages/AdminImportPage'));
 const LessonPlayerPage = lazy(() => import('./pages/LessonPlayerPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const AccountSettingsPage = lazy(() => import('./pages/AccountSettingsPage'));
 
 const DashboardContainer: React.FC<{ children: React.ReactElement; transitionKey: string }> = ({
   children,
@@ -134,6 +137,16 @@ const AppContent: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute allowedRoles={['student', 'parent', 'admin']}>
+                <AccountSettingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/legal/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/legal/terms" element={<TermsPage />} />
           <Route path="*" element={<Navigate to={roleHome(user?.role ?? null)} replace />} />
         </Routes>
       </Suspense>

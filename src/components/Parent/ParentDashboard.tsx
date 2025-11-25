@@ -34,7 +34,14 @@ import {
   Bar,
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
-import type { AssignmentStatus, Parent, ParentChildSnapshot, Subject } from '../../types';
+import type {
+  AssignmentStatus,
+  Parent,
+  ParentChildSnapshot,
+  PrivacyRequestStatus,
+  PrivacyRequestType,
+  Subject,
+} from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
 import { assignModuleToStudents, fetchChildAssignments } from '../../services/assignmentService';
@@ -51,6 +58,7 @@ import {
   openBillingPortal,
   startCheckoutSession,
 } from '../../services/billingService';
+import { listPrivacyRequests, submitPrivacyRequest } from '../../services/privacyService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -85,6 +93,11 @@ const ParentDashboard: React.FC = () => {
   const [guardianError, setGuardianError] = useState<string | null>(null);
   const [billingMessage, setBillingMessage] = useState<string | null>(null);
   const [billingError, setBillingError] = useState<string | null>(null);
+  const [privacyRequestType, setPrivacyRequestType] = useState<PrivacyRequestType>('export');
+  const [privacyReason, setPrivacyReason] = useState('');
+  const [privacyContact, setPrivacyContact] = useState(parent?.email ?? '');
+  const [privacyMessage, setPrivacyMessage] = useState<string | null>(null);
+  const [privacyError, setPrivacyError] = useState<string | null>(null);
 
   const {
     data: dashboard,
@@ -114,6 +127,10 @@ const ParentDashboard: React.FC = () => {
       setSelectedChildId(dashboard.children[0].id);
     }
   }, [dashboard, selectedChildId, parent?.id]);
+
+  useEffect(() => {
+    setPrivacyContact(parent?.email ?? '');
+  }, [parent?.email]);
 
   const currentChild: ParentChildSnapshot | null = useMemo(() => {
     if (!dashboard?.children.length) return null;
@@ -165,8 +182,6 @@ const ParentDashboard: React.FC = () => {
 
   const showSkeleton = isLoading && !dashboard;
 
-  const guardianLinks = guardianLinksQuery.data ?? [];
-
   const computePercent = (current: number, target?: number | null) => {
     if (!target || target <= 0) return null;
     return Math.min(Math.round((current / target) * 100), 200);
@@ -187,6 +202,11 @@ const ParentDashboard: React.FC = () => {
     (dashboard?.children ?? []).forEach((child) => map.set(child.id, child.name));
     return map;
   }, [dashboard]);
+
+  const childPrivacyRequests = useMemo(() => {
+    if (!currentChild) return privacyRequests;
+    return privacyRequests.filter((request) => request.studentId === currentChild.id);
+  }, [privacyRequests, currentChild]);
 
   const childProgress = currentChild?.progressSummary;
   const completedLessons = childProgress?.completed ?? currentChild?.lessonsCompletedWeek ?? 0;
@@ -234,6 +254,15 @@ const ParentDashboard: React.FC = () => {
     enabled: Boolean(parent),
     staleTime: 1000 * 60 * 2,
   });
+  const guardianLinks = guardianLinksQuery.data ?? [];
+
+  const privacyRequestsQuery = useQuery({
+    queryKey: ['privacy-requests', parent?.id],
+    queryFn: () => listPrivacyRequests(),
+    enabled: Boolean(parent),
+    staleTime: 1000 * 60 * 2,
+  });
+  const privacyRequests = privacyRequestsQuery.data ?? [];
 
   const {
     data: childAssignments,
@@ -377,6 +406,48 @@ const ParentDashboard: React.FC = () => {
     },
   });
 
+  const privacyRequestMutation = useMutation({
+    mutationFn: submitPrivacyRequest,
+    onSuccess: (request) => {
+      setPrivacyMessage(
+        'Request submitted. Our team will verify guardian status and follow up via email.',
+      );
+      setPrivacyError(null);
+      setPrivacyReason('');
+      privacyRequestsQuery.refetch();
+      trackEvent('privacy_request_submitted', {
+        parentId: parent?.id,
+        studentId: request.studentId,
+        type: request.requestType,
+      });
+    },
+    onError: (error) => {
+      console.error('[Privacy] Failed to submit data rights request', error);
+      setPrivacyMessage(null);
+      setPrivacyError(
+        error instanceof Error ? error.message : 'Unable to send request right now. Try again.',
+      );
+    },
+  });
+
+  const handlePrivacyRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!parent || !currentChild) {
+      setPrivacyError('Select a learner to submit a request.');
+      return;
+    }
+    setPrivacyMessage(null);
+    setPrivacyError(null);
+
+    await privacyRequestMutation.mutateAsync({
+      requesterId: parent.id,
+      studentId: currentChild.id,
+      requestType: privacyRequestType,
+      contactEmail: privacyContact || parent.email,
+      reason: privacyReason,
+    });
+  };
+
   const handleAssignModule = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!parent || !selectedChildId || !selectedModuleId || assignModuleMutation.isLoading) {
@@ -437,6 +508,12 @@ const ParentDashboard: React.FC = () => {
     completed: 'bg-emerald-100 text-emerald-700',
     in_progress: 'bg-amber-100 text-amber-700',
     not_started: 'bg-slate-200 text-slate-600',
+  };
+  const privacyStatusStyles: Record<PrivacyRequestStatus, string> = {
+    pending: 'bg-amber-100 text-amber-700',
+    in_review: 'bg-blue-100 text-blue-700',
+    fulfilled: 'bg-emerald-100 text-emerald-700',
+    rejected: 'bg-rose-100 text-rose-700',
   };
 
   const billingSummary = billingSummaryQuery.data;
@@ -1324,6 +1401,146 @@ const ParentDashboard: React.FC = () => {
                 ) : (
                   <p className="text-sm text-gray-600">
                     No linked learners yet. Ask your student to share their family link code.
+                  </p>
+                )}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.52 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-3">
+                  <ShieldCheck className="h-5 w-5 text-brand-blue" />
+                  <h3 className="text-xl font-bold text-gray-900">Data rights & privacy</h3>
+                </div>
+                <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 uppercase tracking-wide">
+                  COPPA / FERPA
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 mb-4">
+                Request an export or deletion of your learner&apos;s data. We verify guardian links before fulfilling
+                requests and confirm via email.
+              </p>
+              <form onSubmit={handlePrivacyRequest} className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                      Request type
+                    </label>
+                    <select
+                      value={privacyRequestType}
+                      onChange={(event) =>
+                        setPrivacyRequestType(event.target.value as PrivacyRequestType)
+                      }
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    >
+                      <option value="export">Export learner data</option>
+                      <option value="erasure">Delete learner data</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                      Contact email
+                    </label>
+                    <input
+                      type="email"
+                      value={privacyContact}
+                      onChange={(event) => setPrivacyContact(event.target.value)}
+                      placeholder={parent.email}
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                    Reason (optional)
+                  </label>
+                  <textarea
+                    value={privacyReason}
+                    onChange={(event) => setPrivacyReason(event.target.value)}
+                    rows={2}
+                    placeholder="Tell us what you need and how we should scope the export or deletion."
+                    className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  />
+                </div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <button
+                    type="submit"
+                    disabled={privacyRequestMutation.isLoading || !currentChild}
+                    className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                  >
+                    {privacyRequestMutation.isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Sending…
+                      </>
+                    ) : (
+                      'Send request'
+                    )}
+                  </button>
+                  <p className="text-xs text-gray-500">
+                    We aim to acknowledge within 7 days. Admin follow-up may be required to complete the request.
+                  </p>
+                </div>
+              </form>
+              {privacyMessage && (
+                <p className="mt-3 text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                  {privacyMessage}
+                </p>
+              )}
+              {privacyError && (
+                <p className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                  {privacyError}
+                </p>
+              )}
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-semibold text-gray-900">
+                    Recent requests{currentChild ? ` • ${currentChild.name}` : ''}
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => privacyRequestsQuery.refetch()}
+                    className="p-1 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                    disabled={privacyRequestsQuery.isFetching}
+                  >
+                    <RefreshCw className={`h-4 w-4 ${privacyRequestsQuery.isFetching ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+                {privacyRequestsQuery.isFetching ? (
+                  <SkeletonCard className="h-14" />
+                ) : childPrivacyRequests.length ? (
+                  <ul className="space-y-2">
+                    {childPrivacyRequests.map((request) => (
+                      <li
+                        key={request.id}
+                        className="flex items-start justify-between rounded-lg border border-slate-200 px-3 py-2"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900 capitalize">
+                            {request.requestType === 'export' ? 'Export request' : 'Deletion request'}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(request.createdAt).toLocaleDateString()} •{' '}
+                            {childNameMap.get(request.studentId) ?? 'Learner'}
+                          </p>
+                        </div>
+                        <span
+                          className={`text-[11px] px-2 py-1 rounded-full capitalize ${privacyStatusStyles[request.status]}`}
+                        >
+                          {request.status.replace('_', ' ')}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-gray-600">
+                    No requests yet. Submit an export or deletion request to begin the process.
                   </p>
                 )}
               </div>

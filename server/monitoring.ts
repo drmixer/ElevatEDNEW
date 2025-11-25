@@ -1,9 +1,68 @@
-import type { IncomingMessage } from 'node:http';
+import type { IncomingHttpHeaders, IncomingMessage } from 'node:http';
 import process from 'node:process';
 
 import * as Sentry from '@sentry/node';
 
 let monitoringEnabled = false;
+
+const scrubContext = (context?: Record<string, unknown>): Record<string, unknown> | undefined => {
+  if (!context) {
+    return undefined;
+  }
+  const sanitized: Record<string, unknown> = {};
+  Object.entries(context).forEach(([key, value]) => {
+    const lowerKey = key.toLowerCase();
+    if (['email', 'name', 'full_name', 'content', 'body'].includes(lowerKey)) {
+      sanitized[key] = '[redacted]';
+      return;
+    }
+    if (typeof value === 'string' && value.includes('@')) {
+      sanitized[key] = '[redacted]';
+      return;
+    }
+    sanitized[key] = value;
+  });
+  return sanitized;
+};
+
+const sanitizeHeaders = (headers: IncomingHttpHeaders): Record<string, string> => {
+  const safeHeaders: Record<string, string> = {};
+  (['user-agent', 'x-request-id'] as const).forEach((header) => {
+    const value = headers[header];
+    if (typeof value === 'string' && value.length) {
+      safeHeaders[header] = value;
+    }
+  });
+  return safeHeaders;
+};
+
+const scrubServerEvent = (event: Sentry.Event): Sentry.Event | null => {
+  const sanitized: Sentry.Event = { ...event };
+
+  if (sanitized.user) {
+    sanitized.user = sanitized.user.id ? { id: sanitized.user.id } : undefined;
+  }
+
+  if (sanitized.request) {
+    sanitized.request = {
+      url: sanitized.request.url,
+      method: sanitized.request.method,
+    };
+  }
+
+  if (sanitized.extra) {
+    sanitized.extra = scrubContext(sanitized.extra);
+  }
+
+  if (sanitized.breadcrumbs) {
+    sanitized.breadcrumbs = sanitized.breadcrumbs.slice(-50).map((crumb) => ({
+      ...crumb,
+      data: scrubContext(crumb.data as Record<string, unknown> | undefined),
+    }));
+  }
+
+  return sanitized;
+};
 
 const parseSampleRate = (value: string | undefined, fallback: number): number => {
   if (!value) {
@@ -27,6 +86,8 @@ export const initServerMonitoring = (): boolean => {
     dsn,
     environment: process.env.SENTRY_ENVIRONMENT ?? process.env.NODE_ENV ?? 'development',
     tracesSampleRate: parseSampleRate(process.env.SENTRY_TRACES_SAMPLE_RATE, 0),
+    sendDefaultPii: false,
+    beforeSend: (event) => scrubServerEvent(event),
   });
 
   process.on('unhandledRejection', (reason) => {
@@ -46,7 +107,7 @@ export const captureServerException = (error: unknown, context?: Record<string, 
     return;
   }
   Sentry.captureException(error, {
-    extra: context,
+    extra: scrubContext(context),
   });
 };
 
@@ -60,7 +121,7 @@ export const captureServerMessage = (
   }
   Sentry.captureMessage(message, {
     level,
-    extra: context,
+    extra: scrubContext(context),
   });
 };
 
@@ -76,7 +137,7 @@ export const withRequestScope = async <T>(
     scope.setContext('request', {
       method: req.method,
       url: req.url,
-      headers: req.headers,
+      headers: sanitizeHeaders(req.headers ?? {}),
     });
 
     try {

@@ -15,41 +15,31 @@ import { processImportRun } from './providerPipeline.js';
 const POLL_INTERVAL_MS = 5_000;
 
 const claimPendingRun = async (client: SupabaseClient): Promise<ImportRunRow | null> => {
-  const { data, error } = await client
-    .from('import_runs')
-    .select()
-    .eq('status', 'pending')
-    .order('started_at', { ascending: true })
-    .limit(1);
+  const { data, error } = await client.rpc('claim_pending_import_run');
 
   if (error) {
-    throw new Error(`Failed to scan for pending import runs: ${error.message}`);
+    throw new Error(`Failed to claim pending import runs: ${error.message}`);
   }
 
-  if (!data || data.length === 0) {
+  if (!data) {
     return null;
   }
 
-  const run = coerceImportRunRow(data[0] as Record<string, unknown>);
+  const run = coerceImportRunRow(data as Record<string, unknown>);
   const claimedLogs = appendLogEntry(run, buildLogEntry('info', 'Worker claimed import run.'));
 
   const { data: updated, error: updateError } = await client
     .from('import_runs')
-    .update({ status: 'running', logs: claimedLogs, started_at: nowIso() })
+    .update({ logs: claimedLogs })
     .eq('id', run.id)
-    .eq('status', 'pending')
     .select()
     .maybeSingle();
 
   if (updateError) {
-    throw new Error(`Failed to mark import run ${run.id} as running: ${updateError.message}`);
+    throw new Error(`Failed to append claim log for import run ${run.id}: ${updateError.message}`);
   }
 
-  if (!updated) {
-    return null;
-  }
-
-  return coerceImportRunRow(updated as Record<string, unknown>);
+  return updated ? coerceImportRunRow(updated as Record<string, unknown>) : run;
 };
 
 export type ImportQueueOptions = {

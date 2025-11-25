@@ -33,6 +33,7 @@ import {
   fetchAdminStudents,
 } from '../../services/assignmentService';
 import { fetchCatalogModules } from '../../services/catalogService';
+import { logAdminAuditEvent } from '../../services/adminService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -48,6 +49,7 @@ const AdminDashboard: React.FC = () => {
   const [dueDate, setDueDate] = useState('');
   const [assignMessage, setAssignMessage] = useState<string | null>(null);
   const [assignError, setAssignError] = useState<string | null>(null);
+  const [auditLogged, setAuditLogged] = useState(false);
 
   const {
     data: dashboard,
@@ -120,6 +122,27 @@ const AdminDashboard: React.FC = () => {
     }
     return students.filter((student) => student.grade === selectedGrade).length;
   }, [students, selectedGrade]);
+
+  useEffect(() => {
+    if (!admin || auditLogged || studentsQuery.isLoading || assignmentsQuery.isLoading) {
+      return;
+    }
+    logAdminAuditEvent(admin.id, 'view_student_data', {
+      surface: 'admin_dashboard',
+      student_count: students.length,
+      assignments_preview: assignmentsOverview.length,
+    }).catch(() => {
+      // Logging failure should not block UI.
+    });
+    setAuditLogged(true);
+  }, [
+    admin,
+    auditLogged,
+    students.length,
+    assignmentsOverview.length,
+    studentsQuery.isLoading,
+    assignmentsQuery.isLoading,
+  ]);
 
   const assignModuleMutation = useMutation({
     mutationFn: assignModuleToStudents,

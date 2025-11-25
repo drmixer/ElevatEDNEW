@@ -41,6 +41,7 @@ import {
   type AuthenticatedUser,
 } from './auth.js';
 import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
+import { elapsedMs, recordApiTiming, startTimer } from './instrumentation.js';
 import { normalizeImportLimits } from './importSafety.js';
 import {
   createCheckoutSessionForPlan,
@@ -55,6 +56,10 @@ import {
   grantBypassSubscription,
 } from './billing.js';
 import { NotificationScheduler, notifyAssignmentCreated } from './notifications.js';
+
+type ApiServerOptions = {
+  startImportQueue?: boolean;
+};
 
 const API_VERSION = 'v1';
 const API_PREFIX = '/api';
@@ -660,11 +665,22 @@ export const createApiHandler = (context: ApiContext) => {
 
     const method = (req.method ?? 'GET').toUpperCase();
     const path = parsedPath.path;
+    const startTime = startTimer();
+    let metricsRecorded = false;
+    const recordMetrics = () => {
+      if (metricsRecorded) {
+        return;
+      }
+      metricsRecorded = true;
+      recordApiTiming(method, path, res.statusCode ?? 0, elapsedMs(startTime));
+    };
     const token = extractBearerToken(req);
     const supabase = createRlsClient(token ?? undefined);
 
-    const sendErrorResponse = (status: number, message: string, code: string, details?: unknown) =>
+    const sendErrorResponse = (status: number, message: string, code: string, details?: unknown) => {
       sendError(res, status, message, code, API_VERSION, details);
+      recordMetrics();
+    };
 
     const handleRoute = async (
       handler: () => Promise<void>,
@@ -675,6 +691,7 @@ export const createApiHandler = (context: ApiContext) => {
       } catch (error) {
         handleApiError(res, error, API_VERSION, { route: path, method, ...errorContext });
       }
+      recordMetrics();
       return true;
     };
 
@@ -1167,18 +1184,26 @@ export const createApiHandler = (context: ApiContext) => {
   };
 };
 
-export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787', 10)) => {
+export const startApiServer = (
+  port = Number.parseInt(process.env.PORT ?? '8787', 10),
+  options: ApiServerOptions = {},
+) => {
   const serviceSupabase = createServiceRoleClient();
   const handler = createApiHandler({ serviceSupabase });
-  const queue = new ImportQueue(serviceSupabase, {
-    logger: (entry) => {
-      const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
-      console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
-      if (entry.level === 'error') {
-      captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, 'error');
-      }
-    },
-  });
+  const shouldStartQueue =
+    options.startImportQueue ??
+    (process.env.ENABLE_INLINE_IMPORT_QUEUE === 'true' || process.env.NODE_ENV !== 'production');
+  const queue = shouldStartQueue
+    ? new ImportQueue(serviceSupabase, {
+        logger: (entry) => {
+          const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
+          console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
+          if (entry.level === 'error') {
+            captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, 'error');
+          }
+        },
+      })
+    : null;
   const notifier = new NotificationScheduler(serviceSupabase, { pollIntervalMs: 2 * 60 * 1000 });
 
   const server = createServer(async (req, res) => {
@@ -1193,7 +1218,11 @@ export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787'
     console.log(`ElevatED API listening on http://localhost:${port}`);
   });
 
-  queue.start();
+  if (queue) {
+    queue.start();
+  } else {
+    console.log('[import-queue] Inline import worker disabled. Run server/importWorker.ts separately for ingestion.');
+  }
   notifier.start();
 
   return {
@@ -1201,7 +1230,7 @@ export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787'
     queue,
     notifier,
     close: () => {
-      queue.stop();
+      queue?.stop();
       notifier.stop();
       server.close();
     },
