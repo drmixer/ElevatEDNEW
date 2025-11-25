@@ -105,7 +105,7 @@ const AppContent: React.FC = () => {
           <Route path="/lesson/:id" element={<LessonPlayerPage />} />
           <Route
             path="/admin/import"
-            element={user ? <AdminImportPage /> : <Navigate to="/" replace />}
+            element={user?.role === 'admin' ? <AdminImportPage /> : <Navigate to="/" replace />}
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -94,6 +94,13 @@ Queued Import Workflow
 - Supabase Edge functions can reuse the same processor to run imports on a schedule or via webhooks.
 - Set `SKIP_IMPORT_URL_CHECKS=true` to bypass external link checks when running in an offline environment.
 
+Admin Access & Safety
+---------------------
+
+- `/admin/import` and all `/api/import/*` endpoints are restricted to authenticated admins (users with `role = 'admin'` and an `admin_profiles` row). The frontend now forwards the Supabase session token via `Authorization: Bearer <access_token>`.
+- The import console ships with an admin roster panel to promote/demote users (updates `user_role` and `admin_profiles` records) and to review stored permissions.
+- Imports support a dry-run toggle plus optional per-run module/asset limits; exceeding a limit fails the run before any writes occur while still returning URL QA warnings.
+
 Standards & Assessments Integration
 -----------------------------------
 

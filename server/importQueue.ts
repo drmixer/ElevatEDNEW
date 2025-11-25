@@ -157,6 +157,8 @@ export class ImportQueue {
 
     await log('info', `Starting import for provider ${providerId}.`, {
       importRunId: run.id,
+      dryRun: run.input?.dryRun === true,
+      limits: run.input?.limits ?? undefined,
     });
 
     try {

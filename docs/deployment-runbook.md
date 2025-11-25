@@ -5,6 +5,7 @@
 - Configure Sentry environment variables (frontend `VITE_SENTRY_*`, backend `SENTRY_*`) in the deployment target.
 - Ensure the latest content source files under `data/` and `mappings/` are present and reviewed.
 - Verify Supabase log drain or webhook endpoint is reachable (see section 5).
+- Confirm at least two admin profiles are present via `/admin/import` (Admin Roster) to avoid lockout; promote/demote as needed.
 
 ### 2. Database Migration Order
 ```bash
