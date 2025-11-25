@@ -91,9 +91,13 @@ const Header: React.FC = () => {
             
             <NotificationCenter user={user} />
             
-            <button className="p-2 text-gray-600 hover:text-brand-blue transition-colors rounded-lg hover:bg-gray-100">
+            <Link
+              to="/settings"
+              className="p-2 text-gray-600 hover:text-brand-blue transition-colors rounded-lg hover:bg-gray-100"
+              aria-label="Account and privacy settings"
+            >
               <Settings className="h-5 w-5" />
-            </button>
+            </Link>
             
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-brand-violet rounded-full flex items-center justify-center">

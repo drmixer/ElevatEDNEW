@@ -33,10 +33,10 @@ const Footer: React.FC = () => {
     {
       title: 'Legal',
       links: [
-        { name: 'Privacy Policy', href: '#privacy' },
-        { name: 'Terms of Service', href: '#terms' },
-        { name: 'Cookie Policy', href: '#cookies' },
-        { name: 'COPPA Compliance', href: '#coppa' }
+        { name: 'Privacy Policy', href: '/legal/privacy' },
+        { name: 'Terms of Service', href: '/legal/terms' },
+        { name: 'Cookie Policy', href: '/legal/privacy#cookies' },
+        { name: 'COPPA Compliance', href: '/legal/privacy#coppa' }
       ]
     }
   ];

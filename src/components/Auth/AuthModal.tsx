@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Eye, EyeOff, Mail, Lock, User, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import type { UserRole } from '../../types';
 
@@ -253,6 +254,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   {loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}
                 </button>
               </form>
+
+              <p className="mt-3 text-xs text-gray-500 text-center">
+                By continuing you agree to our{' '}
+                <Link to="/legal/terms" className="text-brand-blue hover:text-brand-teal font-semibold">
+                  Terms
+                </Link>{' '}
+                and{' '}
+                <Link to="/legal/privacy" className="text-brand-blue hover:text-brand-teal font-semibold">
+                  Privacy Policy
+                </Link>
+                . Students under 13 should sign up with a parent/guardian present.
+              </p>
 
               <div className="mt-6 text-center">
                 <button

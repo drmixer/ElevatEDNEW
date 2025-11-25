@@ -490,6 +490,23 @@ export interface ParentActivityPoint {
   practiceMinutes: number;
 }
 
+export type PrivacyRequestType = 'export' | 'erasure';
+export type PrivacyRequestStatus = 'pending' | 'in_review' | 'fulfilled' | 'rejected';
+
+export interface PrivacyRequest {
+  id: number;
+  requesterId: string;
+  studentId: string;
+  requestType: PrivacyRequestType;
+  status: PrivacyRequestStatus;
+  contactEmail?: string | null;
+  reason?: string | null;
+  adminNotes?: string | null;
+  handledBy?: string | null;
+  resolvedAt?: string | null;
+  createdAt: string;
+}
+
 export interface AdminDashboardMetrics {
   totalStudents: number;
   totalParents: number;

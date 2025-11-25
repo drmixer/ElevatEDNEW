@@ -85,6 +85,10 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
     { name: 'Pricing', href: '#pricing' },
     { name: 'FAQ', href: '#faq' },
   ];
+  const legalLinks = [
+    { name: 'Privacy', href: '/legal/privacy' },
+    { name: 'Terms', href: '/legal/terms' },
+  ];
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -192,6 +196,18 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                   <span className="absolute -bottom-2 left-0 block h-0.5 w-0 rounded-full bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent transition-all duration-300 group-hover:w-full" />
                 </motion.button>
               ))}
+              {legalLinks.map((link) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm font-medium text-brand-dark/60 hover:text-brand-blue transition-colors"
+                  initial={{ opacity: 0, y: -12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
             </div>
 
             <motion.div
@@ -254,6 +270,17 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
               >
                 Get Started Free
               </button>
+              <div className="mt-4 flex flex-wrap gap-4">
+                {legalLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-sm font-semibold text-brand-blue hover:text-brand-teal"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
