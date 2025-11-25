@@ -368,6 +368,8 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       missedSessions: parentDetails?.notifications?.missedSessions ?? true,
       lowScores: parentDetails?.notifications?.lowScores ?? true,
       majorProgress: parentDetails?.notifications?.majorProgress ?? true,
+      assignments: parentDetails?.notifications?.assignments ?? true,
+      streaks: parentDetails?.notifications?.streaks ?? true,
     },
     weeklyReport,
   };

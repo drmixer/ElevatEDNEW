@@ -54,6 +54,7 @@ import {
   isBillingSandboxMode,
   grantBypassSubscription,
 } from './billing.js';
+import { NotificationScheduler, notifyAssignmentCreated } from './notifications.js';
 
 const API_VERSION = 'v1';
 const API_PREFIX = '/api';
@@ -236,6 +237,19 @@ const createModuleAssignment = async (
     await supabase.rpc('refresh_dashboard_rollups');
   } catch (rollupError) {
     console.warn('[api] Unable to refresh rollups after assignment', rollupError);
+  }
+
+  try {
+    await notifyAssignmentCreated(serviceSupabase ?? supabase, {
+      assignmentId: assignmentRow.id as number,
+      assignmentTitle,
+      moduleTitle: moduleRow.title as string,
+      dueAt: payload.dueAt ?? null,
+      studentIds,
+      senderId: payload.creatorId,
+    });
+  } catch (notificationError) {
+    console.warn('[api] Failed to enqueue assignment notifications', notificationError);
   }
 
   return {
@@ -1161,10 +1175,11 @@ export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787'
       const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
       console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
       if (entry.level === 'error') {
-        captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, 'error');
+      captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, 'error');
       }
     },
   });
+  const notifier = new NotificationScheduler(serviceSupabase, { pollIntervalMs: 2 * 60 * 1000 });
 
   const server = createServer(async (req, res) => {
     const handled = await withRequestScope(req, () => handler(req, res));
@@ -1179,12 +1194,15 @@ export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787'
   });
 
   queue.start();
+  notifier.start();
 
   return {
     server,
     queue,
+    notifier,
     close: () => {
       queue.stop();
+      notifier.stop();
       server.close();
     },
   };
