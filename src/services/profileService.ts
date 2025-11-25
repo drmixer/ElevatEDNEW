@@ -58,6 +58,9 @@ type ParentDashboardChildRow = {
   practice_minutes_week: number | null;
   xp_earned_week: number | null;
   mastery_breakdown: unknown;
+  weekly_lessons_target?: number | null;
+  practice_minutes_target?: number | null;
+  mastery_targets?: Record<string, unknown> | null;
 };
 
 const normalizeStudentProfile = (
@@ -144,6 +147,25 @@ const toSubjectKey = (value: unknown): Subject | null => {
     return normalized as Subject;
   }
   return null;
+};
+
+const castMasteryTargets = (input: unknown): Partial<Record<Subject, number>> => {
+  if (!input || typeof input !== 'object') return {};
+  const entries = Object.entries(input as Record<string, unknown>);
+  const result: Partial<Record<Subject, number>> = {};
+  entries.forEach(([rawSubject, value]) => {
+    const subject = toSubjectKey(rawSubject);
+    if (!subject) return;
+    if (typeof value === 'number') {
+      result[subject] = value;
+    } else if (typeof value === 'string') {
+      const parsed = Number.parseFloat(value);
+      if (Number.isFinite(parsed)) {
+        result[subject] = parsed;
+      }
+    }
+  });
+  return result;
 };
 
 export const fetchUserProfile = async (userId: string): Promise<User> => {
@@ -263,6 +285,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
         const masteryBreakdown = Array.isArray(child.mastery_breakdown)
           ? (child.mastery_breakdown as SubjectMastery[])
           : [];
+        const masteryTargets = castMasteryTargets(child.mastery_targets);
 
         const masteryBySubject = masteryBreakdown
           .map((entry) => {
@@ -272,7 +295,8 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
             }
             const mastery = (entry as SubjectMastery).mastery ?? 0;
             const cohortAverage = (entry as SubjectMastery).cohortAverage;
-            const goal = (entry as SubjectMastery).goal;
+            const goalOverride = masteryTargets[subject];
+            const goal = goalOverride ?? (entry as SubjectMastery).goal;
             const delta =
               cohortAverage !== undefined
                 ? Math.round((mastery - cohortAverage) * 100) / 100
@@ -310,6 +334,11 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
           xpEarnedWeek: child.xp_earned_week ?? 0,
           masteryBySubject,
           recentActivity: [],
+          goals: {
+            weeklyLessons: child.weekly_lessons_target ?? null,
+            practiceMinutes: child.practice_minutes_target ?? null,
+            masteryTargets: Object.keys(masteryTargets).length ? masteryTargets : null,
+          },
           goalProgress: averageFromBreakdown(child.mastery_breakdown, 'goal'),
           cohortComparison: averageFromBreakdown(child.mastery_breakdown, 'cohortAverage'),
         } satisfies ParentChildSnapshot;

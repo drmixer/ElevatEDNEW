@@ -214,6 +214,7 @@ export interface ParentChildSnapshot {
   xpEarnedWeek: number;
   masteryBySubject: SubjectMastery[];
   recentActivity: ParentChildActivity[];
+  goals?: ChildGoalTargets;
   goalProgress?: number;
   cohortComparison?: number;
   progressSummary?: {
@@ -224,6 +225,25 @@ export interface ParentChildSnapshot {
 }
 
 export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';
+
+export type GuardianLinkStatus = 'pending' | 'active' | 'revoked';
+
+export type ChildGoalTargets = {
+  weeklyLessons?: number | null;
+  practiceMinutes?: number | null;
+  masteryTargets?: Partial<Record<Subject, number>> | null;
+};
+
+export type GuardianChildLink = {
+  id: number;
+  studentId: string;
+  parentId: string;
+  relationship?: string | null;
+  status: GuardianLinkStatus;
+  invitedAt?: string | null;
+  acceptedAt?: string | null;
+  metadata?: Record<string, unknown> | null;
+};
 
 export interface AssignmentSummary {
   id: number;

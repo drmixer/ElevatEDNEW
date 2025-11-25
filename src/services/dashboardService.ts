@@ -110,6 +110,26 @@ type LessonMetadataEntry = {
   masteryPct: number | null;
 };
 
+type ParentDashboardChildRow = {
+  parent_id: string;
+  student_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  grade: number | null;
+  level: number | null;
+  xp: number | null;
+  streak_days: number | null;
+  strengths: string[] | null;
+  weaknesses: string[] | null;
+  lessons_completed_week: number | null;
+  practice_minutes_week: number | null;
+  xp_earned_week: number | null;
+  mastery_breakdown: unknown;
+  weekly_lessons_target?: number | null;
+  practice_minutes_target?: number | null;
+  mastery_targets?: Record<string, unknown> | null;
+};
+
 const SUBJECT_LABELS: Record<Subject, string> = {
   math: 'Mathematics',
   english: 'English Language Arts',
@@ -310,10 +330,91 @@ const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => {
           occurredAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
         },
       ],
+      goals: {
+        weeklyLessons: 6,
+        practiceMinutes: 240,
+        masteryTargets: {
+          math: 80,
+          english: 85,
+        },
+      },
       goalProgress: 78,
       cohortComparison: 64,
     },
   ];
+};
+
+const normalizeMasteryTargets = (input: unknown): Partial<Record<Subject, number>> => {
+  if (!input || typeof input !== 'object') return {};
+  const result: Partial<Record<Subject, number>> = {};
+  Object.entries(input as Record<string, unknown>).forEach(([rawSubject, value]) => {
+    const subject = normalizeSubject(rawSubject);
+    if (!subject) return;
+    if (typeof value === 'number') {
+      result[subject] = value;
+    } else if (typeof value === 'string') {
+      const parsed = Number.parseFloat(value);
+      if (Number.isFinite(parsed)) {
+        result[subject] = parsed;
+      }
+    }
+  });
+  return result;
+};
+
+const mapParentDashboardChildRow = (row: ParentDashboardChildRow): ParentChildSnapshot => {
+  const masteryTargets = normalizeMasteryTargets(row.mastery_targets);
+  const masteryBreakdown = Array.isArray(row.mastery_breakdown)
+    ? (row.mastery_breakdown as SubjectMastery[])
+    : [];
+
+  const masteryBySubject = masteryBreakdown
+    .map((entry) => {
+      const subject = normalizeSubject((entry as SubjectMastery).subject ?? null);
+      if (!subject) return null;
+      const mastery = (entry as SubjectMastery).mastery ?? 0;
+      const cohortAverage = (entry as SubjectMastery).cohortAverage;
+      const goal = masteryTargets[subject] ?? (entry as SubjectMastery).goal;
+      const delta =
+        cohortAverage !== undefined
+          ? Math.round((mastery - cohortAverage) * 100) / 100
+          : undefined;
+      const trend: SubjectMastery['trend'] =
+        delta === undefined ? 'steady' : delta > 0.5 ? 'up' : delta < -0.5 ? 'down' : 'steady';
+
+      return {
+        subject,
+        mastery,
+        trend,
+        cohortAverage,
+        goal,
+        delta,
+      } satisfies SubjectMastery;
+    })
+    .filter((entry): entry is SubjectMastery => Boolean(entry));
+
+  return {
+    id: row.student_id,
+    name: [row.first_name, row.last_name].filter(Boolean).join(' ') || 'Student',
+    grade: row.grade ?? 1,
+    level: row.level ?? 1,
+    xp: row.xp ?? 0,
+    streakDays: row.streak_days ?? 0,
+    strengths: row.strengths ?? [],
+    focusAreas: row.weaknesses ?? [],
+    lessonsCompletedWeek: row.lessons_completed_week ?? 0,
+    practiceMinutesWeek: row.practice_minutes_week ?? 0,
+    xpEarnedWeek: row.xp_earned_week ?? 0,
+    masteryBySubject: masteryBySubject.length ? masteryBySubject : fallbackStudentMastery(),
+    recentActivity: [],
+    goals: {
+      weeklyLessons: row.weekly_lessons_target ?? null,
+      practiceMinutes: row.practice_minutes_target ?? null,
+      masteryTargets: Object.keys(masteryTargets).length ? masteryTargets : null,
+    },
+    goalProgress: undefined,
+    cohortComparison: undefined,
+  };
 };
 
 const fallbackParentAlerts = (): ParentAlert[] => {
@@ -790,6 +891,34 @@ const deriveParentAlerts = (children: ParentChildSnapshot[]): ParentAlert[] => {
   return alerts;
 };
 
+const calculateChildGoalProgress = (child: ParentChildSnapshot): number | undefined => {
+  const segments: number[] = [];
+
+  if (child.goals?.weeklyLessons && child.goals.weeklyLessons > 0) {
+    segments.push(Math.min((child.lessonsCompletedWeek / child.goals.weeklyLessons) * 100, 200));
+  }
+
+  if (child.goals?.practiceMinutes && child.goals.practiceMinutes > 0) {
+    segments.push(
+      Math.min((child.practiceMinutesWeek / child.goals.practiceMinutes) * 100, 200),
+    );
+  }
+
+  child.masteryBySubject.forEach((entry) => {
+    const target = child.goals?.masteryTargets?.[entry.subject] ?? entry.goal;
+    if (target && target > 0) {
+      segments.push(Math.min((entry.mastery / target) * 100, 200));
+    }
+  });
+
+  if (!segments.length) return undefined;
+
+  const average = segments.reduce((acc, value) => acc + value, 0) / segments.length;
+  return Math.round(average * 10) / 10;
+};
+
+export { calculateChildGoalProgress };
+
 export const buildParentDownloadableReport = (
   parent: Parent,
   report: ParentWeeklyReport,
@@ -1149,7 +1278,18 @@ export const fetchParentDashboardData = async (
       console.warn('[Dashboard] Rollup refresh failed', rollupError);
     }
 
-    const childIds = parent.children.map((child) => child.id);
+    const { data: childRows, error: childrenError } = await supabase
+      .from('parent_dashboard_children')
+      .select('*')
+      .eq('parent_id', parent.id);
+
+    if (childrenError) {
+      console.error('[Dashboard] Parent children fetch failed', childrenError);
+    }
+
+    const liveChildren = (childRows as ParentDashboardChildRow[])?.map(mapParentDashboardChildRow) ?? [];
+    const baseChildren = liveChildren.length ? liveChildren : parent.children;
+    const childIds = baseChildren.map((child) => child.id);
 
     const [
       { data: masteryRows, error: masteryError },
@@ -1192,15 +1332,13 @@ export const fetchParentDashboardData = async (
             data: [] as Array<{ student_id: string; status: 'not_started' | 'in_progress' | 'completed' }>,
             error: null,
           }),
-      parent.weeklyReport
-        ? Promise.resolve({ data: null, error: null })
-        : supabase
-            .from('parent_weekly_reports')
-            .select('*')
-            .eq('parent_id', parent.id)
-            .order('week_start', { ascending: false })
-            .limit(1)
-            .maybeSingle(),
+      supabase
+        .from('parent_weekly_reports')
+        .select('*')
+        .eq('parent_id', parent.id)
+        .order('week_start', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
     ]);
 
     if (masteryError) console.error('[Dashboard] Parent mastery fetch failed', masteryError);
@@ -1252,7 +1390,7 @@ export const fetchParentDashboardData = async (
       xpByChild.set(row.student_id, list);
     });
 
-    const enrichedChildren: ParentChildSnapshot[] = parent.children.map((child) => {
+    const enrichedChildren: ParentChildSnapshot[] = baseChildren.map((child) => {
       const masteryFromLive = childMasteryById.get(child.id) ?? [];
       const viewMastery = child.masteryBySubject?.length ? child.masteryBySubject : fallbackStudentMastery();
       const mastery = viewMastery.map((entry) => {
@@ -1274,14 +1412,6 @@ export const fetchParentDashboardData = async (
         occurredAt: formatIsoDate(event.created_at),
       }));
 
-      const goalProgress =
-        mastery.reduce((acc, item) => {
-          if (item.goal && item.goal > 0) {
-            return acc + Math.min((item.mastery / item.goal) * 100, 150);
-          }
-          return acc + item.mastery;
-        }, 0) / (mastery.length || 1);
-
       const cohortComparison =
         mastery.reduce((acc, item) => {
           if (item.cohortAverage !== undefined) {
@@ -1290,10 +1420,9 @@ export const fetchParentDashboardData = async (
           return acc;
         }, 0) / (mastery.length || 1);
 
-      return {
+      const snapshot: ParentChildSnapshot = {
         ...child,
         masteryBySubject: mastery,
-        goalProgress: Math.round(goalProgress * 10) / 10,
         cohortComparison: Math.round(cohortComparison * 10) / 10,
         recentActivity: recentActivity.length ? recentActivity : child.recentActivity,
         progressSummary: progressSummaryByStudent.get(child.id) ?? {
@@ -1302,6 +1431,13 @@ export const fetchParentDashboardData = async (
           notStarted: 0,
         },
       };
+
+      const goalProgress = calculateChildGoalProgress(snapshot);
+      if (goalProgress !== undefined) {
+        snapshot.goalProgress = goalProgress;
+      }
+
+      return snapshot;
     });
 
     const parentActivitySeries = aggregateParentActivity(
@@ -1309,11 +1445,10 @@ export const fetchParentDashboardData = async (
       childIds,
     );
 
-    const alerts = deriveParentAlerts(enrichedChildren.length ? enrichedChildren : parent.children);
+    const alerts = deriveParentAlerts(enrichedChildren.length ? enrichedChildren : baseChildren);
 
     const weeklyReport: ParentWeeklyReport =
-      parent.weeklyReport ??
-      (weeklyReportRow
+      weeklyReportRow
         ? {
             weekStart: weeklyReportRow.week_start,
             summary: weeklyReportRow.summary ?? '',
@@ -1321,17 +1456,21 @@ export const fetchParentDashboardData = async (
             recommendations: toStringArray(weeklyReportRow.recommendations),
             aiGenerated: weeklyReportRow.ai_generated ?? undefined,
           }
-        : fallbackParentWeeklyReport(parent.name));
+        : parent.weeklyReport ?? fallbackParentWeeklyReport(parent.name);
 
     const downloadableReport = buildParentDownloadableReport(
       parent,
       weeklyReport,
-      enrichedChildren.length ? enrichedChildren : parent.children,
+      enrichedChildren.length ? enrichedChildren : baseChildren,
     );
 
     return {
       parent,
-      children: enrichedChildren.length ? enrichedChildren : fallbackParentChildren(parent.name),
+      children: enrichedChildren.length
+        ? enrichedChildren
+        : baseChildren.length
+        ? baseChildren
+        : fallbackParentChildren(parent.name),
       alerts,
       activitySeries: parentActivitySeries,
       weeklyReport,
