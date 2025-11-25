@@ -10,6 +10,9 @@ import {
   Download,
   Loader2,
   Link2,
+  CreditCard,
+  ArrowUpRight,
+  DollarSign,
   RefreshCw,
   ShieldCheck,
   Sparkles,
@@ -42,6 +45,12 @@ import {
   revokeGuardianLink,
   upsertChildGoals,
 } from '../../services/parentService';
+import {
+  fetchBillingPlans,
+  fetchBillingSummary,
+  openBillingPortal,
+  startCheckoutSession,
+} from '../../services/billingService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -74,6 +83,8 @@ const ParentDashboard: React.FC = () => {
   const [guardianRelationship, setGuardianRelationship] = useState('');
   const [guardianMessage, setGuardianMessage] = useState<string | null>(null);
   const [guardianError, setGuardianError] = useState<string | null>(null);
+  const [billingMessage, setBillingMessage] = useState<string | null>(null);
+  const [billingError, setBillingError] = useState<string | null>(null);
 
   const {
     data: dashboard,
@@ -204,6 +215,19 @@ const ParentDashboard: React.FC = () => {
     }
   }, [moduleOptions, selectedModuleId]);
 
+  const billingPlansQuery = useQuery({
+    queryKey: ['billing-plans'],
+    queryFn: fetchBillingPlans,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const billingSummaryQuery = useQuery({
+    queryKey: ['billing-summary', parent?.id],
+    queryFn: () => fetchBillingSummary(),
+    enabled: Boolean(parent),
+    staleTime: 1000 * 60 * 2,
+  });
+
   const guardianLinksQuery = useQuery({
     queryKey: ['guardian-links', parent?.id],
     queryFn: () => fetchGuardianLinks(parent?.id ?? ''),
@@ -325,6 +349,34 @@ const ParentDashboard: React.FC = () => {
     },
   });
 
+  const checkoutMutation = useMutation({
+    mutationFn: (planSlug: string) => startCheckoutSession(planSlug),
+    onSuccess: (url, planSlug) => {
+      setBillingError(null);
+      setBillingMessage(`Redirecting to secure checkout for ${planSlug}...`);
+      window.location.href = url;
+    },
+    onError: (error) => {
+      console.error('[Billing] checkout failed', error);
+      setBillingMessage(null);
+      setBillingError(error instanceof Error ? error.message : 'Unable to start checkout.');
+    },
+  });
+
+  const portalMutation = useMutation({
+    mutationFn: () => openBillingPortal(),
+    onSuccess: (url) => {
+      setBillingError(null);
+      setBillingMessage('Opening billing portal...');
+      window.location.href = url;
+    },
+    onError: (error) => {
+      console.error('[Billing] portal failed', error);
+      setBillingMessage(null);
+      setBillingError(error instanceof Error ? error.message : 'Unable to open billing portal.');
+    },
+  });
+
   const handleAssignModule = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!parent || !selectedChildId || !selectedModuleId || assignModuleMutation.isLoading) {
@@ -386,6 +438,24 @@ const ParentDashboard: React.FC = () => {
     in_progress: 'bg-amber-100 text-amber-700',
     not_started: 'bg-slate-200 text-slate-600',
   };
+
+  const billingSummary = billingSummaryQuery.data;
+  const availablePlans = useMemo(
+    () => (billingPlansQuery.data ?? []).slice().sort((a, b) => a.priceCents - b.priceCents),
+    [billingPlansQuery.data],
+  );
+  const currentPlanSlug = billingSummary?.subscription?.plan?.slug ?? 'family-free';
+  const currentPlanPrice = billingSummary?.subscription?.plan?.priceCents ?? 0;
+  const nextPlan = availablePlans.find((plan) => plan.slug !== currentPlanSlug && plan.priceCents > currentPlanPrice);
+  const billingLoading = billingSummaryQuery.isLoading || billingPlansQuery.isLoading;
+  const billingErrored = billingSummaryQuery.isError || billingPlansQuery.isError;
+
+  const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
+  const currentPeriodEnd = billingSummary?.subscription?.currentPeriodEnd
+    ? new Date(billingSummary.subscription.currentPeriodEnd).toLocaleDateString()
+    : null;
+  const subscriptionMetadata = (billingSummary?.subscription?.metadata ?? {}) as Record<string, unknown>;
+  const canManageBilling = Boolean((subscriptionMetadata?.stripe_customer_id as string | undefined) ?? null);
 
   if (!parent) {
     return null;
@@ -463,6 +533,99 @@ const ParentDashboard: React.FC = () => {
             </div>
           </div>
         )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mb-8"
+        >
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="flex items-start space-x-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-brand-violet flex items-center justify-center text-white">
+                <CreditCard className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Plan</p>
+                <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                  <span>{billingSummary?.subscription?.plan?.name ?? 'Family Free'}</span>
+                  <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                    {billingSummary?.subscription?.status ?? 'trialing'}
+                  </span>
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {billingSummary?.subscription?.plan
+                    ? `${formatPrice(billingSummary.subscription.plan.priceCents)} / month`
+                    : 'Start your family plan to unlock more lessons and AI access.'}
+                </p>
+                <div className="mt-2 text-sm text-gray-600">
+                  {billingMessage && <p className="text-emerald-700">{billingMessage}</p>}
+                  {billingError && <p className="text-rose-600">{billingError}</p>}
+                  {billingErrored && !billingError && (
+                    <p className="text-rose-600">Billing data is temporarily unavailable.</p>
+                  )}
+                  {currentPeriodEnd && (
+                    <p className="text-gray-600">Renews on {currentPeriodEnd}</p>
+                  )}
+                  {billingSummary?.subscription?.trialEndsAt && (
+                    <p className="text-gray-600">
+                      Trial ends {new Date(billingSummary.subscription.trialEndsAt).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-3">
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => portalMutation.mutate()}
+                  disabled={!canManageBilling || portalMutation.isLoading || billingLoading}
+                  className="px-4 py-2 rounded-xl border border-gray-200 hover:border-gray-300 text-sm font-medium flex items-center space-x-2 disabled:opacity-60"
+                >
+                  <ShieldCheck className="h-4 w-4 text-brand-blue" />
+                  <span>{portalMutation.isLoading ? 'Opening...' : 'Manage billing'}</span>
+                </button>
+
+                <button
+                  onClick={() =>
+                    checkoutMutation.mutate(nextPlan?.slug ?? currentPlanSlug)
+                  }
+                  disabled={checkoutMutation.isLoading || billingLoading}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-blue to-brand-violet text-white text-sm font-semibold flex items-center space-x-2 shadow-sm hover:shadow-md disabled:opacity-70"
+                >
+                  <ArrowUpRight className="h-4 w-4" />
+                  <span>
+                    {checkoutMutation.isLoading
+                      ? 'Redirecting...'
+                      : nextPlan
+                        ? `Upgrade to ${nextPlan.name}`
+                        : 'Change plan'}
+                  </span>
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 text-xs text-gray-600">
+                {availablePlans.map((plan) => (
+                  <span
+                    key={plan.slug}
+                    className={`px-3 py-1 rounded-full border ${
+                      plan.slug === currentPlanSlug ? 'border-brand-blue text-brand-blue' : 'border-gray-200'
+                    } ${plan.slug === currentPlanSlug ? 'cursor-default' : 'cursor-pointer'}`}
+                    onClick={() => {
+                      if (plan.slug !== currentPlanSlug) {
+                        checkoutMutation.mutate(plan.slug);
+                      }
+                    }}
+                    role="button"
+                    aria-label={`Switch to ${plan.name}`}
+                  >
+                    {plan.name} · {formatPrice(plan.priceCents)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

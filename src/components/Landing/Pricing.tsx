@@ -9,22 +9,22 @@ interface PricingProps {
 const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
   const plans = [
     {
-      name: 'Free Plan',
+      name: 'Family Free',
       subtitle: 'Core Learning',
       price: '$0',
       period: 'month',
-      students: '1 student',
+      students: '1 learner',
       description: 'Everything you need to start',
       icon: BookOpen,
       valueHook: 'Start building daily learning habits for free.',
       features: [
-        'Access to all 4 core subjects (K-12)',
-        'Adaptive diagnostic assessment',
-        'Personalized daily lesson plan (1 lesson per subject/day)',
-        'Short mixed quizzes with instant feedback',
+        'Access to core K-12 subjects',
+        'Guided diagnostic assessment',
+        'Up to 10 lessons per month',
+        'Mixed quizzes with instant feedback',
         'Basic parent dashboard (recent activity & quiz score)',
-        'Basic gamification: XP, streaks, up to 3 badges',
-        'AI chatbot: 3 questions per week'
+        'Basic gamification: XP, streaks, badges',
+        'AI chatbot: quick tips (limited access)'
       ],
       perfectFor: 'Exploring the platform and building daily learning habits',
       buttonText: 'Start Free',
@@ -33,12 +33,12 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
       gradient: 'from-gray-500 to-gray-600'
     },
     {
-      name: 'Pro Plan',
+      name: 'Family Plus',
       subtitle: 'Accelerated Growth',
-      price: '$9.99',
+      price: '$29.99',
       period: 'month per student',
-      yearlyPrice: '$99/year (save 17%)',
-      students: 'Per student',
+      yearlyPrice: '$299/year (save 17%)',
+      students: 'Up to 3 learners',
       description: 'Includes everything in Free, plus',
       icon: Brain,
       valueHook: 'Personalized K-12 tutoring with weekly progress reports.',
@@ -59,12 +59,12 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
       gradient: 'from-teal-500 to-blue-600'
     },
     {
-      name: 'Family Plan',
+      name: 'Family Premium',
       subtitle: 'Learning Together',
-      price: '$9.99',
-      period: 'month for first student',
-      additionalPrice: '+ $5/month each additional student',
-      yearlyPrice: '$99/year + $49/year per extra student',
+      price: '$49.99',
+      period: 'month for the family',
+      additionalPrice: 'Includes up to 5 learners',
+      yearlyPrice: '$499/year (save 17%)',
       students: 'Multiple children',
       description: 'Everything in Pro, plus',
       icon: Users,
@@ -88,14 +88,14 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
     {
       label: 'Monthly price',
       free: '$0',
-      pro: '$9.99 (per student)',
-      family: '$9.99 first student + $5 each additional'
+      pro: '$29.99',
+      family: '$49.99'
     },
     {
       label: 'Annual price',
       free: '$0',
-      pro: '$99',
-      family: '$99 first student + $49 each additional'
+      pro: '$299',
+      family: '$499'
     },
     {
       label: 'Adaptive lessons',

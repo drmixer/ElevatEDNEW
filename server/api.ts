@@ -42,10 +42,24 @@ import {
 } from './auth.js';
 import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
 import { normalizeImportLimits } from './importSafety.js';
+import {
+  createCheckoutSessionForPlan,
+  createPortalSession,
+  fetchBillingSummary,
+  getPlanLimits,
+  getStripeClient,
+  getStripeWebhookSecret,
+  handleStripeEvent,
+  isBillingBypassed,
+  isBillingSandboxMode,
+  grantBypassSubscription,
+} from './billing.js';
 
 const API_VERSION = 'v1';
 const API_PREFIX = '/api';
 const VERSIONED_PREFIX = `${API_PREFIX}/${API_VERSION}`;
+const DEFAULT_PREMIUM_PLAN_SLUG = process.env.DEFAULT_PREMIUM_PLAN_SLUG ?? 'family-premium';
+const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:5173';
 
 class HttpError extends Error {
   status: number;
@@ -332,6 +346,14 @@ const readValidatedJson = async <T>(req: IncomingMessage): Promise<T> => {
   }
 };
 
+const readRawBody = async (req: IncomingMessage): Promise<Buffer> => {
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+};
+
 const firstQueryValue = (value: string | string[] | undefined): string | undefined =>
   Array.isArray(value) ? value[0] : value;
 
@@ -463,6 +485,24 @@ const parsePositiveIntParam = (value: string | undefined, field: string): number
     throw new HttpError(400, `${field} must be a positive integer.`, 'invalid_parameter');
   }
   return parsed;
+};
+
+const resolveParentPlanSlug = async (supabase: SupabaseClient, parentId: string): Promise<string | null> => {
+  if (await isBillingBypassed(supabase, parentId)) {
+    return DEFAULT_PREMIUM_PLAN_SLUG;
+  }
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('plans ( slug )')
+    .eq('parent_id', parentId)
+    .maybeSingle();
+
+  if (error) {
+    console.warn('[billing] Failed to resolve parent plan', error);
+    return null;
+  }
+  const plan = data?.plans as { slug?: string } | undefined;
+  return plan?.slug ?? null;
 };
 
 const validateAssignmentPayload = (body: unknown): Omit<AssignModulePayload, 'creatorId' | 'creatorRole'> => {
@@ -629,6 +669,14 @@ export const createApiHandler = (context: ApiContext) => {
         const body = await readValidatedJson<TutorRequestBody>(req);
         const actor = token ? await resolveUserFromToken(supabase, token) : null;
 
+        if (process.env.ENFORCE_PLAN_LIMITS === 'true' && actor?.role === 'parent') {
+          const planSlug = (await resolveParentPlanSlug(supabase, actor.id)) ?? 'family-free';
+          const limits = getPlanLimits(planSlug);
+          if (!limits.aiAccess) {
+            throw new HttpError(402, 'Upgrade required to access the AI assistant.', 'payment_required');
+          }
+        }
+
         try {
           const result = await handleTutorRequest(body, supabase, {
             userId: actor?.id ?? null,
@@ -656,6 +704,146 @@ export const createApiHandler = (context: ApiContext) => {
         const lastScore = parseOptionalNumber(url.query.lastScore, 'lastScore');
         const { recommendations } = await getRecommendations(supabase, moduleId, lastScore);
         sendJson(res, 200, { recommendations }, API_VERSION);
+      });
+    }
+
+    if (method === 'GET' && path === '/billing/plans') {
+      return handleRoute(async () => {
+        const { data, error } = await serviceSupabase
+          .from('plans')
+          .select('slug, name, price_cents, metadata, status')
+          .eq('status', 'active');
+
+        if (error) {
+          throw new HttpError(500, `Unable to load plans: ${error.message}`, 'plan_load_failed');
+        }
+
+        sendJson(
+          res,
+          200,
+          {
+            plans: (data ?? []).map((plan) => ({
+              slug: plan.slug,
+              name: plan.name,
+              priceCents: plan.price_cents,
+              metadata: plan.metadata ?? {},
+              status: plan.status,
+            })),
+          },
+          API_VERSION,
+        );
+      });
+    }
+
+    if (method === 'GET' && path === '/billing/summary') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const summary = await fetchBillingSummary(supabase, actor.id, serviceSupabase);
+        sendJson(res, 200, summary, API_VERSION);
+      });
+    }
+
+    if (method === 'POST' && path === '/billing/checkout') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const stripe = getStripeClient();
+        if (!stripe) {
+          throw new HttpError(501, 'Billing is not configured.', 'billing_disabled');
+        }
+
+        const body = await readValidatedJson<{ planSlug?: string; successUrl?: string; cancelUrl?: string }>(req);
+        if (!body.planSlug) {
+          throw new HttpError(400, 'planSlug is required.', 'invalid_payload');
+        }
+
+        const bypassed = await isBillingBypassed(supabase, actor.id);
+        if (bypassed || isBillingSandboxMode()) {
+          await grantBypassSubscription(
+            serviceSupabase,
+            actor.id,
+            body.planSlug,
+            isBillingSandboxMode() ? 'sandbox' : 'bypass',
+          );
+          sendJson(res, 200, { checkoutUrl: body.successUrl ?? `${APP_BASE_URL}/parent` }, API_VERSION);
+          return;
+        }
+
+        const url = await createCheckoutSessionForPlan(serviceSupabase, stripe, actor.id, body.planSlug, {
+          successUrl: body.successUrl,
+          cancelUrl: body.cancelUrl,
+        });
+
+        sendJson(res, 200, { checkoutUrl: url }, API_VERSION);
+      });
+    }
+
+    if (method === 'POST' && path === '/billing/portal') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const bypassed = await isBillingBypassed(supabase, actor.id);
+        if (bypassed || isBillingSandboxMode()) {
+          const body = await readValidatedJson<{ returnUrl?: string }>(req);
+          const portalUrl = body.returnUrl ?? `${APP_BASE_URL}/parent`;
+          sendJson(res, 200, { portalUrl }, API_VERSION);
+          return;
+        }
+
+        const stripe = getStripeClient();
+        if (!stripe) {
+          throw new HttpError(501, 'Billing is not configured.', 'billing_disabled');
+        }
+
+        const { data: subscription } = await serviceSupabase
+          .from('subscriptions')
+          .select('metadata')
+          .eq('parent_id', actor.id)
+          .maybeSingle();
+
+        const customerId =
+          (subscription?.metadata as { stripe_customer_id?: string } | null)?.stripe_customer_id ?? null;
+        if (!customerId) {
+          throw new HttpError(400, 'No billing customer found. Start a checkout first.', 'missing_customer');
+        }
+
+        const body = await readValidatedJson<{ returnUrl?: string }>(req);
+        const portalUrl = await createPortalSession(stripe, customerId, body.returnUrl);
+        sendJson(res, 200, { portalUrl }, API_VERSION);
+      });
+    }
+
+    if (method === 'POST' && path === '/billing/webhook') {
+      return handleRoute(async () => {
+        if (isBillingSandboxMode()) {
+          sendJson(res, 200, { received: true, sandbox: true }, API_VERSION);
+          return;
+        }
+        const stripe = getStripeClient();
+        const webhookSecret = getStripeWebhookSecret();
+        if (!stripe || !webhookSecret) {
+          throw new HttpError(501, 'Billing is not configured.', 'billing_disabled');
+        }
+
+        const rawBody = await readRawBody(req);
+        const signature = req.headers['stripe-signature'];
+        if (!signature || typeof signature !== 'string') {
+          throw new HttpError(400, 'Missing Stripe signature header.', 'invalid_signature');
+        }
+
+        let event;
+        try {
+          event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+        } catch (error) {
+          throw new HttpError(400, error instanceof Error ? error.message : 'Invalid signature.', 'invalid_signature');
+        }
+
+        await handleStripeEvent(serviceSupabase, stripe, event);
+        sendJson(res, 200, { received: true }, API_VERSION);
       });
     }
 

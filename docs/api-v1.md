@@ -22,3 +22,10 @@ Base path: `/api/v1`. All responses are JSON. Errors follow `{ "error": { "messa
 - `GET /import/runs/:id` – Single import run.
 - `POST /import/runs` – Queue a run: `{ provider, mapping?, dataset?, input?, fileName?, notes?, dryRun?, limits? }`.
 - `POST /import/openstax`, `/import/gutenberg`, `/import/federal` – Mapping payloads for their respective importers.
+
+## Billing endpoints
+- `GET /billing/plans` – Returns active plans and metadata (uses service role).
+- `GET /billing/summary` – Auth: parent. Returns current subscription, payments, and available plans for the parent.
+- `POST /billing/checkout` – Auth: parent. Body `{ planSlug, successUrl?, cancelUrl? }`; returns `{ checkoutUrl }` for Stripe Checkout.
+- `POST /billing/portal` – Auth: parent. Body `{ returnUrl? }`; returns `{ portalUrl }` for the Stripe billing portal.
+- `POST /billing/webhook` – Stripe webhook endpoint (expects signature); syncs subscriptions, payments, and logs billing events.
