@@ -22,6 +22,7 @@ import {
   importOpenStaxMapping,
   type OpenStaxMapping,
 } from '../scripts/import_openstax.js';
+import { handleTutorRequest, type TutorRequestBody } from './ai.js';
 import { getRecommendations } from './recommendations.js';
 import { getLessonDetail, getModuleAssessment, getModuleDetail, listModules, type ModuleFilters } from './modules.js';
 import { ImportQueue } from './importQueue.js';
@@ -41,6 +42,23 @@ import {
 } from './auth.js';
 import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
 import { normalizeImportLimits } from './importSafety.js';
+
+const API_VERSION = 'v1';
+const API_PREFIX = '/api';
+const VERSIONED_PREFIX = `${API_PREFIX}/${API_VERSION}`;
+
+class HttpError extends Error {
+  status: number;
+  code: string;
+  details?: unknown;
+
+  constructor(status: number, message: string, code = 'bad_request', details?: unknown) {
+    super(message);
+    this.status = status;
+    this.code = code;
+    this.details = details;
+  }
+}
 
 type ApiContext = {
   serviceSupabase: SupabaseClient;
@@ -226,7 +244,11 @@ const ensureGuardianAccess = async (
     studentIds.map(async (studentId) => {
       const { data, error } = await supabase.rpc('is_guardian', { target_student: studentId });
       if (error) {
-        throw new Error(`Unable to verify guardian status for learner ${studentId}: ${error.message}`);
+        throw new HttpError(
+          500,
+          `Unable to verify guardian status for learner ${studentId}: ${error.message}`,
+          'guardian_lookup_failed',
+        );
       }
       return data === true;
     }),
@@ -234,14 +256,57 @@ const ensureGuardianAccess = async (
 
   const unauthorized = studentIds.filter((_id, index) => results[index] !== true);
   if (unauthorized.length > 0) {
-    throw new Error('You can only assign modules to learners you manage.');
+    throw new HttpError(403, 'You can only assign modules to learners you manage.', 'forbidden');
   }
 };
 
-const sendJson = (res: ServerResponse, status: number, payload: unknown) => {
+const sendJson = (res: ServerResponse, status: number, payload: unknown, version?: string) => {
   res.statusCode = status;
+  if (version) {
+    res.setHeader('X-API-Version', version);
+  }
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(payload));
+};
+
+const sendError = (
+  res: ServerResponse,
+  status: number,
+  message: string,
+  code: string,
+  version?: string,
+  details?: unknown,
+) => {
+  sendJson(
+    res,
+    status,
+    {
+      error: {
+        message,
+        code,
+        ...(details !== undefined ? { details } : {}),
+      },
+    },
+    version,
+  );
+};
+
+const parseApiPath = (
+  pathname: string | undefined | null,
+): { path: string; version: string } | null => {
+  if (!pathname?.startsWith(API_PREFIX)) {
+    return null;
+  }
+
+  if (pathname.startsWith(VERSIONED_PREFIX)) {
+    const remainder = pathname.slice(VERSIONED_PREFIX.length) || '/';
+    const path = remainder.startsWith('/') ? remainder : `/${remainder}`;
+    return { path, version: API_VERSION };
+  }
+
+  const remainder = pathname.slice(API_PREFIX.length) || '/';
+  const path = remainder.startsWith('/') ? remainder : `/${remainder}`;
+  return { path, version: 'unversioned' };
 };
 
 const readJsonBody = async <T>(req: IncomingMessage): Promise<T> => {
@@ -259,62 +324,201 @@ const readJsonBody = async <T>(req: IncomingMessage): Promise<T> => {
   return JSON.parse(body) as T;
 };
 
-const parseNumber = (value: string | undefined | string[]): number | null => {
-  if (!value) return null;
-  const raw = Array.isArray(value) ? value[0] : value;
-  const parsed = Number.parseFloat(raw);
-  return Number.isFinite(parsed) ? parsed : null;
+const readValidatedJson = async <T>(req: IncomingMessage): Promise<T> => {
+  try {
+    return await readJsonBody<T>(req);
+  } catch {
+    throw new HttpError(400, 'Invalid JSON payload.', 'invalid_json');
+  }
 };
 
-const createFilters = (query: Record<string, string | string[] | undefined>): ModuleFilters => {
-  const toStringValue = (key: string) => {
-    const value = query[key];
+const firstQueryValue = (value: string | string[] | undefined): string | undefined =>
+  Array.isArray(value) ? value[0] : value;
+
+const parseOptionalPositiveInt = (
+  value: string | string[] | undefined,
+  field: string,
+  options?: { min?: number; max?: number; defaultValue?: number },
+): number | undefined => {
+  const raw = firstQueryValue(value);
+  if (!raw?.trim()) {
+    return options?.defaultValue;
+  }
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new HttpError(400, `${field} must be a positive integer.`, 'invalid_parameter');
+  }
+  const min = options?.min ?? 1;
+  const max = options?.max;
+  if (parsed < min) {
+    throw new HttpError(400, `${field} must be at least ${min}.`, 'invalid_parameter');
+  }
+  if (max && parsed > max) {
+    throw new HttpError(400, `${field} must be at most ${max}.`, 'invalid_parameter');
+  }
+  return parsed;
+};
+
+const parseOptionalNumber = (value: string | string[] | undefined, field: string): number | undefined => {
+  const raw = firstQueryValue(value);
+  if (raw === undefined) return undefined;
+  const parsed = Number.parseFloat(raw);
+  if (!Number.isFinite(parsed)) {
+    throw new HttpError(400, `${field} must be numeric.`, 'invalid_parameter');
+  }
+  return parsed;
+};
+
+const parseOptionalBoolean = (
+  value: string | string[] | undefined,
+  field: string,
+): boolean | undefined => {
+  const raw = firstQueryValue(value);
+  if (!raw) return undefined;
+  const normalized = raw.toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) {
+    return true;
+  }
+  if (['0', 'false', 'no', 'off'].includes(normalized)) {
+    return false;
+  }
+  throw new HttpError(400, `${field} must be true or false.`, 'invalid_parameter');
+};
+
+const parseCsvList = (value: string | string[] | undefined, field: string): string[] | undefined => {
+  const raw = firstQueryValue(value);
+  if (!raw) return undefined;
+  const items = raw
+    .split(',')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+  if (items.length === 0) {
+    throw new HttpError(400, `${field} cannot be empty.`, 'invalid_parameter');
+  }
+  return items;
+};
+
+const resolveClientIp = (req: IncomingMessage): string | null => {
+  const forwarded = req.headers['x-forwarded-for'] || req.headers['X-Forwarded-For'];
+  if (typeof forwarded === 'string' && forwarded.length) {
+    const first = forwarded.split(',')[0]?.trim();
+    if (first) return first;
+  }
+  const remote = req.socket?.remoteAddress;
+  if (typeof remote === 'string' && remote.length) {
+    return remote;
+  }
+  return null;
+};
+
+const parseModuleFilters = (query: Record<string, string | string[] | undefined>): ModuleFilters => {
+  const toOptionalString = (key: string) => {
+    const value = firstQueryValue(query[key]);
     if (!value) return undefined;
-    return Array.isArray(value) ? value[0] : value;
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
   };
 
-  const toNumber = (key: string) => {
-    const value = query[key];
-    if (!value) return undefined;
-    const parsed = parseNumber(value);
-    return parsed != null ? Math.max(1, Math.floor(parsed)) : undefined;
-  };
+  const allowedSorts = new Set([
+    'featured',
+    'title-asc',
+    'title-desc',
+    'grade-asc',
+    'grade-desc',
+  ]);
 
-  const toBoolean = (key: string) => {
-    const value = toStringValue(key);
-    if (!value) return undefined;
-    const normalized = value.toLowerCase();
-    if (['1', 'true', 'yes', 'on'].includes(normalized)) {
-      return true;
+  const sortRaw = toOptionalString('sort');
+  let sort: ModuleFilters['sort'] | undefined;
+  if (sortRaw) {
+    if (!allowedSorts.has(sortRaw as ModuleFilters['sort'])) {
+      throw new HttpError(
+        400,
+        'sort must be one of featured, title-asc, title-desc, grade-asc, or grade-desc.',
+        'invalid_parameter',
+      );
     }
-    if (['0', 'false', 'no', 'off'].includes(normalized)) {
-      return false;
-    }
-    return undefined;
-  };
+    sort = sortRaw as ModuleFilters['sort'];
+  }
 
-  const toStringArray = (key: string) => {
-    const value = query[key];
-    if (!value) return undefined;
-    const raw = Array.isArray(value) ? value.join(',') : value;
-    const items = raw
-      .split(',')
-      .map((item) => item.trim())
-      .filter((item) => item.length > 0);
-    return items.length > 0 ? items : undefined;
-  };
+  const page = parseOptionalPositiveInt(query.page, 'page', { min: 1 }) ?? 1;
+  const pageSize = parseOptionalPositiveInt(query.pageSize, 'pageSize', { min: 1, max: 50 }) ?? 12;
 
   return {
-    subject: toStringValue('subject'),
-    grade: toStringValue('grade'),
-    strand: toStringValue('strand'),
-    topic: toStringValue('topic'),
-    standards: toStringArray('standards'),
-    openTrack: toBoolean('openTrack'),
-    sort: toStringValue('sort'),
-    search: toStringValue('search'),
-    page: toNumber('page'),
-    pageSize: toNumber('pageSize'),
+    subject: toOptionalString('subject'),
+    grade: toOptionalString('grade'),
+    strand: toOptionalString('strand'),
+    topic: toOptionalString('topic'),
+    standards: parseCsvList(query.standards, 'standards'),
+    openTrack: parseOptionalBoolean(query.openTrack, 'openTrack'),
+    sort: sort ?? 'featured',
+    search: toOptionalString('search'),
+    page,
+    pageSize,
+  };
+};
+
+const parsePositiveIntParam = (value: string | undefined, field: string): number => {
+  const parsed = Number.parseInt(value ?? '', 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new HttpError(400, `${field} must be a positive integer.`, 'invalid_parameter');
+  }
+  return parsed;
+};
+
+const validateAssignmentPayload = (body: unknown): Omit<AssignModulePayload, 'creatorId' | 'creatorRole'> => {
+  if (!body || typeof body !== 'object') {
+    throw new HttpError(400, 'A JSON payload is required.', 'invalid_payload');
+  }
+
+  const payload = body as Record<string, unknown>;
+  const moduleId = parsePositiveIntParam(String(payload.moduleId ?? ''), 'moduleId');
+
+  if (!Array.isArray(payload.studentIds) || payload.studentIds.length === 0) {
+    throw new HttpError(400, 'At least one studentId is required.', 'invalid_payload');
+  }
+
+  const studentIds = Array.from(
+    new Set(
+      payload.studentIds
+        .filter((id): id is string => typeof id === 'string')
+        .map((id) => id.trim())
+        .filter((id) => id.length > 0),
+    ),
+  );
+
+  if (studentIds.length === 0) {
+    throw new HttpError(400, 'At least one valid studentId is required.', 'invalid_payload');
+  }
+
+  let dueAt: string | null | undefined = undefined;
+  if ('dueAt' in payload) {
+    if (payload.dueAt === null) {
+      dueAt = null;
+    } else if (typeof payload.dueAt === 'string') {
+      const trimmed = payload.dueAt.trim();
+      if (trimmed.length > 0) {
+        if (Number.isNaN(Date.parse(trimmed))) {
+          throw new HttpError(400, 'dueAt must be a valid ISO-8601 date string.', 'invalid_payload');
+        }
+        dueAt = trimmed;
+      } else {
+        dueAt = null;
+      }
+    } else {
+      throw new HttpError(400, 'dueAt must be a string value.', 'invalid_payload');
+    }
+  }
+
+  const title =
+    typeof payload.title === 'string' && payload.title.trim().length > 0
+      ? payload.title.trim()
+      : undefined;
+
+  return {
+    moduleId,
+    studentIds,
+    dueAt: dueAt ?? null,
+    title,
   };
 };
 
@@ -322,21 +526,22 @@ const requireUser = async (
   supabase: SupabaseClient,
   token: string | null,
   res: ServerResponse,
+  sendErrorResponse: (status: number, message: string, code: string) => void,
   allowedRoles?: Array<AuthenticatedUser['role']>,
 ): Promise<AuthenticatedUser | null> => {
   if (!token) {
-    sendJson(res, 401, { error: 'Authentication required.' });
+    sendErrorResponse(401, 'Authentication required.', 'unauthorized');
     return null;
   }
 
   const user = await resolveUserFromToken(supabase, token);
   if (!user) {
-    sendJson(res, 401, { error: 'Authentication required.' });
+    sendErrorResponse(401, 'Authentication required.', 'unauthorized');
     return null;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    sendJson(res, 403, { error: 'You do not have permission to perform this action.' });
+    sendErrorResponse(403, 'You do not have permission to perform this action.', 'forbidden');
     return null;
   }
 
@@ -347,15 +552,16 @@ const requireAdmin = async (
   supabase: SupabaseClient,
   token: string | null,
   res: ServerResponse,
+  sendErrorResponse: (status: number, message: string, code: string) => void,
 ): Promise<AuthenticatedAdmin | null> => {
   if (!token) {
-    sendJson(res, 401, { error: 'Authentication required.' });
+    sendErrorResponse(401, 'Authentication required.', 'unauthorized');
     return null;
   }
 
   const admin = await resolveAdminFromToken(supabase, token);
   if (!admin) {
-    sendJson(res, 403, { error: 'Admin access required.' });
+    sendErrorResponse(403, 'Admin access required.', 'forbidden');
     return null;
   }
 
@@ -365,136 +571,160 @@ const requireAdmin = async (
 export const createApiHandler = (context: ApiContext) => {
   const { serviceSupabase } = context;
 
+  const handleApiError = (
+    res: ServerResponse,
+    error: unknown,
+    version: string,
+    context?: Record<string, unknown>,
+  ) => {
+    if (error instanceof HttpError) {
+      if (error.status >= 500) {
+        captureServerException(error, context);
+        console.error('[api] error', error);
+      }
+      sendError(res, error.status, error.message, error.code, version, error.details);
+      return;
+    }
+
+    captureServerException(error, context);
+    console.error('[api] error', error);
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    sendError(res, 500, message, 'internal_error', version);
+  };
+
   return async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
     const url = parseUrl(req.url ?? '', true);
-    if (!url.pathname?.startsWith('/api/')) {
+    const parsedPath = parseApiPath(url.pathname);
+    if (!parsedPath) {
       return false;
     }
 
-    try {
-      const token = extractBearerToken(req);
-      const supabase = createRlsClient(token ?? undefined);
+    res.setHeader('X-API-Version', API_VERSION);
+    if (parsedPath.version === 'unversioned') {
+      res.setHeader('X-API-Warning', 'Deprecated: migrate to /api/v1');
+    }
 
-      if (req.method === 'GET' && url.pathname === '/api/recommendations') {
-        const moduleId = parseNumber(url.query.moduleId);
-        const lastScore = parseNumber(url.query.lastScore);
+    const method = (req.method ?? 'GET').toUpperCase();
+    const path = parsedPath.path;
+    const token = extractBearerToken(req);
+    const supabase = createRlsClient(token ?? undefined);
 
+    const sendErrorResponse = (status: number, message: string, code: string, details?: unknown) =>
+      sendError(res, status, message, code, API_VERSION, details);
+
+    const handleRoute = async (
+      handler: () => Promise<void>,
+      errorContext?: Record<string, unknown>,
+    ): Promise<boolean> => {
+      try {
+        await handler();
+      } catch (error) {
+        handleApiError(res, error, API_VERSION, { route: path, method, ...errorContext });
+      }
+      return true;
+    };
+
+    if (method === 'POST' && path === '/ai/tutor') {
+      return handleRoute(async () => {
+        const body = await readValidatedJson<TutorRequestBody>(req);
+        const actor = token ? await resolveUserFromToken(supabase, token) : null;
+
+        try {
+          const result = await handleTutorRequest(body, supabase, {
+            userId: actor?.id ?? null,
+            role: actor?.role ?? null,
+            clientIp: resolveClientIp(req),
+          });
+          sendJson(res, 200, { message: result.message, model: result.model }, API_VERSION);
+        } catch (error) {
+          const status = (error as { status?: number }).status ?? 500;
+          const message = error instanceof Error ? error.message : 'Assistant unavailable.';
+          const level: Parameters<typeof captureServerMessage>[2] = status >= 500 ? 'error' : 'warning';
+          captureServerMessage('[api] tutor request failed', { status, reason: message }, level);
+          throw new HttpError(status, message, status >= 500 ? 'assistant_failure' : 'bad_request');
+        }
+      });
+    }
+
+    if (method === 'GET' && path === '/recommendations') {
+      return handleRoute(async () => {
+        const moduleId = parseOptionalPositiveInt(url.query.moduleId, 'moduleId');
         if (!moduleId) {
-          sendJson(res, 400, { error: 'moduleId query parameter is required' });
-          return true;
+          throw new HttpError(400, 'moduleId query parameter is required.', 'invalid_parameter');
         }
 
+        const lastScore = parseOptionalNumber(url.query.lastScore, 'lastScore');
         const { recommendations } = await getRecommendations(supabase, moduleId, lastScore);
-        sendJson(res, 200, { recommendations });
+        sendJson(res, 200, { recommendations }, API_VERSION);
+      });
+    }
+
+    if (method === 'POST' && path === '/assignments/assign') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent', 'admin']);
+      if (!actor) {
         return true;
       }
 
-      if (req.method === 'POST' && url.pathname === '/api/assignments/assign') {
-        const actor = await requireUser(supabase, token, res, ['parent', 'admin']);
-        if (!actor) {
-          return true;
-        }
-
-        const body = await readJsonBody<AssignModulePayload>(req);
-        if (
-          !body ||
-          typeof body.moduleId !== 'number' ||
-          !Array.isArray(body.studentIds) ||
-          body.studentIds.length === 0
-        ) {
-          sendJson(res, 400, {
-            error: 'moduleId and studentIds are required to assign a module.',
-          });
-          return true;
-        }
-
-        const studentIds = Array.from(
-          new Set(
-            body.studentIds
-              .filter((id): id is string => typeof id === 'string')
-              .map((id) => id.trim())
-              .filter((id) => id.length > 0),
-          ),
-        );
-
-        if (!studentIds.length) {
-          sendJson(res, 400, { error: 'At least one valid student id is required.' });
-          return true;
-        }
-
-        try {
-          await ensureGuardianAccess(supabase, actor, studentIds);
+      return handleRoute(
+        async () => {
+          const body = await readValidatedJson<AssignModulePayload>(req);
+          const validated = validateAssignmentPayload(body);
+          await ensureGuardianAccess(supabase, actor, validated.studentIds);
 
           const result = await createModuleAssignment(
             supabase,
             {
-              ...body,
-              studentIds,
+              ...validated,
               creatorId: actor.id,
               creatorRole: actor.role === 'admin' ? 'admin' : 'parent',
             },
             serviceSupabase,
           );
-          sendJson(res, 200, result);
-        } catch (error) {
-          captureServerException(error, {
-            route: url.pathname,
-            moduleId: body.moduleId,
-            creatorId: actor.id,
-          });
-          console.error('[api] assign module failed', error);
-          const status =
-            error instanceof Error && error.message.toLowerCase().includes('assign modules to learners you manage')
-              ? 403
-              : 500;
-          sendJson(res, status, {
-            error: error instanceof Error ? error.message : 'Unable to assign module.',
-          });
-        }
-        return true;
-      }
+          sendJson(res, 200, result, API_VERSION);
+        },
+        { actorId: actor.id },
+      );
+    }
 
-      if (req.method === 'GET' && url.pathname === '/api/modules') {
-        const filters = createFilters(url.query);
+    if (method === 'GET' && path === '/modules') {
+      return handleRoute(async () => {
+        const filters = parseModuleFilters(url.query);
         const result = await listModules(supabase, filters);
-        sendJson(res, 200, result);
+        sendJson(res, 200, result, API_VERSION);
+      });
+    }
+
+    if (method === 'GET' && path.startsWith('/lessons/')) {
+      return handleRoute(async () => {
+        const parts = path.split('/').filter(Boolean);
+        if (parts.length !== 2) {
+          throw new HttpError(404, 'Not found.', 'not_found');
+        }
+        const lessonId = parsePositiveIntParam(parts[1], 'lessonId');
+        const detail = await getLessonDetail(supabase, lessonId);
+        if (!detail) {
+          throw new HttpError(404, 'Lesson not found.', 'not_found');
+        }
+        sendJson(res, 200, { lesson: detail }, API_VERSION);
+      });
+    }
+
+    if (path.startsWith('/admins')) {
+      const admin = await requireAdmin(supabase, token, res, sendErrorResponse);
+      if (!admin) {
         return true;
       }
 
-      if (req.method === 'GET' && url.pathname?.startsWith('/api/lessons/')) {
-        const parts = url.pathname.split('/').filter(Boolean);
-        if (parts.length === 3) {
-          const lessonId = Number.parseInt(parts[2] ?? '', 10);
-          if (Number.isNaN(lessonId)) {
-            sendJson(res, 400, { error: 'Lesson id must be numeric.' });
-            return true;
-          }
-
-          const detail = await getLessonDetail(supabase, lessonId);
-          if (!detail) {
-            sendJson(res, 404, { error: 'Lesson not found.' });
-            return true;
-          }
-
-          sendJson(res, 200, { lesson: detail });
-          return true;
-        }
+      if (method === 'GET' && path === '/admins') {
+        return handleRoute(async () => {
+          const admins = await listAdmins(serviceSupabase);
+          sendJson(res, 200, { admins }, API_VERSION);
+        });
       }
 
-      if (url.pathname?.startsWith('/api/admins')) {
-        const admin = await requireAdmin(supabase, token, res);
-        if (!admin) {
-          return true;
-        }
-
-        if (req.method === 'GET' && url.pathname === '/api/admins') {
-          const admins = await listAdmins(serviceSupabase);
-          sendJson(res, 200, { admins });
-          return true;
-        }
-
-        if (req.method === 'POST' && url.pathname === '/api/admins/promote') {
-          const body = await readJsonBody<{
+      if (method === 'POST' && path === '/admins/promote') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{
             email?: string;
             userId?: string;
             title?: string;
@@ -511,49 +741,59 @@ export const createApiHandler = (context: ApiContext) => {
               { email: body.email, userId: body.userId },
               { title: body.title, permissions },
             );
-            sendJson(res, 200, { admin: promoted });
+            sendJson(res, 200, { admin: promoted }, API_VERSION);
           } catch (error) {
-            sendJson(res, 400, {
-              error: error instanceof Error ? error.message : 'Unable to promote admin user.',
-            });
+            throw new HttpError(
+              400,
+              error instanceof Error ? error.message : 'Unable to promote admin user.',
+              'invalid_payload',
+            );
           }
-          return true;
-        }
+        });
+      }
 
-        if (req.method === 'POST' && url.pathname === '/api/admins/demote') {
-          const body = await readJsonBody<{ userId?: string; targetRole?: string }>(req);
+      if (method === 'POST' && path === '/admins/demote') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ userId?: string; targetRole?: string }>(req);
           if (!body.userId || typeof body.userId !== 'string') {
-            sendJson(res, 400, { error: 'userId is required to demote an admin.' });
-            return true;
+            throw new HttpError(400, 'userId is required to demote an admin.', 'invalid_payload');
           }
           const targetRole = body.targetRole === 'student' ? 'student' : 'parent';
 
           try {
             const result = await demoteAdmin(serviceSupabase, body.userId, targetRole);
-            sendJson(res, 200, {
-              demoted: result.id,
-              role: result.role,
-              remainingAdmins: result.remainingAdmins,
-            });
+            sendJson(
+              res,
+              200,
+              {
+                demoted: result.id,
+                role: result.role,
+                remainingAdmins: result.remainingAdmins,
+              },
+              API_VERSION,
+            );
           } catch (error) {
-            sendJson(res, 400, {
-              error: error instanceof Error ? error.message : 'Unable to demote admin user.',
-            });
+            throw new HttpError(
+              400,
+              error instanceof Error ? error.message : 'Unable to demote admin user.',
+              'invalid_payload',
+            );
           }
-          return true;
-        }
+        });
+      }
 
-        sendJson(res, 404, { error: 'Not found' });
+      sendErrorResponse(404, 'Not found.', 'not_found');
+      return true;
+    }
+
+    if (path.startsWith('/import/')) {
+      const admin = await requireAdmin(supabase, token, res, sendErrorResponse);
+      if (!admin) {
         return true;
       }
 
-      if (url.pathname?.startsWith('/api/import/')) {
-        const admin = await requireAdmin(supabase, token, res);
-        if (!admin) {
-          return true;
-        }
-
-        if (req.method === 'GET' && url.pathname === '/api/import/providers') {
+      if (method === 'GET' && path === '/import/providers') {
+        return handleRoute(async () => {
           const providers = IMPORT_PROVIDERS.map((provider) => ({
             id: provider.id,
             label: provider.label,
@@ -563,58 +803,54 @@ export const createApiHandler = (context: ApiContext) => {
             defaultLicense: provider.defaultLicense,
             notes: provider.notes ?? null,
           }));
-          sendJson(res, 200, { providers });
-          return true;
-        }
+          sendJson(res, 200, { providers }, API_VERSION);
+        });
+      }
 
-        if (req.method === 'GET' && url.pathname === '/api/import/runs') {
+      if (method === 'GET' && path === '/import/runs') {
+        return handleRoute(async () => {
           const runs = await fetchImportRuns(supabase, 25);
-          sendJson(res, 200, { runs: runs.map(toApiModel) });
-          return true;
-        }
+          sendJson(res, 200, { runs: runs.map(toApiModel) }, API_VERSION);
+        });
+      }
 
-        if (req.method === 'GET' && url.pathname?.startsWith('/api/import/runs/')) {
-          const parts = url.pathname.split('/').filter(Boolean);
-          if (parts.length === 4) {
-            const idPart = parts[3];
-            const runId = Number.parseInt(idPart ?? '', 10);
-            if (Number.isNaN(runId)) {
-              sendJson(res, 400, { error: 'Import run id must be numeric.' });
-              return true;
-            }
-            const run = await fetchImportRunById(supabase, runId);
-            if (!run) {
-              sendJson(res, 404, { error: 'Import run not found.' });
-              return true;
-            }
-            sendJson(res, 200, { run: toApiModel(run) });
-            return true;
+      if (method === 'GET' && path.startsWith('/import/runs/')) {
+        return handleRoute(async () => {
+          const parts = path.split('/').filter(Boolean);
+          if (parts.length !== 3) {
+            throw new HttpError(404, 'Not found.', 'not_found');
           }
-        }
+          const runId = parsePositiveIntParam(parts[2], 'Import run id');
+          const run = await fetchImportRunById(supabase, runId);
+          if (!run) {
+            throw new HttpError(404, 'Import run not found.', 'not_found');
+          }
+          sendJson(res, 200, { run: toApiModel(run) }, API_VERSION);
+        });
+      }
 
-        if (req.method === 'POST' && url.pathname === '/api/import/runs') {
-          type CreateRunBody = {
-            provider?: string;
-            mapping?: Record<string, unknown>;
-            dataset?: Record<string, unknown>;
-            input?: Record<string, unknown>;
-            fileName?: string;
-            notes?: string;
-            dryRun?: boolean;
-            limits?: Record<string, unknown>;
-          };
+      if (method === 'POST' && path === '/import/runs') {
+        type CreateRunBody = {
+          provider?: string;
+          mapping?: Record<string, unknown>;
+          dataset?: Record<string, unknown>;
+          input?: Record<string, unknown>;
+          fileName?: string;
+          notes?: string;
+          dryRun?: boolean;
+          limits?: Record<string, unknown>;
+        };
 
-          const body = await readJsonBody<CreateRunBody>(req);
+        return handleRoute(async () => {
+          const body = await readValidatedJson<CreateRunBody>(req);
           if (!body.provider || !isImportProviderId(body.provider)) {
-            sendJson(res, 400, { error: 'Valid provider is required.' });
-            return true;
+            throw new HttpError(400, 'Valid provider is required.', 'invalid_payload');
           }
 
           const provider = body.provider as ImportProviderId;
           const providerDefinition = IMPORT_PROVIDER_MAP.get(provider);
           if (!providerDefinition) {
-            sendJson(res, 400, { error: `Provider "${provider}" is not supported.` });
-            return true;
+            throw new HttpError(400, `Provider "${provider}" is not supported.`, 'invalid_payload');
           }
 
           const limits = normalizeImportLimits(body.limits);
@@ -653,98 +889,79 @@ export const createApiHandler = (context: ApiContext) => {
             ],
           });
 
-          sendJson(res, 201, { run: toApiModel(run) });
-          return true;
-        }
+          sendJson(res, 201, { run: toApiModel(run) }, API_VERSION);
+        });
+      }
 
-        if (req.method === 'POST' && url.pathname === '/api/import/openstax') {
-          const body = await readJsonBody<{ mapping: OpenStaxMapping }>(req);
+      if (method === 'POST' && path === '/import/openstax') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ mapping: OpenStaxMapping }>(req);
           if (!body.mapping || typeof body.mapping !== 'object') {
-            sendJson(res, 400, { error: 'mapping payload is required' });
-            return true;
+            throw new HttpError(400, 'mapping payload is required.', 'invalid_payload');
           }
           const inserted = await importOpenStaxMapping(serviceSupabase, body.mapping);
-          sendJson(res, 200, { inserted });
-          return true;
-        }
+          sendJson(res, 200, { inserted }, API_VERSION);
+        });
+      }
 
-        if (req.method === 'POST' && url.pathname === '/api/import/gutenberg') {
-          const body = await readJsonBody<{ mapping: GutenbergMapping }>(req);
+      if (method === 'POST' && path === '/import/gutenberg') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ mapping: GutenbergMapping }>(req);
           if (!body.mapping || typeof body.mapping !== 'object') {
-            sendJson(res, 400, { error: 'mapping payload is required' });
-            return true;
+            throw new HttpError(400, 'mapping payload is required.', 'invalid_payload');
           }
           const inserted = await importGutenbergMapping(serviceSupabase, body.mapping);
-          sendJson(res, 200, { inserted });
-          return true;
-        }
+          sendJson(res, 200, { inserted }, API_VERSION);
+        });
+      }
 
-        if (req.method === 'POST' && url.pathname === '/api/import/federal') {
-          const body = await readJsonBody<{ mapping: FederalMapping }>(req);
+      if (method === 'POST' && path === '/import/federal') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ mapping: FederalMapping }>(req);
           if (!body.mapping || typeof body.mapping !== 'object') {
-            sendJson(res, 400, { error: 'mapping payload is required' });
-            return true;
+            throw new HttpError(400, 'mapping payload is required.', 'invalid_payload');
           }
           const inserted = await importFederalMapping(serviceSupabase, body.mapping);
-          sendJson(res, 200, { inserted });
-          return true;
-        }
-
-        sendJson(res, 404, { error: 'Not found' });
-        return true;
+          sendJson(res, 200, { inserted }, API_VERSION);
+        });
       }
 
-      if (
-        req.method === 'GET' &&
-        url.pathname?.startsWith('/api/modules/') &&
-        url.pathname?.endsWith('/assessment')
-      ) {
-        const parts = url.pathname.split('/');
-        const idPart = parts[3];
-        const moduleId = Number.parseInt(idPart ?? '', 10);
-        if (!Number.isFinite(moduleId)) {
-          sendJson(res, 400, { error: 'Module id must be numeric' });
-          return true;
-        }
-        const detail = await getModuleAssessment(supabase, moduleId);
-        if (!detail) {
-          sendJson(res, 404, { error: 'Module assessment not found' });
-          return true;
-        }
-        sendJson(res, 200, detail);
-        return true;
-      }
-
-      if (req.method === 'GET' && url.pathname.startsWith('/api/modules/')) {
-        const parts = url.pathname.split('/');
-        const idPart = parts[3];
-        const moduleId = Number.parseInt(idPart ?? '', 10);
-        if (!Number.isFinite(moduleId)) {
-          sendJson(res, 400, { error: 'Module id must be numeric' });
-          return true;
-        }
-        const detail = await getModuleDetail(supabase, moduleId);
-        if (!detail) {
-          sendJson(res, 404, { error: 'Module not found' });
-          return true;
-        }
-        sendJson(res, 200, detail);
-        return true;
-      }
-
-      sendJson(res, 404, { error: 'Not found' });
-      return true;
-    } catch (error) {
-      captureServerException(error, {
-        route: url.pathname,
-        method: req.method,
-      });
-      console.error('[api] error', error);
-      sendJson(res, 500, {
-        error: error instanceof Error ? error.message : 'Internal server error',
-      });
+      sendErrorResponse(404, 'Not found.', 'not_found');
       return true;
     }
+
+    if (method === 'GET' && path.startsWith('/modules/') && path.endsWith('/assessment')) {
+      return handleRoute(async () => {
+        const parts = path.split('/').filter(Boolean);
+        if (parts.length !== 3) {
+          throw new HttpError(404, 'Not found.', 'not_found');
+        }
+        const moduleId = parsePositiveIntParam(parts[1], 'Module id');
+        const detail = await getModuleAssessment(supabase, moduleId);
+        if (!detail) {
+          throw new HttpError(404, 'Module assessment not found.', 'not_found');
+        }
+        sendJson(res, 200, detail, API_VERSION);
+      });
+    }
+
+    if (method === 'GET' && path.startsWith('/modules/')) {
+      return handleRoute(async () => {
+        const parts = path.split('/').filter(Boolean);
+        if (parts.length !== 2) {
+          throw new HttpError(404, 'Not found.', 'not_found');
+        }
+        const moduleId = parsePositiveIntParam(parts[1], 'Module id');
+        const detail = await getModuleDetail(supabase, moduleId);
+        if (!detail) {
+          throw new HttpError(404, 'Module not found.', 'not_found');
+        }
+        sendJson(res, 200, detail, API_VERSION);
+      });
+    }
+
+    sendErrorResponse(404, 'Not found.', 'not_found');
+    return true;
   };
 };
 

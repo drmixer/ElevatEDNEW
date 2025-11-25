@@ -1,132 +1,93 @@
-const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-const PRIMARY_MODEL = 'deepseek/deepseek-chat-v3-0324:free';
-const FALLBACK_MODEL = 'z-ai/glm-4.5-air:free';
+import supabase from '../lib/supabaseClient';
 
-const DEFAULT_SYSTEM_PROMPT =
-  'You are ElevatED, a patient K-12 tutor. ' +
-  'Give clear, step-by-step explanations and stay friendly and encouraging.';
+type TutorMode = 'learning' | 'marketing';
 
-type ChatCompletionChoice = {
-  message?: {
-    content?: string | null;
-  };
+type TutorResponseOptions =
+  | string
+  | {
+      systemPrompt?: string;
+      mode?: TutorMode;
+      knowledge?: string;
+    };
+
+type TutorResponsePayload = {
+  message?: string;
+  error?: string;
 };
 
-type ChatCompletionResponse = {
-  choices?: ChatCompletionChoice[];
+const MAX_PROMPT_CHARS = 1200;
+
+const toOptions = (input?: TutorResponseOptions) => {
+  if (!input) return {};
+  if (typeof input === 'string') {
+    return { systemPrompt: input } as { systemPrompt: string };
+  }
+  return input;
 };
 
-type ProcessEnv = Record<string, string | undefined>;
-
-const getProcessEnv = (): ProcessEnv =>
-  ((globalThis as typeof globalThis & { process?: { env?: ProcessEnv } }).process?.env) ?? {};
-
-const resolveApiKey = (): string | undefined => {
-  const processEnv = getProcessEnv();
-  const browserApiKey =
-    typeof import.meta !== 'undefined'
-      ? import.meta.env?.VITE_OPENROUTER_API_KEY ?? import.meta.env?.OPENROUTER_API_KEY
-      : undefined;
-
-  return (
-    browserApiKey ??
-    processEnv?.VITE_OPENROUTER_API_KEY ??
-    processEnv?.OPENROUTER_API_KEY
-  );
+const maybeGetAccessToken = async (): Promise<string | null> => {
+  try {
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  } catch (error) {
+    console.warn('[getTutorResponse] Failed to resolve session', error);
+    return null;
+  }
 };
 
-const buildMessages = (prompt: string, systemPrompt?: string) => {
-  const messages: Array<{ role: 'system' | 'user'; content: string }> = [];
-
-  if (typeof systemPrompt === 'string' && systemPrompt.trim().length > 0) {
-    messages.push({ role: 'system', content: systemPrompt });
+const parseErrorMessage = async (response: Response): Promise<string> => {
+  const fallback = `Assistant unavailable (${response.status})`;
+  try {
+    const payload = (await response.json()) as TutorResponsePayload;
+    if (payload.error && payload.error.trim().length) {
+      return payload.error.trim();
+    }
+  } catch {
+    // no-op
   }
-
-  messages.push({ role: 'user', content: prompt });
-
-  return messages;
-};
-
-const requestModel = async (
-  model: string,
-  prompt: string,
-  apiKey: string,
-  systemPrompt?: string,
-): Promise<string> => {
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${apiKey}`,
-    'Content-Type': 'application/json',
-  };
-
-  if (typeof window !== 'undefined') {
-    headers['HTTP-Referer'] = window.location.origin;
-    headers['X-Title'] = 'ElevatED';
-  }
-
-  const response = await fetch(OPENROUTER_ENDPOINT, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      model,
-      messages: buildMessages(prompt, systemPrompt),
-    }),
-  });
-
-  if (!response.ok) {
-    const errorPayload = await response.text();
-    throw new Error(
-      `OpenRouter request failed (${response.status} ${response.statusText}) for ${model}: ${errorPayload}`,
-    );
-  }
-
-  const json = (await response.json()) as ChatCompletionResponse;
-  const content = json.choices?.[0]?.message?.content?.trim();
-
-  if (!content) {
-    throw new Error(`OpenRouter response missing content for ${model}`);
-  }
-
-  return content;
+  return fallback;
 };
 
 export async function getTutorResponse(
   prompt: string,
-  systemPrompt: string = DEFAULT_SYSTEM_PROMPT,
+  options?: TutorResponseOptions,
 ): Promise<string> {
+  const resolvedOptions = toOptions(options);
   const trimmedPrompt = prompt?.trim();
 
   if (!trimmedPrompt) {
     throw new Error('Prompt must be a non-empty string.');
   }
 
-  const apiKey = resolveApiKey();
-
-  if (!apiKey) {
-    throw new Error(
-      'OPENROUTER_API_KEY is not set. Add VITE_OPENROUTER_API_KEY to your environment to enable AI responses.',
-    );
+  const headers = new Headers({ 'Content-Type': 'application/json' });
+  const token = await maybeGetAccessToken();
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
   }
 
-  try {
-    console.log(`[ElevatED AI] Using model: ${PRIMARY_MODEL}`);
-    return await requestModel(PRIMARY_MODEL, trimmedPrompt, apiKey, systemPrompt);
-  } catch (primaryError) {
-    console.warn(
-      `[ElevatED AI] Primary model failed, falling back to ${FALLBACK_MODEL}.`,
-      primaryError,
-    );
+  const payload = {
+    prompt: trimmedPrompt.slice(0, MAX_PROMPT_CHARS),
+    systemPrompt: resolvedOptions.systemPrompt,
+    knowledge: resolvedOptions.knowledge,
+    mode: resolvedOptions.mode ?? 'learning',
+  };
+
+  const response = await fetch('/api/v1/ai/tutor', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseErrorMessage(response));
   }
 
-  console.log(`[ElevatED AI] Using model: ${FALLBACK_MODEL}`);
-
-  try {
-    return await requestModel(FALLBACK_MODEL, trimmedPrompt, apiKey, systemPrompt);
-  } catch (fallbackError) {
-    console.error('[ElevatED AI] Fallback model failed.', fallbackError);
-    throw fallbackError instanceof Error
-      ? fallbackError
-      : new Error('Failed to retrieve a tutor response from OpenRouter.');
+  const body = (await response.json()) as TutorResponsePayload;
+  if (!body.message) {
+    throw new Error('Assistant unavailable. Please try again in a moment.');
   }
+
+  return body.message;
 }
 
 export default getTutorResponse;

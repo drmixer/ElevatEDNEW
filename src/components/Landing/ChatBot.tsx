@@ -96,13 +96,15 @@ const ChatBot: React.FC = () => {
 
     try {
       const marketingPrompt = [
-        'Use the following ElevatED product facts when answering visitor questions.',
-        MARKETING_KNOWLEDGE.trim(),
         `Visitor question: ${userMessage.content.trim()}`,
         'Guidelines: keep the reply to 2-3 concise sentences, stay on-brand and outcome-focused, and avoid technical or implementation details. If the facts are missing, say you can connect them to ElevatED support instead of guessing.',
       ].join('\n\n');
 
-      assistantContent = await getTutorResponse(marketingPrompt, MARKETING_SYSTEM_PROMPT);
+      assistantContent = await getTutorResponse(marketingPrompt, {
+        systemPrompt: MARKETING_SYSTEM_PROMPT,
+        knowledge: MARKETING_KNOWLEDGE,
+        mode: 'marketing',
+      });
     } catch (error) {
       console.error('[ElevatED Landing Chatbot] Failed to fetch AI response.', error);
       assistantContent = `${getAIResponse(

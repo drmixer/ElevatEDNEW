@@ -28,7 +28,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 export const assignModuleToStudents = async (
   payload: AssignModulePayload,
 ): Promise<AssignModuleResponse> => {
-  const response = await authenticatedFetch('/api/assignments/assign', {
+  const response = await authenticatedFetch('/api/v1/assignments/assign', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

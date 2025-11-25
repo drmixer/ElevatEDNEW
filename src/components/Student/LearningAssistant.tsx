@@ -13,7 +13,7 @@ const LearningAssistant: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      content: `Hi ${student.name}! I'm your personal learning assistant. I know you're currently working on ${student.strengths[0] || 'various topics'} and I can help you with questions, study tips, or just provide motivation. What would you like to work on today?`,
+      content: `Hi there! I'm your personal learning assistant. I can help with ${student.strengths[0] || 'your current subjects'}, study tips, or motivation. What would you like to work on today?`,
       isUser: false,
       timestamp: new Date(),
       role: 'assistant',
@@ -37,7 +37,7 @@ const LearningAssistant: React.FC = () => {
     }
     
     if (message.includes('motivation') || message.includes('tired') || message.includes('give up')) {
-      return `You're doing amazing, ${student.name}! You've already earned ${student.xp} XP and you're on a ${student.streakDays}-day streak! 🔥 Remember, every expert was once a beginner. What you're learning today is building your future success. Take a short break if you need one, then come back strong! 💪`;
+      return `You're doing amazing! You've already earned ${student.xp} XP and you're on a ${student.streakDays}-day streak! 🔥 Remember, every expert was once a beginner. What you're learning today is building your future success. Take a short break if you need one, then come back strong! 💪`;
     }
     
     if (message.includes('math') || message.includes('algebra') || message.includes('equation')) {
@@ -108,12 +108,11 @@ const LearningAssistant: React.FC = () => {
         .map((entry) => `${entry.isUser ? 'Student' : 'Assistant'}: ${entry.content}`)
         .join('\n');
 
-      const systemPrompt = `Student profile: Name ${student.name}, grade ${student.grade}, level ${student.level}, strengths ${student.strengths.join(', ')}, focus areas ${student.weaknesses.join(', ')}.`;
+      const promptForModel = `${contextWindow}\nAssistant:`.slice(-1100);
 
-      const response = await getTutorResponse(
-        `${contextWindow}\nAssistant:`,
-        systemPrompt,
-      );
+      const response = await getTutorResponse(promptForModel, {
+        mode: 'learning',
+      });
 
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
