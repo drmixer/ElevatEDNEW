@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, LogOut, Settings, Bell } from 'lucide-react';
+import { User, LogOut, Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
 import type { Admin, Parent, Student } from '../../types';
+import NotificationCenter from './NotificationCenter';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -88,9 +89,7 @@ const Header: React.FC = () => {
               </div>
             )}
             
-            <button className="p-2 text-gray-600 hover:text-brand-blue transition-colors rounded-lg hover:bg-gray-100">
-              <Bell className="h-5 w-5" />
-            </button>
+            <NotificationCenter user={user} />
             
             <button className="p-2 text-gray-600 hover:text-brand-blue transition-colors rounded-lg hover:bg-gray-100">
               <Settings className="h-5 w-5" />

@@ -105,6 +105,26 @@ export interface NotificationPreferences {
   missedSessions: boolean;
   lowScores: boolean;
   majorProgress: boolean;
+  assignments?: boolean;
+  streaks?: boolean;
+}
+
+export type NotificationType =
+  | 'assignment_created'
+  | 'assignment_overdue'
+  | 'low_mastery'
+  | 'streak_milestone'
+  | string;
+
+export interface NotificationItem {
+  id: number;
+  notificationType: NotificationType;
+  title?: string | null;
+  body?: string | null;
+  data: Record<string, unknown>;
+  isRead: boolean;
+  readAt?: string | null;
+  createdAt: string;
 }
 
 export type Subject = 'math' | 'english' | 'science' | 'social_studies';
