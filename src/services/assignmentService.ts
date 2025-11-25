@@ -1,11 +1,12 @@
+import { authenticatedFetch } from '../lib/apiClient';
 import supabase from '../lib/supabaseClient';
 import type { AdminAssignmentOverview, AdminStudent, AssignmentSummary } from '../types';
 
 type AssignModulePayload = {
   moduleId: number;
   studentIds: string[];
-  creatorId: string;
-  creatorRole: 'parent' | 'admin';
+  creatorId?: string;
+  creatorRole?: 'parent' | 'admin';
   dueAt?: string | null;
   title?: string;
 };
@@ -27,7 +28,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 export const assignModuleToStudents = async (
   payload: AssignModulePayload,
 ): Promise<AssignModuleResponse> => {
-  const response = await fetch('/api/assignments/assign', {
+  const response = await authenticatedFetch('/api/assignments/assign', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

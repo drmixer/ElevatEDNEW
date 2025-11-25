@@ -15,6 +15,26 @@ export const createServiceRoleClient = (): SupabaseClient =>
     auth: { persistSession: false },
   });
 
+const resolveAnonKey = (): string => {
+  const anonKey = process.env.SUPABASE_ANON_KEY ?? process.env.VITE_SUPABASE_ANON_KEY;
+  if (anonKey) {
+    return anonKey;
+  }
+  throw new Error('Missing SUPABASE_ANON_KEY/VITE_SUPABASE_ANON_KEY environment variable.');
+};
+
+export const createRlsClient = (accessToken?: string | null): SupabaseClient =>
+  createClient(requireEnv('SUPABASE_URL'), resolveAnonKey(), {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      headers: accessToken
+        ? {
+            Authorization: `Bearer ${accessToken}`,
+          }
+        : {},
+    },
+  });
+
 type ModuleRecord = { id: number; slug: string };
 
 export const resolveModules = async (

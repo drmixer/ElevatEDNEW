@@ -12,6 +12,7 @@ interface AuthContextType {
     name: string,
     role: UserRole,
     grade?: number,
+    options?: { guardianConsent?: boolean },
   ) => Promise<void>;
   logout: () => void;
   loading: boolean;
@@ -115,9 +116,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (email: string, password: string, name: string, role: UserRole, grade?: number) => {
+  const register = async (
+    email: string,
+    password: string,
+    name: string,
+    role: UserRole,
+    grade?: number,
+    options?: { guardianConsent?: boolean },
+  ) => {
     setLoading(true);
     try {
+      if (role === 'student' && options?.guardianConsent !== true) {
+        throw new Error('A parent or guardian must approve student sign-ups.');
+      }
+
       const emailRedirectTo =
         typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
 
@@ -130,6 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             full_name: name,
             role,
             grade,
+            guardian_consent: options?.guardianConsent === true,
           },
         },
       });

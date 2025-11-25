@@ -4,6 +4,15 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { mapAdminRow, type AdminSummary } from './admins.js';
 
+type UserRole = 'student' | 'parent' | 'admin';
+
+export type AuthenticatedUser = {
+  id: string;
+  email: string;
+  role: UserRole;
+  fullName: string | null;
+};
+
 export type AuthenticatedAdmin = AdminSummary;
 
 export const extractBearerToken = (req: IncomingMessage): string | null => {
@@ -18,6 +27,44 @@ export const extractBearerToken = (req: IncomingMessage): string | null => {
   }
 
   return match[1].trim();
+};
+
+export const resolveUserFromToken = async (
+  supabase: SupabaseClient,
+  token: string,
+): Promise<AuthenticatedUser | null> => {
+  const { data, error } = await supabase.auth.getUser(token);
+
+  if (error || !data?.user) {
+    return null;
+  }
+
+  const userId = data.user.id;
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('id, email, full_name, role')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (profileError) {
+    throw new Error(`Failed to load profile for authentication: ${profileError.message}`);
+  }
+
+  if (!profile) {
+    return null;
+  }
+
+  const role = (profile as Record<string, unknown>).role;
+  if (role !== 'student' && role !== 'parent' && role !== 'admin') {
+    return null;
+  }
+
+  return {
+    id: (profile as Record<string, unknown>).id as string,
+    email: (profile as Record<string, unknown>).email as string,
+    role,
+    fullName: ((profile as Record<string, unknown>).full_name as string | null) ?? null,
+  };
 };
 
 export const resolveAdminFromToken = async (

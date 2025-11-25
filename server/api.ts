@@ -3,7 +3,7 @@ import { parse as parseUrl } from 'node:url';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { createServiceRoleClient } from '../scripts/utils/supabase.js';
+import { createRlsClient, createServiceRoleClient } from '../scripts/utils/supabase.js';
 import {
   IMPORT_PROVIDERS,
   IMPORT_PROVIDER_MAP,
@@ -32,12 +32,18 @@ import {
   toApiModel,
 } from './importRuns.js';
 import { demoteAdmin, listAdmins, promoteUserToAdmin } from './admins.js';
-import { extractBearerToken, resolveAdminFromToken, type AuthenticatedAdmin } from './auth.js';
+import {
+  extractBearerToken,
+  resolveAdminFromToken,
+  resolveUserFromToken,
+  type AuthenticatedAdmin,
+  type AuthenticatedUser,
+} from './auth.js';
 import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
 import { normalizeImportLimits } from './importSafety.js';
 
 type ApiContext = {
-  supabase: SupabaseClient;
+  serviceSupabase: SupabaseClient;
 };
 
 type AssignModulePayload = {
@@ -49,7 +55,11 @@ type AssignModulePayload = {
   title?: string;
 };
 
-const ensureParentProfile = async (supabase: SupabaseClient, creatorId: string) => {
+const ensureParentProfile = async (
+  supabase: SupabaseClient,
+  creatorId: string,
+  serviceSupabase?: SupabaseClient,
+) => {
   const { data, error } = await supabase
     .from('parent_profiles')
     .select('id')
@@ -78,7 +88,17 @@ const ensureParentProfile = async (supabase: SupabaseClient, creatorId: string) 
       .insert({ id: creatorId, full_name: fullName });
 
     if (insertError) {
-      throw new Error(`Failed to provision parent profile: ${insertError.message}`);
+      if (!serviceSupabase) {
+        throw new Error(`Failed to provision parent profile: ${insertError.message}`);
+      }
+
+      const { error: elevatedError } = await serviceSupabase
+        .from('parent_profiles')
+        .insert({ id: creatorId, full_name: fullName });
+
+      if (elevatedError) {
+        throw new Error(`Failed to provision parent profile: ${elevatedError.message}`);
+      }
     }
   }
 };
@@ -86,6 +106,7 @@ const ensureParentProfile = async (supabase: SupabaseClient, creatorId: string) 
 const createModuleAssignment = async (
   supabase: SupabaseClient,
   payload: AssignModulePayload,
+  serviceSupabase?: SupabaseClient,
 ) => {
   const studentIds = Array.from(new Set(payload.studentIds.filter((id) => typeof id === 'string' && id.trim().length)));
   if (!studentIds.length) {
@@ -115,7 +136,7 @@ const createModuleAssignment = async (
     throw new Error(`Unable to load module lessons: ${lessonError.message}`);
   }
 
-  await ensureParentProfile(supabase, payload.creatorId);
+  await ensureParentProfile(supabase, payload.creatorId, serviceSupabase);
 
   const assignmentTitle = payload.title && payload.title.trim().length
     ? payload.title.trim()
@@ -190,6 +211,31 @@ const createModuleAssignment = async (
     lessonsAttached: (lessonRows ?? []).length,
     assignedStudents: assignedRows?.length ?? studentIds.length,
   } satisfies { assignmentId: number; lessonsAttached: number; assignedStudents: number };
+};
+
+const ensureGuardianAccess = async (
+  supabase: SupabaseClient,
+  actor: AuthenticatedUser,
+  studentIds: string[],
+): Promise<void> => {
+  if (actor.role !== 'parent') {
+    return;
+  }
+
+  const results = await Promise.all(
+    studentIds.map(async (studentId) => {
+      const { data, error } = await supabase.rpc('is_guardian', { target_student: studentId });
+      if (error) {
+        throw new Error(`Unable to verify guardian status for learner ${studentId}: ${error.message}`);
+      }
+      return data === true;
+    }),
+  );
+
+  const unauthorized = studentIds.filter((_id, index) => results[index] !== true);
+  if (unauthorized.length > 0) {
+    throw new Error('You can only assign modules to learners you manage.');
+  }
 };
 
 const sendJson = (res: ServerResponse, status: number, payload: unknown) => {
@@ -272,12 +318,36 @@ const createFilters = (query: Record<string, string | string[] | undefined>): Mo
   };
 };
 
+const requireUser = async (
+  supabase: SupabaseClient,
+  token: string | null,
+  res: ServerResponse,
+  allowedRoles?: Array<AuthenticatedUser['role']>,
+): Promise<AuthenticatedUser | null> => {
+  if (!token) {
+    sendJson(res, 401, { error: 'Authentication required.' });
+    return null;
+  }
+
+  const user = await resolveUserFromToken(supabase, token);
+  if (!user) {
+    sendJson(res, 401, { error: 'Authentication required.' });
+    return null;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    sendJson(res, 403, { error: 'You do not have permission to perform this action.' });
+    return null;
+  }
+
+  return user;
+};
+
 const requireAdmin = async (
   supabase: SupabaseClient,
-  req: IncomingMessage,
+  token: string | null,
   res: ServerResponse,
 ): Promise<AuthenticatedAdmin | null> => {
-  const token = extractBearerToken(req);
   if (!token) {
     sendJson(res, 401, { error: 'Authentication required.' });
     return null;
@@ -293,7 +363,7 @@ const requireAdmin = async (
 };
 
 export const createApiHandler = (context: ApiContext) => {
-  const { supabase } = context;
+  const { serviceSupabase } = context;
 
   return async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
     const url = parseUrl(req.url ?? '', true);
@@ -302,6 +372,9 @@ export const createApiHandler = (context: ApiContext) => {
     }
 
     try {
+      const token = extractBearerToken(req);
+      const supabase = createRlsClient(token ?? undefined);
+
       if (req.method === 'GET' && url.pathname === '/api/recommendations') {
         const moduleId = parseNumber(url.query.moduleId);
         const lastScore = parseNumber(url.query.lastScore);
@@ -317,31 +390,64 @@ export const createApiHandler = (context: ApiContext) => {
       }
 
       if (req.method === 'POST' && url.pathname === '/api/assignments/assign') {
+        const actor = await requireUser(supabase, token, res, ['parent', 'admin']);
+        if (!actor) {
+          return true;
+        }
+
         const body = await readJsonBody<AssignModulePayload>(req);
         if (
           !body ||
           typeof body.moduleId !== 'number' ||
           !Array.isArray(body.studentIds) ||
-          body.studentIds.length === 0 ||
-          typeof body.creatorId !== 'string'
+          body.studentIds.length === 0
         ) {
           sendJson(res, 400, {
-            error: 'moduleId, studentIds, and creatorId are required to assign a module.',
+            error: 'moduleId and studentIds are required to assign a module.',
           });
           return true;
         }
 
+        const studentIds = Array.from(
+          new Set(
+            body.studentIds
+              .filter((id): id is string => typeof id === 'string')
+              .map((id) => id.trim())
+              .filter((id) => id.length > 0),
+          ),
+        );
+
+        if (!studentIds.length) {
+          sendJson(res, 400, { error: 'At least one valid student id is required.' });
+          return true;
+        }
+
         try {
-          const result = await createModuleAssignment(supabase, body);
+          await ensureGuardianAccess(supabase, actor, studentIds);
+
+          const result = await createModuleAssignment(
+            supabase,
+            {
+              ...body,
+              studentIds,
+              creatorId: actor.id,
+              creatorRole: actor.role === 'admin' ? 'admin' : 'parent',
+            },
+            serviceSupabase,
+          );
           sendJson(res, 200, result);
         } catch (error) {
           captureServerException(error, {
             route: url.pathname,
             moduleId: body.moduleId,
-            creatorId: body.creatorId,
+            creatorId: actor.id,
           });
           console.error('[api] assign module failed', error);
-          sendJson(res, 500, {
+          const status =
+            error instanceof Error && error.message.toLowerCase().includes('assign modules to learners you manage')
+              ? 403
+              : 500;
+          sendJson(res, status, {
             error: error instanceof Error ? error.message : 'Unable to assign module.',
           });
         }
@@ -376,13 +482,13 @@ export const createApiHandler = (context: ApiContext) => {
       }
 
       if (url.pathname?.startsWith('/api/admins')) {
-        const admin = await requireAdmin(supabase, req, res);
+        const admin = await requireAdmin(supabase, token, res);
         if (!admin) {
           return true;
         }
 
         if (req.method === 'GET' && url.pathname === '/api/admins') {
-          const admins = await listAdmins(supabase);
+          const admins = await listAdmins(serviceSupabase);
           sendJson(res, 200, { admins });
           return true;
         }
@@ -401,7 +507,7 @@ export const createApiHandler = (context: ApiContext) => {
 
           try {
             const promoted = await promoteUserToAdmin(
-              supabase,
+              serviceSupabase,
               { email: body.email, userId: body.userId },
               { title: body.title, permissions },
             );
@@ -423,7 +529,7 @@ export const createApiHandler = (context: ApiContext) => {
           const targetRole = body.targetRole === 'student' ? 'student' : 'parent';
 
           try {
-            const result = await demoteAdmin(supabase, body.userId, targetRole);
+            const result = await demoteAdmin(serviceSupabase, body.userId, targetRole);
             sendJson(res, 200, {
               demoted: result.id,
               role: result.role,
@@ -442,7 +548,7 @@ export const createApiHandler = (context: ApiContext) => {
       }
 
       if (url.pathname?.startsWith('/api/import/')) {
-        const admin = await requireAdmin(supabase, req, res);
+        const admin = await requireAdmin(supabase, token, res);
         if (!admin) {
           return true;
         }
@@ -533,7 +639,7 @@ export const createApiHandler = (context: ApiContext) => {
             limitSummary.push(`assets<=${limits.maxAssets}`);
           }
 
-          const run = await createImportRun(supabase, {
+          const run = await createImportRun(serviceSupabase, {
             source: provider,
             status: 'pending',
             input: inputPayload,
@@ -557,7 +663,7 @@ export const createApiHandler = (context: ApiContext) => {
             sendJson(res, 400, { error: 'mapping payload is required' });
             return true;
           }
-          const inserted = await importOpenStaxMapping(supabase, body.mapping);
+          const inserted = await importOpenStaxMapping(serviceSupabase, body.mapping);
           sendJson(res, 200, { inserted });
           return true;
         }
@@ -568,7 +674,7 @@ export const createApiHandler = (context: ApiContext) => {
             sendJson(res, 400, { error: 'mapping payload is required' });
             return true;
           }
-          const inserted = await importGutenbergMapping(supabase, body.mapping);
+          const inserted = await importGutenbergMapping(serviceSupabase, body.mapping);
           sendJson(res, 200, { inserted });
           return true;
         }
@@ -579,7 +685,7 @@ export const createApiHandler = (context: ApiContext) => {
             sendJson(res, 400, { error: 'mapping payload is required' });
             return true;
           }
-          const inserted = await importFederalMapping(supabase, body.mapping);
+          const inserted = await importFederalMapping(serviceSupabase, body.mapping);
           sendJson(res, 200, { inserted });
           return true;
         }
@@ -643,9 +749,9 @@ export const createApiHandler = (context: ApiContext) => {
 };
 
 export const startApiServer = (port = Number.parseInt(process.env.PORT ?? '8787', 10)) => {
-  const supabase = createServiceRoleClient();
-  const handler = createApiHandler({ supabase });
-  const queue = new ImportQueue(supabase, {
+  const serviceSupabase = createServiceRoleClient();
+  const handler = createApiHandler({ serviceSupabase });
+  const queue = new ImportQueue(serviceSupabase, {
     logger: (entry) => {
       const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
       console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
