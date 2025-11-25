@@ -46,6 +46,13 @@ type StudentMasteryRow = {
   updated_at?: string;
 };
 
+type SubjectMasteryAggregateRow = {
+  student_id?: string;
+  subject: string | null;
+  mastery: number | null;
+  cohort_average: number | null;
+};
+
 type XpEventRow = {
   id: number;
   source: string;
@@ -551,6 +558,32 @@ const groupMasteryBySubject = (
   }));
 };
 
+const mapSubjectMasteryFromRollup = (
+  rows: SubjectMasteryAggregateRow[] | null | undefined,
+): SubjectMastery[] => {
+  if (!rows?.length) {
+    return fallbackStudentMastery();
+  }
+
+  const mapped = rows
+    .map((row) => {
+      const subject = normalizeSubject(row.subject);
+      if (!subject) return null;
+      const mastery = row.mastery ?? 0;
+      const cohort = row.cohort_average ?? null;
+      const trend: SubjectMastery['trend'] =
+        cohort == null ? 'steady' : mastery >= cohort ? 'up' : 'down';
+      return {
+        subject,
+        mastery,
+        trend,
+      } satisfies SubjectMastery;
+    })
+    .filter(Boolean) as SubjectMastery[];
+
+  return mapped.length ? mapped : fallbackStudentMastery();
+};
+
 const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
   if (!student.learningPath?.length) {
     return fallbackStudentLessons();
@@ -1053,15 +1086,13 @@ export const fetchStudentDashboardData = async (
       { data: masteryRows, error: masteryError },
       { data: xpRows, error: xpError },
       { data: assignmentsRows, error: assignmentsError },
-      { data: skillRows, error: skillError },
-      { data: subjectRows, error: subjectError },
       { data: progressRows, error: progressError },
       { data: suggestionRows, error: suggestionError },
     ] =
       await Promise.all([
         supabase
-          .from('student_mastery')
-          .select('skill_id, mastery_pct')
+          .from('student_mastery_by_subject')
+          .select('subject, mastery, cohort_average')
           .eq('student_id', student.id),
         supabase
           .from('xp_events')
@@ -1075,12 +1106,6 @@ export const fetchStudentDashboardData = async (
           .eq('student_id', student.id)
           .order('due_at', { ascending: true })
           .limit(4),
-        supabase
-          .from('skills')
-          .select('id, subject_id'),
-        supabase
-          .from('subjects')
-          .select('id, name'),
         supabase
           .from('student_progress')
           .select(
@@ -1112,12 +1137,6 @@ export const fetchStudentDashboardData = async (
     if (assignmentsError) {
       console.error('[Dashboard] Failed to load assignments', assignmentsError);
     }
-    if (skillError) {
-      console.error('[Dashboard] Failed to load skill references', skillError);
-    }
-    if (subjectError) {
-      console.error('[Dashboard] Failed to load subject references', subjectError);
-    }
     if (progressError) {
       console.error('[Dashboard] Failed to load lesson progress', progressError);
     }
@@ -1125,12 +1144,8 @@ export const fetchStudentDashboardData = async (
       console.error('[Dashboard] Failed to load adaptive suggestions', suggestionError);
     }
 
-    const subjectMastery = masteryRows && skillRows && subjectRows
-      ? groupMasteryBySubject(
-          (masteryRows as StudentMasteryRow[]) ?? [],
-          (skillRows as SkillRow[]) ?? [],
-          (subjectRows as SubjectRow[]) ?? [],
-        )
+    const subjectMastery = masteryRows
+      ? mapSubjectMasteryFromRollup((masteryRows as SubjectMasteryAggregateRow[]) ?? [])
       : fallbackStudentMastery();
 
     const progressData = (progressRows as StudentProgressLessonRow[]) ?? [];
