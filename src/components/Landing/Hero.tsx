@@ -50,26 +50,26 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-center">
           <motion.div
             className="relative z-10 space-y-8 lg:col-span-6"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand-secondary/70 backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
-              Elevating K-12 Learning
-            </div>
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand-secondary/70 backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
+              Smart Learning • Elevated Results
+          </div>
 
-            <h1 className="text-5xl font-semibold text-slate-900 sm:text-6xl lg:text-7xl">
-              A private AI tutor for every student.
+          <h1 className="text-5xl font-semibold text-slate-900 sm:text-6xl lg:text-7xl">
+              Smart Learning. Elevated Results.
               <span className="flex bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent">
-                Built for curiosity.
+                AI tutoring built for every K-12 learner.
               </span>
-            </h1>
+          </h1>
 
-            <p className="text-lg leading-relaxed text-slate-600 sm:text-xl">
-              ElevatED personalizes instruction in real time, adapts across subjects, and celebrates every win.
-              Launch adaptive journeys that feel handcrafted at scale.
-            </p>
+          <p className="text-lg leading-relaxed text-slate-600 sm:text-xl">
+              ElevatED pairs adaptive AI instruction with family-ready insights so students accelerate with confidence.
+              Launch personalized journeys that feel handcrafted, with dashboards that keep everyone in the loop.
+          </p>
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
               <button
