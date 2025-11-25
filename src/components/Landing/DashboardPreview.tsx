@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Play, Star, Trophy, TrendingUp, Users, BarChart3 } from 'lucide-react';
+import { Play, Star, Trophy, TrendingUp, Users, BarChart3, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DashboardPreview: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'student' | 'parent'>('student');
 
   const studentData = {
-    name: 'Emma Johnson',
+    name: 'Sample Student',
     level: 8,
     xp: 2450,
     streak: 12,
@@ -26,8 +26,8 @@ const DashboardPreview: React.FC = () => {
 
   const parentData = {
     children: [
-      { name: 'Emma', grade: 8, progress: 85, streak: 12 },
-      { name: 'Alex', grade: 5, progress: 72, streak: 8 }
+      { name: 'Student A', grade: 8, progress: 85, streak: 12 },
+      { name: 'Student B', grade: 5, progress: 72, streak: 8 }
     ],
     weeklyStats: [
       { day: 'Mon', lessons: 4 },
@@ -54,8 +54,15 @@ const DashboardPreview: React.FC = () => {
             See ElevatED in Action
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Experience our intuitive dashboards designed for both students and parents
+            Experience our intuitive dashboards designed for both students and parents.
           </p>
+          <div className="flex flex-col items-center gap-3 text-sm text-gray-600">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-md shadow-brand-primary/10 ring-1 ring-brand-primary/10">
+              <ShieldCheck className="h-4 w-4 text-brand-primary" />
+              <span>Demo mode with anonymized sample data - no live learner information.</span>
+            </div>
+            <p className="text-xs text-gray-500">Metrics are generated from offline snapshots to keep real accounts protected.</p>
+          </div>
           
           {/* Tab Selector */}
           <div className="flex justify-center mb-12">
@@ -101,9 +108,15 @@ const DashboardPreview: React.FC = () => {
                     <h3 className="text-2xl font-bold mb-2">Welcome back, {studentData.name}! 🌟</h3>
                     <p className="opacity-90">Ready to continue your learning journey?</p>
                   </div>
-                  <div className="text-right">
-                    <div className="text-3xl font-bold">{studentData.xp}</div>
-                    <div className="text-sm opacity-90">Total XP</div>
+                  <div className="text-right space-y-2">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+                      <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                      Sample View
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">{studentData.xp}</div>
+                      <div className="text-sm opacity-90">Total XP</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -222,7 +235,13 @@ const DashboardPreview: React.FC = () => {
                     <h3 className="text-2xl font-bold mb-2">Parent Dashboard</h3>
                     <p className="opacity-90">Track your children's learning progress</p>
                   </div>
-                  <Users className="h-12 w-12 opacity-80" />
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+                      <span className="h-2 w-2 rounded-full bg-amber-300" />
+                      Sample View
+                    </div>
+                    <Users className="h-12 w-12 opacity-80" />
+                  </div>
                 </div>
               </div>
 
@@ -287,9 +306,9 @@ const DashboardPreview: React.FC = () => {
                     <h4 className="text-xl font-bold text-gray-900 mb-6">Recent Achievements</h4>
                     <div className="space-y-4">
                       {[
-                        { child: 'Emma', achievement: 'Completed Algebra Unit', time: '2 hours ago', icon: '🎯' },
-                        { child: 'Alex', achievement: 'Earned Reading Badge', time: '1 day ago', icon: '📚' },
-                        { child: 'Emma', achievement: '10-day Learning Streak', time: '2 days ago', icon: '🔥' }
+                        { child: 'Student A', achievement: 'Completed Algebra Unit', time: '2 hours ago', icon: '🎯' },
+                        { child: 'Student B', achievement: 'Earned Reading Badge', time: '1 day ago', icon: '📚' },
+                        { child: 'Student A', achievement: '10-day Learning Streak', time: '2 days ago', icon: '🔥' }
                       ].map((item, index) => (
                         <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                           <div className="text-2xl">{item.icon}</div>
