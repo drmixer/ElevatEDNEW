@@ -22,6 +22,7 @@ import {
   importOpenStaxMapping,
   type OpenStaxMapping,
 } from '../scripts/import_openstax.js';
+import { handleTutorRequest, type TutorRequestBody } from './ai.js';
 import { getRecommendations } from './recommendations.js';
 import { getLessonDetail, getModuleAssessment, getModuleDetail, listModules, type ModuleFilters } from './modules.js';
 import { ImportQueue } from './importQueue.js';
@@ -266,6 +267,19 @@ const parseNumber = (value: string | undefined | string[]): number | null => {
   return Number.isFinite(parsed) ? parsed : null;
 };
 
+const resolveClientIp = (req: IncomingMessage): string | null => {
+  const forwarded = req.headers['x-forwarded-for'] || req.headers['X-Forwarded-For'];
+  if (typeof forwarded === 'string' && forwarded.length) {
+    const first = forwarded.split(',')[0]?.trim();
+    if (first) return first;
+  }
+  const remote = req.socket?.remoteAddress;
+  if (typeof remote === 'string' && remote.length) {
+    return remote;
+  }
+  return null;
+};
+
 const createFilters = (query: Record<string, string | string[] | undefined>): ModuleFilters => {
   const toStringValue = (key: string) => {
     const value = query[key];
@@ -374,6 +388,28 @@ export const createApiHandler = (context: ApiContext) => {
     try {
       const token = extractBearerToken(req);
       const supabase = createRlsClient(token ?? undefined);
+
+      if (req.method === 'POST' && url.pathname === '/api/ai/tutor') {
+        const body = await readJsonBody<TutorRequestBody>(req);
+        const actor = token ? await resolveUserFromToken(supabase, token) : null;
+
+        try {
+          const result = await handleTutorRequest(body, supabase, {
+            userId: actor?.id ?? null,
+            role: actor?.role ?? null,
+            clientIp: resolveClientIp(req),
+          });
+          sendJson(res, 200, { message: result.message, model: result.model });
+        } catch (error) {
+          const status = (error as { status?: number }).status ?? 500;
+          const message = error instanceof Error ? error.message : 'Assistant unavailable.';
+          const level: Parameters<typeof captureServerMessage>[2] = status >= 500 ? 'error' : 'warning';
+          captureServerMessage('[api] tutor request failed', { status, reason: message }, level);
+          sendJson(res, status, { error: message });
+        }
+
+        return true;
+      }
 
       if (req.method === 'GET' && url.pathname === '/api/recommendations') {
         const moduleId = parseNumber(url.query.moduleId);
