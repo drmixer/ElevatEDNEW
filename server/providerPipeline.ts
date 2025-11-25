@@ -38,6 +38,13 @@ import {
   type LessonSummary,
 } from '../scripts/utils/supabase.js';
 import type { ImportRunRow } from './importRuns.js';
+import {
+  countDatasetItems,
+  countMappingItems,
+  evaluateImportLimits,
+  normalizeImportLimits,
+  type ImportLimits,
+} from './importSafety.js';
 import { checkUrlsHealth } from './urlQA.js';
 
 export type ImportOutcome = {
@@ -420,6 +427,10 @@ export const processImportRun = async (
   providerId: ImportProviderId,
   run: ImportRunRow,
 ): Promise<ImportOutcome> => {
+  const dryRun = run.input?.dryRun === true;
+  const limits = normalizeImportLimits(run.input?.limits);
+  const limitTotals = limits && (limits.maxAssets || limits.maxModules) ? { limits } : {};
+
   if (providerId === 'openstax') {
     const mapping = run.input?.mapping as OpenStaxMapping | undefined;
     if (!mapping || typeof mapping !== 'object') {
@@ -427,6 +438,24 @@ export const processImportRun = async (
         totals: null,
         errors: ['Import run did not include an OpenStax mapping payload.'],
         warnings: [],
+      };
+    }
+
+    const counts = countMappingItems(mapping, normalizeOpenStaxEntries);
+    const limitAssessment = evaluateImportLimits(counts, limits);
+    const limitWarnings = [...limitAssessment.warnings];
+
+    if (limitAssessment.errors.length) {
+      return {
+        totals: {
+          ...limitTotals,
+          provider: providerId,
+          modulesDetected: counts.modules,
+          assetsDetected: counts.assets,
+          dryRun: true,
+        },
+        errors: limitAssessment.errors,
+        warnings: limitWarnings,
       };
     }
 
@@ -439,16 +468,38 @@ export const processImportRun = async (
           : `Potential dead link for ${check.url}: ${check.error ?? 'unknown error'}`,
       );
 
+    const combinedWarnings = [...limitWarnings, ...urlWarnings];
+
+    if (dryRun) {
+      return {
+        totals: {
+          ...limitTotals,
+          provider: providerId,
+          modulesDetected: counts.modules,
+          assetsDetected: counts.assets,
+          assetsInserted: 0,
+          urlChecks: urlChecks.length,
+          urlFailures: urlWarnings.length,
+          dryRun: true,
+        },
+        errors: [],
+        warnings: [...combinedWarnings, 'Dry run enabled; no data was written.'],
+      };
+    }
+
     const inserted = await importOpenStaxMapping(client, mapping);
     return {
       totals: {
+        ...limitTotals,
         provider: providerId,
+        modulesDetected: counts.modules,
         assetsInserted: inserted,
         urlChecks: urlChecks.length,
         urlFailures: urlWarnings.length,
+        dryRun: false,
       },
       errors: [],
-      warnings: urlWarnings,
+      warnings: combinedWarnings,
     };
   }
 
@@ -459,6 +510,24 @@ export const processImportRun = async (
         totals: null,
         errors: ['Import run did not include a Project Gutenberg mapping payload.'],
         warnings: [],
+      };
+    }
+
+    const counts = countMappingItems(mapping, normalizeGutenbergEntries);
+    const limitAssessment = evaluateImportLimits(counts, limits);
+    const limitWarnings = [...limitAssessment.warnings];
+
+    if (limitAssessment.errors.length) {
+      return {
+        totals: {
+          ...limitTotals,
+          provider: providerId,
+          modulesDetected: counts.modules,
+          assetsDetected: counts.assets,
+          dryRun: true,
+        },
+        errors: limitAssessment.errors,
+        warnings: limitWarnings,
       };
     }
 
@@ -473,16 +542,38 @@ export const processImportRun = async (
           : `Potential dead link for ${check.url}: ${check.error ?? 'unknown error'}`,
       );
 
+    const combinedWarnings = [...limitWarnings, ...urlWarnings];
+
+    if (dryRun) {
+      return {
+        totals: {
+          ...limitTotals,
+          provider: providerId,
+          modulesDetected: counts.modules,
+          assetsDetected: counts.assets,
+          assetsInserted: 0,
+          urlChecks: urlChecks.length,
+          urlFailures: urlWarnings.length,
+          dryRun: true,
+        },
+        errors: [],
+        warnings: [...combinedWarnings, 'Dry run enabled; no data was written.'],
+      };
+    }
+
     const inserted = await importGutenbergMapping(client, mapping);
     return {
       totals: {
+        ...limitTotals,
         provider: providerId,
+        modulesDetected: counts.modules,
         assetsInserted: inserted,
         urlChecks: urlChecks.length,
         urlFailures: urlWarnings.length,
+        dryRun: false,
       },
       errors: [],
-      warnings: urlWarnings,
+      warnings: combinedWarnings,
     };
   }
 
@@ -493,6 +584,24 @@ export const processImportRun = async (
         totals: null,
         errors: ['Import run did not include a Federal mapping payload.'],
         warnings: [],
+      };
+    }
+
+    const counts = countMappingItems(mapping, normalizeFederalEntries);
+    const limitAssessment = evaluateImportLimits(counts, limits);
+    const limitWarnings = [...limitAssessment.warnings];
+
+    if (limitAssessment.errors.length) {
+      return {
+        totals: {
+          ...limitTotals,
+          provider: providerId,
+          modulesDetected: counts.modules,
+          assetsDetected: counts.assets,
+          dryRun: true,
+        },
+        errors: limitAssessment.errors,
+        warnings: limitWarnings,
       };
     }
 
@@ -507,16 +616,38 @@ export const processImportRun = async (
           : `Potential dead link for ${check.url}: ${check.error ?? 'unknown error'}`,
       );
 
+    const combinedWarnings = [...limitWarnings, ...urlWarnings];
+
+    if (dryRun) {
+      return {
+        totals: {
+          ...limitTotals,
+          provider: providerId,
+          modulesDetected: counts.modules,
+          assetsDetected: counts.assets,
+          assetsInserted: 0,
+          urlChecks: urlChecks.length,
+          urlFailures: urlWarnings.length,
+          dryRun: true,
+        },
+        errors: [],
+        warnings: [...combinedWarnings, 'Dry run enabled; no data was written.'],
+      };
+    }
+
     const inserted = await importFederalMapping(client, mapping);
     return {
       totals: {
+        ...limitTotals,
         provider: providerId,
+        modulesDetected: counts.modules,
         assetsInserted: inserted,
         urlChecks: urlChecks.length,
         urlFailures: urlWarnings.length,
+        dryRun: false,
       },
       errors: [],
-      warnings: urlWarnings,
+      warnings: combinedWarnings,
     };
   }
 
@@ -532,6 +663,24 @@ export const processImportRun = async (
     };
   }
 
+  const datasetCounts = countDatasetItems(datasetPayload);
+  const limitAssessment = evaluateImportLimits(datasetCounts, limits);
+  const limitWarnings = [...limitAssessment.warnings];
+
+  if (limitAssessment.errors.length) {
+    return {
+      totals: {
+        ...limitTotals,
+        provider: providerId,
+        modulesDetected: datasetCounts.modules,
+        assetsDetected: datasetCounts.assets,
+        dryRun: true,
+      },
+      errors: limitAssessment.errors,
+      warnings: limitWarnings,
+    };
+  }
+
   const { assets, warnings, errors, urlWarnings, totals, lessonState } = await prepareDatasetAssets(
     client,
     providerId,
@@ -539,15 +688,42 @@ export const processImportRun = async (
     run,
   );
 
+  const combinedWarnings = [
+    ...limitWarnings,
+    ...warnings,
+    ...urlWarnings,
+    ...(dryRun ? ['Dry run enabled; no data was written.'] : []),
+  ];
+
+  if (dryRun) {
+    return {
+      totals: {
+        ...totals,
+        ...limitTotals,
+        modulesDetected: datasetCounts.modules,
+        assetsDetected: datasetCounts.assets,
+        assetsInserted: 0,
+        lessonsUpdated: lessonState.touchedLessons.size,
+        dryRun: true,
+      },
+      errors,
+      warnings: combinedWarnings,
+    };
+  }
+
   await finaliseDatasetImport(client, assets, lessonState);
 
   return {
     totals: {
       ...totals,
+      ...limitTotals,
+      modulesDetected: datasetCounts.modules,
+      assetsDetected: datasetCounts.assets,
       assetsInserted: assets.length,
       lessonsUpdated: lessonState.touchedLessons.size,
+      dryRun: false,
     },
     errors,
-    warnings: [...warnings, ...urlWarnings],
+    warnings: combinedWarnings,
   };
 };

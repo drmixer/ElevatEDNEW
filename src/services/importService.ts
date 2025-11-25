@@ -8,6 +8,7 @@ import type {
   ImportRunLogEntry,
   ImportRunStatus,
 } from '../../shared/import-runs.js';
+import { authenticatedFetch, handleApiResponse } from '../lib/apiClient';
 
 type ProvidersResponse = {
   providers: Array<{
@@ -27,14 +28,6 @@ type ImportRunsResponse = {
 
 type ImportRunResponse = {
   run: ImportRunApiModel;
-};
-
-const handleResponse = async <T>(response: Response): Promise<T> => {
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text || `Import API request failed (${response.status})`);
-  }
-  return (await response.json()) as T;
 };
 
 export type ImportRun = {
@@ -63,8 +56,8 @@ const mapRun = (apiRun: ImportRunApiModel): ImportRun => ({
 
 export const fetchImportProviders = async (): Promise<ImportProviderDefinition[]> => {
   try {
-    const response = await fetch('/api/import/providers');
-    const payload = await handleResponse<ProvidersResponse>(response);
+    const response = await authenticatedFetch('/api/import/providers');
+    const payload = await handleApiResponse<ProvidersResponse>(response);
     return payload.providers.map((provider) => ({
       id: provider.id,
       label: provider.label,
@@ -76,6 +69,9 @@ export const fetchImportProviders = async (): Promise<ImportProviderDefinition[]
       notes: provider.notes ?? undefined,
     }));
   } catch (error) {
+    if (error instanceof Error && error.message.toLowerCase().includes('admin')) {
+      throw error;
+    }
     console.warn(
       '[importService] falling back to static provider definitions:',
       error instanceof Error ? error.message : error,
@@ -85,8 +81,8 @@ export const fetchImportProviders = async (): Promise<ImportProviderDefinition[]
 };
 
 export const fetchImportRuns = async (): Promise<ImportRun[]> => {
-  const response = await fetch('/api/import/runs');
-  const payload = await handleResponse<ImportRunsResponse>(response);
+  const response = await authenticatedFetch('/api/import/runs');
+  const payload = await handleApiResponse<ImportRunsResponse>(response);
   return Array.isArray(payload.runs) ? payload.runs.map(mapRun) : [];
 };
 
@@ -97,9 +93,11 @@ export const queueImportRun = async (
     dataset?: Record<string, unknown>;
     fileName?: string;
     notes?: string;
+    dryRun?: boolean;
+    limits?: { maxModules?: number; maxAssets?: number };
   },
 ): Promise<ImportRun> => {
-  const response = await fetch('/api/import/runs', {
+  const response = await authenticatedFetch('/api/import/runs', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -110,8 +108,10 @@ export const queueImportRun = async (
       dataset: payload.dataset,
       fileName: payload.fileName,
       notes: payload.notes,
+      dryRun: payload.dryRun,
+      limits: payload.limits,
     }),
   });
-  const data = await handleResponse<ImportRunResponse>(response);
+  const data = await handleApiResponse<ImportRunResponse>(response);
   return mapRun(data.run);
 };

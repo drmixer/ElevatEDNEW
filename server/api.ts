@@ -31,7 +31,10 @@ import {
   fetchImportRuns,
   toApiModel,
 } from './importRuns.js';
+import { demoteAdmin, listAdmins, promoteUserToAdmin } from './admins.js';
+import { extractBearerToken, resolveAdminFromToken, type AuthenticatedAdmin } from './auth.js';
 import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
+import { normalizeImportLimits } from './importSafety.js';
 
 type ApiContext = {
   supabase: SupabaseClient;
@@ -269,6 +272,26 @@ const createFilters = (query: Record<string, string | string[] | undefined>): Mo
   };
 };
 
+const requireAdmin = async (
+  supabase: SupabaseClient,
+  req: IncomingMessage,
+  res: ServerResponse,
+): Promise<AuthenticatedAdmin | null> => {
+  const token = extractBearerToken(req);
+  if (!token) {
+    sendJson(res, 401, { error: 'Authentication required.' });
+    return null;
+  }
+
+  const admin = await resolveAdminFromToken(supabase, token);
+  if (!admin) {
+    sendJson(res, 403, { error: 'Admin access required.' });
+    return null;
+  }
+
+  return admin;
+};
+
 export const createApiHandler = (context: ApiContext) => {
   const { supabase } = context;
 
@@ -352,93 +375,216 @@ export const createApiHandler = (context: ApiContext) => {
         }
       }
 
-      if (req.method === 'GET' && url.pathname === '/api/import/providers') {
-        const providers = IMPORT_PROVIDERS.map((provider) => ({
-          id: provider.id,
-          label: provider.label,
-          description: provider.description,
-          samplePath: provider.samplePath ?? null,
-          importKind: provider.importKind,
-          defaultLicense: provider.defaultLicense,
-          notes: provider.notes ?? null,
-        }));
-        sendJson(res, 200, { providers });
+      if (url.pathname?.startsWith('/api/admins')) {
+        const admin = await requireAdmin(supabase, req, res);
+        if (!admin) {
+          return true;
+        }
+
+        if (req.method === 'GET' && url.pathname === '/api/admins') {
+          const admins = await listAdmins(supabase);
+          sendJson(res, 200, { admins });
+          return true;
+        }
+
+        if (req.method === 'POST' && url.pathname === '/api/admins/promote') {
+          const body = await readJsonBody<{
+            email?: string;
+            userId?: string;
+            title?: string;
+            permissions?: unknown;
+          }>(req);
+
+          const permissions = Array.isArray(body.permissions)
+            ? body.permissions.filter((item): item is string => typeof item === 'string')
+            : undefined;
+
+          try {
+            const promoted = await promoteUserToAdmin(
+              supabase,
+              { email: body.email, userId: body.userId },
+              { title: body.title, permissions },
+            );
+            sendJson(res, 200, { admin: promoted });
+          } catch (error) {
+            sendJson(res, 400, {
+              error: error instanceof Error ? error.message : 'Unable to promote admin user.',
+            });
+          }
+          return true;
+        }
+
+        if (req.method === 'POST' && url.pathname === '/api/admins/demote') {
+          const body = await readJsonBody<{ userId?: string; targetRole?: string }>(req);
+          if (!body.userId || typeof body.userId !== 'string') {
+            sendJson(res, 400, { error: 'userId is required to demote an admin.' });
+            return true;
+          }
+          const targetRole = body.targetRole === 'student' ? 'student' : 'parent';
+
+          try {
+            const result = await demoteAdmin(supabase, body.userId, targetRole);
+            sendJson(res, 200, {
+              demoted: result.id,
+              role: result.role,
+              remainingAdmins: result.remainingAdmins,
+            });
+          } catch (error) {
+            sendJson(res, 400, {
+              error: error instanceof Error ? error.message : 'Unable to demote admin user.',
+            });
+          }
+          return true;
+        }
+
+        sendJson(res, 404, { error: 'Not found' });
         return true;
       }
 
-      if (req.method === 'GET' && url.pathname === '/api/import/runs') {
-        const runs = await fetchImportRuns(supabase, 25);
-        sendJson(res, 200, { runs: runs.map(toApiModel) });
-        return true;
-      }
+      if (url.pathname?.startsWith('/api/import/')) {
+        const admin = await requireAdmin(supabase, req, res);
+        if (!admin) {
+          return true;
+        }
 
-      if (req.method === 'GET' && url.pathname?.startsWith('/api/import/runs/')) {
-        const parts = url.pathname.split('/').filter(Boolean);
-        if (parts.length === 4) {
-          const idPart = parts[3];
-          const runId = Number.parseInt(idPart ?? '', 10);
-          if (Number.isNaN(runId)) {
-            sendJson(res, 400, { error: 'Import run id must be numeric.' });
+        if (req.method === 'GET' && url.pathname === '/api/import/providers') {
+          const providers = IMPORT_PROVIDERS.map((provider) => ({
+            id: provider.id,
+            label: provider.label,
+            description: provider.description,
+            samplePath: provider.samplePath ?? null,
+            importKind: provider.importKind,
+            defaultLicense: provider.defaultLicense,
+            notes: provider.notes ?? null,
+          }));
+          sendJson(res, 200, { providers });
+          return true;
+        }
+
+        if (req.method === 'GET' && url.pathname === '/api/import/runs') {
+          const runs = await fetchImportRuns(supabase, 25);
+          sendJson(res, 200, { runs: runs.map(toApiModel) });
+          return true;
+        }
+
+        if (req.method === 'GET' && url.pathname?.startsWith('/api/import/runs/')) {
+          const parts = url.pathname.split('/').filter(Boolean);
+          if (parts.length === 4) {
+            const idPart = parts[3];
+            const runId = Number.parseInt(idPart ?? '', 10);
+            if (Number.isNaN(runId)) {
+              sendJson(res, 400, { error: 'Import run id must be numeric.' });
+              return true;
+            }
+            const run = await fetchImportRunById(supabase, runId);
+            if (!run) {
+              sendJson(res, 404, { error: 'Import run not found.' });
+              return true;
+            }
+            sendJson(res, 200, { run: toApiModel(run) });
             return true;
           }
-          const run = await fetchImportRunById(supabase, runId);
-          if (!run) {
-            sendJson(res, 404, { error: 'Import run not found.' });
+        }
+
+        if (req.method === 'POST' && url.pathname === '/api/import/runs') {
+          type CreateRunBody = {
+            provider?: string;
+            mapping?: Record<string, unknown>;
+            dataset?: Record<string, unknown>;
+            input?: Record<string, unknown>;
+            fileName?: string;
+            notes?: string;
+            dryRun?: boolean;
+            limits?: Record<string, unknown>;
+          };
+
+          const body = await readJsonBody<CreateRunBody>(req);
+          if (!body.provider || !isImportProviderId(body.provider)) {
+            sendJson(res, 400, { error: 'Valid provider is required.' });
             return true;
           }
-          sendJson(res, 200, { run: toApiModel(run) });
+
+          const provider = body.provider as ImportProviderId;
+          const providerDefinition = IMPORT_PROVIDER_MAP.get(provider);
+          if (!providerDefinition) {
+            sendJson(res, 400, { error: `Provider "${provider}" is not supported.` });
+            return true;
+          }
+
+          const limits = normalizeImportLimits(body.limits);
+          const hasLimits = Boolean(limits.maxAssets || limits.maxModules);
+
+          const inputPayload: Record<string, unknown> = {
+            provider,
+            fileName: typeof body.fileName === 'string' ? body.fileName : null,
+            mapping: body.mapping && typeof body.mapping === 'object' ? body.mapping : null,
+            dataset: body.dataset && typeof body.dataset === 'object' ? body.dataset : null,
+            extraInput: body.input && typeof body.input === 'object' ? body.input : null,
+            notes: typeof body.notes === 'string' ? body.notes : null,
+            dryRun: body.dryRun === true,
+            limits: hasLimits ? limits : undefined,
+          };
+
+          const limitSummary: string[] = [];
+          if (limits.maxModules) {
+            limitSummary.push(`modules<=${limits.maxModules}`);
+          }
+          if (limits.maxAssets) {
+            limitSummary.push(`assets<=${limits.maxAssets}`);
+          }
+
+          const run = await createImportRun(supabase, {
+            source: provider,
+            status: 'pending',
+            input: inputPayload,
+            triggered_by: admin.id,
+            logs: [
+              {
+                timestamp: new Date().toISOString(),
+                level: 'info',
+                message: `Queued ${providerDefinition.label} import${body.dryRun ? ' (dry run)' : ''}${limitSummary.length ? ` with limits: ${limitSummary.join(', ')}` : ''}.`,
+              },
+            ],
+          });
+
+          sendJson(res, 201, { run: toApiModel(run) });
           return true;
         }
-      }
 
-      if (req.method === 'POST' && url.pathname === '/api/import/runs') {
-        type CreateRunBody = {
-          provider?: string;
-          mapping?: Record<string, unknown>;
-          dataset?: Record<string, unknown>;
-          input?: Record<string, unknown>;
-          fileName?: string;
-          notes?: string;
-          triggeredBy?: string;
-        };
-
-        const body = await readJsonBody<CreateRunBody>(req);
-        if (!body.provider || !isImportProviderId(body.provider)) {
-          sendJson(res, 400, { error: 'Valid provider is required.' });
+        if (req.method === 'POST' && url.pathname === '/api/import/openstax') {
+          const body = await readJsonBody<{ mapping: OpenStaxMapping }>(req);
+          if (!body.mapping || typeof body.mapping !== 'object') {
+            sendJson(res, 400, { error: 'mapping payload is required' });
+            return true;
+          }
+          const inserted = await importOpenStaxMapping(supabase, body.mapping);
+          sendJson(res, 200, { inserted });
           return true;
         }
 
-        const provider = body.provider as ImportProviderId;
-        const providerDefinition = IMPORT_PROVIDER_MAP.get(provider);
-        if (!providerDefinition) {
-          sendJson(res, 400, { error: `Provider "${provider}" is not supported.` });
+        if (req.method === 'POST' && url.pathname === '/api/import/gutenberg') {
+          const body = await readJsonBody<{ mapping: GutenbergMapping }>(req);
+          if (!body.mapping || typeof body.mapping !== 'object') {
+            sendJson(res, 400, { error: 'mapping payload is required' });
+            return true;
+          }
+          const inserted = await importGutenbergMapping(supabase, body.mapping);
+          sendJson(res, 200, { inserted });
           return true;
         }
 
-        const inputPayload: Record<string, unknown> = {
-          provider,
-          fileName: typeof body.fileName === 'string' ? body.fileName : null,
-          mapping: body.mapping && typeof body.mapping === 'object' ? body.mapping : null,
-          dataset: body.dataset && typeof body.dataset === 'object' ? body.dataset : null,
-          extraInput: body.input && typeof body.input === 'object' ? body.input : null,
-          notes: typeof body.notes === 'string' ? body.notes : null,
-        };
+        if (req.method === 'POST' && url.pathname === '/api/import/federal') {
+          const body = await readJsonBody<{ mapping: FederalMapping }>(req);
+          if (!body.mapping || typeof body.mapping !== 'object') {
+            sendJson(res, 400, { error: 'mapping payload is required' });
+            return true;
+          }
+          const inserted = await importFederalMapping(supabase, body.mapping);
+          sendJson(res, 200, { inserted });
+          return true;
+        }
 
-        const run = await createImportRun(supabase, {
-          source: provider,
-          status: 'pending',
-          input: inputPayload,
-          triggered_by: typeof body.triggeredBy === 'string' ? body.triggeredBy : null,
-          logs: [
-            {
-              timestamp: new Date().toISOString(),
-              level: 'info',
-              message: `Queued ${providerDefinition.label} import.`,
-            },
-          ],
-        });
-
-        sendJson(res, 201, { run: toApiModel(run) });
+        sendJson(res, 404, { error: 'Not found' });
         return true;
       }
 
@@ -477,39 +623,6 @@ export const createApiHandler = (context: ApiContext) => {
           return true;
         }
         sendJson(res, 200, detail);
-        return true;
-      }
-
-      if (req.method === 'POST' && url.pathname === '/api/import/openstax') {
-        const body = await readJsonBody<{ mapping: OpenStaxMapping }>(req);
-        if (!body.mapping || typeof body.mapping !== 'object') {
-          sendJson(res, 400, { error: 'mapping payload is required' });
-          return true;
-        }
-        const inserted = await importOpenStaxMapping(supabase, body.mapping);
-        sendJson(res, 200, { inserted });
-        return true;
-      }
-
-      if (req.method === 'POST' && url.pathname === '/api/import/gutenberg') {
-        const body = await readJsonBody<{ mapping: GutenbergMapping }>(req);
-        if (!body.mapping || typeof body.mapping !== 'object') {
-          sendJson(res, 400, { error: 'mapping payload is required' });
-          return true;
-        }
-        const inserted = await importGutenbergMapping(supabase, body.mapping);
-        sendJson(res, 200, { inserted });
-        return true;
-      }
-
-      if (req.method === 'POST' && url.pathname === '/api/import/federal') {
-        const body = await readJsonBody<{ mapping: FederalMapping }>(req);
-        if (!body.mapping || typeof body.mapping !== 'object') {
-          sendJson(res, 400, { error: 'mapping payload is required' });
-          return true;
-        }
-        const inserted = await importFederalMapping(supabase, body.mapping);
-        sendJson(res, 200, { inserted });
         return true;
       }
 
