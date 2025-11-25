@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/Landing/LandingPage';
 import AuthModal from './components/Auth/AuthModal';
 import Header from './components/Layout/Header';
+import type { UserRole } from './types';
 
 const StudentDashboard = lazy(() => import('./components/Student/StudentDashboard'));
 const ParentDashboard = lazy(() => import('./components/Parent/ParentDashboard'));
@@ -14,49 +15,41 @@ const ModulePage = lazy(() => import('./pages/ModulePage'));
 const AdminImportPage = lazy(() => import('./pages/AdminImportPage'));
 const LessonPlayerPage = lazy(() => import('./pages/LessonPlayerPage'));
 
-const DashboardView: React.FC = () => {
+const DashboardContainer: React.FC<{ children: React.ReactElement; transitionKey: string }> = ({
+  children,
+  transitionKey,
+}) => (
+  <AnimatePresence mode="wait">
+    <motion.div
+      key={transitionKey}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
+  </AnimatePresence>
+);
+
+const ProtectedRoute: React.FC<{ children: React.ReactElement; allowedRoles: UserRole[] }> = ({
+  children,
+  allowedRoles,
+}) => {
   const { user } = useAuth();
 
   if (!user) {
-    return null;
+    return <Navigate to="/" replace />;
   }
 
-  return (
-    <AnimatePresence mode="wait">
-      {user.role === 'student' ? (
-        <motion.div
-          key="student"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <StudentDashboard />
-        </motion.div>
-      ) : user.role === 'parent' ? (
-        <motion.div
-          key="parent"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <ParentDashboard />
-        </motion.div>
-      ) : (
-        <motion.div
-          key="admin"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <AdminDashboard />
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to={`/${user.role}`} replace />;
+  }
+
+  return children;
 };
+
+const roleHome = (role?: UserRole | null) => (role ? `/${role}` : '/');
 
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
@@ -94,7 +87,7 @@ const AppContent: React.FC = () => {
             path="/"
             element={
               user ? (
-                <DashboardView />
+                <Navigate to={roleHome(user.role)} replace />
               ) : (
                 <LandingPage onGetStarted={() => setShowAuthModal(true)} />
               )
@@ -104,15 +97,47 @@ const AppContent: React.FC = () => {
           <Route path="/module/:id" element={<ModulePage />} />
           <Route path="/lesson/:id" element={<LessonPlayerPage />} />
           <Route
-            path="/admin/import"
-            element={user?.role === 'admin' ? <AdminImportPage /> : <Navigate to="/" replace />}
+            path="/student"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <DashboardContainer transitionKey="student">
+                  <StudentDashboard />
+                </DashboardContainer>
+              </ProtectedRoute>
+            }
           />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="/parent"
+            element={
+              <ProtectedRoute allowedRoles={['parent']}>
+                <DashboardContainer transitionKey="parent">
+                  <ParentDashboard />
+                </DashboardContainer>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <DashboardContainer transitionKey="admin">
+                  <AdminDashboard />
+                </DashboardContainer>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/import"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminImportPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to={roleHome(user?.role ?? null)} replace />} />
         </Routes>
       </Suspense>
-      {!user && (
-        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-      )}
+      {!user && <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />}
     </div>
   );
 };

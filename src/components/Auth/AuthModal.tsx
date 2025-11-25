@@ -16,11 +16,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     email: '',
     password: '',
     name: '',
-    role: 'student' as UserRole,
-    grade: 1
+    role: 'parent' as UserRole,
+    grade: 1,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [guardianConsent, setGuardianConsent] = useState(false);
 
   const { login, register } = useAuth();
 
@@ -33,7 +34,19 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       if (isLogin) {
         await login(formData.email, formData.password);
       } else {
-        await register(formData.email, formData.password, formData.name, formData.role, formData.grade);
+        if (formData.role === 'student' && !guardianConsent) {
+          setError('A parent or guardian needs to approve student sign-ups. Please confirm before continuing.');
+          setLoading(false);
+          return;
+        }
+        await register(
+          formData.email,
+          formData.password,
+          formData.name,
+          formData.role,
+          formData.grade,
+          { guardianConsent },
+        );
       }
       onClose();
     } catch (err) {
@@ -112,7 +125,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       <div className="grid grid-cols-2 gap-3">
                         <button
                           type="button"
-                          onClick={() => setFormData({ ...formData, role: 'student' })}
+                          onClick={() => {
+                            setFormData({ ...formData, role: 'student' });
+                            setGuardianConsent(false);
+                          }}
                           className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
                             formData.role === 'student'
                               ? 'border-brand-teal bg-brand-light-teal text-brand-blue'
@@ -123,7 +139,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setFormData({ ...formData, role: 'parent' })}
+                          onClick={() => {
+                            setFormData({ ...formData, role: 'parent' });
+                            setGuardianConsent(false);
+                          }}
                           className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
                             formData.role === 'parent'
                               ? 'border-brand-violet bg-brand-light-violet text-brand-blue'
@@ -136,22 +155,44 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {formData.role === 'student' && (
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Grade Level
-                        </label>
-                        <div className="relative">
-                          <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                          <select
-                            value={formData.grade}
-                            onChange={(e) => setFormData({ ...formData, grade: parseInt(e.target.value) })}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal appearance-none"
-                          >
-                            {grades.map(grade => (
-                              <option key={grade} value={grade}>Grade {grade}</option>
-                            ))}
-                          </select>
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Grade Level
+                          </label>
+                          <div className="relative">
+                            <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                            <select
+                              value={formData.grade}
+                              onChange={(e) => setFormData({ ...formData, grade: parseInt(e.target.value) })}
+                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal appearance-none"
+                            >
+                              {grades.map((grade) => (
+                                <option key={grade} value={grade}>Grade {grade}</option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
+                        <div className="space-y-2 rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-900">
+                          <p className="font-semibold">Parent/guardian approval required for learners under 13.</p>
+                          <label className="flex items-start space-x-3 text-gray-800">
+                            <input
+                              type="checkbox"
+                              className="mt-1 h-4 w-4 text-brand-teal focus:ring-brand-teal border-amber-300 rounded"
+                              checked={guardianConsent}
+                              onChange={(e) => setGuardianConsent(e.target.checked)}
+                            />
+                            <span>
+                              I am at least 13 or I&apos;m signing up with my parent/guardian present and they approve this account.
+                            </span>
+                          </label>
+                        </div>
+                      </>
+                    )}
+
+                    {formData.role === 'parent' && (
+                      <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-900">
+                        Create your parent account to manage and invite your learners. Students under 13 should sign in under a parent or guardian account.
                       </div>
                     )}
                   </>
@@ -206,7 +247,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || (!isLogin && formData.role === 'student' && !guardianConsent)}
                   className="w-full bg-gradient-to-r from-brand-teal to-brand-blue text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}
@@ -215,7 +256,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
               <div className="mt-6 text-center">
                 <button
-                  onClick={() => setIsLogin(!isLogin)}
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setGuardianConsent(false);
+                    setError('');
+                  }}
                   className="text-brand-blue hover:text-brand-teal transition-colors font-medium"
                 >
                   {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
