@@ -301,7 +301,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 export const fetchCatalogModules = async (
   filters: CatalogFilters,
 ): Promise<{ data: CatalogModule[]; total: number }> => {
-  const response = await fetch(`/api/modules${buildQueryString(filters)}`);
+  const response = await fetch(`/api/v1/modules${buildQueryString(filters)}`);
   const payload = await handleResponse<ModuleListResponse>(response);
   return {
     data: Array.isArray(payload.data) ? payload.data.map(mapModule) : [],
@@ -310,7 +310,7 @@ export const fetchCatalogModules = async (
 };
 
 export const fetchModuleDetail = async (moduleId: number): Promise<ModuleDetail> => {
-  const response = await fetch(`/api/modules/${moduleId}`);
+  const response = await fetch(`/api/v1/modules/${moduleId}`);
   const payload = await handleResponse<ModuleDetailResponse>(response);
   return {
     module: {
@@ -343,7 +343,7 @@ export const fetchModuleDetail = async (moduleId: number): Promise<ModuleDetail>
 export const fetchModuleAssessment = async (
   moduleId: number,
 ): Promise<ModuleAssessmentDetail | null> => {
-  const response = await fetch(`/api/modules/${moduleId}/assessment`);
+  const response = await fetch(`/api/v1/modules/${moduleId}/assessment`);
   if (response.status === 404) {
     return null;
   }
@@ -359,7 +359,7 @@ export const fetchRecommendations = async (
   if (typeof lastScore === 'number' && Number.isFinite(lastScore)) {
     params.set('lastScore', String(lastScore));
   }
-  const response = await fetch(`/api/recommendations?${params.toString()}`);
+  const response = await fetch(`/api/v1/recommendations?${params.toString()}`);
   const payload = await handleResponse<RecommendationsResponse>(response);
   return Array.isArray(payload.recommendations)
     ? payload.recommendations.map(mapRecommendation)
@@ -367,7 +367,7 @@ export const fetchRecommendations = async (
 };
 
 export const fetchLessonDetail = async (lessonId: number): Promise<LessonDetail> => {
-  const response = await fetch(`/api/lessons/${lessonId}`);
+  const response = await fetch(`/api/v1/lessons/${lessonId}`);
   if (response.status === 404) {
     throw new Error('Lesson not found');
   }

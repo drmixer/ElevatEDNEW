@@ -56,7 +56,7 @@ const mapRun = (apiRun: ImportRunApiModel): ImportRun => ({
 
 export const fetchImportProviders = async (): Promise<ImportProviderDefinition[]> => {
   try {
-    const response = await authenticatedFetch('/api/import/providers');
+    const response = await authenticatedFetch('/api/v1/import/providers');
     const payload = await handleApiResponse<ProvidersResponse>(response);
     return payload.providers.map((provider) => ({
       id: provider.id,
@@ -81,7 +81,7 @@ export const fetchImportProviders = async (): Promise<ImportProviderDefinition[]
 };
 
 export const fetchImportRuns = async (): Promise<ImportRun[]> => {
-  const response = await authenticatedFetch('/api/import/runs');
+  const response = await authenticatedFetch('/api/v1/import/runs');
   const payload = await handleApiResponse<ImportRunsResponse>(response);
   return Array.isArray(payload.runs) ? payload.runs.map(mapRun) : [];
 };
@@ -97,7 +97,7 @@ export const queueImportRun = async (
     limits?: { maxModules?: number; maxAssets?: number };
   },
 ): Promise<ImportRun> => {
-  const response = await authenticatedFetch('/api/import/runs', {
+  const response = await authenticatedFetch('/api/v1/import/runs', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

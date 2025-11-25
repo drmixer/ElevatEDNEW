@@ -21,13 +21,13 @@ type PromoteAdminPayload = {
 };
 
 export const fetchAdmins = async (): Promise<AdminSummary[]> => {
-  const response = await authenticatedFetch('/api/admins');
+  const response = await authenticatedFetch('/api/v1/admins');
   const payload = await handleApiResponse<AdminListResponse>(response);
   return payload.admins ?? [];
 };
 
 export const promoteAdmin = async (payload: PromoteAdminPayload): Promise<AdminSummary> => {
-  const response = await authenticatedFetch('/api/admins/promote', {
+  const response = await authenticatedFetch('/api/v1/admins/promote', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const promoteAdmin = async (payload: PromoteAdminPayload): Promise<AdminS
 export const demoteAdmin = async (
   userId: string,
 ): Promise<{ demoted: string; role: string; remainingAdmins: number | null | undefined }> => {
-  const response = await authenticatedFetch('/api/admins/demote', {
+  const response = await authenticatedFetch('/api/v1/admins/demote', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

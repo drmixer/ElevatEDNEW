@@ -72,7 +72,7 @@ export async function getTutorResponse(
     mode: resolvedOptions.mode ?? 'learning',
   };
 
-  const response = await fetch('/api/ai/tutor', {
+  const response = await fetch('/api/v1/ai/tutor', {
     method: 'POST',
     headers,
     body: JSON.stringify(payload),
