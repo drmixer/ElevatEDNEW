@@ -1,6 +1,13 @@
-import { describe, expect, it } from 'vitest';
-import { buildParentDownloadableReport, calculateChildGoalProgress } from '../dashboardService';
-import type { Parent, ParentChildSnapshot, ParentWeeklyReport } from '../../types';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { buildParentDownloadableReport, calculateChildGoalProgress, fetchStudentDashboardData } from '../dashboardService';
+import type { Parent, ParentChildSnapshot, ParentWeeklyReport, Student } from '../../types';
+
+vi.mock('../../lib/supabaseClient', async () => {
+  const { createSupabaseClientMock } = await import('../../test/supabaseMock');
+  return { __esModule: true, default: createSupabaseClientMock() };
+});
+
+import supabaseMock from '../../lib/supabaseClient';
 
 const mockParent: Parent = {
   id: 'parent-1',
@@ -47,6 +54,11 @@ const mockChildren: ParentChildSnapshot[] = [
   },
 ];
 
+beforeEach(() => {
+  vi.clearAllMocks();
+  supabaseMock.setResponses({});
+});
+
 describe('buildParentDownloadableReport', () => {
   it('creates a shareable weekly summary containing key details', () => {
     const report = buildParentDownloadableReport(mockParent, mockReport, mockChildren);
@@ -90,5 +102,50 @@ describe('calculateChildGoalProgress', () => {
     });
 
     expect(progress).toBeUndefined();
+  });
+});
+
+describe('fetchStudentDashboardData', () => {
+  it('returns synthetic dashboard data when Supabase lookups fail', async () => {
+    vi.stubEnv('VITE_ALLOW_FAKE_DASHBOARD_DATA', 'true');
+
+    supabaseMock.setResponses({
+      student_profiles: { single: async () => ({ data: null, error: new Error('boom') }) },
+      student_daily_activity: { query: async () => ({ data: [], error: new Error('boom') }) },
+      student_assessment_attempts: {
+        maybeSingle: async () => ({ data: null, error: new Error('missing') }),
+      },
+      student_mastery_by_subject: { query: async () => ({ data: [], error: new Error('fail') }) },
+      xp_events: { query: async () => ({ data: [], error: new Error('fail') }) },
+      student_assignments: { query: async () => ({ data: [], error: new Error('fail') }) },
+      student_progress: { query: async () => ({ data: [], error: new Error('fail') }) },
+      'rpc:suggest_next_lessons': {
+        maybeSingle: async () => ({ data: [], error: new Error('fail') }),
+      },
+    });
+
+    const student: Student = {
+      id: 'student-1',
+      email: 'student@example.com',
+      name: 'Sky',
+      role: 'student',
+      grade: 6,
+      xp: 0,
+      level: 1,
+      badges: [],
+      streakDays: 0,
+      strengths: [],
+      weaknesses: [],
+      learningPath: [],
+      assessmentCompleted: false,
+    };
+
+    const dashboard = await fetchStudentDashboardData(student);
+
+    expect(dashboard.todaysPlan.length).toBeGreaterThan(0);
+    expect(dashboard.subjectMastery.length).toBeGreaterThan(0);
+    expect(dashboard.aiRecommendations.length).toBeGreaterThan(0);
+    expect(dashboard.activeLessonId).not.toBeNull();
+    vi.unstubAllEnvs();
   });
 });

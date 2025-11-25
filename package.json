@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest watch",
+    "test:e2e": "playwright test",
     "import:oer": "tsx tools/importers/oer/index.ts",
     "db:migrate": "supabase migration up",
     "seed:skeleton": "tsx scripts/import_skeleton.ts",
@@ -32,7 +33,6 @@
     "@supabase/supabase-js": "^2.74.0",
     "@tanstack/react-query": "^5.90.2",
     "csv-parse": "^5.6.0",
-    "stripe": "^16.12.0",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
@@ -41,10 +41,12 @@
     "react-router-dom": "^6.30.1",
     "recharts": "^2.8.0",
     "remark-gfm": "^4.0.1",
+    "stripe": "^16.12.0",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^18.3.5",

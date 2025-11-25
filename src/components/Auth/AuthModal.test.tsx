@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import AuthModal from './AuthModal';
 
 const registerSpy = vi.fn();
@@ -22,8 +23,15 @@ describe('AuthModal', () => {
     loginSpy.mockReset();
   });
 
+  const renderModal = () =>
+    render(
+      <MemoryRouter>
+        <AuthModal isOpen onClose={() => {}} />
+      </MemoryRouter>,
+    );
+
   it('disables student signup without guardian consent', () => {
-    render(<AuthModal isOpen onClose={() => {}} />);
+    renderModal();
 
     fireEvent.click(screen.getByText("Don't have an account? Sign up"));
     fireEvent.click(screen.getByText('📚 Student'));
@@ -35,7 +43,7 @@ describe('AuthModal', () => {
   it('requires guardian consent before registering a student', async () => {
     registerSpy.mockResolvedValue(undefined);
 
-    render(<AuthModal isOpen onClose={() => {}} />);
+    renderModal();
     fireEvent.click(screen.getByText("Don't have an account? Sign up"));
     fireEvent.click(screen.getByText('📚 Student'));
 
