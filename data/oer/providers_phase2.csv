@@ -1,0 +1,12 @@
+provider,license,license_url,use_category,attribution_requirement,notes
+Open Up Resources (Illustrative Mathematics K–5, 6–8),CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,importable,"Name Open Up Resources and Illustrative Mathematics; keep original notices","Primary math backbone; safe to store and adapt."
+OpenStax (relevant math/science texts),CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,importable,"Cite book title/edition/chapter",Use for bridge/extension content and reference readings.
+OpenSciEd,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,importable,"Retain OpenSciEd attribution/footer",NGSS-aligned science units; safe to store.
+EL Education Language Arts (2019),CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,importable,"State EL Education and CC BY 4.0",ELA units/lessons; safe to store.
+Project Gutenberg (US public domain),Public Domain,https://www.gutenberg.org/policy/license.html,importable,"Cite title/author/source URL",Use PD texts for full-text embedding; verify PD status for target market.
+NASA media (non-logo),Public Domain,https://www.nasa.gov/multimedia/guidelines/index.html,importable,"Note NASA as source; avoid logos/insignia",Use images/videos for science enrichment.
+PhET Interactive Simulations,CC BY 4.0 (most sims),https://phet.colorado.edu/en/licensing,embed_only,"Show PhET attribution; keep links",Prefer embedding; offline copies require per-sim license check.
+EngageNY / Eureka Math and ELA,CC BY-NC-SA 3.0 US,https://creativecommons.org/licenses/by-nc-sa/3.0/us/,link_only,"Must credit EngageNY/Great Minds if linked",Non-commercial; do not store or modify without permission.
+CK-12,CC BY-NC 3.0 (many resources) + CK-12 terms,https://www.ck12.org/terms/,link_only,"Keep CK-12 credit when linking",Non-commercial; no internal storage.
+Khan Academy,CC BY-NC-SA 3.0 US,https://creativecommons.org/licenses/by-nc-sa/3.0/us/,link_only,"Keep Khan branding in embeds/links",Non-commercial; use deep links or embeds only.
+OER Commons (aggregator),Varies by item,https://www.oercommons.org/,link_only,"Record license per item if importing",Default link-only; import only explicit CC BY/CC0 items with recorded license.

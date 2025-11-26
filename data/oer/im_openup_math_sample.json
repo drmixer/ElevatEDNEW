@@ -1,0 +1,121 @@
+{
+  "subject": {
+    "name": "Mathematics",
+    "description": "Illustrative Mathematics (Open Up Resources) sample import for Grades 6-8.",
+    "license": "CC BY 4.0",
+    "source": "Open Up Resources / Illustrative Mathematics",
+    "source_url": "https://im.openupresources.org/",
+    "attribution": "(c) Open Up Resources, Illustrative Mathematics, CC BY 4.0"
+  },
+  "topics": [
+    {
+      "external_id": "im6-u1",
+      "name": "Unit 1: Area and Surface Area (Grade 6)",
+      "slug": "im6-unit-1-area-surface-area",
+      "description": "Launch unit on nets, surface area, and area reasoning.",
+      "license": "CC BY 4.0",
+      "source_url": "https://im.openupresources.org/6/index.html",
+      "attribution": "Open Up Resources / Illustrative Mathematics",
+      "lessons": [
+        {
+          "external_id": "im6-u1-l1",
+          "title": "What is Surface Area?",
+          "slug": "im6-u1-l1-what-is-surface-area",
+          "content": "<p>Learning goal: describe and compute surface area of prisms using nets.</p><p>Lesson resources: <a href=\"https://im.openupresources.org/6/students/1/1.html\">student lesson</a></p>",
+          "estimated_duration_minutes": 45,
+          "media": [
+            { "type": "link", "url": "https://im.openupresources.org/6/students/1/1.html" }
+          ],
+          "metadata": {
+            "grades": [6],
+            "skills": ["geometry_measurement"],
+            "standards": [{ "framework": "CCSS-M", "code": "6.G.A.1" }],
+            "difficulty": 3
+          },
+          "license": "CC BY 4.0",
+          "source_url": "https://im.openupresources.org/6/teachers/1/1.html",
+          "attribution": "Open Up Resources / Illustrative Mathematics"
+        },
+        {
+          "external_id": "im6-u1-l2",
+          "title": "Nets and Prisms",
+          "slug": "im6-u1-l2-nets-and-prisms",
+          "content": "<p>Learning goal: relate nets to three-dimensional figures and compute area.</p><p>Lesson resources: <a href=\"https://im.openupresources.org/6/students/1/2.html\">student lesson</a></p>",
+          "estimated_duration_minutes": 45,
+          "media": [
+            { "type": "link", "url": "https://im.openupresources.org/6/students/1/2.html" }
+          ],
+          "metadata": {
+            "grades": [6],
+            "skills": ["geometry_measurement"],
+            "standards": [{ "framework": "CCSS-M", "code": "6.G.A.1" }],
+            "difficulty": 3
+          },
+          "license": "CC BY 4.0",
+          "source_url": "https://im.openupresources.org/6/teachers/1/2.html",
+          "attribution": "Open Up Resources / Illustrative Mathematics"
+        }
+      ]
+    },
+    {
+      "external_id": "im7-u1",
+      "name": "Unit 1: Scale Drawings (Grade 7)",
+      "slug": "im7-unit-1-scale-drawings",
+      "description": "Introduce scale factors, scale drawings, and proportional reasoning.",
+      "license": "CC BY 4.0",
+      "source_url": "https://im.openupresources.org/7/index.html",
+      "attribution": "Open Up Resources / Illustrative Mathematics",
+      "lessons": [
+        {
+          "external_id": "im7-u1-l1",
+          "title": "What are Scale Drawings?",
+          "slug": "im7-u1-l1-scale-drawings",
+          "content": "<p>Learning goal: interpret and create scale drawings using scale factors.</p><p>Lesson resources: <a href=\"https://im.openupresources.org/7/students/1/1.html\">student lesson</a></p>",
+          "estimated_duration_minutes": 45,
+          "media": [
+            { "type": "link", "url": "https://im.openupresources.org/7/students/1/1.html" }
+          ],
+          "metadata": {
+            "grades": [7],
+            "skills": ["ratios_proportions", "geometry_measurement"],
+            "standards": [{ "framework": "CCSS-M", "code": "7.RP.A.2" }],
+            "difficulty": 3
+          },
+          "license": "CC BY 4.0",
+          "source_url": "https://im.openupresources.org/7/teachers/1/1.html",
+          "attribution": "Open Up Resources / Illustrative Mathematics"
+        }
+      ]
+    },
+    {
+      "external_id": "im8-u1",
+      "name": "Unit 1: Rigid Transformations and Congruence (Grade 8)",
+      "slug": "im8-unit-1-rigid-transformations-congruence",
+      "description": "Rotations, reflections, translations, and congruence reasoning.",
+      "license": "CC BY 4.0",
+      "source_url": "https://im.openupresources.org/8/index.html",
+      "attribution": "Open Up Resources / Illustrative Mathematics",
+      "lessons": [
+        {
+          "external_id": "im8-u1-l1",
+          "title": "Moves in the Plane",
+          "slug": "im8-u1-l1-moves-in-the-plane",
+          "content": "<p>Learning goal: describe and perform rigid transformations on the coordinate plane.</p><p>Lesson resources: <a href=\"https://im.openupresources.org/8/students/1/1.html\">student lesson</a></p>",
+          "estimated_duration_minutes": 45,
+          "media": [
+            { "type": "link", "url": "https://im.openupresources.org/8/students/1/1.html" }
+          ],
+          "metadata": {
+            "grades": [8],
+            "skills": ["geometry_measurement"],
+            "standards": [{ "framework": "CCSS-M", "code": "8.G.A.1" }],
+            "difficulty": 3
+          },
+          "license": "CC BY 4.0",
+          "source_url": "https://im.openupresources.org/8/teachers/1/1.html",
+          "attribution": "Open Up Resources / Illustrative Mathematics"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+subject,grades,provider,license,use_type,role,notes
+Mathematics,3-5,Illustrative Mathematics via Open Up Resources (IM K–5),CC BY 4.0,importable,Backbone units/lessons,"Primary scope and sequence; store and adapt with attribution."
+Mathematics,6-8,Illustrative Mathematics via Open Up Resources (IM 6–8),CC BY 4.0,importable,Backbone units/lessons,"Primary scope and sequence; store and adapt with attribution."
+Mathematics,3-8,EngageNY/Eureka Math,CC BY-NC-SA 3.0 US,link_only,Supplement links,"Non-commercial; link only for additional practice/context."
+Mathematics,6-8,OpenStax (Pre-Algebra/Algebra),CC BY 4.0,importable,Extension readings/examples,"Use for bridge topics and enrichment; cite book/chapter."
+ELA,3-8,EL Education Language Arts (2019),CC BY 4.0,importable,Backbone units/lessons,"Core ELA sequence; store/adapt with attribution."
+ELA,3-8,Public Domain texts (Project Gutenberg/LOC),Public Domain,importable,Full-text readings,"Embed texts; verify PD status for target markets."
+ELA,3-8,EngageNY ELA modules,CC BY-NC-SA 3.0 US,link_only,Supplement links,"Non-commercial; link only for exemplars/reference."
+Science,6-8,OpenSciEd,CC BY 4.0,importable,Backbone units/lessons,"NGSS-aligned; store/adapt with attribution."
+Science,6-8,PhET Interactive Simulations,CC BY 4.0 (most sims),embed_only,Simulations,"Embed with attribution; avoid storing binaries unless license-checked."
+Science,6-8,NASA media,Public Domain,importable,Media/enrichment,"Use images/videos with NASA credit; exclude logos/insignia."
+Science,6-8,OER Commons NGSS units,Varies,link_only,Supplement links,"Import only if item explicitly CC BY/CC0 and recorded."
