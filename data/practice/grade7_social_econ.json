@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "7-social-studies-economics-and-financial-literacy-personal-finance-basics",
+    "lessonSlug": "7-social-studies-economics-and-financial-literacy-personal-finance-basics-launch",
+    "prompt": "What is the main benefit of creating a simple budget?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["economics_financial_literacy"],
+    "standards": ["Econ.6-8"],
+    "tags": ["budgeting"],
+    "options": [
+      { "text": "It helps track income and expenses to avoid overspending.", "isCorrect": true, "feedback": "A budget matches spending to income to prevent shortfalls." },
+      { "text": "It guarantees you will become rich.", "isCorrect": false },
+      { "text": "It replaces all saving.", "isCorrect": false },
+      { "text": "It hides how money is used.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-social-studies-economics-and-financial-literacy-personal-finance-basics",
+    "lessonSlug": "7-social-studies-economics-and-financial-literacy-personal-finance-basics-launch",
+    "prompt": "Which example shows opportunity cost?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["economics_financial_literacy"],
+    "standards": ["Econ.6-8"],
+    "tags": ["opportunity-cost"],
+    "options": [
+      { "text": "Choosing to buy a game means you can’t save that money for a trip.", "isCorrect": true, "feedback": "Opportunity cost is the next best choice you give up." },
+      { "text": "Buying everything you see.", "isCorrect": false },
+      { "text": "Never making a choice.", "isCorrect": false },
+      { "text": "Writing a list of wants.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-social-studies-economics-and-financial-literacy-supply-demand-intro",
+    "lessonSlug": "7-social-studies-economics-and-financial-literacy-supply-demand-intro-launch",
+    "prompt": "If demand for a product rises and supply stays the same, what usually happens to price?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["economics_financial_literacy"],
+    "standards": ["Econ.6-8"],
+    "tags": ["supply-demand"],
+    "options": [
+      { "text": "Price tends to increase.", "isCorrect": true, "feedback": "Higher demand with fixed supply pushes prices up." },
+      { "text": "Price always goes to zero.", "isCorrect": false },
+      { "text": "Price never changes.", "isCorrect": false },
+      { "text": "Price drops sharply.", "isCorrect": false }
+    ]
+  }
+]

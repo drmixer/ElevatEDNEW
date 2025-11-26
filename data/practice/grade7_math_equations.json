@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+    "lessonSlug": "7-mathematics-number-and-operations-expressions-and-equations-launch",
+    "prompt": "Solve: 4(x - 2) = 12",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["expressions_equations"],
+    "standards": ["7.EE.B.3", "7.EE.B.4a"],
+    "tags": ["two-step-equations"],
+    "options": [
+      { "text": "x = 5", "isCorrect": true, "feedback": "4(x-2)=12 → x-2=3 → x=5." },
+      { "text": "x = 3", "isCorrect": false },
+      { "text": "x = -5", "isCorrect": false },
+      { "text": "x = -1", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+    "lessonSlug": "7-mathematics-number-and-operations-expressions-and-equations-launch",
+    "prompt": "Which equation matches: “three more than twice a number is 17”?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["expressions_equations"],
+    "standards": ["7.EE.B.4a"],
+    "tags": ["translate-words"],
+    "options": [
+      { "text": "2x + 3 = 17", "isCorrect": true, "feedback": "Twice a number → 2x; three more → +3." },
+      { "text": "3x + 2 = 17", "isCorrect": false },
+      { "text": "2x - 3 = 17", "isCorrect": false },
+      { "text": "x/2 + 3 = 17", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+    "lessonSlug": "7-mathematics-number-and-operations-expressions-and-equations-launch",
+    "prompt": "Solve the inequality: 3x + 4 ≤ 19",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["expressions_equations"],
+    "standards": ["7.EE.B.4a"],
+    "tags": ["inequalities"],
+    "options": [
+      { "text": "x ≤ 5", "isCorrect": true, "feedback": "3x ≤ 15 → x ≤ 5." },
+      { "text": "x ≥ 5", "isCorrect": false },
+      { "text": "x ≤ 15", "isCorrect": false },
+      { "text": "x ≥ 15", "isCorrect": false }
+    ]
+  }
+]

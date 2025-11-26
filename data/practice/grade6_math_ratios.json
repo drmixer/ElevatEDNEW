@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+    "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+    "prompt": "The ratio of cats to dogs at a shelter is 3:5. If there are 18 cats, how many dogs are there?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["ratios_proportions"],
+    "standards": ["6.RP.A.1", "6.RP.A.3"],
+    "tags": ["ratios", "tables"],
+    "options": [
+      { "text": "30", "isCorrect": true, "feedback": "Scale the ratio 3:5 by 6 (18 ÷ 3). 5 × 6 = 30 dogs." },
+      { "text": "27", "isCorrect": false },
+      { "text": "23", "isCorrect": false },
+      { "text": "15", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+    "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+    "prompt": "A recipe uses 4 cups of flour for 10 muffins. How many muffins per cup of flour?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["ratios_proportions"],
+    "standards": ["6.RP.A.3"],
+    "tags": ["unit-rate"],
+    "options": [
+      { "text": "2.5 muffins per cup", "isCorrect": true, "feedback": "10 ÷ 4 = 2.5 muffins for each cup of flour." },
+      { "text": "1.5 muffins per cup", "isCorrect": false },
+      { "text": "4 muffins per cup", "isCorrect": false },
+      { "text": "14 muffins per cup", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+    "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+    "prompt": "At a bike shop, 12 out of 30 bikes are mountain bikes. What percent are mountain bikes?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["ratios_proportions"],
+    "standards": ["6.RP.A.3"],
+    "tags": ["percent"],
+    "options": [
+      { "text": "40%", "isCorrect": true, "feedback": "12/30 = 0.4 = 40%." },
+      { "text": "30%", "isCorrect": false },
+      { "text": "50%", "isCorrect": false },
+      { "text": "60%", "isCorrect": false }
+    ]
+  }
+]

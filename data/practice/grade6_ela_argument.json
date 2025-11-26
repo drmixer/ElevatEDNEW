@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "6-english-language-arts-reading-informational-science-tech-articles-open-licensed",
+    "lessonSlug": "6-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+    "prompt": "Which sentence best states a claim supported by the article?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["reading_informational", "evidence_reasoning"],
+    "standards": ["RI.6.3"],
+    "tags": ["claims", "evidence"],
+    "options": [
+      { "text": "Solar panels reduce energy costs because they use free sunlight.", "isCorrect": true, "feedback": "It’s a clear claim with a reason tied to the article topic." },
+      { "text": "I like solar panels.", "isCorrect": false },
+      { "text": "Solar panels are shiny.", "isCorrect": false },
+      { "text": "Energy is important.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage",
+    "lessonSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+    "prompt": "Which evidence best supports the claim that school gardens help students?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["argument_writing", "evidence_reasoning"],
+    "standards": ["W.6.1"],
+    "tags": ["evidence"],
+    "options": [
+      { "text": "A study showed students who gardened ate more fruits and vegetables.", "isCorrect": true, "feedback": "It’s a relevant, cited finding supporting the claim." },
+      { "text": "Gardens look pretty.", "isCorrect": false },
+      { "text": "Some students dislike vegetables.", "isCorrect": false },
+      { "text": "Gardens can be messy.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-english-language-arts-reading-informational-science-tech-articles-open-licensed",
+    "lessonSlug": "6-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+    "prompt": "Which sentence shows relevant reasoning that links evidence to the claim?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["evidence_reasoning"],
+    "standards": ["RI.6.3"],
+    "tags": ["reasoning"],
+    "options": [
+      { "text": "Because the article says the device cut energy use by 20%, it supports the claim it saves power.", "isCorrect": true, "feedback": "Connects the evidence to the claim with a clear because statement." },
+      { "text": "The device is cool.", "isCorrect": false },
+      { "text": "Energy is everywhere.", "isCorrect": false },
+      { "text": "The article had three paragraphs.", "isCorrect": false }
+    ]
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem",
+    "lessonSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem-launch",
+    "prompt": "A right triangle has legs 6 and 8. What is the length of the hypotenuse?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["geometry_measurement"],
+    "standards": ["8.G.B.6"],
+    "tags": ["pythagorean"],
+    "options": [
+      { "text": "10", "isCorrect": true, "feedback": "6² + 8² = 36 + 64 = 100; √100 = 10." },
+      { "text": "12", "isCorrect": false },
+      { "text": "7", "isCorrect": false },
+      { "text": "5", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem",
+    "lessonSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem-launch",
+    "prompt": "Which situation can be solved with the Pythagorean Theorem?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["geometry_measurement"],
+    "standards": ["8.G.B.6"],
+    "tags": ["distance"],
+    "options": [
+      { "text": "Finding the straight-line distance between two points on a coordinate plane.", "isCorrect": true, "feedback": "Distance on a plane forms a right triangle with horizontal/vertical legs." },
+      { "text": "Adding two fractions.", "isCorrect": false },
+      { "text": "Finding the mean of a data set.", "isCorrect": false },
+      { "text": "Solving a percentage discount.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem",
+    "lessonSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem-launch",
+    "prompt": "A square has a diagonal of length 14. What is the side length?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["geometry_measurement"],
+    "standards": ["8.G.B.6"],
+    "tags": ["pythagorean"],
+    "options": [
+      { "text": "7√2", "isCorrect": true, "feedback": "For a square, diagonal d = s√2 → s = d/√2 = 14/√2 = 7√2." },
+      { "text": "14√2", "isCorrect": false },
+      { "text": "7", "isCorrect": false },
+      { "text": "28", "isCorrect": false }
+    ]
+  }
+]

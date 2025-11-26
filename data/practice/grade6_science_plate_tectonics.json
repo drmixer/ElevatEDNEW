@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "6-science-earth-and-space-plate-tectonics",
+    "lessonSlug": "6-science-earth-and-space-plate-tectonics-launch",
+    "prompt": "Which observation best supports the idea that continents were once joined?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["earth_space_systems"],
+    "standards": ["MS-ESS2-3"],
+    "tags": ["evidence", "fossils"],
+    "options": [
+      { "text": "Identical fossils found on continents now separated by oceans.", "isCorrect": true, "feedback": "Matching fossils across oceans are classic evidence of past connection." },
+      { "text": "Different climates on different continents.", "isCorrect": false },
+      { "text": "Every continent has mountains.", "isCorrect": false },
+      { "text": "Some continents have deserts.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-science-earth-and-space-plate-tectonics",
+    "lessonSlug": "6-science-earth-and-space-plate-tectonics-launch",
+    "prompt": "Why do most earthquakes and volcanoes occur along plate boundaries?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["earth_space_systems"],
+    "standards": ["MS-ESS2-2"],
+    "tags": ["boundaries"],
+    "options": [
+      { "text": "Plates interact (collide, slide, or spread) at boundaries, releasing energy.", "isCorrect": true, "feedback": "Movement and interaction at boundaries generate quakes and volcanoes." },
+      { "text": "Plates stop moving at boundaries.", "isCorrect": false },
+      { "text": "Boundaries are the coldest parts of plates.", "isCorrect": false },
+      { "text": "Boundaries have the oldest rocks.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-science-earth-and-space-plate-tectonics",
+    "lessonSlug": "6-science-earth-and-space-plate-tectonics-launch",
+    "prompt": "What does the movement of tectonic plates float on?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["earth_space_systems"],
+    "standards": ["MS-ESS2-2"],
+    "tags": ["asthenosphere"],
+    "options": [
+      { "text": "The semi-fluid asthenosphere beneath the lithosphere.", "isCorrect": true, "feedback": "Plates ride on the softer asthenosphere layer." },
+      { "text": "Solid inner core.", "isCorrect": false },
+      { "text": "Crust of another planet.", "isCorrect": false },
+      { "text": "Frozen ocean floor.", "isCorrect": false }
+    ]
+  }
+]

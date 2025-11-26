@@ -1,0 +1,49 @@
+[
+  {
+    "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+    "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+    "prompt": "A package of 12 granola bars costs $9. What is the unit rate in dollars per bar?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "explanation": "Divide total cost by number of bars to find cost per bar.",
+    "skills": ["ratios_proportions"],
+    "standards": ["6.RP.A.3"],
+    "tags": ["practice", "unit-rate"],
+    "options": [
+      { "text": "$0.75", "isCorrect": true, "feedback": "9 ÷ 12 = 0.75 dollars per bar." },
+      { "text": "$1.25", "isCorrect": false },
+      { "text": "$12.00", "isCorrect": false },
+      { "text": "$3.00", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "3-english-language-arts-reading-literature-short-stories-pd",
+    "lessonSlug": "3-english-language-arts-reading-literature-short-stories-pd-launch",
+    "prompt": "Which sentence uses a text detail to support an idea about the main character?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["reading_literature", "evidence_reasoning"],
+    "standards": ["RL.3.1"],
+    "options": [
+      { "text": "\"Lina shared her lunch with Max when he was hungry,\" showing she is generous.", "isCorrect": true, "feedback": "It cites a detail and explains how it proves generosity." },
+      { "text": "I think Lina is cool.", "isCorrect": false },
+      { "text": "Max was in the story too.", "isCorrect": false },
+      { "text": "Lina is the main character.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "6-science-earth-and-space-plate-tectonics",
+    "lessonSlug": "6-science-earth-and-space-plate-tectonics-launch",
+    "prompt": "Which evidence best supports the idea that tectonic plates move over time?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["earth_space_systems"],
+    "standards": ["MS-ESS2-2"],
+    "options": [
+      { "text": "Matching fossils found on continents now separated by oceans.", "isCorrect": true, "feedback": "Fossil distribution across oceans is classic drift evidence." },
+      { "text": "All continents have mountains.", "isCorrect": false },
+      { "text": "Earth has seasons.", "isCorrect": false },
+      { "text": "Some areas are rainy and some are dry.", "isCorrect": false }
+    ]
+  }
+]
