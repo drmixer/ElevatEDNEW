@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Send, X, Bot, Lightbulb, Target, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
@@ -22,6 +22,8 @@ const LearningAssistant: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [assistantError, setAssistantError] = useState<string | null>(null);
+  const assistantWindowRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const quickActions = [
     { icon: Lightbulb, text: 'Get a study tip', action: 'study-tip' },
@@ -149,17 +151,63 @@ const LearningAssistant: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    inputRef.current?.focus();
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (!assistantWindowRef.current) return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusableSelector =
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+      const focusable = Array.from(
+        assistantWindowRef.current.querySelectorAll<HTMLElement>(focusableSelector),
+      ).filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true');
+
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeydown);
+    return () => {
+      document.removeEventListener('keydown', handleKeydown);
+      previouslyFocused?.focus();
+    };
+  }, [isOpen]);
+
   return (
     <>
       {/* Assistant Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 w-14 h-14 bg-gradient-to-r from-brand-violet to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50"
+        className="fixed bottom-6 left-6 w-14 h-14 bg-gradient-to-r from-brand-violet to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 focus-ring"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         animate={{ 
           boxShadow: isOpen ? "0 0 0 4px rgba(151, 28, 181, 0.3)" : "0 10px 25px rgba(0, 0, 0, 0.2)"
         }}
+        aria-label="Open learning assistant"
+        aria-expanded={isOpen}
+        aria-controls="learning-assistant-window"
       >
         <Bot className="h-6 w-6" />
       </motion.button>
@@ -172,6 +220,13 @@ const LearningAssistant: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="fixed bottom-24 left-6 w-80 h-96 bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="learning-assistant-title"
+            aria-describedby="learning-assistant-description"
+            id="learning-assistant-window"
+            tabIndex={-1}
+            ref={assistantWindowRef}
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-brand-violet to-brand-blue text-white p-4 flex items-center justify-between">
@@ -180,13 +235,14 @@ const LearningAssistant: React.FC = () => {
                   <Bot className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Learning Assistant</h3>
-                  <p className="text-xs opacity-90">Here to help you learn!</p>
+                  <h3 className="font-semibold" id="learning-assistant-title">Learning Assistant</h3>
+                  <p className="text-xs opacity-90" id="learning-assistant-description">Here to help you learn!</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                className="p-1 hover:bg-white/20 rounded-full transition-colors focus-ring"
+                aria-label="Close learning assistant"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -199,7 +255,8 @@ const LearningAssistant: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => handleQuickAction(action.action)}
-                    className="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-brand-light-violet rounded-lg text-xs transition-colors"
+                    className="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-brand-light-violet rounded-lg text-xs transition-colors focus-ring"
+                    aria-label={action.text}
                   >
                     <action.icon className="h-3 w-3" />
                     <span>{action.text}</span>
@@ -209,7 +266,7 @@ const LearningAssistant: React.FC = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+            <div className="flex-1 p-4 overflow-y-auto space-y-4" role="log" aria-live="polite" aria-relevant="additions text">
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
@@ -229,7 +286,7 @@ const LearningAssistant: React.FC = () => {
                 </motion.div>
               ))}
               {assistantError && (
-                <div className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                <div className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-xl p-3" role="alert">
                   {assistantError}
                 </div>
               )}
@@ -266,11 +323,14 @@ const LearningAssistant: React.FC = () => {
                   }}
                   placeholder="Ask me anything about your studies..."
                   className="flex-1 p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-violet text-sm"
+                  aria-label="Message the learning assistant"
+                  ref={inputRef}
                 />
                 <button
                   onClick={() => handleSendMessage()}
                   disabled={!inputMessage.trim()}
-                  className="p-2 bg-brand-violet text-white rounded-xl hover:bg-brand-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 bg-brand-violet text-white rounded-xl hover:bg-brand-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
+                  aria-label="Send learning assistant message"
                 >
                   <Send className="h-4 w-4" />
                 </button>

@@ -134,7 +134,7 @@ const StudentDashboard: React.FC = () => {
                 {nextLessonUrl && (
                   <button
                     onClick={() => handleStartLesson(todaysPlan.find((lesson) => lesson.id === activeLessonId) ?? todaysPlan[0])}
-                    className="mt-4 inline-flex items-center space-x-2 bg-white text-brand-violet px-4 py-2 rounded-xl font-semibold hover:bg-gray-100 transition-colors"
+                    className="mt-4 inline-flex items-center space-x-2 bg-white text-brand-violet px-4 py-2 rounded-xl font-semibold hover:bg-gray-100 transition-colors focus-ring"
                   >
                     <Play className="h-4 w-4" />
                     <span>Resume next lesson</span>
@@ -144,7 +144,7 @@ const StudentDashboard: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={handleRefresh}
-                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
+                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors focus-ring"
                   disabled={isFetching}
                 >
                   <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
@@ -183,7 +183,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="text-2xl font-bold text-brand-blue">
                       {quickStats?.level ?? student.level}
                     </div>
-                    <div className="text-sm text-gray-600">Current Level</div>
+                    <div className="text-sm text-gray-700">Current Level</div>
                   </div>
                   <div className="w-12 h-12 bg-brand-light-blue rounded-full flex items-center justify-center">
                     <Star className="h-6 w-6 text-brand-blue" />
@@ -197,7 +197,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="text-2xl font-bold text-brand-violet">
                       {quickStats?.streakDays ?? student.streakDays}
                     </div>
-                    <div className="text-sm text-gray-600">Day Streak</div>
+                    <div className="text-sm text-gray-700">Day Streak</div>
                   </div>
                   <div className="w-12 h-12 bg-brand-light-violet rounded-full flex items-center justify-center">
                     <div className="text-2xl">🔥</div>
@@ -211,7 +211,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="text-2xl font-bold text-brand-teal">
                       {dashboard?.recentBadges.length ?? student.badges.length}
                     </div>
-                    <div className="text-sm text-gray-600">Badges Earned</div>
+                    <div className="text-sm text-gray-700">Badges Earned</div>
                   </div>
                   <div className="w-12 h-12 bg-brand-light-teal rounded-full flex items-center justify-center">
                     <Trophy className="h-6 w-6 text-brand-teal" />
@@ -225,7 +225,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="text-2xl font-bold text-gray-800">
                       {quickStats ? `${quickStats.hoursThisWeek}h` : '—'}
                     </div>
-                    <div className="text-sm text-gray-600">Hours This Week</div>
+                    <div className="text-sm text-gray-700">Hours This Week</div>
                   </div>
                   <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
                     <Clock className="h-6 w-6 text-gray-600" />
@@ -266,7 +266,7 @@ const StudentDashboard: React.FC = () => {
                     </p>
                     <button
                       onClick={() => setActiveView('assessment')}
-                      className="bg-white text-brand-violet px-6 py-2 rounded-xl font-semibold hover:bg-gray-100 transition-colors"
+                      className="bg-white text-brand-violet px-6 py-2 rounded-xl font-semibold hover:bg-gray-100 transition-colors focus-ring"
                     >
                       Start Assessment
                     </button>
