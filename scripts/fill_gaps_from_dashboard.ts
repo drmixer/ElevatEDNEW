@@ -72,8 +72,8 @@ const dedupe = (values: (string | null | undefined)[]): string[] => {
   return Array.from(set);
 };
 
-const fetchCoverage = async (supabase: SupabaseClient): Promise<CoverageCell[]> => {
-  const { data, error } = await supabase
+const fetchCoverage = async (supabase: SupabaseClient, gradeBands: string[] | null): Promise<CoverageCell[]> => {
+  let query = supabase
     .from('coverage_dashboard_cells')
     .select(
       [
@@ -92,6 +92,12 @@ const fetchCoverage = async (supabase: SupabaseClient): Promise<CoverageCell[]> 
       ].join(','),
     )
     .or('meets_practice_baseline.is.false,meets_assessment_baseline.is.false,meets_external_baseline.is.false');
+
+  if (gradeBands && gradeBands.length > 0) {
+    query = query.in('grade_band', gradeBands);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     throw new Error(`Failed to load coverage dashboard cells: ${error.message}`);
@@ -418,8 +424,28 @@ const ensureExternal = async (supabase: SupabaseClient, cell: CoverageCell) => {
 };
 
 const main = async () => {
+  const args = process.argv.slice(2);
+  let gradeBands: string[] | null = null;
+
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+    if (arg === '--grades' || arg === '--grade-bands') {
+      const value = args[i + 1];
+      if (!value) {
+        throw new Error(`Expected comma-separated grades after ${arg}`);
+      }
+      gradeBands = value
+        .split(',')
+        .map((g) => g.trim())
+        .filter(Boolean);
+      i += 1;
+    } else {
+      throw new Error(`Unknown argument: ${arg}`);
+    }
+  }
+
   const supabase = createServiceRoleClient();
-  const [coverage, subjects] = await Promise.all([fetchCoverage(supabase), fetchSubjects(supabase)]);
+  const [coverage, subjects] = await Promise.all([fetchCoverage(supabase, gradeBands), fetchSubjects(supabase)]);
 
   const subjectIdCache = subjects;
 
