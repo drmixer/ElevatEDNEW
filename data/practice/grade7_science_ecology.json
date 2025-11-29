@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "7-science-life-science-ecology-and-biodiversity",
+    "lessonSlug": "7-science-life-science-ecology-and-biodiversity-launch",
+    "prompt": "What is the best explanation for a decrease in a prey population over several years?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["ecosystems_energy_matter"],
+    "standards": ["MS-LS2-3"],
+    "tags": ["predator-prey", "data"],
+    "options": [
+      { "text": "Predator numbers increased, reducing prey survival.", "isCorrect": true, "feedback": "More predators typically lowers prey population." },
+      { "text": "The prey species stopped reproducing entirely.", "isCorrect": false },
+      { "text": "Weather never changes in the ecosystem.", "isCorrect": false },
+      { "text": "The prey species became plants.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-science-life-science-ecology-and-biodiversity",
+    "lessonSlug": "7-science-life-science-ecology-and-biodiversity-launch",
+    "prompt": "Which action best increases biodiversity in a degraded habitat?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["ecosystems_energy_matter"],
+    "standards": ["MS-LS2-3"],
+    "tags": ["biodiversity", "restoration"],
+    "options": [
+      { "text": "Replanting native species and removing invasive species.", "isCorrect": true, "feedback": "Restoring natives and removing invasives supports more niches." },
+      { "text": "Reducing all species to one hardy plant.", "isCorrect": false },
+      { "text": "Adding only predators.", "isCorrect": false },
+      { "text": "Removing all decomposers.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-science-life-science-ecology-and-biodiversity",
+    "lessonSlug": "7-science-life-science-ecology-and-biodiversity-launch",
+    "prompt": "Why are decomposers essential in ecosystems?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["ecosystems_energy_matter"],
+    "standards": ["MS-LS2-3"],
+    "tags": ["decomposers", "cycling"],
+    "options": [
+      { "text": "They recycle nutrients back into the soil for producers.", "isCorrect": true, "feedback": "Decomposers break down matter and return nutrients." },
+      { "text": "They create new energy from nothing.", "isCorrect": false },
+      { "text": "They stop energy flow to predators.", "isCorrect": false },
+      { "text": "They remove sunlight from the system.", "isCorrect": false }
+    ]
+  }
+]

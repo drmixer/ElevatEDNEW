@@ -1,0 +1,45 @@
+framework,subject,grade_band,domain,code,description
+CCSS-M,Mathematics,3,Operations and Algebraic Thinking,3.OA.A.1,"Interpret products of whole numbers (e.g., 3 × 5 as total objects in 3 groups of 5)."
+CCSS-M,Mathematics,3,Operations and Algebraic Thinking,3.OA.A.3,Use multiplication and division within 100 to solve word problems in situations involving equal groups and arrays.
+CCSS-M,Mathematics,3,Number and Operations in Base Ten,3.NBT.A.2,Fluently add and subtract within 1000 using place value strategies and properties of operations.
+CCSS-M,Mathematics,3,Number and Operations—Fractions,3.NF.A.1,Understand a fraction 1/b as one part of a whole divided into b equal parts and a/b as the quantity formed by a parts of size 1/b.
+CCSS-M,Mathematics,3,Number and Operations—Fractions,3.NF.A.3,Explain equivalence of fractions and compare fractions by reasoning about their size.
+CCSS-M,Mathematics,3,Measurement and Data,3.MD.B.3,Draw scaled picture and bar graphs to represent a data set and solve problems using the information presented.
+CCSS-M,Mathematics,3,Geometry,3.G.A.1,"Understand that shapes in different categories may share attributes that define larger categories (e.g., quadrilaterals)."
+CCSS-M,Mathematics,4,Operations and Algebraic Thinking,4.OA.A.3,Solve multistep word problems posed with whole numbers using the four operations and interpret remainders.
+CCSS-M,Mathematics,4,Number and Operations in Base Ten,4.NBT.B.4,Fluently add and subtract multi-digit whole numbers using the standard algorithm.
+CCSS-M,Mathematics,4,Number and Operations—Fractions,4.NF.B.3,Understand a fraction a/b with a > 1 as a sum of fractions 1/b.
+CCSS-M,Mathematics,4,Number and Operations—Fractions,4.NF.C.7,"Compare two decimals to hundredths using >, =, and < and justify the conclusions."
+CCSS-M,Mathematics,4,Measurement and Data,4.MD.A.3,Apply the area and perimeter formulas for rectangles in real-world and mathematical problems.
+CCSS-M,Mathematics,4,Geometry,4.G.A.2,Classify two-dimensional figures based on the presence or absence of parallel or perpendicular lines and angles.
+CCSS-M,Mathematics,5,Number and Operations in Base Ten,5.NBT.B.7,"Add, subtract, multiply, and divide decimals to hundredths using place value strategies and properties of operations."
+CCSS-M,Mathematics,5,Number and Operations—Fractions,5.NF.A.1,Add and subtract fractions with unlike denominators by replacing given fractions with equivalent fractions.
+CCSS-M,Mathematics,5,Number and Operations—Fractions,5.NF.B.3,Interpret a fraction as division of the numerator by the denominator.
+CCSS-M,Mathematics,5,Number and Operations—Fractions,5.NF.B.4,Apply and extend previous understandings of multiplication to multiply a fraction or whole number by a fraction.
+CCSS-M,Mathematics,5,Measurement and Data,5.MD.C.5,Relate volume to multiplication and addition and solve real-world and mathematical problems involving volume.
+CCSS-M,Mathematics,5,Geometry,5.G.A.1,Use a coordinate plane to represent points and interpret their meaning in the context of a problem.
+CCSS-M,Mathematics,5,Geometry,5.G.B.3,Understand that attributes belonging to a category of two-dimensional figures also belong to all subcategories of that category.
+CCSS-M,Mathematics,6,Ratios and Proportional Relationships,6.RP.A.1,Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities.
+CCSS-M,Mathematics,6,Ratios and Proportional Relationships,6.RP.A.3,Use ratio and rate reasoning to solve real-world and mathematical problems including unit rate.
+CCSS-M,Mathematics,6,The Number System,6.NS.C.7,Understand ordering and absolute value of rational numbers and interpret statements of inequality.
+CCSS-M,Mathematics,6,Expressions and Equations,6.EE.B.7,Solve real-world and mathematical problems by writing and solving equations of the form x + p = q and px = q.
+CCSS-M,Mathematics,6,Expressions and Equations,6.EE.C.9,"Use variables to represent two quantities in a relationship; analyze the relationship using graphs, tables, and equations."
+CCSS-M,Mathematics,6,Geometry,6.G.A.1,"Find the area of right triangles, other triangles, special quadrilaterals, and polygons by composing into rectangles and triangles."
+CCSS-M,Mathematics,6,Statistics and Probability,6.SP.B.4,"Display numerical data in plots on a number line, including dot plots, histograms, and box plots."
+CCSS-M,Mathematics,6,Statistics and Probability,6.SP.B.5,"Summarize numerical data sets in relation to their context, including measures of center and variability."
+CCSS-M,Mathematics,7,Ratios and Proportional Relationships,7.RP.A.2,Recognize and represent proportional relationships between quantities.
+CCSS-M,Mathematics,7,The Number System,7.NS.A.1,Apply and extend previous understandings of addition and subtraction to add and subtract rational numbers.
+CCSS-M,Mathematics,7,The Number System,7.NS.A.2,Apply and extend multiplication and division of fractions to multiply and divide rational numbers.
+CCSS-M,Mathematics,7,Expressions and Equations,7.EE.B.3,Solve multistep real-life and mathematical problems posed with positive and negative rational numbers.
+CCSS-M,Mathematics,7,Expressions and Equations,7.EE.B.4a,"Solve word problems leading to equations of the form px + q = r and p(x + q) = r, assessing the reasonableness of results."
+CCSS-M,Mathematics,7,Geometry,7.G.B.6,"Solve real-world and mathematical problems involving area, volume, and surface area of two- and three-dimensional objects."
+CCSS-M,Mathematics,7,Statistics and Probability,7.SP.C.7,Develop a probability model and use it to find probabilities of events.
+CCSS-M,Mathematics,8,The Number System,8.NS.A.1,Know that numbers that are not rational are called irrational and understand rational approximations of irrational numbers.
+CCSS-M,Mathematics,8,Expressions and Equations,8.EE.A.2,Use square root and cube root symbols to represent solutions to equations of the form x^2 = p and x^3 = p.
+CCSS-M,Mathematics,8,Expressions and Equations,8.EE.B.5,Graph proportional relationships and compare linear relationships by examining slope.
+CCSS-M,Mathematics,8,Expressions and Equations,8.EE.C.8,Analyze and solve pairs of simultaneous linear equations.
+CCSS-M,Mathematics,8,Functions,8.F.A.1,Understand that a function assigns to each input exactly one output and describe functions by their rules or graphs.
+CCSS-M,Mathematics,8,Functions,8.F.B.4,Construct a function to model a linear relationship between two quantities; interpret rate of change and initial value.
+CCSS-M,Mathematics,8,Geometry,8.G.B.6,Explain a proof of the Pythagorean Theorem and its converse.
+CCSS-M,Mathematics,8,Statistics and Probability,8.SP.A.1,Construct and interpret scatter plots for bivariate measurement data to investigate patterns of association.
+CCSS-M,Mathematics,8,Statistics and Probability,8.SP.A.3,Use the equation of a fitted line to model the linear relationship between two quantities and assess fit.

@@ -128,7 +128,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                 event.preventDefault();
                 scrollToTop();
               }}
-              className="relative flex flex-col justify-center text-left pr-10"
+              className="relative flex flex-col justify-center text-left pr-10 focus-ring rounded-xl"
               whileHover={{ y: -2 }}
               style={{
                 paddingLeft: headingPaddingLeft,
@@ -187,7 +187,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                 <motion.button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="group relative text-sm font-medium text-brand-dark/70 transition-colors duration-300 hover:text-brand-dark"
+                  className="group relative text-sm font-medium text-brand-dark/85 transition-colors duration-300 hover:text-brand-dark focus-ring rounded-lg px-2 py-1"
                   initial={{ opacity: 0, y: -12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.08 + 0.1 }}
@@ -200,7 +200,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                 <motion.a
                   key={link.name}
                   href={link.href}
-                  className="text-sm font-medium text-brand-dark/60 hover:text-brand-blue transition-colors"
+                  className="text-sm font-medium text-brand-dark/80 hover:text-brand-blue transition-colors focus-ring rounded-lg px-2 py-1"
                   initial={{ opacity: 0, y: -12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.5 }}
@@ -218,7 +218,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
             >
               <button
                 onClick={onGetStarted}
-                className="group relative overflow-hidden rounded-2xl px-6 py-3 text-sm font-semibold text-white"
+                className="group relative overflow-hidden rounded-2xl px-6 py-3 text-sm font-semibold text-white focus-ring"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent transition-transform duration-500 group-hover:scale-110" />
                 <span className="absolute inset-0 -z-10 blur-xl bg-gradient-to-r from-brand-secondary/50 via-brand-primary/45 to-brand-accent/50 opacity-80" />
@@ -237,7 +237,10 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/70 text-brand-dark transition-all hover:border-brand-primary/40 hover:text-brand-primary"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/70 text-brand-dark transition-all hover:border-brand-primary/40 hover:text-brand-primary focus-ring"
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-nav"
+                aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -254,19 +257,19 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden"
           >
-            <div className="mx-auto mt-4 max-w-7xl rounded-3xl border border-white/50 bg-white/90 px-6 py-6 shadow-xl backdrop-blur-xl">
+            <div className="mx-auto mt-4 max-w-7xl rounded-3xl border border-white/50 bg-white/90 px-6 py-6 shadow-xl backdrop-blur-xl" id="mobile-nav">
               {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="block w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold text-brand-dark/70 transition-colors hover:bg-brand-soft/80 hover:text-brand-dark"
+                  className="block w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold text-brand-dark/85 transition-colors hover:bg-brand-soft/80 hover:text-brand-dark focus-ring"
                 >
                   {item.name}
                 </button>
               ))}
               <button
                 onClick={onGetStarted}
-                className="mt-4 w-full rounded-2xl bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-primary/40 transition-transform hover:-translate-y-0.5 hover:shadow-brand-primary/60"
+                className="mt-4 w-full rounded-2xl bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-primary/40 transition-transform hover:-translate-y-0.5 hover:shadow-brand-primary/60 focus-ring"
               >
                 Get Started Free
               </button>
@@ -275,7 +278,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                   <a
                     key={link.name}
                     href={link.href}
-                    className="text-sm font-semibold text-brand-blue hover:text-brand-teal"
+                    className="text-sm font-semibold text-brand-blue hover:text-brand-teal focus-ring rounded-lg px-1 py-0.5"
                   >
                     {link.name}
                   </a>

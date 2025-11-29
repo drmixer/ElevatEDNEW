@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "3-english-language-arts-reading-informational-biographies-pd",
+    "lessonSlug": "3-english-language-arts-reading-informational-biographies-pd-launch",
+    "prompt": "Which sentence best uses a text detail to support the main idea about the person?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["reading_informational", "evidence_reasoning"],
+    "standards": ["RI.3.2"],
+    "tags": ["biography", "evidence"],
+    "options": [
+      { "text": "\"She fixed broken radios for her neighbors,\" showing she liked solving problems.", "isCorrect": true, "feedback": "It quotes a detail and explains how it supports the idea." },
+      { "text": "I like fixing radios too.", "isCorrect": false },
+      { "text": "She lived in a big city.", "isCorrect": false },
+      { "text": "Her name was Ana.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "3-english-language-arts-reading-literature-short-stories-pd",
+    "lessonSlug": "3-english-language-arts-reading-literature-short-stories-pd-launch",
+    "prompt": "What detail best shows the main character is determined?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["reading_literature", "evidence_reasoning"],
+    "standards": ["RL.3.1"],
+    "tags": ["character", "evidence"],
+    "options": [
+      { "text": "\"She tried three times to climb the hill, even after slipping.\"", "isCorrect": true, "feedback": "It shows repeated effort despite setbacks." },
+      { "text": "\"She wore a blue jacket.\"", "isCorrect": false },
+      { "text": "\"She had a dog named Max.\"", "isCorrect": false },
+      { "text": "\"She went to the store.\"", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics",
+    "lessonSlug": "3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics-launch",
+    "prompt": "Which sentence uses a linking word to connect ideas?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["informative_writing", "vocabulary_language"],
+    "standards": ["W.3.2"],
+    "tags": ["writing", "linking-words"],
+    "options": [
+      { "text": "I love to draw, and I also enjoy painting.", "isCorrect": true, "feedback": "Uses \"and\" to link related ideas." },
+      { "text": "I love to draw. I enjoy painting.", "isCorrect": false },
+      { "text": "I love to draw because painting.", "isCorrect": false },
+      { "text": "I love to draw. Also painting.", "isCorrect": false }
+    ]
+  }
+]

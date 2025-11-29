@@ -391,7 +391,7 @@ const LessonPlayerPage: React.FC = () => {
               disabled={progressDisabled}
               onClick={() => progressController.toggleItem(progressId)}
               aria-pressed={progressController.isComplete(progressId)}
-              className="mt-1 inline-flex items-center justify-center rounded-full border border-slate-200 p-2 text-slate-400 hover:text-brand-blue hover:border-brand-blue/40"
+              className="mt-1 inline-flex items-center justify-center rounded-full border border-slate-200 p-2 text-slate-400 hover:text-brand-blue hover:border-brand-blue/40 focus-ring"
               title={
                 progressController.isComplete(progressId)
                   ? 'Mark section as in progress'
@@ -454,7 +454,7 @@ const LessonPlayerPage: React.FC = () => {
               {previousLesson && (
                 <Link
                   to={`/lesson/${previousLesson.id}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 focus-ring"
                 >
                   <ArrowLeft className="h-4 w-4" /> Previous
                 </Link>
@@ -462,7 +462,7 @@ const LessonPlayerPage: React.FC = () => {
               {nextLesson && (
                 <Link
                   to={`/lesson/${nextLesson.id}`}
-                  className="inline-flex items-center gap-2 rounded-xl bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90"
+                  className="inline-flex items-center gap-2 rounded-xl bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 focus-ring"
                 >
                   Next lesson <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -500,7 +500,7 @@ const LessonPlayerPage: React.FC = () => {
                 type="button"
                 disabled={progressDisabled}
                 onClick={progressController.markComplete}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90 focus-ring"
               >
                 Mark all complete
               </button>
@@ -508,7 +508,7 @@ const LessonPlayerPage: React.FC = () => {
                 type="button"
                 onClick={progressController.reset}
                 disabled={progressDisabled || progressController.progress === 0}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 focus-ring"
               >
                 Reset
               </button>
@@ -521,7 +521,7 @@ const LessonPlayerPage: React.FC = () => {
                     disabled={progressDisabled}
                     onClick={() => progressController.toggleItem(item.id)}
                     aria-pressed={progressController.isComplete(item.id)}
-                    className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors ${
+                    className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors focus-ring ${
                       progressController.isComplete(item.id)
                         ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
                         : 'border-slate-200 bg-white text-slate-600 hover:border-brand-blue/40 hover:text-brand-blue'
@@ -550,7 +550,7 @@ const LessonPlayerPage: React.FC = () => {
                   <Link
                     key={lesson.id}
                     to={`/lesson/${lesson.id}`}
-                    className={`flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm transition-colors ${
+                    className={`flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm transition-colors focus-ring ${
                       active
                         ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
                         : 'border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue'
@@ -673,18 +673,18 @@ const LessonPlayerPage: React.FC = () => {
                         : isSelected
                         ? 'border-rose-200 bg-rose-50'
                         : 'border-slate-200 bg-slate-50';
-                      return (
-                        <button
-                          key={option.id}
-                          type="button"
-                          disabled={answered || questionSaving}
-                          onClick={() => handleQuestionAnswer(option.id)}
-                          className={`${baseClasses} ${stateClasses}`}
-                        >
-                          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-600">
-                            {String.fromCharCode(65 + index)}
-                          </div>
-                          <div className="flex-1 space-y-1">
+                    return (
+                      <button
+                        key={option.id}
+                        type="button"
+                        disabled={answered || questionSaving}
+                        onClick={() => handleQuestionAnswer(option.id)}
+                        className={`${baseClasses} ${stateClasses} focus-ring`}
+                      >
+                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-600">
+                          {String.fromCharCode(65 + index)}
+                        </div>
+                        <div className="flex-1 space-y-1">
                             <div className="font-medium text-slate-800">{option.text}</div>
                             {answered && option.feedback && isSelected && (
                               <p className="text-xs text-slate-600">{option.feedback}</p>
@@ -736,7 +736,7 @@ const LessonPlayerPage: React.FC = () => {
                           type="button"
                           onClick={handleNextQuestion}
                           disabled={!questionResponses.has(currentPracticeQuestion.id)}
-                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue disabled:opacity-60"
+                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue disabled:opacity-60 focus-ring"
                         >
                           Next question <ArrowRight className="h-4 w-4" />
                         </button>

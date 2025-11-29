@@ -1,0 +1,398 @@
+{
+  "3-mathematics-number-and-operations-place-value-thousands-millions": [
+    {
+      "source": "EngageNY/Eureka",
+      "url": "http://www.engageny.org/resource/grade-3-mathematics-module-2",
+      "title": "EngageNY Grade 3 Module 2: Place Value and Problem Solving",
+      "description": "Unit overview, lessons, and problem sets for multi-digit place value.",
+      "tags": ["math", "place-value", "grade-3"],
+      "lessonSlug": "3-mathematics-number-and-operations-place-value-thousands-millions-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/math/cc-third-grade-math/imp-place-value-and-rounding",
+      "title": "Place Value and Rounding (Khan Academy)",
+      "description": "Practice set and videos on base-ten place value and rounding strategies.",
+      "tags": ["math", "practice", "grade-3"],
+      "lessonSlug": "3-mathematics-number-and-operations-place-value-thousands-millions-launch"
+    }
+  ],
+  "4-mathematics-geometry-and-measurement-angles-and-lines": [
+    {
+      "source": "EngageNY/Eureka",
+      "url": "http://www.engageny.org/resource/grade-4-mathematics-module-4",
+      "title": "EngageNY Grade 4 Module 4: Angle Measure and Plane Figures",
+      "description": "Downloadable lessons on angle measurement, rays, and classifying lines.",
+      "tags": ["geometry", "angles", "grade-4"],
+      "lessonSlug": "4-mathematics-geometry-and-measurement-angles-and-lines-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/math/cc-fourth-grade-math/cc-4th-geometry",
+      "title": "4th Grade Geometry (Khan Academy)",
+      "description": "Interactive practice on lines, angles, and symmetry for Grade 4.",
+      "tags": ["geometry", "practice", "grade-4"],
+      "lessonSlug": "4-mathematics-geometry-and-measurement-angles-and-lines-launch"
+    }
+  ],
+  "5-mathematics-data-and-probability-statistics-bar-line-plots": [
+    {
+      "source": "EngageNY/Eureka",
+      "url": "http://www.engageny.org/resource/grade-5-mathematics-module-6",
+      "title": "EngageNY Grade 5 Module 6: Coordinate Plane and Data Displays",
+      "description": "Line plots and graphing practice that extend bar graph fluency.",
+      "tags": ["statistics", "data", "grade-5"],
+      "lessonSlug": "5-mathematics-data-and-probability-statistics-bar-line-plots-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/math/cc-fifth-grade-math/cc-5th-data",
+      "title": "Represent and Interpret Data (Khan Academy)",
+      "description": "Practice sets on line plots, measurement data, and graph interpretation.",
+      "tags": ["statistics", "practice", "grade-5"],
+      "lessonSlug": "5-mathematics-data-and-probability-statistics-bar-line-plots-launch"
+    }
+  ],
+  "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": [
+    {
+      "source": "EngageNY/Eureka",
+      "url": "http://www.engageny.org/resource/grade-6-mathematics-module-1",
+      "title": "EngageNY Grade 6 Module 1: Ratios and Unit Rates",
+      "description": "Full module on ratio language, unit rates, and proportional reasoning.",
+      "tags": ["ratios", "proportions", "grade-6"],
+      "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch"
+    },
+    {
+      "source": "Open Up Resources",
+      "url": "https://im.kendallhunt.com/MS/students/2/index.html",
+      "title": "IM 6–8 Math: Unit 2 Student Materials",
+      "description": "Illustrative Mathematics unit on introducing ratios (CC BY 4.0).",
+      "tags": ["ratios", "illustrative-mathematics", "grade-6"],
+      "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch"
+    }
+  ],
+  "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation": [
+    {
+      "source": "OpenStax",
+      "url": "https://openstax.org/books/introductory-statistics/pages/12-introduction",
+      "title": "OpenStax Introductory Statistics: Chapter 12 Overview",
+      "description": "Chapter introduction for correlation and scatterplot analysis.",
+      "tags": ["statistics", "scatterplots", "grade-8"],
+      "lessonSlug": "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data",
+      "title": "Describing Relationships in Data (Khan Academy)",
+      "description": "Videos and practice on associations, correlation, and trend lines.",
+      "tags": ["statistics", "correlation", "grade-8"],
+      "lessonSlug": "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation-launch"
+    }
+  ],
+  "3-english-language-arts-reading-literature-short-stories-pd": [
+    {
+      "source": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/ebooks/1597",
+      "title": "Andersen's Fairy Tales",
+      "description": "Public-domain short stories for close reading practice.",
+      "tags": ["ela", "short-story", "grade-3"],
+      "lessonSlug": "3-english-language-arts-reading-literature-short-stories-pd-launch"
+    },
+    {
+      "source": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/ebooks/21",
+      "title": "Aesop's Fables",
+      "description": "Fables collection to support theme and moral analysis.",
+      "tags": ["ela", "fable", "grade-3"],
+      "lessonSlug": "3-english-language-arts-reading-literature-short-stories-pd-launch"
+    }
+  ],
+  "4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics": [
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/humanities/grammar",
+      "title": "Grammar Course Overview",
+      "description": "Mini-lessons on parts of speech, sentence structure, and punctuation.",
+      "tags": ["ela", "grammar", "grade-4"],
+      "lessonSlug": "4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/humanities/grammar/syntax-sentences-and-clauses",
+      "title": "Sentences and Clauses",
+      "description": "Focused practice on clauses, sentence types, and fragments.",
+      "tags": ["ela", "syntax", "grade-4"],
+      "lessonSlug": "4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics-launch"
+    }
+  ],
+  "5-english-language-arts-vocabulary-roots-prefixes-suffixes": [
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/ela/cc-8th-reading-vocab/xfc5bc4c0f41041c1:vocabulary/v/intro-to-roots-affixes",
+      "title": "Intro to Roots and Affixes",
+      "description": "Short lesson on using roots, prefixes, and suffixes to infer meaning.",
+      "tags": ["ela", "vocabulary", "grade-5"],
+      "lessonSlug": "5-english-language-arts-vocabulary-roots-prefixes-suffixes-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/ela/cc-7th-reading-vocab/x23d40d8b8f0408e1:vocabulary-domains/v/latin-roots-and-foreign-words",
+      "title": "Latin Roots and Foreign Words",
+      "description": "Practice with common Latin roots to build morphological awareness.",
+      "tags": ["ela", "vocabulary", "grade-5"],
+      "lessonSlug": "5-english-language-arts-vocabulary-roots-prefixes-suffixes-launch"
+    }
+  ],
+  "6-english-language-arts-reading-literature-novellas-short-novels-pd": [
+    {
+      "source": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/ebooks/215",
+      "title": "The Call of the Wild",
+      "description": "Public-domain novella for character and theme analysis.",
+      "tags": ["ela", "novella", "grade-6"],
+      "lessonSlug": "6-english-language-arts-reading-literature-novellas-short-novels-pd-launch"
+    },
+    {
+      "source": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/ebooks/35",
+      "title": "The Time Machine",
+      "description": "Science-fiction classic to support plot structure discussions.",
+      "tags": ["ela", "novella", "grade-6"],
+      "lessonSlug": "6-english-language-arts-reading-literature-novellas-short-novels-pd-launch"
+    }
+  ],
+  "7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots": [
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/ela/cc-9th-reading-writing/x8c5b31ecd18eda7b:vocabulary/v/strategies-for-understanding-unknown-words",
+      "title": "Strategies for Unknown Words",
+      "description": "Approaches for decoding unfamiliar academic terms in context.",
+      "tags": ["ela", "academic-vocabulary", "grade-7"],
+      "lessonSlug": "7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots-launch"
+    },
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/ela/cc-7th-reading-vocab/x23d40d8b8f0408e1:vocabulary-domains/v/latin-roots-and-foreign-words",
+      "title": "Latin Roots for Academic Vocabulary",
+      "description": "Root study to strengthen morphology for grade-level texts.",
+      "tags": ["ela", "vocabulary", "grade-7"],
+      "lessonSlug": "7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots-launch"
+    }
+  ],
+  "8-english-language-arts-reading-informational-historical-documents-pd": [
+    {
+      "source": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/ebooks/18",
+      "title": "The Federalist Papers",
+      "description": "Foundational American government essays for close reading practice.",
+      "tags": ["ela", "primary-source", "grade-8"],
+      "lessonSlug": "8-english-language-arts-reading-informational-historical-documents-pd-launch"
+    },
+    {
+      "source": "NARA",
+      "url": "https://www.archives.gov/education/lessons/constitution-day",
+      "title": "Constitution Day Resources",
+      "description": "Lesson-ready NARA set for analyzing the Constitution and amendments.",
+      "tags": ["civics", "primary-source", "grade-8"],
+      "lessonSlug": "8-english-language-arts-reading-informational-historical-documents-pd-launch"
+    }
+  ],
+  "6-science-earth-and-space-plate-tectonics": [
+    {
+      "source": "OpenStax",
+      "url": "https://openstax.org/details/books/earth-science-2e",
+      "title": "OpenStax Earth Science 2e: Plate Tectonics Reference",
+      "description": "CC BY reference text covering Earth systems and tectonic movement.",
+      "tags": ["science", "earth-science", "tectonics"],
+      "lessonSlug": "6-science-earth-and-space-plate-tectonics-launch"
+    },
+    {
+      "source": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/plate-tectonics",
+      "title": "PhET Simulation: Plate Tectonics",
+      "description": "Interactive model for exploring plate boundaries and mantle convection.",
+      "tags": ["science", "simulation", "tectonics"],
+      "lessonSlug": "6-science-earth-and-space-plate-tectonics-launch"
+    }
+  ],
+  "7-science-life-science-evolution-and-natural-selection": [
+    {
+      "source": "OpenStax",
+      "url": "https://openstax.org/books/biology-2e/pages/18-introduction",
+      "title": "OpenStax Biology 2e: Evolution Overview",
+      "description": "Chapter overview on evidence of evolution and speciation.",
+      "tags": ["biology", "evolution", "grade-7"],
+      "lessonSlug": "7-science-life-science-evolution-and-natural-selection-launch"
+    },
+    {
+      "source": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/ebooks/2009",
+      "title": "On the Origin of Species",
+      "description": "Public-domain Darwin text for historical context and excerpts.",
+      "tags": ["biology", "primary-source", "grade-7"],
+      "lessonSlug": "7-science-life-science-evolution-and-natural-selection-launch"
+    }
+  ],
+  "8-science-engineering-practices-tradeoffs-and-constraints": [
+    {
+      "source": "NASA",
+      "url": "https://www.nasa.gov/learning-resources/for-educators/",
+      "title": "NASA Engineering & STEM Educator Resources",
+      "description": "Curated engineering design activities and classroom guides.",
+      "tags": ["engineering", "design-process", "grade-8"],
+      "lessonSlug": "8-science-engineering-practices-tradeoffs-and-constraints-launch"
+    },
+    {
+      "source": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/balancing-act",
+      "title": "PhET Simulation: Balancing Act",
+      "description": "Interactive exploration of balance, forces, and tradeoffs.",
+      "tags": ["engineering", "simulation", "grade-8"],
+      "lessonSlug": "8-science-engineering-practices-tradeoffs-and-constraints-launch"
+    }
+  ],
+  "3-science-physical-science-matter-particles": [
+    {
+      "source": "NASA",
+      "url": "https://climatekids.nasa.gov/what-is-matter/",
+      "title": "NASA Climate Kids: What Is Matter?",
+      "description": "Student-friendly primer on solids, liquids, and gases with visuals.",
+      "tags": ["science", "matter", "grade-3"],
+      "lessonSlug": "3-science-physical-science-matter-particles-launch"
+    },
+    {
+      "source": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/states-of-matter-basics",
+      "title": "PhET: States of Matter (Basics)",
+      "description": "Interactive simulation for particle motion and state changes.",
+      "tags": ["science", "simulation", "grade-3"],
+      "lessonSlug": "3-science-physical-science-matter-particles-launch"
+    }
+  ],
+  "4-science-earth-and-space-solar-system-relative-scale": [
+    {
+      "source": "NASA",
+      "url": "https://solarsystem.nasa.gov/resources/310/solar-system-sizes/",
+      "title": "NASA: Solar System Sizes",
+      "description": "Visual guide comparing planet sizes to build scale understanding.",
+      "tags": ["space", "solar-system", "grade-4"],
+      "lessonSlug": "4-science-earth-and-space-solar-system-relative-scale-launch"
+    },
+    {
+      "source": "NASA Image and Video Library",
+      "url": "https://images.nasa.gov/details-PIA04921",
+      "title": "NASA Image: Solar System Montage",
+      "description": "Public-domain montage of planets for scale and composition discussions.",
+      "tags": ["space", "visual", "grade-4"],
+      "lessonSlug": "4-science-earth-and-space-solar-system-relative-scale-launch"
+    }
+  ],
+  "5-science-engineering-practices-criteria-and-constraints": [
+    {
+      "source": "NASA",
+      "url": "https://www.nasa.gov/learning-resources/for-educators/",
+      "title": "NASA Engineering & STEM Resources",
+      "description": "Design challenges and classroom activities emphasizing constraints.",
+      "tags": ["engineering", "design-process", "grade-5"],
+      "lessonSlug": "5-science-engineering-practices-criteria-and-constraints-launch"
+    },
+    {
+      "source": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/balancing-act",
+      "title": "PhET: Balancing Act",
+      "description": "Simulation exploring balance, forces, and tradeoffs in design.",
+      "tags": ["engineering", "simulation", "grade-5"],
+      "lessonSlug": "5-science-engineering-practices-criteria-and-constraints-launch"
+    }
+  ],
+  "3-social-studies-civics-and-government-local-state-government": [
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/humanities/us-government-and-civics/state-and-local-government/state-and-local-powers/v/introduction-to-state-and-local-government",
+      "title": "Intro to State and Local Government",
+      "description": "Video overview of state responsibilities and local governance.",
+      "tags": ["civics", "state-government", "grade-3"],
+      "lessonSlug": "3-social-studies-civics-and-government-local-state-government-launch"
+    },
+    {
+      "source": "NARA",
+      "url": "https://www.archives.gov/education/civic-education",
+      "title": "National Archives Civic Education Hub",
+      "description": "Primary sources and lesson starters on U.S. civic structures.",
+      "tags": ["civics", "primary-source", "grade-3"],
+      "lessonSlug": "3-social-studies-civics-and-government-local-state-government-launch"
+    }
+  ],
+  "4-social-studies-world-history-and-geography-ancient-civilizations": [
+    {
+      "source": "Library of Congress",
+      "url": "https://www.loc.gov/collections/world-digital-library/about-this-collection/",
+      "title": "World Digital Library Collection",
+      "description": "Global primary sources spanning ancient to early modern history.",
+      "tags": ["world-history", "primary-source", "grade-4"],
+      "lessonSlug": "4-social-studies-world-history-and-geography-ancient-civilizations-launch"
+    },
+    {
+      "source": "CIA World Factbook",
+      "url": "https://www.cia.gov/the-world-factbook/countries/egypt/",
+      "title": "CIA World Factbook: Egypt",
+      "description": "Current geographic and cultural reference to connect past and present.",
+      "tags": ["geography", "reference", "grade-4"],
+      "lessonSlug": "4-social-studies-world-history-and-geography-ancient-civilizations-launch"
+    }
+  ],
+  "5-social-studies-us-history-industrialization-and-immigration": [
+    {
+      "source": "Library of Congress",
+      "url": "https://www.loc.gov/classroom-materials/immigration/",
+      "title": "Immigration and Relocation in U.S. History",
+      "description": "Curated documents, photos, and teacher guides on immigration waves.",
+      "tags": ["us-history", "immigration", "grade-5"],
+      "lessonSlug": "5-social-studies-us-history-industrialization-and-immigration-launch"
+    },
+    {
+      "source": "NARA",
+      "url": "https://www.archives.gov/education/lessons/hine-photos",
+      "title": "Lewis Hine Child Labor Photographs",
+      "description": "Primary-source photo set on industrialization and labor reform.",
+      "tags": ["us-history", "primary-source", "grade-5"],
+      "lessonSlug": "5-social-studies-us-history-industrialization-and-immigration-launch"
+    }
+  ],
+  "7-social-studies-economics-and-financial-literacy-supply-demand-intro": [
+    {
+      "source": "Khan Academy",
+      "url": "https://www.khanacademy.org/economics-finance-domain/microeconomics/supply-demand-equilibrium",
+      "title": "Supply, Demand, and Equilibrium",
+      "description": "Concept videos and practice on supply and demand curves.",
+      "tags": ["economics", "supply-demand", "grade-7"],
+      "lessonSlug": "7-social-studies-economics-and-financial-literacy-supply-demand-intro-launch"
+    },
+    {
+      "source": "CFPB",
+      "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/",
+      "title": "CFPB Youth Financial Education",
+      "description": "Budgeting and decision-making lessons aligned to personal finance.",
+      "tags": ["financial-literacy", "personal-finance", "grade-7"],
+      "lessonSlug": "7-social-studies-economics-and-financial-literacy-supply-demand-intro-launch"
+    }
+  ],
+  "8-social-studies-world-history-and-geography-medieval-to-early-modern": [
+    {
+      "source": "Library of Congress",
+      "url": "https://www.loc.gov/exhibits/magna-carta-muse-and-mentor/",
+      "title": "Magna Carta: Muse and Mentor",
+      "description": "LOC exhibit materials on Magna Carta and evolving rule of law.",
+      "tags": ["world-history", "primary-source", "grade-8"],
+      "lessonSlug": "8-social-studies-world-history-and-geography-medieval-to-early-modern-launch"
+    },
+    {
+      "source": "National Gallery of Art",
+      "url": "https://www.nga.gov/collection/art-object-page.26.html",
+      "title": "Ginevra de' Benci (National Gallery of Art)",
+      "description": "Renaissance portrait open-access image for art and culture analysis.",
+      "tags": ["renaissance", "art-history", "grade-8"],
+      "lessonSlug": "8-social-studies-world-history-and-geography-medieval-to-early-modern-launch"
+    }
+  ]
+}

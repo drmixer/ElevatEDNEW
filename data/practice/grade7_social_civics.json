@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "7-social-studies-civics-and-government-us-constitution-and-federalism",
+    "lessonSlug": "7-social-studies-civics-and-government-us-constitution-and-federalism-launch",
+    "prompt": "Which statement best explains federalism in the United States?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["civics_government"],
+    "standards": ["Civ.6-8"],
+    "tags": ["federalism"],
+    "options": [
+      { "text": "Power is shared between national and state governments.", "isCorrect": true, "feedback": "Federalism divides and shares powers between federal and state levels." },
+      { "text": "Only the national government can make laws.", "isCorrect": false },
+      { "text": "Only state governments can collect taxes.", "isCorrect": false },
+      { "text": "Local governments must approve federal laws.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-social-studies-civics-and-government-elections-and-civic-participation",
+    "lessonSlug": "7-social-studies-civics-and-government-elections-and-civic-participation-launch",
+    "prompt": "What is one effective way citizens can influence government decisions?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["civic_participation"],
+    "standards": ["Civ.6-8"],
+    "tags": ["civic-action"],
+    "options": [
+      { "text": "Organizing or joining a community petition to lawmakers.", "isCorrect": true, "feedback": "Petitions communicate voter concerns directly to officials." },
+      { "text": "Ignoring public meetings.", "isCorrect": false },
+      { "text": "Spreading rumors online.", "isCorrect": false },
+      { "text": "Avoiding voting to stay neutral.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-social-studies-world-history-and-geography-medieval-to-early-modern",
+    "lessonSlug": "7-social-studies-world-history-and-geography-medieval-to-early-modern-launch",
+    "prompt": "Which source would best help analyze trade between medieval cities?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["world_history_geography"],
+    "standards": ["Geo.6-8"],
+    "tags": ["primary-source", "maps"],
+    "options": [
+      { "text": "A map showing trade routes and goods exchanged.", "isCorrect": true, "feedback": "Maps with routes/goods provide direct evidence of trade patterns." },
+      { "text": "A modern novel set in medieval times.", "isCorrect": false },
+      { "text": "A weather report from last week.", "isCorrect": false },
+      { "text": "A personal blog with no sources.", "isCorrect": false }
+    ]
+  }
+]

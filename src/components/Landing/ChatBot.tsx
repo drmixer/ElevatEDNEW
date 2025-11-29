@@ -39,6 +39,8 @@ const ChatBot: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -47,6 +49,49 @@ const ChatBot: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    inputRef.current?.focus();
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (!chatWindowRef.current) return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusableSelector =
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+      const focusable = Array.from(
+        chatWindowRef.current.querySelectorAll<HTMLElement>(focusableSelector),
+      ).filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true');
+
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeydown);
+    return () => {
+      document.removeEventListener('keydown', handleKeydown);
+      previouslyFocused?.focus();
+    };
+  }, [isOpen]);
 
   const getAIResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
@@ -142,12 +187,15 @@ const ChatBot: React.FC = () => {
       {/* Chat Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-brand-teal to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50"
+        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-brand-teal to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 focus-ring"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         animate={{ 
           boxShadow: isOpen ? "0 0 0 4px rgba(51, 217, 193, 0.3)" : "0 10px 25px rgba(0, 0, 0, 0.2)"
         }}
+        aria-label="Open ElevatED marketing assistant chat"
+        aria-expanded={isOpen}
+        aria-controls="landing-chat-window"
       >
         <MessageCircle className="h-6 w-6" />
       </motion.button>
@@ -160,6 +208,13 @@ const ChatBot: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="fixed bottom-24 right-6 w-80 h-96 bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="chatbot-title"
+            aria-describedby="chatbot-description"
+            id="landing-chat-window"
+            tabIndex={-1}
+            ref={chatWindowRef}
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-brand-teal to-brand-blue text-white p-4 flex items-center justify-between">
@@ -168,20 +223,21 @@ const ChatBot: React.FC = () => {
                   <Bot className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">ElevatED Assistant</h3>
-                  <p className="text-xs opacity-90">Concise answers, on-brand.</p>
+                  <h3 className="font-semibold" id="chatbot-title">ElevatED Assistant</h3>
+                  <p className="text-xs opacity-90" id="chatbot-description">Concise answers, on-brand.</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                className="p-1 hover:bg-white/20 rounded-full transition-colors focus-ring"
+                aria-label="Close chat assistant"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+            <div className="flex-1 p-4 overflow-y-auto space-y-4" role="log" aria-live="polite" aria-relevant="additions text">
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
@@ -229,11 +285,14 @@ const ChatBot: React.FC = () => {
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about features, pricing, or getting started..."
                   className="flex-1 p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal text-sm"
+                  aria-label="Message the ElevatED assistant"
+                  ref={inputRef}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim()}
-                  className="p-2 bg-brand-teal text-white rounded-xl hover:bg-brand-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 bg-brand-teal text-white rounded-xl hover:bg-brand-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
+                  aria-label="Send chat message"
                 >
                   <Send className="h-4 w-4" />
                 </button>

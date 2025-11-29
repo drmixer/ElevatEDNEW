@@ -227,16 +227,14 @@ export const updateLessonAttributionBlocks = async (
     return;
   }
 
-  const payload = Array.from(updates.entries()).map(([id, attribution_block]) => ({
-    id,
-    attribution_block,
-  }));
+  for (const [id, attribution_block] of updates.entries()) {
+    const { error } = await supabase
+      .from('lessons')
+      .update({ attribution_block })
+      .eq('id', id);
 
-  const { error } = await supabase
-    .from('lessons')
-    .upsert(payload, { onConflict: 'id' });
-
-  if (error) {
-    throw new Error(`Failed to update lesson attribution blocks: ${error.message}`);
+    if (error) {
+      throw new Error(`Failed to update lesson attribution blocks: ${error.message}`);
+    }
   }
 };

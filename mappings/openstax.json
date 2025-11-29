@@ -1,26 +1,31 @@
 {
   "6-science-earth-and-space-earth-history": [
-    "https://openstax.org/books/earth-science-2e/pages/7-introduction",
     {
-      "url": "https://openstax.org/books/earth-science-2e/pages/7-1-geologic-time-and-stratigraphy",
-      "title": "Geologic Time and Stratigraphy",
-      "description": "OpenStax Earth Science 2e, Chapter 7.1",
-      "tags": ["earth-history", "geology"]
+      "url": "https://openstax.org/details/books/earth-science-2e",
+      "title": "Earth Science 2e (OpenStax)",
+      "description": "Reference text overview for Earth and space topics.",
+      "tags": ["earth-science", "reference"]
+    },
+    {
+      "url": "https://openstax.org/details/books/astronomy-2e",
+      "title": "Astronomy 2e (OpenStax)",
+      "description": "Background reading for planetary formation and Earth systems.",
+      "tags": ["astronomy", "earth-history"]
     }
   ],
   "9-mathematics-algebra-hs-pathways-linear-quadratic-functions": [
-    "https://openstax.org/books/algebra-and-trigonometry/pages/3-6-graphs-of-linear-functions",
     {
-      "url": "https://openstax.org/books/algebra-and-trigonometry/pages/4-4-graphs-of-quadratic-functions",
-      "title": "Graphs of Quadratic Functions",
-      "tags": ["algebra", "quadratic"]
+      "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+      "title": "Algebra and Trigonometry 2e (OpenStax)",
+      "description": "Reference chapters on linear and quadratic functions.",
+      "tags": ["algebra", "functions"]
     }
   ],
   "10-science-life-science-molecular-genetics": [
-    "https://openstax.org/books/biology-2e/pages/14-introduction",
     {
-      "url": "https://openstax.org/books/biology-2e/pages/14-2-dna-structure-and-function",
-      "title": "DNA Structure and Function",
+      "url": "https://openstax.org/details/books/biology-2e",
+      "title": "Biology 2e (OpenStax)",
+      "description": "OpenStax Biology 2e reference for genetics units.",
       "tags": ["genetics", "biology"]
     }
   ]

@@ -66,7 +66,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
               </span>
           </h1>
 
-          <p className="text-lg leading-relaxed text-slate-600 sm:text-xl">
+          <p className="text-lg leading-relaxed text-slate-700 sm:text-xl">
               ElevatED pairs adaptive AI instruction with family-ready insights so students accelerate with confidence.
               Launch personalized journeys that feel handcrafted, with dashboards that keep everyone in the loop.
           </p>
@@ -74,7 +74,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
               <button
                 onClick={onGetStarted}
-                className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent px-8 py-4 text-lg font-semibold text-white shadow-[0_28px_45px_rgba(137,23,237,0.25)] transition-transform hover:-translate-y-1 sm:w-auto"
+                className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent px-8 py-4 text-lg font-semibold text-white shadow-[0_28px_45px_rgba(137,23,237,0.25)] transition-transform hover:-translate-y-1 sm:w-auto focus-ring"
               >
                 <span className="absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 <span className="relative flex items-center gap-3">
@@ -84,7 +84,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
               </button>
               <button
                 onClick={scrollToDemo}
-                className="group inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-brand-primary/20 bg-white/80 px-8 py-4 text-lg font-semibold text-brand-dark/80 shadow-[0_20px_35px_rgba(15,40,80,0.08)] backdrop-blur transition-all hover:border-brand-primary/40 hover:text-brand-primary sm:w-auto"
+                className="group inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-brand-primary/20 bg-white/80 px-8 py-4 text-lg font-semibold text-brand-dark/90 shadow-[0_20px_35px_rgba(15,40,80,0.08)] backdrop-blur transition-all hover:border-brand-primary/40 hover:text-brand-primary sm:w-auto focus-ring"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-primary/30 bg-brand-soft text-brand-primary transition-colors group-hover:border-brand-primary/50 group-hover:bg-brand-soft/90">
                   <Play className="h-5 w-5" />
@@ -122,7 +122,7 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
                   </div>
                   <div>
                     <h3 className="text-base font-semibold text-slate-900">{item.title}</h3>
-                    <p className="text-sm text-slate-500">{item.description}</p>
+                    <p className="text-sm text-slate-600">{item.description}</p>
                   </div>
                 </motion.div>
               ))}

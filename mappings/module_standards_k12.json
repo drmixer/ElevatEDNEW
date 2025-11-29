@@ -1,0 +1,3737 @@
+{
+  "1-electives-arts-and-music-colors-shapes-in-art": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "1-electives-arts-and-music-rhythm-and-melody": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "1-electives-computer-science-algorithms-unplugged": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "1-electives-computer-science-patterns-and-sequencing": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "1-electives-health-and-pe-movement-safety-hygiene": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "1-english-language-arts-reading-informational-simple-nonfiction-animals-places": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.1.2"
+      }
+    ]
+  },
+  "1-english-language-arts-reading-literature-fables-and-folktales-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.1.1"
+      }
+    ]
+  },
+  "1-english-language-arts-reading-literature-picture-books-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.1.1"
+      }
+    ]
+  },
+  "1-english-language-arts-reading-literature-poetry-short-forms": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.1.1"
+      }
+    ]
+  },
+  "1-english-language-arts-speaking-and-listening-show-and-tell-retelling": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.1.1"
+      }
+    ]
+  },
+  "1-english-language-arts-vocabulary-sight-words-and-phonics": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RF.1.3"
+      }
+    ]
+  },
+  "1-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "W.1.2"
+      }
+    ]
+  },
+  "1-mathematics-data-and-probability-statistics-categorize-and-tally": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.MD.C.4"
+      }
+    ]
+  },
+  "1-mathematics-data-and-probability-statistics-describe-data-more-less": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.MD.C.4"
+      }
+    ]
+  },
+  "1-mathematics-data-and-probability-statistics-picture-bar-graphs-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.MD.C.4"
+      }
+    ]
+  },
+  "1-mathematics-data-and-probability-statistics-simple-probability-informal": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.MD.C.4"
+      }
+    ]
+  },
+  "1-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.G.A.1"
+      }
+    ]
+  },
+  "1-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.G.A.1"
+      }
+    ]
+  },
+  "1-mathematics-geometry-and-measurement-perimeter-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.G.A.1"
+      }
+    ]
+  },
+  "1-mathematics-geometry-and-measurement-time-and-money-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.G.A.1"
+      }
+    ]
+  },
+  "1-mathematics-number-and-operations-addition-subtraction-within-20": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.OA.C.6"
+      }
+    ]
+  },
+  "1-mathematics-number-and-operations-compare-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.NBT.B.3"
+      }
+    ]
+  },
+  "1-mathematics-number-and-operations-counting-and-cardinality": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.NBT.A.1"
+      }
+    ]
+  },
+  "1-mathematics-number-and-operations-place-value-tens-ones": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.NBT.B.2"
+      }
+    ]
+  },
+  "1-mathematics-number-and-operations-skip-counting": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "1.NBT.A.1"
+      }
+    ]
+  },
+  "1-science-earth-and-space-earth-materials-rocks-soil": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-ESS2-1"
+      }
+    ]
+  },
+  "1-science-earth-and-space-sun-moon-stars-patterns": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "1-ESS1-1"
+      }
+    ]
+  },
+  "1-science-earth-and-space-weather-and-seasons": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-ESS3-2"
+      }
+    ]
+  },
+  "1-science-engineering-practices-ask-imagine-plan-create-test-design-cycle": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-2-ETS1-1"
+      }
+    ]
+  },
+  "1-science-life-science-habitats": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-LS1-1"
+      }
+    ]
+  },
+  "1-science-life-science-life-cycles": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "2-LS4-1"
+      }
+    ]
+  },
+  "1-science-life-science-plants-animals-needs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-LS1-1"
+      }
+    ]
+  },
+  "1-science-physical-science-energy-heat-sun": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "1-ESS1-1"
+      }
+    ]
+  },
+  "1-science-physical-science-forces-and-motion-push-pull": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-PS2-1"
+      }
+    ]
+  },
+  "1-science-physical-science-light-and-sound": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "1-PS4-1"
+      }
+    ]
+  },
+  "1-science-physical-science-matter-properties-solids-liquids-gases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "2-PS1-1"
+      }
+    ]
+  },
+  "1-social-studies-civics-and-government-rules-and-community": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.K-2"
+      }
+    ]
+  },
+  "1-social-studies-civics-and-government-symbols-and-holidays": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.K-2"
+      }
+    ]
+  },
+  "1-social-studies-economics-and-financial-literacy-choices-and-trade": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "1-social-studies-economics-and-financial-literacy-needs-vs-wants": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "1-social-studies-us-history-national-symbols": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.K-2"
+      }
+    ]
+  },
+  "1-social-studies-us-history-personal-family-history": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.K-2"
+      }
+    ]
+  },
+  "1-social-studies-world-history-and-geography-cultures-intro": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.K-2"
+      }
+    ]
+  },
+  "1-social-studies-world-history-and-geography-maps-globes-basic": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.K-2"
+      }
+    ]
+  },
+  "10-electives-arts-and-music-studio-art-design-music-composition-performance": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.9-12.CR"
+      }
+    ]
+  },
+  "10-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.9-12.DA"
+      }
+    ]
+  },
+  "10-electives-financial-literacy-elective-investing-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "10-electives-financial-literacy-elective-taxes-credit-debt": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "10-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.9-12.HL"
+      }
+    ]
+  },
+  "10-english-language-arts-reading-informational-literary-nonfiction-pd-open": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "10-english-language-arts-reading-informational-primary-sources-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "10-english-language-arts-reading-informational-rhetoric-and-argument": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "10-english-language-arts-reading-literature-american-british-lit-pd-works": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "10-english-language-arts-reading-literature-poetry-drama-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "10-english-language-arts-reading-literature-world-lit-pd-where-possible": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "10-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.11-12.1"
+      }
+    ]
+  },
+  "10-english-language-arts-vocabulary-discipline-specific-terms-test-prep": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "L.11-12.4"
+      }
+    ]
+  },
+  "10-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "10-mathematics-algebra-hs-pathways-linear-quadratic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "10-mathematics-algebra-hs-pathways-modeling-and-applications": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-Q.A.2"
+      }
+    ]
+  },
+  "10-mathematics-algebra-hs-pathways-piecewise-absolute-value": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7b"
+      }
+    ]
+  },
+  "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSA-APR.3"
+      }
+    ]
+  },
+  "10-mathematics-algebra-hs-pathways-rational-radical-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "10-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "10-mathematics-data-and-probability-statistics-descriptive-inferential-statistics": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "10-mathematics-data-and-probability-statistics-normal-distribution": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.A.4"
+      }
+    ]
+  },
+  "10-mathematics-data-and-probability-statistics-regression-linear-multiple": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.B.6"
+      }
+    ]
+  },
+  "10-mathematics-geometry-and-measurement-conic-sections": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-GPE.A.3"
+      }
+    ]
+  },
+  "10-mathematics-geometry-and-measurement-euclidean-proofs": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.C.9"
+      }
+    ]
+  },
+  "10-mathematics-geometry-and-measurement-transformations-advanced": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.A.5"
+      }
+    ]
+  },
+  "10-mathematics-geometry-and-measurement-trigonometry-right-units": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.A.3"
+      }
+    ]
+  },
+  "10-mathematics-geometry-and-measurement-vectors": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.A.1"
+      }
+    ]
+  },
+  "10-mathematics-number-and-operations-complex-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-CN.A.1"
+      }
+    ]
+  },
+  "10-mathematics-number-and-operations-exponential-logarithmic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-LE.4"
+      }
+    ]
+  },
+  "10-mathematics-number-and-operations-matrices-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.C.8"
+      }
+    ]
+  },
+  "10-mathematics-number-and-operations-polynomial-and-rational-expressions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "10-mathematics-number-and-operations-sequences-and-series": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.3"
+      }
+    ]
+  },
+  "10-mathematics-precalculus-calculus-advanced-hs-derivatives-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.DERIVATIVES"
+      }
+    ]
+  },
+  "10-mathematics-precalculus-calculus-advanced-hs-integrals-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.INTEGRALS"
+      }
+    ]
+  },
+  "10-mathematics-precalculus-calculus-advanced-hs-limits": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.LIMITS"
+      }
+    ]
+  },
+  "10-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.PARAMETRIC"
+      }
+    ]
+  },
+  "10-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.C.8"
+      }
+    ]
+  },
+  "10-science-earth-and-space-astronomy-astrophysics-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS1-4"
+      }
+    ]
+  },
+  "10-science-earth-and-space-climate-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS3-5"
+      }
+    ]
+  },
+  "10-science-earth-and-space-geology-minerals-rocks": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-1"
+      }
+    ]
+  },
+  "10-science-earth-and-space-oceanography-atmospheric-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-5"
+      }
+    ]
+  },
+  "10-science-engineering-practices-computational-modeling-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-4"
+      }
+    ]
+  },
+  "10-science-engineering-practices-experiment-design-and-statistics-in-labs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-3"
+      }
+    ]
+  },
+  "10-science-engineering-practices-systems-design": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "10-science-life-science-biochemistry-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-6"
+      }
+    ]
+  },
+  "10-science-life-science-ecology-population-community": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS2-1"
+      }
+    ]
+  },
+  "10-science-life-science-evolution-advanced": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS4-2"
+      }
+    ]
+  },
+  "10-science-life-science-molecular-genetics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS3-1"
+      }
+    ]
+  },
+  "10-science-life-science-physiology": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-3"
+      }
+    ]
+  },
+  "10-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "10-science-physical-science-electricity-and-magnetism": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-4"
+      }
+    ]
+  },
+  "10-science-physical-science-mechanics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-1"
+      }
+    ]
+  },
+  "10-science-physical-science-thermodynamics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS3-1"
+      }
+    ]
+  },
+  "10-science-physical-science-waves-and-optics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS4-1"
+      }
+    ]
+  },
+  "10-social-studies-civics-and-government-comparative-government": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "10-social-studies-civics-and-government-us-government-institutions-policy": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "10-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "10-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "10-social-studies-us-history-thematic-ap-style-depth-pd-docs": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.9-12"
+      }
+    ]
+  },
+  "10-social-studies-world-history-and-geography-modern-era-globalization-human-geography": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.9-12"
+      }
+    ]
+  },
+  "11-electives-arts-and-music-studio-art-design-music-composition-performance": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.9-12.CR"
+      }
+    ]
+  },
+  "11-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.9-12.DA"
+      }
+    ]
+  },
+  "11-electives-financial-literacy-elective-investing-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "11-electives-financial-literacy-elective-taxes-credit-debt": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "11-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.9-12.HL"
+      }
+    ]
+  },
+  "11-english-language-arts-reading-informational-literary-nonfiction-pd-open": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.2"
+      }
+    ]
+  },
+  "11-english-language-arts-reading-informational-primary-sources-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.2"
+      }
+    ]
+  },
+  "11-english-language-arts-reading-informational-rhetoric-and-argument": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "11-english-language-arts-reading-literature-american-british-lit-pd-works": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.11-12.2"
+      }
+    ]
+  },
+  "11-english-language-arts-reading-literature-poetry-drama-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.11-12.2"
+      }
+    ]
+  },
+  "11-english-language-arts-reading-literature-world-lit-pd-where-possible": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.11-12.2"
+      }
+    ]
+  },
+  "11-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.11-12.1"
+      }
+    ]
+  },
+  "11-english-language-arts-vocabulary-discipline-specific-terms-test-prep": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "L.11-12.4"
+      }
+    ]
+  },
+  "11-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "11-mathematics-algebra-hs-pathways-linear-quadratic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "11-mathematics-algebra-hs-pathways-modeling-and-applications": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-Q.A.2"
+      }
+    ]
+  },
+  "11-mathematics-algebra-hs-pathways-piecewise-absolute-value": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7b"
+      }
+    ]
+  },
+  "11-mathematics-algebra-hs-pathways-polynomial-polynomial-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSA-APR.3"
+      }
+    ]
+  },
+  "11-mathematics-algebra-hs-pathways-rational-radical-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "11-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "11-mathematics-data-and-probability-statistics-descriptive-inferential-statistics": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "11-mathematics-data-and-probability-statistics-normal-distribution": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.A.4"
+      }
+    ]
+  },
+  "11-mathematics-data-and-probability-statistics-regression-linear-multiple": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.B.6"
+      }
+    ]
+  },
+  "11-mathematics-geometry-and-measurement-conic-sections": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-GPE.A.3"
+      }
+    ]
+  },
+  "11-mathematics-geometry-and-measurement-euclidean-proofs": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.C.9"
+      }
+    ]
+  },
+  "11-mathematics-geometry-and-measurement-transformations-advanced": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.A.5"
+      }
+    ]
+  },
+  "11-mathematics-geometry-and-measurement-trigonometry-right-units": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.A.3"
+      }
+    ]
+  },
+  "11-mathematics-geometry-and-measurement-vectors": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.A.1"
+      }
+    ]
+  },
+  "11-mathematics-number-and-operations-complex-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-CN.A.1"
+      }
+    ]
+  },
+  "11-mathematics-number-and-operations-exponential-logarithmic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-LE.4"
+      }
+    ]
+  },
+  "11-mathematics-number-and-operations-matrices-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.C.8"
+      }
+    ]
+  },
+  "11-mathematics-number-and-operations-polynomial-and-rational-expressions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "11-mathematics-number-and-operations-sequences-and-series": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.3"
+      }
+    ]
+  },
+  "11-mathematics-precalculus-calculus-advanced-hs-derivatives-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.DERIVATIVES"
+      }
+    ]
+  },
+  "11-mathematics-precalculus-calculus-advanced-hs-integrals-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.INTEGRALS"
+      }
+    ]
+  },
+  "11-mathematics-precalculus-calculus-advanced-hs-limits": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.LIMITS"
+      }
+    ]
+  },
+  "11-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.PARAMETRIC"
+      }
+    ]
+  },
+  "11-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.C.8"
+      }
+    ]
+  },
+  "11-science-earth-and-space-astronomy-astrophysics-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS1-4"
+      }
+    ]
+  },
+  "11-science-earth-and-space-climate-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS3-5"
+      }
+    ]
+  },
+  "11-science-earth-and-space-geology-minerals-rocks": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-1"
+      }
+    ]
+  },
+  "11-science-earth-and-space-oceanography-atmospheric-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-5"
+      }
+    ]
+  },
+  "11-science-engineering-practices-computational-modeling-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-4"
+      }
+    ]
+  },
+  "11-science-engineering-practices-experiment-design-and-statistics-in-labs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-3"
+      }
+    ]
+  },
+  "11-science-engineering-practices-systems-design": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "11-science-life-science-biochemistry-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-6"
+      }
+    ]
+  },
+  "11-science-life-science-ecology-population-community": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS2-1"
+      }
+    ]
+  },
+  "11-science-life-science-evolution-advanced": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS4-2"
+      }
+    ]
+  },
+  "11-science-life-science-molecular-genetics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS3-1"
+      }
+    ]
+  },
+  "11-science-life-science-physiology": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-3"
+      }
+    ]
+  },
+  "11-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "11-science-physical-science-electricity-and-magnetism": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-4"
+      }
+    ]
+  },
+  "11-science-physical-science-mechanics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-1"
+      }
+    ]
+  },
+  "11-science-physical-science-thermodynamics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS3-1"
+      }
+    ]
+  },
+  "11-science-physical-science-waves-and-optics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS4-1"
+      }
+    ]
+  },
+  "11-social-studies-civics-and-government-comparative-government": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "11-social-studies-civics-and-government-us-government-institutions-policy": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "11-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "11-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "11-social-studies-us-history-thematic-ap-style-depth-pd-docs": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.9-12"
+      }
+    ]
+  },
+  "11-social-studies-world-history-and-geography-modern-era-globalization-human-geography": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.9-12"
+      }
+    ]
+  },
+  "12-electives-arts-and-music-studio-art-design-music-composition-performance": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.9-12.CR"
+      }
+    ]
+  },
+  "12-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.9-12.DA"
+      }
+    ]
+  },
+  "12-electives-financial-literacy-elective-investing-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "12-electives-financial-literacy-elective-taxes-credit-debt": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "12-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.9-12.HL"
+      }
+    ]
+  },
+  "12-english-language-arts-reading-informational-literary-nonfiction-pd-open": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.2"
+      }
+    ]
+  },
+  "12-english-language-arts-reading-informational-primary-sources-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.2"
+      }
+    ]
+  },
+  "12-english-language-arts-reading-informational-rhetoric-and-argument": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "12-english-language-arts-reading-literature-american-british-lit-pd-works": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.11-12.2"
+      }
+    ]
+  },
+  "12-english-language-arts-reading-literature-poetry-drama-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.11-12.2"
+      }
+    ]
+  },
+  "12-english-language-arts-reading-literature-world-lit-pd-where-possible": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.11-12.2"
+      }
+    ]
+  },
+  "12-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.11-12.1"
+      }
+    ]
+  },
+  "12-english-language-arts-vocabulary-discipline-specific-terms-test-prep": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "L.11-12.4"
+      }
+    ]
+  },
+  "12-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "12-mathematics-algebra-hs-pathways-linear-quadratic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "12-mathematics-algebra-hs-pathways-modeling-and-applications": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-Q.A.2"
+      }
+    ]
+  },
+  "12-mathematics-algebra-hs-pathways-piecewise-absolute-value": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7b"
+      }
+    ]
+  },
+  "12-mathematics-algebra-hs-pathways-polynomial-polynomial-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSA-APR.3"
+      }
+    ]
+  },
+  "12-mathematics-algebra-hs-pathways-rational-radical-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "12-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "12-mathematics-data-and-probability-statistics-descriptive-inferential-statistics": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "12-mathematics-data-and-probability-statistics-normal-distribution": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.A.4"
+      }
+    ]
+  },
+  "12-mathematics-data-and-probability-statistics-regression-linear-multiple": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.B.6"
+      }
+    ]
+  },
+  "12-mathematics-geometry-and-measurement-conic-sections": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-GPE.A.3"
+      }
+    ]
+  },
+  "12-mathematics-geometry-and-measurement-euclidean-proofs": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.C.9"
+      }
+    ]
+  },
+  "12-mathematics-geometry-and-measurement-transformations-advanced": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.A.5"
+      }
+    ]
+  },
+  "12-mathematics-geometry-and-measurement-trigonometry-right-units": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.A.3"
+      }
+    ]
+  },
+  "12-mathematics-geometry-and-measurement-vectors": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.A.1"
+      }
+    ]
+  },
+  "12-mathematics-number-and-operations-complex-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-CN.A.1"
+      }
+    ]
+  },
+  "12-mathematics-number-and-operations-exponential-logarithmic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-LE.4"
+      }
+    ]
+  },
+  "12-mathematics-number-and-operations-matrices-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.C.8"
+      }
+    ]
+  },
+  "12-mathematics-number-and-operations-polynomial-and-rational-expressions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "12-mathematics-number-and-operations-sequences-and-series": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.3"
+      }
+    ]
+  },
+  "12-mathematics-precalculus-calculus-advanced-hs-derivatives-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.DERIVATIVES"
+      }
+    ]
+  },
+  "12-mathematics-precalculus-calculus-advanced-hs-integrals-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.INTEGRALS"
+      }
+    ]
+  },
+  "12-mathematics-precalculus-calculus-advanced-hs-limits": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.LIMITS"
+      }
+    ]
+  },
+  "12-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.PARAMETRIC"
+      }
+    ]
+  },
+  "12-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.C.8"
+      }
+    ]
+  },
+  "12-science-earth-and-space-astronomy-astrophysics-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS1-4"
+      }
+    ]
+  },
+  "12-science-earth-and-space-climate-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS3-5"
+      }
+    ]
+  },
+  "12-science-earth-and-space-geology-minerals-rocks": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-1"
+      }
+    ]
+  },
+  "12-science-earth-and-space-oceanography-atmospheric-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-5"
+      }
+    ]
+  },
+  "12-science-engineering-practices-computational-modeling-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-4"
+      }
+    ]
+  },
+  "12-science-engineering-practices-experiment-design-and-statistics-in-labs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-3"
+      }
+    ]
+  },
+  "12-science-engineering-practices-systems-design": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "12-science-life-science-biochemistry-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-6"
+      }
+    ]
+  },
+  "12-science-life-science-ecology-population-community": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS2-1"
+      }
+    ]
+  },
+  "12-science-life-science-evolution-advanced": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS4-2"
+      }
+    ]
+  },
+  "12-science-life-science-molecular-genetics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS3-1"
+      }
+    ]
+  },
+  "12-science-life-science-physiology": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-3"
+      }
+    ]
+  },
+  "12-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "12-science-physical-science-electricity-and-magnetism": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-4"
+      }
+    ]
+  },
+  "12-science-physical-science-mechanics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-1"
+      }
+    ]
+  },
+  "12-science-physical-science-thermodynamics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS3-1"
+      }
+    ]
+  },
+  "12-science-physical-science-waves-and-optics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS4-1"
+      }
+    ]
+  },
+  "12-social-studies-civics-and-government-comparative-government": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "12-social-studies-civics-and-government-us-government-institutions-policy": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "12-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "12-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "12-social-studies-us-history-thematic-ap-style-depth-pd-docs": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.9-12"
+      }
+    ]
+  },
+  "12-social-studies-world-history-and-geography-modern-era-globalization-human-geography": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.9-12"
+      }
+    ]
+  },
+  "2-electives-arts-and-music-colors-shapes-in-art": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "2-electives-arts-and-music-rhythm-and-melody": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "2-electives-computer-science-algorithms-unplugged": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "2-electives-computer-science-patterns-and-sequencing": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "2-electives-health-and-pe-movement-safety-hygiene": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "2-english-language-arts-reading-informational-simple-nonfiction-animals-places": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.2.2"
+      }
+    ]
+  },
+  "2-english-language-arts-reading-literature-fables-and-folktales-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.2.1"
+      }
+    ]
+  },
+  "2-english-language-arts-reading-literature-picture-books-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.2.1"
+      }
+    ]
+  },
+  "2-english-language-arts-reading-literature-poetry-short-forms": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.2.1"
+      }
+    ]
+  },
+  "2-english-language-arts-speaking-and-listening-show-and-tell-retelling": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.2.1"
+      }
+    ]
+  },
+  "2-english-language-arts-vocabulary-sight-words-and-phonics": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RF.2.3"
+      }
+    ]
+  },
+  "2-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "W.2.2"
+      }
+    ]
+  },
+  "2-mathematics-data-and-probability-statistics-categorize-and-tally": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.MD.D.10"
+      }
+    ]
+  },
+  "2-mathematics-data-and-probability-statistics-describe-data-more-less": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.MD.D.10"
+      }
+    ]
+  },
+  "2-mathematics-data-and-probability-statistics-picture-bar-graphs-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.MD.D.10"
+      }
+    ]
+  },
+  "2-mathematics-data-and-probability-statistics-simple-probability-informal": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.MD.D.10"
+      }
+    ]
+  },
+  "2-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.G.A.1"
+      }
+    ]
+  },
+  "2-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.G.A.1"
+      }
+    ]
+  },
+  "2-mathematics-geometry-and-measurement-perimeter-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.G.A.1"
+      }
+    ]
+  },
+  "2-mathematics-geometry-and-measurement-time-and-money-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.G.A.1"
+      }
+    ]
+  },
+  "2-mathematics-number-and-operations-addition-subtraction-within-20": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.OA.B.2"
+      }
+    ]
+  },
+  "2-mathematics-number-and-operations-compare-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.NBT.A.4"
+      }
+    ]
+  },
+  "2-mathematics-number-and-operations-counting-and-cardinality": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.NBT.A.1"
+      }
+    ]
+  },
+  "2-mathematics-number-and-operations-place-value-tens-ones": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.NBT.A.1"
+      }
+    ]
+  },
+  "2-mathematics-number-and-operations-skip-counting": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "2.NBT.A.2"
+      }
+    ]
+  },
+  "2-science-earth-and-space-earth-materials-rocks-soil": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-ESS2-1"
+      }
+    ]
+  },
+  "2-science-earth-and-space-sun-moon-stars-patterns": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "1-ESS1-1"
+      }
+    ]
+  },
+  "2-science-earth-and-space-weather-and-seasons": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-ESS3-2"
+      }
+    ]
+  },
+  "2-science-engineering-practices-ask-imagine-plan-create-test-design-cycle": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-2-ETS1-1"
+      }
+    ]
+  },
+  "2-science-life-science-habitats": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-LS1-1"
+      }
+    ]
+  },
+  "2-science-life-science-life-cycles": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "2-LS4-1"
+      }
+    ]
+  },
+  "2-science-life-science-plants-animals-needs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-LS1-1"
+      }
+    ]
+  },
+  "2-science-physical-science-energy-heat-sun": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "1-ESS1-1"
+      }
+    ]
+  },
+  "2-science-physical-science-forces-and-motion-push-pull": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "K-PS2-1"
+      }
+    ]
+  },
+  "2-science-physical-science-light-and-sound": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "1-PS4-1"
+      }
+    ]
+  },
+  "2-science-physical-science-matter-properties-solids-liquids-gases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "2-PS1-1"
+      }
+    ]
+  },
+  "2-social-studies-civics-and-government-rules-and-community": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.K-2"
+      }
+    ]
+  },
+  "2-social-studies-civics-and-government-symbols-and-holidays": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.K-2"
+      }
+    ]
+  },
+  "2-social-studies-economics-and-financial-literacy-choices-and-trade": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "2-social-studies-economics-and-financial-literacy-needs-vs-wants": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "2-social-studies-us-history-national-symbols": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.K-2"
+      }
+    ]
+  },
+  "2-social-studies-us-history-personal-family-history": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.K-2"
+      }
+    ]
+  },
+  "2-social-studies-world-history-and-geography-cultures-intro": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.K-2"
+      }
+    ]
+  },
+  "2-social-studies-world-history-and-geography-maps-globes-basic": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.K-2"
+      }
+    ]
+  },
+  "3-electives-arts-and-music-drawing-painting-techniques": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "3-electives-arts-and-music-notation-basics": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "3-electives-computer-science-block-based-programming": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "3-electives-computer-science-digital-citizenship": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "3-electives-health-and-pe-nutrition-fitness-safety": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "4-electives-arts-and-music-drawing-painting-techniques": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "4-electives-arts-and-music-notation-basics": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "4-electives-computer-science-block-based-programming": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "4-electives-computer-science-digital-citizenship": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "4-electives-health-and-pe-nutrition-fitness-safety": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "5-electives-arts-and-music-drawing-painting-techniques": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "5-electives-arts-and-music-notation-basics": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "5-electives-computer-science-block-based-programming": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "5-electives-computer-science-digital-citizenship": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "5-electives-health-and-pe-nutrition-fitness-safety": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "6-electives-arts-and-music-art-history-pd-images": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "6-electives-arts-and-music-music-theory-intro": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "6-electives-computer-science-data-and-graphics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.CS"
+      }
+    ]
+  },
+  "6-electives-computer-science-intro-python-js": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "6-electives-financial-literacy-elective-banking-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "6-electives-financial-literacy-elective-saving-budgeting": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "6-electives-health-and-pe-body-systems-and-health": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "6-electives-health-and-pe-fitness-planning": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "7-electives-arts-and-music-art-history-pd-images": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "7-electives-arts-and-music-music-theory-intro": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "7-electives-computer-science-data-and-graphics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.CS"
+      }
+    ]
+  },
+  "7-electives-computer-science-intro-python-js": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "7-electives-financial-literacy-elective-banking-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "7-electives-financial-literacy-elective-saving-budgeting": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "7-electives-health-and-pe-body-systems-and-health": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "7-electives-health-and-pe-fitness-planning": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "8-electives-arts-and-music-art-history-pd-images": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "8-electives-arts-and-music-music-theory-intro": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "8-electives-computer-science-data-and-graphics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.CS"
+      }
+    ]
+  },
+  "8-electives-computer-science-intro-python-js": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "8-electives-financial-literacy-elective-banking-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "8-electives-financial-literacy-elective-saving-budgeting": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.K-2"
+      }
+    ]
+  },
+  "8-electives-health-and-pe-body-systems-and-health": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "8-electives-health-and-pe-fitness-planning": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "9-electives-arts-and-music-studio-art-design-music-composition-performance": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.9-12.CR"
+      }
+    ]
+  },
+  "9-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.9-12.DA"
+      }
+    ]
+  },
+  "9-electives-financial-literacy-elective-investing-basics": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "9-electives-financial-literacy-elective-taxes-credit-debt": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "9-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.9-12.HL"
+      }
+    ]
+  },
+  "9-english-language-arts-reading-informational-literary-nonfiction-pd-open": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "9-english-language-arts-reading-informational-primary-sources-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "9-english-language-arts-reading-informational-rhetoric-and-argument": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "9-english-language-arts-reading-literature-american-british-lit-pd-works": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "9-english-language-arts-reading-literature-poetry-drama-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "9-english-language-arts-reading-literature-world-lit-pd-where-possible": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "9-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.11-12.1"
+      }
+    ]
+  },
+  "9-english-language-arts-vocabulary-discipline-specific-terms-test-prep": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "L.11-12.4"
+      }
+    ]
+  },
+  "9-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.11-12.8"
+      }
+    ]
+  },
+  "9-mathematics-algebra-hs-pathways-linear-quadratic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "9-mathematics-algebra-hs-pathways-modeling-and-applications": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-Q.A.2"
+      }
+    ]
+  },
+  "9-mathematics-algebra-hs-pathways-piecewise-absolute-value": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7b"
+      }
+    ]
+  },
+  "9-mathematics-algebra-hs-pathways-polynomial-polynomial-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSA-APR.3"
+      }
+    ]
+  },
+  "9-mathematics-algebra-hs-pathways-rational-radical-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "9-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "9-mathematics-data-and-probability-statistics-descriptive-inferential-statistics": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-IC.A.1"
+      }
+    ]
+  },
+  "9-mathematics-data-and-probability-statistics-normal-distribution": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.A.4"
+      }
+    ]
+  },
+  "9-mathematics-data-and-probability-statistics-regression-linear-multiple": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSS-ID.B.6"
+      }
+    ]
+  },
+  "9-mathematics-geometry-and-measurement-conic-sections": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-GPE.A.3"
+      }
+    ]
+  },
+  "9-mathematics-geometry-and-measurement-euclidean-proofs": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.C.9"
+      }
+    ]
+  },
+  "9-mathematics-geometry-and-measurement-transformations-advanced": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSG-CO.A.5"
+      }
+    ]
+  },
+  "9-mathematics-geometry-and-measurement-trigonometry-right-units": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.A.3"
+      }
+    ]
+  },
+  "9-mathematics-geometry-and-measurement-vectors": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.A.1"
+      }
+    ]
+  },
+  "9-mathematics-number-and-operations-complex-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-CN.A.1"
+      }
+    ]
+  },
+  "9-mathematics-number-and-operations-exponential-logarithmic-functions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-LE.4"
+      }
+    ]
+  },
+  "9-mathematics-number-and-operations-matrices-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSN-VM.C.8"
+      }
+    ]
+  },
+  "9-mathematics-number-and-operations-polynomial-and-rational-expressions": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.7d"
+      }
+    ]
+  },
+  "9-mathematics-number-and-operations-sequences-and-series": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.3"
+      }
+    ]
+  },
+  "9-mathematics-precalculus-calculus-advanced-hs-derivatives-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.DERIVATIVES"
+      }
+    ]
+  },
+  "9-mathematics-precalculus-calculus-advanced-hs-integrals-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.INTEGRALS"
+      }
+    ]
+  },
+  "9-mathematics-precalculus-calculus-advanced-hs-limits": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.LIMITS"
+      }
+    ]
+  },
+  "9-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "CALC.PARAMETRIC"
+      }
+    ]
+  },
+  "9-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-TF.C.8"
+      }
+    ]
+  },
+  "9-science-earth-and-space-astronomy-astrophysics-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS1-4"
+      }
+    ]
+  },
+  "9-science-earth-and-space-climate-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS3-5"
+      }
+    ]
+  },
+  "9-science-earth-and-space-geology-minerals-rocks": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-1"
+      }
+    ]
+  },
+  "9-science-earth-and-space-oceanography-atmospheric-science": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-5"
+      }
+    ]
+  },
+  "9-science-engineering-practices-computational-modeling-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-4"
+      }
+    ]
+  },
+  "9-science-engineering-practices-experiment-design-and-statistics-in-labs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-3"
+      }
+    ]
+  },
+  "9-science-engineering-practices-systems-design": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "9-science-life-science-biochemistry-intro": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-6"
+      }
+    ]
+  },
+  "9-science-life-science-ecology-population-community": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS2-1"
+      }
+    ]
+  },
+  "9-science-life-science-evolution-advanced": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS4-2"
+      }
+    ]
+  },
+  "9-science-life-science-molecular-genetics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS3-1"
+      }
+    ]
+  },
+  "9-science-life-science-physiology": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-LS1-3"
+      }
+    ]
+  },
+  "9-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "9-science-physical-science-electricity-and-magnetism": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-4"
+      }
+    ]
+  },
+  "9-science-physical-science-mechanics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS2-1"
+      }
+    ]
+  },
+  "9-science-physical-science-thermodynamics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS3-1"
+      }
+    ]
+  },
+  "9-science-physical-science-waves-and-optics": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-PS4-1"
+      }
+    ]
+  },
+  "9-social-studies-civics-and-government-comparative-government": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "9-social-studies-civics-and-government-us-government-institutions-policy": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "9-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "9-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "9-social-studies-us-history-thematic-ap-style-depth-pd-docs": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.9-12"
+      }
+    ]
+  },
+  "9-social-studies-world-history-and-geography-modern-era-globalization-human-geography": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.9-12"
+      }
+    ]
+  },
+  "k-electives-arts-and-music-colors-shapes-in-art": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "k-electives-arts-and-music-rhythm-and-melody": {
+    "framework": "NCAS",
+    "standards": [
+      {
+        "framework": "NCAS",
+        "code": "NCAS.K-2.CR"
+      }
+    ]
+  },
+  "k-electives-computer-science-algorithms-unplugged": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "k-electives-computer-science-patterns-and-sequencing": {
+    "framework": "CSTA",
+    "standards": [
+      {
+        "framework": "CSTA",
+        "code": "CSTA.K-2.AP"
+      }
+    ]
+  },
+  "k-electives-health-and-pe-movement-safety-hygiene": {
+    "framework": "SHAPE",
+    "standards": [
+      {
+        "framework": "SHAPE",
+        "code": "SHAPE.K-2.HL"
+      }
+    ]
+  },
+  "k-english-language-arts-reading-informational-simple-nonfiction-animals-places": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "k-english-language-arts-reading-literature-fables-and-folktales-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "k-english-language-arts-reading-literature-picture-books-pd": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "k-english-language-arts-reading-literature-poetry-short-forms": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RL.9-10.2"
+      }
+    ]
+  },
+  "k-english-language-arts-speaking-and-listening-show-and-tell-retelling": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "SL.11-12.1"
+      }
+    ]
+  },
+  "k-english-language-arts-vocabulary-sight-words-and-phonics": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "L.11-12.4"
+      }
+    ]
+  },
+  "k-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation": {
+    "framework": "CCSS-ELA",
+    "standards": [
+      {
+        "framework": "CCSS-ELA",
+        "code": "RI.9-10.2"
+      }
+    ]
+  },
+  "k-mathematics-data-and-probability-statistics-categorize-and-tally": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-data-and-probability-statistics-describe-data-more-less": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-data-and-probability-statistics-picture-bar-graphs-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-data-and-probability-statistics-simple-probability-informal": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-geometry-and-measurement-perimeter-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-geometry-and-measurement-time-and-money-intro": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-number-and-operations-addition-subtraction-within-20": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-number-and-operations-compare-numbers": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-number-and-operations-counting-and-cardinality": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-number-and-operations-place-value-tens-ones": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-mathematics-number-and-operations-skip-counting": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "framework": "CCSS-M",
+        "code": "HSF-IF.4"
+      }
+    ]
+  },
+  "k-science-earth-and-space-earth-materials-rocks-soil": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS2-1"
+      }
+    ]
+  },
+  "k-science-earth-and-space-sun-moon-stars-patterns": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS1-2"
+      }
+    ]
+  },
+  "k-science-earth-and-space-weather-and-seasons": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ESS1-2"
+      }
+    ]
+  },
+  "k-science-engineering-practices-ask-imagine-plan-create-test-design-cycle": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-life-science-habitats": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-life-science-life-cycles": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-life-science-plants-animals-needs": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-physical-science-energy-heat-sun": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-physical-science-forces-and-motion-push-pull": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-physical-science-light-and-sound": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-science-physical-science-matter-properties-solids-liquids-gases": {
+    "framework": "NGSS",
+    "standards": [
+      {
+        "framework": "NGSS",
+        "code": "HS-ETS1-2"
+      }
+    ]
+  },
+  "k-social-studies-civics-and-government-rules-and-community": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "k-social-studies-civics-and-government-symbols-and-holidays": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Civ.9-12"
+      }
+    ]
+  },
+  "k-social-studies-economics-and-financial-literacy-choices-and-trade": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "k-social-studies-economics-and-financial-literacy-needs-vs-wants": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Econ.9-12"
+      }
+    ]
+  },
+  "k-social-studies-us-history-national-symbols": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.9-12"
+      }
+    ]
+  },
+  "k-social-studies-us-history-personal-family-history": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Hist.9-12"
+      }
+    ]
+  },
+  "k-social-studies-world-history-and-geography-cultures-intro": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.9-12"
+      }
+    ]
+  },
+  "k-social-studies-world-history-and-geography-maps-globes-basic": {
+    "framework": "C3",
+    "standards": [
+      {
+        "framework": "C3",
+        "code": "Geo.9-12"
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "moduleSlug": "7-science-physical-science-kinematics-and-forces",
+    "lessonSlug": "7-science-physical-science-kinematics-and-forces-launch",
+    "prompt": "A 10 N force pushes a 2 kg box on a frictionless surface. What is its acceleration?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["forces_motion"],
+    "standards": ["MS-PS2-2"],
+    "tags": ["newton-2nd"],
+    "options": [
+      { "text": "5 m/s²", "isCorrect": true, "feedback": "a = F/m = 10 ÷ 2 = 5 m/s²." },
+      { "text": "2 m/s²", "isCorrect": false },
+      { "text": "10 m/s²", "isCorrect": false },
+      { "text": "0.2 m/s²", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-science-physical-science-kinematics-and-forces",
+    "lessonSlug": "7-science-physical-science-kinematics-and-forces-launch",
+    "prompt": "If net force on an object is zero, what happens to its motion?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["forces_motion"],
+    "standards": ["MS-PS2-2"],
+    "tags": ["balanced-forces"],
+    "options": [
+      { "text": "It stays at rest or keeps moving at constant velocity.", "isCorrect": true, "feedback": "Zero net force → no change in velocity." },
+      { "text": "It must speed up.", "isCorrect": false },
+      { "text": "It must slow down.", "isCorrect": false },
+      { "text": "It instantly stops.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "7-science-physical-science-kinematics-and-forces",
+    "lessonSlug": "7-science-physical-science-kinematics-and-forces-launch",
+    "prompt": "Which diagram best shows action-reaction forces?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["forces_motion"],
+    "standards": ["MS-PS2-2"],
+    "tags": ["newton-3rd"],
+    "options": [
+      { "text": "A skater pushes on the wall; the wall pushes back equally on the skater.", "isCorrect": true, "feedback": "Forces are equal/opposite on different objects." },
+      { "text": "Gravity only pulls objects down.", "isCorrect": false },
+      { "text": "Friction pushing and pulling in the same direction.", "isCorrect": false },
+      { "text": "A single force with no opposite force.", "isCorrect": false }
+    ]
+  }
+]
