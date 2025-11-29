@@ -65,6 +65,7 @@ export const submitPrivacyRequest = async (payload: {
 
 export const listPrivacyRequests = async (options?: {
   studentId?: string | null;
+  requesterId?: string | null;
 }): Promise<PrivacyRequest[]> => {
   let query = supabase
     .from('privacy_requests')
@@ -76,6 +77,10 @@ export const listPrivacyRequests = async (options?: {
 
   if (options?.studentId) {
     query = query.eq('student_id', options.studentId);
+  }
+
+  if (options?.requesterId) {
+    query = query.eq('requester_id', options.requesterId);
   }
 
   const { data, error } = await query;

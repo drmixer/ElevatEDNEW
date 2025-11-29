@@ -1,0 +1,370 @@
+[
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which expression is the result of (3x + 2) + (4x - 5)?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_operations", "combine_like_terms"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["addition"],
+    "options": [
+      { "text": "7x - 3", "isCorrect": true, "feedback": "Add coefficients: 3x + 4x and 2 + (-5)." },
+      { "text": "7x + 7", "isCorrect": false },
+      { "text": "12x - 5", "isCorrect": false },
+      { "text": "7x + 3", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Subtract (x^2 - 3x + 1) from (2x^2 + x - 4).",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_operations", "subtraction"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["subtraction"],
+    "options": [
+      { "text": "x^2 + 4x - 5", "isCorrect": true, "feedback": "Subtract coefficients term by term: 2x^2 - x^2, x - (-3x), -4 - 1." },
+      { "text": "3x^2 - 2x - 3", "isCorrect": false },
+      { "text": "x^2 - 2x - 5", "isCorrect": false },
+      { "text": "x^2 + 2x - 3", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Multiply (2x - 3)(x + 5).",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_operations", "multiplication"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["distribution"],
+    "options": [
+      { "text": "2x^2 + 7x - 15", "isCorrect": true, "feedback": "Use distributive property: 2x*x + 2x*5 -3*x -3*5." },
+      { "text": "2x^2 + 10x - 15", "isCorrect": false },
+      { "text": "2x^2 - 7x - 15", "isCorrect": false },
+      { "text": "2x^2 + 7x + 15", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "What is the degree of the polynomial 5x^4 - 2x^3 + 7?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_structure"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["degree"],
+    "options": [
+      { "text": "4", "isCorrect": true, "feedback": "The highest exponent is 4." },
+      { "text": "3", "isCorrect": false },
+      { "text": "2", "isCorrect": false },
+      { "text": "7", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which identity matches (a + b)^2?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_identities"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["square_binomial"],
+    "options": [
+      { "text": "a^2 + 2ab + b^2", "isCorrect": true, "feedback": "Square both terms and double the product." },
+      { "text": "a^2 - 2ab + b^2", "isCorrect": false },
+      { "text": "a^2 + b^2", "isCorrect": false },
+      { "text": "2a^2 + 2b^2", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Factor x^2 - 9.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["factoring"],
+    "standards": ["HSA-APR.3", "HSA-APR.1"],
+    "tags": ["difference_of_squares"],
+    "options": [
+      { "text": "(x - 3)(x + 3)", "isCorrect": true, "feedback": "Difference of squares factors into conjugates." },
+      { "text": "(x - 9)(x + 1)", "isCorrect": false },
+      { "text": "(x - 3)^2", "isCorrect": false },
+      { "text": "(x + 3)^2", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Solve for the zeros of f(x) = x^2 + 4x + 3.",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["factoring", "zeros"],
+    "standards": ["HSA-APR.3", "HSA-APR.1"],
+    "tags": ["roots"],
+    "options": [
+      { "text": "x = -1 and x = -3", "isCorrect": true, "feedback": "Factor to (x + 1)(x + 3) = 0." },
+      { "text": "x = 1 and x = 3", "isCorrect": false },
+      { "text": "x = -1 and x = 3", "isCorrect": false },
+      { "text": "x = 0 and x = -3", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which expression is equivalent to (2x^2 - 3x) - (x^2 + 5x - 4)?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_operations", "subtraction"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["combine_like_terms"],
+    "options": [
+      { "text": "x^2 - 8x + 4", "isCorrect": true, "feedback": "Subtract each term: 2x^2 - x^2, -3x - 5x, 0 - (-4)." },
+      { "text": "x^2 + 2x - 4", "isCorrect": false },
+      { "text": "3x^2 + 2x + 4", "isCorrect": false },
+      { "text": "x^2 - 2x - 4", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Multiply (x - 4)^2.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_identities", "multiplication"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["square_binomial"],
+    "options": [
+      { "text": "x^2 - 8x + 16", "isCorrect": true, "feedback": "Use (a - b)^2 = a^2 - 2ab + b^2." },
+      { "text": "x^2 - 16", "isCorrect": false },
+      { "text": "x^2 - 4x + 16", "isCorrect": false },
+      { "text": "x^2 + 8x + 16", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Factor 3x^2 - 12x.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["factoring", "gcf"],
+    "standards": ["HSA-APR.3", "HSA-APR.1"],
+    "tags": ["greatest_common_factor"],
+    "options": [
+      { "text": "3x(x - 4)", "isCorrect": true, "feedback": "Take out the greatest common factor 3x." },
+      { "text": "x(3x - 12)", "isCorrect": false },
+      { "text": "3(x - 4)", "isCorrect": false },
+      { "text": "3x(x + 4)", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "The graph of y = x^3 - 4x has x-intercepts at -2, 0, and 2. What does this tell you about its factors?",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["zeros", "factoring"],
+    "standards": ["HSA-APR.3", "HSF-IF.4", "HSA-APR.1"],
+    "tags": ["roots", "graph_features"],
+    "options": [
+      { "text": "It factors as x(x - 2)(x + 2).", "isCorrect": true, "feedback": "Zeros become linear factors x, x - 2, and x + 2." },
+      { "text": "It factors as (x + 4)(x - 1)(x + 1).", "isCorrect": false },
+      { "text": "It has no real factors.", "isCorrect": false },
+      { "text": "It factors as (x - 4)(x + 4)(x).", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which statement is true about the end behavior of f(x) = -2x^4 + 5x^2 - 1?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_structure", "graph_features"],
+    "standards": ["HSF-IF.4", "HSA-APR.1"],
+    "tags": ["end_behavior"],
+    "options": [
+      { "text": "As x -> ±∞, f(x) -> -∞.", "isCorrect": true, "feedback": "Even degree with negative leading coefficient falls both ways." },
+      { "text": "As x -> ±∞, f(x) -> +∞.", "isCorrect": false },
+      { "text": "As x -> ∞, f(x) -> +∞ and as x -> -∞, f(x) -> -∞.", "isCorrect": false },
+      { "text": "End behavior cannot be determined.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which expression represents (x^2 - 1)(x + 3)?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_operations", "distribution"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["multiplication"],
+    "options": [
+      { "text": "x^3 + 3x^2 - x - 3", "isCorrect": true, "feedback": "Multiply x^2 and -1 by each term in (x + 3)." },
+      { "text": "x^3 - 3x^2 - x + 3", "isCorrect": false },
+      { "text": "x^3 + 3x^2 + x + 3", "isCorrect": false },
+      { "text": "x^3 - 3x^2 + x - 3", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Factor x^3 - 27.",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["factoring", "special_products"],
+    "standards": ["HSA-APR.3", "HSA-APR.1"],
+    "tags": ["difference_of_cubes"],
+    "options": [
+      { "text": "(x - 3)(x^2 + 3x + 9)", "isCorrect": true, "feedback": "Difference of cubes uses (a - b)(a^2 + ab + b^2)." },
+      { "text": "(x - 3)(x^2 - 3x + 9)", "isCorrect": false },
+      { "text": "(x + 3)(x^2 - 3x + 9)", "isCorrect": false },
+      { "text": "(x + 3)(x^2 + 3x + 9)", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "What is the leading coefficient of -4x^5 + 7x^2 - 3x + 8?",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "skills": ["polynomial_structure"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["coefficients"],
+    "options": [
+      { "text": "-4", "isCorrect": true, "feedback": "The leading term is -4x^5." },
+      { "text": "7", "isCorrect": false },
+      { "text": "-3", "isCorrect": false },
+      { "text": "8", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "If f(x) = x^2 - 2x - 15, which value is NOT a zero of f?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["zeros", "factoring"],
+    "standards": ["HSA-APR.3", "HSA-APR.1"],
+    "tags": ["roots"],
+    "options": [
+      { "text": "5", "isCorrect": false },
+      { "text": "-3", "isCorrect": false },
+      { "text": "3", "isCorrect": true, "feedback": "Zeros are 5 and -3; 3 does not satisfy f(x) = 0." },
+      { "text": "-5", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which statement about the sum of two odd polynomials is correct?",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["polynomial_identities", "structure_reasoning"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["even_odd_functions"],
+    "options": [
+      { "text": "(f+g)(-x) = -(f+g)(x) when f and g are odd", "isCorrect": true, "feedback": "Odd + odd stays odd; symmetry is preserved." },
+      { "text": "Odd + odd is always even", "isCorrect": false },
+      { "text": "Odd + odd is never odd", "isCorrect": false },
+      { "text": "Odd + odd has no symmetry", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which statement about the graph of y = (x - 1)(x + 2)(x - 4) is true?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["graph_features", "zeros"],
+    "standards": ["HSF-IF.4", "HSA-APR.1"],
+    "tags": ["intercepts"],
+    "options": [
+      { "text": "It crosses the x-axis at x = -2, 1, and 4.", "isCorrect": true, "feedback": "Each linear factor gives an x-intercept where the expression equals zero." },
+      { "text": "It touches the x-axis only at x = 1.", "isCorrect": false },
+      { "text": "All intercepts are negative.", "isCorrect": false },
+      { "text": "The y-intercept is 0 because there are three factors.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "What is the remainder when x^3 - 5x + 6 is divided by (x - 2)?",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["polynomial_operations", "remainder_theorem"],
+    "standards": ["HSA-APR.3", "HSA-APR.1"],
+    "tags": ["remainder_theorem"],
+    "options": [
+      { "text": "0", "isCorrect": false },
+      { "text": "1", "isCorrect": false },
+      { "text": "4", "isCorrect": true, "feedback": "By the Remainder Theorem, f(2) = 8 - 10 + 6 = 4." },
+      { "text": "-4", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which identity is always true for any real number x?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_identities"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["structure"],
+    "options": [
+      { "text": "x^3 - x is divisible by x", "isCorrect": true, "feedback": "Factor x to get x(x^2 - 1)." },
+      { "text": "x^3 + 2 is divisible by x", "isCorrect": false },
+      { "text": "x^3 - 2 is divisible by x^2", "isCorrect": false },
+      { "text": "x^2 + x + 1 is divisible by x", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which statement about polynomial closure is correct?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_structure"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["closure"],
+    "options": [
+      { "text": "The sum of two polynomials is always a polynomial.", "isCorrect": true, "feedback": "Adding polynomials keeps whole-number exponents and real coefficients." },
+      { "text": "The product of two polynomials is sometimes not a polynomial.", "isCorrect": false },
+      { "text": "Subtracting polynomials requires like denominators.", "isCorrect": false },
+      { "text": "Polynomial closure only holds for linear polynomials.", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Find f(1) for f(x) = 2x^3 - 5x^2 + x + 4.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["function_evaluation", "polynomial_operations"],
+    "standards": ["HSF-IF.4", "HSA-APR.1"],
+    "tags": ["evaluation"],
+    "options": [
+      { "text": "2", "isCorrect": true, "feedback": "Substitute x = 1: 2 - 5 + 1 + 4 = 2." },
+      { "text": "-2", "isCorrect": false },
+      { "text": "0", "isCorrect": false },
+      { "text": "6", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which graph feature is shown when a polynomial has a double root at x = 1?",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["graph_features", "multiplicity"],
+    "standards": ["HSF-IF.4"],
+    "tags": ["zeros", "multiplicity"],
+    "options": [
+      { "text": "The graph touches the x-axis at x = 1 and turns around.", "isCorrect": true, "feedback": "Even multiplicity causes the graph to bounce at the intercept." },
+      { "text": "The graph crosses the x-axis steeply at x = 1.", "isCorrect": false },
+      { "text": "The graph has a vertical asymptote at x = 1.", "isCorrect": false },
+      { "text": "The graph has no x-intercept at x = 1.", "isCorrect": false }
+    ]
+  }
+]

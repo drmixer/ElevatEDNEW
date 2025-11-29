@@ -23,12 +23,19 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     name: '',
     role: 'parent' as UserRole,
     grade: 1,
+    age: '',
+    guardianContact: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [guardianConsent, setGuardianConsent] = useState(false);
 
   const { login, register } = useAuth();
+  const parsedAge = Number.parseInt(formData.age, 10);
+  const hasValidAge = Number.isFinite(parsedAge) && parsedAge > 0;
+  const isUnder13 = hasValidAge && parsedAge < 13;
+  const studentSubmissionBlocked =
+    !isLogin && formData.role === 'student' && (!hasValidAge || (isUnder13 && !guardianConsent));
 
   useEffect(() => {
     if (!isOpen) {
@@ -88,18 +95,40 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       if (isLogin) {
         await login(formData.email, formData.password);
       } else {
-        if (formData.role === 'student' && !guardianConsent) {
-          setError('A parent or guardian needs to approve student sign-ups. Please confirm before continuing.');
+        if (formData.role === 'student' && !hasValidAge) {
+          setError('Tell us the learner’s age so we can route consent correctly.');
           setLoading(false);
           return;
         }
+
+        if (formData.role === 'student' && isUnder13 && !guardianConsent) {
+          setError('A parent or guardian needs to approve student sign-ups under age 13.');
+          setLoading(false);
+          return;
+        }
+
+        const consentRecordedAt = new Date().toISOString();
+        const consentActor =
+          formData.role === 'student' && isUnder13 && guardianConsent
+            ? 'guardian_present'
+            : 'self_attested_13_plus';
+
         await register(
           formData.email,
           formData.password,
           formData.name,
           formData.role,
           formData.grade,
-          { guardianConsent },
+          {
+            guardianConsent,
+            studentAge: hasValidAge ? parsedAge : undefined,
+            consentActor,
+            consentActorDetails: guardianConsent
+              ? formData.guardianContact?.trim() || 'Guardian present during signup'
+              : 'Student attested age 13+',
+            consentRecordedAt,
+            guardianContact: guardianConsent ? formData.guardianContact?.trim() || formData.email : null,
+          },
         );
       }
       onClose();
@@ -155,7 +184,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     {isLogin ? 'Welcome Back!' : 'Join ElevatED'}
                   </h2>
                   <p className="text-sm opacity-90" id={descriptionId}>
-                    {isLogin ? 'Sign in to continue learning' : 'Start your learning journey today'}
+                    {isLogin ? 'Sign in to continue learning' : 'Pick who is signing up to keep things clear'}
                   </p>
                 </div>
               </div>
@@ -188,30 +217,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         I am a...
                       </label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData({ ...formData, role: 'student' });
-                            setGuardianConsent(false);
-                          }}
-                          className={`p-3 rounded-xl border-2 text-sm font-medium transition-all focus-ring ${
-                            formData.role === 'student'
-                              ? 'border-brand-teal bg-brand-light-teal text-brand-blue'
-                              : 'border-gray-300 text-gray-700 hover:border-brand-teal'
-                          }`}
-                          aria-pressed={formData.role === 'student'}
-                          aria-label="Sign up as a student"
-                        >
-                          📚 Student
-                        </button>
+                      <p className="text-xs text-gray-600 mb-2">
+                        Recommended: parents create the family space first, then invite learners or link with a code.
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <button
                           type="button"
                           onClick={() => {
                             setFormData({ ...formData, role: 'parent' });
                             setGuardianConsent(false);
                           }}
-                          className={`p-3 rounded-xl border-2 text-sm font-medium transition-all focus-ring ${
+                          className={`p-4 rounded-xl border-2 text-left text-sm font-medium transition-all focus-ring ${
                             formData.role === 'parent'
                               ? 'border-brand-violet bg-brand-light-violet text-brand-blue'
                               : 'border-gray-300 text-gray-700 hover:border-brand-violet'
@@ -219,32 +235,83 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                           aria-pressed={formData.role === 'parent'}
                           aria-label="Sign up as a parent"
                         >
-                          👨‍👩‍👧 Parent
+                          <div className="flex items-center justify-between">
+                            <span className="text-base">👨‍👩‍👧 Parent / Guardian</span>
+                            <span className="text-[11px] px-2 py-1 rounded-full bg-white text-brand-blue font-semibold">
+                              Recommended
+                            </span>
+                          </div>
+                          <p className="mt-2 text-xs font-normal text-brand-dark/80">
+                            Create your family space, invite or link learners, set goals, and manage consent.
+                          </p>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, role: 'student' });
+                            setGuardianConsent(false);
+                          }}
+                          className={`p-4 rounded-xl border-2 text-left text-sm font-medium transition-all focus-ring ${
+                            formData.role === 'student'
+                              ? 'border-brand-teal bg-brand-light-teal text-brand-blue'
+                              : 'border-gray-300 text-gray-700 hover:border-brand-teal'
+                          }`}
+                          aria-pressed={formData.role === 'student'}
+                          aria-label="Sign up as a student"
+                        >
+                          <span className="text-base">📚 I&apos;m a student (with my parent here)</span>
+                          <p className="mt-2 text-xs font-normal text-brand-dark/80">
+                            Start learning with your parent present. They can link your account and view progress.
+                          </p>
                         </button>
                       </div>
                     </div>
 
                     {formData.role === 'student' && (
-                      <>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Grade Level
-                          </label>
-                          <div className="relative">
-                            <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <select
-                              value={formData.grade}
-                              onChange={(e) => setFormData({ ...formData, grade: parseInt(e.target.value) })}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal appearance-none"
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Grade Level
+                            </label>
+                            <div className="relative">
+                              <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                              <select
+                                value={formData.grade}
+                                onChange={(e) => setFormData({ ...formData, grade: parseInt(e.target.value) })}
+                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal appearance-none"
                               >
-                              {grades.map((grade) => (
-                                <option key={grade} value={grade}>Grade {grade}</option>
-                              ))}
-                            </select>
+                                {grades.map((grade) => (
+                                  <option key={grade} value={grade}>
+                                    Grade {grade}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Learner age
+                            </label>
+                            <input
+                              type="number"
+                              min={5}
+                              max={18}
+                              required
+                              value={formData.age}
+                              onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                              placeholder="How old is the learner?"
+                              aria-describedby="age-consent-hint"
+                            />
+                            <p id="age-consent-hint" className="mt-1 text-xs text-gray-600">
+                              Under-13 accounts require a parent or guardian to co-sign before continuing.
+                            </p>
                           </div>
                         </div>
+
                         <div className="space-y-2 rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-900">
-                          <p className="font-semibold">Parent/guardian approval required for learners under 13.</p>
+                          <p className="font-semibold">Consent for young learners</p>
                           <label className="flex items-start space-x-3 text-gray-800">
                             <input
                               type="checkbox"
@@ -253,16 +320,42 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                               onChange={(e) => setGuardianConsent(e.target.checked)}
                             />
                             <span>
-                              I am at least 13 or I&apos;m signing up with my parent/guardian present and they approve this account.
+                              Parent/guardian is here and approves this account (required if the learner is under 13).
                             </span>
                           </label>
+                          <div className="rounded-lg bg-white text-gray-700 border border-amber-100 p-3 text-xs space-y-2">
+                            <p>
+                              We collect learning progress to personalize lessons and share weekly summaries with linked
+                              guardians. We do not sell student data.
+                            </p>
+                            <p>
+                              Under-13 learners require a parent/guardian co-sign. Ages 13+ may self-attest, but we log
+                              who approved, when, and how to reach them for any questions.
+                            </p>
+                            <Link to="/legal/privacy#coppa" className="text-brand-blue font-semibold hover:text-brand-teal">
+                              Read our family privacy commitments
+                            </Link>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="block text-xs font-semibold text-amber-800">
+                              Parent/guardian name & email (for consent log)
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.guardianContact}
+                              onChange={(e) => setFormData({ ...formData, guardianContact: e.target.value })}
+                              className="w-full rounded-lg border border-amber-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              placeholder="e.g., Pat Parent - parent@example.com"
+                            />
+                          </div>
                         </div>
-                      </>
+                      </div>
                     )}
 
                     {formData.role === 'parent' && (
                       <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-900">
-                        Create your parent account to manage and invite your learners. Students under 13 should sign in under a parent or guardian account.
+                        Create your parent account to manage and invite your learners. Students under 13 should sign in
+                        under a parent or guardian account, and you will approve data use during linking.
                       </div>
                     )}
                   </>
@@ -273,21 +366,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     Email Address
                   </label>
                   <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
-                          placeholder="Enter your email"
-                          ref={isLogin ? firstFieldRef : undefined}
-                        />
-                      </div>
-                    </div>
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                      placeholder="Enter your email"
+                      ref={isLogin ? firstFieldRef : undefined}
+                    />
+                  </div>
+                </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Password
                   </label>
                   <div className="relative">
@@ -319,7 +412,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
                 <button
                   type="submit"
-                  disabled={loading || (!isLogin && formData.role === 'student' && !guardianConsent)}
+                  disabled={loading || studentSubmissionBlocked}
                   className="w-full bg-gradient-to-r from-brand-teal to-brand-blue text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
                   >
                   {loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}

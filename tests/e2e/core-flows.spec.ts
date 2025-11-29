@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 const shouldRun = process.env.RUN_E2E === 'true' || Boolean(process.env.E2E_BASE_URL);
 
-test.describe.skip(!shouldRun, 'core product journeys', () => {
+test.describe('core product journeys', () => {
+  test.skip(!shouldRun, 'E2E disabled unless RUN_E2E or E2E_BASE_URL is set');
   test('signup/login entry point is reachable', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('button', { name: /start learning/i })).toBeVisible();

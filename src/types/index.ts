@@ -24,16 +24,27 @@ export interface Student extends User {
   strengths: string[];
   weaknesses: string[];
   learningPath: LearningPathItem[];
+  learningPreferences: LearningPreferences;
   assessmentCompleted: boolean;
 }
 
 export interface Parent extends User {
   role: 'parent';
   children: ParentChildSnapshot[];
-  subscriptionTier: 'free' | 'premium';
+  subscriptionTier: 'free' | 'plus' | 'premium';
   notifications: NotificationPreferences;
   weeklyReport?: ParentWeeklyReport | null;
 }
+
+export type BadgeCategory =
+  | 'math'
+  | 'reading'
+  | 'science'
+  | 'social_studies'
+  | 'study_skills'
+  | 'streak'
+  | 'milestone'
+  | 'general';
 
 export interface Badge {
   id: string;
@@ -42,6 +53,60 @@ export interface Badge {
   icon: string;
   earnedAt: Date;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  category?: BadgeCategory;
+}
+
+export type MissionCadence = 'daily' | 'weekly';
+export type MissionStatus = 'not_started' | 'in_progress' | 'completed';
+
+export interface MissionTask {
+  label: string;
+  target: number;
+  progress: number;
+  unit: 'lessons' | 'minutes' | 'xp' | 'streak';
+  subject?: Subject | 'any';
+}
+
+export interface Mission {
+  id: string;
+  title: string;
+  description: string;
+  cadence: MissionCadence;
+  tasks: MissionTask[];
+  rewardXp: number;
+  rewardBadgeId?: string | null;
+  expiresAt?: string | null;
+  status: MissionStatus;
+  highlight?: string;
+}
+
+export type CelebrationKind = 'streak' | 'badge' | 'assessment' | 'mastery' | 'milestone';
+
+export interface CelebrationMoment {
+  id: string;
+  title: string;
+  description: string;
+  kind: CelebrationKind;
+  occurredAt: string;
+  studentId?: string;
+  prompt?: string;
+  notifyParent?: boolean;
+}
+
+export interface AvatarOption {
+  id: string;
+  label: string;
+  description: string;
+  minXp?: number;
+  requiredBadges?: string[];
+  requiredStreak?: number;
+  palette: {
+    background: string;
+    accent: string;
+    text: string;
+  };
+  icon: string;
+  rarity?: 'starter' | 'rare' | 'epic';
 }
 
 export interface LearningPathItem {
@@ -52,7 +117,24 @@ export interface LearningPathItem {
   difficulty: number;
   status: 'not_started' | 'in_progress' | 'completed' | 'mastered';
   xpReward: number;
+  moduleSlug?: string;
+  strand?: string;
+  standardCodes?: string[];
 }
+
+export type SessionLengthPreference = 'short' | 'standard' | 'long';
+
+export interface LearningPreferences {
+  sessionLength: SessionLengthPreference;
+  focusSubject: Subject | 'balanced';
+  focusIntensity: 'balanced' | 'focused';
+}
+
+export const defaultLearningPreferences: LearningPreferences = {
+  sessionLength: 'standard',
+  focusSubject: 'balanced',
+  focusIntensity: 'balanced',
+};
 
 export interface Assessment {
   id: string;
@@ -114,6 +196,9 @@ export type NotificationType =
   | 'assignment_overdue'
   | 'low_mastery'
   | 'streak_milestone'
+  | 'skill_mastered'
+  | 'goal_met'
+  | 'consistent_low_performance'
   | string;
 
 export interface NotificationItem {
@@ -127,7 +212,7 @@ export interface NotificationItem {
   createdAt: string;
 }
 
-export type Subject = 'math' | 'english' | 'science' | 'social_studies';
+export type Subject = 'math' | 'english' | 'science' | 'social_studies' | 'study_skills';
 
 export interface ChatMessage {
   id: string;
@@ -161,11 +246,30 @@ export interface DashboardLesson {
   status: 'not_started' | 'in_progress' | 'completed';
   difficulty: LessonDifficulty;
   xpReward: number;
+  moduleSlug?: string | null;
   dueAt?: string | null;
   completedAt?: string | null;
   launchUrl?: string | null;
   suggestionReason?: string | null;
   suggestionConfidence?: number | null;
+  activities?: DashboardActivity[];
+}
+
+export interface DashboardActivity {
+  id: string;
+  moduleSlug: string;
+  lessonSlug?: string | null;
+  title: string;
+  description?: string | null;
+  kind: string;
+  activityType?: 'teacher_led' | 'independent' | 'reflection' | 'project' | string;
+  estimatedMinutes?: number | null;
+  difficulty?: number | null;
+  skills?: string[];
+  standards?: string[];
+  homeExtension?: boolean;
+  url?: string | null;
+  tags?: string[];
 }
 
 export interface SubjectMastery {
@@ -175,6 +279,15 @@ export interface SubjectMastery {
   cohortAverage?: number;
   goal?: number;
   delta?: number;
+}
+
+export interface SkillGapInsight {
+  subject: Subject;
+  mastery: number;
+  status: 'needs_attention' | 'watch' | 'improving';
+  summary: string;
+  concepts: string[];
+  actions: string[];
 }
 
 export interface StudentDailyActivity {
@@ -218,6 +331,11 @@ export interface StudentDashboardData {
   upcomingAssessments: AssessmentSummary[];
   activeLessonId?: string | null;
   nextLessonUrl?: string | null;
+  missions?: Mission[];
+  celebrationMoments?: CelebrationMoment[];
+  avatarOptions?: AvatarOption[];
+  equippedAvatarId?: string | null;
+  todayActivities?: DashboardActivity[];
 }
 
 export interface ParentChildSnapshot {
@@ -242,6 +360,9 @@ export interface ParentChildSnapshot {
     inProgress: number;
     notStarted: number;
   };
+  adaptivePlanNotes?: string[];
+  skillGaps?: SkillGapInsight[];
+  homeExtensions?: DashboardActivity[];
 }
 
 export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';
@@ -482,6 +603,8 @@ export interface ParentDashboardData {
   activitySeries: ParentActivityPoint[];
   weeklyReport?: ParentWeeklyReport | null;
   downloadableReport?: string;
+  celebrations?: CelebrationMoment[];
+  celebrationPrompts?: string[];
 }
 
 export interface ParentActivityPoint {

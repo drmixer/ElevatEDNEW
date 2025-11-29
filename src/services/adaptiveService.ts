@@ -1,4 +1,6 @@
 import supabase from '../lib/supabaseClient';
+import { formatSubjectLabel, normalizeSubject } from '../lib/subjects';
+import { buildCanonicalLearningPath, canonicalPositionLookup } from '../lib/learningPaths';
 import type { DashboardLesson, LearningPathItem, Subject } from '../types';
 
 type SuggestionRow = {
@@ -12,6 +14,7 @@ type LessonMetadata = {
   id: number;
   title: string;
   moduleTitle: string | null;
+  moduleSlug?: string | null;
   subject: Subject;
   estimatedDuration: number | null;
   status?: DashboardLesson['status'];
@@ -21,23 +24,6 @@ type SuggestionBuildResult = {
   lessons: Array<DashboardLesson & { suggestionReason?: string | null; suggestionConfidence?: number | null }>;
   learningPath: LearningPathItem[];
   messages: string[];
-};
-
-const SUBJECT_LABELS: Record<Subject, string> = {
-  math: 'Math',
-  english: 'English',
-  science: 'Science',
-  social_studies: 'Social Studies',
-};
-
-const normalizeSubject = (value: unknown): Subject => {
-  if (typeof value !== 'string') return 'math';
-  const normalized = value.toLowerCase().replace(/\s+/g, '_');
-  if (normalized === 'socialstudies') return 'social_studies';
-  if (['math', 'english', 'science', 'social_studies'].includes(normalized)) {
-    return normalized as Subject;
-  }
-  return 'math';
 };
 
 const difficultyFromDuration = (durationMinutes?: number | null): DashboardLesson['difficulty'] => {
@@ -54,7 +40,7 @@ export const describeSuggestionReason = (
   confidence?: number | null,
 ): string => {
   const base = lessonTitle ?? 'this lesson';
-  const subjectLabel = subject ? SUBJECT_LABELS[subject] : 'this subject';
+  const subjectLabel = subject ? formatSubjectLabel(subject) : 'this subject';
   const confidenceText = confidence != null ? ` (${Math.round(confidence * 100)}% confidence)` : '';
 
   switch (reason) {
@@ -64,6 +50,8 @@ export const describeSuggestionReason = (
       return `Finish "${base}" to complete your current ${subjectLabel} topic${confidenceText}.`;
     case 'advance_next_topic':
       return `Advance with "${base}" to explore the next ${subjectLabel} concept${confidenceText}.`;
+    case 'advance_canonical_module':
+      return `Follow your grade-level path with "${base}"${confidenceText}.`;
     default:
       return `Start "${base}" to keep your ${subjectLabel} momentum going${confidenceText}.`;
   }
@@ -76,6 +64,7 @@ const mapLessonMetadata = (rows: unknown[]): Map<number, LessonMetadata> => {
     const lessonId = (row as { id?: number })?.id;
     if (!lessonId) continue;
     const moduleTitle = (row as { modules?: { title?: string | null } | null })?.modules?.title ?? null;
+    const moduleSlug = (row as { modules?: { slug?: string | null } | null })?.modules?.slug ?? null;
     const subject = normalizeSubject(
       (row as { modules?: { subject?: string | null } | null })?.modules?.subject ??
         (row as { subject?: string | null })?.subject ??
@@ -88,6 +77,7 @@ const mapLessonMetadata = (rows: unknown[]): Map<number, LessonMetadata> => {
       moduleTitle,
       subject,
       estimatedDuration: (row as { estimated_duration_minutes?: number | null })?.estimated_duration_minutes ?? null,
+      moduleSlug,
       status: 'not_started',
     });
   }
@@ -135,6 +125,7 @@ const buildPlanFromSuggestions = (
       difficulty: lessonMeta.estimatedDuration ?? 15,
       status: 'not_started',
       xpReward: Math.max(30, (lessonMeta.estimatedDuration ?? 12) * 3),
+      moduleSlug: lessonMeta.moduleSlug ?? undefined,
     });
 
     messages.push(reasonText);
@@ -146,6 +137,7 @@ const buildPlanFromSuggestions = (
 export const refreshLearningPathFromSuggestions = async (
   studentId: string,
   limit = 4,
+  options?: { grade?: number | string | null; subject?: Subject | null },
 ): Promise<SuggestionBuildResult> => {
   const { data: suggestions, error } = await supabase.rpc('suggest_next_lessons', {
     p_student_id: studentId,
@@ -154,7 +146,6 @@ export const refreshLearningPathFromSuggestions = async (
 
   if (error) {
     console.warn('[adaptive] Failed to load suggestions', error);
-    return { lessons: [], learningPath: [], messages: [] };
   }
 
   const suggestionRows = (suggestions ?? []) as SuggestionRow[];
@@ -163,12 +154,37 @@ export const refreshLearningPathFromSuggestions = async (
     .filter((id): id is number => typeof id === 'number');
 
   if (!lessonIds.length) {
+    // Fallback to canonical path if no database suggestions yet.
+    let grade = options?.grade ?? null;
+    let subject = options?.subject ?? null;
+    try {
+      const { data: profileRow } = await supabase
+        .from('student_profiles')
+        .select('grade')
+        .eq('id', studentId)
+        .single();
+      grade = grade ?? (profileRow?.grade as number | null) ?? null;
+    } catch (profileError) {
+      console.warn('[adaptive] Unable to load student profile for canonical path fallback', profileError);
+    }
+
+    const fallbackSubject = subject ?? 'math';
+    const canonicalPath = buildCanonicalLearningPath({ grade, subject: fallbackSubject, limit });
+    if (canonicalPath.length) {
+      try {
+        await supabase.from('student_profiles').update({ learning_path: canonicalPath }).eq('id', studentId);
+      } catch (persistError) {
+        console.warn('[adaptive] Failed to persist canonical learning path', persistError);
+      }
+      return { lessons: [], learningPath: canonicalPath, messages: ['Starting your grade-level path.'] };
+    }
+
     return { lessons: [], learningPath: [], messages: [] };
   }
 
   const { data: lessonRows, error: lessonError } = await supabase
     .from('lessons')
-    .select('id, title, estimated_duration_minutes, open_track, module_id, modules ( title, subject )')
+    .select('id, title, estimated_duration_minutes, open_track, module_id, modules ( title, subject, slug )')
     .in('id', lessonIds);
 
   if (lessonError) {

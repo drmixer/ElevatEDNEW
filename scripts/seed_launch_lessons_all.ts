@@ -20,8 +20,8 @@ type ModuleRow = {
 
 type SubjectRecord = { id: number; name: string };
 
-const GRADE_BANDS = ['3', '4', '5', '6', '7', '8'];
-const SUBJECTS = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies'];
+const GRADE_BANDS = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+const SUBJECTS = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies', 'Electives'];
 const LESSON_SUFFIX = 'launch';
 const DEFAULT_DURATION = 45;
 
@@ -37,13 +37,68 @@ const unique = <T>(items: T[]): T[] => Array.from(new Set(items));
 
 const buildLessonSlug = (moduleSlug: string): string => `${moduleSlug}-${LESSON_SUFFIX}`;
 
-const SUBJECT_TEMPLATES: Record<
-  string,
-  { lessonFocus: string; launch: string; guided: string; practice: string; exit: string; extensions: string; duration: number }
-> = {
+type LessonTemplate = {
+  lessonFocus: string;
+  launch: string;
+  guided: string;
+  practice: string;
+  exit: string;
+  extensions: string;
+  duration: number;
+};
+
+const TEMPLATES_K2: Record<string, LessonTemplate> = {
+  Mathematics: {
+    lessonFocus: 'Use concrete objects and pictures to build number sense and simple operations.',
+    launch: 'Hands-on warmup with manipulatives or counting song; students notice, point, or clap to show quantities.',
+    guided: 'Teacher models with real objects; students chorally respond and show with fingers or counters.',
+    practice: 'Pairs rotate through 3 stations (count/build/compare) with adult checks for accuracy and language.',
+    exit: 'One quick show-me card or thumbs response using a picture or ten-frame.',
+    extensions: 'Choice time with math tubs (pattern blocks, connecting cubes) and a prompt to explain one creation.',
+    duration: 30,
+  },
+  'English Language Arts': {
+    lessonFocus: 'Listen, speak, and track print with rich read-alouds and shared writing.',
+    launch: 'Picture walk and prediction; students turn and tell a partner what they notice.',
+    guided: 'Teacher reads aloud, modeling pointing to words and thinking aloud about characters or facts.',
+    practice: 'Students draw or act out key details; dictate a sentence or label with teacher support.',
+    exit: 'Oral check: name a character/detail or echo a sentence starter.',
+    extensions: 'Play-based literacy center: letter tiles, story retell props, or class bookmaking.',
+    duration: 30,
+  },
+  Science: {
+    lessonFocus: 'Explore a simple phenomenon with senses and talk about observations.',
+    launch: 'Show/handle a real object or short clip; students say what they see, hear, feel, or smell.',
+    guided: 'Teacher models a mini-investigation (pouring, shining light, moving objects) and names what happens.',
+    practice: 'Small groups repeat the mini test with adult help; use picture words to describe changes.',
+    exit: 'Students share one observation using a sentence stem: “I saw/heard/felt...”.',
+    extensions: 'Outdoor walk or center with magnifiers and natural items; invite kids to sort and explain.',
+    duration: 30,
+  },
+  'Social Studies': {
+    lessonFocus: 'Connect self, family, and community through stories, maps, and routines.',
+    launch: 'Share a photo/map; students point to where they live or who is in their community.',
+    guided: 'Teacher models reading a simple map or calendar; practice vocabulary (home, school, helper).',
+    practice: 'Students place picture cards on a map/chart and explain their choice to a partner.',
+    exit: 'Quick check: students circle or point to a community helper/object on a card.',
+    extensions: 'Role-play or block center to build a community street and narrate who helps where.',
+    duration: 30,
+  },
+  General: {
+    lessonFocus: 'Use concrete experiences, pictures, and oral language to build understanding.',
+    launch: 'Short visual or object; students notice/wonder with gestures or simple words.',
+    guided: 'Model the task with think-aloud and plenty of repetition; invite choral responses.',
+    practice: 'Hands-on stations with adult prompts and picture cues.',
+    exit: 'One-picture check-in with thumbs or a single word.',
+    extensions: 'Free explore with related materials and a prompt to “tell a friend what you made/saw.”',
+    duration: 30,
+  },
+};
+
+const TEMPLATES_3_8: Record<string, LessonTemplate> = {
   Mathematics: {
     lessonFocus: 'Connect visual, numeric, and verbal representations to strengthen concept fluency.',
-    launch: 'Quick estimation or notice/wonder task that surfaces intuitive ideas tied to the module’s focus.',
+    launch: 'Quick estimation or notice/wonder task that surfaces intuitive ideas tied to the module focus.',
     guided:
       'Model a worked example on the board, pausing for turn-and-talks and micro-checks (fist-to-five, mini whiteboards).',
     practice:
@@ -87,12 +142,90 @@ const SUBJECT_TEMPLATES: Record<
     extensions: 'Optional timeline/map activity or museum/LOC/NARA artifact to widen context.',
     duration: 45,
   },
+  General: {
+    lessonFocus: 'Engage students with a quick hook, model thinking, then practice and reflect.',
+    launch: 'Use a visual or prompt to spark predictions or recall prior knowledge.',
+    guided: 'Teacher models the core move, inviting brief partner talk to check understanding.',
+    practice: 'Students complete a short, scaffolded set of tasks with checks for sense-making.',
+    exit: 'One concise prompt to confirm the day’s takeaway.',
+    extensions: 'Optional enrichment link or reflection question.',
+    duration: 40,
+  },
 };
 
-const pickTemplate = (subject: string) => SUBJECT_TEMPLATES[subject] ?? SUBJECT_TEMPLATES.Mathematics;
+const TEMPLATES_9_12: Record<string, LessonTemplate> = {
+  Mathematics: {
+    lessonFocus: 'Link concepts to real data or models and push multiple solution paths.',
+    launch: 'Pose a context-rich prompt (graph, data table, or scenario) and ask for a quick estimate or claim.',
+    guided:
+      'Model one representation (graph/algebraic/visual) and narrate choices; invite students to suggest alternate approaches.',
+    practice:
+      'Students tackle 2–3 multi-step problems; half the time is collaborative with whiteboard share-outs and error analysis.',
+    exit: 'One reasoning item (justify a step, explain a graph feature, or critique a sample solution).',
+    extensions: 'Mini-project idea: collect a small data set or find a real-world example and model it for next class.',
+    duration: 50,
+  },
+  'English Language Arts': {
+    lessonFocus: 'Engage with complex texts through argument, craft, and synthesis.',
+    launch:
+      'Use a short excerpt or visual to surface stance or theme; quick write on a prompt tied to author purpose or rhetoric.',
+    guided:
+      'Model close reading with annotation for claims, evidence, and craft moves; show how to paraphrase and integrate quotes.',
+    practice:
+      'Small groups build a claim + evidence + commentary paragraph or outline; peer feedback on clarity and relevance.',
+    exit: 'Exit slip: one-sentence claim with one cited detail or a rhetorical move identified and explained.',
+    extensions: 'Optional: connect to a secondary source, podcast clip, or op-ed for synthesis in the next lesson.',
+    duration: 55,
+  },
+  Science: {
+    lessonFocus: 'Frame an investigation or case study that mirrors scientific reasoning.',
+    launch: 'Show a data-rich figure or brief phenomenon clip; students draft a claim or question.',
+    guided:
+      'Model designing or critiquing a simple procedure/model; highlight variables, controls, and data interpretation.',
+    practice:
+      'Teams analyze a provided data set or simulation output; produce a CER explaining patterns and limitations.',
+    exit: 'Write one claim with evidence and a limitation or next-step question.',
+    extensions: 'Project idea: mini-lab plan, short research synopsis, or model revision to bring back tomorrow.',
+    duration: 55,
+  },
+  'Social Studies': {
+    lessonFocus: 'Analyze sources and construct defensible arguments with evidence and context.',
+    launch: 'Present a provocative primary source or data graphic; students note sourcing and initial claims.',
+    guided:
+      'Model sourcing/corroboration and a quick outline for an argument; highlight contextualization and counterclaims.',
+    practice:
+      'Groups annotate a second source, compare perspectives, and draft a claim with two pieces of evidence.',
+    exit: 'One-sentence thesis or counterclaim with one cited source detail.',
+    extensions: 'Assign a short document-based prompt or mini-research lead for next class.',
+    duration: 55,
+  },
+  General: {
+    lessonFocus: 'Lead with authentic problems or texts and push toward analysis and application.',
+    launch: 'Show a case, data set, or excerpt; students take a position or predict an outcome.',
+    guided: 'Model how to frame the task, demonstrating one analytic move or representation.',
+    practice: 'Students work in teams on a short problem set or source packet with structured roles.',
+    exit: 'Brief reflection: “What convinced you?” or “Which step mattered most?”',
+    extensions: 'Invite a short prep task (find a source/example) to deepen tomorrow’s work.',
+    duration: 55,
+  },
+};
+
+const pickTemplate = (subject: string, gradeBand: string): LessonTemplate => {
+  const normalizedGrade = gradeBand.trim();
+  const isK2 = ['K', '1', '2'].includes(normalizedGrade);
+  const isUpper = ['9', '10', '11', '12'].includes(normalizedGrade);
+
+  if (isK2) {
+    return TEMPLATES_K2[subject] ?? TEMPLATES_K2.General;
+  }
+  if (isUpper) {
+    return TEMPLATES_9_12[subject] ?? TEMPLATES_9_12.General;
+  }
+  return TEMPLATES_3_8[subject] ?? TEMPLATES_3_8.General;
+};
 
 const buildLessonMarkdown = (module: ModuleRow): { content: string; duration: number } => {
-  const template = pickTemplate(module.subject);
+  const template = pickTemplate(module.subject, module.grade_band);
   const header = `# ${module.title}: Launch Lesson`;
   const overview = [
     `**Grade band:** ${module.grade_band}`,

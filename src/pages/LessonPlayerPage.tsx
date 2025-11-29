@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -14,6 +14,7 @@ import {
   Sparkles,
   Video,
   XCircle,
+  Bot,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -27,6 +28,9 @@ import {
 import { useLessonProgress } from '../lib/useLessonProgress';
 import { useAuth } from '../contexts/AuthContext';
 import type { LessonPracticeQuestion, Subject } from '../types';
+import trackEvent from '../lib/analytics';
+import supabase from '../lib/supabaseClient';
+import LearningAssistant from '../components/Student/LearningAssistant';
 
 const MARKDOWN_PLUGINS = [remarkGfm];
 
@@ -217,6 +221,56 @@ const LessonPlayerPage: React.FC = () => {
 
   const progressDisabled = progressController.isLoading || progressController.isSaving;
 
+  const logContextualHelp = useCallback(
+    async (payload: { prompt: string; source: string }) => {
+      if (!isLessonIdValid || !studentId || !progressController.sessionId) {
+        return;
+      }
+
+      const eventOrder = progressController.allocateEventOrder();
+      if (eventOrder == null) return;
+
+      try {
+        await supabase.from('practice_events').insert({
+          session_id: progressController.sessionId,
+          event_order: eventOrder,
+          event_type: 'hint_request',
+          lesson_id: lessonId,
+          payload: { source: payload.source, prompt: payload.prompt.slice(0, 300) },
+        });
+      } catch (error) {
+        console.warn('[lesson] failed to log contextual ai help', error);
+      }
+    },
+    [isLessonIdValid, lessonId, progressController, studentId],
+  );
+
+  const openTutorWithContext = useCallback(
+    (prompt: string, source: string) => {
+      if (!prompt || typeof window === 'undefined') return;
+      const trimmed = prompt.trim();
+      if (!trimmed) return;
+
+      const preview = trimmed.length > 240 ? `${trimmed.slice(0, 240)}…` : trimmed;
+      window.dispatchEvent(
+        new CustomEvent('learning-assistant:open', {
+          detail: {
+            prompt: trimmed,
+            source,
+          },
+        }),
+      );
+      trackEvent('contextual_ai_help_opened', {
+        studentId,
+        lessonId,
+        source,
+        contextPreview: preview,
+      });
+      void logContextualHelp({ prompt: trimmed, source });
+    },
+    [lessonId, logContextualHelp, studentId],
+  );
+
   useEffect(() => {
     setQuestionIndex(0);
     setQuestionResponses(new Map());
@@ -386,31 +440,46 @@ const LessonPlayerPage: React.FC = () => {
         <div id={anchorId} className="flex items-start justify-between gap-4 pt-8 scroll-mt-24">
           {React.createElement(tag, { className: mergedClassName, ...rest }, children)}
           {progressId && (
-            <button
-              type="button"
-              disabled={progressDisabled}
-              onClick={() => progressController.toggleItem(progressId)}
-              aria-pressed={progressController.isComplete(progressId)}
-              className="mt-1 inline-flex items-center justify-center rounded-full border border-slate-200 p-2 text-slate-400 hover:text-brand-blue hover:border-brand-blue/40 focus-ring"
-              title={
-                progressController.isComplete(progressId)
-                  ? 'Mark section as in progress'
-                  : 'Mark section as completed'
-              }
-            >
-              {progressController.isComplete(progressId) ? (
-                <CheckCircle2 className="h-5 w-5 text-brand-blue" />
-              ) : (
-                <Circle className="h-5 w-5" />
-              )}
-            </button>
+            <div className="flex flex-col items-end gap-2">
+              <button
+                type="button"
+                disabled={progressDisabled}
+                onClick={() => progressController.toggleItem(progressId)}
+                aria-pressed={progressController.isComplete(progressId)}
+                className="inline-flex items-center justify-center rounded-full border border-slate-200 p-2 text-slate-400 hover:text-brand-blue hover:border-brand-blue/40 focus-ring"
+                title={
+                  progressController.isComplete(progressId)
+                    ? 'Mark section as in progress'
+                    : 'Mark section as completed'
+                }
+              >
+                {progressController.isComplete(progressId) ? (
+                  <CheckCircle2 className="h-5 w-5 text-brand-blue" />
+                ) : (
+                  <Circle className="h-5 w-5" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  openTutorWithContext(
+                    `I'm reading the section "${text}". Can you explain it in simple steps for my grade?`,
+                    `section:${anchorId}`,
+                  )
+                }
+                className="inline-flex items-center gap-1 rounded-full border border-brand-blue/50 bg-white px-2 py-1 text-[11px] font-semibold text-brand-blue shadow-sm hover:bg-brand-blue/5 focus-ring"
+              >
+                <Bot className="h-3 w-3" /> Ask ElevatED
+              </button>
+            </div>
           )}
         </div>
       );
     };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pb-20">
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pb-20">
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
           <div className="flex flex-wrap items-center gap-4 text-sm text-brand-blue/80">
@@ -652,12 +721,28 @@ const LessonPlayerPage: React.FC = () => {
                 No quick-check questions are linked to this lesson yet.
               </div>
             ) : currentPracticeQuestion ? (
-              <div className="mt-6 space-y-5">
-                <div className="text-sm text-slate-600">
-                  Current score {masteryPct}% · keep momentum with immediate feedback.
-                </div>
-                <div className="space-y-4">
+                <div className="mt-6 space-y-5">
+                  <div className="text-sm text-slate-600">
+                    Current score {masteryPct}% · keep momentum with immediate feedback.
+                  </div>
+                  <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900">{currentPracticeQuestion.prompt}</h3>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openTutorWithContext(
+                          `I'm stuck on this practice question: ${currentPracticeQuestion.prompt}`,
+                          `practice:${currentPracticeQuestion.id}`,
+                        )
+                      }
+                      className="inline-flex items-center gap-1 rounded-full border border-brand-blue/40 px-3 py-1 font-semibold text-brand-blue hover:bg-brand-blue/10 focus-ring"
+                    >
+                      <Bot className="h-3 w-3" />
+                      Ask ElevatED for a hint
+                    </button>
+                    <span className="text-slate-400">Try your best first, then get a guided nudge.</span>
+                  </div>
                   <div className="space-y-3">
                     {currentPracticeQuestion.options.map((option, index) => {
                       const response = questionResponses.get(currentPracticeQuestion.id);
@@ -884,7 +969,9 @@ const LessonPlayerPage: React.FC = () => {
           </article>
         </section>
       </main>
-    </div>
+      </div>
+      {user?.role === 'student' && <LearningAssistant />}
+    </>
   );
 };
 

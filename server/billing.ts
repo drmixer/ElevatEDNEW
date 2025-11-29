@@ -14,10 +14,10 @@ const priceToPlanSlug: Record<string, string> = Object.fromEntries(
   }).filter(([priceId]) => priceId && priceId.trim().length > 0),
 );
 
-const planLimits: Record<string, { aiAccess: boolean; lessonLimit?: number | 'unlimited' }> = {
-  'family-free': { aiAccess: false, lessonLimit: 10 },
-  'family-plus': { aiAccess: true, lessonLimit: 100 },
-  'family-premium': { aiAccess: true, lessonLimit: 'unlimited' },
+const planLimits: Record<string, { aiAccess: boolean; lessonLimit?: number | 'unlimited'; tutorDailyLimit?: number | 'unlimited' }> = {
+  'family-free': { aiAccess: true, lessonLimit: 10, tutorDailyLimit: 3 },
+  'family-plus': { aiAccess: true, lessonLimit: 100, tutorDailyLimit: 'unlimited' },
+  'family-premium': { aiAccess: true, lessonLimit: 'unlimited', tutorDailyLimit: 'unlimited' },
 };
 
 type StripeSubscription = Stripe.Subscription;

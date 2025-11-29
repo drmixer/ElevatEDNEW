@@ -11,6 +11,22 @@ const Header: React.FC = () => {
 
   if (!user) return null;
 
+  const navLinks =
+    user.role === 'student'
+      ? [
+          { label: 'Home', to: '/student' },
+          { label: 'Assignments', to: '/student#assignments' },
+          { label: 'Catalog', to: '/catalog', secondary: true },
+        ]
+      : user.role === 'parent'
+      ? [
+          { label: 'Home', to: '/parent' },
+          { label: 'My Learners', to: '/parent#learners' },
+          { label: 'Assignments', to: '/parent#assignments' },
+          { label: 'Catalog', to: '/catalog', secondary: true },
+        ]
+      : [];
+
   return (
     <motion.header 
       className="bg-white shadow-sm border-b border-gray-200"
@@ -31,23 +47,46 @@ const Header: React.FC = () => {
                 <h1 className="text-xl font-bold text-brand-blue">ElevatED</h1>
                 <p className="text-xs text-gray-500">
                   {user.role === 'student'
-                    ? 'Student Dashboard'
+                    ? 'Student home'
                     : user.role === 'parent'
-                    ? 'Family Dashboard'
-                    : 'Admin Command Center'}
+                    ? 'Family dashboard'
+                    : 'Admin workspace (restricted)'}
                 </p>
               </div>
             </div>
-            <nav className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
-              <Link to="/catalog" className="hover:text-brand-blue transition-colors">
-                Catalog
-              </Link>
-              {user.role === 'admin' && (
-                <Link to="/admin/import" className="hover:text-brand-blue transition-colors">
-                  Import console
+            {user.role !== 'admin' && (
+              <nav className="hidden md:flex items-center space-x-3 text-sm text-gray-600">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    className={`px-3 py-2 rounded-lg transition-colors ${
+                      link.secondary
+                        ? 'text-gray-500 hover:text-brand-blue hover:bg-brand-light-blue/40'
+                        : 'hover:text-brand-blue hover:bg-gray-100'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            )}
+            {user.role === 'admin' && (
+              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
+                <span className="px-3 py-1 rounded-full bg-brand-light-blue/50 text-brand-blue font-semibold">
+                  Admin workspace
+                </span>
+                <Link to="/workspace/admin" className="hover:text-brand-blue transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
+                  Dashboard
                 </Link>
-              )}
-            </nav>
+                <Link to="/workspace/admin/import" className="hover:text-brand-blue transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
+                  Imports
+                </Link>
+                <Link to="/catalog" className="hover:text-brand-blue transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
+                  Catalog
+                </Link>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
@@ -73,7 +112,12 @@ const Header: React.FC = () => {
             {user.role === 'parent' && (
               <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
                 <div className="px-3 py-1 rounded-full bg-brand-light-teal/40 text-brand-teal font-medium">
-                  {(user as Parent).subscriptionTier === 'premium' ? 'Premium Parent' : 'Family Plan'}
+                  {(() => {
+                    const tier = (user as Parent).subscriptionTier;
+                    if (tier === 'premium') return 'Family Premium';
+                    if (tier === 'plus') return 'Family Plus';
+                    return 'Family Free';
+                  })()}
                 </div>
                 <div className="flex items-center space-x-1 text-brand-violet">
                   <span className="text-lg">👨‍👩‍👧‍👦</span>

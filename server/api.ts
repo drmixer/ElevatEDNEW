@@ -40,7 +40,7 @@ import {
   type AuthenticatedAdmin,
   type AuthenticatedUser,
 } from './auth.js';
-import { captureServerException, captureServerMessage, withRequestScope } from './monitoring.js';
+import { captureServerException, captureServerMessage, raiseAlert, withRequestScope } from './monitoring.js';
 import { elapsedMs, recordApiTiming, startTimer } from './instrumentation.js';
 import { normalizeImportLimits } from './importSafety.js';
 import {
@@ -257,6 +257,14 @@ const createModuleAssignment = async (
     console.warn('[api] Failed to enqueue assignment notifications', notificationError);
   }
 
+  captureServerMessage('[assignments] module assigned', {
+    assignmentId: assignmentRow.id,
+    moduleId: payload.moduleId,
+    studentCount: studentIds.length,
+    creatorId: payload.creatorId,
+    role: payload.creatorRole ?? 'parent',
+  });
+
   return {
     assignmentId: assignmentRow.id as number,
     lessonsAttached: (lessonRows ?? []).length,
@@ -289,6 +297,10 @@ const ensureGuardianAccess = async (
 
   const unauthorized = studentIds.filter((_id, index) => results[index] !== true);
   if (unauthorized.length > 0) {
+    captureServerMessage('[assignments] guardian check failed', {
+      actorId: actor.id,
+      unauthorized,
+    }, 'warning');
     throw new HttpError(403, 'You can only assign modules to learners you manage.', 'forbidden');
   }
 };
@@ -682,11 +694,11 @@ export const createApiHandler = (context: ApiContext) => {
       recordMetrics();
     };
 
-    const handleRoute = async (
-      handler: () => Promise<void>,
-      errorContext?: Record<string, unknown>,
-    ): Promise<boolean> => {
-      try {
+  const handleRoute = async (
+    handler: () => Promise<void>,
+    errorContext?: Record<string, unknown>,
+  ): Promise<boolean> => {
+    try {
         await handler();
       } catch (error) {
         handleApiError(res, error, API_VERSION, { route: path, method, ...errorContext });
@@ -695,17 +707,48 @@ export const createApiHandler = (context: ApiContext) => {
       return true;
     };
 
+    const resolveTutorPlanContext = async (
+      actor: AuthenticatedUser | null,
+    ): Promise<{ slug: string; limits: ReturnType<typeof getPlanLimits> }> => {
+      const defaultPlan = 'family-free';
+      if (!actor) {
+        return { slug: defaultPlan, limits: getPlanLimits(defaultPlan) };
+      }
+
+      const client = serviceSupabase ?? supabase;
+      let parentId: string | null = null;
+
+      if (actor.role === 'parent') {
+        parentId = actor.id;
+      } else if (actor.role === 'student') {
+        const { data, error } = await client
+          .from('student_profiles')
+          .select('parent_id')
+          .eq('id', actor.id)
+          .maybeSingle();
+        if (error) {
+          console.warn('[api] unable to resolve parent for student', error);
+        }
+        parentId = (data?.parent_id as string | null) ?? null;
+      }
+
+      if (!parentId) {
+        return { slug: defaultPlan, limits: getPlanLimits(defaultPlan) };
+      }
+
+      const planSlug = (await resolveParentPlanSlug(client, parentId)) ?? defaultPlan;
+      return { slug: planSlug, limits: getPlanLimits(planSlug) };
+    };
+
     if (method === 'POST' && path === '/ai/tutor') {
       return handleRoute(async () => {
         const body = await readValidatedJson<TutorRequestBody>(req);
         const actor = token ? await resolveUserFromToken(supabase, token) : null;
 
-        if (process.env.ENFORCE_PLAN_LIMITS === 'true' && actor?.role === 'parent') {
-          const planSlug = (await resolveParentPlanSlug(supabase, actor.id)) ?? 'family-free';
-          const limits = getPlanLimits(planSlug);
-          if (!limits.aiAccess) {
-            throw new HttpError(402, 'Upgrade required to access the AI assistant.', 'payment_required');
-          }
+        const { slug: planSlug, limits } = await resolveTutorPlanContext(actor);
+
+        if (process.env.ENFORCE_PLAN_LIMITS === 'true' && body.mode !== 'marketing' && !limits.aiAccess) {
+          throw new HttpError(402, 'Upgrade required to access the AI assistant.', 'payment_required');
         }
 
         try {
@@ -713,8 +756,20 @@ export const createApiHandler = (context: ApiContext) => {
             userId: actor?.id ?? null,
             role: actor?.role ?? null,
             clientIp: resolveClientIp(req),
+            plan: { slug: planSlug, tutorDailyLimit: limits.tutorDailyLimit, aiAccess: limits.aiAccess },
           });
-          sendJson(res, 200, { message: result.message, model: result.model }, API_VERSION);
+          sendJson(
+            res,
+            200,
+            {
+              message: result.message,
+              model: result.model,
+              remaining: result.remaining ?? null,
+              limit: result.limit ?? null,
+              plan: result.plan ?? planSlug,
+            },
+            API_VERSION,
+          );
         } catch (error) {
           const status = (error as { status?: number }).status ?? 500;
           const message = error instanceof Error ? error.message : 'Assistant unavailable.';
@@ -735,6 +790,99 @@ export const createApiHandler = (context: ApiContext) => {
         const lastScore = parseOptionalNumber(url.query.lastScore, 'lastScore');
         const { recommendations } = await getRecommendations(supabase, moduleId, lastScore);
         sendJson(res, 200, { recommendations }, API_VERSION);
+      });
+    }
+
+    if (method === 'GET' && path === '/billing/context') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent', 'student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const { slug: planSlug, limits } = await resolveTutorPlanContext(actor);
+        const { data: planRow } = await serviceSupabase
+          .from('plans')
+          .select('slug, name, price_cents, metadata, status')
+          .eq('slug', planSlug)
+          .maybeSingle();
+
+        let subscriptionOwner = actor.role === 'parent' ? actor.id : null;
+        if (!subscriptionOwner && actor.role === 'student') {
+          const { data: parentRow, error: parentError } = await serviceSupabase
+            .from('student_profiles')
+            .select('parent_id')
+            .eq('id', actor.id)
+            .maybeSingle();
+          if (parentError) {
+            console.warn('[billing] unable to resolve parent for student context', parentError);
+          }
+          subscriptionOwner = (parentRow?.parent_id as string | null) ?? null;
+        }
+
+        let subscription: {
+          id: number;
+          status: string;
+          plan: { slug: string; name: string; priceCents: number; metadata: Record<string, unknown> } | null;
+          trialEndsAt: string | null;
+          currentPeriodEnd: string | null;
+          cancelAt: string | null;
+          metadata: Record<string, unknown>;
+        } | null = null;
+
+        if (subscriptionOwner) {
+          const { data: subscriptionRow, error: subscriptionError } = await serviceSupabase
+            .from('subscriptions')
+            .select('id, status, trial_ends_at, current_period_end, cancel_at, metadata, plans ( slug, name, price_cents, metadata )')
+            .eq('parent_id', subscriptionOwner)
+            .maybeSingle();
+
+          if (subscriptionError) {
+            console.warn('[billing] unable to load subscription for context', subscriptionError);
+          }
+
+          if (subscriptionRow) {
+            subscription = {
+              id: subscriptionRow.id as number,
+              status: subscriptionRow.status as string,
+              plan: subscriptionRow.plans
+                ? {
+                    slug: (subscriptionRow.plans as { slug: string }).slug,
+                    name: (subscriptionRow.plans as { name: string }).name,
+                    priceCents: (subscriptionRow.plans as { price_cents: number }).price_cents,
+                    metadata: (subscriptionRow.plans as { metadata: Record<string, unknown> }).metadata ?? {},
+                  }
+                : null,
+              trialEndsAt: (subscriptionRow.trial_ends_at as string | null) ?? null,
+              currentPeriodEnd: (subscriptionRow.current_period_end as string | null) ?? null,
+              cancelAt: (subscriptionRow.cancel_at as string | null) ?? null,
+              metadata: (subscriptionRow.metadata as Record<string, unknown>) ?? {},
+            };
+          }
+        }
+
+        sendJson(
+          res,
+          200,
+          {
+            plan: planRow
+              ? {
+                  slug: planRow.slug,
+                  name: planRow.name,
+                  priceCents: planRow.price_cents,
+                  metadata: planRow.metadata ?? {},
+                  status: planRow.status,
+                }
+              : {
+                  slug: planSlug,
+                  name: planSlug,
+                  priceCents: 0,
+                  metadata: {},
+                  status: 'active',
+                },
+            limits,
+            subscription,
+          },
+          API_VERSION,
+        );
       });
     }
 
@@ -873,7 +1021,19 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(400, error instanceof Error ? error.message : 'Invalid signature.', 'invalid_signature');
         }
 
-        await handleStripeEvent(serviceSupabase, stripe, event);
+        try {
+          await handleStripeEvent(serviceSupabase, stripe, event);
+          captureServerMessage('[billing] webhook processed', { eventType: event?.type, eventId: event?.id });
+        } catch (error) {
+          captureServerException(error, {
+            source: 'billing_webhook',
+            eventType: event?.type,
+            eventId: event?.id,
+          });
+          raiseAlert('billing_webhook_failed', { eventType: event?.type, eventId: event?.id });
+          const message = error instanceof Error ? error.message : 'Billing webhook failed.';
+          throw new HttpError(500, message, 'billing_webhook_failed');
+        }
         sendJson(res, 200, { received: true }, API_VERSION);
       });
     }
@@ -1198,8 +1358,8 @@ export const startApiServer = (
         logger: (entry) => {
           const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
           console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
-          if (entry.level === 'error') {
-            captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, 'error');
+          if (entry.level === 'error' || entry.level === 'warn') {
+            captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, entry.level === 'error' ? 'error' : 'warning');
           }
         },
       })

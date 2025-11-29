@@ -1,0 +1,130 @@
+[
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Combine (4x^2 - x) + (-3x^2 + 7x).",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_operations", "combine_like_terms"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["addition"],
+    "options": [
+      { "text": "x^2 + 6x", "isCorrect": true, "feedback": "Add coefficients of x^2 and x separately." },
+      { "text": "x^2 + 8x", "isCorrect": false },
+      { "text": "7x^2 + 6x", "isCorrect": false },
+      { "text": "x^2 - 6x", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which expression is equivalent to 3(x^2 - 2x) - (x^2 + x)?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_operations", "distribution"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["distribution", "subtraction"],
+    "options": [
+      { "text": "2x^2 - 7x", "isCorrect": true, "feedback": "Distribute 3 then subtract each term of (x^2 + x)." },
+      { "text": "4x^2 - 5x", "isCorrect": false },
+      { "text": "2x^2 + 5x", "isCorrect": false },
+      { "text": "4x^2 - 7x", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "What is the leading term of -6x^4 + 9x^2 - 2?",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "skills": ["polynomial_structure"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["leading_term"],
+    "options": [
+      { "text": "-6x^4", "isCorrect": true, "feedback": "The highest-power term is the leading term." },
+      { "text": "9x^2", "isCorrect": false },
+      { "text": "-2", "isCorrect": false },
+      { "text": "-6x^2", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Multiply (x + 4)(x + 5).",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_operations", "multiplication"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["binomial_product"],
+    "options": [
+      { "text": "x^2 + 9x + 20", "isCorrect": true, "feedback": "Use FOIL: x*x, x*5, 4*x, 4*5." },
+      { "text": "x^2 + 20", "isCorrect": false },
+      { "text": "x^2 + 9x + 9", "isCorrect": false },
+      { "text": "x^2 + 4x + 5", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which identity correctly expands (a - b)^2?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_identities"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["square_binomial"],
+    "options": [
+      { "text": "a^2 - 2ab + b^2", "isCorrect": true, "feedback": "Square both terms and subtract double the product." },
+      { "text": "a^2 + 2ab + b^2", "isCorrect": false },
+      { "text": "a^2 - b^2", "isCorrect": false },
+      { "text": "a^2 + b^2 - 2", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Which statement shows polynomial closure under multiplication?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["polynomial_structure", "closure"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["closure"],
+    "options": [
+      { "text": "(x + 2)(x^2 - 1) produces another polynomial", "isCorrect": true, "feedback": "Multiplying polynomials keeps integer exponents and real coefficients." },
+      { "text": "Multiplying polynomials can create rational exponents", "isCorrect": false },
+      { "text": "Closure only holds when degrees match", "isCorrect": false },
+      { "text": "Products of polynomials are undefined", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "If (x + 1)(x - 1) is multiplied by (x + 3), what is the degree of the resulting polynomial?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_structure"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["degree"],
+    "options": [
+      { "text": "3", "isCorrect": true, "feedback": "A quadratic times a linear polynomial gives a cubic." },
+      { "text": "2", "isCorrect": false },
+      { "text": "1", "isCorrect": false },
+      { "text": "4", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities",
+    "lessonSlug": "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities-launch",
+    "prompt": "Add f(x) = -x^2 + 6x and g(x) = 2x^2 - x. What is f(x) + g(x)?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["polynomial_operations", "addition"],
+    "standards": ["HSA-APR.1"],
+    "tags": ["combine_like_terms"],
+    "options": [
+      { "text": "x^2 + 5x", "isCorrect": true, "feedback": "Combine like terms: (-1 + 2)x^2 and (6 - 1)x." },
+      { "text": "x^2 + 7x", "isCorrect": false },
+      { "text": "-x^2 + 5x", "isCorrect": false },
+      { "text": "x^2 - 5x", "isCorrect": false }
+    ]
+  }
+]

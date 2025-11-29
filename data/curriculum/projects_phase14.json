@@ -1,0 +1,753 @@
+[
+  {
+    "project_slug": "6-math-ratios-snack-stand",
+    "module_slug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+    "lesson_slug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+    "grade_band": "6",
+    "subject": "math",
+    "title": "Snack Stand Pricing Plan",
+    "duration_days": 4,
+    "driving_question": "How can we price and bundle snacks fairly while making a profit?",
+    "summary": "Students design a pop-up snack stand menu, using ratio tables and unit rates to set prices, bundles, and discounts. They justify choices with proportional reasoning and present a simple break-even analysis.",
+    "student_directions": [
+      "Gather data on 2–3 snack items and typical serving sizes.",
+      "Create unit rates and at least one bundle/discount that stays proportional.",
+      "Design a one-page menu with visuals and a short justification paragraph."
+    ],
+    "checkpoints": [
+      {
+        "day": 1,
+        "title": "Market research & ratios",
+        "tasks": ["Record sample prices/servings", "Compute unit rates for each item"],
+        "evidence": ["Completed table with unit rates", "One observation about fairness"]
+      },
+      {
+        "day": 2,
+        "title": "Bundles & discounts",
+        "tasks": ["Propose at least one bundle or BOGO plan", "Show table/graph to prove proportionality"],
+        "evidence": ["Bundle table and graph", "One-sentence justification"]
+      },
+      {
+        "day": 3,
+        "title": "Menu draft & feedback",
+        "tasks": ["Lay out menu draft", "Peer feedback on clarity/pricing"],
+        "evidence": ["Peer feedback notes", "Draft menu"]
+      },
+      {
+        "day": 4,
+        "title": "Pitch & reflection",
+        "tasks": ["2–3 minute pitch", "Reflect on profit/fairness tradeoffs"],
+        "evidence": ["Pitch notes", "Exit reflection slip"]
+      }
+    ],
+    "rubric": [
+      {
+        "criterion": "Proportional reasoning",
+        "levels": {
+          "4": "Tables/graphs clearly show constant of proportionality; explains why choices stay proportional.",
+          "3": "Mostly proportional pricing with minor slips; can identify unit rate.",
+          "2": "Inconsistent proportionality; limited explanation of k.",
+          "1": "Prices/ratios not supported with tables or graphs."
+        }
+      },
+      {
+        "criterion": "Clarity & visuals",
+        "levels": {
+          "4": "Menu is clean, labeled, and audience-friendly; visuals support math.",
+          "3": "Readable with minor clutter; visuals mostly match prices.",
+          "2": "Hard to read or missing labels; visuals loosely connected.",
+          "1": "Unclear layout; audience cannot find prices."
+        }
+      },
+      {
+        "criterion": "Justification",
+        "levels": {
+          "4": "Argument links fairness, profit, and math evidence convincingly.",
+          "3": "States fairness/profit with some evidence.",
+          "2": "Claim present but evidence is thin or vague.",
+          "1": "No clear justification."
+        }
+      }
+    ],
+    "differentiation": {
+      "supports": [
+        "Provide starter price table and partially filled graph axes.",
+        "Allow calculator for unit rate calculations."
+      ],
+      "extensions": [
+        "Add a tax/tip scenario and recalc totals.",
+        "Model profit at two different demand levels."
+      ]
+    },
+    "assets": [
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/6-math-ratios/snack-stand-brief",
+        "title": "Project Brief: Snack Stand Pricing",
+        "description": "Day-by-day directions, exemplar tables/graphs, and the driving question.",
+        "kind": "project",
+        "tags": ["project", "pricing", "proportional-reasoning"],
+        "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "6-math-ratios-snack-stand",
+          "activity_type": "project",
+          "estimated_time_minutes": 180,
+          "difficulty": 3,
+          "skills": ["ratios_proportions"],
+          "standards": ["6.RP.A.3"],
+          "checkpoints": [1, 2, 3, 4],
+          "home_extension": true,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      },
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/6-math-ratios/snack-stand-rubric",
+        "title": "Rubric: Snack Stand Pricing",
+        "description": "3-criterion rubric covering proportional reasoning, visuals, and justification.",
+        "kind": "assessment",
+        "tags": ["rubric", "project"],
+        "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "6-math-ratios-snack-stand",
+          "assessment_type": "project_rubric",
+          "estimated_time_minutes": 30,
+          "difficulty": 3,
+          "skills": ["ratios_proportions"],
+          "standards": ["6.RP.A.3"],
+          "home_extension": false,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      }
+    ]
+  },
+  {
+    "project_slug": "6-ela-argument-community-op-ed",
+    "module_slug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage",
+    "lesson_slug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+    "grade_band": "6",
+    "subject": "english",
+    "title": "Community Op-Ed",
+    "duration_days": 3,
+    "driving_question": "How do I convince my community to act on a local issue?",
+    "summary": "Students write a concise op-ed on a community issue (school lunch, park space, device use). They collect one source, draft a claim/reasoning, and deliver a 90-second recorded read-aloud.",
+    "student_directions": [
+      "Pick a focused community topic and audience.",
+      "Gather at least one credible source and one lived-experience detail.",
+      "Draft, revise, and record a 90-second op-ed read-aloud."
+    ],
+    "checkpoints": [
+      {
+        "day": 1,
+        "title": "Issue + claim",
+        "tasks": ["Choose topic/audience", "Draft clear claim and two reasons"],
+        "evidence": ["Claim statement", "Reason bullets"]
+      },
+      {
+        "day": 2,
+        "title": "Evidence & draft",
+        "tasks": ["Add one cited fact and one anecdote", "Draft full op-ed"],
+        "evidence": ["Draft with citations", "Highlighted reasoning sentences"]
+      },
+      {
+        "day": 3,
+        "title": "Record & reflect",
+        "tasks": ["Record 90-second read-aloud", "Complete revision checklist"],
+        "evidence": ["Audio file", "Checklist submission"]
+      }
+    ],
+    "rubric": [
+      {
+        "criterion": "Claim & focus",
+        "levels": {
+          "4": "Claim is precise and audience-specific; focus never drifts.",
+          "3": "Clear claim; minor drifts from focus.",
+          "2": "Claim vague or broad; focus inconsistently maintained.",
+          "1": "Claim missing or unclear."
+        }
+      },
+      {
+        "criterion": "Evidence & reasoning",
+        "levels": {
+          "4": "Blends cited fact and anecdote; reasoning explicitly ties to claim.",
+          "3": "Includes evidence with some reasoning links.",
+          "2": "Evidence present but weakly connected.",
+          "1": "Evidence absent or unrelated."
+        }
+      },
+      {
+        "criterion": "Voice & conventions",
+        "levels": {
+          "4": "Confident voice with varied sentences; grammar/punctuation strengthen clarity.",
+          "3": "Mostly clear with few errors; some variety.",
+          "2": "Frequent errors or monotone structure.",
+          "1": "Errors impede meaning."
+        }
+      }
+    ],
+    "differentiation": {
+      "supports": [
+        "Provide sentence stems for claim/reasoning.",
+        "Allow recorded rehearsal before final take."
+      ],
+      "extensions": [
+        "Add a counterclaim paragraph.",
+        "Publish to a class blog and invite comments."
+      ]
+    },
+    "assets": [
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/6-ela-argument/community-op-ed-brief",
+        "title": "Project Brief: Community Op-Ed",
+        "description": "Checklist, exemplar paragraphs, and recording tips for the op-ed.",
+        "kind": "project",
+        "tags": ["project", "writing", "op-ed"],
+        "lessonSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "6-ela-argument-community-op-ed",
+          "activity_type": "project",
+          "estimated_time_minutes": 135,
+          "difficulty": 3,
+          "skills": ["argument_writing", "evidence_reasoning"],
+          "standards": ["W.6.1"],
+          "home_extension": true,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      },
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/6-ela-argument/community-op-ed-rubric",
+        "title": "Rubric: Community Op-Ed",
+        "description": "3-criterion rubric for claim, evidence/reasoning, and voice.",
+        "kind": "assessment",
+        "tags": ["rubric", "project"],
+        "lessonSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "6-ela-argument-community-op-ed",
+          "assessment_type": "project_rubric",
+          "estimated_time_minutes": 25,
+          "difficulty": 3,
+          "skills": ["argument_writing"],
+          "standards": ["W.6.1"],
+          "home_extension": false,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      }
+    ]
+  },
+  {
+    "project_slug": "7-math-proportional-blueprint",
+    "module_slug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+    "lesson_slug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+    "grade_band": "7",
+    "subject": "math",
+    "title": "Scale Blueprint Remix",
+    "duration_days": 4,
+    "driving_question": "How can we redesign a room or park using a precise scale drawing?",
+    "summary": "Students redesign a familiar space using a chosen scale, create a clean blueprint, and compute real measurements from scaled drawings. They justify scale choices and area changes.",
+    "student_directions": [
+      "Choose a space (bedroom, classroom corner, mini-park) and pick a scale.",
+      "Sketch a neat blueprint with at least five labeled measurements.",
+      "Calculate two actual distances/areas from the scaled blueprint and explain changes."
+    ],
+    "checkpoints": [
+      {
+        "day": 1,
+        "title": "Choose space & scale",
+        "tasks": ["Select space/photo", "Decide on a scale and explain why"],
+        "evidence": ["Space sketch", "Scale statement"]
+      },
+      {
+        "day": 2,
+        "title": "Draft blueprint",
+        "tasks": ["Draw scaled outline", "Label at least five measurements"],
+        "evidence": ["Draft blueprint with labels"]
+      },
+      {
+        "day": 3,
+        "title": "Calculations & revisions",
+        "tasks": ["Compute two actual distances/areas", "Peer feedback on clarity"],
+        "evidence": ["Calculation sheet", "Peer notes"]
+      },
+      {
+        "day": 4,
+        "title": "Display & reflect",
+        "tasks": ["Post blueprint for gallery walk", "Write reflection on design choices"],
+        "evidence": ["Posted blueprint", "Reflection paragraph"]
+      }
+    ],
+    "rubric": [
+      {
+        "criterion": "Scale accuracy",
+        "levels": {
+          "4": "Consistent scale across all measurements; can reverse from scale to actual flawlessly.",
+          "3": "Scale mostly consistent; minor slips corrected.",
+          "2": "Several inconsistent conversions.",
+          "1": "Scale unclear or not applied."
+        }
+      },
+      {
+        "criterion": "Precision & labeling",
+        "levels": {
+          "4": "Blueprint is precise, labeled, and audience-ready.",
+          "3": "Readable labels with minor precision issues.",
+          "2": "Labels missing/unclear; precision problems.",
+          "1": "Difficult to interpret."
+        }
+      },
+      {
+        "criterion": "Reasoning",
+        "levels": {
+          "4": "Explains design and area/length changes with proportional reasoning.",
+          "3": "Explains most choices with some proportional language.",
+          "2": "Limited explanation or vague reasoning.",
+          "1": "No reasoning provided."
+        }
+      }
+    ],
+    "differentiation": {
+      "supports": [
+        "Offer template grid paper with pre-marked scale bars.",
+        "Pair students for calculation checks."
+      ],
+      "extensions": [
+        "Add a budget for flooring/paint using area costs.",
+        "Model two different scales and compare pros/cons."
+      ]
+    },
+    "assets": [
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/7-math-ratios/scale-blueprint-brief",
+        "title": "Project Brief: Scale Blueprint Remix",
+        "description": "Guided brief with sample scales, blueprint exemplars, and gallery-walk protocol.",
+        "kind": "project",
+        "tags": ["project", "scale", "blueprint"],
+        "lessonSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "7-math-proportional-blueprint",
+          "activity_type": "project",
+          "estimated_time_minutes": 180,
+          "difficulty": 3,
+          "skills": ["ratios_proportions", "geometry_measurement"],
+          "standards": ["7.RP.A.2"],
+          "home_extension": true,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      },
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/7-math-ratios/scale-blueprint-rubric",
+        "title": "Rubric: Scale Blueprint Remix",
+        "description": "Rubric for scale accuracy, precision, and reasoning.",
+        "kind": "assessment",
+        "tags": ["rubric", "project"],
+        "lessonSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "7-math-proportional-blueprint",
+          "assessment_type": "project_rubric",
+          "estimated_time_minutes": 25,
+          "difficulty": 3,
+          "skills": ["ratios_proportions"],
+          "standards": ["7.RP.A.2"],
+          "home_extension": false,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      }
+    ]
+  },
+  {
+    "project_slug": "7-ela-informational-tech-consumer-guide",
+    "module_slug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed",
+    "lesson_slug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+    "grade_band": "7",
+    "subject": "english",
+    "title": "Tech Consumer Guide",
+    "duration_days": 3,
+    "driving_question": "How can readers tell which tech claims to trust?",
+    "summary": "Students curate a one-page consumer guide comparing two tech products or claims. They evaluate source reliability, evidence strength, and write a recommendation blurb.",
+    "student_directions": [
+      "Pick two related tech claims/products to compare.",
+      "Analyze at least two sources for each, flagging bias and evidence strength.",
+      "Write a concise recommendation paragraph with a credibility rating."
+    ],
+    "checkpoints": [
+      {
+        "day": 1,
+        "title": "Claim selection & sources",
+        "tasks": ["Select claims/products", "Gather two sources each", "Rate initial credibility"],
+        "evidence": ["Claim list", "Credibility ratings"]
+      },
+      {
+        "day": 2,
+        "title": "Evidence analysis",
+        "tasks": ["Highlight strongest evidence", "Note bias/intent", "Draft recommendation bullets"],
+        "evidence": ["Annotated sources", "Bullet draft"]
+      },
+      {
+        "day": 3,
+        "title": "Guide publish",
+        "tasks": ["Design one-page guide", "Peer review for clarity", "Publish or present"],
+        "evidence": ["Final guide", "Peer review notes"]
+      }
+    ],
+    "rubric": [
+      {
+        "criterion": "Source evaluation",
+        "levels": {
+          "4": "Consistently distinguishes credible vs. biased sources with clear evidence.",
+          "3": "Generally accurate credibility ratings with some justification.",
+          "2": "Limited justification or mixed-up ratings.",
+          "1": "Ratings missing or unsupported."
+        }
+      },
+      {
+        "criterion": "Evidence strength",
+        "levels": {
+          "4": "Explains why evidence is strong/weak and ties to claim.",
+          "3": "Identifies strong/weak evidence with basic notes.",
+          "2": "Evidence listed without analysis.",
+          "1": "Evidence missing."
+        }
+      },
+      {
+        "criterion": "Recommendation clarity",
+        "levels": {
+          "4": "Concise, audience-friendly, with actionable rating.",
+          "3": "Clear recommendation; minor vagueness.",
+          "2": "Recommendation unclear or unsupported.",
+          "1": "No clear recommendation."
+        }
+      }
+    ],
+    "differentiation": {
+      "supports": [
+        "Provide pre-selected article set for one claim.",
+        "Allow audio notes instead of written annotations."
+      ],
+      "extensions": [
+        "Add a third source type (podcast, interview).",
+        "Include a section on how to fact-check next time."
+      ]
+    },
+    "assets": [
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/7-ela-informational/tech-consumer-guide-brief",
+        "title": "Project Brief: Tech Consumer Guide",
+        "description": "Templates for source analysis, bias flags, and recommendation blurbs.",
+        "kind": "project",
+        "tags": ["project", "media-literacy"],
+        "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "7-ela-informational-tech-consumer-guide",
+          "activity_type": "project",
+          "estimated_time_minutes": 135,
+          "difficulty": 3,
+          "skills": ["reading_informational", "evidence_reasoning"],
+          "standards": ["RI.7.8"],
+          "home_extension": true,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      },
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/7-ela-informational/tech-consumer-guide-rubric",
+        "title": "Rubric: Tech Consumer Guide",
+        "description": "3-criterion rubric for source evaluation, evidence strength, and clarity.",
+        "kind": "assessment",
+        "tags": ["rubric", "project"],
+        "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "7-ela-informational-tech-consumer-guide",
+          "assessment_type": "project_rubric",
+          "estimated_time_minutes": 20,
+          "difficulty": 3,
+          "skills": ["reading_informational"],
+          "standards": ["RI.7.8"],
+          "home_extension": false,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      }
+    ]
+  },
+  {
+    "project_slug": "8-math-systems-startup-budget",
+    "module_slug": "8-mathematics-number-and-operations-expressions-and-equations",
+    "lesson_slug": "8-mathematics-number-and-operations-expressions-and-equations-launch",
+    "grade_band": "8",
+    "subject": "math",
+    "title": "Startup Budget Scenarios",
+    "duration_days": 4,
+    "driving_question": "Which pricing model keeps a small startup profitable?",
+    "summary": "Students compare two business plans modeled by linear systems (subscription vs. one-time fee). They solve systems, graph break-even points, and recommend a plan with reasoning.",
+    "student_directions": [
+      "Choose two pricing models for the same product/service.",
+      "Write equations for revenue/cost and solve the system with two methods.",
+      "Graph, interpret the intersection, and write a recommendation memo."
+    ],
+    "checkpoints": [
+      {
+        "day": 1,
+        "title": "Scenario setup",
+        "tasks": ["Select product and two pricing models", "Draft equations"],
+        "evidence": ["Equation draft", "Assumptions list"]
+      },
+      {
+        "day": 2,
+        "title": "Solve & compare",
+        "tasks": ["Solve with two methods", "Check solutions"],
+        "evidence": ["Worked solutions", "Method comparison notes"]
+      },
+      {
+        "day": 3,
+        "title": "Graph & analyze",
+        "tasks": ["Graph both lines", "Interpret intersection and realistic domain"],
+        "evidence": ["Graph", "Interpretation sentences"]
+      },
+      {
+        "day": 4,
+        "title": "Memo & pitch",
+        "tasks": ["Write one-page recommendation memo", "Share a 2-minute pitch"],
+        "evidence": ["Memo", "Pitch notes"]
+      }
+    ],
+    "rubric": [
+      {
+        "criterion": "System accuracy",
+        "levels": {
+          "4": "Equations, solutions, and graph align; intersection interpreted precisely.",
+          "3": "Minor errors fixed; interpretation mostly clear.",
+          "2": "Errors in solving or graphing; unclear intersection meaning.",
+          "1": "Systems not solved or graphed coherently."
+        }
+      },
+      {
+        "criterion": "Method reasoning",
+        "levels": {
+          "4": "Compares methods and justifies choice for this scenario.",
+          "3": "Uses two methods with some reasoning.",
+          "2": "Methods attempted with little reflection.",
+          "1": "Single or incorrect method without reflection."
+        }
+      },
+      {
+        "criterion": "Recommendation quality",
+        "levels": {
+          "4": "Memo ties math to business decision and domain limits.",
+          "3": "Clear recommendation with some math references.",
+          "2": "Recommendation weakly linked to math.",
+          "1": "No clear recommendation."
+        }
+      }
+    ],
+    "differentiation": {
+      "supports": [
+        "Provide template equation frames.",
+        "Offer graph paper with pre-set axes and scales."
+      ],
+      "extensions": [
+        "Add a third model and compare intersections.",
+        "Incorporate fixed costs vs. variable costs explicitly."
+      ]
+    },
+    "assets": [
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/8-math-systems/startup-budget-brief",
+        "title": "Project Brief: Startup Budget Scenarios",
+        "description": "Scenario prompts, modeling templates, and memo outline.",
+        "kind": "project",
+        "tags": ["project", "systems", "budget"],
+        "lessonSlug": "8-mathematics-number-and-operations-expressions-and-equations-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "8-math-systems-startup-budget",
+          "activity_type": "project",
+          "estimated_time_minutes": 180,
+          "difficulty": 3,
+          "skills": ["expressions_equations", "functions_linear"],
+          "standards": ["8.EE.C.8"],
+          "home_extension": true,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      },
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/8-math-systems/startup-budget-rubric",
+        "title": "Rubric: Startup Budget Scenarios",
+        "description": "Rubric for system accuracy, method reasoning, and recommendation quality.",
+        "kind": "assessment",
+        "tags": ["rubric", "project"],
+        "lessonSlug": "8-mathematics-number-and-operations-expressions-and-equations-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "8-math-systems-startup-budget",
+          "assessment_type": "project_rubric",
+          "estimated_time_minutes": 20,
+          "difficulty": 3,
+          "skills": ["expressions_equations"],
+          "standards": ["8.EE.C.8"],
+          "home_extension": false,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      }
+    ]
+  },
+  {
+    "project_slug": "8-ela-argument-policy-brief",
+    "module_slug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage",
+    "lesson_slug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+    "grade_band": "8",
+    "subject": "english",
+    "title": "Policy Brief & Pitch",
+    "duration_days": 4,
+    "driving_question": "What policy change should our school or city adopt, and why?",
+    "summary": "Students craft a concise policy brief with claim, evidence, counterclaim, and a 2-minute pitch. They integrate at least two sources and a data point.",
+    "student_directions": [
+      "Choose a school/city policy topic and audience.",
+      "Collect two sources and one data point; draft claim, reasons, and counterclaim.",
+      "Write a one-page brief and deliver a 2-minute pitch."
+    ],
+    "checkpoints": [
+      {
+        "day": 1,
+        "title": "Topic + sources",
+        "tasks": ["Select topic/audience", "Find two credible sources", "Capture one data point"],
+        "evidence": ["Source list", "Data snippet"]
+      },
+      {
+        "day": 2,
+        "title": "Draft & counterclaim",
+        "tasks": ["Draft claim/reasons", "Add counterclaim + rebuttal", "Integrate data"],
+        "evidence": ["Draft paragraphs", "Highlighted counterclaim"]
+      },
+      {
+        "day": 3,
+        "title": "Revise & design",
+        "tasks": ["Polish brief with checklist", "Design pitch slide or cue card"],
+        "evidence": ["Revised brief", "Slide/cue card"]
+      },
+      {
+        "day": 4,
+        "title": "Pitch & feedback",
+        "tasks": ["Deliver pitch", "Collect peer/teacher feedback", "Write reflection"],
+        "evidence": ["Pitch recording/notes", "Reflection"]
+      }
+    ],
+    "rubric": [
+      {
+        "criterion": "Argument strength",
+        "levels": {
+          "4": "Claim, reasons, and rebuttal are precise and well-evidenced with data.",
+          "3": "Clear claim with evidence; rebuttal present.",
+          "2": "Partial evidence or weak rebuttal.",
+          "1": "Claim unclear; evidence missing."
+        }
+      },
+      {
+        "criterion": "Organization & clarity",
+        "levels": {
+          "4": "Brief is concise, well-structured, and audience-ready.",
+          "3": "Mostly organized; minor clarity issues.",
+          "2": "Some disorganization or wordiness.",
+          "1": "Hard to follow."
+        }
+      },
+      {
+        "criterion": "Delivery",
+        "levels": {
+          "4": "Pitch is engaging, timed, and uses evidence confidently.",
+          "3": "Clear delivery; minor timing or evidence gaps.",
+          "2": "Uneven delivery; limited evidence references.",
+          "1": "Unclear or off-topic delivery."
+        }
+      }
+    ],
+    "differentiation": {
+      "supports": [
+        "Provide sentence starters for rebuttals.",
+        "Allow recorded pitch instead of live delivery."
+      ],
+      "extensions": [
+        "Include stakeholder quotes or survey data.",
+        "Publish the brief to a class site and invite responses."
+      ]
+    },
+    "assets": [
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/8-ela-argument/policy-brief-brief",
+        "title": "Project Brief: Policy Brief & Pitch",
+        "description": "One-page template, model paragraphs, and pitch guidance.",
+        "kind": "project",
+        "tags": ["project", "policy", "pitch"],
+        "lessonSlug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "8-ela-argument-policy-brief",
+          "activity_type": "project",
+          "estimated_time_minutes": 180,
+          "difficulty": 3,
+          "skills": ["argument_writing", "evidence_reasoning"],
+          "standards": ["W.8.1"],
+          "home_extension": true,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      },
+      {
+        "source": "ElevatED Authoring",
+        "url": "https://curriculum.elevated.family/projects/8-ela-argument/policy-brief-rubric",
+        "title": "Rubric: Policy Brief & Pitch",
+        "description": "Criteria for argument strength, organization, and delivery.",
+        "kind": "assessment",
+        "tags": ["rubric", "project"],
+        "lessonSlug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+        "license": "CC BY",
+        "metadata": {
+          "project_slug": "8-ela-argument-policy-brief",
+          "assessment_type": "project_rubric",
+          "estimated_time_minutes": 20,
+          "difficulty": 3,
+          "skills": ["argument_writing"],
+          "standards": ["W.8.1"],
+          "home_extension": false,
+          "storage_mode": "link",
+          "source_provider": "ElevatED Authoring",
+          "last_verified_at": "2024-04-05T00:00:00Z"
+        }
+      }
+    ]
+  }
+]

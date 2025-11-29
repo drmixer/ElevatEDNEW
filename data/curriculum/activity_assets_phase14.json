@@ -1,0 +1,1154 @@
+{
+  "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-math-ratios/rate-card-gallery-walk",
+      "title": "Rate Card Gallery Walk",
+      "description": "Small groups circulate through stations comparing rate tables, tape diagrams, and double-number-line models. Each stop asks for a quick annotation about which representation is most efficient and why.",
+      "kind": "activity",
+      "tags": ["collaborative", "teacher-led", "representation"],
+      "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "ratios_gallery_walk",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["ratios_proportions"],
+        "standards": ["6.RP.A.3"],
+        "home_extension": false,
+        "grouping": "Trios rotate every 3–4 minutes",
+        "materials": ["Rate/speed mini cards", "Chart paper for annotations", "Markers"],
+        "outcomes": [
+          "Explain how unit rate appears across representations",
+          "Justify which model is best for a given context"
+        ],
+        "checkpoints": [
+          "After two stations, ask each group to surface one connection they noticed.",
+          "Cold-call one station to present a sample annotation for peer feedback."
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-math-ratios/unit-rate-sprint",
+      "title": "Unit Rate Sprint",
+      "description": "Timed independent reps converting ratio tables and tape diagrams to unit rates. Students annotate which strategy they used and flag one item to discuss.",
+      "kind": "activity",
+      "tags": ["independent", "practice"],
+      "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "ratios_unit_rate_sprint",
+        "activity_type": "independent",
+        "estimated_time_minutes": 15,
+        "difficulty": 3,
+        "skills": ["ratios_proportions"],
+        "standards": ["6.RP.A.3"],
+        "home_extension": false,
+        "materials": ["Practice handout or digital deck", "Timer"],
+        "outcomes": [
+          "Fluency moving between ratio, rate, and unit rate",
+          "Self-identify a sticky step to revisit"
+        ],
+        "checkpoints": [
+          "3-minute burst, quick self-check with provided key",
+          "Partner compare on one flagged item"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-math-ratios/ratio-reflection-log",
+      "title": "Ratio Reflection Log",
+      "description": "Students jot two real-world ratios they noticed today, explain if each is proportional, and write one question for tomorrow. Optional home extension: capture a photo/example to share.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "ratios_reflection_log",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 8,
+        "difficulty": 2,
+        "skills": ["ratios_proportions"],
+        "standards": ["6.RP.A.3"],
+        "home_extension": true,
+        "materials": ["Exit slip template or notebook"],
+        "outcomes": [
+          "Surface everyday ratio contexts",
+          "Preview misconceptions to address next lesson"
+        ],
+        "checkpoints": [
+          "Collect one proportional/non-proportional example",
+          "Read aloud 1–2 questions to open tomorrow"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "6-mathematics-number-and-operations-expressions-and-equations": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-math-equations/equation-balance-lab",
+      "title": "Equation Balance Lab",
+      "description": "Teacher-led hanger and bar-model demo showing inverse operations. Students predict the next move before each reveal and justify it aloud.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative"],
+      "lessonSlug": "6-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "eq_balance_lab",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 22,
+        "difficulty": 3,
+        "skills": ["expressions_equations"],
+        "standards": ["6.EE.B.7"],
+        "home_extension": false,
+        "grouping": "Whole-class demo with pair check-ins",
+        "materials": ["Hanger/balance visuals", "Equation cards", "Sticky notes for predictions"],
+        "outcomes": [
+          "Link inverse operations to preserving equality",
+          "Practice narrating each algebraic step"
+        ],
+        "checkpoints": [
+          "Pause after first isolation step for a thumbs vote",
+          "Pairs write a one-step equation and swap for solution"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-math-equations/solve-and-sketch-stations",
+      "title": "Solve & Sketch Stations",
+      "description": "Students rotate through stations solving one-step equations and sketching a bar model or hanger that matches. A QR hint at each station nudges them toward balance reasoning.",
+      "kind": "activity",
+      "tags": ["independent", "stations"],
+      "lessonSlug": "6-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "eq_solve_sketch",
+        "activity_type": "independent",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["expressions_equations"],
+        "standards": ["6.EE.B.7"],
+        "home_extension": false,
+        "materials": ["Station cards with equations", "Scratch paper", "Optional QR hints"],
+        "outcomes": [
+          "Match symbolic work to a visual model",
+          "Build independence with inverse operations"
+        ],
+        "checkpoints": [
+          "Teacher stamps one station showing a correct sketch",
+          "Peer check using provided answer bands"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-math-equations/error-detective-exit",
+      "title": "Error Detective Exit",
+      "description": "Students analyze a worked example with a common misstep (e.g., subtracting on one side). They circle the error, correct it, and write one sentence on how to avoid it at home.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "6-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "eq_error_detective",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 8,
+        "difficulty": 2,
+        "skills": ["expressions_equations"],
+        "standards": ["6.EE.B.7"],
+        "home_extension": true,
+        "materials": ["Exit slip with flawed solution"],
+        "outcomes": [
+          "Spot and fix balance errors",
+          "Plan a quick home practice reminder"
+        ],
+        "checkpoints": [
+          "Share one corrected step with partner",
+          "Collect slips to sort by misconception for reteach"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "7-mathematics-number-and-operations-ratios-and-proportional-reasoning": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-math-ratios/proportional-scenarios-debate",
+      "title": "Proportional Scenarios Debate",
+      "description": "Teacher presents quick scenarios (rideshare fees, recipes, map scales). Teams decide if each is proportional, defend with evidence (graph/table/equation), and respond to a counterexample.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "discourse"],
+      "lessonSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "prop_scenarios_debate",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["ratios_proportions"],
+        "standards": ["7.RP.A.2"],
+        "home_extension": false,
+        "grouping": "Teams of 4 with rotating spokesperson",
+        "materials": ["Scenario slides", "Graph paper"],
+        "outcomes": [
+          "Identify constant of proportionality across contexts",
+          "Use multiple representations to justify reasoning"
+        ],
+        "checkpoints": [
+          "One-minute write: How do you know from the graph?",
+          "Swap spokespeople for final scenario to ensure full participation"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-math-ratios/graph-the-relationship-mini-set",
+      "title": "Graph the Relationship Mini-Set",
+      "description": "Independent mini-set: create a table, graph, and equation for two contexts; then label the constant of proportionality. Final item asks for a quick interpretation of slope.",
+      "kind": "activity",
+      "tags": ["independent", "practice"],
+      "lessonSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "prop_graph_set",
+        "activity_type": "independent",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["ratios_proportions"],
+        "standards": ["7.RP.A.2"],
+        "home_extension": false,
+        "materials": ["Graph paper or Desmos", "Calculator optional"],
+        "outcomes": [
+          "Translate between table, graph, and equation",
+          "State and interpret the constant of proportionality"
+        ],
+        "checkpoints": [
+          "Mid-set self-check with provided slope reminder",
+          "Teacher quick glance at one graph for feedback stamps"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-math-ratios/constant-of-proportionality-exit",
+      "title": "Constant of Proportionality Exit",
+      "description": "Quick exit: given a graph and a table, students write k, explain what it means, and note one real-life proportional relationship they can capture at home.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "prop_exit_constant",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 7,
+        "difficulty": 2,
+        "skills": ["ratios_proportions"],
+        "standards": ["7.RP.A.2"],
+        "home_extension": true,
+        "materials": ["Half-sheet exit slip"],
+        "outcomes": [
+          "Reinforce interpreting k from different representations",
+          "Carry the idea into a home observation"
+        ],
+        "checkpoints": [
+          "One volunteer shares their k meaning",
+          "Collect slips to group by misconception for next warmup"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "7-mathematics-number-and-operations-expressions-and-equations": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-math-equations/inequality-card-sort",
+      "title": "Inequality Card Sort Huddle",
+      "description": "Students sort inequality cards (verbal, symbolic, number line) into matching sets, then justify which side is shaded and why the boundary is open/closed.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "card-sort"],
+      "lessonSlug": "7-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "inequality_card_sort",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["expressions_equations"],
+        "standards": ["7.EE.B.4a"],
+        "home_extension": false,
+        "grouping": "Pairs/triads sort and defend",
+        "materials": ["Inequality card sets", "Number line strips"],
+        "outcomes": [
+          "Connect multiple representations of inequalities",
+          "Explain solution sets using boundary language"
+        ],
+        "checkpoints": [
+          "Teacher listens for boundary wording before whole-class share",
+          "Swap one mis-sorted pair between groups to debug"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-math-equations/two-step-equation-ladder",
+      "title": "Two-Step Equation Ladder",
+      "description": "Independent laddered practice: four two-step equations ordered by complexity. Students annotate the inverse-operations plan before solving and star the step that felt most important.",
+      "kind": "activity",
+      "tags": ["independent", "practice"],
+      "lessonSlug": "7-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "two_step_ladder",
+        "activity_type": "independent",
+        "estimated_time_minutes": 17,
+        "difficulty": 3,
+        "skills": ["expressions_equations"],
+        "standards": ["7.EE.B.4a"],
+        "home_extension": false,
+        "materials": ["Practice ladder sheet", "Highlighters"],
+        "outcomes": [
+          "Plan and execute inverse steps explicitly",
+          "Notice structure before operating"
+        ],
+        "checkpoints": [
+          "Teacher checks one annotated plan mid-way",
+          "Students pair-check last item with color-coded steps"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-math-equations/when-is-it-true-exit",
+      "title": "When Is It True? Exit",
+      "description": "Students write one inequality that matches a given context, shade it, and explain when the statement would be false. Optional home extension: capture a photo of a real-world boundary.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "7-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "inequality_exit_true",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 8,
+        "difficulty": 2,
+        "skills": ["expressions_equations"],
+        "standards": ["7.EE.B.4a"],
+        "home_extension": true,
+        "materials": ["Exit slip with context prompt"],
+        "outcomes": [
+          "Tie inequality meaning to a concrete boundary",
+          "Anticipate where a statement fails"
+        ],
+        "checkpoints": [
+          "Collect 2–3 examples to project next lesson",
+          "Ask one student to share their home-boundary idea"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "8-mathematics-number-and-operations-expressions-and-equations": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-math-systems/method-match-challenge",
+      "title": "Method Match Challenge",
+      "description": "Teams receive system cards and decide whether graphing, substitution, or elimination is most efficient. They justify the pick and solve one to prove it.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "strategy"],
+      "lessonSlug": "8-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "systems_method_match",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 22,
+        "difficulty": 3,
+        "skills": ["expressions_equations", "functions_linear"],
+        "standards": ["8.EE.C.8"],
+        "home_extension": false,
+        "grouping": "Teams of 3–4",
+        "materials": ["System scenario cards", "Graph paper", "Colored pencils"],
+        "outcomes": [
+          "Choose efficient methods based on structure",
+          "Defend method selection with evidence"
+        ],
+        "checkpoints": [
+          "Each team posts one solved system with method tagged",
+          "Teacher cold-calls a team that changed methods and why"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-math-systems/graph-and-solve-studio",
+      "title": "Graph & Solve Studio",
+      "description": "Independent studio: students graph one system and solve another by substitution. A final item asks which method they would pick for a new system and why.",
+      "kind": "activity",
+      "tags": ["independent", "practice"],
+      "lessonSlug": "8-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "systems_graph_solve",
+        "activity_type": "independent",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["expressions_equations", "functions_linear"],
+        "standards": ["8.EE.C.8"],
+        "home_extension": false,
+        "materials": ["Graphing paper or Desmos", "Calculator optional"],
+        "outcomes": [
+          "Execute multiple methods accurately",
+          "Articulate method selection criteria"
+        ],
+        "checkpoints": [
+          "Teacher spot-checks graph intersection",
+          "Exit poll: Which method felt fastest today?"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-math-systems/system-choice-exit",
+      "title": "System Choice Exit",
+      "description": "Students pick the best method for a new system, explain their choice, and sketch the first step. Optional home extension: find a real context that would create intersecting lines.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "8-mathematics-number-and-operations-expressions-and-equations-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "systems_exit_choice",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 7,
+        "difficulty": 2,
+        "skills": ["expressions_equations", "functions_linear"],
+        "standards": ["8.EE.C.8"],
+        "home_extension": true,
+        "materials": ["Exit slip"],
+        "outcomes": [
+          "Solidify method-selection heuristics",
+          "Connect systems to a real-world intersection"
+        ],
+        "checkpoints": [
+          "Pair-share method choice in 60 seconds",
+          "Collect ideas to seed next lesson warmup"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "8-mathematics-geometry-and-measurement-pythagorean-theorem": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-math-pythagorean/map-walk-distance",
+      "title": "Right-Triangle Map Walk",
+      "description": "On grid maps, teams choose two points and estimate walking distance using right triangles. They compare estimates to map scale to discuss when the theorem applies.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "application"],
+      "lessonSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "pythagorean_map_walk",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["geometry_measurement"],
+        "standards": ["8.G.B.6"],
+        "home_extension": false,
+        "grouping": "Pairs with shared map",
+        "materials": ["Grid city/map printouts", "Rulers", "Highlighters"],
+        "outcomes": [
+          "Apply the theorem to realistic coordinates",
+          "Decide when straight-line distance is appropriate"
+        ],
+        "checkpoints": [
+          "Teacher conferences with one pair per group to check setup",
+          "Share-out: when would path length differ from straight-line?"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-math-pythagorean/proof-tiles-practice",
+      "title": "Pythagorean Proof Tiles",
+      "description": "Independent practice using square tiles or digital manipulatives: build squares on legs and hypotenuse, record areas, and verify a² + b² = c² for three right triangles.",
+      "kind": "activity",
+      "tags": ["independent", "manipulative"],
+      "lessonSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "pythagorean_tiles",
+        "activity_type": "independent",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["geometry_measurement"],
+        "standards": ["8.G.B.6"],
+        "home_extension": false,
+        "materials": ["Square tiles or digital tool", "Recording sheet"],
+        "outcomes": [
+          "Visualize the area relationship",
+          "Compute c given legs with accuracy"
+        ],
+        "checkpoints": [
+          "Teacher spot-checks one triangle build",
+          "Self-check with a non-right triangle to see failure"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-math-pythagorean/distance-in-my-world",
+      "title": "Distance in My World",
+      "description": "Exit/reflection: students pick two places from their life, sketch a right triangle on a grid, estimate distance with the theorem, and note one situation where it would not work.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "8-mathematics-geometry-and-measurement-pythagorean-theorem-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "pythagorean_home_extension",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 8,
+        "difficulty": 2,
+        "skills": ["geometry_measurement"],
+        "standards": ["8.G.B.6"],
+        "home_extension": true,
+        "materials": ["Exit slip", "Small grid"],
+        "outcomes": [
+          "Transfer theorem to personal contexts",
+          "Recognize limits of straight-line assumptions"
+        ],
+        "checkpoints": [
+          "Optional: bring a photo/map to discuss next class",
+          "Collect for quick scan of misconception about right angle requirement"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "6-english-language-arts-reading-literature-novellas-short-novels-pd": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-ela-literature/think-aloud-character-shift",
+      "title": "Think-Aloud: Character Shift",
+      "description": "Teacher models a read-aloud of a pivotal scene, pausing to annotate the narrator’s cues and internal shifts. Students track evidence in a shared T-chart.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "reading"],
+      "lessonSlug": "6-english-language-arts-reading-literature-novellas-short-novels-pd-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "lit_think_aloud_shift",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["reading_literature", "evidence_reasoning"],
+        "standards": ["RL.6.1"],
+        "home_extension": false,
+        "grouping": "Whole-group with partner annotations",
+        "materials": ["Excerpt copies", "Document camera or slides"],
+        "outcomes": [
+          "Cite textual evidence for character change",
+          "Model inner voice questions while reading"
+        ],
+        "checkpoints": [
+          "Partner whisper: what line signaled the shift?",
+          "One-sentence evidence share before moving on"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-ela-literature/evidence-flags",
+      "title": "Evidence Flags",
+      "description": "Students place sticky-note flags in their novella marking a line for character motive and a line for theme. They paraphrase the evidence and add a quick why-it-matters note.",
+      "kind": "activity",
+      "tags": ["independent", "reading", "annotation"],
+      "lessonSlug": "6-english-language-arts-reading-literature-novellas-short-novels-pd-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "lit_evidence_flags",
+        "activity_type": "independent",
+        "estimated_time_minutes": 15,
+        "difficulty": 3,
+        "skills": ["reading_literature", "evidence_reasoning"],
+        "standards": ["RL.6.1"],
+        "home_extension": false,
+        "materials": ["Novella/short novel", "Sticky notes"],
+        "outcomes": [
+          "Select precise evidence for motive and theme",
+          "Explain why evidence is compelling"
+        ],
+        "checkpoints": [
+          "Teacher spot-checks two flags per student",
+          "Peer swap: trade one flag and defend the choice"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-ela-literature/theme-snapshot-exit",
+      "title": "Theme Snapshot Exit",
+      "description": "Students write a two-sentence theme statement citing one line from today’s reading. Optional home extension: ask a family member which theme resonates and why.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension"],
+      "lessonSlug": "6-english-language-arts-reading-literature-novellas-short-novels-pd-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "lit_theme_exit",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 7,
+        "difficulty": 2,
+        "skills": ["reading_literature", "speaking_listening"],
+        "standards": ["RL.6.1"],
+        "home_extension": true,
+        "materials": ["Exit slip or notebook"],
+        "outcomes": [
+          "State a theme and anchor it to evidence",
+          "Invite a home conversation to deepen meaning"
+        ],
+        "checkpoints": [
+          "One volunteer shares their line aloud",
+          "Collect slips to sort for tomorrow's discussion groups"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-ela-argument/mentor-text-markup",
+      "title": "Mentor Text Mark-Up",
+      "description": "Teacher models annotating a short argument paragraph, color-coding claim, evidence, and reasoning. Students mirror the mark-up on paper copies.",
+      "kind": "activity",
+      "tags": ["teacher-led", "writing", "grammar"],
+      "lessonSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_mentor_markup_6",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["argument_writing", "evidence_reasoning", "vocabulary_language"],
+        "standards": ["W.6.1"],
+        "home_extension": false,
+        "grouping": "Whole-class mini-lesson",
+        "materials": ["Mentor paragraph", "Highlighters"],
+        "outcomes": [
+          "Identify claim/evidence/reasoning structure",
+          "Notice signal words and punctuation"
+        ],
+        "checkpoints": [
+          "Students underline one transition and share its job",
+          "Quick cold call: where does reasoning show up?"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-ela-argument/claim-evidence-quickwrite",
+      "title": "Claim-Evidence Quickwrite",
+      "description": "Independent 8–10 sentence quickwrite responding to a prompt. Students must bold their claim, italicize evidence, and underline the reasoning sentence.",
+      "kind": "activity",
+      "tags": ["independent", "writing"],
+      "lessonSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_quickwrite_6",
+        "activity_type": "independent",
+        "estimated_time_minutes": 16,
+        "difficulty": 3,
+        "skills": ["argument_writing", "evidence_reasoning"],
+        "standards": ["W.6.1"],
+        "home_extension": false,
+        "materials": ["Prompt slide", "Writing paper or doc"],
+        "outcomes": [
+          "Produce a concise argument paragraph",
+          "Visually separate components for self-check"
+        ],
+        "checkpoints": [
+          "Mid-write pause to highlight reasoning",
+          "Peer swap for one sentence of feedback"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/6-ela-argument/grammar-spot-check-exit",
+      "title": "Grammar Spot-Check Exit",
+      "description": "Students repair two sentences with punctuation/usage errors in a mini argument. Optional home extension: read the fixed version to someone and ask if it sounds convincing.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension", "grammar"],
+      "lessonSlug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_grammar_exit_6",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 7,
+        "difficulty": 2,
+        "skills": ["argument_writing", "vocabulary_language"],
+        "standards": ["W.6.1"],
+        "home_extension": true,
+        "materials": ["Exit slip with flawed sentences"],
+        "outcomes": [
+          "Apply grammar fixes to argument writing",
+          "Read aloud to check clarity"
+        ],
+        "checkpoints": [
+          "Whole-class choral read after fixing one sentence",
+          "Collect slips to target next mini-lesson"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "7-english-language-arts-reading-informational-science-tech-articles-open-licensed": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-ela-informational/source-reliability-gallery",
+      "title": "Source Reliability Gallery",
+      "description": "Teacher posts short excerpts from science/tech articles with source info. Groups rank reliability, highlight signal words, and justify their ranking.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "media-literacy"],
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "info_reliability_gallery_7",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["reading_informational", "evidence_reasoning"],
+        "standards": ["RI.7.8"],
+        "home_extension": false,
+        "grouping": "Stations or gallery walk",
+        "materials": ["Article excerpts", "Source blurbs"],
+        "outcomes": [
+          "Evaluate claims based on source credibility",
+          "Cite textual signals of bias or reliability"
+        ],
+        "checkpoints": [
+          "Require one quote to back each ranking",
+          "Share one 'most trustworthy' excerpt and why"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-ela-informational/claim-vs-evidence-sort",
+      "title": "Claim vs. Evidence Sort",
+      "description": "Independent drag-and-drop or cut-and-sort: separate claims from supporting evidence within a short article, then rewrite one paired reasoning sentence.",
+      "kind": "activity",
+      "tags": ["independent", "analysis"],
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "info_claim_sort_7",
+        "activity_type": "independent",
+        "estimated_time_minutes": 15,
+        "difficulty": 3,
+        "skills": ["reading_informational", "evidence_reasoning"],
+        "standards": ["RI.7.8"],
+        "home_extension": false,
+        "materials": ["Cut-and-sort strips or digital cards"],
+        "outcomes": [
+          "Distinguish claims from evidence",
+          "Draft reasoning that links evidence to claim"
+        ],
+        "checkpoints": [
+          "Teacher checks one rewrite sentence",
+          "Peer swap for a quick sense-check"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-ela-informational/which-source-exit",
+      "title": "Which Source? Exit",
+      "description": "Students pick the most credible source from two short blurbs, cite one reason, and note where they’d verify the claim at home.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension", "media-literacy"],
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "info_exit_source_7",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 7,
+        "difficulty": 2,
+        "skills": ["reading_informational", "speaking_listening"],
+        "standards": ["RI.7.8"],
+        "home_extension": true,
+        "materials": ["Two short source blurbs"],
+        "outcomes": [
+          "Apply credibility checks quickly",
+          "Extend checking behavior outside class"
+        ],
+        "checkpoints": [
+          "One volunteer defends their pick",
+          "Ask for a home verification idea to reopen next class"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-ela-argument/counterclaim-carousel",
+      "title": "Counterclaim Carousel",
+      "description": "Teacher seeds 3–4 common counterclaims around a prompt. Groups rotate, crafting a rebuttal sentence and a grammar check (comma/semicolon) at each stop.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "grammar"],
+      "lessonSlug": "7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_counterclaim_carousel_7",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["argument_writing", "vocabulary_language", "evidence_reasoning"],
+        "standards": ["W.7.1"],
+        "home_extension": false,
+        "grouping": "Groups of 3 rotate every 4 minutes",
+        "materials": ["Chart paper counterclaims", "Markers"],
+        "outcomes": [
+          "Draft rebuttals that address counterclaims",
+          "Apply punctuation to complex sentences"
+        ],
+        "checkpoints": [
+          "Teacher highlights one rebuttal per station",
+          "Class votes on the clearest counterclaim response"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-ela-argument/reasoning-ladder-draft",
+      "title": "Reasoning Ladder Draft",
+      "description": "Independent drafting of a body paragraph using a scaffolded ladder: claim → evidence → reasoning → stylistic upgrade. Students highlight the reasoning sentence in another color.",
+      "kind": "activity",
+      "tags": ["independent", "writing"],
+      "lessonSlug": "7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_reasoning_ladder_7",
+        "activity_type": "independent",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["argument_writing", "evidence_reasoning"],
+        "standards": ["W.7.1"],
+        "home_extension": false,
+        "materials": ["Ladder template", "Colored pens"],
+        "outcomes": [
+          "Compose a full paragraph with balanced parts",
+          "Spot gaps in reasoning before revising"
+        ],
+        "checkpoints": [
+          "Teacher initials once reasoning is highlighted",
+          "Optional peer micro-conference on clarity"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/7-ela-argument/peer-mini-conference-exit",
+      "title": "Peer Mini-Conference Exit",
+      "description": "Pairs swap a paragraph, read aloud one sentence, and give a sticky-note glow/grow. Home extension: read the paragraph to an adult and ask if the reasoning is convincing.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension", "peer-review"],
+      "lessonSlug": "7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_peer_exit_7",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 9,
+        "difficulty": 2,
+        "skills": ["argument_writing", "speaking_listening"],
+        "standards": ["W.7.1"],
+        "home_extension": true,
+        "materials": ["Sticky notes", "Peer conference prompt"],
+        "outcomes": [
+          "Practice concise peer feedback",
+          "Invite a home audience to react to reasoning"
+        ],
+        "checkpoints": [
+          "Collect one glow/grow to inform reteach",
+          "Ask for a show of hands: who wants teacher feedback next?"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "8-english-language-arts-reading-informational-science-tech-articles-open-licensed": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-ela-informational/bias-hunt-tech-news",
+      "title": "Bias Hunt in Tech News",
+      "description": "Teacher models skimming two contrasting tech news excerpts. Groups highlight charged language, missing data, and author intent, then rate bias on a 1–4 scale.",
+      "kind": "activity",
+      "tags": ["teacher-led", "collaborative", "media-literacy"],
+      "lessonSlug": "8-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "info_bias_hunt_8",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["reading_informational", "evidence_reasoning"],
+        "standards": ["RI.8.8"],
+        "home_extension": false,
+        "grouping": "Groups of 3",
+        "materials": ["Two short excerpts", "Bias rating scale"],
+        "outcomes": [
+          "Evaluate argument soundness and bias indicators",
+          "Use evidence to justify bias ratings"
+        ],
+        "checkpoints": [
+          "Require one quote per bias flag",
+          "Whole-class compare of bias ratings"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-ela-informational/evidence-weighing-notebook",
+      "title": "Evidence Weighing Notebook",
+      "description": "Independent notebook entry: gather two claims from a science/tech text, list the supporting evidence, and rate strength with a brief justification.",
+      "kind": "activity",
+      "tags": ["independent", "analysis"],
+      "lessonSlug": "8-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "info_evidence_weighing_8",
+        "activity_type": "independent",
+        "estimated_time_minutes": 16,
+        "difficulty": 3,
+        "skills": ["reading_informational", "evidence_reasoning"],
+        "standards": ["RI.8.8"],
+        "home_extension": false,
+        "materials": ["Notebook or doc", "Assigned article"],
+        "outcomes": [
+          "Differentiate strong vs. weak evidence",
+          "Explain why evidence supports or falls short"
+        ],
+        "checkpoints": [
+          "Teacher initials one strength rating",
+          "Peer compare: which evidence felt weakest?"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-ela-informational/credibility-check-exit",
+      "title": "Credibility Check Exit",
+      "description": "Students choose one article read today and jot: key claim, strongest evidence, and one place they’d fact-check it at home (database, expert, second source).",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension", "media-literacy"],
+      "lessonSlug": "8-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "info_exit_credibility_8",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 7,
+        "difficulty": 2,
+        "skills": ["reading_informational", "speaking_listening"],
+        "standards": ["RI.8.8"],
+        "home_extension": true,
+        "materials": ["Exit slip"],
+        "outcomes": [
+          "Summarize claim/evidence succinctly",
+          "Plan an independent fact-check step"
+        ],
+        "checkpoints": [
+          "Collect slips; sort by fact-check ideas",
+          "Invite one student to share a database/website suggestion"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ],
+  "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage": [
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-ela-argument/data-driven-hook",
+      "title": "Data-Driven Hook",
+      "description": "Teacher displays a data snippet or graph tied to the prompt. Class co-constructs a hook and claim using the data, noting precise language and punctuation.",
+      "kind": "activity",
+      "tags": ["teacher-led", "writing", "data"],
+      "lessonSlug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_data_hook_8",
+        "activity_type": "teacher_led",
+        "estimated_time_minutes": 18,
+        "difficulty": 3,
+        "skills": ["argument_writing", "evidence_reasoning", "vocabulary_language"],
+        "standards": ["W.8.1"],
+        "home_extension": false,
+        "grouping": "Whole-class mini-lesson",
+        "materials": ["Data snippet or infographic", "Projector"],
+        "outcomes": [
+          "Craft hooks grounded in evidence",
+          "Attend to grammar in complex introductory sentences"
+        ],
+        "checkpoints": [
+          "Students draft one alternative hook in pairs",
+          "Teacher spotlights a grammar upgrade live"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-ela-argument/outline-to-draft-sprint",
+      "title": "Outline-to-Draft Sprint",
+      "description": "Independent sprint: convert yesterday’s outline into one polished body paragraph. Students use a self-checklist for claim clarity, evidence integration, and transition variety.",
+      "kind": "activity",
+      "tags": ["independent", "writing"],
+      "lessonSlug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_outline_sprint_8",
+        "activity_type": "independent",
+        "estimated_time_minutes": 20,
+        "difficulty": 3,
+        "skills": ["argument_writing"],
+        "standards": ["W.8.1"],
+        "home_extension": false,
+        "materials": ["Outline", "Checklist", "Writing tool"],
+        "outcomes": [
+          "Develop a cohesive paragraph from outline",
+          "Self-assess transitions and evidence integration"
+        ],
+        "checkpoints": [
+          "Teacher initials once checklist is used",
+          "Optional peer read-aloud of one sentence"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    },
+    {
+      "source": "ElevatED Authoring",
+      "url": "https://curriculum.elevated.family/activities/8-ela-argument/revision-exit-checklist",
+      "title": "Revision Exit Checklist",
+      "description": "Students complete a 4-item checklist (claim strength, counterclaim, sentence variety, citation punctuation). Home extension: read the revised paragraph to someone and ask if the reasoning is clear.",
+      "kind": "activity",
+      "tags": ["reflection", "home_extension", "revision"],
+      "lessonSlug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage-launch",
+      "license": "CC BY",
+      "metadata": {
+        "activity_id": "arg_revision_exit_8",
+        "activity_type": "reflection",
+        "estimated_time_minutes": 8,
+        "difficulty": 2,
+        "skills": ["argument_writing", "speaking_listening"],
+        "standards": ["W.8.1"],
+        "home_extension": true,
+        "materials": ["Checklist slip"],
+        "outcomes": [
+          "Revisit key revision levers",
+          "Invite an outside listener to gauge clarity"
+        ],
+        "checkpoints": [
+          "Teacher collects for next-day mini-lesson focus",
+          "Students star one item they want feedback on"
+        ],
+        "storage_mode": "link",
+        "source_provider": "ElevatED Authoring",
+        "last_verified_at": "2024-04-05T00:00:00Z"
+      }
+    }
+  ]
+}

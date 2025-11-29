@@ -27,8 +27,54 @@ const notificationLabel = (notification: NotificationItem): { text: string; tone
       return { text: 'Mastery', tone: 'bg-rose-50 text-rose-700 border-rose-100' };
     case 'streak_milestone':
       return { text: 'Streak', tone: 'bg-emerald-50 text-emerald-700 border-emerald-100' };
+    case 'skill_mastered':
+      return { text: 'Skill mastered', tone: 'bg-emerald-50 text-emerald-700 border-emerald-100' };
+    case 'goal_met':
+      return { text: 'Goal met', tone: 'bg-indigo-50 text-indigo-700 border-indigo-100' };
+    case 'consistent_low_performance':
+      return { text: 'Needs attention', tone: 'bg-orange-50 text-orange-700 border-orange-100' };
     default:
       return { text: 'Update', tone: 'bg-slate-50 text-slate-700 border-slate-100' };
+  }
+};
+
+const resolveNotificationLink = (notification: NotificationItem): { href: string; label: string } | null => {
+  const targetUrl =
+    typeof (notification.data?.targetUrl as string | undefined) === 'string'
+      ? (notification.data.targetUrl as string)
+      : null;
+  if (targetUrl) {
+    return { href: targetUrl, label: 'Open' };
+  }
+
+  switch (notification.notificationType) {
+    case 'skill_mastered':
+      return { href: '/parent#weekly-snapshot', label: 'See highlight' };
+    case 'goal_met':
+      return { href: '/parent#goal-planner', label: 'Review goal' };
+    case 'consistent_low_performance':
+      return { href: '/parent#skill-gaps', label: 'See gaps' };
+    case 'assignment_overdue':
+      return { href: '/parent#assignments', label: 'View assignment' };
+    default:
+      return null;
+  }
+};
+
+const humanizeNotificationBody = (notification: NotificationItem): string => {
+  if (notification.body) return notification.body;
+  const subject = typeof notification.data?.subject === 'string' ? notification.data.subject : null;
+  const student = typeof notification.data?.studentName === 'string' ? notification.data.studentName : 'Your learner';
+
+  switch (notification.notificationType) {
+    case 'skill_mastered':
+      return `${student} mastered ${subject ?? 'a targeted skill'}. Celebrate and move them forward.`;
+    case 'goal_met':
+      return `${student} just hit a goal. Keep momentum by setting the next milestone.`;
+    case 'consistent_low_performance':
+      return `${student} is trending low in ${subject ?? 'a focus area'}. Review the plan and add a quick practice set.`;
+    default:
+      return 'An update is available.';
   }
 };
 
@@ -106,6 +152,8 @@ const NotificationCenter: React.FC<Props> = ({ user }) => {
   const renderNotification = (notification: NotificationItem) => {
     const label = notificationLabel(notification);
     const isRead = notification.isRead;
+    const link = resolveNotificationLink(notification);
+    const bodyText = humanizeNotificationBody(notification);
 
     return (
       <div
@@ -139,7 +187,7 @@ const NotificationCenter: React.FC<Props> = ({ user }) => {
               <div className="text-sm font-semibold text-gray-900">
                 {notification.title ?? 'Notification'}
               </div>
-              <div className="text-sm text-gray-600">{notification.body ?? 'An update is available.'}</div>
+              <div className="text-sm text-gray-600">{bodyText}</div>
               <div className="flex items-center gap-3 text-xs text-gray-500">
                 <span className="inline-flex items-center gap-1">
                   <Clock className="h-3 w-3" />
@@ -152,6 +200,18 @@ const NotificationCenter: React.FC<Props> = ({ user }) => {
                   </span>
                 )}
               </div>
+              {link && (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    window.location.assign(link.href);
+                  }}
+                  className="text-xs font-semibold text-brand-blue hover:text-brand-violet"
+                >
+                  {link.label}
+                </button>
+              )}
             </div>
             <button
               type="button"

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import {
   AlertTriangle,
   Bell,
@@ -12,7 +13,6 @@ import {
   Link2,
   CreditCard,
   ArrowUpRight,
-  DollarSign,
   RefreshCw,
   ShieldCheck,
   Sparkles,
@@ -20,6 +20,7 @@ import {
   Target,
   TrendingUp,
   Users,
+  Lock,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -34,6 +35,7 @@ import {
   Bar,
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
+import { useEntitlements } from '../../contexts/EntitlementsContext';
 import type {
   AssignmentStatus,
   Parent,
@@ -41,6 +43,7 @@ import type {
   PrivacyRequestStatus,
   PrivacyRequestType,
   Subject,
+  SkillGapInsight,
 } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
@@ -53,15 +56,56 @@ import {
   upsertChildGoals,
 } from '../../services/parentService';
 import {
-  fetchBillingPlans,
-  fetchBillingSummary,
   openBillingPortal,
   startCheckoutSession,
 } from '../../services/billingService';
 import { listPrivacyRequests, submitPrivacyRequest } from '../../services/privacyService';
+import { formatSubjectLabel } from '../../lib/subjects';
+import { studySkillsModules } from '../../data/studySkillsModules';
+import { limitLabel } from '../../lib/entitlements';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
+);
+
+const PlanTag: React.FC<{ label: string; locked?: boolean }> = ({ label, locked = false }) => (
+  <span
+    className={`inline-flex items-center text-[11px] px-2 py-1 rounded-full border ${
+      locked
+        ? 'border-amber-200 bg-amber-50 text-amber-700'
+        : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+    }`}
+  >
+    {locked ? `Locked · ${label}` : `${label} included`}
+  </span>
+);
+
+const LockedFeature: React.FC<{
+  title: string;
+  description: string;
+  onUpgrade?: () => void;
+  ctaLabel?: string;
+}> = ({ title, description, onUpgrade, ctaLabel = 'Unlock with Family Plus' }) => (
+  <div className="rounded-2xl border border-dashed border-amber-200 bg-amber-50/60 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div className="flex items-start gap-3">
+      <div className="h-10 w-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
+        <Lock className="h-5 w-5" />
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-amber-800">{title}</p>
+        <p className="text-xs text-amber-700">{description}</p>
+      </div>
+    </div>
+    {onUpgrade && (
+      <button
+        type="button"
+        onClick={onUpgrade}
+        className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
+      >
+        {ctaLabel}
+      </button>
+    )}
+  </div>
 );
 
 type GoalFormState = {
@@ -73,8 +117,17 @@ type GoalFormState = {
 const ParentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const parent = (user as Parent) ?? null;
+  const {
+    entitlements,
+    billingSummary,
+    availablePlans,
+    loading: entitlementsLoading,
+    error: entitlementsError,
+    refresh: refreshEntitlements,
+  } = useEntitlements();
   const queryClient = useQueryClient();
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+  const [insightTab, setInsightTab] = useState<'overview' | 'skill_gaps'>('overview');
   const [moduleSearch, setModuleSearch] = useState('');
   const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
   const [dueDate, setDueDate] = useState('');
@@ -98,6 +151,20 @@ const ParentDashboard: React.FC = () => {
   const [privacyContact, setPrivacyContact] = useState(parent?.email ?? '');
   const [privacyMessage, setPrivacyMessage] = useState<string | null>(null);
   const [privacyError, setPrivacyError] = useState<string | null>(null);
+  const [newLearnerName, setNewLearnerName] = useState('');
+  const [newLearnerGrade, setNewLearnerGrade] = useState<number>(3);
+  const [generatedFamilyCode, setGeneratedFamilyCode] = useState('');
+  const [onboardingMessage, setOnboardingMessage] = useState<string | null>(null);
+  const [onboardingError, setOnboardingError] = useState<string | null>(null);
+  const [onboardingPrefs, setOnboardingPrefs] = useState<{
+    diagnosticScheduled: boolean;
+    dismissed: boolean;
+    preparedLearner: boolean;
+  }>({
+    diagnosticScheduled: false,
+    dismissed: false,
+    preparedLearner: false,
+  });
 
   const {
     data: dashboard,
@@ -132,6 +199,32 @@ const ParentDashboard: React.FC = () => {
     setPrivacyContact(parent?.email ?? '');
   }, [parent?.email]);
 
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      const saved = localStorage.getItem(`family-onboarding-${parent.id}`);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Partial<typeof onboardingPrefs>;
+        setOnboardingPrefs((prev) => ({
+          diagnosticScheduled: parsed.diagnosticScheduled ?? prev.diagnosticScheduled,
+          dismissed: parsed.dismissed ?? prev.dismissed,
+          preparedLearner: parsed.preparedLearner ?? prev.preparedLearner,
+        }));
+      }
+    } catch (storageError) {
+      console.warn('[ParentDashboard] Unable to restore onboarding prefs', storageError);
+    }
+  }, [parent?.id]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      localStorage.setItem(`family-onboarding-${parent.id}`, JSON.stringify(onboardingPrefs));
+    } catch (storageError) {
+      console.warn('[ParentDashboard] Unable to persist onboarding prefs', storageError);
+    }
+  }, [parent?.id, onboardingPrefs]);
+
   const currentChild: ParentChildSnapshot | null = useMemo(() => {
     if (!dashboard?.children.length) return null;
     return (
@@ -160,6 +253,10 @@ const ParentDashboard: React.FC = () => {
     });
   }, [currentChild]);
 
+  useEffect(() => {
+    setInsightTab('overview');
+  }, [currentChild?.id]);
+
   const familyActivityData = useMemo(() => {
     if (!dashboard) return [];
     return dashboard.activitySeries.map((point) => ({
@@ -172,15 +269,157 @@ const ParentDashboard: React.FC = () => {
   const childMasteryData = useMemo(() => {
     if (!currentChild) return [];
     return currentChild.masteryBySubject.map((subject) => ({
-      subject:
-        subject.subject === 'social_studies'
-          ? 'Social Studies'
-          : subject.subject.charAt(0).toUpperCase() + subject.subject.slice(1),
+      subject: formatSubjectLabel(subject.subject),
       mastery: Math.round(subject.mastery),
     }));
   }, [currentChild]);
 
+  const lowestSubject = useMemo(() => {
+    if (!currentChild?.masteryBySubject?.length) return null;
+    return (
+      currentChild.masteryBySubject.slice().sort((a, b) => a.mastery - b.mastery)[0] ?? null
+    );
+  }, [currentChild?.masteryBySubject]);
+
+  const strongestSubject = useMemo(() => {
+    if (!currentChild?.masteryBySubject?.length) return null;
+    return (
+      currentChild.masteryBySubject.slice().sort((a, b) => b.mastery - a.mastery)[0] ?? null
+    );
+  }, [currentChild?.masteryBySubject]);
+
+  const childSkillGaps: SkillGapInsight[] = useMemo(() => {
+    if (!currentChild) return [];
+    if (currentChild.skillGaps?.length) return currentChild.skillGaps;
+    if (!currentChild.masteryBySubject.length) return [];
+    const sorted = currentChild.masteryBySubject.slice().sort((a, b) => a.mastery - b.mastery).slice(0, 2);
+    return sorted.map((entry) => {
+      const concept = currentChild.focusAreas[0] ?? formatSubjectLabel(entry.subject);
+      const status: SkillGapInsight['status'] = entry.mastery < 55 ? 'needs_attention' : 'watch';
+      return {
+        subject: entry.subject,
+        mastery: entry.mastery,
+        status,
+        summary: `${formatSubjectLabel(entry.subject)} mastery is ${Math.round(entry.mastery)}%.`,
+        concepts: currentChild.focusAreas.slice(0, 3).length
+          ? currentChild.focusAreas.slice(0, 3)
+          : [`${formatSubjectLabel(entry.subject)} foundations`],
+        actions: [
+          `Assign a ${formatSubjectLabel(entry.subject)} module on ${concept}.`,
+          `Encourage a 10-minute practice set to shore up ${concept}.`,
+          'Ask the AI tutor to reteach the last tricky concept together.',
+        ],
+      };
+    });
+  }, [currentChild]);
+
+  const weeklySnapshot = useMemo(() => {
+    if (!dashboard) return null;
+    const lessons = (dashboard.children ?? []).reduce(
+      (acc, child) => acc + (child.lessonsCompletedWeek ?? 0),
+      0,
+    );
+    const minutes = (dashboard.children ?? []).reduce(
+      (acc, child) => acc + (child.practiceMinutesWeek ?? 0),
+      0,
+    );
+    const topStreak = (dashboard.children ?? []).reduce(
+      (max, child) => Math.max(max, child.streakDays ?? 0),
+      0,
+    );
+    const childCount = (dashboard.children ?? []).length;
+    const averageMasteryRaw =
+      (dashboard.children ?? []).reduce((acc, child) => {
+        if (!child.masteryBySubject.length) return acc;
+        const avg =
+          child.masteryBySubject.reduce((masteryTotal, subject) => masteryTotal + subject.mastery, 0) /
+          child.masteryBySubject.length;
+        return acc + avg;
+      }, 0) / Math.max(childCount, 1);
+
+    const weekStartLabel = dashboard.weeklyReport?.weekStart
+      ? new Date(dashboard.weeklyReport.weekStart).toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+        })
+      : null;
+
+    return {
+      lessons,
+      minutes,
+      topStreak,
+      averageMastery:
+        childCount > 0 && Number.isFinite(averageMasteryRaw) ? Math.round(averageMasteryRaw) : null,
+      weekStartLabel,
+    };
+  }, [dashboard]);
+
+  const homeExtensions = currentChild?.homeExtensions ?? [];
+  const describeActivityType = (activityType?: string) => {
+    if (!activityType) return 'Activity';
+    const lookup: Record<string, string> = {
+      teacher_led: 'Teacher-led',
+      independent: 'Independent practice',
+      reflection: 'Reflection',
+      project: 'Project',
+    };
+    return lookup[activityType] ?? activityType.replace(/_/g, ' ');
+  };
+
+  const familyOverviewCards = useMemo(() => {
+    if (!dashboard?.children?.length) return [];
+    return dashboard.children.map((child) => {
+      const lowest = child.masteryBySubject.slice().sort((a, b) => a.mastery - b.mastery)[0] ?? null;
+      const average =
+        child.masteryBySubject.length > 0
+          ? child.masteryBySubject.reduce((acc, item) => acc + item.mastery, 0) /
+            child.masteryBySubject.length
+          : null;
+
+      const needsAttention =
+        (lowest?.mastery ?? 100) < 55 ||
+        ((child.lessonsCompletedWeek ?? 0) < 3 && (child.practiceMinutesWeek ?? 0) < 150);
+      const watchList = average !== null && average < 70;
+      const status = needsAttention ? 'attention' : watchList ? 'watch' : 'on_track';
+
+      return {
+        child,
+        lowest,
+        average,
+        status,
+      };
+    });
+  }, [dashboard?.children]);
+
   const showSkeleton = isLoading && !dashboard;
+
+  const realChildren = useMemo(
+    () => (dashboard?.children ?? []).filter((child) => !child.id.startsWith('fallback-')),
+    [dashboard?.children],
+  );
+  const seatLimit = entitlements.seatLimit ?? null;
+  const seatsUsed = realChildren.length;
+  const seatsRemaining = seatLimit !== null ? Math.max(seatLimit - seatsUsed, 0) : null;
+  const seatLimitReached = seatLimit !== null && seatsUsed >= seatLimit;
+  const hasRealChildren = realChildren.length > 0;
+  const hasGoalsSet = realChildren.some((child) => {
+    const hasWeekly = Boolean(child.goals?.weeklyLessons && child.goals.weeklyLessons > 0);
+    const hasMinutes = Boolean(child.goals?.practiceMinutes && child.goals.practiceMinutes > 0);
+    const hasMastery =
+      child.goals?.masteryTargets && Object.keys(child.goals.masteryTargets).length > 0;
+    return hasWeekly || hasMinutes || hasMastery;
+  });
+  const diagnosticCompleted = realChildren.some((child) =>
+    (child.recentActivity ?? []).some((activity) => {
+      const description = activity.description?.toLowerCase() ?? '';
+      return description.includes('diagnostic') || description.includes('assessment');
+    }),
+  );
+  const showDiagnosticEmpty = !diagnosticCompleted && !onboardingPrefs.diagnosticScheduled;
+  const showOnboardingChecklist =
+    !onboardingPrefs.dismissed && (!hasRealChildren || !hasGoalsSet || showDiagnosticEmpty);
+  const learnerStepDone = hasRealChildren || onboardingPrefs.preparedLearner;
+  const diagnosticStepDone = diagnosticCompleted || onboardingPrefs.diagnosticScheduled;
 
   const computePercent = (current: number, target?: number | null) => {
     if (!target || target <= 0) return null;
@@ -211,6 +450,8 @@ const ParentDashboard: React.FC = () => {
   const childProgress = currentChild?.progressSummary;
   const completedLessons = childProgress?.completed ?? currentChild?.lessonsCompletedWeek ?? 0;
   const inProgressLessons = childProgress?.inProgress ?? 0;
+  const celebrations = dashboard?.celebrations ?? [];
+  const celebrationPrompts = dashboard?.celebrationPrompts ?? [];
 
   const modulesQuery = useQuery({
     queryKey: ['assignable-modules', moduleSearch],
@@ -234,19 +475,6 @@ const ParentDashboard: React.FC = () => {
       setSelectedModuleId(moduleOptions[0].id);
     }
   }, [moduleOptions, selectedModuleId]);
-
-  const billingPlansQuery = useQuery({
-    queryKey: ['billing-plans'],
-    queryFn: fetchBillingPlans,
-    staleTime: 1000 * 60 * 10,
-  });
-
-  const billingSummaryQuery = useQuery({
-    queryKey: ['billing-summary', parent?.id],
-    queryFn: () => fetchBillingSummary(),
-    enabled: Boolean(parent),
-    staleTime: 1000 * 60 * 2,
-  });
 
   const guardianLinksQuery = useQuery({
     queryKey: ['guardian-links', parent?.id],
@@ -492,6 +720,10 @@ const ParentDashboard: React.FC = () => {
 
   const handleLinkGuardian = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (seatLimitReached) {
+      setGuardianError('You have reached the learner limit for your plan. Upgrade to add another learner.');
+      return;
+    }
     if (!guardianCode.trim()) {
       setGuardianError('Enter the family link code shared by the learner.');
       return;
@@ -502,6 +734,55 @@ const ParentDashboard: React.FC = () => {
       code: guardianCode,
       relationship: guardianRelationship,
     });
+  };
+
+  const handleGenerateFamilyCode = () => {
+    if (seatLimitReached) {
+      setOnboardingError('You have reached the learner limit for your plan. Upgrade to add more seats.');
+      return;
+    }
+    if (!newLearnerName.trim()) {
+      setOnboardingError('Add your learner name to generate a family link code.');
+      return;
+    }
+    const code = `${newLearnerName.trim().slice(0, 3).toUpperCase()}-${Math.random()
+      .toString(36)
+      .slice(2, 6)
+      .toUpperCase()}`;
+    setGeneratedFamilyCode(code);
+    setOnboardingMessage('Share this code with your learner to enter on their screen.');
+    setOnboardingError(null);
+    setOnboardingPrefs((prev) => ({ ...prev, preparedLearner: true }));
+    trackEvent('parent_generated_family_code', {
+      parentId: parent?.id,
+      grade: newLearnerGrade,
+    });
+  };
+
+  const handleScheduleDiagnostic = (when: 'now' | 'later') => {
+    setOnboardingPrefs((prev) => ({ ...prev, diagnosticScheduled: true }));
+    setOnboardingError(null);
+    setOnboardingMessage(
+      when === 'now'
+        ? 'Great! Start the diagnostic on your learner device to personalize their path.'
+        : 'Scheduled for later today. We will remind you in the dashboard.',
+    );
+    trackEvent('parent_schedule_diagnostic', {
+      parentId: parent?.id,
+      when,
+    });
+  };
+
+  const handleDismissOnboarding = () => {
+    setOnboardingPrefs((prev) => ({ ...prev, dismissed: true }));
+    trackEvent('parent_onboarding_dismissed', { parentId: parent?.id });
+  };
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const statusBadgeStyles: Record<AssignmentStatus, string> = {
@@ -515,24 +796,63 @@ const ParentDashboard: React.FC = () => {
     fulfilled: 'bg-emerald-100 text-emerald-700',
     rejected: 'bg-rose-100 text-rose-700',
   };
+  const skillGapStatusStyles: Record<SkillGapInsight['status'], string> = {
+    needs_attention: 'bg-rose-50 text-rose-700 border-rose-100',
+    watch: 'bg-amber-50 text-amber-700 border-amber-100',
+    improving: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+  };
+  const familyStatusStyles: Record<
+    'attention' | 'watch' | 'on_track',
+    { badge: string; border: string; label: string }
+  > = {
+    attention: {
+      badge: 'bg-rose-100 text-rose-700',
+      border: 'border-rose-200',
+      label: 'Needs attention this week',
+    },
+    watch: {
+      badge: 'bg-amber-100 text-amber-700',
+      border: 'border-amber-200',
+      label: 'Monitor progress',
+    },
+    on_track: {
+      badge: 'bg-emerald-100 text-emerald-700',
+      border: 'border-emerald-200',
+      label: 'On track',
+    },
+  };
 
-  const billingSummary = billingSummaryQuery.data;
-  const availablePlans = useMemo(
-    () => (billingPlansQuery.data ?? []).slice().sort((a, b) => a.priceCents - b.priceCents),
-    [billingPlansQuery.data],
+  const sortedPlans = useMemo(
+    () => (availablePlans ?? []).slice().sort((a, b) => a.priceCents - b.priceCents),
+    [availablePlans],
   );
-  const currentPlanSlug = billingSummary?.subscription?.plan?.slug ?? 'family-free';
-  const currentPlanPrice = billingSummary?.subscription?.plan?.priceCents ?? 0;
-  const nextPlan = availablePlans.find((plan) => plan.slug !== currentPlanSlug && plan.priceCents > currentPlanPrice);
-  const billingLoading = billingSummaryQuery.isLoading || billingPlansQuery.isLoading;
-  const billingErrored = billingSummaryQuery.isError || billingPlansQuery.isError;
+  const currentPlanSlug = entitlements.planSlug ?? 'family-free';
+  const currentPlanPrice = entitlements.priceCents ?? 0;
+  const nextPlan =
+    sortedPlans.find((plan) => plan.slug !== currentPlanSlug && plan.priceCents > currentPlanPrice) ??
+    sortedPlans.find((plan) => plan.slug !== currentPlanSlug);
+  const billingLoading = entitlementsLoading;
+  const billingErrored = Boolean(entitlementsError);
 
   const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
-  const currentPeriodEnd = billingSummary?.subscription?.currentPeriodEnd
-    ? new Date(billingSummary.subscription.currentPeriodEnd).toLocaleDateString()
+  const currentPeriodEnd = entitlements.renewsAt
+    ? new Date(entitlements.renewsAt).toLocaleDateString()
+    : null;
+  const trialEndsAt = entitlements.trialEndsAt ? new Date(entitlements.trialEndsAt) : null;
+  const trialDaysRemaining = trialEndsAt
+    ? Math.max(0, Math.ceil((trialEndsAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
     : null;
   const subscriptionMetadata = (billingSummary?.subscription?.metadata ?? {}) as Record<string, unknown>;
   const canManageBilling = Boolean((subscriptionMetadata?.stripe_customer_id as string | undefined) ?? null);
+
+  const handleUpgrade = (planSlug?: string) => {
+    const fallbackTarget =
+      nextPlan?.slug ??
+      sortedPlans.find((plan) => plan.slug !== currentPlanSlug)?.slug ??
+      'family-plus';
+    const target = planSlug ?? fallbackTarget;
+    checkoutMutation.mutate(target);
+  };
 
   if (!parent) {
     return null;
@@ -584,6 +904,7 @@ const ParentDashboard: React.FC = () => {
                   onClick={() => {
                     trackEvent('parent_dashboard_refresh', { parentId: parent.id });
                     refetch({ throwOnError: false });
+                    refreshEntitlements();
                   }}
                   className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
                   disabled={isFetching}
@@ -599,6 +920,32 @@ const ParentDashboard: React.FC = () => {
           </div>
         </motion.div>
 
+        {entitlements.isTrialing && trialDaysRemaining !== null && (
+          <div className="mb-6 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold">
+                {trialDaysRemaining <= 1
+                  ? 'Trial ends soon'
+                  : `Trial ends in ${trialDaysRemaining} day${trialDaysRemaining === 1 ? '' : 's'}`}
+              </p>
+              <p className="text-xs text-amber-700">
+                Keep AI weekly summaries and extra seats by upgrading before the trial ends. If you do nothing,
+                your account will move to Family Free.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <PlanTag label="Trial" locked />
+              <button
+                type="button"
+                onClick={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
+              >
+                Keep my benefits
+              </button>
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="mb-8 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex items-start space-x-3">
             <AlertTriangle className="h-5 w-5 mt-0.5" />
@@ -609,6 +956,217 @@ const ParentDashboard: React.FC = () => {
               </p>
             </div>
           </div>
+        )}
+
+        {showOnboardingChecklist && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="mb-8"
+          >
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                    Parent-first setup
+                  </p>
+                  <h3 className="text-xl font-bold text-slate-900 mt-1">Get your family set up in minutes</h3>
+                  <p className="text-sm text-slate-700">
+                    Follow the three steps: add or link a learner, set starter goals, then kick off a diagnostic now or
+                    later today.
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => scrollToSection('family-connections')}
+                    className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-light-teal text-brand-teal text-sm font-semibold hover:bg-brand-light-teal/80"
+                  >
+                    Go to Family Connections
+                  </button>
+                  <button
+                    onClick={handleDismissOnboarding}
+                    className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                  >
+                    Hide checklist
+                  </button>
+                </div>
+              </div>
+
+              {onboardingMessage && (
+                <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                  {onboardingMessage}
+                </p>
+              )}
+              {onboardingError && (
+                <p className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                  {onboardingError}
+                </p>
+              )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-5 w-5 text-brand-teal" />
+                      <span className="font-semibold text-gray-900">Step 1: Add or link a learner</span>
+                    </div>
+                    <span
+                      className={`text-[11px] px-2 py-1 rounded-full ${
+                        learnerStepDone ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                      }`}
+                    >
+                      {learnerStepDone ? 'Done' : 'Pending'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-700">
+                    Enter a learner name and grade to prep their invite. Share the family link code from their screen or
+                    the one you generate here.
+                  </p>
+                  <p className="text-[11px] text-slate-600">
+                    {seatLimit !== null
+                      ? `Seats used: ${seatsUsed}/${seatLimit}. ${
+                          seatLimitReached
+                            ? 'Upgrade to add another learner.'
+                            : `${seatsRemaining} seat${seatsRemaining === 1 ? '' : 's'} remaining.`
+                        }`
+                      : 'Family plan seats sync to your subscription.'}
+                  </p>
+                  {seatLimitReached && (
+                    <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
+                      <span>You have filled your current seats. Upgrade to link another learner.</span>
+                      <button
+                        type="button"
+                        onClick={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                        className="inline-flex items-center px-2 py-1 rounded-md bg-brand-blue text-white font-semibold hover:bg-brand-blue/90"
+                      >
+                        Unlock seats
+                      </button>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 gap-2">
+                    <input
+                      type="text"
+                      value={newLearnerName}
+                      onChange={(event) => setNewLearnerName(event.target.value)}
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                      placeholder="Learner name"
+                    />
+                    <select
+                      value={newLearnerGrade}
+                      onChange={(event) => setNewLearnerGrade(Number(event.target.value))}
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    >
+                      {Array.from({ length: 12 }, (_, index) => index + 1).map((grade) => (
+                        <option key={grade} value={grade}>
+                          Grade {grade}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={handleGenerateFamilyCode}
+                      disabled={seatLimitReached}
+                      className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-60"
+                    >
+                      Generate family link code
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => scrollToSection('family-connections')}
+                      className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                    >
+                      Link with existing code
+                    </button>
+                  </div>
+                  {generatedFamilyCode && (
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs">
+                      Share this with your learner: <span className="font-semibold">{generatedFamilyCode}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ClipboardList className="h-5 w-5 text-brand-blue" />
+                      <span className="font-semibold text-gray-900">Step 2: Set starter goals</span>
+                    </div>
+                    <span
+                      className={`text-[11px] px-2 py-1 rounded-full ${
+                        hasGoalsSet ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                      }`}
+                    >
+                      {hasGoalsSet ? 'Done' : 'Pending'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-700">
+                    Set weekly lessons, minutes, and focus subjects so the AI tutor and family digests stay on track.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('goal-planner')}
+                    className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-teal text-white text-sm font-semibold hover:bg-brand-teal/90"
+                  >
+                    Open goal planner
+                  </button>
+                  {!hasRealChildren && (
+                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                      Add or link a learner first to unlock goals.
+                    </p>
+                  )}
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-brand-violet" />
+                      <span className="font-semibold text-gray-900">Step 3: Diagnostic</span>
+                    </div>
+                    <span
+                      className={`text-[11px] px-2 py-1 rounded-full ${
+                        diagnosticStepDone ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                      }`}
+                    >
+                      {diagnosticStepDone ? 'Ready' : 'Not started'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-700">
+                    Run the adaptive check-in on the learner device now, or schedule it for later today so we can
+                    personalize their path.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleScheduleDiagnostic('now')}
+                      className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-violet text-white text-sm font-semibold hover:bg-brand-violet/90"
+                    >
+                      Start diagnostic now
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleScheduleDiagnostic('later')}
+                      className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                    >
+                      Schedule later today
+                    </button>
+                  </div>
+                  {showDiagnosticEmpty && (
+                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                      We have not seen a diagnostic yet. Start one to unlock calibrated lessons and reports.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-xs text-slate-600 border-t border-slate-100 pt-3">
+                Under-13 consent: linking a learner confirms you are their parent/guardian and agree to our privacy
+                policy for storing progress to personalize learning.
+              </div>
+            </div>
+          </motion.div>
         )}
 
         <motion.div
@@ -625,30 +1183,61 @@ const ParentDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-gray-500 mb-1">Plan</p>
                 <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
-                  <span>{billingSummary?.subscription?.plan?.name ?? 'Family Free'}</span>
+                  <span>{entitlements.planName ?? 'Family Free'}</span>
                   <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                    {billingSummary?.subscription?.status ?? 'trialing'}
+                    {entitlements.planStatus ?? 'trialing'}
                   </span>
+                  <PlanTag label={entitlements.tier === 'premium' ? 'Premium' : entitlements.tier === 'plus' ? 'Plus' : 'Free'} locked={currentPlanSlug === 'family-free'} />
                 </h3>
                 <p className="text-sm text-gray-600">
-                  {billingSummary?.subscription?.plan
-                    ? `${formatPrice(billingSummary.subscription.plan.priceCents)} / month`
+                  {currentPlanPrice > 0
+                    ? `${formatPrice(currentPlanPrice)} / month`
                     : 'Start your family plan to unlock more lessons and AI access.'}
                 </p>
-                <div className="mt-2 text-sm text-gray-600">
+                <div className="mt-2 text-sm text-gray-600 space-y-1">
                   {billingMessage && <p className="text-emerald-700">{billingMessage}</p>}
                   {billingError && <p className="text-rose-600">{billingError}</p>}
                   {billingErrored && !billingError && (
-                    <p className="text-rose-600">Billing data is temporarily unavailable.</p>
+                    <p className="text-rose-600">
+                      Billing data is temporarily unavailable{entitlementsError ? `: ${entitlementsError}` : '.'}
+                    </p>
                   )}
                   {currentPeriodEnd && (
                     <p className="text-gray-600">Renews on {currentPeriodEnd}</p>
                   )}
-                  {billingSummary?.subscription?.trialEndsAt && (
+                  {trialEndsAt && (
                     <p className="text-gray-600">
-                      Trial ends {new Date(billingSummary.subscription.trialEndsAt).toLocaleDateString()}
+                      Trial ends {trialEndsAt.toLocaleDateString()}
                     </p>
                   )}
+                  {entitlements.cancelAt && (
+                    <p className="text-gray-600">
+                      Scheduled to cancel on {new Date(entitlements.cancelAt).toLocaleDateString()}
+                    </p>
+                  )}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs mt-2">
+                    <span className="inline-flex items-center gap-2 text-gray-700">
+                      <Sparkles className="h-3 w-3 text-brand-violet" />
+                      AI tutor: {limitLabel(entitlements.aiTutorDailyLimit, 'chats/day')}
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-gray-700">
+                      <Users className="h-3 w-3 text-brand-blue" />
+                      Seats: {seatLimit !== null ? `${seatsUsed}/${seatLimit}` : `${seatsUsed}+`}
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-gray-700">
+                      <Target className="h-3 w-3 text-brand-teal" />
+                      {entitlements.weeklyAiSummaries ? 'Weekly AI summaries included' : 'Weekly summaries locked on Free'}
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-gray-700">
+                      <TrendingUp className="h-3 w-3 text-brand-blue" />
+                      {entitlements.advancedAnalytics ? 'Advanced analytics on' : 'Advanced analytics locked'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    {entitlements.isTrialing && trialEndsAt
+                      ? `If you don’t upgrade, you’ll move to Family Free after ${trialEndsAt.toLocaleDateString()}.`
+                      : 'You can change plans anytime. Downgrades apply at the next renewal.'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -665,9 +1254,7 @@ const ParentDashboard: React.FC = () => {
                 </button>
 
                 <button
-                  onClick={() =>
-                    checkoutMutation.mutate(nextPlan?.slug ?? currentPlanSlug)
-                  }
+                  onClick={() => handleUpgrade(nextPlan?.slug ?? currentPlanSlug)}
                   disabled={checkoutMutation.isLoading || billingLoading}
                   className="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-blue to-brand-violet text-white text-sm font-semibold flex items-center space-x-2 shadow-sm hover:shadow-md disabled:opacity-70"
                 >
@@ -682,7 +1269,7 @@ const ParentDashboard: React.FC = () => {
                 </button>
               </div>
               <div className="flex flex-wrap gap-2 text-xs text-gray-600">
-                {availablePlans.map((plan) => (
+                {sortedPlans.map((plan) => (
                   <span
                     key={plan.slug}
                     className={`px-3 py-1 rounded-full border ${
@@ -690,7 +1277,7 @@ const ParentDashboard: React.FC = () => {
                     } ${plan.slug === currentPlanSlug ? 'cursor-default' : 'cursor-pointer'}`}
                     onClick={() => {
                       if (plan.slug !== currentPlanSlug) {
-                        checkoutMutation.mutate(plan.slug);
+                        handleUpgrade(plan.slug);
                       }
                     }}
                     role="button"
@@ -707,10 +1294,188 @@ const ParentDashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+          className="mb-8"
+          id="family-overview"
+        >
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                  Family overview
+                </p>
+                <h3 className="text-xl font-bold text-gray-900">This week at a glance</h3>
+                <p className="text-sm text-gray-600">
+                  Quick read on every learner with streaks, XP, and where to focus next.
+                </p>
+              </div>
+              <div className="text-xs text-gray-500">
+                Week of {weeklySnapshot?.weekStartLabel ?? '—'}
+              </div>
+            </div>
+
+            {showSkeleton ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                <SkeletonCard className="h-32" />
+                <SkeletonCard className="h-32" />
+                <SkeletonCard className="h-32" />
+              </div>
+            ) : familyOverviewCards.length ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                {familyOverviewCards.map((item) => {
+                  const statusStyle = familyStatusStyles[item.status];
+                  const lowestLabel = item.lowest
+                    ? `${formatSubjectLabel(item.lowest.subject)} ${Math.round(item.lowest.mastery)}%`
+                    : 'Mastery pending';
+                  const primaryGap = item.child.skillGaps?.[0];
+                  return (
+                    <div
+                      key={item.child.id}
+                      className={`rounded-xl border ${statusStyle.border} bg-slate-50/70 p-4 space-y-2`}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-brand-violet text-white font-semibold flex items-center justify-center">
+                            {item.child.name.charAt(0)}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">{item.child.name}</div>
+                            <div className="text-xs text-gray-600">
+                              Grade {item.child.grade} • Level {item.child.level}
+                            </div>
+                          </div>
+                        </div>
+                        <span className={`text-[11px] px-2 py-1 rounded-full ${statusStyle.badge}`}>
+                          {statusStyle.label}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-xs text-gray-700">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 border border-slate-200">
+                          <Clock className="h-3 w-3 text-brand-blue" />
+                          {item.child.practiceMinutesWeek} min
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 border border-slate-200">
+                          <Target className="h-3 w-3 text-brand-teal" />
+                          {item.child.lessonsCompletedWeek} lessons
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 border border-slate-200">
+                          <Sparkles className="h-3 w-3 text-brand-violet" />
+                          {item.child.streakDays}d streak
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 border border-slate-200">
+                          <Star className="h-3 w-3 text-amber-500" />
+                          {item.child.xp} XP
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-800">
+                        {primaryGap?.summary ?? `Lowest area: ${lowestLabel}`}
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        {primaryGap?.actions?.[0] ??
+                          'Encourage one focused session or a quick practice set to stay on pace.'}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600">
+                Link a learner to see a family snapshot with streaks, XP, and focus areas.
+              </p>
+            )}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.09 }}
+          className="mb-8"
+        >
+          <div className="bg-gradient-to-r from-brand-teal to-brand-blue rounded-2xl p-6 text-white">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-white/80">
+                  <Sparkles className="h-4 w-4" />
+                  <span>Celebrate</span>
+                </div>
+                <h3 className="text-xl font-bold">Big wins to share</h3>
+                <p className="text-sm text-white/90">
+                  Quick prompts for badges, streaks, and milestone moments.
+                </p>
+                <div className="space-y-2">
+                  {celebrations.slice(0, 3).map((moment) => (
+                    <div
+                      key={moment.id}
+                      className="rounded-xl bg-white/10 border border-white/15 p-3 flex items-start justify-between gap-3"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold">{moment.title}</p>
+                        <p className="text-xs text-white/80">{moment.description}</p>
+                        <p className="text-[11px] text-white/60">
+                          {new Date(moment.occurredAt).toLocaleString([], { month: 'short', day: 'numeric' })}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          trackEvent('parent_celebration_share', { parentId: parent.id, momentId: moment.id })
+                        }
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white text-brand-blue text-xs font-semibold hover:bg-gray-100"
+                      >
+                        <Bell className="h-4 w-4" />
+                        Share
+                      </button>
+                    </div>
+                  ))}
+                  {celebrations.length === 0 && (
+                    <p className="text-sm text-white/80">
+                      Complete missions to surface celebration prompts here.
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="lg:min-w-[260px] bg-white/10 rounded-xl p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80 mb-2">
+                  Celebration prompts
+                </p>
+                <ul className="space-y-2 text-sm text-white/90">
+                  {(celebrationPrompts.length ? celebrationPrompts : ['Ask: “What are you proud of today?”']).map(
+                    (prompt, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="mt-0.5 text-brand-light-teal">✶</span>
+                        <span>{prompt}</span>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
           <div className="flex flex-wrap gap-4">
+            {!hasRealChildren && (
+              <div className="flex flex-col items-start gap-2 rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-3">
+                <p className="text-sm font-semibold text-slate-900">No learners linked yet</p>
+                <p className="text-xs text-slate-600">
+                  Add or link your first learner to unlock goals, diagnostics, and progress views.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('family-connections')}
+                  className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
+                >
+                  Add a learner
+                </button>
+              </div>
+            )}
             {(dashboard?.children ?? []).map((child) => (
               <button
                 key={child.id}
@@ -913,6 +1678,189 @@ const ParentDashboard: React.FC = () => {
                 )}
               </div>
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+              className="bg-white rounded-2xl p-6 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Study Skills lane</h3>
+                  <p className="text-sm text-gray-600">
+                    Help learners build planning, focus, and executive function habits alongside core subjects.
+                  </p>
+                </div>
+                <Link
+                  to="/catalog?subject=study_skills"
+                  className="text-sm font-semibold text-brand-blue hover:underline"
+                >
+                  View all
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {studySkillsModules.slice(0, 3).map((module) => (
+                  <div
+                    key={module.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 space-y-2"
+                  >
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <span className="font-semibold text-brand-blue">{module.duration}</span>
+                      <span className="px-2 py-1 rounded-full bg-brand-light-teal/60 text-brand-teal font-semibold">
+                        Grades {module.gradeBand}
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-gray-900">{module.title}</h4>
+                    <p className="text-sm text-gray-700">{module.focus}</p>
+                    <p className="text-[11px] text-gray-500">{module.habit}</p>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs text-gray-600">{formatSubjectLabel(module.subject)}</span>
+                      <Link
+                        to={module.ctaPath ?? '/catalog'}
+                        className="inline-flex items-center px-3 py-1 rounded-md bg-brand-blue text-white text-xs font-semibold hover:bg-brand-blue/90"
+                        onClick={() => trackEvent('parent_study_skills_cta', { parentId: parent?.id })}
+                      >
+                        Browse
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.48 }}
+              id="skill-gaps"
+              className="bg-white rounded-2xl p-6 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <Sparkles className="h-5 w-5 text-brand-violet" />
+                  <h3 className="text-xl font-bold text-gray-900">Learning insights</h3>
+                </div>
+                <div className="flex items-center bg-slate-100 rounded-full p-1 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setInsightTab('overview')}
+                    className={`px-3 py-1 rounded-full font-semibold ${
+                      insightTab === 'overview' ? 'bg-white shadow-sm text-brand-violet' : 'text-gray-600'
+                    }`}
+                  >
+                    Adaptive plan
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setInsightTab('skill_gaps')}
+                    className={`px-3 py-1 rounded-full font-semibold ${
+                      insightTab === 'skill_gaps' ? 'bg-white shadow-sm text-brand-violet' : 'text-gray-600'
+                    }`}
+                  >
+                    Skill gaps
+                  </button>
+                </div>
+              </div>
+              {showSkeleton ? (
+                <SkeletonCard className="h-24" />
+              ) : insightTab === 'skill_gaps' ? (
+                <div className="space-y-3">
+                  {childSkillGaps.length ? (
+                    childSkillGaps.map((gap) => (
+                      <div
+                        key={gap.subject}
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 space-y-2"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900 capitalize">
+                              {formatSubjectLabel(gap.subject)}
+                            </p>
+                            <p className="text-xs text-slate-600">{gap.summary}</p>
+                          </div>
+                          <span
+                            className={`text-[11px] px-2 py-1 rounded-full border ${skillGapStatusStyles[gap.status]}`}
+                          >
+                            {gap.status === 'needs_attention'
+                              ? 'Needs attention'
+                              : gap.status === 'improving'
+                              ? 'Improving'
+                              : 'Watch'}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {gap.concepts.map((concept) => (
+                            <span
+                              key={concept}
+                              className="text-[11px] px-2 py-1 rounded-full bg-white border border-slate-200 text-slate-700"
+                            >
+                              {concept}
+                            </span>
+                          ))}
+                        </div>
+                        <ul className="space-y-1">
+                          {gap.actions.map((action, index) => (
+                            <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
+                              <ArrowUpRight className="h-4 w-4 text-brand-blue mt-0.5" />
+                              <span>{action}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-600">
+                      Complete a diagnostic and a few lessons to surface skill gaps and plain-language actions.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                      <p className="text-[11px] uppercase text-slate-500">Focus this week</p>
+                      <p className="text-sm font-semibold text-slate-900">
+                        {lowestSubject
+                          ? `${formatSubjectLabel(lowestSubject.subject)} · ${Math.round(lowestSubject.mastery)}%`
+                          : 'Waiting on data'}
+                      </p>
+                      <p className="text-[11px] text-slate-600">
+                        {lowestSubject
+                          ? 'Extra practice and repetition scheduled.'
+                          : 'Complete a diagnostic to calibrate.'}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                      <p className="text-[11px] uppercase text-slate-500">Easing off</p>
+                      <p className="text-sm font-semibold text-slate-900">
+                        {strongestSubject
+                          ? `${formatSubjectLabel(strongestSubject.subject)} anchored`
+                          : 'Pending'}
+                      </p>
+                      <p className="text-[11px] text-slate-600">
+                        {strongestSubject
+                          ? 'Light reinforcement while gaps close elsewhere.'
+                          : 'Need more lessons to compare strengths.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    {(currentChild?.adaptivePlanNotes ?? []).map((note, index) => (
+                      <div key={index} className="flex items-start space-x-2">
+                        <Sparkles className="h-4 w-4 text-brand-violet mt-0.5" />
+                        <p className="text-sm text-gray-700">{note}</p>
+                      </div>
+                    ))}
+                    {(currentChild?.adaptivePlanNotes?.length ?? 0) === 0 && (
+                      <p className="text-sm text-gray-600">
+                        Adaptive explanations will appear after the first diagnostic and recommendations.
+                      </p>
+                    )}
+                  </div>
+                </>
+              )}
+            </motion.div>
           </div>
 
           <div className="space-y-8">
@@ -920,6 +1868,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
+              id="goal-planner"
               className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
             >
               <div className="flex items-center justify-between mb-4">
@@ -933,6 +1882,11 @@ const ParentDashboard: React.FC = () => {
                   </span>
                 )}
               </div>
+              {showDiagnosticEmpty && (
+                <div className="mb-3 rounded-lg border border-dashed border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                  No diagnostic detected yet. Start or schedule one to calibrate goals and difficulty.
+                </div>
+              )}
               {showSkeleton ? (
                 <SkeletonCard className="h-40" />
               ) : (
@@ -1131,6 +2085,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
+              id="assignments"
               className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
             >
               <div className="flex items-center justify-between mb-4">
@@ -1286,6 +2241,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
+              id="family-connections"
               className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
             >
               <div className="flex items-center justify-between mb-3">
@@ -1293,33 +2249,48 @@ const ParentDashboard: React.FC = () => {
                   <Link2 className="h-5 w-5 text-brand-teal" />
                   <h3 className="text-xl font-bold text-gray-900">Family Connections</h3>
                 </div>
-                <span className="text-xs text-gray-500 flex items-center space-x-1">
+                <div className="flex items-center gap-2 text-xs text-gray-500">
                   <ShieldCheck className="h-4 w-4 text-brand-teal" />
-                  <span>RLS aligned</span>
-                </span>
+                  <span>Guardian protected</span>
+                  <PlanTag label="Seats" locked={seatLimitReached} />
+                </div>
               </div>
               <p className="text-sm text-gray-600 mb-4">
-                Use the family link code from your learner to connect. Access is governed by Supabase RLS and
-                <code className="px-1">public.is_guardian</code>.
+                Enter the family link code your child sees on their screen. Linking confirms you are the parent/guardian
+                and allows you to see progress. Under-13 learners should only be linked by a parent/guardian.
               </p>
+              <p className="text-[11px] text-slate-600 mb-2">
+                {seatLimit !== null
+                  ? `You are using ${seatsUsed}/${seatLimit} seats${seatLimitReached ? '. Free up a seat or upgrade to add another learner.' : ''}`
+                  : 'Seats follow your current plan.'}
+              </p>
+              {seatLimitReached && (
+                <LockedFeature
+                  title="Learner limit reached"
+                  description="Family Free includes one learner. Upgrade to Family Plus to link more students under one plan."
+                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                />
+              )}
               <form onSubmit={handleLinkGuardian} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <input
                   type="text"
                   value={guardianCode}
                   onChange={(event) => setGuardianCode(event.target.value)}
                   placeholder="Family link code"
-                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  disabled={seatLimitReached}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 disabled:opacity-60"
                 />
                 <input
                   type="text"
                   value={guardianRelationship}
                   onChange={(event) => setGuardianRelationship(event.target.value)}
                   placeholder="Relationship (optional)"
-                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  disabled={seatLimitReached}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 disabled:opacity-60"
                 />
                 <button
                   type="submit"
-                  disabled={linkGuardianMutation.isLoading}
+                  disabled={linkGuardianMutation.isLoading || seatLimitReached}
                   className="inline-flex items-center justify-center rounded-lg bg-brand-teal px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-teal/90 disabled:opacity-50"
                 >
                   {linkGuardianMutation.isLoading ? (
@@ -1332,6 +2303,10 @@ const ParentDashboard: React.FC = () => {
                   )}
                 </button>
               </form>
+              <p className="mt-2 text-[11px] text-slate-600">
+                By linking, I confirm I am the parent/guardian and agree to the ElevatED privacy policy for storing
+                progress data to personalize learning.
+              </p>
               {guardianMessage && (
                 <p className="mt-3 text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
                   {guardianMessage}
@@ -1550,54 +2525,101 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
+              id="weekly-snapshot"
               className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <Sparkles className="h-5 w-5 text-brand-violet" />
-                  <h3 className="text-xl font-bold text-gray-900">Weekly AI Summary</h3>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">Weekly Snapshot</h3>
+                    <p className="text-xs text-gray-700">
+                      Week of {weeklySnapshot?.weekStartLabel ?? '—'}
+                    </p>
+                  </div>
                 </div>
-                {dashboard?.weeklyReport?.aiGenerated && (
-                  <span className="text-xs uppercase tracking-wide bg-white/30 px-2 py-1 rounded-full">
-                    AI generated
-                  </span>
-                )}
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  {dashboard?.weeklyReport?.aiGenerated && (
+                    <span className="text-xs uppercase tracking-wide bg-white/30 px-2 py-1 rounded-full">
+                      AI generated
+                    </span>
+                  )}
+                  <PlanTag label="Plus" locked={!entitlements.weeklyAiSummaries} />
+                </div>
               </div>
-              {showSkeleton ? (
+              {showSkeleton || billingLoading ? (
                 <div className="space-y-3">
                   <SkeletonCard className="h-6" />
                   <SkeletonCard className="h-6" />
                   <SkeletonCard className="h-6" />
                 </div>
-              ) : (
+              ) : entitlements.weeklyAiSummaries ? (
                 <>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                    <div className="rounded-xl bg-white/60 border border-white px-3 py-2">
+                      <p className="text-[11px] uppercase text-slate-600">Time spent</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {weeklySnapshot ? Math.round((weeklySnapshot.minutes / 60) * 10) / 10 : 0} hrs
+                      </p>
+                      <p className="text-[11px] text-slate-600">Across the family</p>
+                    </div>
+                    <div className="rounded-xl bg-white/60 border border-white px-3 py-2">
+                      <p className="text-[11px] uppercase text-slate-600">Lessons completed</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {weeklySnapshot?.lessons ?? 0}
+                      </p>
+                      <p className="text-[11px] text-slate-600">This week</p>
+                    </div>
+                    <div className="rounded-xl bg-white/60 border border-white px-3 py-2">
+                      <p className="text-[11px] uppercase text-slate-600">Best streak</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {weeklySnapshot?.topStreak ?? 0} days
+                      </p>
+                      <p className="text-[11px] text-slate-600">
+                        Avg mastery {weeklySnapshot?.averageMastery ?? '—'}%
+                      </p>
+                    </div>
+                  </div>
+
                   <p className="text-sm text-gray-700 mb-4">
                     {dashboard?.weeklyReport?.summary ??
                       'Adaptive summary not available yet—complete a few lessons to train the AI.'}
                   </p>
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-brand-violet mb-2">Highlights</h4>
-                    <ul className="space-y-2">
-                      {(dashboard?.weeklyReport?.highlights ?? []).map((highlight, index) => (
-                        <li key={index} className="flex items-start space-x-2 text-sm text-gray-700">
-                          <span className="mt-0.5 text-brand-violet">•</span>
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-brand-blue mb-2">Recommended Next Steps</h4>
-                    <ul className="space-y-2">
-                      {(dashboard?.weeklyReport?.recommendations ?? []).map((recommendation, index) => (
-                        <li key={index} className="flex items-start space-x-2 text-sm text-gray-700">
-                          <span className="mt-0.5 text-brand-blue">→</span>
-                          <span>{recommendation}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="text-sm font-semibold text-brand-violet mb-2">Highlights</h4>
+                      <ul className="space-y-2">
+                        {(dashboard?.weeklyReport?.highlights ?? ['Progress signals will appear here once we have a full week of data.']).map(
+                          (highlight, index) => (
+                            <li key={index} className="flex items-start space-x-2 text-sm text-gray-700">
+                              <span className="mt-0.5 text-brand-violet">•</span>
+                              <span>{highlight}</span>
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-brand-blue mb-2">Recommended Next Steps</h4>
+                      <ul className="space-y-2">
+                        {(dashboard?.weeklyReport?.recommendations ?? [
+                          'Set one small goal for each learner to guide the next digest.',
+                        ]).map((recommendation, index) => (
+                          <li key={index} className="flex items-start space-x-2 text-sm text-gray-700">
+                            <span className="mt-0.5 text-brand-blue">→</span>
+                            <span>{recommendation}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </>
+              ) : (
+                <LockedFeature
+                  title="Weekly AI summaries are a Plus feature"
+                  description="Upgrade to Family Plus to keep getting AI-generated highlights and renewal reminders."
+                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                />
               )}
             </motion.div>
 
@@ -1607,39 +2629,118 @@ const ParentDashboard: React.FC = () => {
               transition={{ delay: 0.65 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">
-                Mastery by Subject • {currentChild?.name ?? '—'}
-              </h3>
-              <div className="h-60">
-                {showSkeleton ? (
-                  <SkeletonCard className="h-full" />
-                ) : (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={childMasteryData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
-                      <XAxis dataKey="subject" stroke="#6B7280" />
-                      <YAxis stroke="#6B7280" />
-                      <Tooltip
-                        contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
-                        labelStyle={{ color: '#1F2937', fontWeight: 600 }}
-                      />
-                      <Bar dataKey="mastery" fill="#971CB5" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Mastery by Subject • {currentChild?.name ?? '—'}
+                </h3>
+                <PlanTag label="Plus" locked={!entitlements.advancedAnalytics} />
               </div>
-              {!showSkeleton && currentChild && (
-                <div className="mt-4 text-xs text-gray-500">
-                  Average goal progress{' '}
-                  {currentChild.goalProgress !== undefined && currentChild.goalProgress !== null
-                    ? `${Math.round(currentChild.goalProgress)}%`
-                    : '—'}{' '}
-                  · Cohort delta{' '}
-                  {currentChild.cohortComparison !== undefined && currentChild.cohortComparison !== null
-                    ? `${currentChild.cohortComparison > 0 ? '+' : ''}${currentChild.cohortComparison}`
-                    : '—'}
-                  %
+              {showSkeleton || billingLoading ? (
+                <div className="h-60">
+                  <SkeletonCard className="h-full" />
                 </div>
+              ) : entitlements.advancedAnalytics ? (
+                <>
+                  <div className="h-60">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={childMasteryData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#EEF2FF" />
+                        <XAxis dataKey="subject" stroke="#6B7280" />
+                        <YAxis stroke="#6B7280" />
+                        <Tooltip
+                          contentStyle={{ borderRadius: '12px', borderColor: '#E5E7EB' }}
+                          labelStyle={{ color: '#1F2937', fontWeight: 600 }}
+                        />
+                        <Bar dataKey="mastery" fill="#971CB5" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  {currentChild && (
+                    <div className="mt-4 text-xs text-gray-500">
+                      Average goal progress{' '}
+                      {currentChild.goalProgress !== undefined && currentChild.goalProgress !== null
+                        ? `${Math.round(currentChild.goalProgress)}%`
+                        : '—'}{' '}
+                      · Cohort delta{' '}
+                      {currentChild.cohortComparison !== undefined && currentChild.cohortComparison !== null
+                        ? `${currentChild.cohortComparison > 0 ? '+' : ''}${currentChild.cohortComparison}`
+                        : '—'}
+                      %
+                    </div>
+                  )}
+                </>
+              ) : (
+                <LockedFeature
+                  title="Advanced analytics are a Plus feature"
+                  description="Upgrade to see mastery by subject, cohort comparisons, and deeper insights."
+                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                />
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="bg-white rounded-2xl p-6 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-900">Home extension</h3>
+                <span className="text-xs text-gray-500">
+                  {currentChild?.name ?? 'Learner'}
+                </span>
+              </div>
+              {showSkeleton ? (
+                <div className="space-y-2">
+                  <SkeletonCard className="h-20" />
+                  <SkeletonCard className="h-20" />
+                </div>
+              ) : homeExtensions.length > 0 ? (
+                <div className="space-y-3">
+                  {homeExtensions.slice(0, 3).map((activity) => (
+                    <div
+                      key={activity.id}
+                      className="p-4 rounded-xl border border-slate-200 bg-slate-50"
+                    >
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span className="font-semibold text-brand-blue">
+                          {describeActivityType(activity.activityType)}
+                        </span>
+                        {activity.estimatedMinutes ? (
+                          <span>~{activity.estimatedMinutes} min</span>
+                        ) : null}
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 mt-1">{activity.title}</p>
+                      {activity.description && (
+                        <p className="text-xs text-gray-600 mt-1 line-clamp-2">{activity.description}</p>
+                      )}
+                      <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                        <span className="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">
+                          Home extension
+                        </span>
+                        {activity.standards && activity.standards[0] && (
+                          <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                            {activity.standards[0]}
+                          </span>
+                        )}
+                      </div>
+                      {activity.url && (
+                        <a
+                          href={activity.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center text-xs font-semibold text-brand-blue hover:underline mt-2"
+                        >
+                          Share activity ↗
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600">
+                  We&apos;ll suggest quick at-home activities as soon as this learner completes a bit more work.
+                </p>
               )}
             </motion.div>
 

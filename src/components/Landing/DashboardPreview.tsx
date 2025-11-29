@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Play, Star, Trophy, TrendingUp, Users, BarChart3, ShieldCheck } from 'lucide-react';
+import { formatSubjectLabel } from '../../lib/subjects';
+import type { Subject } from '../../types';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DashboardPreview: React.FC = () => {
@@ -12,15 +14,16 @@ const DashboardPreview: React.FC = () => {
     streak: 12,
     badges: 15,
     subjects: [
-      { name: 'Math', progress: 85, color: 'from-brand-secondary to-brand-primary' },
-      { name: 'English', progress: 92, color: 'from-brand-success to-brand-secondary' },
-      { name: 'Science', progress: 78, color: 'from-brand-primary to-brand-tertiary' },
-      { name: 'History', progress: 65, color: 'from-brand-accent to-brand-secondary' }
+      { subject: 'math' as Subject, progress: 85, color: 'from-brand-secondary to-brand-primary' },
+      { subject: 'english' as Subject, progress: 92, color: 'from-brand-success to-brand-secondary' },
+      { subject: 'science' as Subject, progress: 78, color: 'from-brand-primary to-brand-tertiary' },
+      { subject: 'social_studies' as Subject, progress: 65, color: 'from-brand-accent to-brand-secondary' },
+      { subject: 'study_skills' as Subject, progress: 58, color: 'from-slate-200 to-brand-light-teal' },
     ],
     recentLessons: [
-      { subject: 'Math', topic: 'Quadratic Equations', xp: 75, completed: true },
-      { subject: 'English', topic: 'Essay Writing', xp: 50, completed: false },
-      { subject: 'Science', topic: 'Photosynthesis', xp: 60, completed: false }
+      { subject: 'math' as Subject, topic: 'Quadratic Equations', xp: 75, completed: true },
+      { subject: 'english' as Subject, topic: 'Essay Writing', xp: 50, completed: false },
+      { subject: 'study_skills' as Subject, topic: 'Build a weekly plan', xp: 30, completed: false },
     ]
   };
 
@@ -170,7 +173,9 @@ const DashboardPreview: React.FC = () => {
                       {studentData.subjects.map((subject, index) => (
                         <div key={index} className="bg-gray-50 rounded-xl p-4">
                           <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-semibold text-gray-900">{subject.name}</h5>
+                            <h5 className="font-semibold text-gray-900">
+                              {formatSubjectLabel(subject.subject)}
+                            </h5>
                             <span className="text-sm font-medium text-gray-600">{subject.progress}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-3">
@@ -201,7 +206,9 @@ const DashboardPreview: React.FC = () => {
                             </div>
                             <div>
                               <h5 className="font-semibold text-gray-900">{lesson.topic}</h5>
-                              <p className="text-sm text-gray-600">{lesson.subject}</p>
+                              <p className="text-sm text-gray-600">
+                                {formatSubjectLabel(lesson.subject)}
+                              </p>
                             </div>
                           </div>
                           <div className="text-right">

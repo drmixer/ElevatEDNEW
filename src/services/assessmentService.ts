@@ -1,5 +1,7 @@
 import supabase from '../lib/supabaseClient';
-import type { Subject } from '../types';
+import { normalizeSubject } from '../lib/subjects';
+import type { LearningPathItem, Subject } from '../types';
+import { buildCanonicalLearningPath } from '../lib/learningPaths';
 import { refreshLearningPathFromSuggestions } from './adaptiveService';
 
 export type AssessmentOption = {
@@ -21,6 +23,8 @@ export type AssessmentQuestion = {
   skillIds: number[];
   subjectId: number | null;
   topicId: number | null;
+  strand?: string | null;
+  placement?: { on_miss?: string[]; on_mastery?: string[] };
 };
 
 export type LoadedAssessment = {
@@ -31,6 +35,7 @@ export type LoadedAssessment = {
   description: string | null;
   subject: Subject | null;
   estimatedDurationMinutes: number | null;
+  metadata?: Record<string, unknown> | null;
   questions: AssessmentQuestion[];
   existingResponses: Map<number, { selectedOptionId: number | null; isCorrect: boolean | null }>;
 };
@@ -100,16 +105,6 @@ type QuestionSkillRow = {
   skills?: { name?: string | null } | null;
 };
 
-const normalizeSubject = (value: unknown): Subject | null => {
-  if (typeof value !== 'string') return null;
-  const normalized = value.toLowerCase().replace(/\s+/g, '_');
-  if (normalized === 'socialstudies') return 'social_studies';
-  if (['math', 'english', 'science', 'social_studies'].includes(normalized)) {
-    return normalized as Subject;
-  }
-  return null;
-};
-
 const deriveConcept = (
   question: QuestionBankRow,
   link: AssessmentQuestionLink,
@@ -130,14 +125,37 @@ const deriveConcept = (
   return moduleTitle ?? 'Concept focus';
 };
 
-const pickAssessment = (rows: AssessmentRow[]): AssessmentRow | null => {
+const pickAssessment = (
+  rows: AssessmentRow[],
+  opts?: { grade?: number | string | null; subject?: Subject | null },
+): AssessmentRow | null => {
+  const gradeBand = opts?.grade != null ? opts.grade.toString() : null;
+  const preferredSubject = opts?.subject ?? null;
   if (!rows.length) return null;
-  const preferred = rows.find((row) => {
+  const diagnosticRows = rows.filter((row) => {
     const meta = (row.metadata ?? {}) as Record<string, unknown>;
     const purpose = typeof meta.purpose === 'string' ? meta.purpose.toLowerCase() : '';
     return purpose.includes('diagnostic') || meta.diagnostic === true || meta.is_adaptive === true;
   });
-  if (preferred) return preferred;
+
+  const gradeMatched = diagnosticRows.filter((row) => {
+    const meta = (row.metadata ?? {}) as Record<string, unknown>;
+    const metaGrade = typeof meta.grade_band === 'string' ? meta.grade_band : null;
+    return gradeBand ? metaGrade === gradeBand : true;
+  });
+
+  const subjectMatched = gradeMatched.length ? gradeMatched : diagnosticRows;
+  const sorted = subjectMatched.sort((a, b) => {
+    const aPref =
+      preferredSubject && normalizeSubject(a.modules?.subject ?? null) === preferredSubject ? 0 : 1;
+    const bPref =
+      preferredSubject && normalizeSubject(b.modules?.subject ?? null) === preferredSubject ? 0 : 1;
+    if (aPref !== bPref) return aPref - bPref;
+    return 0;
+  });
+
+  if (sorted.length) return sorted[0]!;
+
   const baseline = rows.find((row) => {
     const meta = (row.metadata ?? {}) as Record<string, unknown>;
     const purpose = typeof meta.purpose === 'string' ? meta.purpose.toLowerCase() : '';
@@ -146,7 +164,10 @@ const pickAssessment = (rows: AssessmentRow[]): AssessmentRow | null => {
   return baseline ?? rows[0] ?? null;
 };
 
-const fetchAssessmentDefinition = async (studentId: string): Promise<LoadedAssessment> => {
+const fetchAssessmentDefinition = async (
+  studentId: string,
+  opts?: { grade?: number | string | null; subject?: Subject | null },
+): Promise<LoadedAssessment> => {
   const { data: assessments, error: assessmentError } = await supabase
     .from('assessments')
     .select(
@@ -159,7 +180,7 @@ const fetchAssessmentDefinition = async (studentId: string): Promise<LoadedAsses
     throw new Error(`Unable to load assessment definitions: ${assessmentError.message}`);
   }
 
-  const assessmentRow = pickAssessment((assessments ?? []) as AssessmentRow[]);
+  const assessmentRow = pickAssessment((assessments ?? []) as AssessmentRow[], opts);
   if (!assessmentRow) {
     throw new Error('No assessments have been configured yet.');
   }
@@ -260,6 +281,8 @@ const fetchAssessmentDefinition = async (studentId: string): Promise<LoadedAsses
       const options = (optionLookup.get(link.question_id) ?? []).sort((a, b) => a.id - b.id);
       const skillIds = (skillLookup.get(link.question_id) ?? []).map((skill) => skill.id);
       const concept = deriveConcept(bankQuestion, link, moduleTitle);
+      const placement = (bankQuestion.metadata as Record<string, unknown> | null | undefined)?.placement;
+      const strand = (bankQuestion.metadata as Record<string, unknown> | null | undefined)?.strand;
 
       return {
         id: `${link.question_id}`,
@@ -273,6 +296,18 @@ const fetchAssessmentDefinition = async (studentId: string): Promise<LoadedAsses
         skillIds,
         subjectId: bankQuestion.subject_id ?? assessmentRow.subject_id ?? null,
         topicId: typeof link.metadata?.topic_id === 'number' ? (link.metadata.topic_id as number) : null,
+        strand: typeof strand === 'string' ? strand : null,
+        placement:
+          placement && typeof placement === 'object'
+            ? {
+                on_miss: Array.isArray((placement as Record<string, unknown>).on_miss)
+                  ? ((placement as Record<string, unknown>).on_miss as string[])
+                  : undefined,
+                on_mastery: Array.isArray((placement as Record<string, unknown>).on_mastery)
+                  ? ((placement as Record<string, unknown>).on_mastery as string[])
+                  : undefined,
+              }
+            : undefined,
         order: link.question_order ?? index + 1,
       } satisfies AssessmentQuestion & { order: number };
     })
@@ -345,13 +380,17 @@ const fetchAssessmentDefinition = async (studentId: string): Promise<LoadedAsses
     description: assessmentRow.description ?? null,
     subject,
     estimatedDurationMinutes: assessmentRow.estimated_duration_minutes ?? null,
+    metadata: assessmentRow.metadata ?? null,
     questions,
     existingResponses,
   } satisfies LoadedAssessment;
 };
 
-export const loadDiagnosticAssessment = async (studentId: string): Promise<LoadedAssessment> => {
-  return fetchAssessmentDefinition(studentId);
+export const loadDiagnosticAssessment = async (
+  studentId: string,
+  opts?: { grade?: number | string | null; subject?: Subject | null },
+): Promise<LoadedAssessment> => {
+  return fetchAssessmentDefinition(studentId, opts);
 };
 
 export const recordAssessmentResponse = async (
@@ -590,9 +629,10 @@ export const finalizeAssessmentAttempt = async (
     assessment: LoadedAssessment;
     answers: AssessmentAnswer[];
     startedAt: Date;
+    grade?: number | string | null;
   },
 ): Promise<AssessmentResult> => {
-  const { studentId, assessment, answers, startedAt } = params;
+  const { studentId, assessment, answers, startedAt, grade } = params;
   if (!answers.length) {
     throw new Error('Cannot finalize assessment without answers.');
   }
@@ -657,12 +697,98 @@ export const finalizeAssessmentAttempt = async (
     console.warn('[assessment] Failed to flag assessment completion', profileError);
   }
 
+  const questionLookup = new Map<number, AssessmentQuestion>();
+  assessment.questions.forEach((question) => {
+    questionLookup.set(question.bankQuestionId, question);
+  });
+
+  const moduleWeights = new Map<string, number>();
+  const strandScores = new Map<string, { correct: number; total: number }>();
+
+  const addWeight = (slug: string | undefined | null, weight = 1) => {
+    if (!slug) return;
+    const key = slug.trim();
+    if (!key) return;
+    const current = moduleWeights.get(key) ?? 0;
+    moduleWeights.set(key, current + weight);
+  };
+
+  answers.forEach((answer) => {
+    const question = questionLookup.get(answer.bankQuestionId);
+    if (!question) return;
+    const strandKey = question.strand ?? question.concept ?? 'strand';
+    const strandEntry = strandScores.get(strandKey) ?? { correct: 0, total: 0 };
+    if (answer.isCorrect) strandEntry.correct += 1;
+    strandEntry.total += 1;
+    strandScores.set(strandKey, strandEntry);
+
+    const placement = answer.isCorrect ? question.placement?.on_mastery : question.placement?.on_miss;
+    placement?.forEach((slug) => addWeight(slug, 1));
+  });
+
+  const blueprintSections = Array.isArray((assessment.metadata as Record<string, unknown> | null | undefined)?.blueprint?.sections)
+    ? ((assessment.metadata as Record<string, unknown>)?.blueprint as { sections: Array<Record<string, unknown>> }).sections
+    : [];
+
+  blueprintSections.forEach((section) => {
+    const strand = (section.strand as string) ?? '';
+    const score = strandScores.get(strand) ?? { correct: 0, total: 0 };
+    const pct = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+    const bands = Array.isArray(section.scoreBands) ? (section.scoreBands as Array<Record<string, unknown>>) : [];
+    for (const band of bands) {
+      const min = (band.min as number | undefined) ?? 0;
+      const max = (band.max as number | undefined) ?? 100;
+      if (pct >= min && pct <= max) {
+        const placements = Array.isArray(band.placement) ? (band.placement as string[]) : [];
+        placements.forEach((slug) => addWeight(slug, 2));
+        break;
+      }
+    }
+  });
+
+  const preferredModules = Array.from(moduleWeights.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([slug]) => slug);
+
+  const targetGrade = grade ?? (assessment.metadata as Record<string, unknown> | null | undefined)?.grade_band ?? null;
+  const targetSubject = assessment.subject ?? 'math';
+
+  let canonicalPath: LearningPathItem[] = [];
+  try {
+    canonicalPath = buildCanonicalLearningPath({
+      grade: targetGrade,
+      subject: targetSubject,
+      preferredModules,
+      limit: 8,
+    });
+    if (canonicalPath.length) {
+      await supabase.from('student_profiles').update({ learning_path: canonicalPath }).eq('id', studentId);
+    }
+  } catch (canonicalError) {
+    console.warn('[assessment] Unable to build canonical learning path', canonicalError);
+  }
+
   let planMessages: string[] = [];
   try {
-    const plan = await refreshLearningPathFromSuggestions(studentId, 4);
+    const plan = await refreshLearningPathFromSuggestions(studentId, 4, {
+      grade: targetGrade,
+      subject: targetSubject,
+    });
     planMessages = plan.messages;
+    if (!planMessages.length && canonicalPath.length) {
+      const firstTwo = canonicalPath.slice(0, 2).map((item) => item.topic).filter(Boolean);
+      planMessages = firstTwo.length
+        ? [`Starting with ${firstTwo.join(' → ')} based on your diagnostic.`]
+        : ['Your path has been calibrated from the diagnostic.'];
+    }
   } catch (planError) {
     console.warn('[assessment] Adaptive plan refresh failed', planError);
+    if (canonicalPath.length) {
+      const firstTwo = canonicalPath.slice(0, 2).map((item) => item.topic).filter(Boolean);
+      planMessages = firstTwo.length
+        ? [`Starting with ${firstTwo.join(' → ')} based on your diagnostic.`]
+        : ['Your path has been calibrated from the diagnostic.'];
+    }
   }
 
   return {

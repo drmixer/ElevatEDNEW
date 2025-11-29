@@ -1,5 +1,5 @@
 import supabase from '../lib/supabaseClient';
-import type { ChildGoalTargets, GuardianChildLink } from '../types';
+import type { ChildGoalTargets, GuardianChildLink, NotificationPreferences } from '../types';
 
 type GoalPayload = ChildGoalTargets & {
   studentId: string;
@@ -91,6 +91,18 @@ export const revokeGuardianLink = async (linkId: number, parentId: string): Prom
 
   if (error) {
     console.error('[Parent] Failed to revoke guardian link', error);
+    throw error;
+  }
+};
+
+export const updateParentNotifications = async (
+  parentId: string,
+  preferences: NotificationPreferences,
+): Promise<void> => {
+  const { error } = await supabase.from('parent_profiles').update({ notifications: preferences }).eq('id', parentId);
+
+  if (error) {
+    console.error('[Parent] Failed to update notification preferences', error);
     throw error;
   }
 };

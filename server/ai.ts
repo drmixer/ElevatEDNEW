@@ -41,9 +41,27 @@ type LessonSnapshot = {
   lastActivityAt?: string | null;
 };
 
+type DailyLimit = number | 'unlimited' | null | undefined;
+
 type TutorResponse = {
   message: string;
   model: string;
+  remaining?: number | null;
+  limit?: DailyLimit;
+  plan?: string | null;
+};
+
+type TutorPlanContext = {
+  slug?: string | null;
+  tutorDailyLimit?: DailyLimit;
+  aiAccess?: boolean;
+};
+
+type TutorRequestOptions = {
+  userId?: string | null;
+  role?: string | null;
+  clientIp?: string | null;
+  plan?: TutorPlanContext;
 };
 
 class AiRequestError extends Error {
@@ -116,10 +134,52 @@ const sanitizeText = (input: string, maxLength: number): string => {
 const sanitizeOutput = (text: string): string =>
   sanitizeText(text, MAX_RESPONSE_CHARS);
 
+const gradeBandGuidance = (grade?: number | null): string | null => {
+  if (grade == null || Number.isNaN(grade)) return null;
+  if (grade <= 3) {
+    return 'Grade band K-3: use very short sentences, simple words, and concrete real-life examples. Offer one hint at a time and invite the learner to try the next step.';
+  }
+  if (grade <= 8) {
+    return 'Grade band 4-8: give 2-3 step hints, define any new vocabulary, and keep paragraphs short. Encourage the learner to explain their thinking back to you.';
+  }
+  return 'Grade band 9-12: expect deeper reasoning and study strategies. Encourage evidence, error-spotting, and concise explanations before sharing full solutions.';
+};
+
+const subjectGuidance = (subject?: string | null): string | null => {
+  if (!subject) return null;
+  const normalized = subject.toLowerCase();
+  if (normalized.includes('math')) {
+    return 'When helping with math, foreground the process: write out the steps, keep numbers small when illustrating, and only share the final answer after the learner tries.';
+  }
+  if (normalized.includes('english') || normalized.includes('ela')) {
+    return 'For reading and writing, model structure and examples rather than rewriting student work. Offer sentence starters and quick checks for understanding.';
+  }
+  if (normalized.includes('science')) {
+    return 'For science, connect ideas to observable phenomena and experiments. Emphasise cause-and-effect and simple definitions before deeper theory.';
+  }
+  if (normalized.includes('social')) {
+    return 'For social studies, ground explanations in timelines, causes, and perspectives. Encourage sourcing evidence and concise summaries.';
+  }
+  return null;
+};
+
+const buildLearningGuardrails = (context?: StudentContext): string | null => {
+  const snippets = [
+    gradeBandGuidance(context?.grade),
+    subjectGuidance(context?.activeLesson?.subject ?? context?.nextLesson?.subject ?? null),
+    'Always offer a hint or step-by-step nudge before giving the full solution. If the learner insists on the full answer, keep it concise and still explain why it works.',
+  ].filter(Boolean);
+  if (!snippets.length) {
+    return null;
+  }
+  return snippets.join('\n');
+};
+
 const baseTutorSystemPrompt = [
   'You are ElevatED, a patient K-12 tutor.',
+  'Start with a short hint or next step before revealing a full solution; only provide the complete answer if the learner directly asks or is still stuck.',
   'Give step-by-step explanations, check for understanding, and keep responses concise.',
-  'Avoid sharing any personal data, emails, or phone numbers. Do not request PII.',
+  'Keep answers age-appropriate and decline unsafe or off-topic requests. Avoid sharing any personal data, emails, or phone numbers. Do not request PII.',
 ].join(' ');
 
 const marketingSystemPrompt = [
@@ -127,6 +187,63 @@ const marketingSystemPrompt = [
   'Keep replies concise (2-3 sentences), warm, encouraging, and confident.',
   'Use only the provided product facts. If unsure, say so and offer to connect them with support.',
 ].join(' ');
+
+const tutorUsage = new Map<string, { date: string; count: number }>();
+
+const todayKey = (): string => new Date().toISOString().slice(0, 10);
+
+const readUsageCount = (key: string): number => {
+  const today = todayKey();
+  const entry = tutorUsage.get(key);
+  if (!entry || entry.date !== today) {
+    tutorUsage.set(key, { date: today, count: 0 });
+    return 0;
+  }
+  return entry.count;
+};
+
+const bumpUsageCount = (key: string): number => {
+  const today = todayKey();
+  const entry = tutorUsage.get(key);
+  if (!entry || entry.date !== today) {
+    tutorUsage.set(key, { date: today, count: 1 });
+    return 1;
+  }
+  const next = entry.count + 1;
+  tutorUsage.set(key, { date: today, count: next });
+  return next;
+};
+
+const enforceDailyTutorLimit = (
+  limit: DailyLimit,
+  usageKey: string,
+  planSlug?: string | null,
+): number | null => {
+  if (!limit || limit === 'unlimited') {
+    return null;
+  }
+
+  const used = readUsageCount(usageKey);
+  if (used >= limit) {
+    const planLabel = planSlug ? ` on your ${planSlug.replace(/[-_]/g, ' ')} plan` : '';
+    captureServerMessage('[ai] tutor daily limit reached', { usageKey, plan: planSlug, limit }, 'warning');
+    throw new AiRequestError(
+      402,
+      `You've reached today's AI tutor limit${planLabel}. Upgrade to get more help or try again tomorrow.`,
+    );
+  }
+
+  return Math.max(0, limit - used);
+};
+
+const recordTutorUsage = (limit: DailyLimit, usageKey: string): number | null => {
+  if (!limit || limit === 'unlimited') {
+    return null;
+  }
+
+  const next = bumpUsageCount(usageKey);
+  return Math.max(0, limit - next);
+};
 
 const resolveSystemPrompt = (mode: TutorMode, requestedPrompt?: string): string => {
   const fallback = mode === 'marketing' ? marketingSystemPrompt : baseTutorSystemPrompt;
@@ -346,6 +463,16 @@ const buildMessages = (context: TutorContext) => {
     }
   }
 
+  if (context.mode === 'learning') {
+    const guardrails = buildLearningGuardrails(context.studentContext);
+    if (guardrails) {
+      messages.push({
+        role: 'system',
+        content: guardrails,
+      });
+    }
+  }
+
   messages.push({
     role: 'user',
     content: context.prompt,
@@ -389,10 +516,15 @@ const callOpenRouter = async (context: TutorContext, model: string, apiKey: stri
   };
 };
 
-const enforceRateLimit = (key: string | null, limiter: ReturnType<typeof createLimiter>) => {
+const enforceRateLimit = (
+  key: string | null,
+  limiter: ReturnType<typeof createLimiter>,
+  context?: Record<string, unknown>,
+) => {
   if (!key) return;
-  const { allowed } = limiter.check(key);
+  const { allowed, remaining } = limiter.check(key);
   if (!allowed) {
+    captureServerMessage('[ai] rate limit hit', { ...context, remaining }, 'warning');
     throw new AiRequestError(429, 'Too many AI requests. Please wait a moment and try again.');
   }
 };
@@ -400,7 +532,7 @@ const enforceRateLimit = (key: string | null, limiter: ReturnType<typeof createL
 export const handleTutorRequest = async (
   payload: TutorRequestBody,
   supabase: SupabaseClient,
-  opts: { userId?: string | null; role?: string | null; clientIp?: string | null },
+  opts: TutorRequestOptions,
 ): Promise<TutorResponse> => {
   const apiKey = process.env.OPENROUTER_API_KEY ?? process.env.VITE_OPENROUTER_API_KEY;
   if (!apiKey) {
@@ -409,13 +541,29 @@ export const handleTutorRequest = async (
 
   const hashedUser = anonymize(opts.userId ?? null);
   const hashedIp = anonymize(opts.clientIp ?? null);
+  const usageKey = hashedUser ?? hashedIp ?? 'anonymous';
 
-  enforceRateLimit(hashedIp ? `ip:${hashedIp}` : null, ipLimiter);
-  enforceRateLimit(hashedUser ? `user:${hashedUser}` : null, learnerLimiter);
+  enforceRateLimit(hashedIp ? `ip:${hashedIp}` : null, ipLimiter, { hashedIp, mode: payload.mode ?? 'learning' });
+  enforceRateLimit(
+    hashedUser ? `user:${hashedUser}` : null,
+    learnerLimiter,
+    { hashedUser, mode: payload.mode ?? 'learning' },
+  );
 
   if (payload.mode === 'learning' && opts.role && opts.role !== 'student') {
     throw new AiRequestError(403, 'Learning assistant is only available for student accounts.');
   }
+
+  const tutorLimit = payload.mode === 'learning' ? opts.plan?.tutorDailyLimit ?? null : null;
+  if (payload.mode === 'learning' && opts.plan && opts.plan.aiAccess === false) {
+    captureServerMessage('[ai] plan gated', { plan: opts.plan.slug, hashedUser }, 'warning');
+    throw new AiRequestError(402, 'Upgrade required to access the AI assistant.', 'payment_required');
+  }
+
+  const remainingAllowance =
+    payload.mode === 'learning'
+      ? enforceDailyTutorLimit(tutorLimit, usageKey, opts.plan?.slug ?? null)
+      : null;
 
   const studentContext =
     payload.mode === 'marketing'
@@ -432,38 +580,63 @@ export const handleTutorRequest = async (
     hasContext: Boolean(studentContext),
     hashedUser,
     hashedIp,
+    plan: opts.plan?.slug,
+    tutorLimit,
+    remaining: remainingAllowance,
   });
+
+  let aiResult: TutorResponse | null = null;
 
   try {
     try {
       const result = await callOpenRouter(tutorContext, PRIMARY_MODEL, apiKey);
+      aiResult = result;
       captureServerMessage('[ai] tutor success', {
         mode: tutorContext.mode,
         model: result.model,
         hashedUser,
         hashedIp,
         responseChars: result.message.length,
+        plan: opts.plan?.slug,
       });
-      return result;
     } catch (primaryError) {
       captureServerException(primaryError, { model: PRIMARY_MODEL, mode: tutorContext.mode });
+      const fallback = await callOpenRouter(tutorContext, FALLBACK_MODEL, apiKey);
+      aiResult = fallback;
+      captureServerMessage('[ai] tutor fallback success', {
+        mode: tutorContext.mode,
+        model: fallback.model,
+        hashedUser,
+        hashedIp,
+        responseChars: fallback.message.length,
+        plan: opts.plan?.slug,
+      });
     }
 
-    const fallback = await callOpenRouter(tutorContext, FALLBACK_MODEL, apiKey);
-    captureServerMessage('[ai] tutor fallback success', {
-      mode: tutorContext.mode,
-      model: fallback.model,
-      hashedUser,
-      hashedIp,
-      responseChars: fallback.message.length,
-    });
-    return fallback;
+    if (!aiResult) {
+      throw new AiRequestError(502, 'The tutor is unavailable right now. Please try again shortly.');
+    }
+
+    return {
+      ...aiResult,
+      remaining: payload.mode === 'learning' ? recordTutorUsage(tutorLimit, usageKey) : null,
+      limit: payload.mode === 'learning' ? tutorLimit ?? null : null,
+      plan: payload.mode === 'learning' ? opts.plan?.slug ?? null : null,
+    };
   } catch (error) {
-    captureServerException(error, {
+    const status = error instanceof AiRequestError ? error.status : 500;
+    const context = {
       mode: tutorContext.mode,
       hashedUser,
       hashedIp,
-    });
+      plan: opts.plan?.slug,
+      status,
+    };
+    if (status >= 500) {
+      captureServerException(error, context);
+    } else {
+      captureServerMessage('[ai] tutor request blocked', context, status >= 500 ? 'error' : 'warning');
+    }
     if (error instanceof AiRequestError) {
       throw error;
     }

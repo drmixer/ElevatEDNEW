@@ -17,13 +17,13 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
   const highlights = [
     {
       icon: Brain,
-      title: 'Adaptive mastery',
-      description: 'AI tailors every lesson, hint, and challenge in real time.'
+      title: 'Adaptive mastery at home',
+      description: 'AI tailors every lesson, hint, and challenge to each child\'s pace.'
     },
     {
       icon: TrendingUp,
-      title: 'Actionable insights',
-      description: 'Dynamic dashboards keep families and teachers in sync.'
+      title: 'Family clarity',
+      description: 'Dashboards speak to parents in plain language with weekly digests.'
     },
     {
       icon: Trophy,
@@ -56,18 +56,19 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
         >
           <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand-secondary/70 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
-              Smart Learning • Elevated Results
+              Home Learning • Family-First
           </div>
 
           <h1 className="text-5xl font-semibold text-slate-900 sm:text-6xl lg:text-7xl">
-              Smart Learning. Elevated Results.
+              Home learning, elevated.
               <span className="flex bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent">
                 AI tutoring built for every K-12 learner.
               </span>
           </h1>
 
           <p className="text-lg leading-relaxed text-slate-700 sm:text-xl">
-              ElevatED pairs adaptive AI instruction with family-ready insights so students accelerate with confidence.
+              ElevatED is for students and parents at home, not schools or teachers. Adaptive AI instruction meets
+              family-ready insights so students accelerate with confidence while parents get calm, clear updates.
               Launch personalized journeys that feel handcrafted, with dashboards that keep everyone in the loop.
           </p>
 

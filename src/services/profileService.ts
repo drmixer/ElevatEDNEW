@@ -1,4 +1,5 @@
 import supabase from '../lib/supabaseClient';
+import { normalizeSubject } from '../lib/subjects';
 import type {
   Admin,
   Badge,
@@ -9,7 +10,9 @@ import type {
   Subject,
   SubjectMastery,
   User,
+  LearningPreferences,
 } from '../types';
+import { defaultLearningPreferences } from '../types';
 
 type StudentProfileRow = {
   grade: number | null;
@@ -21,10 +24,11 @@ type StudentProfileRow = {
   weaknesses: string[] | null;
   learning_path: unknown;
   assessment_completed: boolean | null;
+  learning_style?: Record<string, unknown> | null;
 };
 
 type ParentProfileRow = {
-  subscription_tier: 'free' | 'premium' | null;
+  subscription_tier: 'free' | 'plus' | 'premium' | null;
   notifications: Record<string, boolean> | null;
 };
 
@@ -141,12 +145,7 @@ const averageFromBreakdown = (input: unknown, property: 'goal' | 'cohortAverage'
 };
 
 const toSubjectKey = (value: unknown): Subject | null => {
-  if (typeof value !== 'string') return null;
-  const normalized = value.toLowerCase().replace(/\s+/g, '_');
-  if (['math', 'english', 'science', 'social_studies'].includes(normalized)) {
-    return normalized as Subject;
-  }
-  return null;
+  return normalizeSubject(typeof value === 'string' ? value : null);
 };
 
 const castMasteryTargets = (input: unknown): Partial<Record<Subject, number>> => {
@@ -168,6 +167,35 @@ const castMasteryTargets = (input: unknown): Partial<Record<Subject, number>> =>
   return result;
 };
 
+export const castLearningPreferences = (input: unknown): LearningPreferences => {
+  if (!input || typeof input !== 'object') {
+    return defaultLearningPreferences;
+  }
+
+  const prefs: LearningPreferences = { ...defaultLearningPreferences };
+  const raw = input as Record<string, unknown>;
+
+  const session = raw.sessionLength ?? raw.preferredSession ?? raw.session_length;
+  if (session === 'short' || session === 'standard' || session === 'long') {
+    prefs.sessionLength = session;
+  }
+
+  const focusSubject = raw.focusSubject ?? raw.focus_subject;
+  const normalizedFocus = toSubjectKey(focusSubject);
+  if (normalizedFocus) {
+    prefs.focusSubject = normalizedFocus;
+  } else if (focusSubject === 'balanced') {
+    prefs.focusSubject = 'balanced';
+  }
+
+  const intensity = raw.focusIntensity ?? raw.focus_intensity;
+  if (intensity === 'focused' || intensity === 'balanced') {
+    prefs.focusIntensity = intensity;
+  }
+
+  return prefs;
+};
+
 export const fetchUserProfile = async (userId: string): Promise<User> => {
   const { data, error } = await supabase
     .from('profiles')
@@ -182,13 +210,14 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
         grade,
         xp,
         level,
-        badges,
-        streak_days,
-        strengths,
-        weaknesses,
-        learning_path,
-        assessment_completed
-      ),
+      badges,
+      streak_days,
+      strengths,
+      weaknesses,
+      learning_path,
+      assessment_completed,
+      learning_style
+    ),
       parent_profiles(
         subscription_tier,
         notifications
@@ -226,6 +255,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       strengths: studentDetails?.strengths ?? [],
       weaknesses: studentDetails?.weaknesses ?? [],
       learningPath: (studentDetails?.learning_path as Student['learningPath']) ?? [],
+      learningPreferences: castLearningPreferences(studentDetails?.learning_style),
       assessmentCompleted: studentDetails?.assessment_completed ?? false,
       avatar: profile.avatar_url ?? undefined,
     };
@@ -375,4 +405,18 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
   };
 
   return parent;
+};
+
+export const updateLearningPreferences = async (
+  studentId: string,
+  preferences: LearningPreferences,
+): Promise<void> => {
+  const { error } = await supabase
+    .from('student_profiles')
+    .update({ learning_style: preferences })
+    .eq('id', studentId);
+
+  if (error) {
+    throw new Error(error.message ?? 'Failed to update learning preferences');
+  }
 };
