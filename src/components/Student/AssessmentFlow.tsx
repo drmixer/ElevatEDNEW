@@ -14,7 +14,7 @@ import {
 } from '../../services/assessmentService';
 
 interface AssessmentFlowProps {
-  onComplete: () => void;
+  onComplete: (result?: AssessmentResult | null) => void;
 }
 
 type Step = 'intro' | 'assessment' | 'results';
@@ -79,7 +79,14 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
     setTimeSpent(0);
     setQuestionStart(null);
     try {
-      const loaded = await loadDiagnosticAssessment(student.id);
+      const preferredSubject =
+        student.learningPreferences?.focusSubject && student.learningPreferences.focusSubject !== 'balanced'
+          ? student.learningPreferences.focusSubject
+          : null;
+      const loaded = await loadDiagnosticAssessment(student.id, {
+        grade: student.grade,
+        subject: preferredSubject,
+      });
       const seededAnswers = seedExistingResponses(loaded);
       setAssessment(loaded);
       setAnswers(seededAnswers);
@@ -141,6 +148,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
           assessment,
           answers: updatedAnswers,
           startedAt: startTime ?? new Date(),
+          grade: student.grade,
         });
         setResult(summary);
         setCurrentStep('results');
@@ -226,11 +234,11 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
               </button>
 
               <button
-                onClick={onComplete}
-                className="w-full text-gray-600 py-2 rounded-xl hover:text-gray-800 transition-colors"
-              >
-                Skip for now (start at grade level)
-              </button>
+              onClick={() => onComplete(null)}
+              className="w-full text-gray-600 py-2 rounded-xl hover:text-gray-800 transition-colors"
+            >
+              Skip for now (start at grade level)
+            </button>
             </div>
           </div>
         </motion.div>
@@ -412,7 +420,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
             )}
 
             <button
-              onClick={onComplete}
+              onClick={() => onComplete(result)}
               className="w-full bg-gradient-to-r from-brand-teal to-brand-blue text-white py-4 rounded-2xl font-semibold text-lg hover:shadow-lg transition-all duration-300"
             >
               Start Your Learning Journey

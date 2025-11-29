@@ -75,10 +75,10 @@ const Features: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent bg-clip-text text-transparent mb-6">
-            Powerful Features for Modern Learning
+            Built for Families Learning at Home
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Everything you need to create personalized, engaging, and effective learning experiences
+            Everything students and parents need to keep home learning personal, clear, and motivating
           </p>
         </motion.div>
 

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { captureServerMessage } from './monitoring.js';
 
 export type ModuleListItem = {
   id: number;
@@ -135,6 +136,15 @@ export type LessonDetail = {
   }>;
   standards: ModuleStandard[];
 };
+
+const parseLimit = (value: string | undefined, fallback: number): number => {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+const MODULE_ASSET_LIMIT = parseLimit(process.env.MODULE_ASSET_LIMIT, 400);
+const MODULE_LESSON_LIMIT = parseLimit(process.env.MODULE_LESSON_LIMIT, 120);
 
 type LessonRow = {
   id: number;
@@ -377,11 +387,14 @@ export const getModuleDetail = async (
       .select('id, title, content, estimated_duration_minutes, attribution_block, open_track')
       .eq('module_id', moduleId)
       .eq('visibility', 'public')
-      .order('id', { ascending: true }),
+      .order('id', { ascending: true })
+      .range(0, MODULE_LESSON_LIMIT - 1),
     supabase
       .from('assets')
       .select('id, lesson_id, title, description, url, kind, license, license_url, attribution_text, tags')
-      .eq('module_id', moduleId),
+      .eq('module_id', moduleId)
+      .order('id', { ascending: true })
+      .range(0, MODULE_ASSET_LIMIT - 1),
     supabase
       .from('module_standards')
       .select('standard_id, alignment_strength, metadata')
@@ -406,6 +419,9 @@ export const getModuleDetail = async (
   }
 
   const lessonsRaw = (lessonsResult.data ?? []) as LessonRow[];
+  if (lessonsRaw.length === MODULE_LESSON_LIMIT) {
+    captureServerMessage('[modules] lesson list truncated', { moduleId, limit: MODULE_LESSON_LIMIT }, 'warning');
+  }
   const lessons = lessonsRaw.map((lesson) => ({
     id: lesson.id,
     title: lesson.title,
@@ -420,9 +436,13 @@ export const getModuleDetail = async (
   lessons.forEach((lesson, index) => lessonIndex.set(lesson.id, index));
 
   const moduleAssets: AssetSummary[] = [];
+  const assetRows = (assetsResult.data ?? []) as AssetSummary[];
+  if (assetRows.length === MODULE_ASSET_LIMIT) {
+    captureServerMessage('[modules] module assets truncated', { moduleId, limit: MODULE_ASSET_LIMIT }, 'warning');
+  }
 
-  for (const asset of assetsResult.data ?? []) {
-    const summary = asset as AssetSummary;
+  for (const asset of assetRows) {
+    const summary = asset;
     if (summary.lesson_id && lessonIndex.has(summary.lesson_id)) {
       lessons[lessonIndex.get(summary.lesson_id)!].assets.push(summary);
     } else {
@@ -588,7 +608,8 @@ export const getLessonDetail = async (
       .select('id, title, estimated_duration_minutes, open_track')
       .eq('module_id', moduleId)
       .eq('visibility', 'public')
-      .order('id', { ascending: true }),
+      .order('id', { ascending: true })
+      .range(0, MODULE_LESSON_LIMIT - 1),
   ]);
 
   if (moduleResult.error) {
@@ -608,6 +629,9 @@ export const getLessonDetail = async (
 
   const assets = (assetsResult.data ?? []) as AssetSummary[];
   const moduleLessonsRaw = (moduleLessonsResult.data ?? []) as LessonNavRow[];
+  if (moduleLessonsRaw.length === MODULE_LESSON_LIMIT) {
+    captureServerMessage('[modules] lesson navigation truncated', { moduleId, limit: MODULE_LESSON_LIMIT }, 'warning');
+  }
 
   return {
     lesson: {

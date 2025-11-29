@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { formatSubjectLabel, normalizeSubject } from '../lib/subjects';
 
 import { fetchModuleAssessment, fetchModuleDetail, fetchRecommendations } from '../services/catalogService';
 
@@ -116,20 +117,13 @@ const ModulePage: React.FC = () => {
   }
 
   const { module: core, lessons, moduleAssets } = moduleDetail;
+  const normalizedSubject = normalizeSubject(core.subject);
+  const subjectLabel = normalizedSubject ? formatSubjectLabel(normalizedSubject) : core.subject;
   const firstLesson = lessons[0] ?? null;
-  const totalLessonAssets = useMemo(
-    () => lessons.reduce((sum, lesson) => sum + lesson.assets.length, 0),
-    [lessons],
-  );
+  const totalLessonAssets = lessons.reduce((sum, lesson) => sum + lesson.assets.length, 0);
   const totalAssets = totalLessonAssets + moduleAssets.length;
-  const openTrackLessonCount = useMemo(
-    () => lessons.filter((lesson) => lesson.openTrack).length,
-    [lessons],
-  );
-  const standardsHighlight = useMemo(
-    () => moduleDetail.standards.slice(0, 6),
-    [moduleDetail.standards],
-  );
+  const openTrackLessonCount = lessons.filter((lesson) => lesson.openTrack).length;
+  const standardsHighlight = moduleDetail.standards.slice(0, 6);
   const hasAssessments = moduleDetail.assessments.length > 0;
 
   return (
@@ -137,12 +131,12 @@ const ModulePage: React.FC = () => {
       <header className="bg-white border-b border-slate-200 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col gap-4">
           <div className="text-sm text-brand-blue uppercase tracking-wide font-semibold">
-            {core.subject} · Grade {core.gradeBand}
+            {subjectLabel ?? core.subject} · Grade {core.gradeBand}
           </div>
           <h1 className="text-3xl font-bold text-slate-900">{pageTitle}</h1>
           <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
-            {core.strand && <span>Strand: {core.strand}</span>}
-            {core.topic && <span>Topic: {core.topic}</span>}
+            {core.strand && <span>Focus area: {core.strand}</span>}
+            {core.topic && <span>Skill target: {core.topic}</span>}
             {openTrackTag}
           </div>
           <p className="text-slate-600 max-w-3xl">
@@ -613,7 +607,7 @@ const ModulePage: React.FC = () => {
           <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Module snapshot</h2>
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li><span className="font-semibold text-slate-700">Subject:</span> {core.subject}</li>
+              <li><span className="font-semibold text-slate-700">Subject:</span> {subjectLabel}</li>
               <li><span className="font-semibold text-slate-700">Grade band:</span> {core.gradeBand}</li>
               <li><span className="font-semibold text-slate-700">Lessons:</span> {lessons.length}</li>
               <li>

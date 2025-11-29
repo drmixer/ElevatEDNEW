@@ -1,10 +1,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { formatSubjectLabel as labelSubject, normalizeSubject } from '../src/lib/subjects';
 
 export type NotificationType =
   | 'assignment_created'
   | 'assignment_overdue'
   | 'low_mastery'
-  | 'streak_milestone';
+  | 'streak_milestone'
+  | 'skill_mastered'
+  | 'goal_met'
+  | 'consistent_low_performance';
 
 type ParentPreferenceKey =
   | 'weeklyReports'
@@ -60,11 +64,32 @@ type StreakContext = {
   streak_days: number;
 };
 
+type ParentDashboardChildRow = {
+  parent_id: string;
+  student_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  lessons_completed_week: number | null;
+  practice_minutes_week: number | null;
+  weekly_lessons_target: number | null;
+  practice_minutes_target: number | null;
+  mastery_targets: Record<string, unknown> | null;
+  mastery_breakdown:
+    | Array<{
+        subject?: string | null;
+        mastery?: number | null;
+      }>
+    | null;
+};
+
 const PREFERENCE_KEY_BY_TYPE: Record<NotificationType, ParentPreferenceKey | null> = {
   assignment_created: 'majorProgress',
   assignment_overdue: 'missedSessions',
   low_mastery: 'lowScores',
   streak_milestone: 'majorProgress',
+  skill_mastered: 'majorProgress',
+  goal_met: 'majorProgress',
+  consistent_low_performance: 'lowScores',
 };
 
 const formatStudentName = (row: StudentRow | undefined): string => {
@@ -72,6 +97,13 @@ const formatStudentName = (row: StudentRow | undefined): string => {
   const parts = [row.first_name, row.last_name].filter(Boolean) as string[];
   if (parts.length === 0) return 'your learner';
   return parts.join(' ');
+};
+
+const formatSubjectLabel = (subject: string | null | undefined): string => {
+  if (!subject) return 'a focus area';
+  const normalized = normalizeSubject(subject);
+  if (!normalized) return subject.replace('_', ' ');
+  return labelSubject(normalized);
 };
 
 const formatDueDate = (value: string | null | undefined): string => {
@@ -97,6 +129,31 @@ const parentPreferenceEnabled = (
   const preferences = recipient.preferences ?? {};
   const value = preferences[preferenceKey];
   return value !== false;
+};
+
+const getWeekStartIso = (now = new Date()): string => {
+  const day = now.getDay();
+  const mondayOffset = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now);
+  monday.setDate(mondayOffset);
+  monday.setHours(0, 0, 0, 0);
+  return monday.toISOString();
+};
+
+const parseTargets = (raw: Record<string, unknown> | null): Record<string, number> => {
+  const map: Record<string, number> = {};
+  if (!raw) return map;
+  Object.entries(raw).forEach(([key, value]) => {
+    if (typeof value === 'number') {
+      map[key] = value;
+    } else if (typeof value === 'string') {
+      const parsed = Number.parseFloat(value);
+      if (Number.isFinite(parsed)) {
+        map[key] = parsed;
+      }
+    }
+  });
+  return map;
 };
 
 const fetchStudentRows = async (
@@ -187,6 +244,24 @@ const fetchParentRecipients = async (
   return recipients;
 };
 
+const fetchParentDashboardSnapshots = async (
+  client: SupabaseClient,
+): Promise<ParentDashboardChildRow[]> => {
+  const { data, error } = await client
+    .from('parent_dashboard_children')
+    .select(
+      'parent_id, student_id, first_name, last_name, lessons_completed_week, practice_minutes_week, weekly_lessons_target, practice_minutes_target, mastery_targets, mastery_breakdown',
+    )
+    .limit(150);
+
+  if (error) {
+    console.warn('[notifications] Unable to load parent dashboard snapshots', error);
+    return [];
+  }
+
+  return (data as ParentDashboardChildRow[]) ?? [];
+};
+
 const filterExistingNotifications = async (
   client: SupabaseClient,
   payloads: NotificationInsert[],
@@ -246,7 +321,6 @@ const insertNotifications = async (
 const queueExternalDeliveryHooks = (payloads: NotificationInsert[]) => {
   // Placeholder for future email/SMS delivery.
   if (payloads.length === 0) return;
-  // eslint-disable-next-line no-console
   console.debug(
     '[notifications] Delivery hooks ready',
     payloads.map((item) => item.notification_type),
@@ -419,6 +493,298 @@ const buildLowMasteryNotifications = (
         });
       });
   });
+
+  return notifications;
+};
+
+const buildSkillMasteredNotifications = (
+  masteryRows: MasteryContext[],
+  studentRows: StudentRow[],
+  parentRecipients: Map<string, ParentRecipient[]>,
+  subjectNameBySkill: Map<number, string>,
+  threshold = 85,
+): NotificationInsert[] => {
+  const notifications: NotificationInsert[] = [];
+  const studentMap = new Map(studentRows.map((row) => [row.id, row]));
+
+  masteryRows.forEach((row) => {
+    if (row.mastery_pct < threshold) return;
+    const subject = subjectNameBySkill.get(row.skill_id) ?? 'a focus area';
+    const studentId = row.student_id;
+    const studentName = formatStudentName(studentMap.get(studentId));
+    const eventKey = `skill_mastered:${row.skill_id}:${studentId}`;
+
+    notifications.push({
+      recipient_id: studentId,
+      notification_type: 'skill_mastered',
+      title: `Skill mastered: ${subject}`,
+      body: `Great job! You reached ${Math.round(row.mastery_pct)}% mastery. Keep the momentum.`,
+      data: {
+        skillId: row.skill_id,
+        masteryPct: row.mastery_pct,
+        eventKey,
+        channels: ['in_app'],
+        targetUrl: '/student',
+      },
+    });
+
+    const parents = parentRecipients.get(studentId) ?? [];
+    parents
+      .filter((parent) => parentPreferenceEnabled(parent, 'skill_mastered'))
+      .forEach((parent) => {
+        notifications.push({
+          recipient_id: parent.id,
+          notification_type: 'skill_mastered',
+          title: `${studentName} mastered a ${subject} skill`,
+          body: `${studentName} reached ${Math.round(row.mastery_pct)}% mastery. High five them and pick a next step.`,
+          data: {
+            skillId: row.skill_id,
+            studentId,
+            masteryPct: row.mastery_pct,
+            eventKey,
+            channels: ['in_app'],
+            targetUrl: '/parent#weekly-snapshot',
+          },
+        });
+      });
+  });
+
+  return notifications;
+};
+
+export const buildGoalNotificationsFromRow = (
+  row: ParentDashboardChildRow,
+  student: StudentRow | undefined,
+  parents: ParentRecipient[],
+  weekStart: string,
+): NotificationInsert[] => {
+  const notifications: NotificationInsert[] = [];
+  const studentId = row.student_id;
+  const studentName = formatStudentName(student);
+  const lessonsCompleted = row.lessons_completed_week ?? 0;
+  const minutesCompleted = row.practice_minutes_week ?? 0;
+  const lessonsTarget = row.weekly_lessons_target ?? 0;
+  const minutesTarget = row.practice_minutes_target ?? 0;
+  const masteryTargets = parseTargets(row.mastery_targets);
+  const masteryMap = new Map<string, number>();
+  (row.mastery_breakdown ?? []).forEach((entry) => {
+    const subject = (entry.subject ?? '') as string;
+    const key = subject.toLowerCase();
+    const mastery = typeof entry.mastery === 'number' ? entry.mastery : Number.parseFloat(String(entry.mastery ?? 0));
+    if (key && Number.isFinite(mastery)) {
+      masteryMap.set(key, mastery);
+    }
+  });
+
+  const pushParent = (payload: NotificationInsert, type: NotificationType) => {
+    parents
+      .filter((parent) => parentPreferenceEnabled(parent, type))
+      .forEach((parent) =>
+        notifications.push({
+          ...payload,
+          recipient_id: parent.id,
+        }),
+      );
+  };
+
+  if (lessonsTarget > 0 && lessonsCompleted >= lessonsTarget) {
+    const eventKey = `goal_met:lessons:${studentId}:${weekStart}`;
+    notifications.push({
+      recipient_id: studentId,
+      notification_type: 'goal_met',
+      title: 'Weekly lessons goal met',
+      body: `You completed ${lessonsCompleted}/${lessonsTarget} lessons this week.`,
+      data: {
+        goalType: 'lessons',
+        target: lessonsTarget,
+        achieved: lessonsCompleted,
+        eventKey,
+        weekStart,
+        targetUrl: '/student',
+        channels: ['in_app'],
+      },
+    });
+
+    pushParent(
+      {
+        recipient_id: studentId,
+        notification_type: 'goal_met',
+        title: `${studentName} hit their lessons goal`,
+        body: `${studentName} finished ${lessonsCompleted}/${lessonsTarget} lessons this week.`,
+        data: {
+          goalType: 'lessons',
+          target: lessonsTarget,
+          achieved: lessonsCompleted,
+          studentId,
+          eventKey,
+          weekStart,
+          targetUrl: '/parent#weekly-snapshot',
+          channels: ['in_app'],
+        },
+      },
+      'goal_met',
+    );
+  }
+
+  if (minutesTarget > 0 && minutesCompleted >= minutesTarget) {
+    const eventKey = `goal_met:minutes:${studentId}:${weekStart}`;
+    notifications.push({
+      recipient_id: studentId,
+      notification_type: 'goal_met',
+      title: 'Weekly minutes goal met',
+      body: `You studied for ${minutesCompleted} minutes (goal ${minutesTarget}).`,
+      data: {
+        goalType: 'minutes',
+        target: minutesTarget,
+        achieved: minutesCompleted,
+        eventKey,
+        weekStart,
+        targetUrl: '/student',
+        channels: ['in_app'],
+      },
+    });
+
+    pushParent(
+      {
+        recipient_id: studentId,
+        notification_type: 'goal_met',
+        title: `${studentName} hit their minutes goal`,
+        body: `${studentName} logged ${minutesCompleted} minutes toward a ${minutesTarget}-minute goal.`,
+        data: {
+          goalType: 'minutes',
+          target: minutesTarget,
+          achieved: minutesCompleted,
+          studentId,
+          eventKey,
+          weekStart,
+          targetUrl: '/parent#weekly-snapshot',
+          channels: ['in_app'],
+        },
+      },
+      'goal_met',
+    );
+  }
+
+  let masteryNotices = 0;
+  Object.entries(masteryTargets).forEach(([subjectKey, target]) => {
+    if (masteryNotices >= 2) return;
+    const mastery = masteryMap.get(subjectKey.toLowerCase());
+    if (mastery === undefined) return;
+    if (mastery < target) return;
+    masteryNotices += 1;
+
+    const subjectLabel = formatSubjectLabel(subjectKey);
+    const eventKey = `goal_met:mastery:${subjectKey}:${studentId}:${weekStart}`;
+
+    notifications.push({
+      recipient_id: studentId,
+      notification_type: 'goal_met',
+      title: `Mastery goal met in ${subjectLabel}`,
+      body: `You reached ${Math.round(mastery)}% mastery (goal ${Math.round(target)}%).`,
+      data: {
+        goalType: 'mastery',
+        target,
+        achieved: mastery,
+        subject: subjectKey,
+        eventKey,
+        weekStart,
+        targetUrl: '/student',
+        channels: ['in_app'],
+      },
+    });
+
+    pushParent(
+      {
+        recipient_id: studentId,
+        notification_type: 'goal_met',
+        title: `${studentName} met a ${subjectLabel} goal`,
+        body: `${studentName} reached ${Math.round(mastery)}% mastery (goal ${Math.round(target)}%).`,
+        data: {
+          goalType: 'mastery',
+          target,
+          achieved: mastery,
+          subject: subjectKey,
+          studentId,
+          eventKey,
+          weekStart,
+          targetUrl: '/parent#weekly-snapshot',
+          channels: ['in_app'],
+        },
+      },
+      'goal_met',
+    );
+  });
+
+  return notifications;
+};
+
+const buildConsistentLowPerformanceNotifications = (
+  row: ParentDashboardChildRow,
+  student: StudentRow | undefined,
+  parents: ParentRecipient[],
+  weekStart: string,
+): NotificationInsert[] => {
+  const notifications: NotificationInsert[] = [];
+  const studentId = row.student_id;
+  const studentName = formatStudentName(student);
+  const lessons = row.lessons_completed_week ?? 0;
+  const minutes = row.practice_minutes_week ?? 0;
+  const masteryEntries = (row.mastery_breakdown ?? []).map((entry) => ({
+    subject: (entry.subject ?? '') as string,
+    mastery: typeof entry.mastery === 'number' ? entry.mastery : Number.parseFloat(String(entry.mastery ?? 0)),
+  }));
+
+  if (!masteryEntries.length) return notifications;
+
+  const lowest = masteryEntries.slice().sort((a, b) => (a.mastery ?? 100) - (b.mastery ?? 100))[0];
+  const average =
+    masteryEntries.reduce((acc, entry) => acc + (entry.mastery ?? 0), 0) / Math.max(masteryEntries.length, 1);
+
+  const lowActivity = lessons < 3 || minutes < 150;
+  const lowMastery = (lowest.mastery ?? 100) < 60 || average < 65;
+  if (!lowActivity || !lowMastery) return notifications;
+
+  const subjectLabel = formatSubjectLabel(lowest.subject);
+  const eventKey = `consistent_low_performance:${studentId}:${lowest.subject || 'general'}:${weekStart}`;
+
+  notifications.push({
+    recipient_id: studentId,
+    notification_type: 'consistent_low_performance',
+    title: `Let's lift ${subjectLabel}`,
+    body: `Your recent work in ${subjectLabel} looks low. Try a focused practice block to rebound.`,
+    data: {
+      subject: lowest.subject ?? 'focus',
+      mastery: lowest.mastery,
+      lessons,
+      minutes,
+      eventKey,
+      weekStart,
+      targetUrl: '/student',
+      channels: ['in_app'],
+    },
+  });
+
+  parents
+    .filter((parent) => parentPreferenceEnabled(parent, 'consistent_low_performance'))
+    .forEach((parent) => {
+      notifications.push({
+        recipient_id: parent.id,
+        notification_type: 'consistent_low_performance',
+        title: `${studentName} needs attention in ${subjectLabel}`,
+        body: `${studentName} has low ${subjectLabel} mastery and light activity this week. Check the Skill gaps view.`,
+        data: {
+          subject: lowest.subject ?? 'focus',
+          mastery: lowest.mastery,
+          lessons,
+          minutes,
+          studentId,
+          eventKey,
+          weekStart,
+          targetUrl: '/parent#skill-gaps',
+          channels: ['in_app'],
+        },
+      });
+    });
 
   return notifications;
 };
@@ -601,6 +967,74 @@ const scanLowMastery = async (client: SupabaseClient): Promise<number> => {
   return insertNotifications(client, payloads);
 };
 
+const scanSkillMastered = async (client: SupabaseClient): Promise<number> => {
+  const threshold = 85;
+  const recentCutoff = new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString();
+
+  const { data, error } = await client
+    .from('student_mastery')
+    .select('student_id, skill_id, mastery_pct, updated_at')
+    .gte('mastery_pct', threshold)
+    .gte('updated_at', recentCutoff)
+    .order('updated_at', { ascending: false })
+    .limit(80);
+
+  if (error) {
+    console.warn('[notifications] Skill mastered scan failed', error);
+    return 0;
+  }
+
+  const rows = (data as MasteryContext[]) ?? [];
+  if (!rows.length) return 0;
+
+  const skillIds = Array.from(new Set(rows.map((row) => row.skill_id)));
+  const { data: skillRows, error: skillError } = await client
+    .from('skills')
+    .select('id, subject_id, name')
+    .in('id', skillIds);
+
+  if (skillError) {
+    console.warn('[notifications] Unable to load mastered skill subjects', skillError);
+  }
+
+  const subjectIds = Array.from(
+    new Set(
+      (skillRows ?? [])
+        .map((row) => row.subject_id as number | null)
+        .filter((value): value is number => typeof value === 'number'),
+    ),
+  );
+
+  const { data: subjectRows, error: subjectError } = subjectIds.length
+    ? await client.from('subjects').select('id, name').in('id', subjectIds)
+    : { data: [], error: null };
+
+  if (subjectError) {
+    console.warn('[notifications] Unable to load mastered subject labels', subjectError);
+  }
+
+  const subjectMap = new Map<number, string>();
+  (subjectRows ?? []).forEach((row) => {
+    if (typeof row.id === 'number') {
+      subjectMap.set(row.id, (row.name as string) ?? 'a focus area');
+    }
+  });
+
+  const subjectNameBySkill = new Map<number, string>();
+  (skillRows ?? []).forEach((row) => {
+    const subjectId = row.subject_id as number | null;
+    subjectNameBySkill.set(row.id as number, subjectId ? subjectMap.get(subjectId) ?? 'a focus area' : 'a focus area');
+  });
+
+  const studentRows = await fetchStudentRows(
+    client,
+    Array.from(new Set(rows.map((row) => row.student_id))),
+  );
+  const parentRecipients = await fetchParentRecipients(client, studentRows);
+  const payloads = buildSkillMasteredNotifications(rows, studentRows, parentRecipients, subjectNameBySkill, threshold);
+  return insertNotifications(client, payloads);
+};
+
 const scanStreakMilestones = async (client: SupabaseClient): Promise<number> => {
   const milestones = [3, 5, 7, 14, 21, 30];
   const { data, error } = await client
@@ -624,6 +1058,49 @@ const scanStreakMilestones = async (client: SupabaseClient): Promise<number> => 
   );
   const parentRecipients = await fetchParentRecipients(client, studentRows);
   const payloads = buildStreakNotifications(rows, studentRows, parentRecipients, milestones);
+  return insertNotifications(client, payloads);
+};
+
+const scanGoalProgress = async (client: SupabaseClient): Promise<number> => {
+  const snapshots = await fetchParentDashboardSnapshots(client);
+  if (!snapshots.length) return 0;
+
+  const studentRows = await fetchStudentRows(
+    client,
+    Array.from(new Set(snapshots.map((row) => row.student_id))),
+  );
+  const parentRecipients = await fetchParentRecipients(client, studentRows);
+  const studentMap = new Map(studentRows.map((row) => [row.id, row]));
+  const weekStart = getWeekStartIso();
+
+  const payloads = snapshots.flatMap((row) =>
+    buildGoalNotificationsFromRow(row, studentMap.get(row.student_id), parentRecipients.get(row.student_id) ?? [], weekStart),
+  );
+
+  return insertNotifications(client, payloads);
+};
+
+const scanConsistentLowPerformance = async (client: SupabaseClient): Promise<number> => {
+  const snapshots = await fetchParentDashboardSnapshots(client);
+  if (!snapshots.length) return 0;
+
+  const studentRows = await fetchStudentRows(
+    client,
+    Array.from(new Set(snapshots.map((row) => row.student_id))),
+  );
+  const parentRecipients = await fetchParentRecipients(client, studentRows);
+  const studentMap = new Map(studentRows.map((row) => [row.id, row]));
+  const weekStart = getWeekStartIso();
+
+  const payloads = snapshots.flatMap((row) =>
+    buildConsistentLowPerformanceNotifications(
+      row,
+      studentMap.get(row.student_id),
+      parentRecipients.get(row.student_id) ?? [],
+      weekStart,
+    ),
+  );
+
   return insertNotifications(client, payloads);
 };
 
@@ -660,10 +1137,13 @@ export class NotificationScheduler {
         scanOverdueAssignments(this.client),
         scanLowMastery(this.client),
         scanStreakMilestones(this.client),
+        scanSkillMastered(this.client),
+        scanGoalProgress(this.client),
+        scanConsistentLowPerformance(this.client),
       ]);
       results.forEach((result, index) => {
         if (result.status === 'rejected') {
-          const buckets = ['overdue', 'low-mastery', 'streaks'];
+          const buckets = ['overdue', 'low-mastery', 'streaks', 'skill-mastered', 'goal-progress', 'low-performance'];
           console.warn(`[notifications] ${buckets[index]} scan errored`, result.reason);
         }
       });
@@ -672,4 +1152,3 @@ export class NotificationScheduler {
     }
   }
 }
-

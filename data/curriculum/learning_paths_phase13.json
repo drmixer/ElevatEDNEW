@@ -1,0 +1,626 @@
+[
+  {
+    "grade_band": "6",
+    "subject": "math",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "module_title": "Ratios & Proportional Reasoning",
+        "strand": "Number & Operations",
+        "standard_codes": ["6.RP.A.3"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Primary entry for placement from diagnostic; rate tables, unit rate, tape/number-line models."
+        }
+      },
+      {
+        "position": 2,
+        "module_slug": "6-mathematics-number-and-operations-percent-and-rates",
+        "module_title": "Percent & Rates",
+        "strand": "Number & Operations",
+        "standard_codes": ["6.RP.A.3"],
+        "metadata": {
+          "notes": "Extends ratio reasoning to percent increase/decrease and multi-step rate problems."
+        }
+      },
+      {
+        "position": 3,
+        "module_slug": "6-mathematics-number-and-operations-integers-and-rational-numbers",
+        "module_title": "Integers & Rational Numbers",
+        "strand": "Number & Operations",
+        "standard_codes": ["6.NS.C.5", "6.NS.C.6"],
+        "metadata": {
+          "notes": "Ordering, absolute value, and operations with signed numbers."
+        }
+      },
+      {
+        "position": 4,
+        "module_slug": "6-mathematics-number-and-operations-expressions-and-equations",
+        "module_title": "Expressions & Equations",
+        "strand": "Number & Operations",
+        "standard_codes": ["6.EE.B.7"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "One-step equations/inequalities with contexts."
+        }
+      },
+      {
+        "position": 5,
+        "module_slug": "6-mathematics-number-and-operations-functions-intro",
+        "module_title": "Functions (Intro)",
+        "strand": "Number & Operations",
+        "standard_codes": ["6.EE.C.9"],
+        "metadata": {
+          "notes": "Tables, simple rules, and growing patterns that set up slope reasoning later."
+        }
+      },
+      {
+        "position": 6,
+        "module_slug": "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "module_title": "Coordinate Geometry",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["6.NS.C.8"],
+        "metadata": {
+          "notes": "Distance on the coordinate plane and quadrants."
+        }
+      },
+      {
+        "position": 7,
+        "module_slug": "6-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "module_title": "Transformations & Symmetry",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["6.G.A.3"],
+        "metadata": {
+          "notes": "Translations, reflections, rotations on grids."
+        }
+      },
+      {
+        "position": 8,
+        "module_slug": "6-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "module_title": "Similarity & Congruence",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["6.G.A.4"],
+        "metadata": {
+          "notes": "Scale drawings and triangle congruence intuition."
+        }
+      },
+      {
+        "position": 9,
+        "module_slug": "6-mathematics-geometry-and-measurement-volume-and-surface-area",
+        "module_title": "Volume & Surface Area",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["6.G.A.2"],
+        "metadata": {
+          "notes": "Prisms and composite figures with nets."
+        }
+      },
+      {
+        "position": 10,
+        "module_slug": "6-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "module_title": "Pythagorean Theorem (Early Concept)",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["8.G.B.6"],
+        "metadata": {
+          "notes": "Concrete legs/hypotenuse intuition to prep Grade 8 mastery."
+        }
+      },
+      {
+        "position": 11,
+        "module_slug": "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "module_title": "Sampling & Inference (Intro)",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["6.SP.A.1", "6.SP.A.2"],
+        "metadata": {
+          "notes": "Representative samples, bias, and informal inference."
+        }
+      },
+      {
+        "position": 12,
+        "module_slug": "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "module_title": "Scatterplots & Correlation",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["6.SP.B.4"],
+        "metadata": {
+          "notes": "Trend direction, clusters, and outliers."
+        }
+      },
+      {
+        "position": 13,
+        "module_slug": "6-mathematics-data-and-probability-statistics-two-way-tables",
+        "module_title": "Two-way Tables",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["6.SP.B.5"],
+        "metadata": {
+          "notes": "Relative frequency and interpreting categories."
+        }
+      },
+      {
+        "position": 14,
+        "module_slug": "6-mathematics-data-and-probability-statistics-probability-rules",
+        "module_title": "Probability Rules",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["6.SP.C.7"],
+        "metadata": {
+          "notes": "Simple probability and expected value intuition."
+        }
+      }
+    ]
+  },
+  {
+    "grade_band": "6",
+    "subject": "ela",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots",
+        "module_title": "Academic Vocabulary & Roots",
+        "strand": "Vocabulary",
+        "standard_codes": ["L.6.4", "L.6.6"],
+        "metadata": { "notes": "Entry set for diagnostic routing; focus on morphemes and academic words." }
+      },
+      {
+        "position": 2,
+        "module_slug": "6-english-language-arts-reading-informational-science-tech-articles-open-licensed",
+        "module_title": "Reading Informational: Science & Tech",
+        "strand": "Reading Informational",
+        "standard_codes": ["RI.6.1"],
+        "metadata": { "notes": "Evidence gathering on technical passages." }
+      },
+      {
+        "position": 3,
+        "module_slug": "6-english-language-arts-reading-informational-historical-documents-pd",
+        "module_title": "Reading Informational: Historical Documents",
+        "strand": "Reading Informational",
+        "standard_codes": ["RI.6.1"],
+        "metadata": { "notes": "Structure, author purpose, and sourcing." }
+      },
+      {
+        "position": 4,
+        "module_slug": "6-english-language-arts-reading-literature-novellas-short-novels-pd",
+        "module_title": "Reading Literature: Novellas & Short Novels",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.6.1"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Theme, character response, and text evidence."
+        }
+      },
+      {
+        "position": 5,
+        "module_slug": "6-english-language-arts-reading-literature-poetry-and-drama-pd",
+        "module_title": "Reading Literature: Poetry & Drama",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.6.5"],
+        "metadata": { "notes": "Stanza/scene structure and figurative language." }
+      },
+      {
+        "position": 6,
+        "module_slug": "6-english-language-arts-reading-literature-world-literature-pd-where-possible",
+        "module_title": "Reading Literature: World Texts",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.6.2"],
+        "metadata": { "notes": "Global texts for theme and summary." }
+      },
+      {
+        "position": 7,
+        "module_slug": "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage",
+        "module_title": "Argument Writing & Grammar",
+        "strand": "Writing & Grammar",
+        "standard_codes": ["W.6.1"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Claim-reason-evidence, cohesion, and conventions."
+        }
+      },
+      {
+        "position": 8,
+        "module_slug": "6-english-language-arts-speaking-and-listening-debates-multimedia-presentations",
+        "module_title": "Speaking & Listening",
+        "strand": "Speaking & Listening",
+        "standard_codes": ["SL.6.1", "SL.6.4"],
+        "metadata": { "notes": "Collaborative discussions and multimedia notes." }
+      }
+    ]
+  },
+  {
+    "grade_band": "7",
+    "subject": "math",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "module_title": "Proportional Relationships",
+        "strand": "Number & Operations",
+        "standard_codes": ["7.RP.A.2"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Rate tables, constant of proportionality, and slope links."
+        }
+      },
+      {
+        "position": 2,
+        "module_slug": "7-mathematics-number-and-operations-percent-and-rates",
+        "module_title": "Percent & Rate Problems",
+        "strand": "Number & Operations",
+        "standard_codes": ["7.RP.A.3"],
+        "metadata": { "notes": "Markdown, markup, and multistep percent change." }
+      },
+      {
+        "position": 3,
+        "module_slug": "7-mathematics-number-and-operations-integers-and-rational-numbers",
+        "module_title": "Integers & Rational Operations",
+        "strand": "Number & Operations",
+        "standard_codes": ["7.NS.A.1", "7.NS.A.2"],
+        "metadata": { "notes": "Operations with signed numbers and fraction/decimal fluency." }
+      },
+      {
+        "position": 4,
+        "module_slug": "7-mathematics-number-and-operations-expressions-and-equations",
+        "module_title": "Expressions, Equations & Inequalities",
+        "strand": "Number & Operations",
+        "standard_codes": ["7.EE.B.4a"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Two-step equations/inequalities in context."
+        }
+      },
+      {
+        "position": 5,
+        "module_slug": "7-mathematics-number-and-operations-functions-intro",
+        "module_title": "Functions (Grade 7 bridge)",
+        "strand": "Number & Operations",
+        "standard_codes": ["7.EE.B.3"],
+        "metadata": { "notes": "Tables/graphs that set up linear functions language." }
+      },
+      {
+        "position": 6,
+        "module_slug": "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "module_title": "Coordinate Geometry & Slope",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["7.G.A.1"],
+        "metadata": { "notes": "Scale drawings, slope from graphs, and distance." }
+      },
+      {
+        "position": 7,
+        "module_slug": "7-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "module_title": "Transformations & Symmetry",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["7.G.A.2"],
+        "metadata": { "notes": "Rigid motions, symmetry, and coordinate proofs light." }
+      },
+      {
+        "position": 8,
+        "module_slug": "7-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "module_title": "Similarity & Congruence",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["7.G.A.1"],
+        "metadata": { "notes": "Triangle similarity, dilations, and scale factor." }
+      },
+      {
+        "position": 9,
+        "module_slug": "7-mathematics-geometry-and-measurement-volume-and-surface-area",
+        "module_title": "Volume & Surface Area",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["7.G.B.6"],
+        "metadata": { "notes": "Prisms, cylinders, and composite solids." }
+      },
+      {
+        "position": 10,
+        "module_slug": "7-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "module_title": "Pythagorean Theorem Bridge",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["7.G.B.8"],
+        "metadata": { "notes": "Distance on a grid as a precursor to 8th-grade depth." }
+      },
+      {
+        "position": 11,
+        "module_slug": "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "module_title": "Sampling & Inference",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["7.SP.A.1"],
+        "metadata": { "notes": "Random samples and variability." }
+      },
+      {
+        "position": 12,
+        "module_slug": "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "module_title": "Scatterplots & Correlation",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["7.SP.A.2"],
+        "metadata": { "notes": "Trend lines and qualitative correlation." }
+      },
+      {
+        "position": 13,
+        "module_slug": "7-mathematics-data-and-probability-statistics-two-way-tables",
+        "module_title": "Two-way Tables",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["7.SP.B.3"],
+        "metadata": { "notes": "Joint vs marginal frequency and relative frequency." }
+      },
+      {
+        "position": 14,
+        "module_slug": "7-mathematics-data-and-probability-statistics-probability-rules",
+        "module_title": "Probability Rules",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["7.SP.C.7"],
+        "metadata": { "notes": "Compound probability with lists, tables, and simulations." }
+      }
+    ]
+  },
+  {
+    "grade_band": "7",
+    "subject": "ela",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots",
+        "module_title": "Academic Vocabulary & Roots",
+        "strand": "Vocabulary",
+        "standard_codes": ["L.7.4", "L.7.6"],
+        "metadata": { "notes": "Affixes, context, and precision language." }
+      },
+      {
+        "position": 2,
+        "module_slug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed",
+        "module_title": "Reading Informational: Science & Tech",
+        "strand": "Reading Informational",
+        "standard_codes": ["RI.7.8"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Evaluating arguments and evidence quality."
+        }
+      },
+      {
+        "position": 3,
+        "module_slug": "7-english-language-arts-reading-informational-historical-documents-pd",
+        "module_title": "Reading Informational: Historical Documents",
+        "strand": "Reading Informational",
+        "standard_codes": ["RI.7.8"],
+        "metadata": { "notes": "Claims vs evidence, sourcing, and bias." }
+      },
+      {
+        "position": 4,
+        "module_slug": "7-english-language-arts-reading-literature-novellas-short-novels-pd",
+        "module_title": "Reading Literature: Novellas & Short Novels",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.7.2"],
+        "metadata": { "notes": "Theme, plot structure, and textual evidence." }
+      },
+      {
+        "position": 5,
+        "module_slug": "7-english-language-arts-reading-literature-poetry-and-drama-pd",
+        "module_title": "Reading Literature: Poetry & Drama",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.7.5"],
+        "metadata": { "notes": "Poetic structure, scenes, and dramatic irony." }
+      },
+      {
+        "position": 6,
+        "module_slug": "7-english-language-arts-reading-literature-world-literature-pd-where-possible",
+        "module_title": "Reading Literature: World Texts",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.7.6"],
+        "metadata": { "notes": "Perspective and cultural context comparisons." }
+      },
+      {
+        "position": 7,
+        "module_slug": "7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage",
+        "module_title": "Argument Writing & Grammar",
+        "strand": "Writing & Grammar",
+        "standard_codes": ["W.7.1"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Claims, logical organization, counterpoints, and conventions."
+        }
+      },
+      {
+        "position": 8,
+        "module_slug": "7-english-language-arts-speaking-and-listening-debates-multimedia-presentations",
+        "module_title": "Speaking & Listening",
+        "strand": "Speaking & Listening",
+        "standard_codes": ["SL.7.1", "SL.7.4"],
+        "metadata": { "notes": "Collaborative debates and multimedia planning." }
+      }
+    ]
+  },
+  {
+    "grade_band": "8",
+    "subject": "math",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "module_title": "Proportional Review & Rate Reasoning",
+        "strand": "Number & Operations",
+        "standard_codes": ["8.RP.A.3"],
+        "metadata": { "notes": "Bridge to linear functions and percent error." }
+      },
+      {
+        "position": 2,
+        "module_slug": "8-mathematics-number-and-operations-percent-and-rates",
+        "module_title": "Percent Problems & Growth",
+        "strand": "Number & Operations",
+        "standard_codes": ["8.RP.A.3"],
+        "metadata": { "notes": "Compound percent change and multi-step contexts." }
+      },
+      {
+        "position": 3,
+        "module_slug": "8-mathematics-number-and-operations-integers-and-rational-numbers",
+        "module_title": "Rational Numbers & Scientific Notation",
+        "strand": "Number & Operations",
+        "standard_codes": ["8.NS.A.1", "8.EE.A.3"],
+        "metadata": { "notes": "Operations with rationals and magnitude comparisons." }
+      },
+      {
+        "position": 4,
+        "module_slug": "8-mathematics-number-and-operations-expressions-and-equations",
+        "module_title": "Linear Expressions & Equations",
+        "strand": "Number & Operations",
+        "standard_codes": ["8.EE.B.5"],
+        "metadata": { "notes": "Slope, rate of change, and linear equation solving." }
+      },
+      {
+        "position": 5,
+        "module_slug": "8-mathematics-number-and-operations-functions-intro",
+        "module_title": "Functions & Representations",
+        "strand": "Number & Operations",
+        "standard_codes": ["8.F.A.1", "8.F.A.2"],
+        "metadata": { "notes": "Function rules, tables, graphs, and comparisons." }
+      },
+      {
+        "position": 6,
+        "module_slug": "8-mathematics-number-and-operations-expressions-and-equations",
+        "module_title": "Systems of Linear Equations",
+        "strand": "Number & Operations",
+        "standard_codes": ["8.EE.C.8"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Graphing, substitution, elimination, and interpretation."
+        }
+      },
+      {
+        "position": 7,
+        "module_slug": "8-mathematics-geometry-and-measurement-coordinate-geometry",
+        "module_title": "Coordinate Geometry & Transformations",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["8.G.A.1"],
+        "metadata": { "notes": "Transformations on the plane and slope connections." }
+      },
+      {
+        "position": 8,
+        "module_slug": "8-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "module_title": "Rigid Motions & Symmetry",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["8.G.A.2"],
+        "metadata": { "notes": "Congruence through transformations." }
+      },
+      {
+        "position": 9,
+        "module_slug": "8-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "module_title": "Similarity & Dilations",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["8.G.A.4"],
+        "metadata": { "notes": "Scale factor, angle-angle similarity, and indirect measurement." }
+      },
+      {
+        "position": 10,
+        "module_slug": "8-mathematics-geometry-and-measurement-volume-and-surface-area",
+        "module_title": "Volume & Surface Area",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["8.G.C.9"],
+        "metadata": { "notes": "Cylinders, cones, spheres, and composites." }
+      },
+      {
+        "position": 11,
+        "module_slug": "8-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "module_title": "Pythagorean Theorem & Distance",
+        "strand": "Geometry & Measurement",
+        "standard_codes": ["8.G.B.6"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Proof sketches, converse, and coordinate plane distance."
+        }
+      },
+      {
+        "position": 12,
+        "module_slug": "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "module_title": "Scatterplots & Linear Models",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["8.SP.A.1", "8.SP.A.2"],
+        "metadata": { "notes": "Trend lines, rate interpretation, and correlation." }
+      },
+      {
+        "position": 13,
+        "module_slug": "8-mathematics-data-and-probability-statistics-two-way-tables",
+        "module_title": "Two-way Tables & Association",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["8.SP.A.4"],
+        "metadata": { "notes": "Relative frequency and association judgments." }
+      },
+      {
+        "position": 14,
+        "module_slug": "8-mathematics-data-and-probability-statistics-probability-rules",
+        "module_title": "Probability Rules & Simulations",
+        "strand": "Data & Probability / Statistics",
+        "standard_codes": ["8.SP.C.7"],
+        "metadata": { "notes": "Compound probability, expected value intuition." }
+      }
+    ]
+  },
+  {
+    "grade_band": "8",
+    "subject": "ela",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots",
+        "module_title": "Academic Vocabulary & Roots",
+        "strand": "Vocabulary",
+        "standard_codes": ["L.8.4", "L.8.6"],
+        "metadata": { "notes": "Precision vocabulary, nuance, and morphology." }
+      },
+      {
+        "position": 2,
+        "module_slug": "8-english-language-arts-reading-informational-science-tech-articles-open-licensed",
+        "module_title": "Reading Informational: Science & Tech",
+        "strand": "Reading Informational",
+        "standard_codes": ["RI.8.8"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Evaluating claims, evidence strength, and counterarguments."
+        }
+      },
+      {
+        "position": 3,
+        "module_slug": "8-english-language-arts-reading-informational-historical-documents-pd",
+        "module_title": "Reading Informational: Historical Documents",
+        "strand": "Reading Informational",
+        "standard_codes": ["RI.8.8"],
+        "metadata": { "notes": "Rhetoric, sourcing, and tracing arguments." }
+      },
+      {
+        "position": 4,
+        "module_slug": "8-english-language-arts-reading-literature-novellas-short-novels-pd",
+        "module_title": "Reading Literature: Novels & Extended Texts",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.8.2"],
+        "metadata": { "notes": "Theme, characterization, and evidence weighting." }
+      },
+      {
+        "position": 5,
+        "module_slug": "8-english-language-arts-reading-literature-poetry-and-drama-pd",
+        "module_title": "Reading Literature: Poetry & Drama",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.8.4", "RL.8.5"],
+        "metadata": { "notes": "Structure, word choice, and dramatic conventions." }
+      },
+      {
+        "position": 6,
+        "module_slug": "8-english-language-arts-reading-literature-world-literature-pd-where-possible",
+        "module_title": "Reading Literature: World Texts",
+        "strand": "Reading Literature",
+        "standard_codes": ["RL.8.6"],
+        "metadata": { "notes": "Point of view, cultural lens, and comparison." }
+      },
+      {
+        "position": 7,
+        "module_slug": "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage",
+        "module_title": "Argument Writing & Grammar",
+        "strand": "Writing & Grammar",
+        "standard_codes": ["W.8.1"],
+        "metadata": {
+          "priority": "coverage_anchor",
+          "notes": "Claims, counterclaims, cohesion, and conventions."
+        }
+      },
+      {
+        "position": 8,
+        "module_slug": "8-english-language-arts-speaking-and-listening-debates-multimedia-presentations",
+        "module_title": "Speaking & Listening",
+        "strand": "Speaking & Listening",
+        "standard_codes": ["SL.8.1", "SL.8.4"],
+        "metadata": { "notes": "Structured discussions, argument critique, and multimedia." }
+      }
+    ]
+  }
+]

@@ -1,0 +1,56 @@
+name: Coverage Audits
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 9 * * 1,4' # Mondays and Thursdays at 09:30 UTC
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+
+jobs:
+  coverage-audits:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Supabase secrets
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
+            echo "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required for coverage audits."
+            exit 1
+          fi
+
+      - name: Run coverage audits
+        run: |
+          set -euo pipefail
+          mkdir -p coverage-reports
+          npm run audit:completeness | tee coverage-reports/audit_completeness.txt
+          npm run audit:practice | tee coverage-reports/audit_practice_coverage.txt
+          npm run audit:coverage-rollup | tee coverage-reports/coverage_quick_rollup.txt
+          npm run audit:coverage-gaps | tee coverage-reports/report_coverage_gaps.txt
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-audits-${{ github.run_id }}
+          path: coverage-reports
+          if-no-files-found: error

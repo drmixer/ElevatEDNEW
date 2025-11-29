@@ -27,7 +27,6 @@ type SubjectRow = { id: number; name: string };
 const TARGET_SUBJECTS = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies'];
 const TARGET_GRADES = ['3', '4', '5', '6', '7', '8'];
 
-const normalize = (value: string | null | undefined): string => (value ?? '').toLowerCase();
 const toGrade = (value: string | null | undefined): number => Number.parseInt((value ?? '').trim(), 10) || 0;
 
 const shortTopic = (module: ModuleRow): string =>

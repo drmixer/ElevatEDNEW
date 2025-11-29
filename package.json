@@ -31,6 +31,8 @@
     "seed:fallback-assets": "tsx scripts/seed_fallback_assets.ts",
     "audit:licenses": "tsx scripts/audit_licenses.ts",
     "audit:completeness": "tsx scripts/audit_completeness.ts",
+    "audit:coverage-rollup": "tsx scripts/coverage_quick_rollup.ts --grades 3,4,5,6,7,8",
+    "audit:coverage-gaps": "tsx scripts/report_coverage_gaps.ts",
     "audit:practice": "tsx scripts/audit_practice_coverage.ts",
     "seed:lessons": "tsx scripts/seed_lessons.ts",
     "seed:module-assessments": "tsx scripts/seed_module_assessments.ts",

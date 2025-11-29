@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildAssignmentNotifications } from '../notifications.js';
+import { buildAssignmentNotifications, buildGoalNotificationsFromRow } from '../notifications.js';
 
 describe('buildAssignmentNotifications', () => {
   it('creates notifications for students and opts out parents who disable the preference', () => {
@@ -48,3 +48,33 @@ describe('buildAssignmentNotifications', () => {
   });
 });
 
+describe('buildGoalNotificationsFromRow', () => {
+  it('emits goal-met notifications with target URLs', () => {
+    const row = {
+      parent_id: 'parent-1',
+      student_id: 'student-1',
+      first_name: 'Avery',
+      last_name: 'Lee',
+      lessons_completed_week: 6,
+      practice_minutes_week: 240,
+      weekly_lessons_target: 5,
+      practice_minutes_target: 200,
+      mastery_targets: { math: 80 },
+      mastery_breakdown: [{ subject: 'math', mastery: 82 }],
+    };
+
+    const parents = [{ id: 'parent-1', name: 'Jordan', preferences: { majorProgress: true } }];
+    const student = { id: 'student-1', first_name: 'Avery', last_name: 'Lee' };
+
+    const notifications = buildGoalNotificationsFromRow(row as never, student as never, parents as never, '2024-09-02');
+
+    const types = notifications.map((note) => note.notification_type);
+    expect(types).toContain('goal_met');
+
+    const parentNote = notifications.find((note) => note.recipient_id === 'parent-1');
+    expect(parentNote?.data?.targetUrl).toBe('/parent#weekly-snapshot');
+
+    const studentNote = notifications.find((note) => note.recipient_id === 'student-1');
+    expect(studentNote?.data?.targetUrl).toBe('/student');
+  });
+});

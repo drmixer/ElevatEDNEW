@@ -2,6 +2,7 @@ import React, { Suspense, useState, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { EntitlementsProvider } from './contexts/EntitlementsContext';
 import LandingPage from './components/Landing/LandingPage';
 import AuthModal from './components/Auth/AuthModal';
 import Header from './components/Layout/Header';
@@ -35,6 +36,12 @@ const DashboardContainer: React.FC<{ children: React.ReactElement; transitionKey
   </AnimatePresence>
 );
 
+const roleHome = (role?: UserRole | null) => {
+  if (!role) return '/';
+  if (role === 'admin') return '/workspace/admin';
+  return `/${role}`;
+};
+
 const ProtectedRoute: React.FC<{ children: React.ReactElement; allowedRoles: UserRole[] }> = ({
   children,
   allowedRoles,
@@ -46,13 +53,11 @@ const ProtectedRoute: React.FC<{ children: React.ReactElement; allowedRoles: Use
   }
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to={`/${user.role}`} replace />;
+    return <Navigate to={roleHome(user.role)} replace />;
   }
 
   return children;
 };
-
-const roleHome = (role?: UserRole | null) => (role ? `/${role}` : '/');
 
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
@@ -124,13 +129,31 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <DashboardContainer transitionKey="admin">
-                  <AdminDashboard />
+                  <Navigate to="/workspace/admin" replace />
                 </DashboardContainer>
               </ProtectedRoute>
             }
           />
           <Route
             path="/admin/import"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Navigate to="/workspace/admin/import" replace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/workspace/admin"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <DashboardContainer transitionKey="admin-workspace">
+                  <AdminDashboard />
+                </DashboardContainer>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/workspace/admin/import"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <AdminImportPage />
@@ -158,9 +181,11 @@ const AppContent: React.FC = () => {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <EntitlementsProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </EntitlementsProvider>
     </AuthProvider>
   );
 }

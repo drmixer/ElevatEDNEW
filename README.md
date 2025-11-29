@@ -1,7 +1,22 @@
-ElevatED Platform
-=================
+ElevatED for Families
+=====================
 
-Curriculum orchestration workspace for ElevatED with Supabase migrations, importer tooling, adaptive recommendations API, and a lightweight catalog UI.
+ElevatED is a family-first, home-learning product that pairs an AI tutor for students with clear, calm oversight for parents. The primary audience is households learning at home, not schools, districts, or classroom teachers.
+
+What ElevatED is / is not
+-------------------------
+
+- Is: Adaptive AI tutor for K-12 students at home, family dashboards, gentle progress coaching, optional assignments and rewards.
+- Is: Simple catalog for parents to explore lessons and launch the learner view.
+- Is not: A district SIS/LMS replacement, a teacher gradebook, or a school rostering tool.
+- Is not: Built for classroom scheduling, bell schedules, or bulk teacher provisioning.
+
+Surface map
+-----------
+
+- Marketing: `/` - public landing copy speaks directly to parents and learners at home.
+- Family app: `/student` (learner view), `/parent` (family dashboard), `/catalog` (secondary browse surface).
+- Admin workspace (restricted): `/workspace/admin` and `/workspace/admin/import` for migrations, imports, and catalog authoring. Legacy `/admin` URLs redirect into this workspace.
 
 Prerequisites
 -------------
@@ -20,6 +35,19 @@ Install Dependencies
 ```bash
 npm install
 ```
+
+Local Development
+-----------------
+
+```bash
+# Start Vite + API proxy on http://localhost:5173
+npm run dev
+
+# (Optional) run the standalone API server on http://localhost:8787
+npm run api:dev
+```
+
+When running the UI locally (or executing Vitest) provide `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` so the Supabase client can initialise. Admin-only routes stay behind the `/workspace/admin` prefix and require an authenticated admin session.
 
 Database & Schema
 -----------------
@@ -45,22 +73,22 @@ Database & Schema
 Lesson Data
 -----------
 
-- `public.lessons` is the canonical store for classroom-ready lesson plans. Required fields are:
-  - `module_id` – links the lesson to a curriculum module. Lesson detail pages only surface lessons with a populated `module_id`.
-  - `title` – human-friendly heading used in catalog views.
-  - `content` – Markdown body containing the structured lesson plan. The API renders this body to HTML for the UI.
-  - `visibility` – enum (`draft`, `private`, `public`) that controls publication state.
-  - `open_track` – boolean flag indicating if the lesson is approved for an open-track sequence.
-  - `attribution_block` – Markdown snippet that aggregates attribution strings for the lesson’s supporting assets.
+- `public.lessons` is the canonical store for lesson plans. Required fields are:
+  - `module_id` - links the lesson to a curriculum module. Lesson detail pages only surface lessons with a populated `module_id`.
+  - `title` - human-friendly heading used in catalog views.
+  - `content` - Markdown body containing the structured lesson plan. The API renders this body to HTML for the UI.
+  - `visibility` - enum (`draft`, `private`, `public`) that controls publication state.
+  - `open_track` - boolean flag indicating if the lesson is approved for an open-track sequence.
+  - `attribution_block` - Markdown snippet that aggregates attribution strings for the lesson's supporting assets.
 - Optional metadata:
   - `estimated_duration_minutes`, `media_url`, and `ai_hint_context` enrich time estimates and adaptive experiences.
   - `metadata` (JSONB) can store importer breadcrumbs and authoring notes.
   - `created_by` back-references a profile when lessons are authored through the app.
-- Assets connect to lessons through `public.assets.lesson_id`. When assets are attached to a lesson, their aggregated attribution is stored on the lesson’s `attribution_block`.
-- Open-track lessons are also surfaced at the module level; make sure to set both the module and lesson `open_track` flags when authoring.
+- Assets connect to lessons through `public.assets.lesson_id`. When assets are attached to a lesson, their aggregated attribution is stored on the lesson's `attribution_block`.
+- Open-track lessons are also surfaced at the module level; set both the module and lesson `open_track` flags when authoring.
 
-Content Importers
------------------
+Content Importers (Admin workspace)
+-----------------------------------
 
 Sample mapping files live under `mappings/`. After seeding modules you can attach assets with:
 
@@ -89,7 +117,7 @@ Supported `--provider` values: `openstax`, `c3teachers`, `siyavula`, and `nasa_n
 Queued Import Workflow
 ----------------------
 
-- `/api/import/runs` persists every job with `pending → running → success|error` status, metrics, and append-only logs.
+- `/api/import/runs` persists every job with `pending -> running -> success|error` status, metrics, and append-only logs.
 - The Node API boots an in-process worker (`ImportQueue`) that claims pending runs, performs license QA (including optional URL health checks), and records warnings/errors back onto the run.
 - Supabase Edge functions can reuse the same processor to run imports on a schedule or via webhooks.
 - Set `SKIP_IMPORT_URL_CHECKS=true` to bypass external link checks when running in an offline environment.
@@ -97,16 +125,16 @@ Queued Import Workflow
 Admin Access & Safety
 ---------------------
 
-- `/admin/import` and all `/api/import/*` endpoints are restricted to authenticated admins (users with `role = 'admin'` and an `admin_profiles` row). The frontend now forwards the Supabase session token via `Authorization: Bearer <access_token>`.
+- `/workspace/admin` and `/workspace/admin/import` are restricted to authenticated admins (users with `role = 'admin'` and an `admin_profiles` row). The frontend forwards the Supabase session token via `Authorization: Bearer <access_token>`.
 - The import console ships with an admin roster panel to promote/demote users (updates `user_role` and `admin_profiles` records) and to review stored permissions.
 - Imports support a dry-run toggle plus optional per-run module/asset limits; exceeding a limit fails the run before any writes occur while still returning URL QA warnings.
 
 Standards & Assessments Integration
 -----------------------------------
 
-- `npm run import:standards` – loads frameworks and codes from `data/standards/standards.json` (JSON or CSV supported via `--file`).
-- `npm run import:module-standards` – attaches standards to modules using `mappings/module_standards.json` (module slug → standard codes).
-- `npm run seed:module-assessments` – seeds baseline quizzes per module from `data/assessments/module_quizzes.json`, creating question bank items, sections, and assessment links.
+- `npm run import:standards` - loads frameworks and codes from `data/standards/standards.json` (JSON or CSV supported via `--file`).
+- `npm run import:module-standards` - attaches standards to modules using `mappings/module_standards.json` (module slug -> standard codes).
+- `npm run seed:module-assessments` - seeds baseline quizzes per module from `data/assessments/module_quizzes.json`, creating question bank items, sections, and assessment links.
 
 Module detail pages now return aligned standards, baseline assessment summaries, and the `/api/modules/:id/assessment` endpoint exposes the full quiz structure for previewing in the UI.
 
@@ -121,16 +149,10 @@ npm run audit:licenses
 npm run audit:completeness
 ```
 
-Local Development
------------------
-
-The Vite dev server proxies API requests to the same service-role powered handlers used in production.
-
 Progress Tracking & Assignments
 -------------------------------
 
-- Lesson progress persists to Supabase via `student_progress`, `practice_sessions`, and `practice_events`. The lesson player now records session starts, inline checkpoints, and completions so dashboards render live data.
-- When running the UI locally (or executing Vitest) provide `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` environment variables so the Supabase client can be initialised without throwing.
+- Lesson progress persists to Supabase via `student_progress`, `practice_sessions`, and `practice_events`. The lesson player records session starts, inline checkpoints, and completions so dashboards render live data.
 - Module assignments can be created programmatically by issuing a `POST /api/assignments/assign` request with:
 
   ```json
@@ -143,22 +165,15 @@ Progress Tracking & Assignments
   }
   ```
 
-  The endpoint links every lesson from the module to a new assignment, upserts the `student_assignments`, and refreshes analytics rollups. The same handler is used by the Parent and Admin dashboards to issue assignments.
-
-```bash
-# Start Vite + API proxy on http://localhost:5173
-npm run dev
-
-# (Optional) run the standalone API server on http://localhost:8787
-npm run api:dev
-```
+  The endpoint links every lesson from the module to a new assignment, upserts the `student_assignments`, and refreshes analytics rollups. The same handler is used by the Parent dashboard to issue assignments.
 
 UI Highlights
 -------------
 
-- `/catalog` – grade, subject, strand, and topic filters with pagination.
-- `/module/:id` – lesson list, linked assets with attribution, and adaptive recommendations based on the most recent assessment score.
-- `/admin/import` – upload mapping or dataset files, queue provider runs, and monitor job logs / status without blocking the UI.
+- `/student` - learner view with streaks, progress, and adaptive tutoring.
+- `/parent` - family dashboard with insights, goals, and data controls.
+- `/catalog` - grade, subject, strand, and topic filters with pagination.
+- `/workspace/admin` - admin-only controls; `/workspace/admin/import` for bulk imports.
 
 Adaptive Recommendations API
 ----------------------------
@@ -170,7 +185,7 @@ Returns up to three modules in the same subject/strand, automatically falling ba
 Additional Tooling
 ------------------
 
-- `npm run import:oer` – legacy OER importer (unchanged).
+- `npm run import:oer` - legacy OER importer (unchanged).
 - Supabase helper functions and migrations live under `supabase/`.
 
 Troubleshooting
@@ -178,4 +193,4 @@ Troubleshooting
 
 - `supabase migration up` requires the Docker-based local stack; start it with `supabase start`.
 - Import commands need `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. For local development they are emitted by `supabase status --json`.
-- The catalog and module pages read from the new `/api/modules` endpoints; verify the API server is running if you see 404s in the browser.
+- The catalog and module pages read from the `/api/modules` endpoints; verify the API server is running if you see 404s in the browser.

@@ -28,5 +28,25 @@
         "notes": "Practice set and exit ticket extend to unit rate problem solving."
       }
     ]
+  },
+  "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities": {
+    "framework": "CCSS-M",
+    "standards": [
+      {
+        "code": "HSA-APR.1",
+        "alignment": "anchor",
+        "notes": "Emphasize closure, degree, and structure of polynomial operations."
+      },
+      {
+        "code": "HSA-APR.3",
+        "alignment": "priority",
+        "notes": "Connect factoring to zeros and sketching polynomial graphs."
+      },
+      {
+        "code": "HSF-IF.4",
+        "alignment": "supporting",
+        "notes": "Interpret key features of polynomial function graphs in context."
+      }
+    ]
   }
 }

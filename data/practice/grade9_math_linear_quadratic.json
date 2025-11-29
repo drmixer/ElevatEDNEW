@@ -1,0 +1,338 @@
+[
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "What is the slope of the line y = -3x + 7?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["linear_functions", "rate_of_change"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["slope", "linear-equations"],
+    "options": [
+      { "text": "-3", "isCorrect": true, "feedback": "Slope is the coefficient of x in slope-intercept form." },
+      { "text": "3", "isCorrect": false },
+      { "text": "7", "isCorrect": false },
+      { "text": "-7", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "The function f(x) = 2x - 5 models a taxi fare in dollars, where x is miles traveled. What does the -5 represent?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["linear_functions", "interpret_parameters"],
+    "standards": ["HSF-IF.B.4"],
+    "tags": ["y-intercept", "context"],
+    "options": [
+      { "text": "Starting balance of -$5 (a credit)", "isCorrect": false },
+      { "text": "A $5 discount after traveling", "isCorrect": false },
+      { "text": "The fixed fee before any miles are traveled", "isCorrect": true, "feedback": "The y-intercept shows the initial value when x = 0 miles." },
+      { "text": "The cost per mile", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Evaluate g(x) = -4x + 1 at x = -2.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["linear_functions", "function_evaluation"],
+    "standards": ["HSF-IF.A.1"],
+    "tags": ["substitution"],
+    "options": [
+      { "text": "-9", "isCorrect": false },
+      { "text": "9", "isCorrect": true, "feedback": "-4(-2) + 1 = 8 + 1 = 9." },
+      { "text": "7", "isCorrect": false },
+      { "text": "-7", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Which line passes through (0, 2) and has slope -1/3?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["linear_functions", "writing_equations"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["point-slope"],
+    "options": [
+      { "text": "y = -1/3x + 2", "isCorrect": true, "feedback": "Use slope-intercept form with b = 2." },
+      { "text": "y = 1/3x + 2", "isCorrect": false },
+      { "text": "y = -3x + 2", "isCorrect": false },
+      { "text": "y = -1/3x - 2", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "A graph shows a line rising 4 units for every 1 unit right. Which equation matches this rate and crosses the y-axis at -6?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["linear_functions", "graph_to_equation"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["slope", "y-intercept"],
+    "options": [
+      { "text": "y = 4x - 6", "isCorrect": true, "feedback": "Slope 4, y-intercept -6 gives y = 4x - 6." },
+      { "text": "y = -4x - 6", "isCorrect": false },
+      { "text": "y = 4x + 6", "isCorrect": false },
+      { "text": "y = -4x + 6", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Which ordered pair is a solution to y = 2x + 5?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["linear_functions", "solutions"],
+    "standards": ["HSF-IF.A.2"],
+    "tags": ["substitution"],
+    "options": [
+      { "text": "(2, 9)", "isCorrect": true, "feedback": "2(2) + 5 = 9." },
+      { "text": "(1, 3)", "isCorrect": false },
+      { "text": "(-1, 3)", "isCorrect": false },
+      { "text": "(0, -5)", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "A ball is thrown and its height is modeled by h(t) = -16t^2 + 24t + 5 (height in feet, time in seconds). What is the initial height?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["quadratic_functions", "interpret_parameters"],
+    "standards": ["HSF-IF.B.4"],
+    "tags": ["y-intercept", "context"],
+    "options": [
+      { "text": "5 feet", "isCorrect": true, "feedback": "The constant term gives the height when t = 0." },
+      { "text": "24 feet", "isCorrect": false },
+      { "text": "16 feet", "isCorrect": false },
+      { "text": "29 feet", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "What are the zeros of f(x) = x^2 + 5x + 6?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["quadratic_functions", "factoring"],
+    "standards": ["HSF-IF.C.8"],
+    "tags": ["roots", "factoring"],
+    "options": [
+      { "text": "x = -2 and x = -3", "isCorrect": true, "feedback": "(x + 2)(x + 3) = 0 gives roots -2, -3." },
+      { "text": "x = 2 and x = 3", "isCorrect": false },
+      { "text": "x = -6 and x = 1", "isCorrect": false },
+      { "text": "x = 6 and x = -1", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Where is the vertex of y = (x - 4)^2 - 9?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["quadratic_functions", "vertex_form"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["vertex", "transformations"],
+    "options": [
+      { "text": "(4, -9)", "isCorrect": true, "feedback": "Vertex form y = (x - h)^2 + k has vertex (h, k)." },
+      { "text": "(-4, -9)", "isCorrect": false },
+      { "text": "(4, 9)", "isCorrect": false },
+      { "text": "(0, -9)", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "How does y = (x + 2)^2 compare to y = x^2?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["quadratic_functions", "transformations"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["translations"],
+    "options": [
+      { "text": "Shifted left 2 units", "isCorrect": true, "feedback": "Replacing x with x + 2 moves the graph left 2." },
+      { "text": "Shifted right 2 units", "isCorrect": false },
+      { "text": "Shifted up 2 units", "isCorrect": false },
+      { "text": "Shifted down 2 units", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "The parabola y = ax^2 opens downward and passes through the origin. Which statement must be true?",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["quadratic_functions", "interpret_parameters"],
+    "standards": ["HSF-IF.C.8"],
+    "tags": ["concavity", "parameters"],
+    "options": [
+      { "text": "a is negative", "isCorrect": true, "feedback": "Negative a opens the parabola downward." },
+      { "text": "a is positive", "isCorrect": false },
+      { "text": "a equals 0", "isCorrect": false },
+      { "text": "a is undefined", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Find the slope of the line that passes through (3, 7) and (8, -3).",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["linear_functions", "rate_of_change"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["slope", "coordinate-geometry"],
+    "options": [
+      { "text": "-2", "isCorrect": true, "feedback": "Slope = (-3 - 7)/(8 - 3) = -10/5 = -2." },
+      { "text": "2", "isCorrect": false },
+      { "text": "-1/3", "isCorrect": false },
+      { "text": "3", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Which equation has x-intercepts at x = -1 and x = 5?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["quadratic_functions", "factoring"],
+    "standards": ["HSF-IF.C.8"],
+    "tags": ["roots"],
+    "options": [
+      { "text": "y = (x + 1)(x - 5)", "isCorrect": true, "feedback": "Zeros at -1 and 5 come from factors (x + 1)(x - 5)." },
+      { "text": "y = (x - 1)(x + 5)", "isCorrect": false },
+      { "text": "y = (x - 1)(x - 5)", "isCorrect": false },
+      { "text": "y = (x + 1)(x + 5)", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Given y = 3x^2 - 12x + 9, what is the y-intercept?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["quadratic_functions", "graph_features"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["y-intercept"],
+    "options": [
+      { "text": "9", "isCorrect": true, "feedback": "Set x = 0 to find the y-intercept; y = 9." },
+      { "text": "-12", "isCorrect": false },
+      { "text": "3", "isCorrect": false },
+      { "text": "0", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Rewrite y = x^2 - 6x + 5 in vertex form.",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["quadratic_functions", "completing_square"],
+    "standards": ["HSF-IF.C.8"],
+    "tags": ["vertex_form", "algebraic-manipulation"],
+    "options": [
+      { "text": "y = (x - 3)^2 - 4", "isCorrect": true, "feedback": "Complete the square: x^2 - 6x becomes (x - 3)^2 - 9." },
+      { "text": "y = (x + 3)^2 - 4", "isCorrect": false },
+      { "text": "y = (x - 3)^2 + 4", "isCorrect": false },
+      { "text": "y = (x + 3)^2 + 4", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Which situation is modeled by a quadratic function?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["function_models", "quadratic_functions"],
+    "standards": ["HSF-IF.B.4"],
+    "tags": ["modeling"],
+    "options": [
+      { "text": "The area of a square field as its side length changes", "isCorrect": true, "feedback": "Area grows with the square of side length." },
+      { "text": "The cost of a taxi ride with a fixed fee and per-mile rate", "isCorrect": false },
+      { "text": "Constant speed travel on a highway", "isCorrect": false },
+      { "text": "A bank account with simple interest", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "The graph of y = ax^2 + bx + c has a minimum at (2, -5). Which statement is true?",
+    "type": "multiple_choice",
+    "difficulty": 4,
+    "skills": ["quadratic_functions", "graph_features"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["vertex", "concavity"],
+    "options": [
+      { "text": "a is positive", "isCorrect": true, "feedback": "A minimum means the parabola opens upward (a > 0)." },
+      { "text": "a is negative", "isCorrect": false },
+      { "text": "b must equal 0", "isCorrect": false },
+      { "text": "c must equal -5", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "For the quadratic y = -2(x - 1)^2 + 8, what is the maximum value of y?",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["quadratic_functions", "vertex_form"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["vertex", "max-min"],
+    "options": [
+      { "text": "8", "isCorrect": true, "feedback": "In vertex form, k = 8 gives the maximum when a < 0." },
+      { "text": "-2", "isCorrect": false },
+      { "text": "1", "isCorrect": false },
+      { "text": "10", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Solve 2x^2 - 8 = 0.",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "skills": ["quadratic_functions", "solving_equations"],
+    "standards": ["HSF-IF.C.8"],
+    "tags": ["roots"],
+    "options": [
+      { "text": "x = -2 or x = 2", "isCorrect": true, "feedback": "2x^2 = 8 gives x^2 = 4 so x = ±2." },
+      { "text": "x = -4 or x = 4", "isCorrect": false },
+      { "text": "x = -2", "isCorrect": false },
+      { "text": "x = 4", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "Which graph best matches y = -x + 3?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["linear_functions", "graph_features"],
+    "standards": ["HSF-IF.C.7"],
+    "tags": ["graphing", "slope"],
+    "options": [
+      { "text": "A line with negative slope crossing the y-axis at 3", "isCorrect": true, "feedback": "Slope -1 gives a downward line through (0, 3)." },
+      { "text": "A line with positive slope crossing the y-axis at 3", "isCorrect": false },
+      { "text": "A parabola opening upward with vertex at (0, 3)", "isCorrect": false },
+      { "text": "A horizontal line at y = 3", "isCorrect": false }
+    ]
+  },
+  {
+    "moduleSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions",
+    "lessonSlug": "9-mathematics-algebra-hs-pathways-linear-quadratic-functions-launch",
+    "prompt": "When x increases by 1, y increases by the same amount each time in a table of values. Which function type fits this pattern?",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "skills": ["linear_functions", "function_models"],
+    "standards": ["HSF-IF.B.4"],
+    "tags": ["rate_of_change"],
+    "options": [
+      { "text": "Linear", "isCorrect": true, "feedback": "A constant rate of change indicates a linear relationship." },
+      { "text": "Quadratic", "isCorrect": false },
+      { "text": "Exponential", "isCorrect": false },
+      { "text": "Absolute value", "isCorrect": false }
+    ]
+  }
+]

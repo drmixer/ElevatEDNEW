@@ -12,6 +12,8 @@ import {
   Globe2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { formatSubjectLabel } from '../../lib/subjects';
+import type { Subject } from '../../types';
 
 const LessonPreview: React.FC = () => {
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
@@ -21,7 +23,7 @@ const LessonPreview: React.FC = () => {
 
   const lessons = [
     {
-      subject: 'Math',
+      subject: 'math' as Subject,
       grade: 'Grade 3',
       focus: 'Multiplication Basics',
       steps: [
@@ -55,7 +57,7 @@ const LessonPreview: React.FC = () => {
       ]
     },
     {
-      subject: 'Science',
+      subject: 'science' as Subject,
       grade: 'Grade 5',
       focus: 'Ecosystem Energy Flow',
       steps: [
@@ -89,7 +91,7 @@ const LessonPreview: React.FC = () => {
       ]
     },
     {
-      subject: 'ELA',
+      subject: 'english' as Subject,
       grade: 'Grade 7',
       focus: 'Finding the Theme',
       steps: [
@@ -133,6 +135,7 @@ const LessonPreview: React.FC = () => {
   const currentLesson = lessons[currentLessonIndex];
   const lessonSteps = currentLesson.steps;
   const currentLessonStep = lessonSteps[currentStep];
+  const lessonSubjectLabel = formatSubjectLabel(currentLesson.subject);
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
@@ -195,7 +198,7 @@ const LessonPreview: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {currentLesson.subject} • {currentLesson.grade}
+                  {lessonSubjectLabel} • {currentLesson.grade}
                 </h3>
                 <p className="text-sm text-gray-600">{currentLesson.focus}</p>
               </div>

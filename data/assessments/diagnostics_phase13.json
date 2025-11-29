@@ -1,0 +1,2432 @@
+{
+  "math_6": {
+    "grade_band": "6",
+    "subject": "math",
+    "title": "Grade 6 Math Diagnostic",
+    "description": "Placement across ratios, percent, equations, geometry, and early data displays.",
+    "estimatedDurationMinutes": 18,
+    "blueprint": {
+      "sections": [
+        {
+          "id": "ratios",
+          "strand": "Ratios & Rates",
+          "standards": ["6.RP.A.3"],
+          "itemCount": 6,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-mathematics-number-and-operations-ratios-and-proportional-reasoning"] },
+            { "name": "on_track", "min": 70, "placement": ["6-mathematics-number-and-operations-percent-and-rates"] }
+          ]
+        },
+        {
+          "id": "integers",
+          "strand": "Integers & Rational",
+          "standards": ["6.NS.C.5", "6.NS.C.6"],
+          "itemCount": 2,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-mathematics-number-and-operations-integers-and-rational-numbers"] },
+            { "name": "on_track", "min": 70, "placement": ["6-mathematics-number-and-operations-expressions-and-equations"] }
+          ]
+        },
+        {
+          "id": "equations",
+          "strand": "Equations & Inequalities",
+          "standards": ["6.EE.B.7"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-mathematics-number-and-operations-expressions-and-equations"] },
+            { "name": "stretch", "min": 85, "placement": ["6-mathematics-number-and-operations-functions-intro"] }
+          ]
+        },
+        {
+          "id": "geometry",
+          "strand": "Geometry & Measurement",
+          "standards": ["6.G.A.2", "6.NS.C.8"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-mathematics-geometry-and-measurement-coordinate-geometry"] },
+            { "name": "stretch", "min": 85, "placement": ["6-mathematics-geometry-and-measurement-pythagorean-theorem"] }
+          ]
+        },
+        {
+          "id": "data_probability",
+          "strand": "Data & Probability",
+          "standards": ["6.SP.A.1", "6.SP.B.4", "6.SP.C.7"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-mathematics-data-and-probability-statistics-sampling-and-inference-intro"] },
+            { "name": "on_track", "min": 70, "placement": ["6-mathematics-data-and-probability-statistics-probability-rules"] }
+          ]
+        }
+      ]
+    },
+    "items": [
+      {
+        "id": "6m-rp-1",
+        "prompt": "A recipe uses 3 cups of flour for 2 batches of muffins. How many cups are needed for 5 batches?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Ratios & Rates",
+        "standard": "6.RP.A.3",
+        "options": [
+          { "text": "5 cups", "isCorrect": false },
+          { "text": "6 cups", "isCorrect": false },
+          { "text": "7.5 cups", "isCorrect": true },
+          { "text": "9 cups", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["6-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "6m-rp-2",
+        "prompt": "A bus travels 180 miles in 3 hours. What is its unit rate in miles per hour?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Ratios & Rates",
+        "standard": "6.RP.A.3",
+        "options": [
+          { "text": "30 mph", "isCorrect": false },
+          { "text": "45 mph", "isCorrect": false },
+          { "text": "60 mph", "isCorrect": true },
+          { "text": "75 mph", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["6-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "6m-rp-3",
+        "prompt": "A $50 jacket is on sale for 10% off. What is the sale price before tax?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Ratios & Rates",
+        "standard": "6.RP.A.3",
+        "options": [
+          { "text": "$40", "isCorrect": false },
+          { "text": "$45", "isCorrect": true },
+          { "text": "$47", "isCorrect": false },
+          { "text": "$55", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-percent-and-rates"],
+          "on_mastery": ["6-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "6m-rp-4",
+        "prompt": "The table shows a proportional relationship between x and y. If x = 4, what is y?\n(x, y): (1, 2.5), (2, 5), (3, 7.5), (4, ?)",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Ratios & Rates",
+        "standard": "6.RP.A.3",
+        "options": [
+          { "text": "8", "isCorrect": false },
+          { "text": "9", "isCorrect": false },
+          { "text": "10", "isCorrect": true },
+          { "text": "12.5", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["6-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "6m-rp-5",
+        "prompt": "Four tickets to a museum cost $18. Using a double-number-line idea, how much would 10 tickets cost at the same rate?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Ratios & Rates",
+        "standard": "6.RP.A.3",
+        "options": [
+          { "text": "$30", "isCorrect": false },
+          { "text": "$36", "isCorrect": false },
+          { "text": "$45", "isCorrect": true },
+          { "text": "$48", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["6-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "6m-rp-6",
+        "prompt": "A bag has red and white marbles in a ratio of 3:2. If there are 25 marbles total, how many are red?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Ratios & Rates",
+        "standard": "6.RP.A.3",
+        "options": [
+          { "text": "10", "isCorrect": false },
+          { "text": "12", "isCorrect": false },
+          { "text": "15", "isCorrect": true },
+          { "text": "20", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["6-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "6m-int-1",
+        "prompt": "Which number has the greatest value?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Integers & Rational",
+        "standard": "6.NS.C.5",
+        "options": [
+          { "text": "-8", "isCorrect": false },
+          { "text": "-2", "isCorrect": false },
+          { "text": "0", "isCorrect": true },
+          { "text": "-5", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["6-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "6m-int-2",
+        "prompt": "What is the value of -4 - 7?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Integers & Rational",
+        "standard": "6.NS.C.6",
+        "options": [
+          { "text": "-11", "isCorrect": true },
+          { "text": "-3", "isCorrect": false },
+          { "text": "3", "isCorrect": false },
+          { "text": "11", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["6-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "6m-eq-1",
+        "prompt": "Solve for x: x + 5 = 17",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Equations & Inequalities",
+        "standard": "6.EE.B.7",
+        "options": [
+          { "text": "10", "isCorrect": false },
+          { "text": "11", "isCorrect": false },
+          { "text": "12", "isCorrect": true },
+          { "text": "22", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["6-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "6m-eq-2",
+        "prompt": "Solve for x: 3x = 21",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Equations & Inequalities",
+        "standard": "6.EE.B.7",
+        "options": [
+          { "text": "6", "isCorrect": false },
+          { "text": "7", "isCorrect": true },
+          { "text": "8", "isCorrect": false },
+          { "text": "9", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["6-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "6m-eq-3",
+        "prompt": "Which value of p does NOT make the inequality p - 4 \\u2264 9 true?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Equations & Inequalities",
+        "standard": "6.EE.B.8",
+        "options": [
+          { "text": "p = 6", "isCorrect": false },
+          { "text": "p = 13", "isCorrect": false },
+          { "text": "p = 14", "isCorrect": true },
+          { "text": "p = 9", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["6-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "6m-eq-4",
+        "prompt": "Which expression matches the phrase \"five less than triple a number n\"?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Equations & Inequalities",
+        "standard": "6.EE.B.6",
+        "options": [
+          { "text": "3n + 5", "isCorrect": false },
+          { "text": "5n - 3", "isCorrect": false },
+          { "text": "3n - 5", "isCorrect": true },
+          { "text": "n/3 - 5", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["6-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "6m-geo-1",
+        "prompt": "Point P is at (-3, 4) on the coordinate plane. Which quadrant contains P?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Measurement",
+        "standard": "6.NS.C.8",
+        "options": [
+          { "text": "Quadrant I", "isCorrect": false },
+          { "text": "Quadrant II", "isCorrect": true },
+          { "text": "Quadrant III", "isCorrect": false },
+          { "text": "Quadrant IV", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-geometry-and-measurement-coordinate-geometry"],
+          "on_mastery": ["6-mathematics-geometry-and-measurement-transformations-and-symmetry"]
+        }
+      },
+      {
+        "id": "6m-geo-2",
+        "prompt": "A rectangular prism measures 5 cm by 3 cm by 2 cm. What is its volume?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Measurement",
+        "standard": "6.G.A.2",
+        "options": [
+          { "text": "10 cm^3", "isCorrect": false },
+          { "text": "15 cm^3", "isCorrect": false },
+          { "text": "30 cm^3", "isCorrect": true },
+          { "text": "60 cm^3", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-geometry-and-measurement-volume-and-surface-area"],
+          "on_mastery": ["6-mathematics-geometry-and-measurement-pythagorean-theorem"]
+        }
+      },
+      {
+        "id": "6m-geo-3",
+        "prompt": "In a right triangle, the legs are 6 units and 8 units. What is the length of the hypotenuse?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Geometry & Measurement",
+        "standard": "8.G.B.6",
+        "options": [
+          { "text": "8 units", "isCorrect": false },
+          { "text": "9 units", "isCorrect": false },
+          { "text": "10 units", "isCorrect": true },
+          { "text": "12 units", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-geometry-and-measurement-coordinate-geometry"],
+          "on_mastery": ["6-mathematics-geometry-and-measurement-pythagorean-theorem"]
+        }
+      },
+      {
+        "id": "6m-geo-4",
+        "prompt": "A shape moves 4 units to the left on the coordinate plane without turning. Which transformation is this?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Geometry & Measurement",
+        "standard": "6.G.A.3",
+        "options": [
+          { "text": "Rotation", "isCorrect": false },
+          { "text": "Reflection", "isCorrect": false },
+          { "text": "Translation", "isCorrect": true },
+          { "text": "Dilation", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-geometry-and-measurement-transformations-and-symmetry"],
+          "on_mastery": ["6-mathematics-geometry-and-measurement-similarity-and-congruence"]
+        }
+      },
+      {
+        "id": "6m-data-1",
+        "prompt": "Which sample would best estimate how students feel about cafeteria lunches?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Data & Probability",
+        "standard": "6.SP.A.1",
+        "options": [
+          { "text": "Surveying your three closest friends", "isCorrect": false },
+          { "text": "Asking only the soccer team", "isCorrect": false },
+          { "text": "Surveying 50 students chosen at random across grades", "isCorrect": true },
+          { "text": "Asking students in one lunch line", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-data-and-probability-statistics-sampling-and-inference-intro"],
+          "on_mastery": ["6-mathematics-data-and-probability-statistics-two-way-tables"]
+        }
+      },
+      {
+        "id": "6m-data-2",
+        "prompt": "A scatterplot shows that as study time increases, test scores also increase. What kind of association is this?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Data & Probability",
+        "standard": "6.SP.B.4",
+        "options": [
+          { "text": "No association", "isCorrect": false },
+          { "text": "Negative association", "isCorrect": false },
+          { "text": "Positive association", "isCorrect": true },
+          { "text": "Random association", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-data-and-probability-statistics-scatterplots-and-correlation"],
+          "on_mastery": ["6-mathematics-data-and-probability-statistics-two-way-tables"]
+        }
+      },
+      {
+        "id": "6m-data-3",
+        "prompt": "If a spinner has 3 green sections and 1 red section of equal size, what is the probability of landing on green?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Data & Probability",
+        "standard": "6.SP.C.7",
+        "options": [
+          { "text": "1/4", "isCorrect": false },
+          { "text": "1/3", "isCorrect": false },
+          { "text": "3/4", "isCorrect": true },
+          { "text": "4/3", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-data-and-probability-statistics-probability-rules"],
+          "on_mastery": ["6-mathematics-data-and-probability-statistics-probability-rules"]
+        }
+      },
+      {
+        "id": "6m-data-4",
+        "prompt": "When rolling a standard six-sided die, what is the probability of getting an even number?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Data & Probability",
+        "standard": "6.SP.C.7",
+        "options": [
+          { "text": "1/6", "isCorrect": false },
+          { "text": "1/3", "isCorrect": false },
+          { "text": "1/2", "isCorrect": true },
+          { "text": "2/3", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-mathematics-data-and-probability-statistics-probability-rules"],
+          "on_mastery": ["6-mathematics-data-and-probability-statistics-probability-rules"]
+        }
+      }
+    ]
+  },
+  "math_7": {
+    "grade_band": "7",
+    "subject": "math",
+    "title": "Grade 7 Math Diagnostic",
+    "description": "Checks proportional reasoning, rational operations, two-step equations, geometry, and data foundations.",
+    "estimatedDurationMinutes": 18,
+    "blueprint": {
+      "sections": [
+        {
+          "id": "proportions",
+          "strand": "Proportional Relationships",
+          "standards": ["7.RP.A.2", "7.RP.A.3"],
+          "itemCount": 6,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-mathematics-number-and-operations-ratios-and-proportional-reasoning"] },
+            { "name": "on_track", "min": 70, "placement": ["7-mathematics-number-and-operations-percent-and-rates"] }
+          ]
+        },
+        {
+          "id": "rational_ops",
+          "strand": "Rational Operations",
+          "standards": ["7.NS.A.1", "7.NS.A.2"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-mathematics-number-and-operations-integers-and-rational-numbers"] },
+            { "name": "stretch", "min": 85, "placement": ["7-mathematics-number-and-operations-expressions-and-equations"] }
+          ]
+        },
+        {
+          "id": "equations",
+          "strand": "Equations & Inequalities",
+          "standards": ["7.EE.B.4a"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-mathematics-number-and-operations-expressions-and-equations"] },
+            { "name": "stretch", "min": 85, "placement": ["7-mathematics-number-and-operations-functions-intro"] }
+          ]
+        },
+        {
+          "id": "geometry",
+          "strand": "Geometry & Measurement",
+          "standards": ["7.G.A.1", "7.G.B.6"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-mathematics-geometry-and-measurement-coordinate-geometry"] },
+            { "name": "stretch", "min": 85, "placement": ["7-mathematics-geometry-and-measurement-pythagorean-theorem"] }
+          ]
+        },
+        {
+          "id": "data_probability",
+          "strand": "Data & Probability",
+          "standards": ["7.SP.A.1", "7.SP.C.7"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-mathematics-data-and-probability-statistics-sampling-and-inference-intro"] },
+            { "name": "on_track", "min": 70, "placement": ["7-mathematics-data-and-probability-statistics-probability-rules"] }
+          ]
+        }
+      ]
+    },
+    "items": [
+      {
+        "id": "7m-rp-1",
+        "prompt": "The table represents a proportional relationship. What is the constant of proportionality (unit rate)?\n(x, y): (1, 2), (2, 4), (5, 10)",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Proportional Relationships",
+        "standard": "7.RP.A.2",
+        "options": [
+          { "text": "0.5", "isCorrect": false },
+          { "text": "1", "isCorrect": false },
+          { "text": "2", "isCorrect": true },
+          { "text": "5", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["7-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "7m-rp-2",
+        "prompt": "Five notebooks cost $12.50. At the same rate, how much do 8 notebooks cost?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Proportional Relationships",
+        "standard": "7.RP.A.3",
+        "options": [
+          { "text": "$16.00", "isCorrect": false },
+          { "text": "$18.50", "isCorrect": false },
+          { "text": "$20.00", "isCorrect": true },
+          { "text": "$22.50", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["7-mathematics-number-and-operations-percent-and-rates"]
+        }
+      },
+      {
+        "id": "7m-rp-3",
+        "prompt": "A graph of a proportional relationship passes through the point (2, 6). What is its equation?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Proportional Relationships",
+        "standard": "7.RP.A.2",
+        "options": [
+          { "text": "y = 2x", "isCorrect": false },
+          { "text": "y = 3x", "isCorrect": true },
+          { "text": "y = x + 3", "isCorrect": false },
+          { "text": "y = 6x", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["7-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "7m-rp-4",
+        "prompt": "A $60 jacket is discounted by 15%. What is the sale price?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Proportional Relationships",
+        "standard": "7.RP.A.3",
+        "options": [
+          { "text": "$45.00", "isCorrect": false },
+          { "text": "$51.00", "isCorrect": true },
+          { "text": "$54.00", "isCorrect": false },
+          { "text": "$69.00", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-percent-and-rates"],
+          "on_mastery": ["7-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "7m-rp-5",
+        "prompt": "A bike costs $80 and sales tax is 7%. What is the total cost?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Proportional Relationships",
+        "standard": "7.RP.A.3",
+        "options": [
+          { "text": "$83.60", "isCorrect": false },
+          { "text": "$85.60", "isCorrect": true },
+          { "text": "$90.00", "isCorrect": false },
+          { "text": "$94.40", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-percent-and-rates"],
+          "on_mastery": ["7-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "7m-rp-6",
+        "prompt": "On a map, 1 cm represents 4 meters. A path measures 7.5 cm on the map. What is the actual length?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Proportional Relationships",
+        "standard": "7.RP.A.2",
+        "options": [
+          { "text": "11 meters", "isCorrect": false },
+          { "text": "15 meters", "isCorrect": false },
+          { "text": "24 meters", "isCorrect": false },
+          { "text": "30 meters", "isCorrect": true }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["7-mathematics-geometry-and-measurement-coordinate-geometry"]
+        }
+      },
+      {
+        "id": "7m-ns-1",
+        "prompt": "What is -5 + (-7)?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Rational Operations",
+        "standard": "7.NS.A.1",
+        "options": [
+          { "text": "-2", "isCorrect": false },
+          { "text": "-12", "isCorrect": true },
+          { "text": "2", "isCorrect": false },
+          { "text": "12", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["7-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "7m-ns-2",
+        "prompt": "Compute (-3) \\u00d7 (2/5).",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Rational Operations",
+        "standard": "7.NS.A.2",
+        "options": [
+          { "text": "6/5", "isCorrect": false },
+          { "text": "-6/5", "isCorrect": true },
+          { "text": "-3/10", "isCorrect": false },
+          { "text": "3/10", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["7-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "7m-ns-3",
+        "prompt": "What is 2/3 divided by 1/6?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Rational Operations",
+        "standard": "7.NS.A.2",
+        "options": [
+          { "text": "1/9", "isCorrect": false },
+          { "text": "1/4", "isCorrect": false },
+          { "text": "4", "isCorrect": true },
+          { "text": "12", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["7-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "7m-eq-1",
+        "prompt": "Solve for x: 4x - 7 = 25",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Equations & Inequalities",
+        "standard": "7.EE.B.4a",
+        "options": [
+          { "text": "6", "isCorrect": false },
+          { "text": "8", "isCorrect": true },
+          { "text": "9", "isCorrect": false },
+          { "text": "11", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["7-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "7m-eq-2",
+        "prompt": "Solve for x: 2(x + 3) = 18",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Equations & Inequalities",
+        "standard": "7.EE.B.4a",
+        "options": [
+          { "text": "3", "isCorrect": false },
+          { "text": "6", "isCorrect": true },
+          { "text": "9", "isCorrect": false },
+          { "text": "12", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["7-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "7m-eq-3",
+        "prompt": "Solve for p: 5 + 3p > 17",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Equations & Inequalities",
+        "standard": "7.EE.B.4a",
+        "options": [
+          { "text": "p > 4", "isCorrect": true },
+          { "text": "p > 3", "isCorrect": false },
+          { "text": "p > 6", "isCorrect": false },
+          { "text": "p > 12", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["7-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "7m-eq-4",
+        "prompt": "Maria spent $12 on lunch and bought 3 identical shirts. She spent $120 in total. Which equation finds the price p of each shirt?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Equations & Inequalities",
+        "standard": "7.EE.B.4a",
+        "options": [
+          { "text": "3p = 12", "isCorrect": false },
+          { "text": "3p + 12 = 120", "isCorrect": true },
+          { "text": "12p + 3 = 120", "isCorrect": false },
+          { "text": "p + 12 = 3", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["7-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "7m-geo-1",
+        "prompt": "A blueprint uses a scale of 1 inch to 4 feet. If a wall is 6 inches long on the blueprint, how long is it in reality?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Measurement",
+        "standard": "7.G.A.1",
+        "options": [
+          { "text": "10 feet", "isCorrect": false },
+          { "text": "20 feet", "isCorrect": false },
+          { "text": "24 feet", "isCorrect": true },
+          { "text": "30 feet", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-geometry-and-measurement-coordinate-geometry"],
+          "on_mastery": ["7-mathematics-geometry-and-measurement-transformations-and-symmetry"]
+        }
+      },
+      {
+        "id": "7m-geo-2",
+        "prompt": "What is the surface area of a cube with side length 3 cm?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Measurement",
+        "standard": "7.G.B.6",
+        "options": [
+          { "text": "9 cm^2", "isCorrect": false },
+          { "text": "18 cm^2", "isCorrect": false },
+          { "text": "27 cm^2", "isCorrect": false },
+          { "text": "54 cm^2", "isCorrect": true }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-geometry-and-measurement-volume-and-surface-area"],
+          "on_mastery": ["7-mathematics-geometry-and-measurement-pythagorean-theorem"]
+        }
+      },
+      {
+        "id": "7m-geo-3",
+        "prompt": "A right triangle has a hypotenuse of 15 feet and one leg of 9 feet. How long is the other leg?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Geometry & Measurement",
+        "standard": "7.G.B.5",
+        "options": [
+          { "text": "6 feet", "isCorrect": false },
+          { "text": "10 feet", "isCorrect": true },
+          { "text": "12 feet", "isCorrect": false },
+          { "text": "18 feet", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-geometry-and-measurement-coordinate-geometry"],
+          "on_mastery": ["7-mathematics-geometry-and-measurement-pythagorean-theorem"]
+        }
+      },
+      {
+        "id": "7m-geo-4",
+        "prompt": "Find the slope between the points (1, 2) and (4, 8).",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Measurement",
+        "standard": "7.RP.A.2",
+        "options": [
+          { "text": "1/2", "isCorrect": false },
+          { "text": "2", "isCorrect": true },
+          { "text": "4", "isCorrect": false },
+          { "text": "6", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-geometry-and-measurement-coordinate-geometry"],
+          "on_mastery": ["7-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "7m-data-1",
+        "prompt": "Which is the best way to estimate the percentage of students who prefer music during lunch?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Data & Probability",
+        "standard": "7.SP.A.1",
+        "options": [
+          { "text": "Ask 20 band members", "isCorrect": false },
+          { "text": "Survey 30 randomly selected students", "isCorrect": true },
+          { "text": "Ask students in one lunch line", "isCorrect": false },
+          { "text": "Survey only 7th graders", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-data-and-probability-statistics-sampling-and-inference-intro"],
+          "on_mastery": ["7-mathematics-data-and-probability-statistics-two-way-tables"]
+        }
+      },
+      {
+        "id": "7m-data-2",
+        "prompt": "You flip a fair coin and roll a fair six-sided die. What is the probability of getting heads and rolling a number greater than 4?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Data & Probability",
+        "standard": "7.SP.C.7",
+        "options": [
+          { "text": "1/2", "isCorrect": false },
+          { "text": "1/3", "isCorrect": false },
+          { "text": "1/6", "isCorrect": true },
+          { "text": "1/12", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-data-and-probability-statistics-probability-rules"],
+          "on_mastery": ["7-mathematics-data-and-probability-statistics-probability-rules"]
+        }
+      },
+      {
+        "id": "7m-data-3",
+        "prompt": "A bag has 4 blue and 6 green marbles. What is the probability of randomly picking a blue marble, then a green marble without replacement?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Data & Probability",
+        "standard": "7.SP.C.7",
+        "options": [
+          { "text": "4/10", "isCorrect": false },
+          { "text": "4/15", "isCorrect": true },
+          { "text": "6/10", "isCorrect": false },
+          { "text": "6/15", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-mathematics-data-and-probability-statistics-probability-rules"],
+          "on_mastery": ["7-mathematics-data-and-probability-statistics-probability-rules"]
+        }
+      }
+    ]
+  },
+  "math_8": {
+    "grade_band": "8",
+    "subject": "math",
+    "title": "Grade 8 Math Diagnostic",
+    "description": "Gauges readiness for linear functions, systems, Pythagorean reasoning, and grade-band data.",
+    "estimatedDurationMinutes": 20,
+    "blueprint": {
+      "sections": [
+        {
+          "id": "functions",
+          "strand": "Linear Functions",
+          "standards": ["8.EE.B.5", "8.F.A.1"],
+          "itemCount": 6,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-mathematics-number-and-operations-ratios-and-proportional-reasoning"] },
+            { "name": "on_track", "min": 70, "placement": ["8-mathematics-number-and-operations-functions-intro"] }
+          ]
+        },
+        {
+          "id": "systems",
+          "strand": "Systems of Equations",
+          "standards": ["8.EE.C.8"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-mathematics-number-and-operations-expressions-and-equations"] },
+            { "name": "on_track", "min": 70, "placement": ["8-mathematics-number-and-operations-expressions-and-equations"] }
+          ]
+        },
+        {
+          "id": "geometry",
+          "strand": "Geometry & Pythagorean",
+          "standards": ["8.G.B.6", "8.G.A.1", "8.G.C.9"],
+          "itemCount": 5,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-mathematics-geometry-and-measurement-coordinate-geometry"] },
+            { "name": "stretch", "min": 85, "placement": ["8-mathematics-geometry-and-measurement-pythagorean-theorem"] }
+          ]
+        },
+        {
+          "id": "data_probability",
+          "strand": "Data & Probability",
+          "standards": ["8.SP.A.1", "8.SP.A.4", "8.SP.C.7"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-mathematics-data-and-probability-statistics-scatterplots-and-correlation"] },
+            { "name": "on_track", "min": 70, "placement": ["8-mathematics-data-and-probability-statistics-probability-rules"] }
+          ]
+        },
+        {
+          "id": "rational",
+          "strand": "Rational & Scientific Notation",
+          "standards": ["8.NS.A.1", "8.EE.A.3"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-mathematics-number-and-operations-integers-and-rational-numbers"] },
+            { "name": "on_track", "min": 70, "placement": ["8-mathematics-number-and-operations-expressions-and-equations"] }
+          ]
+        }
+      ]
+    },
+    "items": [
+      {
+        "id": "8m-fn-1",
+        "prompt": "Find the slope between the points (3, 7) and (5, 11).",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Linear Functions",
+        "standard": "8.EE.B.5",
+        "options": [
+          { "text": "1", "isCorrect": false },
+          { "text": "2", "isCorrect": true },
+          { "text": "3", "isCorrect": false },
+          { "text": "4", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["8-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "8m-fn-2",
+        "prompt": "Which equation represents a line with slope 3 and y-intercept -1?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Linear Functions",
+        "standard": "8.EE.B.5",
+        "options": [
+          { "text": "y = 3x - 1", "isCorrect": true },
+          { "text": "y = 3x + 1", "isCorrect": false },
+          { "text": "y = -3x - 1", "isCorrect": false },
+          { "text": "y = x - 3", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["8-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "8m-fn-3",
+        "prompt": "A table shows x: 0, 2, 4 and y: -3, 3, 9. What is the rate of change?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Linear Functions",
+        "standard": "8.F.A.2",
+        "options": [
+          { "text": "1", "isCorrect": false },
+          { "text": "1.5", "isCorrect": true },
+          { "text": "2", "isCorrect": false },
+          { "text": "3", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-ratios-and-proportional-reasoning"],
+          "on_mastery": ["8-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "8m-fn-4",
+        "prompt": "Is the relation {(1,2), (1,3), (2,4)} a function?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Linear Functions",
+        "standard": "8.F.A.1",
+        "options": [
+          { "text": "Yes, each x has exactly one y", "isCorrect": false },
+          { "text": "No, x = 1 has two different y values", "isCorrect": true },
+          { "text": "Yes, because the points increase", "isCorrect": false },
+          { "text": "No, because 2 is repeated", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-functions-intro"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-fn-5",
+        "prompt": "For the function y = 0.8x + 2, what is y when x = 5?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Linear Functions",
+        "standard": "8.F.A.2",
+        "options": [
+          { "text": "2", "isCorrect": false },
+          { "text": "4", "isCorrect": false },
+          { "text": "6", "isCorrect": true },
+          { "text": "10", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-functions-intro"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-fn-6",
+        "prompt": "A quantity increases from 50 to 65. What is the percent increase?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Linear Functions",
+        "standard": "8.RP.A.3",
+        "options": [
+          { "text": "15%", "isCorrect": false },
+          { "text": "23%", "isCorrect": false },
+          { "text": "30%", "isCorrect": true },
+          { "text": "50%", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-percent-and-rates"],
+          "on_mastery": ["8-mathematics-number-and-operations-functions-intro"]
+        }
+      },
+      {
+        "id": "8m-sys-1",
+        "prompt": "Solve the system: y = 2x + 1 and y = -x + 10.",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Systems of Equations",
+        "standard": "8.EE.C.8",
+        "options": [
+          { "text": "(2, 5)", "isCorrect": false },
+          { "text": "(3, 7)", "isCorrect": true },
+          { "text": "(4, 9)", "isCorrect": false },
+          { "text": "(5, 12)", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-sys-2",
+        "prompt": "Solve the system: 3x - y = 5 and x + y = 7.",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Systems of Equations",
+        "standard": "8.EE.C.8",
+        "options": [
+          { "text": "(2, 5)", "isCorrect": false },
+          { "text": "(3, 4)", "isCorrect": true },
+          { "text": "(4, 3)", "isCorrect": false },
+          { "text": "(5, 2)", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-sys-3",
+        "prompt": "Plan A costs $20 plus $3 per gig of data. Plan B costs $5 plus $5 per gig. At how many gigs do the plans cost the same?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Systems of Equations",
+        "standard": "8.EE.C.8",
+        "options": [
+          { "text": "5 gigs", "isCorrect": false },
+          { "text": "6 gigs", "isCorrect": false },
+          { "text": "7.5 gigs", "isCorrect": true },
+          { "text": "10 gigs", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-expressions-and-equations"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-geo-1",
+        "prompt": "In a right triangle with legs 9 and 12, what is the length of the hypotenuse?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Pythagorean",
+        "standard": "8.G.B.6",
+        "options": [
+          { "text": "12", "isCorrect": false },
+          { "text": "13", "isCorrect": false },
+          { "text": "15", "isCorrect": true },
+          { "text": "18", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-geometry-and-measurement-pythagorean-theorem"],
+          "on_mastery": ["8-mathematics-geometry-and-measurement-pythagorean-theorem"]
+        }
+      },
+      {
+        "id": "8m-geo-2",
+        "prompt": "What is the distance between the points (1, 2) and (5, 9)?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Geometry & Pythagorean",
+        "standard": "8.G.B.6",
+        "options": [
+          { "text": "7", "isCorrect": false },
+          { "text": "sqrt(65)", "isCorrect": true },
+          { "text": "sqrt(81)", "isCorrect": false },
+          { "text": "13", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-geometry-and-measurement-coordinate-geometry"],
+          "on_mastery": ["8-mathematics-geometry-and-measurement-pythagorean-theorem"]
+        }
+      },
+      {
+        "id": "8m-geo-3",
+        "prompt": "Turning a figure 90 degrees around the origin is which transformation?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Geometry & Pythagorean",
+        "standard": "8.G.A.1",
+        "options": [
+          { "text": "Reflection", "isCorrect": false },
+          { "text": "Translation", "isCorrect": false },
+          { "text": "Rotation", "isCorrect": true },
+          { "text": "Dilation", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-geometry-and-measurement-transformations-and-symmetry"],
+          "on_mastery": ["8-mathematics-geometry-and-measurement-similarity-and-congruence"]
+        }
+      },
+      {
+        "id": "8m-geo-4",
+        "prompt": "What is the volume of a cylinder with radius 3 units and height 4 units?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Pythagorean",
+        "standard": "8.G.C.9",
+        "options": [
+          { "text": "12pi", "isCorrect": false },
+          { "text": "24pi", "isCorrect": false },
+          { "text": "36pi", "isCorrect": true },
+          { "text": "48pi", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-geometry-and-measurement-volume-and-surface-area"],
+          "on_mastery": ["8-mathematics-geometry-and-measurement-similarity-and-congruence"]
+        }
+      },
+      {
+        "id": "8m-geo-5",
+        "prompt": "Two similar triangles have a scale factor of 1.5. If a side on the smaller triangle is 8 cm, what is the corresponding side on the larger triangle?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Geometry & Pythagorean",
+        "standard": "8.G.A.4",
+        "options": [
+          { "text": "6 cm", "isCorrect": false },
+          { "text": "10 cm", "isCorrect": false },
+          { "text": "12 cm", "isCorrect": true },
+          { "text": "14 cm", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-geometry-and-measurement-similarity-and-congruence"],
+          "on_mastery": ["8-mathematics-geometry-and-measurement-volume-and-surface-area"]
+        }
+      },
+      {
+        "id": "8m-data-1",
+        "prompt": "A line of best fit for a scatterplot of study hours vs. test scores has a slope of 2. What does this mean?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Data & Probability",
+        "standard": "8.SP.A.1",
+        "options": [
+          { "text": "Scores drop by 2 points per study hour", "isCorrect": false },
+          { "text": "Scores rise about 2 points per study hour", "isCorrect": true },
+          { "text": "There is no association", "isCorrect": false },
+          { "text": "Study hours start at 2", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-data-and-probability-statistics-scatterplots-and-correlation"],
+          "on_mastery": ["8-mathematics-data-and-probability-statistics-two-way-tables"]
+        }
+      },
+      {
+        "id": "8m-data-2",
+        "prompt": "In a survey of 50 students, 30 preferred fiction. What is the relative frequency of students who preferred fiction?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Data & Probability",
+        "standard": "8.SP.A.4",
+        "options": [
+          { "text": "0.3", "isCorrect": false },
+          { "text": "0.4", "isCorrect": false },
+          { "text": "0.6", "isCorrect": true },
+          { "text": "0.8", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-data-and-probability-statistics-two-way-tables"],
+          "on_mastery": ["8-mathematics-data-and-probability-statistics-probability-rules"]
+        }
+      },
+      {
+        "id": "8m-data-3",
+        "prompt": "What is the probability of drawing a red card from a standard deck (26 red cards) and rolling an even number on a fair die?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Data & Probability",
+        "standard": "8.SP.C.7",
+        "options": [
+          { "text": "1/2", "isCorrect": false },
+          { "text": "1/3", "isCorrect": false },
+          { "text": "1/4", "isCorrect": true },
+          { "text": "1/6", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-data-and-probability-statistics-probability-rules"],
+          "on_mastery": ["8-mathematics-data-and-probability-statistics-probability-rules"]
+        }
+      },
+      {
+        "id": "8m-rat-1",
+        "prompt": "Write 0.00032 in scientific notation.",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Rational & Scientific Notation",
+        "standard": "8.EE.A.3",
+        "options": [
+          { "text": "3.2 x 10^-4", "isCorrect": true },
+          { "text": "3.2 x 10^4", "isCorrect": false },
+          { "text": "32 x 10^-5", "isCorrect": false },
+          { "text": "32 x 10^4", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-rat-2",
+        "prompt": "Evaluate (-4)^2 / 8.",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Rational & Scientific Notation",
+        "standard": "8.NS.A.1",
+        "options": [
+          { "text": "-2", "isCorrect": false },
+          { "text": "2", "isCorrect": true },
+          { "text": "4", "isCorrect": false },
+          { "text": "8", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-integers-and-rational-numbers"],
+          "on_mastery": ["8-mathematics-number-and-operations-expressions-and-equations"]
+        }
+      },
+      {
+        "id": "8m-rat-3",
+        "prompt": "A prediction was 48 students, but the actual count was 50. What is the percent error?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Rational & Scientific Notation",
+        "standard": "8.RP.A.3",
+        "options": [
+          { "text": "2%", "isCorrect": false },
+          { "text": "4%", "isCorrect": true },
+          { "text": "5%", "isCorrect": false },
+          { "text": "10%", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-mathematics-number-and-operations-percent-and-rates"],
+          "on_mastery": ["8-mathematics-number-and-operations-functions-intro"]
+        }
+      }
+    ]
+  },
+  "ela_6": {
+    "grade_band": "6",
+    "subject": "ela",
+    "title": "Grade 6 ELA Diagnostic",
+    "description": "Evidence use, informational analysis, argument writing, vocabulary, and discussion skills.",
+    "estimatedDurationMinutes": 18,
+    "blueprint": {
+      "sections": [
+        {
+          "id": "literature",
+          "strand": "Evidence in Literature",
+          "standards": ["RL.6.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-english-language-arts-reading-literature-novellas-short-novels-pd"] },
+            { "name": "on_track", "min": 70, "placement": ["6-english-language-arts-reading-literature-poetry-and-drama-pd"] }
+          ]
+        },
+        {
+          "id": "informational",
+          "strand": "Informational Text",
+          "standards": ["RI.6.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"] },
+            { "name": "on_track", "min": 70, "placement": ["6-english-language-arts-reading-informational-historical-documents-pd"] }
+          ]
+        },
+        {
+          "id": "writing",
+          "strand": "Argument Writing",
+          "standards": ["W.6.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"] },
+            { "name": "on_track", "min": 70, "placement": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"] }
+          ]
+        },
+        {
+          "id": "vocabulary",
+          "strand": "Vocabulary & Roots",
+          "standards": ["L.6.4"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"] },
+            { "name": "on_track", "min": 70, "placement": ["6-english-language-arts-reading-literature-world-literature-pd-where-possible"] }
+          ]
+        },
+        {
+          "id": "speaking",
+          "strand": "Speaking & Listening",
+          "standards": ["SL.6.1", "SL.6.4"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["6-english-language-arts-speaking-and-listening-debates-multimedia-presentations"] },
+            { "name": "on_track", "min": 70, "placement": ["6-english-language-arts-speaking-and-listening-debates-multimedia-presentations"] }
+          ]
+        }
+      ]
+    },
+    "items": [
+      {
+        "id": "6ela-rl-1",
+        "prompt": "Maya checked the weather, packed a raincoat, and caught the early bus because the clouds were dark. Which detail best supports the inference that Maya was prepared?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.6.1",
+        "options": [
+          { "text": "She hoped it would rain later", "isCorrect": false },
+          { "text": "She packed a raincoat before leaving", "isCorrect": true },
+          { "text": "She liked cloudy mornings", "isCorrect": false },
+          { "text": "She waved to her friends", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["6-english-language-arts-reading-literature-poetry-and-drama-pd"]
+        }
+      },
+      {
+        "id": "6ela-rl-2",
+        "prompt": "In a story, Jonas keeps rebuilding his tower after it falls several times. Which theme does this best show?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.6.2",
+        "options": [
+          { "text": "Competition leads to mistakes", "isCorrect": false },
+          { "text": "Perseverance helps people reach goals", "isCorrect": true },
+          { "text": "Teamwork always wins", "isCorrect": false },
+          { "text": "Planning is impossible", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["6-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "6ela-rl-3",
+        "prompt": "A narrator says, \"I couldn't believe Sara volunteered first,\" while another character smiles and raises her hand. What does this reveal about Sara?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.6.1",
+        "options": [
+          { "text": "She is shy and avoids attention", "isCorrect": false },
+          { "text": "She is confident about speaking up", "isCorrect": true },
+          { "text": "She dislikes the narrator", "isCorrect": false },
+          { "text": "She forgot to prepare", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["6-english-language-arts-reading-literature-poetry-and-drama-pd"]
+        }
+      },
+      {
+        "id": "6ela-rl-4",
+        "prompt": "Which sentence is the strongest evidence that a character feels nervous about a performance?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.6.1",
+        "options": [
+          { "text": "She practiced every afternoon.", "isCorrect": false },
+          { "text": "Her hands trembled as she stepped on stage.", "isCorrect": true },
+          { "text": "The lights were bright and warm.", "isCorrect": false },
+          { "text": "She waved to her family in the crowd.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-literature-poetry-and-drama-pd"],
+          "on_mastery": ["6-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "6ela-ri-1",
+        "prompt": "A paragraph explains how recycling reduces landfill waste and conserves resources. Which sentence best states the main idea?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Informational Text",
+        "standard": "RI.6.1",
+        "options": [
+          { "text": "Landfills are smelly places", "isCorrect": false },
+          { "text": "Recycling keeps materials out of landfills and saves resources", "isCorrect": true },
+          { "text": "People should throw away less food", "isCorrect": false },
+          { "text": "Glass is heavy to transport", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["6-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "6ela-ri-2",
+        "prompt": "An article compares wind power and solar power, listing pros and cons for each. What text structure is the author using?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Informational Text",
+        "standard": "RI.6.5",
+        "options": [
+          { "text": "Cause and effect", "isCorrect": false },
+          { "text": "Problem and solution", "isCorrect": false },
+          { "text": "Compare and contrast", "isCorrect": true },
+          { "text": "Chronological order", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["6-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "6ela-ri-3",
+        "prompt": "Which sentence best supports the claim that school gardens help students learn science?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Informational Text",
+        "standard": "RI.6.1",
+        "options": [
+          { "text": "The garden looks beautiful in spring", "isCorrect": false },
+          { "text": "Students measure plant growth and graph the results", "isCorrect": true },
+          { "text": "Tomatoes are the most popular plant", "isCorrect": false },
+          { "text": "Gardens need water and sunlight", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["6-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "6ela-ri-4",
+        "prompt": "An author presents a problem of litter in parks and proposes cleanup days as a solution. What is the author's purpose?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Informational Text",
+        "standard": "RI.6.6",
+        "options": [
+          { "text": "To entertain readers with a story", "isCorrect": false },
+          { "text": "To explain why parks close early", "isCorrect": false },
+          { "text": "To persuade readers to join cleanup efforts", "isCorrect": true },
+          { "text": "To list park rules", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-reading-informational-historical-documents-pd"],
+          "on_mastery": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "6ela-w-1",
+        "prompt": "Which is the strongest claim for an argument about school lunches?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.6.1",
+        "options": [
+          { "text": "Lunch is important", "isCorrect": false },
+          { "text": "Our school should offer more fresh fruits to improve student health", "isCorrect": true },
+          { "text": "Some students like pizza", "isCorrect": false },
+          { "text": "Food is expensive", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "6ela-w-2",
+        "prompt": "Which evidence best supports the claim that more recess improves focus?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.6.1",
+        "options": [
+          { "text": "Students like being outside", "isCorrect": false },
+          { "text": "A study showed test scores rose after schools added recess time", "isCorrect": true },
+          { "text": "Teachers enjoy fresh air", "isCorrect": false },
+          { "text": "Recess is fun", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["6-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "6ela-w-3",
+        "prompt": "Which transition best connects two reasons in an argument?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Argument Writing",
+        "standard": "W.6.1",
+        "options": [
+          { "text": "However", "isCorrect": true },
+          { "text": "Suddenly", "isCorrect": false },
+          { "text": "Yesterday", "isCorrect": false },
+          { "text": "Finally!", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"]
+        }
+      },
+      {
+        "id": "6ela-w-4",
+        "prompt": "How should a concluding statement support a claim?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.6.1",
+        "options": [
+          { "text": "By introducing a new reason", "isCorrect": false },
+          { "text": "By restating the claim and why it matters", "isCorrect": true },
+          { "text": "By adding unrelated facts", "isCorrect": false },
+          { "text": "By repeating the introduction word for word", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"]
+        }
+      },
+      {
+        "id": "6ela-v-1",
+        "prompt": "In the sentence \"Carlos was reluctant to join the game,\" what does \"reluctant\" mean?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.6.4",
+        "options": [
+          { "text": "Eager", "isCorrect": false },
+          { "text": "Unwilling or hesitant", "isCorrect": true },
+          { "text": "Confused", "isCorrect": false },
+          { "text": "Excited", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["6-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "6ela-v-2",
+        "prompt": "The root \"tele\" in \"telegraph\" means:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.6.4",
+        "options": [
+          { "text": "Write", "isCorrect": false },
+          { "text": "Far or distant", "isCorrect": true },
+          { "text": "Sound", "isCorrect": false },
+          { "text": "Move", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "6ela-v-3",
+        "prompt": "Which word best replaces \"helped\" to add precision? \"The volunteer helped the new student find her classes.\"",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.6.4",
+        "options": [
+          { "text": "Ignored", "isCorrect": false },
+          { "text": "Assisted", "isCorrect": true },
+          { "text": "Waited", "isCorrect": false },
+          { "text": "Ran", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["6-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "6ela-sl-1",
+        "prompt": "During a multimedia presentation, what is the best way to take notes?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Speaking & Listening",
+        "standard": "SL.6.4",
+        "options": [
+          { "text": "Copy every sentence on the slides", "isCorrect": false },
+          { "text": "Write key ideas and examples in your own words", "isCorrect": true },
+          { "text": "Only watch the images", "isCorrect": false },
+          { "text": "Interrupt to ask unrelated questions", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["6-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "6ela-sl-2",
+        "prompt": "If you disagree with a peer in a discussion, what is the best response?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Speaking & Listening",
+        "standard": "SL.6.1",
+        "options": [
+          { "text": "Interrupt to say they are wrong", "isCorrect": false },
+          { "text": "Listen, then share your evidence politely", "isCorrect": true },
+          { "text": "Ignore their idea", "isCorrect": false },
+          { "text": "Change the topic", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["6-english-language-arts-speaking-and-listening-debates-multimedia-presentations"]
+        }
+      },
+      {
+        "id": "6ela-sl-3",
+        "prompt": "Which question shows active listening to a speaker about ocean pollution?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Speaking & Listening",
+        "standard": "SL.6.1",
+        "options": [
+          { "text": "Can we have less homework?", "isCorrect": false },
+          { "text": "Why does plastic harm sea animals?", "isCorrect": true },
+          { "text": "What time is lunch?", "isCorrect": false },
+          { "text": "Do you like the beach?", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["6-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      }
+    ]
+  },
+  "ela_7": {
+    "grade_band": "7",
+    "subject": "ela",
+    "title": "Grade 7 ELA Diagnostic",
+    "description": "Evaluates evidence in texts, argument quality, academic vocabulary, and collaborative discussion.",
+    "estimatedDurationMinutes": 18,
+    "blueprint": {
+      "sections": [
+        {
+          "id": "literature",
+          "strand": "Evidence in Literature",
+          "standards": ["RL.7.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-english-language-arts-reading-literature-novellas-short-novels-pd"] },
+            { "name": "on_track", "min": 70, "placement": ["7-english-language-arts-reading-literature-poetry-and-drama-pd"] }
+          ]
+        },
+        {
+          "id": "informational",
+          "strand": "Informational Text",
+          "standards": ["RI.7.8"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"] },
+            { "name": "on_track", "min": 70, "placement": ["7-english-language-arts-reading-informational-historical-documents-pd"] }
+          ]
+        },
+        {
+          "id": "writing",
+          "strand": "Argument Writing",
+          "standards": ["W.7.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"] },
+            { "name": "on_track", "min": 70, "placement": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"] }
+          ]
+        },
+        {
+          "id": "vocabulary",
+          "strand": "Vocabulary & Roots",
+          "standards": ["L.7.4"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"] },
+            { "name": "on_track", "min": 70, "placement": ["7-english-language-arts-reading-literature-world-literature-pd-where-possible"] }
+          ]
+        },
+        {
+          "id": "speaking",
+          "strand": "Speaking & Listening",
+          "standards": ["SL.7.1", "SL.7.4"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["7-english-language-arts-speaking-and-listening-debates-multimedia-presentations"] },
+            { "name": "on_track", "min": 70, "placement": ["7-english-language-arts-speaking-and-listening-debates-multimedia-presentations"] }
+          ]
+        }
+      ]
+    },
+    "items": [
+      {
+        "id": "7ela-rl-1",
+        "prompt": "A narrator notes, \"Lena rehearsed her speech twice before raising her hand to present.\" Which evidence best shows Lena's motivation?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.7.1",
+        "options": [
+          { "text": "She rehearsed because she wanted to do well.", "isCorrect": true },
+          { "text": "She rehearsed because she was bored.", "isCorrect": false },
+          { "text": "She rehearsed because her friend told her to.", "isCorrect": false },
+          { "text": "She rehearsed because she forgot the topic.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["7-english-language-arts-reading-literature-poetry-and-drama-pd"]
+        }
+      },
+      {
+        "id": "7ela-rl-2",
+        "prompt": "Which detail best supports the theme that honesty strengthens friendships?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.7.2",
+        "options": [
+          { "text": "After telling the truth, Maya's friend thanked her for being direct.", "isCorrect": true },
+          { "text": "Maya arrived early to practice.", "isCorrect": false },
+          { "text": "They decided to meet again on Saturday.", "isCorrect": false },
+          { "text": "Maya bought her friend a snack.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["7-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "7ela-rl-3",
+        "prompt": "If a narrator admits, \"I might be remembering this wrong,\" what does that suggest?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Evidence in Literature",
+        "standard": "RL.7.6",
+        "options": [
+          { "text": "The narrator is completely reliable", "isCorrect": false },
+          { "text": "The narrator's account may be biased or uncertain", "isCorrect": true },
+          { "text": "The narrator dislikes the story", "isCorrect": false },
+          { "text": "The narrator is switching topics", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-literature-poetry-and-drama-pd"],
+          "on_mastery": ["7-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "7ela-rl-4",
+        "prompt": "Which sentence offers the best text evidence that a character is feeling left out?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.7.1",
+        "options": [
+          { "text": "He watched the others from the hallway, clutching his books.", "isCorrect": true },
+          { "text": "He ran quickly to class.", "isCorrect": false },
+          { "text": "The bell rang at noon.", "isCorrect": false },
+          { "text": "She smiled at her friend.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-literature-poetry-and-drama-pd"],
+          "on_mastery": ["7-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "7ela-ri-1",
+        "prompt": "An article claims that school uniforms reduce morning stress. Which evidence best strengthens this claim?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Informational Text",
+        "standard": "RI.7.8",
+        "options": [
+          { "text": "Uniforms look neat in photos", "isCorrect": false },
+          { "text": "A survey found students spent 10 fewer minutes choosing clothes after uniforms were introduced", "isCorrect": true },
+          { "text": "Some students prefer hoodies", "isCorrect": false },
+          { "text": "Uniforms are sometimes expensive", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["7-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "7ela-ri-2",
+        "prompt": "Which statement shows a flaw in reasoning in an argument about homework?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Informational Text",
+        "standard": "RI.7.8",
+        "options": [
+          { "text": "\"Homework is useless because I dislike it.\"", "isCorrect": true },
+          { "text": "\"Homework should match what we learned in class.\"", "isCorrect": false },
+          { "text": "\"Homework sometimes takes an hour.\"", "isCorrect": false },
+          { "text": "\"Homework can be done online or on paper.\"", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-informational-historical-documents-pd"],
+          "on_mastery": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "7ela-ri-3",
+        "prompt": "An author cites a blog post without data to prove a medical claim. What should the reader question?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Informational Text",
+        "standard": "RI.7.8",
+        "options": [
+          { "text": "Whether the source is credible and supported by evidence", "isCorrect": true },
+          { "text": "Whether the author likes blogs", "isCorrect": false },
+          { "text": "Whether the article has pictures", "isCorrect": false },
+          { "text": "Whether the font is readable", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["7-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "7ela-ri-4",
+        "prompt": "Which sentence most clearly states an author's claim about screen time?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Informational Text",
+        "standard": "RI.7.8",
+        "options": [
+          { "text": "Many teens use tablets for homework.", "isCorrect": false },
+          { "text": "Limiting screen time before bed improves sleep quality.", "isCorrect": true },
+          { "text": "Phones can be charged overnight.", "isCorrect": false },
+          { "text": "Apps come in many categories.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["7-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "7ela-w-1",
+        "prompt": "Which is the strongest claim for an argument about later school start times?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.7.1",
+        "options": [
+          { "text": "Teenagers like to sleep", "isCorrect": false },
+          { "text": "Schools should start later because research links more sleep to higher grades and safer commutes", "isCorrect": true },
+          { "text": "The bus is crowded", "isCorrect": false },
+          { "text": "Some students walk to school", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "7ela-w-2",
+        "prompt": "Which sentence works as a counterclaim in an essay supporting longer lunches?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Argument Writing",
+        "standard": "W.7.1",
+        "options": [
+          { "text": "Some argue longer lunches could reduce class time.", "isCorrect": true },
+          { "text": "Students enjoy talking with friends.", "isCorrect": false },
+          { "text": "Food options are tasty.", "isCorrect": false },
+          { "text": "Lunch lines are long.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["7-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "7ela-w-3",
+        "prompt": "Which transition best shows contrast between two reasons?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.7.1",
+        "options": [
+          { "text": "Additionally", "isCorrect": false },
+          { "text": "For example", "isCorrect": false },
+          { "text": "Nevertheless", "isCorrect": true },
+          { "text": "Finally", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"]
+        }
+      },
+      {
+        "id": "7ela-w-4",
+        "prompt": "What should a concluding statement do in a Grade 7 argument?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.7.1",
+        "options": [
+          { "text": "Repeat the introduction exactly", "isCorrect": false },
+          { "text": "Acknowledge counterclaims and reinforce the main claim", "isCorrect": true },
+          { "text": "Add unrelated facts", "isCorrect": false },
+          { "text": "Skip transitions", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"]
+        }
+      },
+      {
+        "id": "7ela-v-1",
+        "prompt": "In \"The activist chose to advocate for clean air laws,\" what does \"advocate\" mean?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.7.4",
+        "options": [
+          { "text": "To oppose", "isCorrect": false },
+          { "text": "To speak or act in favor of", "isCorrect": true },
+          { "text": "To ignore", "isCorrect": false },
+          { "text": "To delay", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["7-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "7ela-v-2",
+        "prompt": "The root \"inter\" in \"international\" means:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.7.4",
+        "options": [
+          { "text": "Within", "isCorrect": false },
+          { "text": "Between", "isCorrect": true },
+          { "text": "Above", "isCorrect": false },
+          { "text": "Under", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "7ela-v-3",
+        "prompt": "Which word best replaces \"said\" to show a writer presented reasons clearly?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.7.4",
+        "options": [
+          { "text": "Mumbled", "isCorrect": false },
+          { "text": "Argued", "isCorrect": true },
+          { "text": "Ignored", "isCorrect": false },
+          { "text": "Laughed", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["7-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "7ela-sl-1",
+        "prompt": "During a debate, which question best probes a speaker's evidence?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Speaking & Listening",
+        "standard": "SL.7.1",
+        "options": [
+          { "text": "Where did you find that data?", "isCorrect": true },
+          { "text": "Do you like debates?", "isCorrect": false },
+          { "text": "What's for lunch?", "isCorrect": false },
+          { "text": "Can you repeat your name?", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["7-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "7ela-sl-2",
+        "prompt": "If you disagree during discussion, what should you do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Speaking & Listening",
+        "standard": "SL.7.1",
+        "options": [
+          { "text": "Raise your voice", "isCorrect": false },
+          { "text": "Listen fully, then cite evidence for your view", "isCorrect": true },
+          { "text": "Change topics", "isCorrect": false },
+          { "text": "Interrupt repeatedly", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["7-english-language-arts-speaking-and-listening-debates-multimedia-presentations"]
+        }
+      },
+      {
+        "id": "7ela-sl-3",
+        "prompt": "What is an effective note to capture while listening to a persuasive speech?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Speaking & Listening",
+        "standard": "SL.7.4",
+        "options": [
+          { "text": "Key claims and the evidence cited", "isCorrect": true },
+          { "text": "How loud the speaker is", "isCorrect": false },
+          { "text": "Whether the slides use blue or green", "isCorrect": false },
+          { "text": "Unrelated doodles", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["7-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      }
+    ]
+  },
+  "ela_8": {
+    "grade_band": "8",
+    "subject": "ela",
+    "title": "Grade 8 ELA Diagnostic",
+    "description": "Checks evidence use, evaluation of claims and counterclaims, precise language, and academic discourse.",
+    "estimatedDurationMinutes": 18,
+    "blueprint": {
+      "sections": [
+        {
+          "id": "literature",
+          "strand": "Evidence in Literature",
+          "standards": ["RL.8.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-english-language-arts-reading-literature-novellas-short-novels-pd"] },
+            { "name": "on_track", "min": 70, "placement": ["8-english-language-arts-reading-literature-poetry-and-drama-pd"] }
+          ]
+        },
+        {
+          "id": "informational",
+          "strand": "Informational Text",
+          "standards": ["RI.8.8"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"] },
+            { "name": "on_track", "min": 70, "placement": ["8-english-language-arts-reading-informational-historical-documents-pd"] }
+          ]
+        },
+        {
+          "id": "writing",
+          "strand": "Argument Writing",
+          "standards": ["W.8.1"],
+          "itemCount": 4,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"] },
+            { "name": "on_track", "min": 70, "placement": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"] }
+          ]
+        },
+        {
+          "id": "vocabulary",
+          "strand": "Vocabulary & Roots",
+          "standards": ["L.8.4"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"] },
+            { "name": "on_track", "min": 70, "placement": ["8-english-language-arts-reading-literature-world-literature-pd-where-possible"] }
+          ]
+        },
+        {
+          "id": "speaking",
+          "strand": "Speaking & Listening",
+          "standards": ["SL.8.1", "SL.8.4"],
+          "itemCount": 3,
+          "scoreBands": [
+            { "name": "needs_support", "max": 50, "placement": ["8-english-language-arts-speaking-and-listening-debates-multimedia-presentations"] },
+            { "name": "on_track", "min": 70, "placement": ["8-english-language-arts-speaking-and-listening-debates-multimedia-presentations"] }
+          ]
+        }
+      ]
+    },
+    "items": [
+      {
+        "id": "8ela-rl-1",
+        "prompt": "A character stays late to fix a project despite missing a game. Which evidence best supports the inference that responsibility matters to them?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.8.1",
+        "options": [
+          { "text": "They didn't want to get in trouble.", "isCorrect": false },
+          { "text": "They choose the project over the game because others are counting on them.", "isCorrect": true },
+          { "text": "They dislike sports.", "isCorrect": false },
+          { "text": "They forgot about the game.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["8-english-language-arts-reading-literature-poetry-and-drama-pd"]
+        }
+      },
+      {
+        "id": "8ela-rl-2",
+        "prompt": "Which detail best shows a narrator's tone is skeptical?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Evidence in Literature",
+        "standard": "RL.8.4",
+        "options": [
+          { "text": "She accepted the plan without a thought.", "isCorrect": false },
+          { "text": "She raised an eyebrow and asked, \"Are you sure this will work?\"", "isCorrect": true },
+          { "text": "She cheered loudly at the idea.", "isCorrect": false },
+          { "text": "She hurried to pack.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-literature-poetry-and-drama-pd"],
+          "on_mastery": ["8-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "8ela-rl-3",
+        "prompt": "If a story is told from a first-person point of view, what should readers keep in mind about the events?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.8.6",
+        "options": [
+          { "text": "They may reflect the narrator's bias or limited knowledge.", "isCorrect": true },
+          { "text": "They are always completely objective.", "isCorrect": false },
+          { "text": "They include all characters' thoughts.", "isCorrect": false },
+          { "text": "They never use descriptive language.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-literature-poetry-and-drama-pd"],
+          "on_mastery": ["8-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "8ela-rl-4",
+        "prompt": "Which sentence best supports the theme that setbacks can lead to growth?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Evidence in Literature",
+        "standard": "RL.8.2",
+        "options": [
+          { "text": "After failing, he analyzed his mistakes and tried a new approach.", "isCorrect": true },
+          { "text": "He arrived at practice early.", "isCorrect": false },
+          { "text": "She liked listening to music.", "isCorrect": false },
+          { "text": "They sat quietly.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-literature-novellas-short-novels-pd"],
+          "on_mastery": ["8-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "8ela-ri-1",
+        "prompt": "A writer claims that year-round school improves learning and cites a travel blog as evidence. What weakens this argument most?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Informational Text",
+        "standard": "RI.8.8",
+        "options": [
+          { "text": "The claim is unrelated to travel, making the source questionable.", "isCorrect": true },
+          { "text": "The article is long.", "isCorrect": false },
+          { "text": "The author likes vacations.", "isCorrect": false },
+          { "text": "The font is small.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["8-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "8ela-ri-2",
+        "prompt": "Which sentence best refutes a counterclaim that school arts programs are unnecessary?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Informational Text",
+        "standard": "RI.8.8",
+        "options": [
+          { "text": "Many students enjoy music.", "isCorrect": false },
+          { "text": "Studies link arts participation to higher graduation rates.", "isCorrect": true },
+          { "text": "Instruments can be loud.", "isCorrect": false },
+          { "text": "Some people prefer sports.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["8-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "8ela-ri-3",
+        "prompt": "Which reasoning is flawed in an argument about banning phones?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Informational Text",
+        "standard": "RI.8.8",
+        "options": [
+          { "text": "\"No schools allow phones, so ours shouldn't either\" (without evidence)", "isCorrect": true },
+          { "text": "\"Phones can distract some students\"", "isCorrect": false },
+          { "text": "\"Phones can be stored in lockers\"", "isCorrect": false },
+          { "text": "\"Phones have educational apps\"", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-informational-historical-documents-pd"],
+          "on_mastery": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "8ela-ri-4",
+        "prompt": "An article includes a statistic about water use but doesn't cite the source. What should readers do?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Informational Text",
+        "standard": "RI.8.8",
+        "options": [
+          { "text": "Accept it because it seems true", "isCorrect": false },
+          { "text": "Question the statistic until a reliable source is provided", "isCorrect": true },
+          { "text": "Ignore all statistics", "isCorrect": false },
+          { "text": "Assume the number is exaggerated", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"],
+          "on_mastery": ["8-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "8ela-w-1",
+        "prompt": "Which claim best sets up an argument and acknowledges a counterclaim?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Argument Writing",
+        "standard": "W.8.1",
+        "options": [
+          { "text": "Cafeterias should remove dessert.", "isCorrect": false },
+          { "text": "While some worry about cost, investing in healthier cafeteria options benefits student focus and wellbeing.", "isCorrect": true },
+          { "text": "Food can be tasty.", "isCorrect": false },
+          { "text": "Lunch happens at noon.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "8ela-w-2",
+        "prompt": "Which sentence effectively introduces a counterclaim about homework?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Argument Writing",
+        "standard": "W.8.1",
+        "options": [
+          { "text": "I dislike homework.", "isCorrect": false },
+          { "text": "Some argue that homework teaches responsibility, even though excessive amounts can backfire.", "isCorrect": true },
+          { "text": "Homework takes time.", "isCorrect": false },
+          { "text": "Homework is due on Fridays.", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["8-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "8ela-w-3",
+        "prompt": "Which transition best signals a rebuttal to a counterclaim?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.8.1",
+        "options": [
+          { "text": "On the contrary", "isCorrect": true },
+          { "text": "Similarly", "isCorrect": false },
+          { "text": "For instance", "isCorrect": false },
+          { "text": "Next", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"]
+        }
+      },
+      {
+        "id": "8ela-w-4",
+        "prompt": "What should a conclusion include in a Grade 8 argument essay?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Argument Writing",
+        "standard": "W.8.1",
+        "options": [
+          { "text": "A summary that revisits the claim and shows how evidence answered counterclaims", "isCorrect": true },
+          { "text": "New evidence not mentioned earlier", "isCorrect": false },
+          { "text": "Only personal stories", "isCorrect": false },
+          { "text": "Unrelated opinions", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"],
+          "on_mastery": ["8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage"]
+        }
+      },
+      {
+        "id": "8ela-v-1",
+        "prompt": "In \"New rules aim to mitigate traffic near the school,\" mitigate most nearly means:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.8.4",
+        "options": [
+          { "text": "Increase", "isCorrect": false },
+          { "text": "Reduce or lessen", "isCorrect": true },
+          { "text": "Ignore", "isCorrect": false },
+          { "text": "Celebrate", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["8-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "8ela-v-2",
+        "prompt": "The root \"cred\" in \"credible\" means:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.8.4",
+        "options": [
+          { "text": "Believe or trust", "isCorrect": true },
+          { "text": "Write", "isCorrect": false },
+          { "text": "Speak", "isCorrect": false },
+          { "text": "Move", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      },
+      {
+        "id": "8ela-v-3",
+        "prompt": "Which word best replaces \"said angrily\" to add precision?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Vocabulary & Roots",
+        "standard": "L.8.4",
+        "options": [
+          { "text": "Whispered", "isCorrect": false },
+          { "text": "Retorted", "isCorrect": true },
+          { "text": "Laughed", "isCorrect": false },
+          { "text": "Mentioned", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots"],
+          "on_mastery": ["8-english-language-arts-reading-literature-world-literature-pd-where-possible"]
+        }
+      },
+      {
+        "id": "8ela-sl-1",
+        "prompt": "During a seminar, which follow-up question best challenges a statistic a speaker cited?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "strand": "Speaking & Listening",
+        "standard": "SL.8.1",
+        "options": [
+          { "text": "Where was that statistic published, and when?", "isCorrect": true },
+          { "text": "Do you like statistics?", "isCorrect": false },
+          { "text": "Can you speak louder?", "isCorrect": false },
+          { "text": "What is your favorite class?", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["8-english-language-arts-reading-informational-historical-documents-pd"]
+        }
+      },
+      {
+        "id": "8ela-sl-2",
+        "prompt": "What is an effective first step before rebutting a peer's claim?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Speaking & Listening",
+        "standard": "SL.8.1",
+        "options": [
+          { "text": "Summarize their point fairly", "isCorrect": true },
+          { "text": "Interrupt immediately", "isCorrect": false },
+          { "text": "Change the topic", "isCorrect": false },
+          { "text": "Ignore the evidence", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["8-english-language-arts-speaking-and-listening-debates-multimedia-presentations"]
+        }
+      },
+      {
+        "id": "8ela-sl-3",
+        "prompt": "What is the best note to capture when listening to a talk for later citation?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Speaking & Listening",
+        "standard": "SL.8.4",
+        "options": [
+          { "text": "Source titles and key quotes with time stamps", "isCorrect": true },
+          { "text": "The color of the slides", "isCorrect": false },
+          { "text": "Unrelated song lyrics", "isCorrect": false },
+          { "text": "Side conversations", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-english-language-arts-speaking-and-listening-debates-multimedia-presentations"],
+          "on_mastery": ["8-english-language-arts-reading-informational-science-tech-articles-open-licensed"]
+        }
+      }
+    ]
+  }
+}

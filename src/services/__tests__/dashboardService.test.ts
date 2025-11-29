@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildParentDownloadableReport, calculateChildGoalProgress, fetchStudentDashboardData } from '../dashboardService';
 import type { Parent, ParentChildSnapshot, ParentWeeklyReport, Student } from '../../types';
+import { defaultLearningPreferences } from '../../types';
 
 vi.mock('../../lib/supabaseClient', async () => {
   const { createSupabaseClientMock } = await import('../../test/supabaseMock');
@@ -137,6 +138,7 @@ describe('fetchStudentDashboardData', () => {
       strengths: [],
       weaknesses: [],
       learningPath: [],
+      learningPreferences: defaultLearningPreferences,
       assessmentCompleted: false,
     };
 

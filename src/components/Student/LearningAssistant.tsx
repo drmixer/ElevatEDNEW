@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Send, X, Bot, Lightbulb, Target, BookOpen } from 'lucide-react';
+import { Send, X, Bot, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student } from '../../types';
@@ -22,6 +22,14 @@ const LearningAssistant: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [assistantError, setAssistantError] = useState<string | null>(null);
+  const [responseMode, setResponseMode] = useState<'hint' | 'solution'>('hint');
+  const [planUsage, setPlanUsage] = useState<{ limit: number | 'unlimited' | null; remaining: number | null; plan: string | null }>({
+    limit: null,
+    remaining: null,
+    plan: null,
+  });
+  const [contextHint, setContextHint] = useState<string | null>(null);
+  const [showExplainModal, setShowExplainModal] = useState(false);
   const assistantWindowRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -65,6 +73,31 @@ const LearningAssistant: React.FC = () => {
     return `That's a great question! Based on your learning profile (Level ${student.level}, strong in ${student.strengths[0] || 'multiple areas'}), I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
   };
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleOpen = (event: Event) => {
+      const detail = (event as CustomEvent<{ prompt?: string; source?: string }>).detail ?? {};
+      setIsOpen(true);
+      if (detail.prompt) {
+        setInputMessage(detail.prompt);
+        setContextHint(detail.source ?? 'Lesson context');
+      } else {
+        setContextHint(detail.source ?? null);
+      }
+      trackEvent('learning_assistant_context_open', {
+        studentId: student.id,
+        source: detail.source ?? 'unknown',
+        hasPrompt: Boolean(detail.prompt),
+      });
+    };
+
+    window.addEventListener('learning-assistant:open', handleOpen as EventListener);
+    return () => {
+      window.removeEventListener('learning-assistant:open', handleOpen as EventListener);
+    };
+  }, [student.id]);
+
   const handleQuickAction = (action: string) => {
     let message = '';
     switch (action) {
@@ -87,6 +120,12 @@ const LearningAssistant: React.FC = () => {
     const messageToSend = (customMessage ?? inputMessage).trim();
     if (!messageToSend.trim()) return;
 
+    const modeInstruction =
+      responseMode === 'hint'
+        ? 'Provide a scaffolded hint without giving away the full answer unless I ask for it.'
+        : 'Share the full worked solution with reasoning after a short hint reminder.';
+    const decoratedMessage = `${messageToSend}\n\n${modeInstruction}`;
+
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content: messageToSend,
@@ -95,17 +134,20 @@ const LearningAssistant: React.FC = () => {
       role: 'user',
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsTyping(true);
     setAssistantError(null);
     trackEvent('learning_assistant_message_sent', {
       studentId: student.id,
       length: messageToSend.length,
+      responseMode,
+      contextSource: contextHint ?? 'direct',
     });
 
     try {
-      const contextWindow = [...messages, userMessage]
+      const promptEntries = [...messages, { ...userMessage, content: decoratedMessage }];
+      const contextWindow = promptEntries
         .slice(-6)
         .map((entry) => `${entry.isUser ? 'Student' : 'Assistant'}: ${entry.content}`)
         .join('\n');
@@ -118,20 +160,40 @@ const LearningAssistant: React.FC = () => {
 
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: response,
+        content: response.message,
         isUser: false,
         timestamp: new Date(),
         role: 'assistant',
       };
 
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages((prev) => [...prev, aiResponse]);
+      setPlanUsage((prev) => ({
+        limit: response.limit ?? prev.limit,
+        remaining:
+          response.limit === 'unlimited'
+            ? null
+            : response.remaining ?? response.limit ?? prev.remaining,
+        plan: response.plan ?? prev.plan,
+      }));
       trackEvent('learning_assistant_message_received', {
         studentId: student.id,
         source: 'openrouter',
+        plan: response.plan ?? undefined,
+        remaining: response.remaining,
       });
     } catch (err) {
       console.error('[LearningAssistant] AI response failed', err);
-      setAssistantError('The assistant is unavailable right now. Please try again in a moment.');
+      const errorMessage =
+        err instanceof Error ? err.message : 'The assistant is unavailable right now.';
+      setAssistantError(errorMessage);
+
+      if (errorMessage.toLowerCase().includes('limit')) {
+        trackEvent('learning_assistant_limit_reached', {
+          studentId: student.id,
+          plan: planUsage.plan,
+        });
+        return;
+      }
 
       const fallbackResponse: ChatMessage = {
         id: (Date.now() + 2).toString(),
@@ -141,7 +203,7 @@ const LearningAssistant: React.FC = () => {
         role: 'assistant',
       };
 
-      setMessages(prev => [...prev, fallbackResponse]);
+      setMessages((prev) => [...prev, fallbackResponse]);
       trackEvent('learning_assistant_message_received', {
         studentId: student.id,
         source: 'rules-engine',
@@ -229,28 +291,55 @@ const LearningAssistant: React.FC = () => {
             ref={assistantWindowRef}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-brand-violet to-brand-blue text-white p-4 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="h-4 w-4" />
+            <div className="bg-gradient-to-r from-brand-violet to-brand-blue text-white p-4 space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    <Bot className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold" id="learning-assistant-title">Learning Assistant</h3>
+                    <p className="text-xs opacity-90" id="learning-assistant-description">Hints first, full solutions on request.</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold" id="learning-assistant-title">Learning Assistant</h3>
-                  <p className="text-xs opacity-90" id="learning-assistant-description">Here to help you learn!</p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowExplainModal(true)}
+                    className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1 text-[11px] font-semibold hover:bg-white/25 focus-ring"
+                    aria-label="How ElevatED explains things"
+                  >
+                    <Info className="h-3 w-3" />
+                    How we answer
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      setContextHint(null);
+                    }}
+                    className="p-1 hover:bg-white/20 rounded-full transition-colors focus-ring"
+                    aria-label="Close learning assistant"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-white/20 rounded-full transition-colors focus-ring"
-                aria-label="Close learning assistant"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-2 py-1 font-semibold">
+                  {planUsage.limit === 'unlimited'
+                    ? 'Unlimited tutor chats (fair use applies)'
+                    : planUsage.limit
+                      ? `${planUsage.remaining ?? planUsage.limit} of ${planUsage.limit} chats left today`
+                      : 'Free includes 3 tutor chats/day; paid plans are unlimited (fair use). Remaining will update after your first question.'}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1">
+                  <Sparkles className="h-3 w-3" /> Hints first—toggle below for full solutions
+                </span>
+              </div>
             </div>
 
             {/* Quick Actions */}
             <div className="p-3 border-b border-gray-200">
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
                 {quickActions.map((action, index) => (
                   <button
                     key={index}
@@ -264,6 +353,20 @@ const LearningAssistant: React.FC = () => {
                 ))}
               </div>
             </div>
+
+            {contextHint && (
+              <div className="px-4 py-2 text-xs text-slate-600 bg-slate-50 border-b border-gray-200 flex items-center gap-2">
+                <MessageSquare className="h-3 w-3 text-brand-violet" />
+                <span>Using lesson context: {contextHint}</span>
+                <button
+                  type="button"
+                  className="ml-auto text-[11px] font-semibold text-brand-violet hover:underline"
+                  onClick={() => setContextHint(null)}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
 
             {/* Messages */}
             <div className="flex-1 p-4 overflow-y-auto space-y-4" role="log" aria-live="polite" aria-relevant="additions text">
@@ -309,7 +412,34 @@ const LearningAssistant: React.FC = () => {
             </div>
 
             {/* Input */}
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-gray-200 space-y-3">
+              <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                <span className="text-slate-500">Response style:</span>
+                <button
+                  type="button"
+                  onClick={() => setResponseMode('hint')}
+                  aria-pressed={responseMode === 'hint'}
+                  className={`rounded-full px-3 py-1 font-semibold transition-colors focus-ring ${
+                    responseMode === 'hint'
+                      ? 'bg-brand-violet text-white'
+                      : 'bg-gray-100 text-slate-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Give me a hint
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setResponseMode('solution')}
+                  aria-pressed={responseMode === 'solution'}
+                  className={`rounded-full px-3 py-1 font-semibold transition-colors focus-ring ${
+                    responseMode === 'solution'
+                      ? 'bg-brand-blue text-white'
+                      : 'bg-gray-100 text-slate-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Show full solution
+                </button>
+              </div>
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -339,6 +469,45 @@ const LearningAssistant: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {showExplainModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h4 className="text-lg font-semibold text-slate-900">How ElevatED explains things</h4>
+                <p className="text-sm text-slate-600">
+                  Responses adapt to grade level, subject, and whether you want hints or full solutions.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowExplainModal(false)}
+                className="p-1 rounded-full hover:bg-slate-100 focus-ring"
+                aria-label="Close explanation modal"
+              >
+                <X className="h-5 w-5 text-slate-500" />
+              </button>
+            </div>
+            <ul className="space-y-2 text-sm text-slate-700">
+              <li>• K-3: short sentences, simple words, and concrete examples.</li>
+              <li>• Grades 4-8: 2-3 step hints with vocabulary reminders before answers.</li>
+              <li>• Grades 9-12: deeper reasoning, study strategies, and concise solutions.</li>
+              <li>• Math: show the process first; English: model structure; Science/Social Studies: tie ideas to evidence and causes.</li>
+            </ul>
+            <div className="text-xs text-slate-500">
+              Hint mode is default to encourage productive struggle. Switch to “Show full solution” when you need the entire walkthrough.
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="rounded-full bg-brand-violet px-4 py-2 text-sm font-semibold text-white hover:bg-brand-blue focus-ring"
+                onClick={() => setShowExplainModal(false)}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

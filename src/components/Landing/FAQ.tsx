@@ -62,9 +62,31 @@ const FAQ: React.FC = () => {
             Frequently Asked Questions
           </h2>
           <p className="text-xl text-gray-600">
-            Everything you need to know about ElevatED's personalized learning platform
+            Everything you need to know about ElevatED's personalized, family-first learning platform
           </p>
         </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+          <div className="rounded-2xl bg-gradient-to-br from-teal-50 to-blue-50 border border-blue-100 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">What ElevatED is</h3>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>• A home-learning companion for students and parents.</li>
+              <li>• Adaptive AI tutor with family dashboards and weekly digests.</li>
+              <li>• Simple catalog browsing so parents can launch the right lessons.</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl bg-white border border-gray-200 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">What ElevatED is not</h3>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>• Not a school SIS/LMS, teacher gradebook, or district roster tool.</li>
+              <li>• Not built for classroom schedules or bulk teacher provisioning.</li>
+              <li>• Admin/import tools live separately at <code className="px-1">/workspace/admin</code>.</li>
+            </ul>
+            <p className="mt-4 text-sm text-gray-600">
+              ElevatED is for students and parents at home, not schools or teachers.
+            </p>
+          </div>
+        </div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (

@@ -12,6 +12,7 @@ import type {
   ModuleStandard,
   RecommendationItem,
 } from '../types';
+import { normalizeSubject } from '../lib/subjects';
 
 type ApiModule = {
   id: number;
@@ -152,19 +153,22 @@ type LessonDetailResponse = {
   };
 };
 
-const mapModule = (item: ApiModule): CatalogModule => ({
-  id: item.id,
-  slug: item.slug,
-  title: item.title,
-  summary: item.summary ?? null,
-  gradeBand: item.grade_band,
-  subject: item.subject,
-  strand: item.strand ?? null,
-  topic: item.topic ?? null,
-  openTrack: item.open_track ?? false,
-  suggestedSourceCategory: item.suggested_source_category ?? null,
-  exampleSource: item.example_source ?? null,
-});
+const mapModule = (item: ApiModule): CatalogModule => {
+  const normalizedSubject = normalizeSubject(item.subject);
+  return {
+    id: item.id,
+    slug: item.slug,
+    title: item.title,
+    summary: item.summary ?? null,
+    gradeBand: item.grade_band,
+    subject: (normalizedSubject ?? item.subject) as CatalogModule['subject'],
+    strand: item.strand ?? null,
+    topic: item.topic ?? null,
+    openTrack: item.open_track ?? false,
+    suggestedSourceCategory: item.suggested_source_category ?? null,
+    exampleSource: item.example_source ?? null,
+  };
+};
 
 const mapAsset = (asset: ApiAsset): ModuleAsset => ({
   id: asset.id,
@@ -256,19 +260,22 @@ const mapAssessmentDetail = (payload: ApiModuleAssessmentDetail): ModuleAssessme
     : [],
 });
 
-const mapRecommendation = (item: ApiRecommendation): RecommendationItem => ({
-  id: item.id,
-  slug: item.slug,
-  title: item.title,
-  subject: item.subject,
-  strand: item.strand ?? null,
-  topic: item.topic ?? null,
-  gradeBand: item.grade_band,
-  summary: item.summary ?? null,
-  openTrack: item.open_track ?? false,
-  reason: item.reason,
-  fallback: Boolean(item.fallback),
-});
+const mapRecommendation = (item: ApiRecommendation): RecommendationItem => {
+  const normalizedSubject = normalizeSubject(item.subject);
+  return {
+    id: item.id,
+    slug: item.slug,
+    title: item.title,
+    subject: (normalizedSubject ?? item.subject) as RecommendationItem['subject'],
+    strand: item.strand ?? null,
+    topic: item.topic ?? null,
+    gradeBand: item.grade_band,
+    summary: item.summary ?? null,
+    openTrack: item.open_track ?? false,
+    reason: item.reason,
+    fallback: Boolean(item.fallback),
+  };
+};
 
 const buildQueryString = (filters: CatalogFilters): string => {
   const params = new URLSearchParams();

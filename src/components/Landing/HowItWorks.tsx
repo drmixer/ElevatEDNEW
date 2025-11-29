@@ -8,26 +8,26 @@ const HowItWorks: React.FC = () => {
   const steps = [
     {
       icon: UserPlus,
-      title: 'Sign Up & Choose Role',
-      description: 'Create your account as a student or parent. Students can link to parent accounts for comprehensive tracking.',
+      title: 'Create Your Family Space',
+      description: 'Parents invite learners and set simple goals. Students join with their own login so privacy and progress stay separate.',
       color: 'from-brand-secondary to-brand-primary'
     },
     {
       icon: Brain,
-      title: 'Take Diagnostic Assessment',
-      description: 'Complete our adaptive assessment across core subjects. Skip to start at grade level if preferred.',
+      title: 'Meet the AI Tutor',
+      description: 'Learners take a short adaptive check-in so the tutor can set the right starting point across subjects.',
       color: 'from-brand-primary to-brand-tertiary'
     },
     {
       icon: BookOpen,
-      title: 'Follow Personalized Path',
-      description: 'Learn through adaptive lessons that adjust difficulty based on your performance and mastery.',
+      title: 'Follow Personalized Paths',
+      description: 'Daily lessons adapt automatically. Students get hints, practice, and encouragement without needing a classroom teacher.',
       color: 'from-brand-primary to-brand-accent'
     },
     {
       icon: TrendingUp,
-      title: 'Track Progress & Grow',
-      description: 'Monitor advancement through detailed analytics, earn badges, and celebrate achievements.',
+      title: 'Parents Stay in the Loop',
+      description: 'Weekly summaries, clear alerts, and side-by-side sibling views keep parents informed without jargon.',
       color: 'from-brand-accent to-brand-secondary'
     }
   ];
@@ -54,7 +54,7 @@ const HowItWorks: React.FC = () => {
             How ElevatED Works
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Get started in minutes with our simple, proven approach to personalized learning
+            A home-learning flow that makes sense for families and keeps students moving forward
           </p>
         </motion.div>
 

@@ -13,9 +13,19 @@ type TutorResponseOptions =
 type TutorResponsePayload = {
   message?: string;
   error?: string;
+  remaining?: number | null;
+  limit?: number | 'unlimited' | null;
+  plan?: string | null;
 };
 
 const MAX_PROMPT_CHARS = 1200;
+
+export type TutorResponseResult = {
+  message: string;
+  remaining: number | null;
+  limit: number | 'unlimited' | null;
+  plan: string | null;
+};
 
 const toOptions = (input?: TutorResponseOptions) => {
   if (!input) return {};
@@ -51,7 +61,7 @@ const parseErrorMessage = async (response: Response): Promise<string> => {
 export async function getTutorResponse(
   prompt: string,
   options?: TutorResponseOptions,
-): Promise<string> {
+): Promise<TutorResponseResult> {
   const resolvedOptions = toOptions(options);
   const trimmedPrompt = prompt?.trim();
 
@@ -87,7 +97,12 @@ export async function getTutorResponse(
     throw new Error('Assistant unavailable. Please try again in a moment.');
   }
 
-  return body.message;
+  return {
+    message: body.message,
+    remaining: body.remaining ?? null,
+    limit: body.limit ?? null,
+    plan: body.plan ?? null,
+  };
 }
 
 export default getTutorResponse;

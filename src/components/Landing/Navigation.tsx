@@ -176,7 +176,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                   ElevatED
                 </span>
                 <div className={`font-semibold text-brand-dark transition-all duration-500 ${isCondensed ? 'text-xl leading-tight' : 'text-3xl leading-snug'}`}>
-                  Smart Learning. Elevated Results.
+                  Home Learning. Elevated Together.
                 </div>
                 <p className={`text-brand-dark/60 transition-all duration-500 ${isCondensed ? 'text-sm' : 'text-base'}`}>Adaptive AI tutoring with family-ready insights</p>
               </div>

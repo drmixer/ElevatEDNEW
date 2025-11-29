@@ -4,6 +4,7 @@ import process from 'node:process';
 import * as Sentry from '@sentry/node';
 
 let monitoringEnabled = false;
+const errorTimestamps: number[] = [];
 
 const scrubContext = (context?: Record<string, unknown>): Record<string, unknown> | undefined => {
   if (!context) {
@@ -72,6 +73,39 @@ const parseSampleRate = (value: string | undefined, fallback: number): number =>
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 };
 
+const parsePositiveInt = (value: string | undefined, fallback: number): number => {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+const ERROR_SPIKE_WINDOW_MS = parsePositiveInt(process.env.ERROR_SPIKE_WINDOW_MS, 5 * 60 * 1000);
+const ERROR_SPIKE_THRESHOLD = parsePositiveInt(process.env.ERROR_SPIKE_THRESHOLD, 12);
+let lastSpikeNotifiedAt = 0;
+
+const noteErrorSpikeCandidate = () => {
+  const now = Date.now();
+  errorTimestamps.push(now);
+  const windowStart = now - ERROR_SPIKE_WINDOW_MS;
+  while (errorTimestamps.length && errorTimestamps[0] < windowStart) {
+    errorTimestamps.shift();
+  }
+
+  const recentCount = errorTimestamps.length;
+  const cooldownActive = now - lastSpikeNotifiedAt < ERROR_SPIKE_WINDOW_MS / 2;
+
+  if (recentCount >= ERROR_SPIKE_THRESHOLD && !cooldownActive) {
+    lastSpikeNotifiedAt = now;
+    Sentry.captureMessage('alert:error_spike', {
+      level: 'error',
+      extra: {
+        windowMs: ERROR_SPIKE_WINDOW_MS,
+        count: recentCount,
+      },
+    });
+  }
+};
+
 export const initServerMonitoring = (): boolean => {
   if (monitoringEnabled) {
     return true;
@@ -109,6 +143,7 @@ export const captureServerException = (error: unknown, context?: Record<string, 
   Sentry.captureException(error, {
     extra: scrubContext(context),
   });
+  noteErrorSpikeCandidate();
 };
 
 export const captureServerMessage = (
@@ -123,6 +158,14 @@ export const captureServerMessage = (
     level,
     extra: scrubContext(context),
   });
+};
+
+export const raiseAlert = (key: string, context?: Record<string, unknown>): void => {
+  if (!monitoringEnabled) {
+    return;
+  }
+  const payload = { alert: key, ...scrubContext(context) };
+  Sentry.captureMessage(`alert:${key}`, { level: 'error', extra: payload });
 };
 
 export const withRequestScope = async <T>(

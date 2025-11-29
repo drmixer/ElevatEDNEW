@@ -119,5 +119,213 @@
         "explanation": "Divide total miles by gallons (180 ÷ 6) to obtain the 30 mpg unit rate."
       }
     ]
+  },
+  "9-mathematics-algebra-hs-pathways-linear-quadratic-functions": {
+    "title": "Algebra I: Linear & Quadratic Foundations",
+    "description": "Quick baseline to check readiness with slope, intercepts, and basic quadratic features.",
+    "estimatedDuration": 12,
+    "sectionTitle": "Functions Check-In",
+    "standards": [
+      "Common Core Math:HSF-IF.C.7",
+      "Common Core Math:HSF-IF.B.4",
+      "Common Core Math:HSF-IF.C.8"
+    ],
+    "questions": [
+      {
+        "id": "lq-q1",
+        "prompt": "What is the slope of the line y = 1.5x - 4?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["Common Core Math:HSF-IF.C.7"],
+        "options": [
+          { "text": "1.5", "isCorrect": true, "feedback": "In slope-intercept form y = mx + b, m is the slope." },
+          { "text": "-4", "isCorrect": false },
+          { "text": "4", "isCorrect": false },
+          { "text": "-1.5", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "lq-q2",
+        "prompt": "Which statement is true about the graph of y = -2(x - 3)^2 + 1?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSF-IF.C.7"],
+        "options": [
+          { "text": "It opens upward with vertex at (3, 1).", "isCorrect": false },
+          { "text": "It opens downward with vertex at (3, 1).", "isCorrect": true, "feedback": "The negative leading coefficient flips the parabola down; vertex form shows (h, k) = (3, 1)." },
+          { "text": "It opens downward with vertex at (-3, 1).", "isCorrect": false },
+          { "text": "It opens upward with vertex at (-3, -1).", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "lq-q3",
+        "prompt": "Solve for the x-intercepts of y = x^2 - 9.",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["Common Core Math:HSF-IF.C.8"],
+        "options": [
+          { "text": "x = -3 and x = 3", "isCorrect": true, "feedback": "Set x^2 - 9 = 0 and take the square root of 9." },
+          { "text": "x = 0 and x = 9", "isCorrect": false },
+          { "text": "x = -9 and x = 9", "isCorrect": false },
+          { "text": "x = -3 only", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "lq-q4",
+        "prompt": "What is the rate of change for the line through (1, 4) and (4, 13)?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSF-IF.C.7"],
+        "options": [
+          { "text": "3", "isCorrect": true, "feedback": "Slope = (13 - 4)/(4 - 1) = 9/3 = 3." },
+          { "text": "-3", "isCorrect": false },
+          { "text": "9", "isCorrect": false },
+          { "text": "1/3", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "lq-q5",
+        "prompt": "A line models earnings E = 18t + 45, where t is hours worked. What does 45 represent?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSF-IF.B.4"],
+        "options": [
+          { "text": "Hourly pay rate", "isCorrect": false },
+          { "text": "Starting bonus before any hours are worked", "isCorrect": true, "feedback": "The y-intercept is the starting amount when t = 0." },
+          { "text": "Earnings after 45 hours", "isCorrect": false },
+          { "text": "Amount deducted from each paycheck", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "lq-q6",
+        "prompt": "Which function type fits a data set where first differences are not constant but second differences are constant?",
+        "type": "multiple_choice",
+        "difficulty": 4,
+        "standards": ["Common Core Math:HSF-IF.B.4"],
+        "options": [
+          { "text": "Quadratic", "isCorrect": true, "feedback": "Quadratic sequences have constant second differences." },
+          { "text": "Linear", "isCorrect": false },
+          { "text": "Exponential", "isCorrect": false },
+          { "text": "Absolute value", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "lq-q7",
+        "prompt": "Which equation represents the line passing through (0, -2) and (4, 6)?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSF-IF.C.7"],
+        "options": [
+          { "text": "y = 2x - 2", "isCorrect": true, "feedback": "Slope = 2 and the point (0, -2) gives the intercept." },
+          { "text": "y = 2x + 2", "isCorrect": false },
+          { "text": "y = -2x - 2", "isCorrect": false },
+          { "text": "y = 2x + 6", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities": {
+    "title": "Polynomial Operations & Identities Check",
+    "description": "Baseline pulse on adding, multiplying, factoring polynomials, and interpreting graphs.",
+    "estimatedDuration": 12,
+    "sectionTitle": "Polynomial Baseline",
+    "standards": [
+      "Common Core Math:HSA-APR.1",
+      "Common Core Math:HSA-APR.3",
+      "Common Core Math:HSF-IF.4"
+    ],
+    "questions": [
+      {
+        "id": "poly-q1",
+        "prompt": "What is the degree of the polynomial -3x^5 + 4x^2 - 7?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["Common Core Math:HSA-APR.1"],
+        "options": [
+          { "text": "5", "isCorrect": true, "feedback": "The highest exponent is 5." },
+          { "text": "4", "isCorrect": false },
+          { "text": "3", "isCorrect": false },
+          { "text": "2", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "poly-q2",
+        "prompt": "Which expression is equivalent to (2x - 3)(x + 1)?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["Common Core Math:HSA-APR.1"],
+        "options": [
+          { "text": "2x^2 - x - 3", "isCorrect": true, "feedback": "Distribute: 2x*x + 2x*1 -3*x -3*1." },
+          { "text": "2x^2 + x - 3", "isCorrect": false },
+          { "text": "2x^2 - 3x + 1", "isCorrect": false },
+          { "text": "2x^2 - x + 3", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "poly-q3",
+        "prompt": "Factor the polynomial x^2 - 8x + 15.",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSA-APR.3"],
+        "options": [
+          { "text": "(x - 3)(x - 5)", "isCorrect": true, "feedback": "Numbers -3 and -5 multiply to 15 and add to -8." },
+          { "text": "(x + 3)(x + 5)", "isCorrect": false },
+          { "text": "(x - 1)(x - 15)", "isCorrect": false },
+          { "text": "(x + 1)(x + 15)", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "poly-q4",
+        "prompt": "What is the remainder when f(x) = x^3 - 4x + 1 is divided by (x - 2)?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSA-APR.3"],
+        "options": [
+          { "text": "1", "isCorrect": true, "feedback": "Use the Remainder Theorem: f(2) = 8 - 8 + 1 = 1." },
+          { "text": "5", "isCorrect": false },
+          { "text": "0", "isCorrect": false },
+          { "text": "-1", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "poly-q5",
+        "prompt": "Where does the graph of y = (x - 2)(x + 1)(x + 4) cross the x-axis?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSF-IF.4"],
+        "options": [
+          { "text": "At x = -4, -1, and 2", "isCorrect": true, "feedback": "Each factor gives a zero at its root." },
+          { "text": "Only at x = 2", "isCorrect": false },
+          { "text": "At x = -2 and 2", "isCorrect": false },
+          { "text": "At x = -4 and 1", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "poly-q6",
+        "prompt": "Which identity is correct?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["Common Core Math:HSA-APR.1"],
+        "options": [
+          { "text": "(a + b)^2 = a^2 + 2ab + b^2", "isCorrect": true, "feedback": "Square each term and double the product." },
+          { "text": "(a + b)^2 = a^2 + b^2", "isCorrect": false },
+          { "text": "(a - b)^2 = a^2 - b^2", "isCorrect": false },
+          { "text": "a^2 - b^2 = (a - b)^2", "isCorrect": false }
+        ]
+      },
+      {
+        "id": "poly-q7",
+        "prompt": "Which end behavior matches f(x) = -x^4 + 6x^2 - 2?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["Common Core Math:HSF-IF.4"],
+        "options": [
+          { "text": "As x increases in magnitude, f(x) goes to negative infinity.", "isCorrect": true, "feedback": "Even degree with negative leading coefficient falls on both ends." },
+          { "text": "As x increases in magnitude, f(x) goes to positive infinity.", "isCorrect": false },
+          { "text": "It rises to the right and falls to the left.", "isCorrect": false },
+          { "text": "It has horizontal asymptotes at y = 0.", "isCorrect": false }
+        ]
+      }
+    ]
   }
 }

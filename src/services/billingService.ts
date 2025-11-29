@@ -1,6 +1,6 @@
 import { authenticatedFetch } from '../lib/apiClient';
 
-type BillingPlan = {
+export type BillingPlan = {
   slug: string;
   name: string;
   priceCents: number;
@@ -8,7 +8,7 @@ type BillingPlan = {
   status: string;
 };
 
-type BillingSummary = {
+export type BillingSummary = {
   subscription: {
     id: number;
     status: string;
@@ -47,6 +47,22 @@ export const fetchBillingPlans = async (): Promise<BillingPlan[]> => {
 export const fetchBillingSummary = async (): Promise<BillingSummary> => {
   const response = await authenticatedFetch('/api/v1/billing/summary');
   return handleResponse<BillingSummary>(response);
+};
+
+export type BillingContext = {
+  plan: BillingPlan | null;
+  limits?: {
+    aiAccess?: boolean;
+    lessonLimit?: number | 'unlimited' | null;
+    tutorDailyLimit?: number | 'unlimited' | null;
+    seatLimit?: number | null;
+  };
+  subscription: BillingSummary['subscription'] | null;
+};
+
+export const fetchBillingContext = async (): Promise<BillingContext> => {
+  const response = await authenticatedFetch('/api/v1/billing/context');
+  return handleResponse<BillingContext>(response);
 };
 
 export const startCheckoutSession = async (planSlug: string): Promise<string> => {

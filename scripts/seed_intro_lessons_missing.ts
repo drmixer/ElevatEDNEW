@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import process from 'node:process';
 
 import { loadModuleStandards } from './import_module_standards.js';
@@ -234,7 +235,6 @@ const main = async (): Promise<void> => {
 
   let inserted = 0;
   let refreshed = 0;
-  let skipped = 0;
 
   for (const module of modules ?? []) {
     const subjectId = await ensureSubjectId(supabase, subjectCache, module.subject as string);

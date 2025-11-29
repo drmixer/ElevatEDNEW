@@ -4,6 +4,7 @@ import Hero from './Hero';
 import Features from './Features';
 import DashboardPreview from './DashboardPreview';
 import LessonPreview from './LessonPreview';
+import AboutFamilies from './AboutFamilies';
 import HowItWorks from './HowItWorks';
 import Pricing from './Pricing';
 import FAQ from './FAQ';
@@ -22,6 +23,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       <Features />
       <DashboardPreview />
       <LessonPreview />
+      <AboutFamilies />
       <HowItWorks />
       <Pricing onGetStarted={onGetStarted} />
       <FAQ />

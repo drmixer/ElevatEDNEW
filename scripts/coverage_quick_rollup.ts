@@ -60,16 +60,30 @@ const main = async (): Promise<void> => {
 
   const rollup = new Map<
     string,
-    { modules: number; missing: { lessons: number; practice: number; assessments: number; external: number } }
+    {
+      modules: number;
+      fullyCovered: number;
+      missing: { lessons: number; practice: number; assessments: number; external: number };
+    }
   >();
 
   for (const cell of (data ?? []) as Cell[]) {
     const key = `${cell.grade_band}::${cell.subject}`;
     if (!rollup.has(key)) {
-      rollup.set(key, { modules: 0, missing: { lessons: 0, practice: 0, assessments: 0, external: 0 } });
+      rollup.set(key, {
+        modules: 0,
+        fullyCovered: 0,
+        missing: { lessons: 0, practice: 0, assessments: 0, external: 0 },
+      });
     }
     const entry = rollup.get(key)!;
     entry.modules += 1;
+    const fullyCovered =
+      cell.meets_explanation_baseline &&
+      cell.meets_practice_baseline &&
+      cell.meets_assessment_baseline &&
+      cell.meets_external_baseline;
+    if (fullyCovered) entry.fullyCovered += 1;
     if (!cell.meets_explanation_baseline) entry.missing.lessons += 1;
     if (!cell.meets_practice_baseline) entry.missing.practice += 1;
     if (!cell.meets_assessment_baseline) entry.missing.assessments += 1;
@@ -79,8 +93,13 @@ const main = async (): Promise<void> => {
   const sorted = Array.from(rollup.entries()).sort((a, b) => a[0].localeCompare(b[0]));
   for (const [key, entry] of sorted) {
     const [grade, subject] = key.split('::');
+    const coveragePercent = entry.modules === 0 ? 0 : Math.round((entry.fullyCovered / entry.modules) * 100);
+    const needsAttention = entry.modules - entry.fullyCovered;
     console.log(
       `${grade} ${subject}: modules ${entry.modules}, missing lessons ${entry.missing.lessons}, practice ${entry.missing.practice}, assessments ${entry.missing.assessments}, external ${entry.missing.external}`,
+    );
+    console.log(
+      `  -> fully covered ${entry.fullyCovered} (${coveragePercent}%), needs attention ${needsAttention}`,
     );
   }
 };
