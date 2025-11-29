@@ -44,11 +44,11 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
     };
   }, [rawProgress]);
 
-  const containerPaddingTop = useTransform(smoothProgress, [0, 1], [28, 14]);
-  const containerPaddingBottom = useTransform(smoothProgress, [0, 1], [28, 14]);
-  const containerPaddingLeft = useTransform(smoothProgress, [0, 1], [36, 26]);
-  const containerPaddingRight = useTransform(smoothProgress, [0, 1], [36, 24]);
-  const containerGap = useTransform(smoothProgress, [0, 1], [32, 20]);
+  const containerPaddingTop = useTransform(smoothProgress, [0, 1], [18, 12]);
+  const containerPaddingBottom = useTransform(smoothProgress, [0, 1], [18, 12]);
+  const containerPaddingLeft = useTransform(smoothProgress, [0, 1], [20, 16]);
+  const containerPaddingRight = useTransform(smoothProgress, [0, 1], [20, 16]);
+  const containerGap = useTransform(smoothProgress, [0, 1], [20, 14]);
   const containerBorderColor = useTransform(
     smoothProgress,
     [0, 1],
@@ -60,24 +60,24 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
     ['0px 22px 48px rgba(137,23,237,0.18)', '0px 10px 24px rgba(10,30,60,0.12)']
   );
 
-  const headingPaddingLeft = useTransform(smoothProgress, [0, 1], [180, 96]);
-  const headingPaddingTop = useTransform(smoothProgress, [0, 1], [34, 18]);
-  const headingPaddingBottom = useTransform(smoothProgress, [0, 1], [28, 20]);
-  const logoScale = useTransform(smoothProgress, [0, 1], [1, 0.64]);
-  const logoLeft = useTransform(smoothProgress, [0, 1], [-120, -80]);
-  const logoTop = useTransform(smoothProgress, [0, 1], ['50%', '48%']);
-  const logoOuterRadius = useTransform(smoothProgress, [0, 1], [88, 52]);
-  const logoInnerSize = useTransform(smoothProgress, [0, 1], [228, 140]);
-  const logoInnerRadius = useTransform(smoothProgress, [0, 1], [68, 44]);
-  const logoHaloRadius = useTransform(smoothProgress, [0, 1], [92, 52]);
+  const headingPaddingLeft = useTransform(smoothProgress, [0, 1], [96, 54]);
+  const headingPaddingTop = useTransform(smoothProgress, [0, 1], [20, 12]);
+  const headingPaddingBottom = useTransform(smoothProgress, [0, 1], [16, 12]);
+  const logoScale = useTransform(smoothProgress, [0, 1], [1, 0.78]);
+  const logoLeft = useTransform(smoothProgress, [0, 1], [-82, -62]);
+  const logoTop = useTransform(smoothProgress, [0, 1], ['50%', '50%']);
+  const logoOuterRadius = useTransform(smoothProgress, [0, 1], [64, 44]);
+  const logoInnerSize = useTransform(smoothProgress, [0, 1], [136, 104]);
+  const logoInnerRadius = useTransform(smoothProgress, [0, 1], [36, 28]);
+  const logoHaloRadius = useTransform(smoothProgress, [0, 1], [70, 48]);
   const logoShadow = useTransform(
     smoothProgress,
     [0, 1],
     ['0px 32px 54px rgba(137,23,237,0.24)', '0px 18px 32px rgba(137,23,237,0.18)']
   );
-  const logoBorderRadius = useTransform(smoothProgress, [0, 1], [48, 32]);
-  const logoPadding = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const logoImageScale = useTransform(smoothProgress, [0, 1], [1.88, 2.02]);
+  const logoBorderRadius = useTransform(smoothProgress, [0, 1], [36, 26]);
+  const logoPadding = useTransform(smoothProgress, [0, 1], [4, 2]);
+  const logoImageScale = useTransform(smoothProgress, [0, 1], [1.2, 1.32]);
 
   const navItems = [
     { name: 'Features', href: '#features' },
@@ -111,7 +111,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
         <div className="relative">
           <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-brand-secondary/25 via-brand-primary/20 to-brand-accent/25 blur-lg" />
           <motion.div
-            className="flex items-center justify-between rounded-[28px] border bg-white/85 backdrop-blur-lg overflow-visible"
+            className="flex items-center justify-between rounded-[22px] border bg-white/85 backdrop-blur-lg overflow-visible"
             style={{
               paddingTop: containerPaddingTop,
               paddingBottom: containerPaddingBottom,
@@ -128,7 +128,7 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                 event.preventDefault();
                 scrollToTop();
               }}
-              className="relative flex flex-col justify-center text-left pr-10 focus-ring rounded-xl"
+              className="relative flex items-center gap-4 text-left pr-8 focus-ring rounded-xl"
               whileHover={{ y: -2 }}
               style={{
                 paddingLeft: headingPaddingLeft,
@@ -138,9 +138,9 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
             >
               <motion.div
                 className="pointer-events-none absolute z-20 flex items-center justify-center bg-white"
-              style={{
-                  width: 240,
-                  height: 240,
+                style={{
+                  width: 160,
+                  height: 160,
                   left: logoLeft,
                   top: logoTop,
                   translateY: '-50%',
@@ -172,13 +172,12 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
                 <motion.div className="absolute inset-0 border border-brand-primary/25" style={{ borderRadius: logoBorderRadius }} />
               </motion.div>
               <div className="leading-tight">
-                <span className={`font-semibold uppercase tracking-[0.4em] text-brand-secondary/70 transition-all duration-500 ${isCondensed ? 'text-[0.68rem]' : 'text-sm'}`}>
-                  ElevatED
-                </span>
-                <div className={`font-semibold text-brand-dark transition-all duration-500 ${isCondensed ? 'text-xl leading-tight' : 'text-3xl leading-snug'}`}>
-                  Home Learning. Elevated Together.
+                <div className={`font-semibold text-brand-dark transition-all duration-500 ${isCondensed ? 'text-base' : 'text-xl'}`}>
+                  Home learning, family-first.
                 </div>
-                <p className={`text-brand-dark/60 transition-all duration-500 ${isCondensed ? 'text-sm' : 'text-base'}`}>Adaptive AI tutoring with family-ready insights</p>
+                <p className={`text-brand-dark/60 transition-all duration-500 ${isCondensed ? 'text-xs' : 'text-sm'}`}>
+                  Adaptive AI tutoring with insights parents can trust.
+                </p>
               </div>
             </motion.a>
 
