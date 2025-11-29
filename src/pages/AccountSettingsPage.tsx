@@ -87,10 +87,6 @@ const AccountSettingsPage: React.FC = () => {
     }
   }, [parentUser?.children, parentUser?.children?.length, selectedChildId]);
 
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
-
   const handleSavePreferences = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!studentUser) {
@@ -226,6 +222,10 @@ const AccountSettingsPage: React.FC = () => {
     if (!selectedChildId) return privacyRequests;
     return privacyRequests.filter((request) => request.studentId === selectedChildId);
   }, [privacyRequests, selectedChildId]);
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">

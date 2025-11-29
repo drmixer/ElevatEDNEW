@@ -120,19 +120,10 @@ const ModulePage: React.FC = () => {
   const normalizedSubject = normalizeSubject(core.subject);
   const subjectLabel = normalizedSubject ? formatSubjectLabel(normalizedSubject) : core.subject;
   const firstLesson = lessons[0] ?? null;
-  const totalLessonAssets = useMemo(
-    () => lessons.reduce((sum, lesson) => sum + lesson.assets.length, 0),
-    [lessons],
-  );
+  const totalLessonAssets = lessons.reduce((sum, lesson) => sum + lesson.assets.length, 0);
   const totalAssets = totalLessonAssets + moduleAssets.length;
-  const openTrackLessonCount = useMemo(
-    () => lessons.filter((lesson) => lesson.openTrack).length,
-    [lessons],
-  );
-  const standardsHighlight = useMemo(
-    () => moduleDetail.standards.slice(0, 6),
-    [moduleDetail.standards],
-  );
+  const openTrackLessonCount = lessons.filter((lesson) => lesson.openTrack).length;
+  const standardsHighlight = moduleDetail.standards.slice(0, 6);
   const hasAssessments = moduleDetail.assessments.length > 0;
 
   return (

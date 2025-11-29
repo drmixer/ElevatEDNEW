@@ -1,6 +1,6 @@
 import supabase from '../lib/supabaseClient';
 import { formatSubjectLabel, normalizeSubject } from '../lib/subjects';
-import { buildCanonicalLearningPath, canonicalPositionLookup } from '../lib/learningPaths';
+import { buildCanonicalLearningPath } from '../lib/learningPaths';
 import type { DashboardLesson, LearningPathItem, Subject } from '../types';
 
 type SuggestionRow = {
@@ -156,7 +156,7 @@ export const refreshLearningPathFromSuggestions = async (
   if (!lessonIds.length) {
     // Fallback to canonical path if no database suggestions yet.
     let grade = options?.grade ?? null;
-    let subject = options?.subject ?? null;
+    const subject = options?.subject ?? null;
     try {
       const { data: profileRow } = await supabase
         .from('student_profiles')

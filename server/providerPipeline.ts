@@ -43,7 +43,6 @@ import {
   countMappingItems,
   evaluateImportLimits,
   normalizeImportLimits,
-  type ImportLimits,
 } from './importSafety.js';
 import { checkUrlsHealth } from './urlQA.js';
 

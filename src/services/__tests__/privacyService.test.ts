@@ -9,6 +9,11 @@ vi.mock('../../lib/supabaseClient', async () => {
 
 import supabaseMock from '../../lib/supabaseClient';
 
+type FromMockResult = {
+  eq: ReturnType<typeof vi.fn>;
+  order: ReturnType<typeof vi.fn>;
+};
+
 describe('privacyService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -41,8 +46,9 @@ describe('privacyService', () => {
 
     const results = await listPrivacyRequests({ studentId: 'student-1', requesterId: 'parent-1' });
 
-    const builder = (supabaseMock.from as unknown as { mock: { results: Array<{ value: unknown }> } }).mock.results[0]
-      ?.value as any;
+    const builder = (
+      supabaseMock.from as unknown as { mock: { results: Array<{ value: FromMockResult }> } }
+    ).mock.results[0]?.value as FromMockResult;
     expect(builder.eq).toHaveBeenCalledWith('student_id', 'student-1');
     expect(builder.eq).toHaveBeenCalledWith('requester_id', 'parent-1');
     expect(results[0].requestType).toBe('export');

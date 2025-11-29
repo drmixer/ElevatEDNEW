@@ -228,7 +228,7 @@ export const syncStripeSubscription = async (
     throw new Error('Subscription missing parent reference.');
   }
 
-  let plan = await mapPriceToPlan(serviceSupabase, subscription.items.data[0]?.price?.id);
+  const plan = await mapPriceToPlan(serviceSupabase, subscription.items.data[0]?.price?.id);
   if (!plan) {
     throw new Error(`Unknown price for subscription ${subscription.id}`);
   }

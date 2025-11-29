@@ -26,9 +26,9 @@ describe('module baseline quizzes dataset', () => {
     expect(moduleSlugs).toHaveLength(2);
     moduleSlugs.forEach((slug) => expect(slug).toMatch(/^6-[a-z0-9-]+$/));
 
-    Object.entries(mapping).forEach(([moduleSlug, quiz]) => {
+    Object.entries(mapping).forEach(([, quiz]) => {
       expect(quiz.questions.length).toBeGreaterThanOrEqual(3);
-      quiz.questions.forEach((question, index) => {
+      quiz.questions.forEach((question) => {
         expect(question.prompt.trim().length).toBeGreaterThan(0);
         expect(
           question.options.length >= 2 &&

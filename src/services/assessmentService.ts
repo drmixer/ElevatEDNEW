@@ -312,8 +312,8 @@ const fetchAssessmentDefinition = async (
       } satisfies AssessmentQuestion & { order: number };
     })
     .sort((a, b) => a.order - b.order)
-    .map((q) => {
-      const { order, ...rest } = q;
+    .map(({ order, ...rest }) => {
+      void order;
       return rest;
     });
 

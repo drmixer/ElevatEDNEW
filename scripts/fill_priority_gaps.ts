@@ -805,7 +805,7 @@ const ensureAssessment = async (
   }
 
   const sectionId = sectionRow.id as number;
-  let selectedQuestions = questionIds.slice(0, Math.min(questionIds.length, 5));
+  const selectedQuestions = questionIds.slice(0, Math.min(questionIds.length, 5));
 
   if (selectedQuestions.length < 5) {
     const remaining = 5 - selectedQuestions.length;

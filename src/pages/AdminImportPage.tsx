@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { UploadCloud, CheckCircle2, AlertTriangle, RefreshCw, ShieldCheck, UserMinus, UserPlus } from 'lucide-react';
 
@@ -8,7 +8,7 @@ import {
   queueImportRun,
   type ImportRun,
 } from '../services/importService';
-import type { ImportProviderDefinition, ImportProviderId } from '../../shared/import-providers';
+import type { ImportProviderId } from '../../shared/import-providers';
 import { IMPORT_PROVIDERS } from '../../shared/import-providers';
 import { useAuth } from '../contexts/AuthContext';
 import { demoteAdmin, fetchAdmins, promoteAdmin, type AdminSummary } from '../services/adminService';
@@ -133,27 +133,7 @@ const AdminImportPage: React.FC = () => {
     enabled: user?.role === 'admin',
   });
 
-  if (!user || user.role !== 'admin') {
-    return (
-      <div className="bg-slate-50 min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-xl w-full bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
-          <div className="mx-auto h-12 w-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
-            <ShieldCheck className="h-6 w-6" />
-          </div>
-          <h1 className="text-xl font-semibold text-slate-900">Admin access required</h1>
-          <p className="text-sm text-slate-500 mt-2">
-            The content ingestion console is restricted to platform administrators. Please sign in
-            with an admin account or request access from an existing admin.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const selectedProvider: ImportProviderDefinition | undefined = useMemo(
-    () => providersQuery.data?.find((item) => item.id === providerId),
-    [providerId, providersQuery.data],
-  );
+  const selectedProvider = providersQuery.data?.find((item) => item.id === providerId);
 
   const queueMutation = useMutation({
     mutationFn: (payload: { mapping?: Record<string, unknown>; dataset?: Record<string, unknown> }) => {
@@ -250,6 +230,23 @@ const AdminImportPage: React.FC = () => {
       });
     },
   });
+
+  if (!user || user.role !== 'admin') {
+    return (
+      <div className="bg-slate-50 min-h-screen flex items-center justify-center px-6">
+        <div className="max-w-xl w-full bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
+          <div className="mx-auto h-12 w-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+          <h1 className="text-xl font-semibold text-slate-900">Admin access required</h1>
+          <p className="text-sm text-slate-500 mt-2">
+            The content ingestion console is restricted to platform administrators. Please sign in
+            with an admin account or request access from an existing admin.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const handleFile = async (file: File | null) => {
     if (!file) {

@@ -1,7 +1,7 @@
 import process from 'node:process';
 
 import composeAttribution from './utils/attribution.js';
-import { createServiceRoleClient, fetchLessonsByModuleIds, fetchContentSourcesByName } from './utils/supabase.js';
+import { createServiceRoleClient, fetchContentSourcesByName } from './utils/supabase.js';
 
 type ModuleRow = {
   id: number;
@@ -18,8 +18,6 @@ type ModuleRow = {
   metadata: Record<string, unknown> | null;
 };
 
-type SubjectRecord = { id: number; name: string };
-
 const GRADE_BANDS = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 const SUBJECTS = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies', 'Electives'];
 const LESSON_SUFFIX = 'launch';
@@ -32,8 +30,6 @@ const slugify = (value: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .replace(/-+/g, '-');
-
-const unique = <T>(items: T[]): T[] => Array.from(new Set(items));
 
 const buildLessonSlug = (moduleSlug: string): string => `${moduleSlug}-${LESSON_SUFFIX}`;
 
@@ -347,11 +343,6 @@ const seedLaunchLessons = async (): Promise<void> => {
     return;
   }
 
-  const lessonsByModule = await fetchLessonsByModuleIds(
-    supabase,
-    moduleRows.map((m) => m.id),
-  );
-
   const sources = await fetchContentSourcesByName(supabase, ['ElevatED Author Team']);
   const authorSource = sources.get('ElevatED Author Team');
   if (!authorSource) {
@@ -369,9 +360,6 @@ const seedLaunchLessons = async (): Promise<void> => {
 
   for (const module of moduleRows) {
     const lessonSlug = buildLessonSlug(module.slug);
-    const existing = (lessonsByModule.get(module.id) ?? []).find(
-      (lesson) => lesson.slug && lesson.slug.toLowerCase() === lessonSlug.toLowerCase(),
-    );
     const subjectId = await ensureSubjectId(supabase, subjectCache, module.subject);
     const topicId = await ensureTopicId(supabase, subjectId, module);
     const { content, duration } = buildLessonMarkdown(module);

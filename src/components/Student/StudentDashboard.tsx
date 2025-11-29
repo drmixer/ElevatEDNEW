@@ -49,6 +49,27 @@ import type { AssessmentResult } from '../../services/assessmentService';
 import { formatSubjectLabel, SUBJECTS } from '../../lib/subjects';
 import { studySkillsModules } from '../../data/studySkillsModules';
 
+const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
+  in_progress: 0,
+  not_started: 1,
+  completed: 2,
+  mastered: 3,
+};
+
+const PATH_STATUS_LABELS: Record<LearningPathItem['status'], string> = {
+  not_started: 'Ready',
+  in_progress: 'In progress',
+  completed: 'Completed',
+  mastered: 'Mastered',
+};
+
+const PATH_STATUS_STYLES: Record<LearningPathItem['status'], string> = {
+  not_started: 'bg-blue-50 text-blue-700',
+  in_progress: 'bg-amber-50 text-amber-700',
+  completed: 'bg-emerald-50 text-emerald-700',
+  mastered: 'bg-purple-50 text-purple-700',
+};
+
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
 );
@@ -147,39 +168,18 @@ const StudentDashboard: React.FC = () => {
     return [];
   }, [dashboard?.profile?.learningPath, student?.learningPath]);
 
-  const pathStatusRank: Record<LearningPathItem['status'], number> = {
-    in_progress: 0,
-    not_started: 1,
-    completed: 2,
-    mastered: 3,
-  };
-
-  const pathStatusLabels: Record<LearningPathItem['status'], string> = {
-    not_started: 'Ready',
-    in_progress: 'In progress',
-    completed: 'Completed',
-    mastered: 'Mastered',
-  };
-
-  const pathStatusStyles: Record<LearningPathItem['status'], string> = {
-    not_started: 'bg-blue-50 text-blue-700',
-    in_progress: 'bg-amber-50 text-amber-700',
-    completed: 'bg-emerald-50 text-emerald-700',
-    mastered: 'bg-purple-50 text-purple-700',
-  };
-
   const journeyGroups = useMemo(() => {
     const buckets = new Map<Subject, LearningPathItem[]>();
     learningPath.forEach((item) => {
       const list = buckets.get(item.subject) ?? [];
       list.push(item);
       buckets.set(item.subject, list);
-    });
+      });
 
     return Array.from(buckets.entries()).map(([subject, items]) => ({
       subject,
       label: formatSubjectLabel(subject),
-      items: items.slice().sort((a, b) => pathStatusRank[a.status] - pathStatusRank[b.status]),
+      items: items.slice().sort((a, b) => PATH_STATUS_RANK[a.status] - PATH_STATUS_RANK[b.status]),
     }));
   }, [learningPath]);
 
@@ -187,9 +187,34 @@ const StudentDashboard: React.FC = () => {
     () =>
       learningPath
         .filter((item) => item.status !== 'completed' && item.status !== 'mastered')
-        .sort((a, b) => pathStatusRank[a.status] - pathStatusRank[b.status])
+        .sort((a, b) => PATH_STATUS_RANK[a.status] - PATH_STATUS_RANK[b.status])
         .slice(0, 4),
     [learningPath],
+  );
+
+  const badges = useMemo(() => {
+    const fallbackBadges = student?.badges ?? [];
+    const pool =
+      dashboard?.profile?.badges?.length && dashboard.profile.badges.length > 0
+        ? dashboard.profile.badges
+        : dashboard?.recentBadges?.length
+        ? dashboard.recentBadges
+        : fallbackBadges;
+    return pool.slice().sort((a, b) => {
+      const aTime = a.earnedAt instanceof Date ? a.earnedAt.getTime() : new Date(a.earnedAt).getTime();
+      const bTime = b.earnedAt instanceof Date ? b.earnedAt.getTime() : new Date(b.earnedAt).getTime();
+      return bTime - aTime;
+    });
+  }, [dashboard?.profile?.badges, dashboard?.recentBadges, student?.badges]);
+
+  const filteredBadges = useMemo(() => {
+    if (achievementFilter === 'all') return badges;
+    return badges.filter((badge) => (badge.category ?? 'general') === achievementFilter);
+  }, [achievementFilter, badges]);
+
+  const badgeCategories = useMemo(
+    () => Array.from(new Set<BadgeCategory | 'general'>(badges.map((badge) => badge.category ?? 'general'))),
+    [badges],
   );
 
   if (!student) {
@@ -220,20 +245,6 @@ const StudentDashboard: React.FC = () => {
     return meetsXp && meetsStreak && meetsBadges;
   };
 
-  const badges = useMemo(() => {
-    const pool =
-      dashboard?.profile?.badges?.length && dashboard.profile.badges.length > 0
-        ? dashboard.profile.badges
-        : dashboard?.recentBadges?.length
-        ? dashboard.recentBadges
-        : student.badges ?? [];
-    return pool.slice().sort((a, b) => {
-      const aTime = a.earnedAt instanceof Date ? a.earnedAt.getTime() : new Date(a.earnedAt).getTime();
-      const bTime = b.earnedAt instanceof Date ? b.earnedAt.getTime() : new Date(b.earnedAt).getTime();
-      return bTime - aTime;
-    });
-  }, [dashboard?.profile?.badges, dashboard?.recentBadges, student.badges]);
-
   const describeActivityType = (activityType?: string) => {
     if (!activityType) return 'Activity';
     const lookup: Record<string, string> = {
@@ -244,16 +255,6 @@ const StudentDashboard: React.FC = () => {
     };
     return lookup[activityType] ?? activityType.replace(/_/g, ' ');
   };
-
-  const filteredBadges = useMemo(() => {
-    if (achievementFilter === 'all') return badges;
-    return badges.filter((badge) => (badge.category ?? 'general') === achievementFilter);
-  }, [achievementFilter, badges]);
-
-  const badgeCategories = useMemo(
-    () => Array.from(new Set<BadgeCategory | 'general'>(badges.map((badge) => badge.category ?? 'general'))),
-    [badges],
-  );
 
   const celebrationMoments = dashboard?.celebrationMoments ?? [];
   const avatarOptions = dashboard?.avatarOptions ?? [];
@@ -289,28 +290,19 @@ const StudentDashboard: React.FC = () => {
   }
 
   const todaysPlan = dashboard?.todaysPlan ?? [];
-  const filteredPlan = useMemo(
-    () =>
-      subjectFilter === 'all'
-        ? todaysPlan
-        : todaysPlan.filter((lesson) => lesson.subject === subjectFilter),
-    [subjectFilter, todaysPlan],
-  );
+  const filteredPlan =
+    subjectFilter === 'all'
+      ? todaysPlan
+      : todaysPlan.filter((lesson) => lesson.subject === subjectFilter);
   const todayActivities = dashboard?.todayActivities ?? [];
-  const extensionActivities = useMemo(
-    () => todayActivities.filter((activity) => activity.homeExtension),
-    [todayActivities],
-  );
+  const extensionActivities = todayActivities.filter((activity) => activity.homeExtension);
   const quickStats = dashboard?.quickStats;
   const activeLessonId = dashboard?.activeLessonId ?? null;
-  const recommendedLesson = useMemo(
-    () =>
-      todaysPlan.find((lesson) => lesson.id === activeLessonId) ??
-      todaysPlan.find((lesson) => lesson.status !== 'completed') ??
-      todaysPlan[0] ??
-      null,
-    [todaysPlan, activeLessonId],
-  );
+  const recommendedLesson =
+    todaysPlan.find((lesson) => lesson.id === activeLessonId) ??
+    todaysPlan.find((lesson) => lesson.status !== 'completed') ??
+    todaysPlan[0] ??
+    null;
 
   const journeyNarrative = assessmentNarrative.length
     ? assessmentNarrative
@@ -1266,9 +1258,9 @@ const StudentDashboard: React.FC = () => {
                                 <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
                                   <span>Level {index + 1}</span>
                                   <span
-                                    className={`px-2 py-1 rounded-full font-semibold ${pathStatusStyles[item.status]}`}
+                                    className={`px-2 py-1 rounded-full font-semibold ${PATH_STATUS_STYLES[item.status]}`}
                                   >
-                                    {pathStatusLabels[item.status]}
+                                    {PATH_STATUS_LABELS[item.status]}
                                   </span>
                                 </div>
                                 <h4 className="font-semibold text-gray-900 truncate">{item.topic}</h4>
@@ -1313,9 +1305,9 @@ const StudentDashboard: React.FC = () => {
                           <div className="flex items-center justify-between">
                             <h4 className="font-semibold text-gray-900">{item.topic}</h4>
                             <span
-                              className={`text-[11px] px-2 py-1 rounded-full font-semibold ${pathStatusStyles[item.status]}`}
+                              className={`text-[11px] px-2 py-1 rounded-full font-semibold ${PATH_STATUS_STYLES[item.status]}`}
                             >
-                              {pathStatusLabels[item.status]}
+                              {PATH_STATUS_LABELS[item.status]}
                             </span>
                           </div>
                           <p className="text-xs text-gray-600">{formatSubjectLabel(item.subject)}</p>
@@ -1336,7 +1328,7 @@ const StudentDashboard: React.FC = () => {
                     </div>
                   )}
                   <p className="text-xs text-gray-500 mt-4">
-                    We’ll keep nudging you toward {recommendedLesson ? `\"${recommendedLesson.title}\"` : "today's focus"} first.
+                    We’ll keep nudging you toward {recommendedLesson ? `"${recommendedLesson.title}"` : "today's focus"} first.
                   </p>
                 </motion.div>
               </>
@@ -1625,7 +1617,7 @@ const StudentDashboard: React.FC = () => {
                 <div className="text-xs text-gray-500">Share wins with your family</div>
               </div>
               <div className="space-y-3">
-                {celebrationMoments.map((moment, index) => (
+                {celebrationMoments.map((moment) => (
                   <div
                     key={moment.id}
                     className="flex items-start justify-between gap-3 p-3 border border-gray-200 rounded-xl"

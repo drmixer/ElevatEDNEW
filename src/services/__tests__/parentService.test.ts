@@ -9,6 +9,11 @@ vi.mock('../../lib/supabaseClient', async () => {
 
 import supabaseMock from '../../lib/supabaseClient';
 
+type FromMockResult = {
+  eq: ReturnType<typeof vi.fn>;
+  order: ReturnType<typeof vi.fn>;
+};
+
 describe('parentService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -38,8 +43,9 @@ describe('parentService', () => {
 
     const links = await fetchGuardianLinks('parent-1');
 
-    const builder = (supabaseMock.from as unknown as { mock: { results: Array<{ value: unknown }> } }).mock.results[0]
-      ?.value as any;
+    const builder = (
+      supabaseMock.from as unknown as { mock: { results: Array<{ value: FromMockResult }> } }
+    ).mock.results[0]?.value as FromMockResult;
     expect(builder.eq).toHaveBeenCalledWith('parent_id', 'parent-1');
     expect(builder.order).toHaveBeenCalledWith('created_at', { ascending: false });
     expect(links[0].relationship).toBe('Aunt');

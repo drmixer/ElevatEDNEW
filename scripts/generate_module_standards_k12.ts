@@ -29,7 +29,6 @@ const pickMathStandard = (module: ModuleRow): StandardRef => {
   const grade = gradeNumber(module.grade_band);
   const topic = normalize(`${module.topic ?? ''} ${module.subtopic ?? ''} ${module.slug}`);
   const strand = normalize(module.strand);
-  const isPrimary = grade >= 0 && grade <= 2;
   const isHighSchool = grade >= 9;
 
   if (isPrimary) {
@@ -239,7 +238,6 @@ const pickElectivesStandard = (module: ModuleRow): StandardRef => {
   const grade = gradeNumber(module.grade_band);
   const topic = normalize(`${module.topic ?? ''} ${module.subtopic ?? ''} ${module.slug}`);
   const strand = normalize(module.strand);
-  const isPrimary = grade >= 0 && grade <= 2;
   const isHighSchool = grade >= 9;
 
   if (strand.includes('computer science')) {

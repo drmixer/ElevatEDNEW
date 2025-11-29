@@ -321,7 +321,6 @@ const insertNotifications = async (
 const queueExternalDeliveryHooks = (payloads: NotificationInsert[]) => {
   // Placeholder for future email/SMS delivery.
   if (payloads.length === 0) return;
-  // eslint-disable-next-line no-console
   console.debug(
     '[notifications] Delivery hooks ready',
     payloads.map((item) => item.notification_type),

@@ -423,7 +423,7 @@ const LessonPlayerPage: React.FC = () => {
   }
 
   const headingRenderer = (tag: 'h2' | 'h3') =>
-    ({ node, ...props }: { node?: unknown } & React.HTMLAttributes<HTMLHeadingElement>) => {
+    ({ ...props }: { node?: unknown } & React.HTMLAttributes<HTMLHeadingElement>) => {
       const { children, className, ...rest } = props;
       const text = extractText(children).trim();
       const lookupKey = text.toLowerCase();
@@ -676,7 +676,7 @@ const LessonPlayerPage: React.FC = () => {
               components={{
                 h2: headingRenderer('h2'),
                 h3: headingRenderer('h3'),
-                a: ({ node, ...rest }) => (
+                a: ({ ...rest }) => (
                   <a {...rest} target="_blank" rel="noreferrer" />
                 ),
               }}
