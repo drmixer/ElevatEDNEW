@@ -67,9 +67,9 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
           </h1>
 
           <p className="text-lg leading-relaxed text-slate-700 sm:text-xl">
-              ElevatED is for students and parents at home, not schools or teachers. Adaptive AI instruction meets
-              family-ready insights so students accelerate with confidence while parents get calm, clear updates.
-              Launch personalized journeys that feel handcrafted, with dashboards that keep everyone in the loop.
+            Adaptive AI instruction meets family-ready insights to help every student learn with confidence. ElevatED
+            creates personalized learning journeys that feel handcrafted, supported by intuitive dashboards that keep
+            progress clear, calm, and easy to follow.
           </p>
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
