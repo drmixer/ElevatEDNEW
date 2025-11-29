@@ -37,7 +37,7 @@ jobs:
         run: npm run build
 
       - name: Unit and integration tests
-        run: npm test -- --threads=false
+        run: npm test -- --run
 
       - name: Playwright dependencies
         if: env.RUN_E2E == 'true'
