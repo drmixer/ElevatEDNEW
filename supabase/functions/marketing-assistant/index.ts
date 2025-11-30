@@ -82,6 +82,8 @@ const callOpenRouter = async (messages: ChatMessage[]): Promise<MarketingRespons
       .replace(/<\/?s>/gi, '')
       .replace(/\[\/?s>?]/gi, '')
       .replace(/<\|im_[^|]+?\|>/gi, '')
+      .replace(/\[\/?out]/gi, '')
+      .replace(/\[out]/gi, '')
       .trim();
 
   try {
