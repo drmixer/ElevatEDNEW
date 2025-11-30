@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, Bot, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatMessage } from '../../types';
-import getTutorResponse from '../../services/getTutorResponse';
-import { MARKETING_KNOWLEDGE, MARKETING_SYSTEM_PROMPT } from '../../../shared/marketingContent';
+import getMarketingResponse from '../../services/getMarketingResponse';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -124,12 +123,8 @@ const ChatBot: React.FC = () => {
         'Guidelines: keep the reply to 2-3 concise sentences, stay on-brand and outcome-focused, and avoid technical or implementation details. If the facts are missing, say you can connect them to ElevatED support instead of guessing.',
       ].join('\n\n');
 
-      const tutorResult = await getTutorResponse(marketingPrompt, {
-        systemPrompt: MARKETING_SYSTEM_PROMPT,
-        knowledge: MARKETING_KNOWLEDGE,
-        mode: 'marketing',
-      });
-      assistantContent = tutorResult.message;
+      const result = await getMarketingResponse(marketingPrompt);
+      assistantContent = result.message;
     } catch (error) {
       console.error('[ElevatED Landing Chatbot] Failed to fetch AI response.', error);
       assistantContent = `${getAIResponse(
