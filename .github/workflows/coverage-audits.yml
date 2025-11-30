@@ -48,9 +48,17 @@ jobs:
           npm run audit:coverage-rollup | tee coverage-reports/coverage_quick_rollup.txt
           npm run audit:coverage-gaps | tee coverage-reports/report_coverage_gaps.txt
 
+      - name: High-traffic module report (14d)
+        run: |
+          set -euo pipefail
+          mkdir -p ops-reports
+          npm run audit:traffic-report -- --days 14 --limit 25 --output ops-reports/high_traffic_modules.txt
+
       - name: Upload coverage artifacts
         uses: actions/upload-artifact@v4
         with:
           name: coverage-audits-${{ github.run_id }}
-          path: coverage-reports
+          path: |
+            coverage-reports
+            ops-reports
           if-no-files-found: error

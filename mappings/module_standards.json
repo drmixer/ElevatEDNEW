@@ -1,5 +1,5 @@
 {
-  "6-science-earth-space-plate-tectonics": {
+  "6-science-earth-and-space-plate-tectonics": {
     "framework": "NGSS",
     "standards": [
       {
@@ -14,7 +14,7 @@
       }
     ]
   },
-  "6-mathematics-number-operations-ratios-proportional-reasoning": {
+  "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
     "framework": "CCSS-M",
     "standards": [
       {

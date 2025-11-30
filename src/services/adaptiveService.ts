@@ -1,7 +1,11 @@
 import supabase from '../lib/supabaseClient';
 import { formatSubjectLabel, normalizeSubject } from '../lib/subjects';
 import { buildCanonicalLearningPath } from '../lib/learningPaths';
-import type { DashboardLesson, LearningPathItem, Subject } from '../types';
+import { applyLearningPreferencesToPlan, maxLessonsForSession } from '../lib/learningPlan';
+import { castLearningPreferences } from './profileService';
+import type { DashboardLesson, LearningPathItem, LearningPreferences, Subject } from '../types';
+import { defaultLearningPreferences } from '../types';
+import recordReliabilityCheckpoint from '../lib/reliability';
 
 type SuggestionRow = {
   lesson_id: number | null;
@@ -139,13 +143,46 @@ export const refreshLearningPathFromSuggestions = async (
   limit = 4,
   options?: { grade?: number | string | null; subject?: Subject | null },
 ): Promise<SuggestionBuildResult> => {
+  let grade = options?.grade ?? null;
+  let preferences: LearningPreferences = { ...defaultLearningPreferences };
+  const subject = options?.subject ?? null;
+
+  try {
+    const { data: profileRow } = await supabase
+      .from('student_profiles')
+      .select('grade, learning_style')
+      .eq('id', studentId)
+      .single();
+    grade = grade ?? (profileRow?.grade as number | null) ?? null;
+    if (profileRow?.learning_style) {
+      preferences = castLearningPreferences(profileRow.learning_style);
+    }
+  } catch (profileError) {
+    console.warn('[adaptive] Unable to load student profile for suggestions', profileError);
+    recordReliabilityCheckpoint('adaptive_path', 'error', {
+      phase: 'profile_load',
+      error: profileError instanceof Error ? profileError.message : 'profile_load_failed',
+      studentId,
+    });
+  }
+
+  const limitCount = Math.max(
+    1,
+    Math.min(limit ?? 4, maxLessonsForSession[preferences.sessionLength] ?? 4),
+  );
+
   const { data: suggestions, error } = await supabase.rpc('suggest_next_lessons', {
     p_student_id: studentId,
-    limit_count: limit,
+    limit_count: limitCount,
   });
 
   if (error) {
     console.warn('[adaptive] Failed to load suggestions', error);
+    recordReliabilityCheckpoint('adaptive_path', 'error', {
+      phase: 'suggestions_rpc',
+      error: error.message,
+      studentId,
+    });
   }
 
   const suggestionRows = (suggestions ?? []) as SuggestionRow[];
@@ -155,27 +192,24 @@ export const refreshLearningPathFromSuggestions = async (
 
   if (!lessonIds.length) {
     // Fallback to canonical path if no database suggestions yet.
-    let grade = options?.grade ?? null;
-    const subject = options?.subject ?? null;
-    try {
-      const { data: profileRow } = await supabase
-        .from('student_profiles')
-        .select('grade')
-        .eq('id', studentId)
-        .single();
-      grade = grade ?? (profileRow?.grade as number | null) ?? null;
-    } catch (profileError) {
-      console.warn('[adaptive] Unable to load student profile for canonical path fallback', profileError);
-    }
-
     const fallbackSubject = subject ?? 'math';
-    const canonicalPath = buildCanonicalLearningPath({ grade, subject: fallbackSubject, limit });
+    const canonicalLimit = maxLessonsForSession[preferences.sessionLength] ?? limitCount ?? 4;
+    const canonicalPath = buildCanonicalLearningPath({
+      grade,
+      subject: fallbackSubject,
+      limit: canonicalLimit,
+    }).slice(0, canonicalLimit);
     if (canonicalPath.length) {
       try {
         await supabase.from('student_profiles').update({ learning_path: canonicalPath }).eq('id', studentId);
       } catch (persistError) {
         console.warn('[adaptive] Failed to persist canonical learning path', persistError);
       }
+      recordReliabilityCheckpoint('adaptive_path', 'success', {
+        fallback: 'canonical',
+        lessonCount: canonicalPath.length,
+        studentId,
+      });
       return { lessons: [], learningPath: canonicalPath, messages: ['Starting your grade-level path.'] };
     }
 
@@ -189,22 +223,42 @@ export const refreshLearningPathFromSuggestions = async (
 
   if (lessonError) {
     console.warn('[adaptive] Failed to hydrate lesson metadata for suggestions', lessonError);
+    recordReliabilityCheckpoint('adaptive_path', 'error', {
+      phase: 'lesson_metadata',
+      error: lessonError.message,
+      studentId,
+    });
     return { lessons: [], learningPath: [], messages: [] };
   }
 
   const metadata = mapLessonMetadata(lessonRows ?? []);
   const plan = buildPlanFromSuggestions(suggestionRows, metadata);
+  const cappedLessons = applyLearningPreferencesToPlan(plan.lessons, preferences);
+  const cappedCount =
+    cappedLessons.length || (maxLessonsForSession[preferences.sessionLength] ?? limitCount);
+  const trimmedLearningPath = plan.learningPath.slice(0, cappedCount);
 
   try {
     await supabase
       .from('student_profiles')
-      .update({ learning_path: plan.learningPath })
+      .update({ learning_path: trimmedLearningPath })
       .eq('id', studentId);
   } catch (updateError) {
     console.warn('[adaptive] Failed to persist learning path suggestions', updateError);
   }
 
-  return plan;
+  recordReliabilityCheckpoint('adaptive_path', 'success', {
+    lessonCount: cappedLessons.length,
+    suggestions: suggestionRows.length,
+    studentId,
+  });
+
+  return {
+    ...plan,
+    lessons: cappedLessons,
+    learningPath: trimmedLearningPath,
+    messages: plan.messages.slice(0, cappedCount),
+  };
 };
 
 export type { SuggestionRow, SuggestionBuildResult };

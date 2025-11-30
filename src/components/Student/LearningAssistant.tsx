@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Send, X, Bot, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import { ChatMessage, Student } from '../../types';
+import { ChatMessage, Student, Subject } from '../../types';
 import getTutorResponse from '../../services/getTutorResponse';
 import trackEvent from '../../lib/analytics';
 
@@ -13,7 +13,7 @@ const LearningAssistant: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      content: `Hi there! I'm your personal learning assistant. I can help with ${student.strengths[0] || 'your current subjects'}, study tips, or motivation. What would you like to work on today?`,
+      content: `Hi there! I'm your personal learning assistant. I can help with ${student.strengths[0] || 'your current subjects'}, study tips, or motivation. I stay school-safe and focused on your lessons, and I’ll stick to the current module you’re on. What would you like to work on today?`,
       isUser: false,
       timestamp: new Date(),
       role: 'assistant',
@@ -29,6 +29,12 @@ const LearningAssistant: React.FC = () => {
     plan: null,
   });
   const [contextHint, setContextHint] = useState<string | null>(null);
+  const [lessonContext, setLessonContext] = useState<{
+    lessonId?: number | string | null;
+    lessonTitle?: string | null;
+    moduleTitle?: string | null;
+    subject?: Subject | string | null;
+  } | null>(null);
   const [showExplainModal, setShowExplainModal] = useState(false);
   const assistantWindowRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -77,18 +83,30 @@ const LearningAssistant: React.FC = () => {
     if (typeof window === 'undefined') return;
 
     const handleOpen = (event: Event) => {
-      const detail = (event as CustomEvent<{ prompt?: string; source?: string }>).detail ?? {};
+      const detail = (event as CustomEvent<{
+        prompt?: string;
+        source?: string;
+        lesson?: {
+          lessonId?: number | string | null;
+          lessonTitle?: string | null;
+          moduleTitle?: string | null;
+          subject?: Subject | string | null;
+        };
+      }>).detail ?? {};
       setIsOpen(true);
       if (detail.prompt) {
         setInputMessage(detail.prompt);
-        setContextHint(detail.source ?? 'Lesson context');
+        setContextHint(detail.lesson?.lessonTitle ?? detail.source ?? 'Lesson context');
       } else {
-        setContextHint(detail.source ?? null);
+        setContextHint(detail.lesson?.lessonTitle ?? detail.source ?? null);
       }
+      setLessonContext(detail.lesson ?? null);
       trackEvent('learning_assistant_context_open', {
         studentId: student.id,
         source: detail.source ?? 'unknown',
         hasPrompt: Boolean(detail.prompt),
+        lessonId: detail.lesson?.lessonId,
+        lessonSubject: detail.lesson?.subject,
       });
     };
 
@@ -142,7 +160,7 @@ const LearningAssistant: React.FC = () => {
       studentId: student.id,
       length: messageToSend.length,
       responseMode,
-      contextSource: contextHint ?? 'direct',
+      contextSource: contextHint ?? lessonContext?.lessonTitle ?? 'direct',
     });
 
     try {
@@ -153,9 +171,24 @@ const LearningAssistant: React.FC = () => {
         .join('\n');
 
       const promptForModel = `${contextWindow}\nAssistant:`.slice(-1100);
+      const guardrails = lessonContext
+        ? `You are an in-lesson tutor. Stay focused on "${lessonContext.lessonTitle ?? 'this lesson'}" in ${
+            lessonContext.subject ?? 'this subject'
+          }. Keep answers concise (2-3 steps), avoid unrelated tangents, and remind the learner to try before giving full solutions.`
+        : 'You are ElevatED tutor. Stay concise, age-appropriate, and prioritize small next steps over long answers.';
+      const knowledgeContext = [
+        lessonContext?.moduleTitle ? `Module: ${lessonContext.moduleTitle}` : null,
+        lessonContext?.lessonTitle ? `Lesson: ${lessonContext.lessonTitle}` : null,
+        lessonContext?.subject ? `Subject: ${lessonContext.subject}` : null,
+        contextHint ? `Context: ${contextHint}` : null,
+      ]
+        .filter(Boolean)
+        .join(' | ');
 
       const response = await getTutorResponse(promptForModel, {
         mode: 'learning',
+        systemPrompt: guardrails,
+        knowledge: knowledgeContext || undefined,
       });
 
       const aiResponse: ChatMessage = {
@@ -191,6 +224,20 @@ const LearningAssistant: React.FC = () => {
         trackEvent('learning_assistant_limit_reached', {
           studentId: student.id,
           plan: planUsage.plan,
+        });
+        return;
+      }
+
+      const lowerMessage = errorMessage.toLowerCase();
+      if (
+        lowerMessage.includes('school-safe') ||
+        lowerMessage.includes('unsafe') ||
+        lowerMessage.includes('trusted adult') ||
+        lowerMessage.includes('personal')
+      ) {
+        trackEvent('learning_assistant_blocked', {
+          studentId: student.id,
+          reason: 'safety_guardrail',
         });
         return;
       }
@@ -314,6 +361,7 @@ const LearningAssistant: React.FC = () => {
                   <button
                     onClick={() => {
                       setIsOpen(false);
+                      setLessonContext(null);
                       setContextHint(null);
                     }}
                     className="p-1 hover:bg-white/20 rounded-full transition-colors focus-ring"
@@ -354,14 +402,25 @@ const LearningAssistant: React.FC = () => {
               </div>
             </div>
 
-            {contextHint && (
+            {(contextHint || lessonContext) && (
               <div className="px-4 py-2 text-xs text-slate-600 bg-slate-50 border-b border-gray-200 flex items-center gap-2">
                 <MessageSquare className="h-3 w-3 text-brand-violet" />
-                <span>Using lesson context: {contextHint}</span>
+                <div className="flex flex-col">
+                  <span>Using lesson context: {lessonContext?.lessonTitle ?? contextHint}</span>
+                  {lessonContext?.subject && (
+                    <span className="text-[11px] text-slate-500">
+                      {lessonContext.subject}
+                      {lessonContext.moduleTitle ? ` • ${lessonContext.moduleTitle}` : ''}
+                    </span>
+                  )}
+                </div>
                 <button
                   type="button"
                   className="ml-auto text-[11px] font-semibold text-brand-violet hover:underline"
-                  onClick={() => setContextHint(null)}
+                  onClick={() => {
+                    setContextHint(null);
+                    setLessonContext(null);
+                  }}
                 >
                   Clear
                 </button>

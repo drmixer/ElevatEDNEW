@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/react';
 
 let monitoringInitialized = false;
+let lastInitSucceeded = false;
 
 type NumericEnv = string | number | undefined | null;
 
@@ -102,7 +103,24 @@ export const initClientMonitoring = (): boolean => {
   });
 
   monitoringInitialized = true;
+  lastInitSucceeded = true;
   return true;
 };
 
 export { Sentry };
+
+export const isMonitoringEnabled = (): boolean => lastInitSucceeded;
+
+export const captureClientException = (error: unknown, context?: Record<string, unknown>): void => {
+  if (!lastInitSucceeded) return;
+  Sentry.captureException(error, { extra: scrubRecord(context) });
+};
+
+export const captureClientMessage = (
+  message: string,
+  context?: Record<string, unknown>,
+  level: Sentry.SeverityLevel = 'info',
+): void => {
+  if (!lastInitSucceeded) return;
+  Sentry.captureMessage(message, { level, extra: scrubRecord(context) });
+};

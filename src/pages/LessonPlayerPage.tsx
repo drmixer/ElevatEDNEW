@@ -24,10 +24,11 @@ import {
   calculateMasteryPct,
   fetchLessonCheckQuestions,
   recordLessonQuestionAttempt,
+  syncLessonMasteryFromCheck,
 } from '../services/lessonPracticeService';
 import { useLessonProgress } from '../lib/useLessonProgress';
 import { useAuth } from '../contexts/AuthContext';
-import type { LessonPracticeQuestion, Subject } from '../types';
+import type { LessonPracticeQuestion, Student, Subject } from '../types';
 import trackEvent from '../lib/analytics';
 import supabase from '../lib/supabaseClient';
 import LearningAssistant from '../components/Student/LearningAssistant';
@@ -121,6 +122,7 @@ const LessonPlayerPage: React.FC = () => {
   >(new Map());
   const [questionSaving, setQuestionSaving] = useState(false);
   const studentId = user?.role === 'student' ? user.id : null;
+  const studentUser = user?.role === 'student' ? (user as Student) : null;
 
   const isLessonIdValid = Number.isFinite(lessonId);
 
@@ -257,6 +259,14 @@ const LessonPlayerPage: React.FC = () => {
           detail: {
             prompt: trimmed,
             source,
+            lesson: lessonDetail
+              ? {
+                  lessonId: lessonDetail.lesson.id,
+                  lessonTitle: lessonDetail.lesson.title,
+                  moduleTitle: lessonDetail.module.title,
+                  subject: lessonDetail.module.subject,
+                }
+              : undefined,
           },
         }),
       );
@@ -265,10 +275,11 @@ const LessonPlayerPage: React.FC = () => {
         lessonId,
         source,
         contextPreview: preview,
+        subject: lessonDetail?.module.subject,
       });
       void logContextualHelp({ prompt: trimmed, source });
     },
-    [lessonId, logContextualHelp, studentId],
+    [lessonDetail, lessonId, logContextualHelp, studentId],
   );
 
   useEffect(() => {
@@ -385,6 +396,20 @@ const LessonPlayerPage: React.FC = () => {
       isCorrect,
       explanation: selectedOption?.feedback ?? currentPracticeQuestion.explanation ?? null,
     });
+
+    if (status === 'completed') {
+      const masteryEventOrder = progressController.allocateEventOrder();
+      void syncLessonMasteryFromCheck({
+        studentId,
+        lessonId,
+        sessionId: progressController.sessionId ?? null,
+        questions: practiceQuestions,
+        responses: updatedResponses,
+        attempts: progressController.attempts ?? 1,
+        subject: (lessonDetail?.module.subject as Subject | null) ?? null,
+        eventOrder: masteryEventOrder ?? null,
+      });
+    }
   };
 
   const handleNextQuestion = () => {
@@ -538,6 +563,32 @@ const LessonPlayerPage: React.FC = () => {
               )}
             </div>
           </div>
+          {studentUser && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div className="text-xs text-slate-500">Lesson progress</div>
+                <div className="flex items-center justify-between mt-1">
+                  <span className="text-lg font-semibold text-brand-blue">{progressController.progress}%</span>
+                  <div className="w-24 h-2 rounded-full bg-white overflow-hidden">
+                    <div
+                      className="h-full bg-brand-blue transition-all"
+                      style={{ width: `${progressController.progress}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div className="text-xs text-slate-500">Streak</div>
+                <div className="text-lg font-semibold text-amber-600">{studentUser.streakDays} days</div>
+                <div className="text-[11px] text-slate-500">Keep it going for badge boosts</div>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div className="text-xs text-slate-500">XP</div>
+                <div className="text-lg font-semibold text-emerald-600">{studentUser.xp}</div>
+                <div className="text-[11px] text-slate-500">Earn more by finishing this lesson</div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -805,10 +856,24 @@ const LessonPlayerPage: React.FC = () => {
                             {questionFeedback.isCorrect ? 'Nice work! Correct answer.' : 'Not quite—review the explanation.'}
                           </p>
                           {questionFeedback.explanation && (
-                            <p className="text-xs mt-1">{questionFeedback.explanation}</p>
+                          <p className="text-xs mt-1">{questionFeedback.explanation}</p>
                           )}
                         </div>
                       </div>
+                      {!questionFeedback.isCorrect && currentPracticeQuestion && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openTutorWithContext(
+                              `I missed this check-in question: "${currentPracticeQuestion.prompt}". Walk me through the concept in two steps and give me a quick practice prompt.`,
+                              `practice:${currentPracticeQuestion.id}:extra-help`,
+                            )
+                          }
+                          className="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/70 px-3 py-2 text-xs font-semibold text-brand-blue hover:bg-white"
+                        >
+                          Need extra help? Ask the AI tutor
+                        </button>
+                      )}
                     </div>
                   )}
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

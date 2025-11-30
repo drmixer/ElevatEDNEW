@@ -84,6 +84,25 @@ const MAX_RESPONSE_CHARS = 1600;
 const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const PHONE_REGEX = /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})\b/g;
 const LONG_NUMBER_REGEX = /\b\d{9,}\b/g;
+const UNSAFE_KEYWORDS = [
+  'violence',
+  'harm',
+  'weapon',
+  'fight',
+  'drugs',
+  'self-harm',
+  'suicide',
+  'kill',
+  'dating',
+  'boyfriend',
+  'girlfriend',
+  'meet up',
+  'address',
+  'phone number',
+];
+const LOCATION_REGEX = /\b(address|where.*live|meet you|come over|phone number|snapchat|instagram)\b/i;
+const SAFETY_REFUSAL_MESSAGE =
+  "I can't help with that request. I'm here for school-safe learning help like math, reading, and science. Please ask a trusted adult if you need help with personal or safety issues.";
 
 const learnerLimiter = createLimiter(12, 5 * 60 * 1000); // 12 requests per 5 minutes per learner
 const ipLimiter = createLimiter(30, 5 * 60 * 1000); // 30 requests per 5 minutes per IP
@@ -134,6 +153,45 @@ const sanitizeText = (input: string, maxLength: number): string => {
 const sanitizeOutput = (text: string): string =>
   sanitizeText(text, MAX_RESPONSE_CHARS);
 
+const detectUnsafePrompt = (prompt: string, context?: StudentContext): string | null => {
+  const normalized = prompt.toLowerCase();
+
+  if (UNSAFE_KEYWORDS.some((keyword) => normalized.includes(keyword))) {
+    return 'unsafe_keyword';
+  }
+
+  if (LOCATION_REGEX.test(normalized)) {
+    return 'personal_contact';
+  }
+
+  const grade = context?.grade ?? null;
+  if (grade != null && grade < 13) {
+    if (normalized.includes('social media') || normalized.includes('dating') || normalized.includes('meet up')) {
+      return 'age_inappropriate';
+    }
+  }
+
+  if (normalized.includes('ignore previous') || normalized.includes('jailbreak') || normalized.includes('prompt injection')) {
+    return 'prompt_attack';
+  }
+
+  return null;
+};
+
+const buildSafetyRefusal = (reason: string, context?: StudentContext): string => {
+  const grade = context?.grade ?? null;
+  if (reason === 'personal_contact') {
+    return `${SAFETY_REFUSAL_MESSAGE} I cannot share or collect personal contact info. Keep conversations focused on your lessons.`;
+  }
+  if (reason === 'age_inappropriate' && grade != null && grade < 13) {
+    return `${SAFETY_REFUSAL_MESSAGE} Because this account is for a child under 13, I avoid personal or social topics.`;
+  }
+  if (reason === 'prompt_attack') {
+    return `${SAFETY_REFUSAL_MESSAGE} I stay within my safety rules and will keep answers on-topic for learning.`;
+  }
+  return SAFETY_REFUSAL_MESSAGE;
+};
+
 const gradeBandGuidance = (grade?: number | null): string | null => {
   if (grade == null || Number.isNaN(grade)) return null;
   if (grade <= 3) {
@@ -180,6 +238,7 @@ const baseTutorSystemPrompt = [
   'Start with a short hint or next step before revealing a full solution; only provide the complete answer if the learner directly asks or is still stuck.',
   'Give step-by-step explanations, check for understanding, and keep responses concise.',
   'Keep answers age-appropriate and decline unsafe or off-topic requests. Avoid sharing any personal data, emails, or phone numbers. Do not request PII.',
+  'Politely refuse violence, self-harm, bullying, pranks, politics, or requests for contact/location info. Redirect the learner to a trusted adult when something sounds unsafe or personal.',
 ].join(' ');
 
 const marketingSystemPrompt = [
@@ -573,6 +632,25 @@ export const handleTutorRequest = async (
         : undefined;
 
   const tutorContext = buildTutorContext(payload, studentContext);
+
+  const safetyIssue = detectUnsafePrompt(tutorContext.prompt, studentContext);
+  if (safetyIssue) {
+    captureServerMessage('[ai] tutor safety_refusal', {
+      mode: tutorContext.mode,
+      reason: safetyIssue,
+      hashedUser,
+      hashedIp,
+      plan: opts.plan?.slug,
+      grade: studentContext?.grade,
+    });
+    return {
+      message: buildSafetyRefusal(safetyIssue, studentContext),
+      model: 'guardrail',
+      remaining: remainingAllowance,
+      limit: payload.mode === 'learning' ? tutorLimit ?? null : null,
+      plan: payload.mode === 'learning' ? opts.plan?.slug ?? null : null,
+    };
+  }
 
   captureServerMessage('[ai] tutor request', {
     mode: tutorContext.mode,

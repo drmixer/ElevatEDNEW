@@ -40,6 +40,10 @@ type Gap = {
   practiceGap: number;
 };
 
+// Focus on launch scope to keep queries fast on remote Supabase
+const TARGET_GRADES = ['3', '4', '5', '6', '7', '8'];
+const TARGET_SUBJECTS = ['Mathematics', 'English Language Arts', 'Science'];
+
 const PRACTICE_BASELINE_FALLBACK = 20;
 
 const loadCoverageCells = async (supabase: SupabaseClient): Promise<CoverageRow[]> => {
@@ -64,7 +68,9 @@ const loadCoverageCells = async (supabase: SupabaseClient): Promise<CoverageRow[
         'meets_assessment_baseline',
         'meets_external_baseline',
       ].join(','),
-    );
+    )
+    .in('grade_band', TARGET_GRADES)
+    .in('subject', TARGET_SUBJECTS);
 
   if (error) {
     throw new Error(`Failed to load coverage dashboard cells: ${error.message}`);
@@ -88,6 +94,8 @@ const loadRollups = async (supabase: SupabaseClient): Promise<RollupRow[]> => {
         'modules_needing_attention',
       ].join(','),
     )
+    .in('grade_band', TARGET_GRADES)
+    .in('subject', TARGET_SUBJECTS)
     .order('grade_band', { ascending: true })
     .order('subject', { ascending: true });
 

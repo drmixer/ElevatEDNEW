@@ -69,6 +69,7 @@ const SUBJECT_LABELS: Record<string, string> = {
   ela: 'English Language Arts',
   english: 'English Language Arts',
   english_language_arts: 'English Language Arts',
+  science: 'Science',
 };
 
 const DEFAULT_FILE = path.resolve(process.cwd(), 'data/assessments/diagnostics_phase13.json');
@@ -131,16 +132,17 @@ const deleteExistingDiagnostic = async (
     }
 
     const questionIds = Array.from(new Set((questionLinks ?? []).map((row) => row.question_id as number)));
+
+    const { error: deleteLinksError } = await supabase.from('assessment_questions').delete().in('section_id', sectionIds);
+    if (deleteLinksError) {
+      throw new Error(`Failed to delete diagnostic links: ${deleteLinksError.message}`);
+    }
+
     if (questionIds.length) {
       const { error } = await supabase.from('question_bank').delete().in('id', questionIds);
       if (error) {
         throw new Error(`Failed to delete diagnostic question bank entries: ${error.message}`);
       }
-    }
-
-    const { error: deleteLinksError } = await supabase.from('assessment_questions').delete().in('section_id', sectionIds);
-    if (deleteLinksError) {
-      throw new Error(`Failed to delete diagnostic links: ${deleteLinksError.message}`);
     }
 
     const { error: deleteSectionsError } = await supabase.from('assessment_sections').delete().in('id', sectionIds);
@@ -192,10 +194,6 @@ const insertDiagnostic = async (
     section_order: index + 1,
     title: section.strand ?? `Section ${index + 1}`,
     instructions: 'Answer to calibrate your starting path. Evidence is optional but encouraged.',
-    metadata: {
-      standards: section.standards ?? [],
-      score_bands: section.scoreBands ?? [],
-    },
   }));
 
   const { data: sectionRows, error: sectionError } = await supabase
