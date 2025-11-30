@@ -77,6 +77,13 @@ const callOpenRouter = async (messages: ChatMessage[]): Promise<MarketingRespons
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
+  const sanitize = (text: string): string =>
+    text
+      .replace(/<\\/?s>/gi, '')
+      .replace(/\\[\\/?s>?]/gi, '')
+      .replace(/<\\|im_[a-z]+\\|>/gi, '')
+      .trim();
+
   try {
     const response = await fetch(OPENROUTER_ENDPOINT, {
       method: 'POST',
@@ -96,7 +103,7 @@ const callOpenRouter = async (messages: ChatMessage[]): Promise<MarketingRespons
     }
 
     const json = await response.json();
-    const content = json?.choices?.[0]?.message?.content?.trim();
+    const content = sanitize(json?.choices?.[0]?.message?.content ?? '');
     if (!content) {
       throw new Error('OpenRouter response was empty.');
     }
