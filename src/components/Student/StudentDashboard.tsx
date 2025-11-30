@@ -217,10 +217,6 @@ const StudentDashboard: React.FC = () => {
     [badges],
   );
 
-  if (!student) {
-    return null;
-  }
-
   const missions = dashboard?.missions ?? [];
   const visibleMissions = missions.filter((mission) => mission.cadence === missionCadence);
   const activeMission = visibleMissions[0] ?? missions[0] ?? null;
@@ -275,20 +271,6 @@ const StudentDashboard: React.FC = () => {
     await refetch({ throwOnError: false });
   };
 
-  if (activeView === 'assessment') {
-    return (
-      <Suspense
-        fallback={
-          <div className="min-h-screen flex items-center justify-center bg-gray-50 text-sm text-gray-500">
-            Loading assessment experience…
-          </div>
-        }
-      >
-        <AssessmentFlow onComplete={handleAssessmentComplete} />
-      </Suspense>
-    );
-  }
-
   const todaysPlan = dashboard?.todaysPlan ?? [];
   const filteredPlan =
     subjectFilter === 'all'
@@ -309,6 +291,24 @@ const StudentDashboard: React.FC = () => {
     const pct = total ? Math.round((completed / total) * 100) : 0;
     return { completed, total, pct };
   }, [todaysPlan]);
+
+  if (!student) {
+    return null;
+  }
+
+  if (activeView === 'assessment') {
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-gray-50 text-sm text-gray-500">
+            Loading assessment experience…
+          </div>
+        }
+      >
+        <AssessmentFlow onComplete={handleAssessmentComplete} />
+      </Suspense>
+    );
+  }
 
   const journeyNarrative = assessmentNarrative.length
     ? assessmentNarrative
