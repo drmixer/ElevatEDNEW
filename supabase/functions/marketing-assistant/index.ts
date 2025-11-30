@@ -79,9 +79,9 @@ const callOpenRouter = async (messages: ChatMessage[]): Promise<MarketingRespons
 
   const sanitize = (text: string): string =>
     text
-      .replace(/<\\/?s>/gi, '')
-      .replace(/\\[\\/?s>?]/gi, '')
-      .replace(/<\\|im_[a-z]+\\|>/gi, '')
+      .replace(/<\/?s>/gi, '')
+      .replace(/\[\/?s>?]/gi, '')
+      .replace(/<\|im_[^|]+?\|>/gi, '')
       .trim();
 
   try {
