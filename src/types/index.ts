@@ -21,6 +21,9 @@ export interface Student extends User {
   level: number;
   badges: Badge[];
   streakDays: number;
+  tutorName?: string | null;
+  tutorAvatarId?: string | null;
+  studentAvatarId?: string | null;
   strengths: string[];
   weaknesses: string[];
   learningPath: LearningPathItem[];
@@ -107,6 +110,9 @@ export interface AvatarOption {
   };
   icon: string;
   rarity?: 'starter' | 'rare' | 'epic';
+  kind?: 'student' | 'tutor';
+  tags?: string[];
+  tone?: 'calm' | 'encouraging' | 'bold' | 'structured';
 }
 
 export interface LearningPathItem {

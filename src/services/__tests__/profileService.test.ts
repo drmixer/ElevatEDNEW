@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { Student } from '../../types';
 import { fetchUserProfile } from '../profileService';
 
 vi.mock('../../lib/supabaseClient', async () => {
@@ -29,28 +30,35 @@ describe('fetchUserProfile', () => {
               {
                 grade: 4,
                 xp: 120,
-                level: 3,
-                badges: [{ name: 'Starter', earnedAt: '2024-01-01T00:00:00.000Z' }],
-                streak_days: 7,
-                strengths: ['Reading'],
-                weaknesses: ['Fractions'],
-                learning_path: [{ id: 'lp-1', subject: 'math', topic: 'Fractions', status: 'not_started' }],
-                assessment_completed: true,
-              },
-            ],
-          },
-          error: null,
-        }),
+              level: 3,
+              badges: [{ name: 'Starter', earnedAt: '2024-01-01T00:00:00.000Z' }],
+              streak_days: 7,
+              strengths: ['Reading'],
+              weaknesses: ['Fractions'],
+              learning_path: [{ id: 'lp-1', subject: 'math', topic: 'Fractions', status: 'not_started' }],
+              assessment_completed: true,
+              tutor_name: 'Coach Nova',
+              tutor_avatar_id: 'tutor-ember',
+              student_avatar_id: 'avatar-streak-ember',
+            },
+          ],
+        },
+        error: null,
+      }),
       },
     });
 
     const profile = await fetchUserProfile('student-1');
+    const studentProfile = profile as Student;
 
-    expect(profile.role).toBe('student');
-    expect(profile.xp).toBe(120);
-    expect(profile.badges[0].name).toBe('Starter');
-    expect(profile.badges[0].earnedAt).toBeInstanceOf(Date);
-    expect(profile.strengths).toContain('Reading');
+    expect(studentProfile.role).toBe('student');
+    expect(studentProfile.xp).toBe(120);
+    expect(studentProfile.badges[0].name).toBe('Starter');
+    expect(studentProfile.badges[0].earnedAt).toBeInstanceOf(Date);
+    expect(studentProfile.strengths).toContain('Reading');
+    expect(studentProfile.tutorName).toBe('Coach Nova');
+    expect(studentProfile.tutorAvatarId).toBe('tutor-ember');
+    expect(studentProfile.studentAvatarId).toBe('avatar-streak-ember');
   });
 
   it('hydrates parent dashboards with mastery targets and reports', async () => {

@@ -19,6 +19,7 @@ import {
   Target,
   TrendingUp,
   Trophy,
+  Bot,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -48,6 +49,9 @@ import trackEvent from '../../lib/analytics';
 import type { AssessmentResult } from '../../services/assessmentService';
 import { formatSubjectLabel, SUBJECTS } from '../../lib/subjects';
 import { studySkillsModules } from '../../data/studySkillsModules';
+import { saveStudentAvatar, saveTutorPersona } from '../../services/avatarService';
+import { TUTOR_AVATARS, isStudentAvatarUnlocked } from '../../../shared/avatarManifests';
+import { tutorNameErrorMessage, validateTutorName } from '../../../shared/nameSafety';
 
 const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
   in_progress: 0,
@@ -75,7 +79,7 @@ const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
 );
 
 const StudentDashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const student = (user as Student) ?? null;
   const { entitlements, loading: entitlementsLoading } = useEntitlements();
   const [activeView, setActiveView] = useState<'dashboard' | 'assessment' | 'lesson'>('dashboard');
@@ -108,6 +112,11 @@ const StudentDashboard: React.FC = () => {
   const [readingAnswer, setReadingAnswer] = useState<number | null>(null);
   const [readingFeedback, setReadingFeedback] = useState<string | null>(null);
   const [autoRoutedDiagnostic, setAutoRoutedDiagnostic] = useState(false);
+  const [avatarSaving, setAvatarSaving] = useState(false);
+  const [tutorNameInput, setTutorNameInput] = useState<string>(student?.tutorName ?? '');
+  const [tutorAvatarId, setTutorAvatarId] = useState<string>(student?.tutorAvatarId ?? TUTOR_AVATARS[0].id);
+  const [tutorFeedback, setTutorFeedback] = useState<string | null>(null);
+  const [tutorSaving, setTutorSaving] = useState(false);
 
   const {
     data: dashboard,
@@ -126,10 +135,18 @@ const StudentDashboard: React.FC = () => {
 
   useEffect(() => {
     if (!student) return;
-    if (dashboard?.equippedAvatarId || student.avatar) {
-      setEquippedAvatarId(dashboard?.equippedAvatarId ?? student.avatar ?? 'avatar-starter');
+    if (dashboard?.equippedAvatarId || student.studentAvatarId || student.avatar) {
+      setEquippedAvatarId(
+        dashboard?.equippedAvatarId ?? student.studentAvatarId ?? student.avatar ?? 'avatar-starter',
+      );
     }
   }, [dashboard?.equippedAvatarId, student]);
+
+  useEffect(() => {
+    if (!student) return;
+    setTutorNameInput(student.tutorName ?? '');
+    setTutorAvatarId(student.tutorAvatarId ?? TUTOR_AVATARS[0].id);
+  }, [student?.tutorName, student?.tutorAvatarId]);
 
   useEffect(() => {
     if (autoRoutedDiagnostic || !student) return;
@@ -231,15 +248,29 @@ const StudentDashboard: React.FC = () => {
     return Math.min(Math.round((current / total) * 100), 120);
   };
 
-  const isAvatarUnlocked = (option: AvatarOption) => {
-    const meetsXp = option.minXp ? student.xp >= option.minXp : true;
-    const meetsStreak = option.requiredStreak ? student.streakDays >= option.requiredStreak : true;
-    const meetsBadges =
-      option.requiredBadges && option.requiredBadges.length
-        ? option.requiredBadges.every((id) => student.badges.some((badge) => badge.id === id))
-        : true;
-    return meetsXp && meetsStreak && meetsBadges;
-  };
+  const isAvatarUnlocked = (option: AvatarOption) =>
+    isStudentAvatarUnlocked(option, {
+      xp: dashboard?.profile?.xp ?? student?.xp ?? 0,
+      streakDays: dashboard?.profile?.streakDays ?? student?.streakDays ?? 0,
+    });
+
+  const selectedTutorAvatar = useMemo(
+    () => TUTOR_AVATARS.find((option) => option.id === tutorAvatarId) ?? TUTOR_AVATARS[0],
+    [tutorAvatarId],
+  );
+
+  const tutorNameValidation = useMemo(() => {
+    const trimmed = tutorNameInput.trim();
+    if (!trimmed.length) {
+      return { ok: true as const, value: '', normalized: '' };
+    }
+    return validateTutorName(trimmed);
+  }, [tutorNameInput]);
+
+  const tutorNameError =
+    tutorNameInput.trim().length === 0 || tutorNameValidation.ok
+      ? null
+      : tutorNameErrorMessage(tutorNameValidation);
 
   const describeActivityType = (activityType?: string) => {
     if (!activityType) return 'Activity';
@@ -370,14 +401,58 @@ const StudentDashboard: React.FC = () => {
     }
   };
 
-  const handleEquipAvatar = (option: AvatarOption) => {
+  const handleSaveTutorPersona = async () => {
+    setTutorFeedback(null);
+    const trimmedName = tutorNameInput.trim();
+    const validation = trimmedName.length ? validateTutorName(trimmedName) : { ok: true, value: '', normalized: '' };
+    if (!validation.ok) {
+      setTutorFeedback(tutorNameErrorMessage(validation));
+      return;
+    }
+    setTutorSaving(true);
+    try {
+      await saveTutorPersona({
+        name: trimmedName.length ? validation.value : null,
+        avatarId: tutorAvatarId,
+      });
+      setTutorFeedback(
+        trimmedName.length
+          ? `Saved! Your tutor will introduce as ${validation.value}.`
+          : 'Saved! We will use the default tutor name.',
+      );
+      await refreshUser();
+    } catch (error) {
+      console.error('[StudentDashboard] Failed to save tutor persona', error);
+      setTutorFeedback(error instanceof Error ? error.message : 'Unable to save tutor settings right now.');
+    } finally {
+      setTutorSaving(false);
+    }
+  };
+
+  const handleRandomizeTutorAvatar = () => {
+    const next = TUTOR_AVATARS[Math.floor(Math.random() * TUTOR_AVATARS.length)];
+    setTutorAvatarId(next.id);
+  };
+
+  const handleEquipAvatar = async (option: AvatarOption) => {
     if (!isAvatarUnlocked(option)) {
       setAvatarFeedback('Keep working on missions to unlock this avatar.');
       return;
     }
-    setEquippedAvatarId(option.id);
-    setAvatarFeedback(`Equipped ${option.label}!`);
-    trackEvent('avatar_equipped', { studentId: student.id, avatarId: option.id });
+    setAvatarSaving(true);
+    setAvatarFeedback(null);
+    try {
+      await saveStudentAvatar(option.id);
+      setEquippedAvatarId(option.id);
+      setAvatarFeedback(`Equipped ${option.label}!`);
+      trackEvent('avatar_equipped', { studentId: student.id, avatarId: option.id });
+      await refreshUser();
+    } catch (error) {
+      console.error('[StudentDashboard] Failed to equip avatar', error);
+      setAvatarFeedback(error instanceof Error ? error.message : 'Unable to equip avatar right now.');
+    } finally {
+      setAvatarSaving(false);
+    }
   };
 
   return (
@@ -1537,12 +1612,140 @@ const StudentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-brand-light-blue/40"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">AI Tutor Persona</h3>
+                  <p className="text-sm text-gray-600">
+                    Name your tutor and pick a calm, school-safe avatar just for them.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <Bot className="h-4 w-4 text-brand-blue" />
+                  <span>
+                    {(tutorNameInput.trim() || student.tutorName || 'Tutor').slice(0, 22)} • {selectedTutorAvatar.label}
+                  </span>
+                </div>
+              </div>
+              <div className="grid gap-4 lg:grid-cols-3">
+                <div className="lg:col-span-1 space-y-3">
+                  <label className="block text-sm font-semibold text-gray-800">
+                    Tutor name
+                    <input
+                      type="text"
+                      value={tutorNameInput}
+                      onChange={(e) => setTutorNameInput(e.target.value)}
+                      placeholder="e.g., Coach Sky"
+                      maxLength={24}
+                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                    />
+                  </label>
+                  <p className="text-xs text-gray-500">
+                    We filter names for classroom safety. Leave blank to keep the default.
+                  </p>
+                  {tutorNameError && (
+                    <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-md px-2 py-1">
+                      {tutorNameError}
+                    </p>
+                  )}
+                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: selectedTutorAvatar.palette.background }}
+                      >
+                        <span className="text-lg" aria-hidden>
+                          {selectedTutorAvatar.icon}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900">
+                          {tutorNameInput.trim() || student.tutorName || 'Your tutor'}
+                        </div>
+                        <div className="text-xs text-gray-500">{selectedTutorAvatar.description}</div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-2">
+                      Your tutor will introduce with this name and keep a {selectedTutorAvatar.tone ?? 'calm'} tone.
+                    </p>
+                  </div>
+                </div>
+                <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {TUTOR_AVATARS.map((avatar) => {
+                    const isSelected = tutorAvatarId === avatar.id;
+                    return (
+                      <button
+                        key={avatar.id}
+                        type="button"
+                        onClick={() => setTutorAvatarId(avatar.id)}
+                        className={`flex items-start gap-3 rounded-xl border p-3 text-left transition shadow-sm ${
+                          isSelected
+                            ? 'border-brand-blue ring-2 ring-brand-blue/30 bg-brand-light-blue/30'
+                            : 'border-gray-200 hover:border-brand-blue/50 bg-white'
+                        }`}
+                      >
+                        <div
+                          className="w-10 h-10 rounded-full flex items-center justify-center"
+                          style={{ backgroundColor: avatar.palette.background }}
+                        >
+                          <span aria-hidden className="text-lg">
+                            {avatar.icon}
+                          </span>
+                        </div>
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-gray-900">{avatar.label}</span>
+                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 capitalize">
+                              {avatar.tone ?? 'steady'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-600">{avatar.description}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleRandomizeTutorAvatar}
+                  className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
+                >
+                  <Sparkles className="h-4 w-4 text-brand-violet" />
+                  Surprise me
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleSaveTutorPersona()}
+                  disabled={tutorSaving || (!!tutorNameError && tutorNameInput.trim().length > 0)}
+                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${
+                    tutorSaving || (!!tutorNameError && tutorNameInput.trim().length > 0)
+                      ? 'bg-gray-200 text-gray-500'
+                      : 'bg-brand-blue text-white hover:bg-brand-blue/90'
+                  }`}
+                >
+                  {tutorSaving ? 'Saving...' : 'Save tutor look'}
+                </button>
+                {tutorFeedback && (
+                  <div className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                    {tutorFeedback}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-xl font-bold text-gray-900">Avatar Lab</h3>
-                  <p className="text-sm text-gray-600">Unlock looks with XP, streaks, and badges.</p>
+                  <p className="text-sm text-gray-600">Student-only looks unlocked with XP and streaks.</p>
                 </div>
                 <div className="text-xs text-gray-500 flex items-center gap-2">
                   <Palette className="h-4 w-4 text-brand-violet" />
@@ -1553,6 +1756,10 @@ const StudentDashboard: React.FC = () => {
                 {avatarOptions.map((option) => {
                   const unlocked = isAvatarUnlocked(option);
                   const isEquipped = equippedAvatarId === option.id;
+                  const requirementParts: string[] = [];
+                  if (option.minXp) requirementParts.push(`${option.minXp} XP`);
+                  if (option.requiredStreak) requirementParts.push(`${option.requiredStreak}-day streak`);
+                  const requirementText = requirementParts.length ? `Requires ${requirementParts.join(' • ')}` : 'Starter look';
                   return (
                     <div
                       key={option.id}
@@ -1567,10 +1774,7 @@ const StudentDashboard: React.FC = () => {
                       </div>
                       <h4 className="font-semibold text-gray-900 mt-2">{option.label}</h4>
                       <p className="text-xs text-gray-600 line-clamp-3">{option.description}</p>
-                      <p className="text-[11px] text-gray-500 mt-2">
-                        Requires {option.minXp ?? 0} XP{option.requiredStreak ? ` • ${option.requiredStreak}-day streak` : ''}{' '}
-                        {option.requiredBadges?.length ? ` • ${option.requiredBadges.length} badges` : ''}
-                      </p>
+                      <p className="text-[11px] text-gray-500 mt-2">{requirementText}</p>
                       <div className="mt-3 flex items-center justify-between">
                         <div
                           className="w-8 h-8 rounded-full flex items-center justify-center"
@@ -1583,17 +1787,23 @@ const StudentDashboard: React.FC = () => {
                         </div>
                         <button
                           type="button"
-                          onClick={() => handleEquipAvatar(option)}
-                          disabled={!unlocked}
+                          onClick={() => void handleEquipAvatar(option)}
+                          disabled={!unlocked || avatarSaving}
                           className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
                             isEquipped
                               ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                              : unlocked
+                              : unlocked && !avatarSaving
                               ? 'bg-brand-blue text-white'
                               : 'bg-gray-100 text-gray-500'
                           }`}
                         >
-                          {isEquipped ? 'Equipped' : unlocked ? 'Equip' : 'Locked'}
+                          {isEquipped
+                            ? 'Equipped'
+                            : avatarSaving && !isEquipped
+                            ? 'Saving...'
+                            : unlocked
+                            ? 'Equip'
+                            : 'Locked'}
                         </button>
                       </div>
                     </div>

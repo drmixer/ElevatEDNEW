@@ -10,6 +10,8 @@ import {
   isImportProviderId,
   type ImportProviderId,
 } from '../shared/import-providers.js';
+import { findStudentAvatar, findTutorAvatar, isStudentAvatarUnlocked } from '../shared/avatarManifests.js';
+import { tutorNameErrorMessage, validateTutorName } from '../shared/nameSafety.js';
 import {
   importFederalMapping,
   type FederalMapping,
@@ -777,6 +779,126 @@ export const createApiHandler = (context: ApiContext) => {
           captureServerMessage('[api] tutor request failed', { status, reason: message }, level);
           throw new HttpError(status, message, status >= 500 ? 'assistant_failure' : 'bad_request');
         }
+      });
+    }
+
+    if (method === 'POST' && path === '/profile/tutor') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{ name?: string | null; avatarId?: string | null }>(req);
+        const updates: Record<string, string | null> = {};
+
+        if ('name' in body) {
+          const rawName = typeof body.name === 'string' ? body.name.trim() : '';
+          if (!rawName) {
+            updates.tutor_name = null;
+          } else {
+            const result = validateTutorName(rawName);
+            if (!result.ok) {
+              throw new HttpError(400, tutorNameErrorMessage(result), 'invalid_tutor_name');
+            }
+            updates.tutor_name = result.value;
+          }
+        }
+
+        if ('avatarId' in body) {
+          const avatarId = typeof body.avatarId === 'string' ? body.avatarId : null;
+          if (avatarId) {
+            const avatar = findTutorAvatar(avatarId);
+            if (!avatar) {
+              throw new HttpError(400, 'Unknown tutor avatar option.', 'invalid_tutor_avatar');
+            }
+            updates.tutor_avatar_id = avatar.id;
+          } else {
+            updates.tutor_avatar_id = null;
+          }
+        }
+
+        if (!Object.keys(updates).length) {
+          throw new HttpError(400, 'Nothing to update.', 'invalid_payload');
+        }
+
+        const { error } = await supabase.from('student_profiles').update(updates).eq('id', actor.id);
+        if (error) {
+          throw new HttpError(500, 'Failed to update tutor preferences.', 'tutor_update_failed', error);
+        }
+
+        sendJson(
+          res,
+          200,
+          {
+            tutorName: 'tutor_name' in updates ? updates.tutor_name : undefined,
+            tutorAvatarId: 'tutor_avatar_id' in updates ? updates.tutor_avatar_id : undefined,
+          },
+          API_VERSION,
+        );
+      });
+    }
+
+    if (method === 'POST' && path === '/profile/student-avatar') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{ avatarId?: string | null }>(req);
+        const avatarId = typeof body.avatarId === 'string' ? body.avatarId.trim() : '';
+        if (!avatarId) {
+          throw new HttpError(400, 'avatarId is required.', 'invalid_avatar');
+        }
+
+        const avatar = findStudentAvatar(avatarId);
+        if (!avatar) {
+          throw new HttpError(400, 'Unknown avatar option.', 'invalid_avatar');
+        }
+
+        const { data: studentRow, error: studentError } = await supabase
+          .from('student_profiles')
+          .select('xp, streak_days')
+          .eq('id', actor.id)
+          .maybeSingle();
+
+        if (studentError) {
+          throw new HttpError(500, 'Failed to load student profile.', 'profile_load_failed', studentError);
+        }
+
+        if (!studentRow) {
+          throw new HttpError(404, 'Student profile not found.', 'not_found');
+        }
+
+        const progress = {
+          xp: (studentRow.xp as number | null) ?? 0,
+          streakDays: (studentRow.streak_days as number | null) ?? 0,
+        };
+
+        if (!isStudentAvatarUnlocked(avatar, progress)) {
+          throw new HttpError(
+            403,
+            'That avatar is locked. Keep up your streak or XP to unlock it.',
+            'avatar_locked',
+          );
+        }
+
+        const { error } = await supabase
+          .from('student_profiles')
+          .update({ student_avatar_id: avatar.id })
+          .eq('id', actor.id);
+
+        if (error) {
+          throw new HttpError(500, 'Failed to update avatar.', 'avatar_update_failed', error);
+        }
+
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ avatar_url: avatar.id })
+          .eq('id', actor.id);
+
+        if (profileError) {
+          console.warn('[api] profile avatar update failed', profileError);
+        }
+
+        sendJson(res, 200, { avatarId: avatar.id }, API_VERSION);
       });
     }
 

@@ -1,23 +1,51 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Send, X, Bot, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student, Subject } from '../../types';
 import getTutorResponse from '../../services/getTutorResponse';
 import trackEvent from '../../lib/analytics';
+import { TUTOR_AVATARS } from '../../../shared/avatarManifests';
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
   const student = user as Student;
+  const tutorAvatar = useMemo(
+    () => TUTOR_AVATARS.find((avatar) => avatar.id === student.tutorAvatarId) ?? TUTOR_AVATARS[0],
+    [student.tutorAvatarId],
+  );
+  const tutorPalette =
+    tutorAvatar?.palette ?? { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+  const tutorDisplayName = student.tutorName?.trim() || 'Learning Assistant';
+  const tutorToneDescriptor = useMemo(() => {
+    switch (tutorAvatar?.tone) {
+      case 'calm':
+        return 'I keep answers calm and patient.';
+      case 'bold':
+        return 'Expect upbeat energy and quick encouragement.';
+      case 'structured':
+        return 'I guide you step by step with clear checkpoints.';
+      default:
+        return 'I’ll cheer you on with short encouragement.';
+    }
+  }, [tutorAvatar?.tone]);
+  const buildIntroMessage = useCallback(() => {
+    const preferredName = student.tutorName?.trim();
+    const introName =
+      preferredName && preferredName.length ? `${preferredName}, your personal learning guide` : 'your personal learning assistant';
+    const strengths = student.strengths[0] || 'your current subjects';
+    const safetyLine = 'I stay school-safe and focused on your lessons';
+    return `Hi there! I'm ${introName}. I can help with ${strengths}, study tips, or motivation. ${tutorToneDescriptor} ${safetyLine}. What would you like to work on today?`;
+  }, [student.strengths, student.tutorName, tutorToneDescriptor]);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
       id: '1',
-      content: `Hi there! I'm your personal learning assistant. I can help with ${student.strengths[0] || 'your current subjects'}, study tips, or motivation. I stay school-safe and focused on your lessons, and I’ll stick to the current module you’re on. What would you like to work on today?`,
+      content: buildIntroMessage(),
       isUser: false,
       timestamp: new Date(),
       role: 'assistant',
-    }
+    },
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -44,6 +72,17 @@ const LearningAssistant: React.FC = () => {
     { icon: Target, text: 'Review weak areas', action: 'review-weak' },
     { icon: BookOpen, text: 'Explain a concept', action: 'explain-concept' }
   ];
+
+  useEffect(() => {
+    setMessages((prev) => {
+      if (!prev.length) return prev;
+      const [first, ...rest] = prev;
+      if (first.isUser) return prev;
+      const intro = buildIntroMessage();
+      if (first.content === intro) return prev;
+      return [{ ...first, content: intro }, ...rest];
+    });
+  }, [buildIntroMessage]);
 
   const getContextualResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
@@ -171,11 +210,22 @@ const LearningAssistant: React.FC = () => {
         .join('\n');
 
       const promptForModel = `${contextWindow}\nAssistant:`.slice(-1100);
-      const guardrails = lessonContext
+      const personaName = student.tutorName?.trim();
+      const personaTone =
+        tutorAvatar?.tone === 'calm'
+          ? 'calm, patient tone'
+          : tutorAvatar?.tone === 'structured'
+            ? 'structured, step-by-step coaching tone'
+            : tutorAvatar?.tone === 'bold'
+              ? 'upbeat, high-energy tone'
+              : 'encouraging, warm tone';
+      const baseGuardrails = lessonContext
         ? `You are an in-lesson tutor. Stay focused on "${lessonContext.lessonTitle ?? 'this lesson'}" in ${
             lessonContext.subject ?? 'this subject'
           }. Keep answers concise (2-3 steps), avoid unrelated tangents, and remind the learner to try before giving full solutions.`
         : 'You are ElevatED tutor. Stay concise, age-appropriate, and prioritize small next steps over long answers.';
+      const personaGuardrails = `${personaName ? `The student calls you "${personaName}".` : 'You have a chosen tutor persona.'} Keep a ${personaTone} and use that name when referring to yourself.`;
+      const guardrails = `${baseGuardrails} ${personaGuardrails}`;
       const knowledgeContext = [
         lessonContext?.moduleTitle ? `Module: ${lessonContext.moduleTitle}` : null,
         lessonContext?.lessonTitle ? `Lesson: ${lessonContext.lessonTitle}` : null,
@@ -308,7 +358,7 @@ const LearningAssistant: React.FC = () => {
       {/* Assistant Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 w-14 h-14 bg-gradient-to-r from-brand-violet to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 focus-ring"
+        className="fixed bottom-6 left-6 w-14 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 focus-ring"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         animate={{ 
@@ -317,8 +367,14 @@ const LearningAssistant: React.FC = () => {
         aria-label="Open learning assistant"
         aria-expanded={isOpen}
         aria-controls="learning-assistant-window"
+        style={{
+          background: `linear-gradient(135deg, ${tutorPalette.accent}, ${tutorPalette.background})`,
+          color: tutorPalette.text,
+        }}
       >
-        <Bot className="h-6 w-6" />
+        <span className="text-xl" aria-hidden>
+          {tutorAvatar.icon}
+        </span>
       </motion.button>
 
       {/* Assistant Window */}
@@ -338,15 +394,30 @@ const LearningAssistant: React.FC = () => {
             ref={assistantWindowRef}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-brand-violet to-brand-blue text-white p-4 space-y-3">
+            <div
+              className="p-4 space-y-3"
+              style={{
+                background: `linear-gradient(135deg, ${tutorPalette.accent}, ${tutorPalette.background})`,
+                color: tutorPalette.text,
+              }}
+            >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                    <Bot className="h-4 w-4" />
+                  <div
+                    className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center border border-white/30"
+                    style={{ color: tutorPalette.text }}
+                  >
+                    <span aria-hidden className="text-lg">
+                      {tutorAvatar.icon}
+                    </span>
                   </div>
                   <div>
-                    <h3 className="font-semibold" id="learning-assistant-title">Learning Assistant</h3>
-                    <p className="text-xs opacity-90" id="learning-assistant-description">Hints first, full solutions on request.</p>
+                    <h3 className="font-semibold" id="learning-assistant-title">
+                      {tutorDisplayName}
+                    </h3>
+                    <p className="text-xs opacity-90" id="learning-assistant-description">
+                      {tutorAvatar.label} • Hints first, full solutions on request.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

@@ -37,6 +37,7 @@ import { formatSubjectLabel, normalizeSubject, SUBJECT_LABELS } from '../lib/sub
 import { getActivitiesForModule, getHomeExtensionActivities, activityModuleSlugs } from '../lib/activityAssets';
 import { getCanonicalSequence } from '../lib/learningPaths';
 import { applyLearningPreferencesToPlan, maxLessonsForSession } from '../lib/learningPlan';
+import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarManifests';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
@@ -1124,66 +1125,31 @@ const buildMissions = (
   return [dailyMission, weeklyMission];
 };
 
+const avatarLockMessage = (option: AvatarOption, xp: number, streak: number): string => {
+  const needs: string[] = [];
+  if (option.minXp && xp < option.minXp) {
+    needs.push(`${Math.max(option.minXp - xp, 0)} XP to go`);
+  }
+  if (option.requiredStreak && streak < option.requiredStreak) {
+    const remaining = option.requiredStreak - streak;
+    needs.push(`${remaining} more day${remaining === 1 ? '' : 's'} on your streak`);
+  }
+  return needs.length ? `${option.description} (${needs.join(' • ')})` : option.description;
+};
+
 const buildAvatarOptions = (student: Student): AvatarOption[] => {
   const xp = student.xp ?? 0;
   const streak = student.streakDays ?? 0;
-  const badges = student.badges ?? [];
 
-  const hasBadge = (id: string) => badges.some((badge) => badge.id === id);
-
-  const options: AvatarOption[] = [
-    {
-      id: 'avatar-starter',
-      label: 'Starter Spark',
-      description: 'Default companion for new learners.',
-      minXp: 0,
-      palette: { background: '#E0F2FE', accent: '#0EA5E9', text: '#0F172A' },
-      icon: '✨',
-      rarity: 'starter',
-    },
-    {
-      id: 'avatar-trailblazer',
-      label: 'Trailblazer',
-      description: 'Unlocked after your first 500 XP.',
-      minXp: 500,
-      palette: { background: '#ECFDF3', accent: '#10B981', text: '#064E3B' },
-      icon: '🧭',
-      rarity: 'rare',
-    },
-    {
-      id: 'avatar-streak-ember',
-      label: 'Streak Ember',
-      description: 'Stay active 7 days in a row to glow bright.',
-      requiredStreak: 7,
-      palette: { background: '#FEF3C7', accent: '#F59E0B', text: '#78350F' },
-      icon: '🔥',
-      rarity: 'rare',
-    },
-    {
-      id: 'avatar-badge-legend',
-      label: 'Badge Legend',
-      description: 'Collect 8 badges including one epic.',
-      requiredBadges: badges.slice(0, 8).map((badge) => badge.id),
-      palette: { background: '#EEF2FF', accent: '#6366F1', text: '#312E81' },
-      icon: '🏅',
-      rarity: 'epic',
-    },
-  ];
-
-  return options.map((option) => {
-    const meetsXp = option.minXp ? xp >= option.minXp : true;
-    const meetsStreak = option.requiredStreak ? streak >= option.requiredStreak : true;
-    const meetsBadges =
-      option.requiredBadges && option.requiredBadges.length
-        ? option.requiredBadges.every((id) => hasBadge(id))
-        : true;
-    const unlocked = meetsXp && meetsStreak && meetsBadges;
+  return STUDENT_AVATARS.map((option) => {
+    const unlocked = isStudentAvatarUnlocked(option, { xp, streakDays: streak });
     return {
       ...option,
+      kind: 'student',
       requiredBadges: option.requiredBadges ?? [],
       minXp: option.minXp ?? 0,
       requiredStreak: option.requiredStreak ?? undefined,
-      description: unlocked ? option.description : `${option.description} (${Math.max(option.minXp ?? 0 - xp, 0)} XP or streak goals left)`,
+      description: unlocked ? option.description : avatarLockMessage(option, xp, streak),
     };
   });
 };

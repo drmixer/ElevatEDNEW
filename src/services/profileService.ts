@@ -25,6 +25,9 @@ type StudentProfileRow = {
   learning_path: unknown;
   assessment_completed: boolean | null;
   learning_style?: Record<string, unknown> | null;
+  tutor_name?: string | null;
+  tutor_avatar_id?: string | null;
+  student_avatar_id?: string | null;
 };
 
 type ParentProfileRow = {
@@ -216,7 +219,10 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       weaknesses,
       learning_path,
       assessment_completed,
-      learning_style
+      learning_style,
+      tutor_name,
+      tutor_avatar_id,
+      student_avatar_id
     ),
       parent_profiles(
         subscription_tier,
@@ -241,6 +247,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
 
   if (profile.role === 'student') {
     const studentDetails = normalizeStudentProfile(profile.student_profiles);
+    const studentAvatarId = studentDetails?.student_avatar_id ?? profile.avatar_url ?? 'avatar-starter';
 
     const student: Student = {
       id: profile.id,
@@ -252,12 +259,15 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       level: studentDetails?.level ?? 1,
       badges: castBadges(studentDetails?.badges),
       streakDays: studentDetails?.streak_days ?? 0,
+      tutorName: studentDetails?.tutor_name ?? null,
+      tutorAvatarId: studentDetails?.tutor_avatar_id ?? null,
+      studentAvatarId,
       strengths: studentDetails?.strengths ?? [],
       weaknesses: studentDetails?.weaknesses ?? [],
       learningPath: (studentDetails?.learning_path as Student['learningPath']) ?? [],
       learningPreferences: castLearningPreferences(studentDetails?.learning_style),
       assessmentCompleted: studentDetails?.assessment_completed ?? false,
-      avatar: profile.avatar_url ?? undefined,
+      avatar: studentAvatarId ?? undefined,
     };
 
     return student;
