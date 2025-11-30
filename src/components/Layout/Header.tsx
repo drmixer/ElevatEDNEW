@@ -21,8 +21,8 @@ const Header: React.FC = () => {
       : user.role === 'parent'
       ? [
           { label: 'Home', to: '/parent' },
-          { label: 'My Learners', to: '/parent#learners' },
-          { label: 'Assignments', to: '/parent#assignments' },
+          { label: 'Goals', to: '/parent#goal-planner' },
+          { label: 'Insights', to: '/parent#family-overview' },
           { label: 'Catalog', to: '/catalog', secondary: true },
         ]
       : [];
@@ -78,9 +78,6 @@ const Header: React.FC = () => {
                 </span>
                 <Link to="/workspace/admin" className="hover:text-brand-blue transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
                   Dashboard
-                </Link>
-                <Link to="/workspace/admin/import" className="hover:text-brand-blue transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
-                  Imports
                 </Link>
                 <Link to="/catalog" className="hover:text-brand-blue transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
                   Catalog

@@ -44,6 +44,8 @@ import type {
   PrivacyRequestType,
   Subject,
   SkillGapInsight,
+  LearningPreferences,
+  defaultLearningPreferences,
 } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
@@ -63,6 +65,7 @@ import { listPrivacyRequests, submitPrivacyRequest } from '../../services/privac
 import { formatSubjectLabel } from '../../lib/subjects';
 import { studySkillsModules } from '../../data/studySkillsModules';
 import { limitLabel } from '../../lib/entitlements';
+import { updateLearningPreferences } from '../../services/profileService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -112,6 +115,8 @@ type GoalFormState = {
   weeklyLessons: string;
   practiceMinutes: string;
   masteryTargets: Record<Subject, string>;
+  focusSubject: Subject | 'balanced';
+  focusIntensity: 'balanced' | 'focused';
 };
 
 const ParentDashboard: React.FC = () => {
@@ -137,6 +142,8 @@ const ParentDashboard: React.FC = () => {
     weeklyLessons: '',
     practiceMinutes: '',
     masteryTargets: {},
+    focusSubject: defaultLearningPreferences.focusSubject,
+    focusIntensity: defaultLearningPreferences.focusIntensity,
   });
   const [goalMessage, setGoalMessage] = useState<string | null>(null);
   const [goalError, setGoalError] = useState<string | null>(null);
@@ -234,6 +241,7 @@ const ParentDashboard: React.FC = () => {
 
   useEffect(() => {
     if (!currentChild) return;
+    const preferences = currentChild.learningPreferences ?? defaultLearningPreferences;
     setGoalMessage(null);
     setGoalError(null);
     setGoalForm({
@@ -250,6 +258,8 @@ const ParentDashboard: React.FC = () => {
         acc[item.subject] = target === '' ? '' : String(target ?? '');
         return acc;
       }, {} as Record<Subject, string>),
+      focusSubject: preferences.focusSubject ?? defaultLearningPreferences.focusSubject,
+      focusIntensity: preferences.focusIntensity ?? defaultLearningPreferences.focusIntensity,
     });
   }, [currentChild]);
 
@@ -312,6 +322,17 @@ const ParentDashboard: React.FC = () => {
       };
     });
   }, [currentChild]);
+
+  const lessonsProgressPct = computePercent(
+    currentChild?.lessonsCompletedWeek ?? 0,
+    weeklyLessonsTargetValue ?? null,
+  );
+  const minutesProgressPct = computePercent(
+    currentChild?.practiceMinutesWeek ?? 0,
+    practiceMinutesTargetValue ?? null,
+  );
+  const lessonsStatus = describeProgressStatus(lessonsProgressPct);
+  const minutesStatus = describeProgressStatus(minutesProgressPct);
 
   const weeklySnapshot = useMemo(() => {
     if (!dashboard) return null;
@@ -392,6 +413,10 @@ const ParentDashboard: React.FC = () => {
   }, [dashboard?.children]);
 
   const showSkeleton = isLoading && !dashboard;
+  const showAssignmentsSection =
+    typeof import.meta !== 'undefined' &&
+    typeof import.meta.env !== 'undefined' &&
+    import.meta.env.VITE_SHOW_PARENT_ASSIGNMENTS === 'true';
 
   const realChildren = useMemo(
     () => (dashboard?.children ?? []).filter((child) => !child.id.startsWith('fallback-')),
@@ -426,6 +451,36 @@ const ParentDashboard: React.FC = () => {
     return Math.min(Math.round((current / target) * 100), 200);
   };
 
+  const deriveSessionLengthPreference = (
+    minutesTarget?: number | null,
+    lessonsTarget?: number | null,
+    fallback: LearningPreferences['sessionLength'] = defaultLearningPreferences.sessionLength,
+  ): LearningPreferences['sessionLength'] => {
+    if (!minutesTarget || minutesTarget <= 0) return fallback;
+    const lessons = lessonsTarget && lessonsTarget > 0 ? lessonsTarget : 4;
+    const avgMinutes = minutesTarget / Math.max(lessons, 1);
+    if (avgMinutes < 20) return 'short';
+    if (avgMinutes > 45) return 'long';
+    return 'standard';
+  };
+
+  const describeProgressStatus = (percent: number | null) => {
+    if (percent === null) {
+      return {
+        label: 'No target yet',
+        badge: 'bg-slate-100 text-slate-700',
+        tone: 'text-slate-600',
+      };
+    }
+    if (percent >= 110) {
+      return { label: 'Ahead', badge: 'bg-emerald-100 text-emerald-700', tone: 'text-emerald-700' };
+    }
+    if (percent >= 80) {
+      return { label: 'On track', badge: 'bg-brand-light-teal text-brand-teal', tone: 'text-brand-teal' };
+    }
+    return { label: 'Behind', badge: 'bg-rose-100 text-rose-700', tone: 'text-rose-700' };
+  };
+
   const weeklyLessonsTarget = currentChild?.goals?.weeklyLessons ?? null;
   const practiceMinutesTarget = currentChild?.goals?.practiceMinutes ?? null;
   const masteryTargets = currentChild?.goals?.masteryTargets ?? {};
@@ -435,6 +490,34 @@ const ParentDashboard: React.FC = () => {
   const practiceMinutesTargetValue = Number.isFinite(Number.parseInt(goalForm.practiceMinutes, 10))
     ? Number.parseInt(goalForm.practiceMinutes, 10)
     : practiceMinutesTarget;
+
+  const focusConcepts = useMemo(() => {
+    if (childSkillGaps.length) {
+      return childSkillGaps.flatMap((gap) => gap.concepts).filter(Boolean).slice(0, 2);
+    }
+    if (currentChild?.focusAreas?.length) {
+      return currentChild.focusAreas.slice(0, 2);
+    }
+    if (lowestSubject) {
+      return [`${formatSubjectLabel(lowestSubject.subject)} foundations`];
+    }
+    return [];
+  }, [childSkillGaps, currentChild?.focusAreas, lowestSubject]);
+
+  const masteryBands = useMemo(
+    () =>
+      (currentChild?.masteryBySubject ?? []).map((entry) => ({
+        subject: entry.subject,
+        label: formatSubjectLabel(entry.subject),
+        mastery: Math.round(entry.mastery),
+      })),
+    [currentChild?.masteryBySubject],
+  );
+
+  const focusSubjectOptions = useMemo(
+    () => Array.from(new Set((currentChild?.masteryBySubject ?? []).map((entry) => entry.subject))),
+    [currentChild?.masteryBySubject],
+  );
 
   const childNameMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -545,13 +628,28 @@ const ParentDashboard: React.FC = () => {
         }
       });
 
-      await upsertChildGoals({
-        parentId: parent.id,
-        studentId: child.id,
-        weeklyLessons: Number.isFinite(weeklyLessonsTarget) ? weeklyLessonsTarget : null,
-        practiceMinutes: Number.isFinite(practiceMinutesTarget) ? practiceMinutesTarget : null,
-        masteryTargets: Object.keys(masteryTargets).length ? masteryTargets : {},
-      });
+      const focusSubject = goalForm.focusSubject ?? 'balanced';
+      const focusIntensity = goalForm.focusIntensity === 'focused' ? 'focused' : 'balanced';
+      const sessionLength = deriveSessionLengthPreference(
+        practiceMinutesTarget,
+        weeklyLessonsTarget,
+        (child.learningPreferences ?? defaultLearningPreferences).sessionLength,
+      );
+
+      await Promise.all([
+        upsertChildGoals({
+          parentId: parent.id,
+          studentId: child.id,
+          weeklyLessons: Number.isFinite(weeklyLessonsTarget) ? weeklyLessonsTarget : null,
+          practiceMinutes: Number.isFinite(practiceMinutesTarget) ? practiceMinutesTarget : null,
+          masteryTargets: Object.keys(masteryTargets).length ? masteryTargets : {},
+        }),
+        updateLearningPreferences(child.id, {
+          sessionLength,
+          focusSubject,
+          focusIntensity,
+        }),
+      ]);
     },
     onSuccess: async (_data, variables) => {
       setGoalMessage('Goals updated for this learner.');
@@ -1512,6 +1610,121 @@ const ParentDashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.14 }}
+          className="mb-8"
+        >
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                  Weekly pulse
+                </p>
+                <h3 className="text-xl font-bold text-gray-900">Usage, pace, and focus</h3>
+                <p className="text-sm text-gray-600">
+                  Time this week, lessons done, quick mastery bands, and what to lean into next.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 text-xs text-gray-600">
+                <span className="px-2 py-1 rounded-full bg-slate-100 text-slate-700 uppercase tracking-wide">
+                  Focus concepts
+                </span>
+                {focusConcepts.length ? (
+                  focusConcepts.map((concept) => (
+                    <span
+                      key={concept}
+                      className="px-3 py-1 rounded-full bg-brand-light-teal/60 text-brand-teal font-semibold"
+                    >
+                      {concept}
+                    </span>
+                  ))
+                ) : (
+                  <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700">
+                    Awaiting diagnostic to suggest focus
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Time this week</p>
+                  <span className={`text-[11px] px-2 py-1 rounded-full ${minutesStatus.badge}`}>
+                    {minutesStatus.label}
+                  </span>
+                </div>
+                <p className={`text-2xl font-bold ${minutesStatus.tone}`}>
+                  {currentChild?.practiceMinutesWeek ?? 0} min
+                </p>
+                <p className="text-xs text-gray-600">
+                  Target {practiceMinutesTargetValue ? `${practiceMinutesTargetValue} min/week` : 'set a target'}
+                </p>
+                <div className="h-2 rounded-full bg-white overflow-hidden border border-slate-200">
+                  <div
+                    className="h-full bg-brand-teal"
+                    style={{ width: `${Math.min(minutesProgressPct ?? 0, 100)}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Lessons done</p>
+                  <span className={`text-[11px] px-2 py-1 rounded-full ${lessonsStatus.badge}`}>
+                    {lessonsStatus.label}
+                  </span>
+                </div>
+                <p className={`text-2xl font-bold ${lessonsStatus.tone}`}>
+                  {currentChild?.lessonsCompletedWeek ?? 0} lessons
+                </p>
+                <p className="text-xs text-gray-600">
+                  Target {weeklyLessonsTargetValue ? `${weeklyLessonsTargetValue} /week` : 'set a target'}
+                </p>
+                <div className="h-2 rounded-full bg-white overflow-hidden border border-slate-200">
+                  <div
+                    className="h-full bg-brand-blue"
+                    style={{ width: `${Math.min(lessonsProgressPct ?? 0, 100)}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Mastery bands</p>
+                  <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                    By subject
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {masteryBands.length ? (
+                    masteryBands.slice(0, 4).map((band) => (
+                      <div key={band.subject}>
+                        <div className="flex items-center justify-between text-xs text-gray-700">
+                          <span>{band.label}</span>
+                          <span>{band.mastery}%</span>
+                        </div>
+                        <div className="mt-1 h-1.5 rounded-full bg-white overflow-hidden border border-slate-200">
+                          <div
+                            className="h-full bg-brand-violet"
+                            style={{ width: `${Math.min(band.mastery, 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-gray-600">
+                      We&apos;ll chart mastery by subject once the first lessons are finished.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
         >
@@ -1978,6 +2191,62 @@ const ParentDashboard: React.FC = () => {
                       </div>
                     </div>
 
+                    <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-semibold text-gray-900">Subject emphasis</h4>
+                        <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                          Shapes the daily plan
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Focus subject
+                          </label>
+                          <select
+                            value={goalForm.focusSubject}
+                            onChange={(event) =>
+                              setGoalForm((prev) => ({
+                                ...prev,
+                                focusSubject: (event.target.value as Subject | 'balanced') ?? 'balanced',
+                              }))
+                            }
+                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                          >
+                            <option value="balanced">Balanced across subjects</option>
+                            {(focusSubjectOptions.length ? focusSubjectOptions : (['math', 'english', 'science', 'social_studies'] as Subject[])).map(
+                              (subject) => (
+                                <option key={subject} value={subject}>
+                                  {formatSubjectLabel(subject)}
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Emphasis level
+                          </label>
+                          <select
+                            value={goalForm.focusIntensity}
+                            onChange={(event) =>
+                              setGoalForm((prev) => ({
+                                ...prev,
+                                focusIntensity: event.target.value === 'focused' ? 'focused' : 'balanced',
+                              }))
+                            }
+                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                          >
+                            <option value="balanced">Keep things balanced</option>
+                            <option value="focused">Prioritize this subject</option>
+                          </select>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-xs text-gray-600">
+                        We pass this into the learning preferences so applyLearningPreferencesToPlan leads with the chosen subject.
+                      </p>
+                    </div>
+
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="text-sm font-semibold text-gray-900">Mastery targets</h4>
@@ -2081,161 +2350,163 @@ const ParentDashboard: React.FC = () => {
               )}
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
-              id="assignments"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <ClipboardList className="h-5 w-5 text-brand-blue" />
-                  <h3 className="text-xl font-bold text-gray-900">Module Assignments</h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => modulesQuery.refetch()}
-                  className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
-                  disabled={modulesQuery.isFetching}
-                >
-                  <RefreshCw className={`h-4 w-4 ${modulesQuery.isFetching ? 'animate-spin' : ''}`} />
-                </button>
-              </div>
-              <form onSubmit={handleAssignModule} className="space-y-4">
-                <div>
-                  <label htmlFor="assignment-child" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                    Learner
-                  </label>
-                  <select
-                    id="assignment-child"
-                    value={selectedChildId ?? ''}
-                    onChange={(event) => setSelectedChildId(event.target.value || null)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                    disabled={showSkeleton || !dashboard?.children.length}
+            {showAssignmentsSection && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45 }}
+                id="assignments"
+                className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <ClipboardList className="h-5 w-5 text-brand-blue" />
+                    <h3 className="text-xl font-bold text-gray-900">Module Assignments</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => modulesQuery.refetch()}
+                    className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                    disabled={modulesQuery.isFetching}
                   >
-                    {(dashboard?.children ?? []).map((child) => (
-                      <option key={child.id} value={child.id}>
-                        {child.name}
-                      </option>
-                    ))}
-                  </select>
+                    <RefreshCw className={`h-4 w-4 ${modulesQuery.isFetching ? 'animate-spin' : ''}`} />
+                  </button>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <form onSubmit={handleAssignModule} className="space-y-4">
                   <div>
-                    <label htmlFor="assignment-module" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                      Module
+                    <label htmlFor="assignment-child" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                      Learner
                     </label>
                     <select
-                      id="assignment-module"
-                      value={selectedModuleId ?? ''}
-                      onChange={(event) => setSelectedModuleId(Number(event.target.value))}
+                      id="assignment-child"
+                      value={selectedChildId ?? ''}
+                      onChange={(event) => setSelectedChildId(event.target.value || null)}
                       className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                      disabled={!moduleOptions.length || modulesQuery.isLoading}
+                      disabled={showSkeleton || !dashboard?.children.length}
                     >
-                      {moduleOptions.map((module) => (
-                        <option key={module.id} value={module.id}>
-                          {module.title}
+                      {(dashboard?.children ?? []).map((child) => (
+                        <option key={child.id} value={child.id}>
+                          {child.name}
                         </option>
                       ))}
                     </select>
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label htmlFor="assignment-module" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Module
+                      </label>
+                      <select
+                        id="assignment-module"
+                        value={selectedModuleId ?? ''}
+                        onChange={(event) => setSelectedModuleId(Number(event.target.value))}
+                        className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                        disabled={!moduleOptions.length || modulesQuery.isLoading}
+                      >
+                        {moduleOptions.map((module) => (
+                          <option key={module.id} value={module.id}>
+                            {module.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="assignment-due" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Due date (optional)
+                      </label>
+                      <input
+                        id="assignment-due"
+                        type="date"
+                        value={dueDate}
+                        onChange={(event) => setDueDate(event.target.value)}
+                        className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                      />
+                    </div>
+                  </div>
+
                   <div>
-                    <label htmlFor="assignment-due" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                      Due date (optional)
+                    <label htmlFor="assignment-search" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                      Search library
                     </label>
                     <input
-                      id="assignment-due"
-                      type="date"
-                      value={dueDate}
-                      onChange={(event) => setDueDate(event.target.value)}
+                      id="assignment-search"
+                      type="search"
+                      value={moduleSearch}
+                      onChange={(event) => setModuleSearch(event.target.value)}
+                      placeholder="Fractions, writing prompts, STEM"
                       className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="assignment-search" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                    Search library
-                  </label>
-                  <input
-                    id="assignment-search"
-                    type="search"
-                    value={moduleSearch}
-                    onChange={(event) => setModuleSearch(event.target.value)}
-                    placeholder="Fractions, writing prompts, STEM"
-                    className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                  />
-                </div>
+                  <button
+                    type="submit"
+                    disabled={!selectedChildId || !selectedModuleId || assignModuleMutation.isLoading}
+                    className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                  >
+                    {assignModuleMutation.isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Assigning…
+                      </>
+                    ) : (
+                      'Assign module'
+                    )}
+                  </button>
+                </form>
 
-                <button
-                  type="submit"
-                  disabled={!selectedChildId || !selectedModuleId || assignModuleMutation.isLoading}
-                  className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
-                >
-                  {assignModuleMutation.isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Assigning…
-                    </>
-                  ) : (
-                    'Assign module'
-                  )}
-                </button>
-              </form>
-
-              {assignMessage && (
-                <p className="mt-3 text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
-                  {assignMessage}
-                </p>
-              )}
-              {assignErrorMessage && (
-                <p className="mt-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
-                  {assignErrorMessage}
-                </p>
-              )}
-
-              <div className="mt-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-semibold text-gray-900">
-                    Assignments for {currentChild?.name ?? '—'}
-                  </h4>
-                  <span className="text-xs text-gray-500">
-                    {assignmentsList.length} total
-                  </span>
-                </div>
-                {assignmentsLoading ? (
-                  <SkeletonCard className="h-16" />
-                ) : assignmentsList.length ? (
-                  <ul className="space-y-3">
-                    {assignmentsList.map((assignment) => (
-                      <li
-                        key={assignment.id}
-                        className="rounded-xl border border-slate-200 px-4 py-3 flex items-start justify-between gap-3"
-                      >
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">{assignment.title}</p>
-                          <p className="text-xs text-gray-500">
-                            {assignment.moduleTitle ?? 'Module'}
-                            {assignment.dueAt ? ` • Due ${new Date(assignment.dueAt).toLocaleDateString()}` : ''}
-                          </p>
-                        </div>
-                        <span
-                          className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${statusBadgeStyles[assignment.status]}`}
-                        >
-                          {assignment.status.replace('_', ' ')}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-gray-600">
-                    No assignments yet. Pick a module and send it their way.
+                {assignMessage && (
+                  <p className="mt-3 text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                    {assignMessage}
                   </p>
                 )}
-              </div>
-            </motion.div>
+                {assignErrorMessage && (
+                  <p className="mt-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                    {assignErrorMessage}
+                  </p>
+                )}
+
+                <div className="mt-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-sm font-semibold text-gray-900">
+                      Assignments for {currentChild?.name ?? '—'}
+                    </h4>
+                    <span className="text-xs text-gray-500">
+                      {assignmentsList.length} total
+                    </span>
+                  </div>
+                  {assignmentsLoading ? (
+                    <SkeletonCard className="h-16" />
+                  ) : assignmentsList.length ? (
+                    <ul className="space-y-3">
+                      {assignmentsList.map((assignment) => (
+                        <li
+                          key={assignment.id}
+                          className="rounded-xl border border-slate-200 px-4 py-3 flex items-start justify-between gap-3"
+                        >
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">{assignment.title}</p>
+                            <p className="text-xs text-gray-500">
+                              {assignment.moduleTitle ?? 'Module'}
+                              {assignment.dueAt ? ` • Due ${new Date(assignment.dueAt).toLocaleDateString()}` : ''}
+                            </p>
+                          </div>
+                          <span
+                            className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${statusBadgeStyles[assignment.status]}`}
+                          >
+                            {assignment.status.replace('_', ' ')}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-600">
+                      No assignments yet. Pick a module and send it their way.
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            )}
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -2400,6 +2671,10 @@ const ParentDashboard: React.FC = () => {
                 Request an export or deletion of your learner&apos;s data. We verify guardian links before fulfilling
                 requests and confirm via email.
               </p>
+              <div className="text-xs text-slate-600 mb-4 rounded-lg bg-slate-50 border border-slate-100 p-3">
+                Under-13 accounts stay read-only until consent is captured on this parent profile. Exports and deletions
+                are fulfilled only for linked guardians, and we log the request time and contact email for audit.
+              </div>
               <form onSubmit={handlePrivacyRequest} className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>

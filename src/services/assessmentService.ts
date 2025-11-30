@@ -3,6 +3,7 @@ import { normalizeSubject } from '../lib/subjects';
 import type { LearningPathItem, Subject } from '../types';
 import { buildCanonicalLearningPath } from '../lib/learningPaths';
 import { refreshLearningPathFromSuggestions } from './adaptiveService';
+import recordReliabilityCheckpoint from '../lib/reliability';
 
 export type AssessmentOption = {
   id: number;
@@ -177,11 +178,21 @@ const fetchAssessmentDefinition = async (
     .limit(5);
 
   if (assessmentError) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'definitions',
+      studentId,
+      error: assessmentError.message,
+    });
     throw new Error(`Unable to load assessment definitions: ${assessmentError.message}`);
   }
 
   const assessmentRow = pickAssessment((assessments ?? []) as AssessmentRow[], opts);
   if (!assessmentRow) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'selection',
+      studentId,
+      reason: 'no_assessment_found',
+    });
     throw new Error('No assessments have been configured yet.');
   }
 
@@ -195,11 +206,23 @@ const fetchAssessmentDefinition = async (
     .order('section_order', { ascending: true });
 
   if (sectionError) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'sections',
+      studentId,
+      assessmentId: assessmentRow.id,
+      error: sectionError.message,
+    });
     throw new Error(`Failed to load assessment sections: ${sectionError.message}`);
   }
 
   const sectionIds = (sectionRows ?? []).map((section) => section.id as number);
   if (!sectionIds.length) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'sections',
+      studentId,
+      assessmentId: assessmentRow.id,
+      reason: 'no_sections',
+    });
     throw new Error('Assessment is missing sections or questions.');
   }
   const { data: links, error: linkError } = await supabase
@@ -209,12 +232,24 @@ const fetchAssessmentDefinition = async (
     .order('question_order', { ascending: true });
 
   if (linkError) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'question_links',
+      studentId,
+      assessmentId: assessmentRow.id,
+      error: linkError.message,
+    });
     throw new Error(`Failed to load assessment questions: ${linkError.message}`);
   }
 
   const questionLinks = (links ?? []) as AssessmentQuestionLink[];
   const questionIds = Array.from(new Set(questionLinks.map((link) => link.question_id)));
   if (!questionIds.length) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'question_links',
+      studentId,
+      assessmentId: assessmentRow.id,
+      reason: 'no_questions',
+    });
     throw new Error('Assessment does not have any questions configured.');
   }
 
@@ -235,9 +270,21 @@ const fetchAssessmentDefinition = async (
   ]);
 
   if (questionBankResult.error) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'question_bank',
+      studentId,
+      assessmentId: assessmentRow.id,
+      error: questionBankResult.error.message,
+    });
     throw new Error(`Failed to load assessment questions: ${questionBankResult.error.message}`);
   }
   if (optionsResult.error) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'options',
+      studentId,
+      assessmentId: assessmentRow.id,
+      error: optionsResult.error.message,
+    });
     throw new Error(`Failed to load assessment options: ${optionsResult.error.message}`);
   }
   if (skillsResult.error) {
@@ -327,6 +374,12 @@ const fetchAssessmentDefinition = async (
     .maybeSingle();
 
   if (attemptError && attemptError.code !== 'PGRST116') {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'attempt_load',
+      studentId,
+      assessmentId: assessmentRow.id,
+      error: attemptError.message,
+    });
     throw new Error(`Failed to load assessment attempts: ${attemptError.message}`);
   }
 
@@ -346,6 +399,12 @@ const fetchAssessmentDefinition = async (
       .single();
 
     if (insertError || !newAttempt) {
+      recordReliabilityCheckpoint('diagnostic_load', 'error', {
+        phase: 'attempt_insert',
+        studentId,
+        assessmentId: assessmentRow.id,
+        error: insertError?.message ?? 'attempt_insert_failed',
+      });
       throw new Error(insertError ? `Failed to start assessment attempt: ${insertError.message}` : 'Attempt could not be created.');
     }
 
@@ -371,6 +430,13 @@ const fetchAssessmentDefinition = async (
       });
     });
   }
+
+  recordReliabilityCheckpoint('diagnostic_load', 'success', {
+    studentId,
+    assessmentId: assessmentRow.id,
+    questionCount: questions.length,
+    attemptId,
+  });
 
   return {
     assessmentId: assessmentRow.id,
@@ -423,6 +489,13 @@ export const recordAssessmentResponse = async (
 
   if (error) {
     console.error('[assessment] Failed to save response', error);
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'response_save',
+      studentId,
+      assessmentId,
+      attemptId,
+      error: error.message,
+    });
     throw error;
   }
 

@@ -36,6 +36,7 @@ import { castLearningPreferences } from './profileService';
 import { formatSubjectLabel, normalizeSubject, SUBJECT_LABELS } from '../lib/subjects';
 import { getActivitiesForModule, getHomeExtensionActivities, activityModuleSlugs } from '../lib/activityAssets';
 import { getCanonicalSequence } from '../lib/learningPaths';
+import { applyLearningPreferencesToPlan, maxLessonsForSession } from '../lib/learningPlan';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
@@ -176,35 +177,6 @@ const ensureLearningPreferences = (student: Student): LearningPreferences => {
     student.learningPreferences = { ...defaultLearningPreferences };
   }
   return student.learningPreferences;
-};
-
-const maxLessonsForSession: Record<LearningPreferences['sessionLength'], number> = {
-  short: 2,
-  standard: 4,
-  long: 5,
-};
-
-const applyLearningPreferencesToPlan = (
-  plan: DashboardLesson[],
-  preferences: LearningPreferences,
-): DashboardLesson[] => {
-  if (!plan.length) return plan;
-  const pref = preferences ?? defaultLearningPreferences;
-  const cappedLength = maxLessonsForSession[pref.sessionLength] ?? 4;
-
-  let ordered = plan.slice();
-  if (pref.focusSubject && pref.focusSubject !== 'balanced') {
-    const focusLessons = ordered.filter((lesson) => lesson.subject === pref.focusSubject);
-    const nonFocus = ordered.filter((lesson) => lesson.subject !== pref.focusSubject);
-    if (pref.focusIntensity === 'focused') {
-      ordered = [...focusLessons, ...nonFocus];
-    } else if (focusLessons.length) {
-      const [firstFocus] = focusLessons;
-      ordered = [firstFocus, ...ordered.filter((lesson) => lesson.id !== firstFocus.id)];
-    }
-  }
-
-  return ordered.slice(0, Math.max(1, cappedLength));
 };
 
 const ensureStudentQuickStats = (
@@ -400,6 +372,7 @@ const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => {
         'Dialed up Geometry practice this week based on recent misconceptions.',
         'Keeping English steady while we rebuild Science confidence.',
       ],
+      learningPreferences: defaultLearningPreferences,
     },
   ];
 
@@ -480,6 +453,7 @@ const mapParentDashboardChildRow = (row: ParentDashboardChildRow): ParentChildSn
     goalProgress: undefined,
     cohortComparison: undefined,
     adaptivePlanNotes: [],
+    learningPreferences: defaultLearningPreferences,
   };
 };
 
@@ -656,6 +630,9 @@ const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
       subject: item.subject,
       title: item.topic,
       moduleSlug: item.moduleSlug ?? item.id,
+      suggestionReason: item.concept
+        ? `From your grade-level path (${item.concept.replace(/_/g, ' ')})`
+        : 'From your grade-level path',
       status:
         item.status === 'completed' || item.status === 'mastered'
           ? 'completed'
@@ -667,6 +644,40 @@ const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
       launchUrl: hasNumericId ? `/lesson/${numericId}` : null,
     };
   });
+};
+
+const normalizePlanBySubject = (
+  lessons: DashboardLesson[],
+  preferences: LearningPreferences,
+): DashboardLesson[] => {
+  if (!lessons.length) return lessons;
+  const grouped = new Map<Subject, DashboardLesson[]>();
+
+  lessons.forEach((lesson) => {
+    const subject = lesson.subject;
+    const list = grouped.get(subject) ?? [];
+    if (list.length < 4) {
+      list.push(lesson);
+      grouped.set(subject, list);
+    }
+  });
+
+  const subjectOrder = Array.from(grouped.keys()).sort((a, b) => {
+    if (preferences.focusSubject && preferences.focusSubject !== 'balanced') {
+      if (a === preferences.focusSubject) return -1;
+      if (b === preferences.focusSubject) return 1;
+    }
+    return a.localeCompare(b);
+  });
+
+  const flattened: DashboardLesson[] = [];
+  subjectOrder.forEach((subject) => {
+    const pool = grouped.get(subject) ?? [];
+    const capped = pool.slice(0, Math.max(2, Math.min(4, pool.length)));
+    flattened.push(...capped);
+  });
+
+  return applyLearningPreferencesToPlan(flattened, preferences);
 };
 
 const mapProgressLessons = (
@@ -1177,6 +1188,74 @@ const buildAvatarOptions = (student: Student): AvatarOption[] => {
   });
 };
 
+const mergeBadgePools = (base: Badge[], extras: Badge[]): Badge[] => {
+  const seen = new Set(base.map((badge) => badge.id));
+  const merged = [...base];
+  extras.forEach((badge) => {
+    if (!seen.has(badge.id)) {
+      merged.push(badge);
+      seen.add(badge.id);
+    }
+  });
+  return merged;
+};
+
+const buildDynamicBadges = (params: {
+  student: Student;
+  quickStats: StudentDashboardData['quickStats'];
+  progressLessons: DashboardLesson[];
+  subjectMastery: SubjectMastery[];
+  lessonMetadata: Map<number, LessonMetadataEntry>;
+}): Badge[] => {
+  const { quickStats, progressLessons, subjectMastery, lessonMetadata } = params;
+  const badges: Badge[] = [];
+
+  if (quickStats.streakDays >= 3) {
+    badges.push({
+      id: `consistency-${quickStats.streakDays}`,
+      name: 'Consistency Champ',
+      description: `Logged in ${quickStats.streakDays} days in a row.`,
+      icon: '📅',
+      earnedAt: new Date(),
+      rarity: quickStats.streakDays >= 10 ? 'epic' : 'common',
+      category: 'streak',
+    });
+  }
+
+  const growingSubject = subjectMastery.find((entry) => entry.trend === 'up' && entry.mastery >= 45);
+  if (growingSubject) {
+    badges.push({
+      id: `growth-${growingSubject.subject}`,
+      name: `${SUBJECT_LABELS[growingSubject.subject]} Growth`,
+      description: `Mastery trending up in ${SUBJECT_LABELS[growingSubject.subject]}.`,
+      icon: '📈',
+      earnedAt: new Date(),
+      rarity: growingSubject.mastery >= 75 ? 'rare' : 'common',
+      category: growingSubject.subject,
+    });
+  }
+
+  const completedLesson = progressLessons.find((lesson) => lesson.status === 'completed');
+  if (completedLesson) {
+    const numericId = Number.parseInt(completedLesson.id, 10);
+    const moduleTitle =
+      (!Number.isNaN(numericId) ? lessonMetadata.get(numericId)?.moduleTitle : null) ??
+      completedLesson.moduleSlug ??
+      completedLesson.title;
+    badges.push({
+      id: `module-${completedLesson.moduleSlug ?? completedLesson.id}`,
+      name: 'Module Finisher',
+      description: `Closed out ${moduleTitle ?? 'a module'} with today’s effort.`,
+      icon: '🏁',
+      earnedAt: new Date(),
+      rarity: 'rare',
+      category: completedLesson.subject,
+    });
+  }
+
+  return badges;
+};
+
 const buildCelebrationMoments = (
   student: Student,
   badges: Badge[],
@@ -1665,7 +1744,7 @@ export const fetchStudentDashboardData = async (
           .limit(20),
         supabase.rpc('suggest_next_lessons', {
           p_student_id: student.id,
-          limit_count: 3,
+          limit_count: Math.max(2, maxLessonsForSession[preferences.sessionLength] ?? 3),
         }),
       ]);
 
@@ -1744,7 +1823,7 @@ export const fetchStudentDashboardData = async (
       const plan: DashboardLesson[] = [];
       const seen = new Set<string>();
       const desiredCount = maxLessonsForSession[preferences.sessionLength] ?? 4;
-      const fillTarget = Math.max(4, desiredCount);
+      const fillTarget = Math.max(4, desiredCount * 2);
 
       const pushLesson = (lesson: DashboardLesson) => {
         if (seen.has(lesson.id)) return;
@@ -1767,7 +1846,8 @@ export const fetchStudentDashboardData = async (
         return fallbackStudentLessons();
       }
 
-      return applyLearningPreferencesToPlan(plan, preferences);
+      const normalized = normalizePlanBySubject(plan, preferences);
+      return normalized.length ? normalized : applyLearningPreferencesToPlan(plan, preferences);
     })();
 
     const activityLineup = buildActivityLineup(todaysPlan, lessonMetadata, student.grade);
@@ -1793,13 +1873,22 @@ export const fetchStudentDashboardData = async (
     const xpTimeline = buildXpTimeline((xpRows as XpEventRow[]) ?? []);
     const assessments = buildAssessmentsSummary((assignmentsRows as StudentAssignmentRow[]) ?? []);
     const quickStats = ensureStudentQuickStats(student, activity);
+    const dynamicBadges = buildDynamicBadges({
+      student,
+      quickStats,
+      progressLessons,
+      subjectMastery,
+      lessonMetadata,
+    });
+    const badgePool = mergeBadgePools(student.badges ?? [], dynamicBadges);
+    student.badges = badgePool;
     let aiRecommendations = suggestionPlan.messages;
     if (!aiRecommendations.length) {
       aiRecommendations = deriveAiRecommendations(subjectMastery, todaysPlan);
     }
-    const recentBadges = student.badges.slice(0, 3);
+    const recentBadges = badgePool.slice(0, 3);
     const missions = buildMissions(student, todaysPlan, activity);
-    const celebrationMoments = buildCelebrationMoments(student, student.badges, quickStats, assessments);
+    const celebrationMoments = buildCelebrationMoments(student, badgePool, quickStats, assessments);
     const avatarOptions = buildAvatarOptions(student);
 
     return {
@@ -1826,20 +1915,30 @@ export const fetchStudentDashboardData = async (
     const fallbackQuickStats = ensureStudentQuickStats(student, fallbackActivity);
     const fallbackAssessments = buildAssessmentsSummary([]);
     const fallbackLessons = fallbackStudentLessons();
+    const fallbackSubjectMastery = fallbackStudentMastery();
+    const fallbackBadges = buildDynamicBadges({
+      student,
+      quickStats: fallbackQuickStats,
+      progressLessons: fallbackLessons,
+      subjectMastery: fallbackSubjectMastery,
+      lessonMetadata: new Map(),
+    });
+    const badgePool = mergeBadgePools(student.badges ?? [], fallbackBadges);
+    student.badges = badgePool;
     return {
       profile: student,
       quickStats: fallbackQuickStats,
       todaysPlan: fallbackLessons,
-      subjectMastery: fallbackStudentMastery(),
+      subjectMastery: fallbackSubjectMastery,
       dailyActivity: fallbackActivity,
-      recentBadges: student.badges.slice(0, 3),
+      recentBadges: badgePool.slice(0, 3),
       xpTimeline: buildXpTimeline([]),
-      aiRecommendations: deriveAiRecommendations(fallbackStudentMastery(), fallbackLessons),
+      aiRecommendations: deriveAiRecommendations(fallbackSubjectMastery, fallbackLessons),
       upcomingAssessments: fallbackAssessments,
       activeLessonId: null,
       nextLessonUrl: null,
       missions: buildMissions(student, fallbackLessons, fallbackActivity),
-      celebrationMoments: buildCelebrationMoments(student, student.badges, fallbackQuickStats, fallbackAssessments),
+      celebrationMoments: buildCelebrationMoments(student, badgePool, fallbackQuickStats, fallbackAssessments),
       avatarOptions: buildAvatarOptions(student),
       equippedAvatarId: student.avatar ?? null,
       todayActivities: buildActivityLineup(fallbackLessons, new Map(), student.grade),
@@ -1878,6 +1977,7 @@ export const fetchParentDashboardData = async (
       { data: subjectRows, error: subjectError },
       { data: progressRows, error: progressError },
       { data: weeklyReportRow, error: weeklyError },
+      { data: learningPrefRows, error: learningPrefError },
     ] = await Promise.all([
       childIds.length
         ? supabase
@@ -1918,6 +2018,12 @@ export const fetchParentDashboardData = async (
         .order('week_start', { ascending: false })
         .limit(1)
         .maybeSingle(),
+      childIds.length
+        ? supabase
+            .from('student_profiles')
+            .select('id, learning_style')
+            .in('id', childIds)
+        : Promise.resolve({ data: [] as Array<{ id: string; learning_style: unknown }>, error: null }),
     ]);
 
     if (masteryError) console.error('[Dashboard] Parent mastery fetch failed', masteryError);
@@ -1927,6 +2033,7 @@ export const fetchParentDashboardData = async (
     if (subjectError) console.error('[Dashboard] Subject reference fetch failed', subjectError);
     if (progressError) console.error('[Dashboard] Parent progress fetch failed', progressError);
     if (weeklyError) console.error('[Dashboard] Parent weekly report fetch failed', weeklyError);
+    if (learningPrefError) console.error('[Dashboard] Parent learning prefs fetch failed', learningPrefError);
 
     const skillMap = (skillRows as SkillRow[]) ?? [];
     const subjectMap = (subjectRows as SubjectRow[]) ?? [];
@@ -1961,6 +2068,11 @@ export const fetchParentDashboardData = async (
         progressSummaryByStudent.set(row.student_id, entry);
       },
     );
+
+    const learningPreferencesByStudent = new Map<string, LearningPreferences>();
+    (learningPrefRows as { id: string; learning_style: unknown }[]).forEach((row) => {
+      learningPreferencesByStudent.set(row.id, castLearningPreferences(row.learning_style));
+    });
 
     const xpByChild = new Map<string, XpEventRow[]>();
     (xpRows as (XpEventRow & { student_id: string })[]).forEach((row) => {
@@ -2000,6 +2112,10 @@ export const fetchParentDashboardData = async (
         }, 0) / (mastery.length || 1);
 
       const homeExtensions = buildHomeExtensions(child.grade, mastery);
+      const learningPreferences =
+        learningPreferencesByStudent.get(child.id) ??
+        child.learningPreferences ??
+        defaultLearningPreferences;
 
       const snapshot: ParentChildSnapshot = {
         ...child,
@@ -2012,6 +2128,7 @@ export const fetchParentDashboardData = async (
           notStarted: 0,
         },
         homeExtensions,
+        learningPreferences,
       };
 
       const goalProgress = calculateChildGoalProgress(snapshot);

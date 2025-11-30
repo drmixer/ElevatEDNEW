@@ -1,5 +1,6 @@
 import supabase from '../lib/supabaseClient';
 import type { LessonPracticeQuestion, Subject } from '../types';
+import recordReliabilityCheckpoint from '../lib/reliability';
 
 type LessonSkillRow = { skill_id: number };
 type QuestionSkillRow = { question_id: number; skill_id: number };
@@ -40,6 +41,11 @@ export const fetchLessonCheckQuestions = async (
 
   if (skillError) {
     console.warn('[lesson-quiz] Unable to load lesson skills', skillError);
+    recordReliabilityCheckpoint('lesson_playback', 'error', {
+      phase: 'lesson_skills',
+      lessonId,
+      error: skillError.message,
+    });
   }
 
   const skillIds = ((lessonSkills ?? []) as LessonSkillRow[])
@@ -57,6 +63,11 @@ export const fetchLessonCheckQuestions = async (
 
     if (questionSkillError) {
       console.warn('[lesson-quiz] Failed to load skill-aligned questions', questionSkillError);
+      recordReliabilityCheckpoint('lesson_playback', 'error', {
+        phase: 'question_skills',
+        lessonId,
+        error: questionSkillError.message,
+      });
     } else {
       candidateQuestionIds = Array.from(
         new Set(
@@ -78,6 +89,11 @@ export const fetchLessonCheckQuestions = async (
 
     if (subjectError) {
       console.warn('[lesson-quiz] Unable to resolve subject for practice questions', subjectError);
+      recordReliabilityCheckpoint('lesson_playback', 'error', {
+        phase: 'subject_lookup',
+        lessonId,
+        error: subjectError.message,
+      });
     }
 
     if (subjectRow?.id) {
@@ -89,6 +105,11 @@ export const fetchLessonCheckQuestions = async (
 
       if (subjectQuestionsError) {
         console.warn('[lesson-quiz] Failed to load subject practice questions', subjectQuestionsError);
+        recordReliabilityCheckpoint('lesson_playback', 'error', {
+          phase: 'subject_questions',
+          lessonId,
+          error: subjectQuestionsError.message,
+        });
       } else {
         candidateQuestionIds = ((subjectQuestions ?? []) as Array<{ id: number }>)
           .map((row) => row.id)
@@ -110,6 +131,11 @@ export const fetchLessonCheckQuestions = async (
 
   if (questionError) {
     console.error('[lesson-quiz] Failed to load practice question details', questionError);
+    recordReliabilityCheckpoint('lesson_playback', 'error', {
+      phase: 'question_detail',
+      lessonId,
+      error: questionError.message,
+    });
     return [];
   }
 
@@ -210,6 +236,12 @@ export const recordLessonQuestionAttempt = async (input: QuestionAttemptInput): 
     });
   } catch (eventError) {
     console.warn('[lesson-quiz] Failed to record practice event', eventError);
+    recordReliabilityCheckpoint('lesson_playback', 'error', {
+      phase: 'practice_event',
+      lessonId,
+      studentId,
+      error: eventError instanceof Error ? eventError.message : 'practice_event_failed',
+    });
   }
 
   try {
@@ -229,5 +261,163 @@ export const recordLessonQuestionAttempt = async (input: QuestionAttemptInput): 
       );
   } catch (progressError) {
     console.warn('[lesson-quiz] Failed to sync progress from quiz', progressError);
+    recordReliabilityCheckpoint('lesson_playback', 'error', {
+      phase: 'progress_upsert',
+      lessonId,
+      studentId,
+      error: progressError instanceof Error ? progressError.message : 'progress_upsert_failed',
+    });
+  }
+};
+
+export const syncLessonMasteryFromCheck = async (params: {
+  studentId: string | null;
+  lessonId: number;
+  sessionId: number | null;
+  questions: LessonPracticeQuestion[];
+  responses: Map<number, { isCorrect: boolean }>;
+  attempts?: number;
+  subject?: Subject | null;
+  eventOrder?: number | null;
+}): Promise<void> => {
+  const { studentId, lessonId, sessionId, questions, responses, attempts = 1, subject, eventOrder } = params;
+  if (!studentId || !sessionId) return;
+  if (!questions.length || responses.size === 0) return;
+
+  const skillTotals = new Map<number, { correct: number; total: number }>();
+  let correctCount = 0;
+
+  questions.forEach((question) => {
+    const response = responses.get(question.id);
+    if (!response) return;
+    if (response.isCorrect) {
+      correctCount += 1;
+    }
+    question.skillIds.forEach((skillId) => {
+      const entry = skillTotals.get(skillId) ?? { correct: 0, total: 0 };
+      entry.total += 1;
+      if (response.isCorrect) {
+        entry.correct += 1;
+      }
+      skillTotals.set(skillId, entry);
+    });
+  });
+
+  if (!skillTotals.size) return;
+
+  const skillIds = Array.from(skillTotals.keys());
+  const { data: masteryRows, error: masteryError } = await supabase
+    .from('student_mastery')
+    .select('skill_id, mastery_pct')
+    .eq('student_id', studentId)
+    .in('skill_id', skillIds);
+
+  if (masteryError) {
+    console.warn('[lesson-quiz] Unable to load mastery baselines for lesson', masteryError);
+  }
+
+  const currentMastery = new Map<number, number>();
+  (masteryRows ?? []).forEach((row) => {
+    currentMastery.set(row.skill_id as number, Number(row.mastery_pct) || 0);
+  });
+
+  const nowIso = new Date().toISOString();
+  const masteryPayload: Array<{
+    student_id: string;
+    skill_id: number;
+    mastery_pct: number;
+    last_evidence_at: string;
+    evidence: Record<string, unknown>;
+  }> = [];
+
+  const masteryBySkill: Record<string, number> = {};
+
+  skillTotals.forEach((totals, skillId) => {
+    const percent = totals.total > 0 ? Math.round((totals.correct / totals.total) * 100) : 0;
+    const prev = currentMastery.get(skillId) ?? 0;
+    const blended = Math.min(100, Math.round(prev * 0.7 + percent * 0.3));
+    masteryBySkill[String(skillId)] = blended;
+
+    masteryPayload.push({
+      student_id: studentId,
+      skill_id: skillId,
+      mastery_pct: blended,
+      last_evidence_at: nowIso,
+      evidence: {
+        source: 'lesson_check',
+        lesson_id: lessonId,
+        session_id: sessionId,
+        correct: totals.correct,
+        total: totals.total,
+      },
+    });
+  });
+
+  if (masteryPayload.length) {
+    const { error: upsertError } = await supabase
+      .from('student_mastery')
+      .upsert(masteryPayload, { onConflict: 'student_id,skill_id' });
+
+    if (upsertError) {
+      console.warn('[lesson-quiz] Failed to update student_mastery from lesson', upsertError);
+      recordReliabilityCheckpoint('lesson_playback', 'error', {
+        phase: 'mastery_upsert',
+        lessonId,
+        studentId,
+        error: upsertError.message,
+      });
+    }
+  }
+
+  const masteryPct = calculateMasteryPct(correctCount, responses.size || questions.length);
+  const status: QuestionAttemptInput['status'] =
+    responses.size >= questions.length ? 'completed' : 'in_progress';
+
+  try {
+    await supabase
+      .from('student_progress')
+      .upsert(
+        {
+          student_id: studentId,
+          lesson_id: lessonId,
+          status,
+          mastery_pct: masteryPct,
+          attempts,
+          last_activity_at: nowIso,
+        },
+        { onConflict: 'student_id,lesson_id' },
+      );
+  } catch (progressError) {
+    console.warn('[lesson-quiz] Failed to refresh student_progress rollup', progressError);
+    recordReliabilityCheckpoint('lesson_playback', 'error', {
+      phase: 'progress_rollup',
+      lessonId,
+      studentId,
+      error: progressError instanceof Error ? progressError.message : 'progress_rollup_failed',
+    });
+  }
+
+  if (eventOrder != null) {
+    try {
+      await supabase.from('practice_events').insert({
+        session_id: sessionId,
+        event_order: eventOrder,
+        event_type: 'lesson_mastery',
+        lesson_id: lessonId,
+        payload: {
+          mastery_pct: masteryPct,
+          mastery_by_skill: masteryBySkill,
+          subject,
+        },
+      });
+    } catch (eventError) {
+      console.warn('[lesson-quiz] Failed to log mastery practice_event', eventError);
+      recordReliabilityCheckpoint('lesson_playback', 'error', {
+        phase: 'mastery_event',
+        lessonId,
+        studentId,
+        error: eventError instanceof Error ? eventError.message : 'mastery_event_failed',
+      });
+    }
   }
 };

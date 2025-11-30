@@ -217,10 +217,6 @@ const StudentDashboard: React.FC = () => {
     [badges],
   );
 
-  if (!student) {
-    return null;
-  }
-
   const missions = dashboard?.missions ?? [];
   const visibleMissions = missions.filter((mission) => mission.cadence === missionCadence);
   const activeMission = visibleMissions[0] ?? missions[0] ?? null;
@@ -275,20 +271,6 @@ const StudentDashboard: React.FC = () => {
     await refetch({ throwOnError: false });
   };
 
-  if (activeView === 'assessment') {
-    return (
-      <Suspense
-        fallback={
-          <div className="min-h-screen flex items-center justify-center bg-gray-50 text-sm text-gray-500">
-            Loading assessment experience…
-          </div>
-        }
-      >
-        <AssessmentFlow onComplete={handleAssessmentComplete} />
-      </Suspense>
-    );
-  }
-
   const todaysPlan = dashboard?.todaysPlan ?? [];
   const filteredPlan =
     subjectFilter === 'all'
@@ -303,6 +285,30 @@ const StudentDashboard: React.FC = () => {
     todaysPlan.find((lesson) => lesson.status !== 'completed') ??
     todaysPlan[0] ??
     null;
+  const todaysPlanProgress = useMemo(() => {
+    const total = todaysPlan.length;
+    const completed = todaysPlan.filter((lesson) => lesson.status === 'completed').length;
+    const pct = total ? Math.round((completed / total) * 100) : 0;
+    return { completed, total, pct };
+  }, [todaysPlan]);
+
+  if (!student) {
+    return null;
+  }
+
+  if (activeView === 'assessment') {
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-gray-50 text-sm text-gray-500">
+            Loading assessment experience…
+          </div>
+        }
+      >
+        <AssessmentFlow onComplete={handleAssessmentComplete} />
+      </Suspense>
+    );
+  }
 
   const journeyNarrative = assessmentNarrative.length
     ? assessmentNarrative
@@ -752,6 +758,27 @@ const StudentDashboard: React.FC = () => {
                       </span>
                     </div>
                   </div>
+                  {!showSkeleton && (
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 mb-4">
+                      <div className="inline-flex items-center gap-2 font-semibold text-brand-teal">
+                        <Target className="h-4 w-4" />
+                        <span>
+                          {todaysPlanProgress.completed}/{todaysPlanProgress.total} done
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-[160px] h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-brand-teal to-brand-blue transition-all"
+                          style={{ width: `${todaysPlanProgress.pct}%` }}
+                        />
+                      </div>
+                      <div className="inline-flex items-center gap-1 text-gray-500">
+                        <span>Streak {quickStats?.streakDays ?? student.streakDays}</span>
+                        <span className="text-gray-300">•</span>
+                        <span>{quickStats?.totalXp ?? student.xp} XP</span>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {(['all', ...SUBJECTS] as Array<Subject | 'all'>).map((subject) => {
                       const active = subjectFilter === subject;

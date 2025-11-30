@@ -25,6 +25,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     grade: 1,
     age: '',
     guardianContact: '',
+    parentEmail: '',
+    focusSubject: 'balanced' as 'balanced' | 'math' | 'english' | 'science',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,7 +37,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const hasValidAge = Number.isFinite(parsedAge) && parsedAge > 0;
   const isUnder13 = hasValidAge && parsedAge < 13;
   const studentSubmissionBlocked =
-    !isLogin && formData.role === 'student' && (!hasValidAge || (isUnder13 && !guardianConsent));
+    !isLogin &&
+    formData.role === 'student' &&
+    (!hasValidAge || (isUnder13 && !guardianConsent));
 
   useEffect(() => {
     if (!isOpen) {
@@ -113,23 +117,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             ? 'guardian_present'
             : 'self_attested_13_plus';
 
-        await register(
-          formData.email,
-          formData.password,
-          formData.name,
-          formData.role,
-          formData.grade,
-          {
-            guardianConsent,
-            studentAge: hasValidAge ? parsedAge : undefined,
-            consentActor,
-            consentActorDetails: guardianConsent
-              ? formData.guardianContact?.trim() || 'Guardian present during signup'
-              : 'Student attested age 13+',
-            consentRecordedAt,
-            guardianContact: guardianConsent ? formData.guardianContact?.trim() || formData.email : null,
-          },
-        );
+        await register(formData.email, formData.password, formData.name, formData.role, formData.grade, {
+          guardianConsent,
+          studentAge: hasValidAge ? parsedAge : undefined,
+          consentActor,
+          consentActorDetails: guardianConsent
+            ? formData.guardianContact?.trim() || 'Guardian present during signup'
+            : 'Student attested age 13+',
+          consentRecordedAt,
+          guardianContact: guardianConsent ? formData.guardianContact?.trim() || formData.email : null,
+          parentEmail: formData.parentEmail?.trim() || null,
+          focusSubject: formData.focusSubject,
+        });
       }
       onClose();
     } catch (err) {
@@ -139,7 +138,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const grades = Array.from({ length: 12 }, (_, i) => i + 1);
+  const grades = Array.from({ length: 12 }, (_, i) => i + 1); // Grades 1–12
   const headingId = 'auth-modal-title';
   const descriptionId = 'auth-modal-description';
 
@@ -310,6 +309,47 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                           </div>
                         </div>
 
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Parent/guardian email
+                            </label>
+                            <input
+                              type="email"
+                              value={formData.parentEmail}
+                              onChange={(e) => setFormData({ ...formData, parentEmail: e.target.value })}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                              placeholder="Parent email for consent and updates"
+                            />
+                            <p className="mt-1 text-xs text-gray-600">
+                              We&apos;ll send consent and progress summaries here. This must be an adult.
+                            </p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Subject focus (optional)
+                            </label>
+                            <select
+                              value={formData.focusSubject}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  focusSubject: e.target.value as 'balanced' | 'math' | 'english' | 'science',
+                                })
+                              }
+                              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                            >
+                              <option value="balanced">Balanced (all subjects)</option>
+                              <option value="math">Math first</option>
+                              <option value="english">Reading & Writing first</option>
+                              <option value="science">Science first</option>
+                            </select>
+                            <p className="mt-1 text-xs text-gray-600">
+                              We&apos;ll prioritize this subject in today&apos;s plan; you can change it anytime.
+                            </p>
+                          </div>
+                        </div>
+
                         <div className="space-y-2 rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-900">
                           <p className="font-semibold">Consent for young learners</p>
                           <label className="flex items-start space-x-3 text-gray-800">
@@ -429,6 +469,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   Privacy Policy
                 </Link>
                 . Students under 13 should sign up with a parent/guardian present.
+              </p>
+              <p className="mt-2 text-[11px] text-gray-500 text-center">
+                Parents own the family account and can request data export or deletion anytime from the Family
+                Dashboard. Learners keep their view focused on lessons only.
               </p>
 
               <div className="mt-6 text-center">

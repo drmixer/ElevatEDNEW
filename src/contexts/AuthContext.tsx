@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import supabase from '../lib/supabaseClient';
-import type { User, UserRole } from '../types';
+import type { Subject, User, UserRole } from '../types';
 import { fetchUserProfile } from '../services/profileService';
+import recordReliabilityCheckpoint from '../lib/reliability';
 
 interface AuthContextType {
   user: User | null;
@@ -19,6 +20,8 @@ interface AuthContextType {
       consentActorDetails?: string | null;
       consentRecordedAt?: string;
       guardianContact?: string | null;
+      focusSubject?: Subject | 'balanced';
+      parentEmail?: string | null;
     },
   ) => Promise<void>;
   logout: () => void;
@@ -107,12 +110,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error || !data.user) {
+        recordReliabilityCheckpoint('auth_login', 'error', { reason: error?.message ?? 'missing_user' });
         throw error ?? new Error('Supabase did not return a user session.');
       }
 
       await loadProfile(data.user.id);
+      recordReliabilityCheckpoint('auth_login', 'success', { userId: data.user.id });
     } catch (error) {
       console.error('[Auth] Login failed', error);
+      recordReliabilityCheckpoint('auth_login', 'error', { error });
       setUser(null);
       if (error instanceof Error) {
         throw error;
@@ -136,6 +142,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       consentActorDetails?: string | null;
       consentRecordedAt?: string;
       guardianContact?: string | null;
+      focusSubject?: Subject | 'balanced';
+      parentEmail?: string | null;
     },
   ) => {
     setLoading(true);
@@ -166,7 +174,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             consent_actor: consentActor,
             consent_actor_details: options?.consentActorDetails ?? null,
             consent_recorded_at: consentRecordedAt,
-            guardian_contact: options?.guardianContact ?? null,
+            guardian_contact: options?.guardianContact ?? options?.parentEmail ?? null,
+            parent_email: options?.parentEmail ?? null,
+            focus_subject: options?.focusSubject ?? null,
           },
         },
       });
@@ -177,12 +187,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (!data.session || !data.user) {
         setUser(null);
+        recordReliabilityCheckpoint('auth_register', 'error', { reason: 'pending_email_confirmation' });
         throw new Error('Sign-up successful. Please check your email to confirm your account.');
       }
 
+      // Persist grade and learning preferences onto the student profile so adaptive paths can start immediately.
+      if (role === 'student') {
+        const focusSubject = options?.focusSubject ?? 'balanced';
+        const learningStyle = {
+          sessionLength: 'standard',
+          focusSubject,
+          focusIntensity: focusSubject === 'balanced' ? 'balanced' : 'focused',
+        };
+        await supabase
+          .from('student_profiles')
+          .update({
+            grade: grade ?? null,
+            learning_style: learningStyle,
+          })
+          .eq('id', data.user.id);
+      }
+
       await loadProfile(data.user.id);
+      recordReliabilityCheckpoint('auth_register', 'success', {
+        userId: data.user.id,
+        role,
+        consentActor,
+        guardianConsent: options?.guardianConsent === true,
+      });
     } catch (error) {
       console.error('[Auth] Registration failed', error);
+      recordReliabilityCheckpoint('auth_register', 'error', { error });
       setUser(null);
       if (error instanceof Error) {
         throw error;

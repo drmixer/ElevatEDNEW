@@ -363,6 +363,7 @@ export interface ParentChildSnapshot {
   adaptivePlanNotes?: string[];
   skillGaps?: SkillGapInsight[];
   homeExtensions?: DashboardActivity[];
+  learningPreferences?: LearningPreferences;
 }
 
 export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';

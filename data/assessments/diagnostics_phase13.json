@@ -2428,5 +2428,539 @@
         }
       }
     ]
+  },
+  "science_6": {
+    "grade_band": "6",
+    "subject": "science",
+    "title": "Grade 6 Science Diagnostic",
+    "description": "Placement across physical science, life science, earth/space science, and engineering practices.",
+    "estimatedDurationMinutes": 12,
+    "blueprint": {
+      "sections": [
+        { "id": "ps", "strand": "Physical Science", "standards": ["MS-PS2-2", "MS-PS3-1"], "itemCount": 4, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["6-science-physical-science-kinematics-and-forces"] },
+          { "name": "on_track", "min": 70, "placement": ["6-science-physical-science-energy-and-heat"] }
+        ]},
+        { "id": "ls", "strand": "Life Science", "standards": ["MS-LS1-3", "MS-LS3-2"], "itemCount": 3, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["6-science-life-science-cells-and-organelles"] },
+          { "name": "on_track", "min": 70, "placement": ["6-science-life-science-genetics-and-heredity"] }
+        ]},
+        { "id": "ess", "strand": "Earth & Space", "standards": ["MS-ESS1-2", "MS-ESS2-3"], "itemCount": 3, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["6-science-earth-and-space-plate-tectonics"] },
+          { "name": "stretch", "min": 85, "placement": ["6-science-earth-and-space-astronomy-stars-galaxies"] }
+        ]},
+        { "id": "eng", "strand": "Engineering", "standards": ["MS-ETS1-2"], "itemCount": 2, "scoreBands": [
+          { "name": "on_track", "min": 60, "placement": ["6-science-engineering-practices-data-driven-design"] }
+        ]}
+      ]
+    },
+    "items": [
+      {
+        "id": "6s-ps-1",
+        "prompt": "A box experiences 10 N to the right and 6 N to the left. What is the net force and direction?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS2-2",
+        "options": [
+          { "text": "4 N right", "isCorrect": true },
+          { "text": "16 N right", "isCorrect": false },
+          { "text": "4 N left", "isCorrect": false },
+          { "text": "No net force", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-physical-science-kinematics-and-forces"],
+          "on_mastery": ["6-science-physical-science-energy-and-heat"]
+        }
+      },
+      {
+        "id": "6s-ps-2",
+        "prompt": "Heating water increases molecular motion. What happens to average kinetic energy?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS3-1",
+        "options": [
+          { "text": "It decreases", "isCorrect": false },
+          { "text": "It stays the same", "isCorrect": false },
+          { "text": "It increases", "isCorrect": true },
+          { "text": "It becomes zero", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-physical-science-energy-and-heat"],
+          "on_mastery": ["6-science-physical-science-waves-and-electromagnetic-spectrum"]
+        }
+      },
+      {
+        "id": "6s-ls-1",
+        "prompt": "Which structure is common to both plant and animal cells?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Life Science",
+        "standard": "MS-LS1-3",
+        "options": [
+          { "text": "Chloroplast", "isCorrect": false },
+          { "text": "Cell membrane", "isCorrect": true },
+          { "text": "Cell wall", "isCorrect": false },
+          { "text": "Large central vacuole", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-life-science-cells-and-organelles"],
+          "on_mastery": ["6-science-life-science-genetics-and-heredity"]
+        }
+      },
+      {
+        "id": "6s-ls-2",
+        "prompt": "If a gene mutates in a parent cell, when can the change be passed to offspring?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Life Science",
+        "standard": "MS-LS3-2",
+        "options": [
+          { "text": "Only in body (somatic) cells", "isCorrect": false },
+          { "text": "Only if it occurs in sex cells", "isCorrect": true },
+          { "text": "Mutations are never inherited", "isCorrect": false },
+          { "text": "All mutations pass to offspring", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-life-science-genetics-and-heredity"],
+          "on_mastery": ["6-science-life-science-evolution-and-natural-selection"]
+        }
+      },
+      {
+        "id": "6s-ess-1",
+        "prompt": "What evidence best supports the idea of moving tectonic plates?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Earth & Space",
+        "standard": "MS-ESS2-3",
+        "options": [
+          { "text": "Similar fossils on different continents", "isCorrect": true },
+          { "text": "Random volcano locations", "isCorrect": false },
+          { "text": "Ocean tides", "isCorrect": false },
+          { "text": "Daily weather changes", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-earth-and-space-plate-tectonics"],
+          "on_mastery": ["6-science-earth-and-space-earth-history"]
+        }
+      },
+      {
+        "id": "6s-ess-2",
+        "prompt": "Why do planets orbit the sun?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Earth & Space",
+        "standard": "MS-ESS1-2",
+        "options": [
+          { "text": "Magnetic fields from the moon", "isCorrect": false },
+          { "text": "Friction with space", "isCorrect": false },
+          { "text": "The sun’s gravity pulls them", "isCorrect": true },
+          { "text": "Solar wind pushes them", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-earth-and-space-astronomy-stars-galaxies"],
+          "on_mastery": ["6-science-engineering-practices-data-driven-design"]
+        }
+      },
+      {
+        "id": "6s-eng-1",
+        "prompt": "When defining a design problem, what must be identified?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Engineering",
+        "standard": "MS-ETS1-2",
+        "options": [
+          { "text": "Criteria and constraints", "isCorrect": true },
+          { "text": "Only materials cost", "isCorrect": false },
+          { "text": "Random solutions first", "isCorrect": false },
+          { "text": "Colors and logos only", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-engineering-practices-data-driven-design"],
+          "on_mastery": ["6-science-engineering-practices-modeling-and-optimization"]
+        }
+      },
+      {
+        "id": "6s-eng-2",
+        "prompt": "What is the benefit of testing multiple prototypes?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Engineering",
+        "standard": "MS-ETS1-2",
+        "options": [
+          { "text": "It wastes time", "isCorrect": false },
+          { "text": "It reveals tradeoffs and improvements", "isCorrect": true },
+          { "text": "It prevents data collection", "isCorrect": false },
+          { "text": "It guarantees perfection", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["6-science-engineering-practices-tradeoffs-and-constraints"],
+          "on_mastery": ["6-science-engineering-practices-tradeoffs-and-constraints"]
+        }
+      }
+    ]
+  },
+  "science_7": {
+    "grade_band": "7",
+    "subject": "science",
+    "title": "Grade 7 Science Diagnostic",
+    "description": "Placement across life science, physical science, earth/space science, and engineering.",
+    "estimatedDurationMinutes": 12,
+    "blueprint": {
+      "sections": [
+        { "id": "ls", "strand": "Life Science", "standards": ["MS-LS1-3", "MS-LS3-2", "MS-LS4-4"], "itemCount": 4, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["7-science-life-science-cells-and-organelles"] },
+          { "name": "on_track", "min": 70, "placement": ["7-science-life-science-genetics-and-heredity"] }
+        ]},
+        { "id": "ps", "strand": "Physical Science", "standards": ["MS-PS2-2", "MS-PS3-1"], "itemCount": 3, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["7-science-physical-science-kinematics-and-forces"] },
+          { "name": "on_track", "min": 70, "placement": ["7-science-physical-science-energy-and-heat"] }
+        ]},
+        { "id": "ess", "strand": "Earth & Space", "standards": ["MS-ESS1-2", "MS-ESS2-3"], "itemCount": 3, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["7-science-earth-and-space-plate-tectonics"] },
+          { "name": "stretch", "min": 85, "placement": ["7-science-earth-and-space-astronomy-stars-galaxies"] }
+        ]},
+        { "id": "eng", "strand": "Engineering", "standards": ["MS-ETS1-2"], "itemCount": 2, "scoreBands": [
+          { "name": "on_track", "min": 60, "placement": ["7-science-engineering-practices-data-driven-design"] }
+        ]}
+      ]
+    },
+    "items": [
+      {
+        "id": "7s-ls-1",
+        "prompt": "Which best explains why traits can skip a generation?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Life Science",
+        "standard": "MS-LS3-2",
+        "options": [
+          { "text": "All traits are dominant", "isCorrect": false },
+          { "text": "Recessive alleles need two copies to show", "isCorrect": true },
+          { "text": "Genes never combine", "isCorrect": false },
+          { "text": "Mutations block traits", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-life-science-genetics-and-heredity"],
+          "on_mastery": ["7-science-life-science-evolution-and-natural-selection"]
+        }
+      },
+      {
+        "id": "7s-ls-2",
+        "prompt": "Natural selection depends on which factor?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Life Science",
+        "standard": "MS-LS4-4",
+        "options": [
+          { "text": "Identical environments everywhere", "isCorrect": false },
+          { "text": "Variation in traits affecting survival", "isCorrect": true },
+          { "text": "No competition", "isCorrect": false },
+          { "text": "Unlimited resources", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-life-science-evolution-and-natural-selection"],
+          "on_mastery": ["7-science-life-science-ecology-and-biodiversity"]
+        }
+      },
+      {
+        "id": "7s-ps-1",
+        "prompt": "A cart speeds up when the net force increases. Which law explains this?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS2-2",
+        "options": [
+          { "text": "Newton’s Second Law (F = ma)", "isCorrect": true },
+          { "text": "Conservation of mass", "isCorrect": false },
+          { "text": "Plate tectonics", "isCorrect": false },
+          { "text": "Cell theory", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-physical-science-kinematics-and-forces"],
+          "on_mastery": ["7-science-physical-science-energy-and-heat"]
+        }
+      },
+      {
+        "id": "7s-ps-2",
+        "prompt": "Which change best shows energy transfer?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS3-1",
+        "options": [
+          { "text": "Ice melting in warm air", "isCorrect": true },
+          { "text": "A book on a shelf", "isCorrect": false },
+          { "text": "A rock sitting still", "isCorrect": false },
+          { "text": "A closed switch", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-physical-science-energy-and-heat"],
+          "on_mastery": ["7-science-physical-science-waves-and-electromagnetic-spectrum"]
+        }
+      },
+      {
+        "id": "7s-ess-1",
+        "prompt": "Which observation supports Earth plates moving over time?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Earth & Space",
+        "standard": "MS-ESS2-3",
+        "options": [
+          { "text": "Identical fossils on distant continents", "isCorrect": true },
+          { "text": "Daily sunrise", "isCorrect": false },
+          { "text": "Local rainstorms", "isCorrect": false },
+          { "text": "Moon phases", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-earth-and-space-plate-tectonics"],
+          "on_mastery": ["7-science-earth-and-space-earth-history"]
+        }
+      },
+      {
+        "id": "7s-ess-2",
+        "prompt": "Why do stars orbit within galaxies?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Earth & Space",
+        "standard": "MS-ESS1-2",
+        "options": [
+          { "text": "Galactic gravity pulls them inward", "isCorrect": true },
+          { "text": "Magnetic storms", "isCorrect": false },
+          { "text": "Solar wind", "isCorrect": false },
+          { "text": "They are stationary", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-earth-and-space-astronomy-stars-galaxies"],
+          "on_mastery": ["7-science-engineering-practices-data-driven-design"]
+        }
+      },
+      {
+        "id": "7s-eng-1",
+        "prompt": "What should teams compare when selecting a solution?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Engineering",
+        "standard": "MS-ETS1-2",
+        "options": [
+          { "text": "How well each meets criteria and constraints", "isCorrect": true },
+          { "text": "Which is most expensive", "isCorrect": false },
+          { "text": "Random choice", "isCorrect": false },
+          { "text": "Only appearance", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-engineering-practices-data-driven-design"],
+          "on_mastery": ["7-science-engineering-practices-modeling-and-optimization"]
+        }
+      },
+      {
+        "id": "7s-eng-2",
+        "prompt": "Why document test results during iteration?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Engineering",
+        "standard": "MS-ETS1-2",
+        "options": [
+          { "text": "To learn which changes improve performance", "isCorrect": true },
+          { "text": "To hide evidence", "isCorrect": false },
+          { "text": "To avoid comparisons", "isCorrect": false },
+          { "text": "To skip constraints", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["7-science-engineering-practices-tradeoffs-and-constraints"],
+          "on_mastery": ["7-science-engineering-practices-tradeoffs-and-constraints"]
+        }
+      }
+    ]
+  },
+  "science_8": {
+    "grade_band": "8",
+    "subject": "science",
+    "title": "Grade 8 Science Diagnostic",
+    "description": "Placement across advanced middle school physical, life, earth/space science, and engineering.",
+    "estimatedDurationMinutes": 12,
+    "blueprint": {
+      "sections": [
+        { "id": "ps", "strand": "Physical Science", "standards": ["MS-PS1-2", "MS-PS2-2", "MS-PS3-1"], "itemCount": 4, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["8-science-physical-science-kinematics-and-forces"] },
+          { "name": "on_track", "min": 70, "placement": ["8-science-physical-science-energy-and-heat"] }
+        ]},
+        { "id": "ls", "strand": "Life Science", "standards": ["MS-LS1-3", "MS-LS4-4"], "itemCount": 3, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["8-science-life-science-cells-and-organelles"] },
+          { "name": "on_track", "min": 70, "placement": ["8-science-life-science-evolution-and-natural-selection"] }
+        ]},
+        { "id": "ess", "strand": "Earth & Space", "standards": ["MS-ESS1-2", "MS-ESS2-2"], "itemCount": 3, "scoreBands": [
+          { "name": "needs_support", "max": 50, "placement": ["8-science-earth-and-space-plate-tectonics"] },
+          { "name": "stretch", "min": 85, "placement": ["8-science-earth-and-space-astronomy-stars-galaxies"] }
+        ]},
+        { "id": "eng", "strand": "Engineering", "standards": ["MS-ETS1-2"], "itemCount": 2, "scoreBands": [
+          { "name": "on_track", "min": 60, "placement": ["8-science-engineering-practices-data-driven-design"] }
+        ]}
+      ]
+    },
+    "items": [
+      {
+        "id": "8s-ps-1",
+        "prompt": "Which observation shows a chemical reaction occurred?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS1-2",
+        "options": [
+          { "text": "Change in odor and temperature", "isCorrect": true },
+          { "text": "Ice melting", "isCorrect": false },
+          { "text": "Water boiling", "isCorrect": false },
+          { "text": "Metal stretching", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-physical-science-chemistry-atoms-bonding-reactions"],
+          "on_mastery": ["8-science-physical-science-energy-and-heat"]
+        }
+      },
+      {
+        "id": "8s-ps-2",
+        "prompt": "An object’s motion changes more with larger net force or smaller mass. This models:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS2-2",
+        "options": [
+          { "text": "Newton’s Second Law", "isCorrect": true },
+          { "text": "Law of superposition", "isCorrect": false },
+          { "text": "Cell theory", "isCorrect": false },
+          { "text": "Law of conservation of charge", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-physical-science-kinematics-and-forces"],
+          "on_mastery": ["8-science-physical-science-waves-and-electromagnetic-spectrum"]
+        }
+      },
+      {
+        "id": "8s-ps-3",
+        "prompt": "Which situation best shows energy transfer and efficiency?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Physical Science",
+        "standard": "MS-PS3-1",
+        "options": [
+          { "text": "LED bulb using less energy for same light", "isCorrect": true },
+          { "text": "Rock sitting on ground", "isCorrect": false },
+          { "text": "Closed drawer", "isCorrect": false },
+          { "text": "Static charge build-up", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-physical-science-energy-and-heat"],
+          "on_mastery": ["8-science-physical-science-waves-and-electromagnetic-spectrum"]
+        }
+      },
+      {
+        "id": "8s-ls-1",
+        "prompt": "A change in DNA that alters a protein can lead to:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Life Science",
+        "standard": "MS-LS3-2",
+        "options": [
+          { "text": "Traits with beneficial, harmful, or neutral effects", "isCorrect": true },
+          { "text": "Only harmful traits", "isCorrect": false },
+          { "text": "No change in any trait", "isCorrect": false },
+          { "text": "Instant extinction", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-life-science-genetics-and-heredity"],
+          "on_mastery": ["8-science-life-science-evolution-and-natural-selection"]
+        }
+      },
+      {
+        "id": "8s-ls-2",
+        "prompt": "Why might a population’s traits shift over generations?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Life Science",
+        "standard": "MS-LS4-4",
+        "options": [
+          { "text": "Differential survival and reproduction", "isCorrect": true },
+          { "text": "Identical offspring every time", "isCorrect": false },
+          { "text": "No environmental pressure", "isCorrect": false },
+          { "text": "Traits never vary", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-life-science-evolution-and-natural-selection"],
+          "on_mastery": ["8-science-life-science-ecology-and-biodiversity"]
+        }
+      },
+      {
+        "id": "8s-ess-1",
+        "prompt": "Which best explains seismic waves bending through Earth’s layers?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Earth & Space",
+        "standard": "MS-ESS2-2",
+        "options": [
+          { "text": "Different densities of materials", "isCorrect": true },
+          { "text": "Moon gravity", "isCorrect": false },
+          { "text": "Ocean tides", "isCorrect": false },
+          { "text": "Cloud thickness", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-earth-and-space-plate-tectonics"],
+          "on_mastery": ["8-science-earth-and-space-earth-history"]
+        }
+      },
+      {
+        "id": "8s-ess-2",
+        "prompt": "What force keeps galaxies and solar systems bound?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "strand": "Earth & Space",
+        "standard": "MS-ESS1-2",
+        "options": [
+          { "text": "Gravity", "isCorrect": true },
+          { "text": "Magnetism", "isCorrect": false },
+          { "text": "Friction with space", "isCorrect": false },
+          { "text": "Light pressure only", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-earth-and-space-astronomy-stars-galaxies"],
+          "on_mastery": ["8-science-engineering-practices-data-driven-design"]
+        }
+      },
+      {
+        "id": "8s-eng-1",
+        "prompt": "Why compare data from multiple design trials?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Engineering",
+        "standard": "MS-ETS1-2",
+        "options": [
+          { "text": "To select the most effective solution under constraints", "isCorrect": true },
+          { "text": "To ignore criteria", "isCorrect": false },
+          { "text": "To avoid iteration", "isCorrect": false },
+          { "text": "To remove documentation", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-engineering-practices-data-driven-design"],
+          "on_mastery": ["8-science-engineering-practices-modeling-and-optimization"]
+        }
+      },
+      {
+        "id": "8s-eng-2",
+        "prompt": "What should a design team do when two solutions meet criteria but differ on constraints?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "strand": "Engineering",
+        "standard": "MS-ETS1-2",
+        "options": [
+          { "text": "Compare tradeoffs and choose the better fit", "isCorrect": true },
+          { "text": "Pick randomly", "isCorrect": false },
+          { "text": "Ignore constraints", "isCorrect": false },
+          { "text": "Stop testing", "isCorrect": false }
+        ],
+        "placement": {
+          "on_miss": ["8-science-engineering-practices-tradeoffs-and-constraints"],
+          "on_mastery": ["8-science-engineering-practices-tradeoffs-and-constraints"]
+        }
+      }
+    ]
   }
 }

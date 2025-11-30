@@ -622,5 +622,383 @@
         "metadata": { "notes": "Structured discussions, argument critique, and multimedia." }
       }
     ]
+  },
+  {
+    "grade_band": "6",
+    "subject": "science",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "6-science-physical-science-kinematics-and-forces",
+        "module_title": "Kinematics & Forces",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS2-2"],
+        "metadata": { "notes": "Net force, motion graphs, and simple vector reasoning." }
+      },
+      {
+        "position": 2,
+        "module_slug": "6-science-physical-science-energy-and-heat",
+        "module_title": "Energy & Heat",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS3-1"],
+        "metadata": { "notes": "Energy transfer, kinetic/potential energy, and temperature." }
+      },
+      {
+        "position": 3,
+        "module_slug": "6-science-physical-science-waves-and-electromagnetic-spectrum",
+        "module_title": "Waves & Electromagnetic Spectrum",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS3-1"],
+        "metadata": { "notes": "Wave basics, amplitude/frequency, and everyday EM examples." }
+      },
+      {
+        "position": 4,
+        "module_slug": "6-science-physical-science-chemistry-atoms-bonding-reactions",
+        "module_title": "Chemistry: Atoms, Bonding, & Reactions",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS1-2"],
+        "metadata": { "notes": "Atomic structure, bonding models, and simple reactions." }
+      },
+      {
+        "position": 5,
+        "module_slug": "6-science-life-science-cells-and-organelles",
+        "module_title": "Cells & Organelles",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS1-3"],
+        "metadata": { "notes": "Cell structure/function with microscope-ready models." }
+      },
+      {
+        "position": 6,
+        "module_slug": "6-science-life-science-genetics-and-heredity",
+        "module_title": "Genetics & Heredity",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS3-2"],
+        "metadata": { "notes": "Traits, Punnett squares, and DNA/protein linkages." }
+      },
+      {
+        "position": 7,
+        "module_slug": "6-science-life-science-ecology-and-biodiversity",
+        "module_title": "Ecology & Biodiversity",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS2-3"],
+        "metadata": { "notes": "Ecosystem interactions and energy/matter cycling." }
+      },
+      {
+        "position": 8,
+        "module_slug": "6-science-life-science-evolution-and-natural-selection",
+        "module_title": "Evolution & Natural Selection",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS4-4"],
+        "metadata": { "notes": "Adaptations, variation, and environmental pressures." }
+      },
+      {
+        "position": 9,
+        "module_slug": "6-science-earth-and-space-plate-tectonics",
+        "module_title": "Plate Tectonics",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS2-3"],
+        "metadata": { "notes": "Continental drift evidence and boundary interactions." }
+      },
+      {
+        "position": 10,
+        "module_slug": "6-science-earth-and-space-earth-history",
+        "module_title": "Earth History",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS2-2"],
+        "metadata": { "notes": "Geologic time, fossils, and surface change." }
+      },
+      {
+        "position": 11,
+        "module_slug": "6-science-earth-and-space-weather-climate-systems",
+        "module_title": "Weather & Climate Systems",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS3-1"],
+        "metadata": { "notes": "Atmospheric drivers, water cycle, and regional climate." }
+      },
+      {
+        "position": 12,
+        "module_slug": "6-science-earth-and-space-astronomy-stars-galaxies",
+        "module_title": "Astronomy: Stars & Galaxies",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS1-2"],
+        "metadata": { "notes": "Gravity in galaxies, stellar life cycles, and scale models." }
+      },
+      {
+        "position": 13,
+        "module_slug": "6-science-engineering-practices-data-driven-design",
+        "module_title": "Engineering: Data-Driven Design",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Define problems, criteria/constraints, test-and-iterate." }
+      },
+      {
+        "position": 14,
+        "module_slug": "6-science-engineering-practices-modeling-and-optimization",
+        "module_title": "Engineering: Modeling & Optimization",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Simple models, tradeoffs, and improvement cycles." }
+      },
+      {
+        "position": 15,
+        "module_slug": "6-science-engineering-practices-tradeoffs-and-constraints",
+        "module_title": "Engineering: Tradeoffs & Constraints",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Balancing constraints and stakeholder needs." }
+      }
+    ]
+  },
+  {
+    "grade_band": "7",
+    "subject": "science",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "7-science-life-science-cells-and-organelles",
+        "module_title": "Cells & Organelles",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS1-3"],
+        "metadata": { "notes": "Cell systems, membranes, and body subsystems." }
+      },
+      {
+        "position": 2,
+        "module_slug": "7-science-life-science-genetics-and-heredity",
+        "module_title": "Genetics & Heredity",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS3-2"],
+        "metadata": { "notes": "Inheritance models, mutations, and protein impacts." }
+      },
+      {
+        "position": 3,
+        "module_slug": "7-science-life-science-evolution-and-natural-selection",
+        "module_title": "Evolution & Natural Selection",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS4-4"],
+        "metadata": { "notes": "Selection pressures and population adaptation evidence." }
+      },
+      {
+        "position": 4,
+        "module_slug": "7-science-life-science-ecology-and-biodiversity",
+        "module_title": "Ecology & Biodiversity",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS2-3"],
+        "metadata": { "notes": "Energy flow, cycles, and ecosystem stability." }
+      },
+      {
+        "position": 5,
+        "module_slug": "7-science-physical-science-kinematics-and-forces",
+        "module_title": "Kinematics & Forces",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS2-2"],
+        "metadata": { "notes": "Two-step motion problems and net force." }
+      },
+      {
+        "position": 6,
+        "module_slug": "7-science-physical-science-energy-and-heat",
+        "module_title": "Energy & Heat",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS3-1"],
+        "metadata": { "notes": "Thermal energy, conduction/convection/radiation labs." }
+      },
+      {
+        "position": 7,
+        "module_slug": "7-science-physical-science-chemistry-atoms-bonding-reactions",
+        "module_title": "Chemistry: Atoms, Bonding, & Reactions",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS1-2"],
+        "metadata": { "notes": "Bonding types, reaction evidence, and conservation." }
+      },
+      {
+        "position": 8,
+        "module_slug": "7-science-physical-science-waves-and-electromagnetic-spectrum",
+        "module_title": "Waves & Electromagnetic Spectrum",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS3-1"],
+        "metadata": { "notes": "Wave interactions, EM spectrum, and applications." }
+      },
+      {
+        "position": 9,
+        "module_slug": "7-science-earth-and-space-plate-tectonics",
+        "module_title": "Plate Tectonics",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS2-3"],
+        "metadata": { "notes": "Plate boundaries, quakes/volcanoes, and modeling." }
+      },
+      {
+        "position": 10,
+        "module_slug": "7-science-earth-and-space-earth-history",
+        "module_title": "Earth History",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS2-2"],
+        "metadata": { "notes": "Rock cycle, dating methods, and past environments." }
+      },
+      {
+        "position": 11,
+        "module_slug": "7-science-earth-and-space-weather-climate-systems",
+        "module_title": "Weather & Climate Systems",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS3-1"],
+        "metadata": { "notes": "Climate drivers, human impacts, mitigation/adaptation." }
+      },
+      {
+        "position": 12,
+        "module_slug": "7-science-earth-and-space-astronomy-stars-galaxies",
+        "module_title": "Astronomy: Stars & Galaxies",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS1-2"],
+        "metadata": { "notes": "Gravity, orbital mechanics, and galaxy structures." }
+      },
+      {
+        "position": 13,
+        "module_slug": "7-science-engineering-practices-data-driven-design",
+        "module_title": "Engineering: Data-Driven Design",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Criteria/constraints, quick testing, and iteration." }
+      },
+      {
+        "position": 14,
+        "module_slug": "7-science-engineering-practices-modeling-and-optimization",
+        "module_title": "Engineering: Modeling & Optimization",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Modeling design ideas and improving efficiency." }
+      },
+      {
+        "position": 15,
+        "module_slug": "7-science-engineering-practices-tradeoffs-and-constraints",
+        "module_title": "Engineering: Tradeoffs & Constraints",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Prioritizing constraints and communicating choices." }
+      }
+    ]
+  },
+  {
+    "grade_band": "8",
+    "subject": "science",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "8-science-physical-science-kinematics-and-forces",
+        "module_title": "Kinematics & Forces",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS2-2"],
+        "metadata": { "notes": "Vectors, Newton's laws applications, and motion graphs." }
+      },
+      {
+        "position": 2,
+        "module_slug": "8-science-physical-science-energy-and-heat",
+        "module_title": "Energy & Heat",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS3-1"],
+        "metadata": { "notes": "Energy transformations, efficiency, and heat transfer." }
+      },
+      {
+        "position": 3,
+        "module_slug": "8-science-physical-science-waves-and-electromagnetic-spectrum",
+        "module_title": "Waves & Electromagnetic Spectrum",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS3-1"],
+        "metadata": { "notes": "Wave models, EM spectrum, and digital signals." }
+      },
+      {
+        "position": 4,
+        "module_slug": "8-science-physical-science-chemistry-atoms-bonding-reactions",
+        "module_title": "Chemistry: Atoms, Bonding, & Reactions",
+        "strand": "Physical Science",
+        "standard_codes": ["MS-PS1-2"],
+        "metadata": { "notes": "Chemical reactions, evidence, and balancing intuition." }
+      },
+      {
+        "position": 5,
+        "module_slug": "8-science-life-science-cells-and-organelles",
+        "module_title": "Cells & Organelles",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS1-3"],
+        "metadata": { "notes": "Systems interactions and cellular processes." }
+      },
+      {
+        "position": 6,
+        "module_slug": "8-science-life-science-genetics-and-heredity",
+        "module_title": "Genetics & Heredity",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS3-2"],
+        "metadata": { "notes": "Genetic variation, mutations, and proteins." }
+      },
+      {
+        "position": 7,
+        "module_slug": "8-science-life-science-evolution-and-natural-selection",
+        "module_title": "Evolution & Natural Selection",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS4-4"],
+        "metadata": { "notes": "Adaptation models and population data cases." }
+      },
+      {
+        "position": 8,
+        "module_slug": "8-science-life-science-ecology-and-biodiversity",
+        "module_title": "Ecology & Biodiversity",
+        "strand": "Life Science",
+        "standard_codes": ["MS-LS2-3"],
+        "metadata": { "notes": "Human impacts, ecosystem services, and resilience." }
+      },
+      {
+        "position": 9,
+        "module_slug": "8-science-earth-and-space-plate-tectonics",
+        "module_title": "Plate Tectonics",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS2-3"],
+        "metadata": { "notes": "Boundary types, seismic/volcanic risk, and models." }
+      },
+      {
+        "position": 10,
+        "module_slug": "8-science-earth-and-space-earth-history",
+        "module_title": "Earth History",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS2-2"],
+        "metadata": { "notes": "Dating methods, stratigraphy, and geologic evidence." }
+      },
+      {
+        "position": 11,
+        "module_slug": "8-science-earth-and-space-weather-climate-systems",
+        "module_title": "Weather & Climate Systems",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS3-1"],
+        "metadata": { "notes": "Climate variability, greenhouse effect, and modeling." }
+      },
+      {
+        "position": 12,
+        "module_slug": "8-science-earth-and-space-astronomy-stars-galaxies",
+        "module_title": "Astronomy: Stars & Galaxies",
+        "strand": "Earth & Space Science",
+        "standard_codes": ["MS-ESS1-2"],
+        "metadata": { "notes": "Gravity, spectra, and distance/scale tools." }
+      },
+      {
+        "position": 13,
+        "module_slug": "8-science-engineering-practices-data-driven-design",
+        "module_title": "Engineering: Data-Driven Design",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Data collection, iterate, and justify design choices." }
+      },
+      {
+        "position": 14,
+        "module_slug": "8-science-engineering-practices-modeling-and-optimization",
+        "module_title": "Engineering: Modeling & Optimization",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Model evaluation and performance tradeoffs." }
+      },
+      {
+        "position": 15,
+        "module_slug": "8-science-engineering-practices-tradeoffs-and-constraints",
+        "module_title": "Engineering: Tradeoffs & Constraints",
+        "strand": "Engineering Practices",
+        "standard_codes": ["MS-ETS1-2"],
+        "metadata": { "notes": "Constraints, stakeholders, and solution comparisons." }
+      }
+    ]
   }
 ]
