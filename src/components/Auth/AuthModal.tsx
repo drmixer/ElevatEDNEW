@@ -22,7 +22,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     password: '',
     name: '',
     role: 'parent' as UserRole,
-    grade: 6,
+    grade: 1,
     age: '',
     guardianContact: '',
     parentEmail: '',
@@ -39,7 +39,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const studentSubmissionBlocked =
     !isLogin &&
     formData.role === 'student' &&
-    (!hasValidAge || (isUnder13 && !guardianConsent) || formData.parentEmail.trim().length === 0);
+    (!hasValidAge || (isUnder13 && !guardianConsent));
 
   useEffect(() => {
     if (!isOpen) {
@@ -138,7 +138,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const grades = Array.from({ length: 10 }, (_, i) => i + 3); // 3–12 emphasis
+  const grades = Array.from({ length: 12 }, (_, i) => i + 1); // Grades 1–12
   const headingId = 'auth-modal-title';
   const descriptionId = 'auth-modal-description';
 
@@ -316,7 +316,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                             </label>
                             <input
                               type="email"
-                              required
                               value={formData.parentEmail}
                               onChange={(e) => setFormData({ ...formData, parentEmail: e.target.value })}
                               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
