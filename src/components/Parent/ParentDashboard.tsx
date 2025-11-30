@@ -519,17 +519,6 @@ const ParentDashboard: React.FC = () => {
     [currentChild?.masteryBySubject],
   );
 
-  const lessonsProgressPct = computePercent(
-    currentChild?.lessonsCompletedWeek ?? 0,
-    weeklyLessonsTargetValue ?? null,
-  );
-  const minutesProgressPct = computePercent(
-    currentChild?.practiceMinutesWeek ?? 0,
-    practiceMinutesTargetValue ?? null,
-  );
-  const lessonsStatus = describeProgressStatus(lessonsProgressPct);
-  const minutesStatus = describeProgressStatus(minutesProgressPct);
-
   const childNameMap = useMemo(() => {
     const map = new Map<string, string>();
     (dashboard?.children ?? []).forEach((child) => map.set(child.id, child.name));
