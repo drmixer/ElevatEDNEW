@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { captureServerException, captureServerMessage } from './monitoring.js';
+import { MARKETING_KNOWLEDGE, MARKETING_SYSTEM_PROMPT } from '../shared/marketingContent.js';
 
 type TutorMode = 'learning' | 'marketing';
 
@@ -73,8 +74,9 @@ class AiRequestError extends Error {
 }
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-const PRIMARY_MODEL = 'deepseek/deepseek-chat-v3-0324:free';
-const FALLBACK_MODEL = 'z-ai/glm-4.5-air:free';
+// Keep the marketing assistant aligned with the tutor: OpenRouter + Mistral 7B Instruct (free).
+const PRIMARY_MODEL = 'mistralai/mistral-7b-instruct:free';
+const FALLBACK_MODEL = 'mistralai/mistral-7b-instruct:free';
 
 const MAX_PROMPT_CHARS = 1200;
 const MAX_SYSTEM_PROMPT_CHARS = 1400;
@@ -241,11 +243,7 @@ const baseTutorSystemPrompt = [
   'Politely refuse violence, self-harm, bullying, pranks, politics, or requests for contact/location info. Redirect the learner to a trusted adult when something sounds unsafe or personal.',
 ].join(' ');
 
-const marketingSystemPrompt = [
-  'You are ElevatED, the official marketing assistant for ElevatED - an adaptive K-12 learning platform.',
-  'Keep replies concise (2-3 sentences), warm, encouraging, and confident.',
-  'Use only the provided product facts. If unsure, say so and offer to connect them with support.',
-].join(' ');
+const marketingSystemPrompt = MARKETING_SYSTEM_PROMPT;
 
 const tutorUsage = new Map<string, { date: string; count: number }>();
 
@@ -495,7 +493,11 @@ const buildTutorContext = (payload: TutorRequestBody, studentContext?: StudentCo
   }
 
   const systemPrompt = resolveSystemPrompt(mode, payload.systemPrompt);
-  const knowledge = payload.knowledge ? sanitizeText(payload.knowledge, MAX_KNOWLEDGE_CHARS) : undefined;
+  const marketingKnowledge =
+    mode === 'marketing'
+      ? [MARKETING_KNOWLEDGE, payload.knowledge].filter(Boolean).join('\n\n')
+      : payload.knowledge;
+  const knowledge = marketingKnowledge ? sanitizeText(marketingKnowledge, MAX_KNOWLEDGE_CHARS) : undefined;
 
   return { prompt, systemPrompt, mode, knowledge, studentContext };
 };
