@@ -80,3 +80,25 @@ export const logAdminAuditEvent = async (
     console.warn('[Admin] Failed to record audit event', error);
   }
 };
+
+export type OpsMetricsSnapshot = {
+  windowMs: number;
+  totals: Record<'tutor_success' | 'tutor_error' | 'tutor_safety_block' | 'tutor_plan_limit' | 'api_failure' | 'api_slow', number>;
+  topSafetyReasons: Array<{ label: string; count: number }>;
+  topPlanLimitReasons: Array<{ label: string; count: number }>;
+  apiFailuresByRoute: Array<{ label: string; count: number }>;
+  recent: Array<{
+    type: string;
+    reason?: string | null;
+    route?: string | null;
+    status?: number | null;
+    durationMs?: number | null;
+    plan?: string | null;
+    timestamp: number;
+  }>;
+};
+
+export const fetchOpsMetrics = async (): Promise<OpsMetricsSnapshot> => {
+  const response = await authenticatedFetch('/api/v1/admins/ops-metrics');
+  return handleApiResponse<OpsMetricsSnapshot>(response);
+};

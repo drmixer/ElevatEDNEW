@@ -10,6 +10,8 @@ import {
   isImportProviderId,
   type ImportProviderId,
 } from '../shared/import-providers.js';
+import { findStudentAvatar, findTutorAvatar, isStudentAvatarUnlocked } from '../shared/avatarManifests.js';
+import { tutorNameErrorMessage, validateTutorName } from '../shared/nameSafety.js';
 import {
   importFederalMapping,
   type FederalMapping,
@@ -56,6 +58,9 @@ import {
   grantBypassSubscription,
 } from './billing.js';
 import { NotificationScheduler, notifyAssignmentCreated } from './notifications.js';
+import { HttpError } from './httpError.js';
+import { listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
+import { getOpsSnapshot } from './opsMetrics.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -66,19 +71,6 @@ const API_PREFIX = '/api';
 const VERSIONED_PREFIX = `${API_PREFIX}/${API_VERSION}`;
 const DEFAULT_PREMIUM_PLAN_SLUG = process.env.DEFAULT_PREMIUM_PLAN_SLUG ?? 'family-premium';
 const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:5173';
-
-class HttpError extends Error {
-  status: number;
-  code: string;
-  details?: unknown;
-
-  constructor(status: number, message: string, code = 'bad_request', details?: unknown) {
-    super(message);
-    this.status = status;
-    this.code = code;
-    this.details = details;
-  }
-}
 
 type ApiContext = {
   serviceSupabase: SupabaseClient;
@@ -153,7 +145,7 @@ const createModuleAssignment = async (
 
   const { data: moduleRow, error: moduleError } = await supabase
     .from('modules')
-    .select('id, title')
+    .select('id, title, slug, metadata')
     .eq('id', payload.moduleId)
     .maybeSingle();
 
@@ -180,6 +172,36 @@ const createModuleAssignment = async (
     ? payload.title.trim()
     : `${moduleRow.title} module focus`;
 
+  // Guardrail: block assigning modules more than one unit ahead of the adaptive path when data is available.
+  const learningPaths = await Promise.all(
+    studentIds.map(async (studentId) => {
+      const { data, error } = await supabase
+        .from('student_profiles')
+        .select('learning_path')
+        .eq('id', studentId)
+        .maybeSingle();
+      if (error) {
+        console.warn('[assignments] unable to read learning_path for guardrail', { studentId, error });
+        return null;
+      }
+      return (data?.learning_path as unknown) ?? null;
+    }),
+  );
+
+  const moduleSlug = moduleRow.slug as string;
+  const guardrailBreaches = learningPaths.some((path) => {
+    if (!Array.isArray(path)) return false;
+    const normalized = path as Array<{ moduleSlug?: string | null; status?: string | null }>;
+    const currentIndex = normalized.findIndex((item) => item.status === 'in_progress' || item.status === 'not_started');
+    const targetIndex = normalized.findIndex((item) => item.moduleSlug === moduleSlug);
+    if (targetIndex === -1 || currentIndex === -1) return false;
+    return targetIndex - currentIndex > 1;
+  });
+
+  if (guardrailBreaches) {
+    throw new HttpError(400, 'Assignment is too far ahead of the adaptive path.', 'too_far_ahead');
+  }
+
   const { data: assignmentRow, error: assignmentError } = await supabase
     .from('assignments')
     .insert({
@@ -192,6 +214,9 @@ const createModuleAssignment = async (
         module_id: payload.moduleId,
         module_title: moduleRow.title,
         assigned_by_role: payload.creatorRole ?? 'parent',
+        updated_by: payload.creatorId,
+        updated_at: new Date().toISOString(),
+        source: payload.creatorRole ?? 'parent',
       },
     })
     .select('id')
@@ -226,7 +251,12 @@ const createModuleAssignment = async (
     metadata: {
       module_id: payload.moduleId,
       module_title: moduleRow.title,
+      updated_by: payload.creatorId,
+      updated_at: new Date().toISOString(),
+      source: payload.creatorRole ?? 'parent',
     },
+    updated_by: payload.creatorId,
+    audit_source: payload.creatorRole ?? 'parent',
   }));
 
   const { data: assignedRows, error: assignError } = await supabase
@@ -780,6 +810,126 @@ export const createApiHandler = (context: ApiContext) => {
       });
     }
 
+    if (method === 'POST' && path === '/profile/tutor') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{ name?: string | null; avatarId?: string | null }>(req);
+        const updates: Record<string, string | null> = {};
+
+        if ('name' in body) {
+          const rawName = typeof body.name === 'string' ? body.name.trim() : '';
+          if (!rawName) {
+            updates.tutor_name = null;
+          } else {
+            const result = validateTutorName(rawName);
+            if (!result.ok) {
+              throw new HttpError(400, tutorNameErrorMessage(result), 'invalid_tutor_name');
+            }
+            updates.tutor_name = result.value;
+          }
+        }
+
+        if ('avatarId' in body) {
+          const avatarId = typeof body.avatarId === 'string' ? body.avatarId : null;
+          if (avatarId) {
+            const avatar = findTutorAvatar(avatarId);
+            if (!avatar) {
+              throw new HttpError(400, 'Unknown tutor avatar option.', 'invalid_tutor_avatar');
+            }
+            updates.tutor_avatar_id = avatar.id;
+          } else {
+            updates.tutor_avatar_id = null;
+          }
+        }
+
+        if (!Object.keys(updates).length) {
+          throw new HttpError(400, 'Nothing to update.', 'invalid_payload');
+        }
+
+        const { error } = await supabase.from('student_profiles').update(updates).eq('id', actor.id);
+        if (error) {
+          throw new HttpError(500, 'Failed to update tutor preferences.', 'tutor_update_failed', error);
+        }
+
+        sendJson(
+          res,
+          200,
+          {
+            tutorName: 'tutor_name' in updates ? updates.tutor_name : undefined,
+            tutorAvatarId: 'tutor_avatar_id' in updates ? updates.tutor_avatar_id : undefined,
+          },
+          API_VERSION,
+        );
+      });
+    }
+
+    if (method === 'POST' && path === '/profile/student-avatar') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{ avatarId?: string | null }>(req);
+        const avatarId = typeof body.avatarId === 'string' ? body.avatarId.trim() : '';
+        if (!avatarId) {
+          throw new HttpError(400, 'avatarId is required.', 'invalid_avatar');
+        }
+
+        const avatar = findStudentAvatar(avatarId);
+        if (!avatar) {
+          throw new HttpError(400, 'Unknown avatar option.', 'invalid_avatar');
+        }
+
+        const { data: studentRow, error: studentError } = await supabase
+          .from('student_profiles')
+          .select('xp, streak_days')
+          .eq('id', actor.id)
+          .maybeSingle();
+
+        if (studentError) {
+          throw new HttpError(500, 'Failed to load student profile.', 'profile_load_failed', studentError);
+        }
+
+        if (!studentRow) {
+          throw new HttpError(404, 'Student profile not found.', 'not_found');
+        }
+
+        const progress = {
+          xp: (studentRow.xp as number | null) ?? 0,
+          streakDays: (studentRow.streak_days as number | null) ?? 0,
+        };
+
+        if (!isStudentAvatarUnlocked(avatar, progress)) {
+          throw new HttpError(
+            403,
+            'That avatar is locked. Keep up your streak or XP to unlock it.',
+            'avatar_locked',
+          );
+        }
+
+        const { error } = await supabase
+          .from('student_profiles')
+          .update({ student_avatar_id: avatar.id })
+          .eq('id', actor.id);
+
+        if (error) {
+          throw new HttpError(500, 'Failed to update avatar.', 'avatar_update_failed', error);
+        }
+
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ avatar_url: avatar.id })
+          .eq('id', actor.id);
+
+        if (profileError) {
+          console.warn('[api] profile avatar update failed', profileError);
+        }
+
+        sendJson(res, 200, { avatarId: avatar.id }, API_VERSION);
+      });
+    }
+
     if (method === 'GET' && path === '/recommendations') {
       return handleRoute(async () => {
         const moduleId = parseOptionalPositiveInt(url.query.moduleId, 'moduleId');
@@ -1068,7 +1218,8 @@ export const createApiHandler = (context: ApiContext) => {
     if (method === 'GET' && path === '/modules') {
       return handleRoute(async () => {
         const filters = parseModuleFilters(url.query);
-        const result = await listModules(supabase, filters);
+        // Use service role client so public catalog reads aren’t blocked by RLS.
+        const result = await listModules(serviceSupabase, filters);
         sendJson(res, 200, result, API_VERSION);
       });
     }
@@ -1080,7 +1231,7 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(404, 'Not found.', 'not_found');
         }
         const lessonId = parsePositiveIntParam(parts[1], 'lessonId');
-        const detail = await getLessonDetail(supabase, lessonId);
+        const detail = await getLessonDetail(serviceSupabase, lessonId);
         if (!detail) {
           throw new HttpError(404, 'Lesson not found.', 'not_found');
         }
@@ -1158,6 +1309,44 @@ export const createApiHandler = (context: ApiContext) => {
               'invalid_payload',
             );
           }
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/tutor-reports') {
+        return handleRoute(async () => {
+          const status = parseReportStatus(typeof url.query.status === 'string' ? url.query.status : undefined);
+          const limit =
+            typeof url.query.limit === 'string' && !Number.isNaN(Number(url.query.limit))
+              ? Number(url.query.limit)
+              : 50;
+          const reports = await listTutorReports(serviceSupabase, { status, limit });
+          sendJson(res, 200, { reports }, API_VERSION);
+        });
+      }
+
+      if (method === 'POST' && path === '/admins/tutor-reports/update') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ id?: number; status?: string }>(req);
+          if (typeof body.id !== 'number' || body.id <= 0) {
+            throw new HttpError(400, 'id is required to update a tutor report.', 'invalid_payload');
+          }
+          const status = parseReportStatus(body.status);
+          if (!status) {
+            throw new HttpError(400, 'status is required.', 'invalid_payload');
+          }
+          const updated = await updateTutorReportStatus(serviceSupabase, body.id, status, admin.id);
+          sendJson(res, 200, { report: updated }, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/ops-metrics') {
+        return handleRoute(async () => {
+          const windowMs =
+            typeof url.query.windowMs === 'string' && !Number.isNaN(Number(url.query.windowMs))
+              ? Number(url.query.windowMs)
+              : undefined;
+          const snapshot = getOpsSnapshot(windowMs);
+          sendJson(res, 200, snapshot, API_VERSION);
         });
       }
 
@@ -1316,7 +1505,7 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(404, 'Not found.', 'not_found');
         }
         const moduleId = parsePositiveIntParam(parts[1], 'Module id');
-        const detail = await getModuleAssessment(supabase, moduleId);
+        const detail = await getModuleAssessment(serviceSupabase, moduleId);
         if (!detail) {
           throw new HttpError(404, 'Module assessment not found.', 'not_found');
         }
@@ -1331,7 +1520,8 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(404, 'Not found.', 'not_found');
         }
         const moduleId = parsePositiveIntParam(parts[1], 'Module id');
-        const detail = await getModuleDetail(supabase, moduleId);
+        // Use service role client so public catalog reads aren’t blocked by RLS.
+        const detail = await getModuleDetail(serviceSupabase, moduleId);
         if (!detail) {
           throw new HttpError(404, 'Module not found.', 'not_found');
         }

@@ -1,0 +1,23 @@
+{
+  "math": {
+    "3": { "minModules": 3, "minDiagnostics": 1 },
+    "4": { "minModules": 3, "minDiagnostics": 1 },
+    "5": { "minModules": 3, "minDiagnostics": 1 },
+    "6": { "minModules": 4, "minDiagnostics": 1 },
+    "7": { "minModules": 4, "minDiagnostics": 1 },
+    "8": { "minModules": 4, "minDiagnostics": 1 }
+  },
+  "ela": {
+    "3": { "minModules": 3, "minDiagnostics": 1 },
+    "4": { "minModules": 3, "minDiagnostics": 1 },
+    "5": { "minModules": 3, "minDiagnostics": 1 },
+    "6": { "minModules": 4, "minDiagnostics": 1 },
+    "7": { "minModules": 4, "minDiagnostics": 1 },
+    "8": { "minModules": 4, "minDiagnostics": 1 }
+  },
+  "science": {
+    "6": { "minModules": 2, "minDiagnostics": 1 },
+    "7": { "minModules": 2, "minDiagnostics": 1 },
+    "8": { "minModules": 2, "minDiagnostics": 1 }
+  }
+}

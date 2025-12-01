@@ -1,6 +1,7 @@
 import { performance } from 'node:perf_hooks';
 
 import { captureServerMessage } from './monitoring.js';
+import { recordOpsEvent } from './opsMetrics.js';
 
 const parseNumberEnv = (value: string | undefined, fallback: number): number => {
   if (!value) return fallback;
@@ -55,6 +56,23 @@ export const recordApiTiming = (
   console.log(
     `[metrics] ${route} -> ${statusCode} in ${Math.round(roundedDuration)}ms`,
   );
+
+  if (statusCode >= 500) {
+    recordOpsEvent({
+      type: 'api_failure',
+      route,
+      status: statusCode,
+      durationMs: roundedDuration,
+    });
+  }
+  if (roundedDuration >= SLOW_THRESHOLD_MS) {
+    recordOpsEvent({
+      type: 'api_slow',
+      route,
+      status: statusCode,
+      durationMs: roundedDuration,
+    });
+  }
 
   captureServerMessage('api_timing', context, roundedDuration >= SLOW_THRESHOLD_MS ? 'warning' : 'info');
 };

@@ -382,7 +382,7 @@ const ensureTopicId = async (
         slug: targetSlug,
         description: module.summary ?? module.description ?? null,
       },
-      { onConflict: 'subject_id,slug' },
+      { onConflict: 'subject_id,name' },
     )
     .select('id')
     .single();

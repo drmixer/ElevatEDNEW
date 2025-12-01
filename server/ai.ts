@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { captureServerException, captureServerMessage } from './monitoring.js';
+import { recordOpsEvent } from './opsMetrics.js';
 import { MARKETING_KNOWLEDGE, MARKETING_SYSTEM_PROMPT } from '../shared/marketingContent.js';
 
 type TutorMode = 'learning' | 'marketing';
@@ -31,6 +32,13 @@ type StudentContext = {
   activeLesson?: LessonSnapshot | null;
   nextLesson?: LessonSnapshot | null;
   masteryBySubject: Array<{ subject: string; mastery: number }>;
+  chatMode?: 'guided_only' | 'guided_preferred' | 'free';
+  chatModeLocked?: boolean;
+  studyMode?: 'catch_up' | 'keep_up' | 'get_ahead';
+  studyModeLocked?: boolean;
+  allowTutor?: boolean;
+  tutorLessonOnly?: boolean;
+  tutorDailyLimit?: number | null;
 };
 
 type LessonSnapshot = {
@@ -228,6 +236,9 @@ const buildLearningGuardrails = (context?: StudentContext): string | null => {
     gradeBandGuidance(context?.grade),
     subjectGuidance(context?.activeLesson?.subject ?? context?.nextLesson?.subject ?? null),
     'Always offer a hint or step-by-step nudge before giving the full solution. If the learner insists on the full answer, keep it concise and still explain why it works.',
+    context?.tutorLessonOnly
+      ? 'Lesson-only mode is enabled. Stay on the active lesson/module and decline unrelated requests, asking the learner to return to their current lesson.'
+      : null,
   ].filter(Boolean);
   if (!snippets.length) {
     return null;
@@ -276,14 +287,29 @@ const enforceDailyTutorLimit = (
   usageKey: string,
   planSlug?: string | null,
 ): number | null => {
-  if (!limit || limit === 'unlimited') {
+  if (limit === null || limit === undefined || limit === 'unlimited') {
     return null;
+  }
+
+  if (typeof limit === 'number' && limit <= 0) {
+    captureServerMessage('[ai] tutor disabled by limit', { usageKey, plan: planSlug, limit }, 'warning');
+    recordOpsEvent({
+      type: 'tutor_plan_limit',
+      reason: 'disabled',
+      plan: planSlug ?? null,
+    });
+    throw new AiRequestError(403, 'Your grown-up turned off tutor chats for now. Ask them if you need it back on.');
   }
 
   const used = readUsageCount(usageKey);
   if (used >= limit) {
     const planLabel = planSlug ? ` on your ${planSlug.replace(/[-_]/g, ' ')} plan` : '';
     captureServerMessage('[ai] tutor daily limit reached', { usageKey, plan: planSlug, limit }, 'warning');
+    recordOpsEvent({
+      type: 'tutor_plan_limit',
+      reason: 'daily_limit',
+      plan: planSlug ?? null,
+    });
     throw new AiRequestError(
       402,
       `You've reached today's AI tutor limit${planLabel}. Upgrade to get more help or try again tomorrow.`,
@@ -294,13 +320,32 @@ const enforceDailyTutorLimit = (
 };
 
 const recordTutorUsage = (limit: DailyLimit, usageKey: string): number | null => {
-  if (!limit || limit === 'unlimited') {
+  if (limit === null || limit === undefined || limit === 'unlimited') {
     return null;
+  }
+  if (typeof limit === 'number' && limit <= 0) {
+    return 0;
   }
 
   const next = bumpUsageCount(usageKey);
   return Math.max(0, limit - next);
 };
+
+const mergeTutorLimits = (planLimit: DailyLimit, learnerLimit?: number | null): DailyLimit => {
+  if (learnerLimit == null || Number.isNaN(learnerLimit)) {
+    return planLimit ?? null;
+  }
+  const normalizedLearnerLimit = Math.max(0, learnerLimit);
+  if (!planLimit || planLimit === 'unlimited') {
+    return normalizedLearnerLimit;
+  }
+  if (typeof planLimit === 'number') {
+    return Math.min(planLimit, normalizedLearnerLimit);
+  }
+  return normalizedLearnerLimit;
+};
+
+export { mergeTutorLimits };
 
 const resolveSystemPrompt = (mode: TutorMode, requestedPrompt?: string): string => {
   const fallback = mode === 'marketing' ? marketingSystemPrompt : baseTutorSystemPrompt;
@@ -347,6 +392,21 @@ const formatStudentContext = (context: StudentContext | undefined): string => {
       .join(' | ');
     lines.push(nextSummary);
   }
+  if (context.chatMode) {
+    lines.push(`Chat mode: ${context.chatMode}${context.chatModeLocked ? ' (parent locked)' : ''}`);
+  }
+  if (context.studyMode) {
+    lines.push(`Study mode: ${context.studyMode}`);
+  }
+  if (context.allowTutor === false) {
+    lines.push('Tutor access: disabled by parent/guardian.');
+  }
+  if (context.tutorLessonOnly) {
+    lines.push('Tutor scope: lesson-only; decline unrelated prompts.');
+  }
+  if (typeof context.tutorDailyLimit === 'number') {
+    lines.push(`Tutor cap: ${context.tutorDailyLimit} chats/day.`);
+  }
 
   return lines.join('\n');
 };
@@ -363,7 +423,7 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
   ] = await Promise.all([
     supabase
       .from('student_profiles')
-      .select('grade, level, strengths, weaknesses, learning_path')
+      .select('grade, level, strengths, weaknesses, learning_path, learning_style')
       .eq('id', studentId)
       .maybeSingle(),
     supabase
@@ -406,6 +466,65 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
   const weaknesses = Array.isArray(profile?.weaknesses)
     ? profile?.weaknesses.filter((entry): entry is string => typeof entry === 'string')
     : [];
+  const learningStyle = profile?.learning_style as Record<string, unknown> | null | undefined;
+  const resolveChatMode = (): 'guided_only' | 'guided_preferred' | 'free' => {
+    const raw = learningStyle?.chatMode ?? learningStyle?.chat_mode ?? learningStyle?.mode;
+    if (raw === 'guided_only' || raw === 'guided_preferred' || raw === 'free') return raw;
+    if ((profile?.grade as number | null) != null) {
+      const g = (profile?.grade as number) ?? 0;
+      if (g <= 3) return 'guided_only';
+      if (g <= 5) return 'guided_preferred';
+    }
+    return 'free';
+  };
+  const chatMode = resolveChatMode();
+  const chatModeLocked =
+    typeof learningStyle?.chatModeLocked === 'boolean'
+      ? (learningStyle?.chatModeLocked as boolean)
+      : typeof learningStyle?.chat_mode_locked === 'boolean'
+        ? (learningStyle?.chat_mode_locked as boolean)
+        : false;
+  const studyModeRaw = learningStyle?.studyMode ?? learningStyle?.study_mode;
+  const studyMode =
+    studyModeRaw === 'catch_up' || studyModeRaw === 'keep_up' || studyModeRaw === 'get_ahead'
+      ? studyModeRaw
+      : undefined;
+  const studyModeLocked =
+    typeof learningStyle?.studyModeLocked === 'boolean'
+      ? (learningStyle?.studyModeLocked as boolean)
+      : typeof learningStyle?.study_mode_locked === 'boolean'
+        ? (learningStyle?.study_mode_locked as boolean)
+        : false;
+  const allowTutorRaw =
+    learningStyle?.allowTutor ??
+    learningStyle?.allow_tutor ??
+    learningStyle?.ai_enabled ??
+    learningStyle?.aiEnabled;
+  const allowTutor = typeof allowTutorRaw === 'boolean' ? (allowTutorRaw as boolean) : true;
+  const lessonOnlyRaw =
+    learningStyle?.tutorLessonOnly ??
+    learningStyle?.tutor_lesson_only ??
+    learningStyle?.lessonOnly ??
+    learningStyle?.lesson_only ??
+    learningStyle?.limitTutorToLessonContext ??
+    learningStyle?.ai_lesson_only;
+  const tutorLessonOnly =
+    typeof lessonOnlyRaw === 'boolean'
+      ? (lessonOnlyRaw as boolean)
+      : (profile?.grade as number | null) != null && (profile?.grade as number) < 13;
+  const tutorDailyLimitRaw =
+    learningStyle?.tutorDailyLimit ??
+    learningStyle?.tutor_daily_limit ??
+    learningStyle?.maxTutorChatsPerDay ??
+    learningStyle?.max_tutor_chats_per_day ??
+    learningStyle?.dailyTutorLimit ??
+    learningStyle?.daily_tutor_limit;
+  const tutorDailyLimit =
+    typeof tutorDailyLimitRaw === 'number' && Number.isFinite(tutorDailyLimitRaw)
+      ? (tutorDailyLimitRaw as number)
+      : typeof tutorDailyLimitRaw === 'string' && Number.isFinite(Number.parseInt(tutorDailyLimitRaw, 10))
+        ? Number.parseInt(tutorDailyLimitRaw, 10)
+        : null;
 
   const activeProgress = (progressRows ?? []).find((row) => row?.lessons?.title) ?? null;
   const activeLesson: LessonSnapshot | null = activeProgress
@@ -482,6 +601,13 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
     activeLesson,
     nextLesson,
     masteryBySubject,
+    chatMode,
+    chatModeLocked,
+    studyMode,
+    studyModeLocked,
+    allowTutor,
+    tutorLessonOnly,
+    tutorDailyLimit,
   };
 };
 
@@ -530,6 +656,46 @@ const buildMessages = (context: TutorContext) => {
       messages.push({
         role: 'system',
         content: guardrails,
+      });
+    }
+    const chatMode = context.studentContext?.chatMode;
+    if (chatMode === 'guided_only') {
+      messages.push({
+        role: 'system',
+        content:
+          'Chat mode: guided_only. Ask 1-2 clarifying questions before longer answers. Keep answers short (2-3 steps). If the prompt is off-topic or personal, politely decline and ask the learner to pick a different guided prompt; remind them to ask a trusted adult for safety issues.',
+      });
+    } else if (chatMode === 'guided_preferred') {
+      messages.push({
+        role: 'system',
+        content:
+          'Chat mode: guided_preferred. Lead with a concise answer and one clarifying question. If the request is off-topic/personal, decline and suggest choosing a guided prompt. Keep responses brief (2-3 steps).',
+      });
+    }
+    const studyMode = context.studentContext?.studyMode;
+    if (studyMode === 'catch_up') {
+      messages.push({
+        role: 'system',
+        content:
+          'Study mode: catch_up. Prioritize remediation, weaker skills, and gentle reassurance. Keep responses short and suggest one review action.',
+      });
+    } else if (studyMode === 'get_ahead') {
+      messages.push({
+        role: 'system',
+        content:
+          'Study mode: get_ahead. Offer extension or stretch practice within safe bounds. Keep tone upbeat but concise; do not unlock unsafe or off-grade content.',
+      });
+    } else if (studyMode === 'keep_up') {
+      messages.push({
+        role: 'system',
+        content:
+          'Study mode: keep_up. Stay balanced; keep answers concise and on-grade.',
+      });
+    }
+    if (context.studentContext?.studyModeLocked) {
+      messages.push({
+        role: 'system',
+        content: 'Study mode is locked by a parent/teacher—do not switch tone beyond the assigned mode.',
       });
     }
   }
@@ -586,6 +752,11 @@ const enforceRateLimit = (
   const { allowed, remaining } = limiter.check(key);
   if (!allowed) {
     captureServerMessage('[ai] rate limit hit', { ...context, remaining }, 'warning');
+    recordOpsEvent({
+      type: 'tutor_plan_limit',
+      reason: 'rate_limit',
+      plan: (context?.plan as string | null) ?? null,
+    });
     throw new AiRequestError(429, 'Too many AI requests. Please wait a moment and try again.');
   }
 };
@@ -608,23 +779,23 @@ export const handleTutorRequest = async (
   enforceRateLimit(
     hashedUser ? `user:${hashedUser}` : null,
     learnerLimiter,
-    { hashedUser, mode: payload.mode ?? 'learning' },
+    { hashedUser, mode: payload.mode ?? 'learning', plan: opts.plan?.slug },
   );
 
   if (payload.mode === 'learning' && opts.role && opts.role !== 'student') {
     throw new AiRequestError(403, 'Learning assistant is only available for student accounts.');
   }
 
-  const tutorLimit = payload.mode === 'learning' ? opts.plan?.tutorDailyLimit ?? null : null;
+  let tutorLimit: DailyLimit = payload.mode === 'learning' ? opts.plan?.tutorDailyLimit ?? null : null;
   if (payload.mode === 'learning' && opts.plan && opts.plan.aiAccess === false) {
     captureServerMessage('[ai] plan gated', { plan: opts.plan.slug, hashedUser }, 'warning');
+    recordOpsEvent({
+      type: 'tutor_plan_limit',
+      reason: 'plan_gated',
+      plan: opts.plan.slug ?? null,
+    });
     throw new AiRequestError(402, 'Upgrade required to access the AI assistant.', 'payment_required');
   }
-
-  const remainingAllowance =
-    payload.mode === 'learning'
-      ? enforceDailyTutorLimit(tutorLimit, usageKey, opts.plan?.slug ?? null)
-      : null;
 
   const studentContext =
     payload.mode === 'marketing'
@@ -633,23 +804,57 @@ export const handleTutorRequest = async (
         ? await fetchStudentContext(supabase, opts.userId)
         : undefined;
 
+  if (payload.mode === 'learning') {
+    tutorLimit = mergeTutorLimits(tutorLimit, studentContext?.tutorDailyLimit ?? null);
+  }
+
+  if (payload.mode === 'learning' && studentContext?.allowTutor === false) {
+    captureServerMessage('tutor_disabled_by_parent', {
+      hashedUser,
+      hashedIp,
+      plan: opts.plan?.slug,
+      tutorLimit,
+    });
+    throw new AiRequestError(403, 'Your grown-up turned off tutor chats for now. Ask them if you need it back on.');
+  }
+
+  const remainingAllowance =
+    payload.mode === 'learning'
+      ? enforceDailyTutorLimit(tutorLimit, usageKey, opts.plan?.slug ?? null)
+      : null;
+
   const tutorContext = buildTutorContext(payload, studentContext);
 
   const safetyIssue = detectUnsafePrompt(tutorContext.prompt, studentContext);
   if (safetyIssue) {
-    captureServerMessage('[ai] tutor safety_refusal', {
-      mode: tutorContext.mode,
-      reason: safetyIssue,
-      hashedUser,
-      hashedIp,
-      plan: opts.plan?.slug,
-      grade: studentContext?.grade,
-    });
-    return {
-      message: buildSafetyRefusal(safetyIssue, studentContext),
-      model: 'guardrail',
-      remaining: remainingAllowance,
-      limit: payload.mode === 'learning' ? tutorLimit ?? null : null,
+    if (studentContext?.chatMode === 'guided_only' || studentContext?.chatMode === 'guided_preferred') {
+      captureServerMessage('chat_guided_guardrail_triggered', {
+        reason: safetyIssue,
+        chatMode: studentContext.chatMode,
+        grade: studentContext.grade,
+        hashedUser,
+        hashedIp,
+        plan: opts.plan?.slug,
+      });
+    }
+      captureServerMessage('[ai] tutor safety_refusal', {
+        mode: tutorContext.mode,
+        reason: safetyIssue,
+        hashedUser,
+        hashedIp,
+        plan: opts.plan?.slug,
+        grade: studentContext?.grade,
+      });
+      recordOpsEvent({
+        type: 'tutor_safety_block',
+        reason: safetyIssue,
+        plan: opts.plan?.slug ?? null,
+      });
+      return {
+        message: buildSafetyRefusal(safetyIssue, studentContext),
+        model: 'guardrail',
+        remaining: remainingAllowance,
+        limit: payload.mode === 'learning' ? tutorLimit ?? null : null,
       plan: payload.mode === 'learning' ? opts.plan?.slug ?? null : null,
     };
   }
@@ -679,6 +884,10 @@ export const handleTutorRequest = async (
         responseChars: result.message.length,
         plan: opts.plan?.slug,
       });
+      recordOpsEvent({
+        type: 'tutor_success',
+        plan: opts.plan?.slug ?? null,
+      });
     } catch (primaryError) {
       captureServerException(primaryError, { model: PRIMARY_MODEL, mode: tutorContext.mode });
       const fallback = await callOpenRouter(tutorContext, FALLBACK_MODEL, apiKey);
@@ -690,6 +899,10 @@ export const handleTutorRequest = async (
         hashedIp,
         responseChars: fallback.message.length,
         plan: opts.plan?.slug,
+      });
+      recordOpsEvent({
+        type: 'tutor_success',
+        plan: opts.plan?.slug ?? null,
       });
     }
 
@@ -717,6 +930,18 @@ export const handleTutorRequest = async (
     } else {
       captureServerMessage('[ai] tutor request blocked', context, status >= 500 ? 'error' : 'warning');
     }
+    recordOpsEvent({
+      type: 'tutor_error',
+      plan: opts.plan?.slug ?? null,
+      reason:
+        status === 402
+          ? 'payment_required'
+          : status === 403
+            ? 'forbidden'
+            : status === 429
+              ? 'rate_limit'
+              : 'error',
+    });
     if (error instanceof AiRequestError) {
       throw error;
     }

@@ -1,23 +1,68 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Send, X, Bot, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, ShieldCheck, Flag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student, Subject } from '../../types';
 import getTutorResponse from '../../services/getTutorResponse';
 import trackEvent from '../../lib/analytics';
+import { TUTOR_AVATARS } from '../../../shared/avatarManifests';
+import { updateLearningPreferences } from '../../services/profileService';
+import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
+import { fetchReflections } from '../../services/reflectionService';
+import { submitTutorAnswerReport, type TutorReportReason } from '../../services/tutorReportService';
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
   const student = user as Student;
+  const tutorAvatar = useMemo(
+    () => TUTOR_AVATARS.find((avatar) => avatar.id === student.tutorAvatarId) ?? TUTOR_AVATARS[0],
+    [student.tutorAvatarId],
+  );
+  const tutorPalette =
+    tutorAvatar?.palette ?? { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+  const tutorDisplayName = student.tutorName?.trim() || 'Learning Assistant';
+  const autoChatMode: 'guided_only' | 'guided_preferred' | 'free' =
+    student.grade <= 3 ? 'guided_only' : student.grade <= 5 ? 'guided_preferred' : 'free';
+  const tutorDisabled = student.learningPreferences.allowTutor === false;
+  const lessonOnlyMode =
+    student.learningPreferences.tutorLessonOnly ??
+    (student.grade > 0 && student.grade < 13 ? true : false);
+  const [chatMode, setChatMode] = useState<'guided_only' | 'guided_preferred' | 'free'>(
+    student.learningPreferences.chatMode ?? autoChatMode,
+  );
+  const chatModeLocked = student.learningPreferences.chatModeLocked ?? false;
+  const [guidedCardUsed, setGuidedCardUsed] = useState(false);
+  const tutorToneDescriptor = useMemo(() => {
+    switch (tutorAvatar?.tone) {
+      case 'calm':
+        return 'I keep answers calm and patient.';
+      case 'bold':
+        return 'Expect upbeat energy and quick encouragement.';
+      case 'structured':
+        return 'I guide you step by step with clear checkpoints.';
+      case 'concise':
+        return 'I stay crisp and to the point with minimal fluff.';
+      default:
+        return 'I’ll cheer you on with short encouragement.';
+    }
+  }, [tutorAvatar?.tone]);
+  const buildIntroMessage = useCallback(() => {
+    const preferredName = student.tutorName?.trim();
+    const introName =
+      preferredName && preferredName.length ? `${preferredName}, your personal learning guide` : 'your personal learning assistant';
+    const strengths = student.strengths[0] || 'your current subjects';
+    const safetyLine = 'I stay school-safe, will not help with cheating, and I do not replace your teacher';
+    return `Hi there! I'm ${introName}. I can help with ${strengths}, study tips, or motivation. ${tutorToneDescriptor} ${safetyLine}. What would you like to work on today?`;
+  }, [student.strengths, student.tutorName, tutorToneDescriptor]);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
       id: '1',
-      content: `Hi there! I'm your personal learning assistant. I can help with ${student.strengths[0] || 'your current subjects'}, study tips, or motivation. I stay school-safe and focused on your lessons, and I’ll stick to the current module you’re on. What would you like to work on today?`,
+      content: buildIntroMessage(),
       isUser: false,
       timestamp: new Date(),
       role: 'assistant',
-    }
+    },
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -35,15 +80,147 @@ const LearningAssistant: React.FC = () => {
     moduleTitle?: string | null;
     subject?: Subject | string | null;
   } | null>(null);
+  const conversationId = useRef<string>(`conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
   const [showExplainModal, setShowExplainModal] = useState(false);
   const assistantWindowRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [chatModeSaving, setChatModeSaving] = useState(false);
+  const [explainerSource, setExplainerSource] = useState<'first_run' | 'header' | 'guardrail' | null>(null);
+  const [quizChoice, setQuizChoice] = useState<string | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+  const [recentReflections, setRecentReflections] = useState<
+    Array<{ id: string; responseText: string; createdAt: Date }>
+  >([]);
+  const [hintMessages, setHintMessages] = useState(0);
+  const [confusionCount, setConfusionCount] = useState(0);
+  const [reflectionPrompted, setReflectionPrompted] = useState(false);
+  const [reportTarget, setReportTarget] = useState<{ messageId?: string; answer: string } | null>(null);
+  const [reportReason, setReportReason] = useState<TutorReportReason>('incorrect');
+  const [reportNotes, setReportNotes] = useState('');
+  const [reportError, setReportError] = useState<string | null>(null);
+  const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [reportSuccess, setReportSuccess] = useState(false);
+  const clarifierChips = useMemo(() => {
+    const base = ['Which step is tricky?', 'Do you want a hint or full answer?', 'Any words or vocab that confuse you?'];
+    const subject = lessonContext?.subject?.toString().toLowerCase() ?? '';
+    const lessonTitle = lessonContext?.lessonTitle;
+    const contextual: string[] = [];
+    if (lessonTitle) {
+      contextual.push(`I’m stuck on "${lessonTitle}"`);
+    }
+    if (contextHint) {
+      contextual.push(`Can you check this part: "${contextHint}"?`);
+    }
+    if (subject.includes('math')) {
+      contextual.push('Show me a similar example', 'Where should I start with this problem?');
+    }
+    if (subject.includes('english')) {
+      contextual.push('What kind of writing is it?', 'Can you suggest a sentence starter?');
+    }
+    if (subject.includes('science')) {
+      contextual.push('Which concept is unclear?', 'Can you link it to a real-world example?');
+    }
+    return [...base, ...contextual].slice(0, 6);
+  }, [contextHint, lessonContext]);
 
   const quickActions = [
     { icon: Lightbulb, text: 'Get a study tip', action: 'study-tip' },
     { icon: Target, text: 'Review weak areas', action: 'review-weak' },
     { icon: BookOpen, text: 'Explain a concept', action: 'explain-concept' }
   ];
+
+  useEffect(() => {
+    if (tutorDisabled) {
+      setAssistantError(tutorControlsCopy.studentDisabledMessage);
+    } else {
+      setAssistantError(null);
+    }
+  }, [tutorDisabled]);
+
+  const guidedCards = useMemo(
+    () => {
+      const base = [
+        { id: 'explain-problem', label: 'Explain this problem', prompt: 'Explain this problem in simple steps.' },
+        { id: 'practice-weak', label: 'Practice my weak area', prompt: 'Help me practice my weak areas.' },
+        { id: 'study-tip', label: 'Give me a study tip', prompt: 'Give me a study tip for my class.' },
+        { id: 'check-steps', label: 'Check my steps', prompt: 'Check my steps and point out mistakes.' },
+        { id: 'quiz-me', label: 'Ask me a quiz', prompt: 'Quiz me on what I just learned.' },
+        { id: 'safety', label: 'Something feels off', prompt: 'Something feels off. What should I do?' },
+      ];
+      const contextual: { id: string; label: string; prompt: string }[] = [];
+      if (lessonContext?.lessonTitle) {
+        contextual.push({
+          id: 'lesson-help',
+          label: `Help with ${lessonContext.lessonTitle}`,
+          prompt: `Help me with ${lessonContext.lessonTitle}.`,
+        });
+      }
+      if (lessonContext?.subject) {
+        contextual.push({
+          id: 'subject-basics',
+          label: `Review ${lessonContext.subject} basics`,
+          prompt: `Review ${lessonContext.subject} basics with me.`,
+        });
+      }
+      return [...contextual, ...base];
+    },
+    [lessonContext],
+  );
+
+
+  const detectGuardrail = (message: string): string | null => {
+    const lower = message.toLowerCase();
+    const piiPattern = /\b\d{3}[- ]?\d{3}[- ]?\d{4}\b|@\w+/;
+    if (piiPattern.test(lower)) return 'pii';
+    if (lower.includes('cheat') || lower.includes('test answer') || lower.includes('answer key')) return 'cheating';
+    if (lower.includes('address') || lower.includes('phone number') || lower.includes('email')) return 'pii';
+    return null;
+  };
+
+  const maybePromptReflection = (reason: 'confusion' | 'hint_count' | 'end_of_lesson' | 'long_session') => {
+    if (reflectionPrompted) return;
+    setReflectionPrompted(true);
+    window.dispatchEvent(new CustomEvent('reflection:prompt', { detail: { reason, questionId: 'what_learned' } }));
+  };
+
+
+  useEffect(() => {
+    setMessages((prev) => {
+      if (!prev.length) return prev;
+      const [first, ...rest] = prev;
+      if (first.isUser) return prev;
+      const intro = buildIntroMessage();
+      if (first.content === intro) return prev;
+      return [{ ...first, content: intro }, ...rest];
+    });
+  }, [buildIntroMessage]);
+
+  const explainerDismissKey = useMemo(() => `tutor-explainer-dismissed-${student.id}`, [student.id]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (typeof window === 'undefined') return;
+    const dismissed = localStorage.getItem(explainerDismissKey);
+    if (!dismissed) {
+      setShowExplainModal(true);
+      setExplainerSource('first_run');
+      trackEvent('tutor_explainer_viewed', { source: 'first_run', grade_band: student.grade });
+    }
+  }, [explainerDismissKey, isOpen, student.grade]);
+
+  useEffect(() => {
+    fetchReflections(3)
+      .then((rows) => {
+        setRecentReflections(
+          rows.map((row) => ({
+            id: row.id,
+            responseText: row.responseText,
+            createdAt: row.createdAt,
+          })),
+        );
+      })
+      .catch((err) => console.warn('[LearningAssistant] Unable to load reflections', err));
+  }, []);
 
   const getContextualResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
@@ -77,6 +254,53 @@ const LearningAssistant: React.FC = () => {
     }
     
     return `That's a great question! Based on your learning profile (Level ${student.level}, strong in ${student.strengths[0] || 'multiple areas'}), I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
+  };
+
+  const handleReportSubmit = async () => {
+    if (!reportTarget) return;
+    setReportSubmitting(true);
+    setReportError(null);
+    setReportSuccess(false);
+    try {
+      await submitTutorAnswerReport({
+        answer: reportTarget.answer,
+        reason: reportReason,
+        notes: reportNotes,
+        messageId: reportTarget.messageId,
+        conversationId: conversationId.current,
+        lessonId: lessonContext?.lessonId ?? null,
+        subject: lessonContext?.subject ?? null,
+      });
+      trackEvent('learning_assistant_report_submitted', {
+        message_id: reportTarget.messageId,
+        conversation_id: conversationId.current,
+        reason: reportReason,
+        has_notes: Boolean(reportNotes.trim()),
+        lesson_id: lessonContext?.lessonId ?? null,
+        subject: lessonContext?.subject ?? null,
+      });
+      setReportSuccess(true);
+      setReportNotes('');
+    } catch (error) {
+      console.error('[LearningAssistant] Failed to submit tutor report', error);
+      setReportError(error instanceof Error ? error.message : 'Unable to send report right now.');
+    } finally {
+      setReportSubmitting(false);
+    }
+  };
+
+  const openExplainer = (source: 'header' | 'guardrail' | 'first_run') => {
+    setShowExplainModal(true);
+    setExplainerSource(source);
+    trackEvent('tutor_explainer_viewed', { source, grade_band: student.grade });
+  };
+
+  const closeExplainer = (reason: 'got_it' | 'x' | 'backdrop') => {
+    setShowExplainModal(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(explainerDismissKey, 'true');
+    }
+    trackEvent('tutor_explainer_closed', { source: explainerSource ?? 'header', reason });
   };
 
   useEffect(() => {
@@ -116,6 +340,30 @@ const LearningAssistant: React.FC = () => {
     };
   }, [student.id]);
 
+  const handleChatModeChange = async (mode: 'guided_only' | 'guided_preferred' | 'free') => {
+    if (chatMode === mode) return;
+    if (chatModeLocked && mode !== 'guided_only') {
+      return;
+    }
+    setChatMode(mode);
+    setChatModeSaving(true);
+    trackEvent('chat_mode_set', {
+      mode,
+      source: 'student',
+      grade_band: student.grade <= 5 ? 'g3-5' : student.grade <= 8 ? 'g6-8' : 'g9-plus',
+    });
+    try {
+      await updateLearningPreferences(student.id, {
+        ...student.learningPreferences,
+        chatMode: mode,
+      });
+    } catch (error) {
+      console.warn('[LearningAssistant] Failed to persist chat mode', error);
+    } finally {
+      setChatModeSaving(false);
+    }
+  };
+
   const handleQuickAction = (action: string) => {
     let message = '';
     switch (action) {
@@ -130,13 +378,67 @@ const LearningAssistant: React.FC = () => {
         break;
     }
     if (message) {
-      void handleSendMessage(message);
+      trackEvent('tutor_onboarding_step_completed', {
+        step: 'prompts',
+        persona_id: tutorAvatar?.id ?? null,
+        avatar_id: tutorAvatar?.id ?? null,
+        provided_name: Boolean(student.tutorName?.trim()),
+      });
+      trackEvent('tutor_onboarding_question_used', {
+        question_id: action,
+        persona_id: tutorAvatar?.id ?? null,
+      });
+      void handleSendMessage(message, { source: 'card', cardId: action });
     }
   };
 
-  const handleSendMessage = async (customMessage?: string) => {
+  const handleSendMessage = async (
+    customMessage?: string,
+    metadata?: { source?: 'card' | 'free'; cardId?: string },
+  ) => {
     const messageToSend = (customMessage ?? inputMessage).trim();
     if (!messageToSend.trim()) return;
+
+    if (tutorDisabled) {
+      setAssistantError(tutorControlsCopy.studentDisabledMessage);
+      return;
+    }
+
+    if (lessonOnlyMode && !lessonContext && !contextHint) {
+      setAssistantError(tutorControlsCopy.studentLessonOnlyMessage);
+      return;
+    }
+
+    const lower = messageToSend.toLowerCase();
+    if (lower.includes('confused') || lower.includes('stuck') || lower.includes('don’t get') || lower.includes("don't get")) {
+      setConfusionCount((prev) => prev + 1);
+    }
+    if (lessonContext?.lessonId && /done|finished|complete/.test(lower)) {
+      maybePromptReflection('end_of_lesson');
+    }
+
+    const guardrailReason = detectGuardrail(messageToSend);
+    const now = Date.now();
+    const guardrailCooldownKey = `tutor-guardrail-last-${student.id}`;
+    if (guardrailReason) {
+      const last = typeof window !== 'undefined' ? Number(localStorage.getItem(guardrailCooldownKey) ?? 0) : 0;
+      const withinCooldown = now - last < 10 * 60 * 1000;
+      const reminder =
+        'Reminder: I stay school-safe and cannot help with that. Try a guided prompt or ask a trusted adult.';
+      setAssistantError(reminder);
+      trackEvent('chat_guided_guardrail_triggered', { reason: guardrailReason });
+      if (!withinCooldown) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(guardrailCooldownKey, `${now}`);
+        }
+        setShowExplainModal(true);
+        setExplainerSource('guardrail');
+        trackEvent('tutor_explainer_viewed', { source: 'guardrail', grade_band: student.grade });
+      } else {
+        trackEvent('tutor_explainer_closed', { source: 'guardrail', reason: 'guardrail_auto_close' });
+      }
+      return;
+    }
 
     const modeInstruction =
       responseMode === 'hint'
@@ -156,12 +458,26 @@ const LearningAssistant: React.FC = () => {
     setInputMessage('');
     setIsTyping(true);
     setAssistantError(null);
-    trackEvent('learning_assistant_message_sent', {
+    if (metadata?.source === 'card') {
+      setGuidedCardUsed(true);
+    }
+    trackEvent(metadata?.source === 'card' ? 'chat_prompt_card_sent' : 'learning_assistant_message_sent', {
       studentId: student.id,
       length: messageToSend.length,
       responseMode,
       contextSource: contextHint ?? lessonContext?.lessonTitle ?? 'direct',
+      card_id: metadata?.cardId,
+      mode: chatMode,
+      subject: lessonContext?.subject ?? null,
+      lesson_id: lessonContext?.lessonId ?? null,
     });
+    if (metadata?.source !== 'card') {
+      trackEvent('chat_free_text_used', {
+        mode: chatMode,
+        length: messageToSend.length,
+        after_card: guidedCardUsed,
+      });
+    }
 
     try {
       const promptEntries = [...messages, { ...userMessage, content: decoratedMessage }];
@@ -171,16 +487,51 @@ const LearningAssistant: React.FC = () => {
         .join('\n');
 
       const promptForModel = `${contextWindow}\nAssistant:`.slice(-1100);
-      const guardrails = lessonContext
+      const personaName = student.tutorName?.trim();
+      const personaTone =
+        tutorAvatar?.tone === 'calm'
+          ? 'calm, patient tone'
+          : tutorAvatar?.tone === 'structured'
+            ? 'structured, step-by-step coaching tone'
+            : tutorAvatar?.tone === 'bold'
+              ? 'upbeat, high-energy tone'
+              : tutorAvatar?.tone === 'concise'
+                ? 'concise, to-the-point tone'
+                : 'encouraging, warm tone';
+      const planIntensity = student.learningPreferences?.weeklyPlanIntensity ?? 'normal';
+      const planTone =
+        planIntensity === 'light'
+          ? 'Keep encouragement gentle and celebrate small wins.'
+          : planIntensity === 'challenge'
+            ? 'Use a bit more upbeat motivation and suggest one extra stretch step.'
+            : 'Use a balanced encouragement tone.';
+      const chatModePrompt =
+        chatMode === 'guided_only'
+          ? 'You are in guided-only mode. Ask 1-2 clarifying questions before longer answers. Keep responses short (2-3 steps). Decline off-topic or personal requests and suggest picking another prompt.'
+          : chatMode === 'guided_preferred'
+            ? 'You are in guided-preferred mode. Start with a short answer and one clarifying question. Keep answers concise and redirect if off-topic.'
+            : 'Standard chat mode. Keep answers school-safe and concise.';
+      const baseGuardrails = lessonContext
         ? `You are an in-lesson tutor. Stay focused on "${lessonContext.lessonTitle ?? 'this lesson'}" in ${
             lessonContext.subject ?? 'this subject'
-          }. Keep answers concise (2-3 steps), avoid unrelated tangents, and remind the learner to try before giving full solutions.`
-        : 'You are ElevatED tutor. Stay concise, age-appropriate, and prioritize small next steps over long answers.';
+          }. Keep answers concise (2-3 steps), avoid unrelated tangents, and remind the learner to try before giving full solutions. You are a helper, not a teacher, so keep it light and encouraging.`
+        : 'You are ElevatED tutor. Stay concise, age-appropriate, and prioritize small next steps over long answers. You are a helper, not a teacher, and you never assist with cheating or collecting personal info.';
+      const personaGuardrails = `${personaName ? `The student calls you "${personaName}".` : 'You have a chosen tutor persona.'} Keep a ${personaTone} and use that name when referring to yourself. ${planTone} ${chatModePrompt} Never assist with cheating, personal data, or off-topic requests; politely decline and redirect to a trusted adult if needed.`;
+      const lessonOnlyGuardrail = lessonOnlyMode
+        ? 'The learner is restricted to lesson-only tutoring. If a request feels unrelated to the active lesson, decline and remind them to return to their current module.'
+        : '';
+      const guardrails = `${baseGuardrails} ${personaGuardrails} ${lessonOnlyGuardrail}`.trim();
       const knowledgeContext = [
         lessonContext?.moduleTitle ? `Module: ${lessonContext.moduleTitle}` : null,
         lessonContext?.lessonTitle ? `Lesson: ${lessonContext.lessonTitle}` : null,
         lessonContext?.subject ? `Subject: ${lessonContext.subject}` : null,
         contextHint ? `Context: ${contextHint}` : null,
+        recentReflections.length
+          ? `Recent reflections: ${recentReflections
+              .map((entry) => entry.responseText.trim())
+              .slice(0, 3)
+              .join(' | ')}`
+          : null,
       ]
         .filter(Boolean)
         .join(' | ');
@@ -190,6 +541,12 @@ const LearningAssistant: React.FC = () => {
         systemPrompt: guardrails,
         knowledge: knowledgeContext || undefined,
       });
+      if (recentReflections.length) {
+        trackEvent('reflection_referenced_in_tutor', {
+          lesson_id: lessonContext?.lessonId,
+          subject: lessonContext?.subject ?? null,
+        });
+      }
 
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -200,6 +557,14 @@ const LearningAssistant: React.FC = () => {
       };
 
       setMessages((prev) => [...prev, aiResponse]);
+      if (responseMode === 'hint') {
+        setHintMessages((prev) => prev + 1);
+      }
+      if (confusionCount >= 2 && !reflectionPrompted) {
+        maybePromptReflection('confusion');
+      } else if (hintMessages + 1 >= 3 && !reflectionPrompted) {
+        maybePromptReflection('hint_count');
+      }
       setPlanUsage((prev) => ({
         limit: response.limit ?? prev.limit,
         remaining:
@@ -308,7 +673,7 @@ const LearningAssistant: React.FC = () => {
       {/* Assistant Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 w-14 h-14 bg-gradient-to-r from-brand-violet to-brand-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 focus-ring"
+        className="fixed bottom-6 left-6 w-14 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 focus-ring"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         animate={{ 
@@ -317,8 +682,14 @@ const LearningAssistant: React.FC = () => {
         aria-label="Open learning assistant"
         aria-expanded={isOpen}
         aria-controls="learning-assistant-window"
+        style={{
+          background: `linear-gradient(135deg, ${tutorPalette.accent}, ${tutorPalette.background})`,
+          color: tutorPalette.text,
+        }}
       >
-        <Bot className="h-6 w-6" />
+        <span className="text-xl" aria-hidden>
+          {tutorAvatar.icon}
+        </span>
       </motion.button>
 
       {/* Assistant Window */}
@@ -338,25 +709,62 @@ const LearningAssistant: React.FC = () => {
             ref={assistantWindowRef}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-brand-violet to-brand-blue text-white p-4 space-y-3">
+            <div
+              className="p-4 space-y-3"
+              style={{
+                background: `linear-gradient(135deg, ${tutorPalette.accent}, ${tutorPalette.background})`,
+                color: tutorPalette.text,
+              }}
+            >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                    <Bot className="h-4 w-4" />
+                  <div
+                    className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center border border-white/30"
+                    style={{ color: tutorPalette.text }}
+                  >
+                    <span aria-hidden className="text-lg">
+                      {tutorAvatar.icon}
+                    </span>
                   </div>
                   <div>
-                    <h3 className="font-semibold" id="learning-assistant-title">Learning Assistant</h3>
-                    <p className="text-xs opacity-90" id="learning-assistant-description">Hints first, full solutions on request.</p>
+                    <h3 className="font-semibold" id="learning-assistant-title">
+                      {tutorDisplayName}
+                    </h3>
+                    <p className="text-xs opacity-90" id="learning-assistant-description">
+                      {tutorAvatar.label} • Hints first, full solutions on request.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <div className="hidden md:flex items-center gap-1 text-[11px] font-semibold">
+                    <span className="px-2 py-1 rounded-full border border-white/40 bg-white/30 text-gray-900">
+                      {chatMode === 'guided_only'
+                        ? 'Guided only'
+                        : chatMode === 'guided_preferred'
+                          ? 'Guided'
+                          : 'Free'}
+                    </span>
+                    {chatModeLocked && (
+                      <span className="px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                        Parent locked
+                      </span>
+                    )}
+                  </div>
                   <button
-                    onClick={() => setShowExplainModal(true)}
+                    onClick={() => openExplainer('header')}
                     className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1 text-[11px] font-semibold hover:bg-white/25 focus-ring"
                     aria-label="How ElevatED explains things"
                   >
                     <Info className="h-3 w-3" />
                     How we answer
+                  </button>
+                  <button
+                    onClick={() => openExplainer('header')}
+                    className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1 text-[11px] font-semibold hover:bg-white/25 focus-ring"
+                    aria-label="Safety and privacy"
+                  >
+                    <ShieldCheck className="h-3 w-3" />
+                    Safety & privacy
                   </button>
                   <button
                     onClick={() => {
@@ -383,24 +791,105 @@ const LearningAssistant: React.FC = () => {
                   <Sparkles className="h-3 w-3" /> Hints first—toggle below for full solutions
                 </span>
               </div>
+              <div className="flex flex-wrap items-center gap-2 text-[11px] mt-1">
+                <span className="text-gray-900 font-semibold">Mode:</span>
+                {(['guided_only', 'guided_preferred', 'free'] as const).map((mode) => {
+                  const label = mode === 'guided_only' ? 'Guided only' : mode === 'guided_preferred' ? 'Guided' : 'Free';
+                  const active = chatMode === mode;
+                  return (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => void handleChatModeChange(mode)}
+                      className={`px-2 py-1 rounded-full border font-semibold transition-colors ${
+                        active
+                          ? 'bg-white text-gray-900 border-white'
+                          : 'bg-white/20 text-gray-800 border-white/40 hover:bg-white/30'
+                      }`}
+                      disabled={chatModeSaving || (chatModeLocked && mode !== 'guided_only')}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+                {chatModeLocked && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                    Parent locked
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="p-3 border-b border-gray-200">
-              <div className="flex flex-wrap gap-2">
-                {quickActions.map((action, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleQuickAction(action.action)}
-                    className="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-brand-light-violet rounded-lg text-xs transition-colors focus-ring"
-                    aria-label={action.text}
-                  >
-                    <action.icon className="h-3 w-3" />
-                    <span>{action.text}</span>
-                  </button>
-                ))}
-              </div>
+          <div className="p-3 border-b border-gray-200">
+            <div className="flex flex-wrap gap-2">
+              {quickActions.map((action, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleQuickAction(action.action)}
+                  className="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-brand-light-violet rounded-lg text-xs transition-colors focus-ring"
+                  aria-label={action.text}
+                >
+                  <action.icon className="h-3 w-3" />
+                  <span>{action.text}</span>
+                </button>
+              ))}
             </div>
+            {(chatMode === 'guided_only' || chatMode === 'guided_preferred') && (
+              <>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {guidedCards.map((card) => (
+                    <button
+                      key={card.id}
+                      onClick={() => {
+                        setSelectedCardId(card.id);
+                        trackEvent('chat_prompt_card_selected', {
+                          card_id: card.id,
+                          mode: chatMode,
+                          has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
+                        });
+                        void handleSendMessage(card.prompt, { source: 'card', cardId: card.id });
+                      }}
+                      className="rounded-lg border border-gray-200 bg-gray-50 hover:border-brand-blue/60 text-left p-3 text-sm font-semibold text-gray-800 transition focus-ring"
+                    >
+                      <span className="block">{card.label}</span>
+                      <span className="text-xs text-gray-500">
+                        {lessonContext?.subject ? 'Context aware' : 'Quick start'}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                {selectedCardId && (
+                  <div className="mt-2">
+                    <p className="text-xs font-semibold text-gray-700 mb-1">Quick clarifiers</p>
+                    <div className="flex flex-wrap gap-2">
+                      {clarifierChips.map((chip) => (
+                        <button
+                          key={chip}
+                          className="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
+                          onClick={() => {
+                            trackEvent('chat_prompt_clarifier_selected', {
+                              card_id: selectedCardId,
+                              mode: chatMode,
+                              has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
+                              clarifier: chip,
+                            });
+                            const basePrompt = guidedCards.find((c) => c.id === selectedCardId)?.prompt ?? '';
+                            void handleSendMessage(`${basePrompt} ${chip}`, {
+                              source: 'card',
+                              cardId: selectedCardId,
+                            });
+                          }}
+                        >
+                          {chip}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
             {(contextHint || lessonContext) && (
               <div className="px-4 py-2 text-xs text-slate-600 bg-slate-50 border-b border-gray-200 flex items-center gap-2">
@@ -443,7 +932,30 @@ const LearningAssistant: React.FC = () => {
                         : 'bg-gray-100 text-gray-800'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{message.content}</p>
+                    <div className="flex items-start gap-2">
+                      <p className="text-sm leading-relaxed flex-1">{message.content}</p>
+                      {!message.isUser && (
+                        <button
+                          type="button"
+                          className="text-[11px] font-semibold text-rose-700 hover:text-rose-800 underline-offset-2 hover:underline focus-ring"
+                          onClick={() => {
+                            setReportTarget({ messageId: message.id, answer: message.content });
+                            setReportReason('incorrect');
+                            setReportNotes('');
+                            setReportError(null);
+                            setReportSuccess(false);
+                            trackEvent('learning_assistant_report_opened', {
+                              message_id: message.id,
+                              conversation_id: conversationId.current,
+                              lesson_id: lessonContext?.lessonId ?? null,
+                              subject: lessonContext?.subject ?? null,
+                            });
+                          }}
+                        >
+                          Report
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -499,69 +1011,269 @@ const LearningAssistant: React.FC = () => {
                   Show full solution
                 </button>
               </div>
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      void handleSendMessage();
+              {(chatMode !== 'guided_only' || guidedCardUsed) && (
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        void handleSendMessage(undefined, { source: 'free' });
+                      }
+                    }}
+                    placeholder={
+                      chatMode === 'guided_only'
+                        ? 'Ask a follow-up...'
+                        : 'Ask me anything about your studies...'
                     }
-                  }}
-                  placeholder="Ask me anything about your studies..."
-                  className="flex-1 p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-violet text-sm"
-                  aria-label="Message the learning assistant"
-                  ref={inputRef}
-                />
-                <button
-                  onClick={() => handleSendMessage()}
-                  disabled={!inputMessage.trim()}
-                  className="p-2 bg-brand-violet text-white rounded-xl hover:bg-brand-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
-                  aria-label="Send learning assistant message"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </div>
+                    className="flex-1 p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-violet text-sm"
+                    aria-label="Message the learning assistant"
+                    ref={inputRef}
+                  />
+                  <button
+                    onClick={() => void handleSendMessage(undefined, { source: 'free' })}
+                    disabled={!inputMessage.trim()}
+                    className="p-2 bg-brand-violet text-white rounded-xl hover:bg-brand-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
+                    aria-label="Send learning assistant message"
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+              {chatMode === 'guided_only' && !guidedCardUsed && (
+                <p className="text-xs text-slate-500">Pick a prompt card to start. Free text unlocks after you send a prompt.</p>
+              )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
       {showExplainModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h4 className="text-lg font-semibold text-slate-900">How ElevatED explains things</h4>
-                <p className="text-sm text-slate-600">
-                  Responses adapt to grade level, subject, and whether you want hints or full solutions.
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Tutor safety</p>
+                <h4 className="text-xl font-bold text-slate-900">How this tutor works</h4>
+                <p className="text-sm text-slate-600">School-safe help, short answers, and reminders to ask an adult if something feels off.</p>
               </div>
               <button
-                onClick={() => setShowExplainModal(false)}
+                onClick={() => closeExplainer('x')}
                 className="p-1 rounded-full hover:bg-slate-100 focus-ring"
                 aria-label="Close explanation modal"
               >
                 <X className="h-5 w-5 text-slate-500" />
               </button>
             </div>
-            <ul className="space-y-2 text-sm text-slate-700">
-              <li>• K-3: short sentences, simple words, and concrete examples.</li>
-              <li>• Grades 4-8: 2-3 step hints with vocabulary reminders before answers.</li>
-              <li>• Grades 9-12: deeper reasoning, study strategies, and concise solutions.</li>
-              <li>• Math: show the process first; English: model structure; Science/Social Studies: tie ideas to evidence and causes.</li>
-            </ul>
-            <div className="text-xs text-slate-500">
-              Hint mode is default to encourage productive struggle. Switch to “Show full solution” when you need the entire walkthrough.
+            <div className="grid md:grid-cols-3 gap-3 text-sm">
+              <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-3">
+                <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">I can help with…</p>
+                <ul className="space-y-1 text-emerald-800">
+                  <li>• Explain lessons in short steps</li>
+                  <li>• Give hints before answers</li>
+                  <li>• Practice or quiz you safely</li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-rose-100 bg-rose-50 p-3">
+                <p className="text-xs font-semibold text-rose-700 uppercase tracking-wide mb-1">I can’t…</p>
+                <ul className="space-y-1 text-rose-800">
+                  <li>• Give test/quiz answers</li>
+                  <li>• Collect personal info</li>
+                  <li>• Replace your teacher</li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-amber-100 bg-amber-50 p-3">
+                <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Ask an adult if…</p>
+                <ul className="space-y-1 text-amber-800">
+                  <li>• Something feels wrong</li>
+                  <li>• You see unsafe content</li>
+                  <li>• You’re asked for personal info</li>
+                </ul>
+              </div>
             </div>
-            <div className="flex justify-end">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 grid md:grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1">Your data</p>
+                <ul className="space-y-1 text-slate-800">
+                  <li>• Saves lesson context to stay on-topic.</li>
+                  <li>• Stores recent tutor chats for safety review.</li>
+                  <li>• Keeps progress, goals, and streaks to personalize help.</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1">Need help?</p>
+                <ul className="space-y-1 text-slate-800">
+                  <li>• Report answers with the “Report” button in chat.</li>
+                  <li>• Ask a parent to visit Safety in the Family Dashboard.</li>
+                  <li>• Support responds within 1 business day.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2">
+              <p className="text-sm font-semibold text-gray-900">Quick check</p>
+              {[
+                { id: 'cheating', statement: 'The tutor can give me answers for a test.', correct: false },
+                { id: 'adult', statement: 'I should ask an adult if something feels wrong.', correct: true },
+              ].map((item) => {
+                const selected = quizChoice?.startsWith(item.id) ? quizChoice.split(':')[1] : null;
+                const isCorrect = selected ? selected === String(item.correct) : null;
+                return (
+                  <div key={item.id} className="flex items-center justify-between gap-2 rounded-lg bg-white border border-slate-200 px-3 py-2">
+                    <p className="text-sm text-gray-800">{item.statement}</p>
+                    <div className="inline-flex gap-1">
+                      {[true, false].map((value) => (
+                        <button
+                          key={`${item.id}-${value}`}
+                          type="button"
+                          onClick={() => {
+                            setQuizChoice(`${item.id}:${value}`);
+                            trackEvent('tutor_explainer_quiz_answered', { correct: value === item.correct });
+                          }}
+                          className={`px-2 py-1 rounded-lg text-xs font-semibold border ${
+                            selected === String(value)
+                              ? value === item.correct
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                                : 'bg-rose-100 text-rose-700 border-rose-200'
+                              : 'border-slate-200 text-gray-700 hover:border-brand-violet/60'
+                          }`}
+                        >
+                          {value ? 'True' : 'False'}
+                        </button>
+                      ))}
+                    </div>
+                    {isCorrect !== null && (
+                      <span className={`text-[11px] font-semibold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
+                        {isCorrect ? 'Correct' : 'Try again'}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => closeExplainer('backdrop')}
+                className="text-sm font-semibold text-gray-600 hover:text-gray-800 focus-ring"
+              >
+                Ask an adult
+              </button>
               <button
                 type="button"
                 className="rounded-full bg-brand-violet px-4 py-2 text-sm font-semibold text-white hover:bg-brand-blue focus-ring"
-                onClick={() => setShowExplainModal(false)}
+                onClick={() => {
+                  trackEvent('tutor_explainer_completed', {
+                    source: explainerSource ?? 'header',
+                    quiz_shown: true,
+                    quiz_correct: quizChoice?.includes('true') ?? false,
+                    grade_band: student.grade,
+                  });
+                  closeExplainer('got_it');
+                }}
               >
                 Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {reportTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Report this answer</p>
+                <h4 className="text-xl font-bold text-slate-900">Something felt off?</h4>
+                <p className="text-sm text-slate-600">Tell us what was wrong so an adult can review it.</p>
+              </div>
+              <button
+                onClick={() => {
+                  setReportTarget(null);
+                  setReportNotes('');
+                  setReportError(null);
+                  setReportSuccess(false);
+                }}
+                className="p-1 rounded-full hover:bg-slate-100 focus-ring"
+                aria-label="Close report dialog"
+              >
+                <X className="h-5 w-5 text-slate-500" />
+              </button>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+              <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1">Tutor answer</p>
+              <p className="text-slate-800 whitespace-pre-wrap">{reportTarget.answer}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-gray-900">What went wrong?</p>
+              <div className="grid grid-cols-2 gap-2">
+                {([
+                  { id: 'incorrect', label: 'Incorrect' },
+                  { id: 'confusing', label: 'Confusing' },
+                  { id: 'unsafe', label: 'Not school-safe' },
+                  { id: 'off_topic', label: 'Off-topic' },
+                  { id: 'other', label: 'Other' },
+                ] satisfies Array<{ id: TutorReportReason; label: string }>).map((option) => {
+                  const active = reportReason === option.id;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setReportReason(option.id)}
+                      className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition-colors focus-ring ${
+                        active ? 'border-rose-300 bg-rose-50 text-rose-800' : 'border-slate-200 text-gray-700 hover:border-brand-blue/60'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Flag className="h-4 w-4" />
+                        {option.label}
+                      </span>
+                      <span className="text-[11px] text-slate-500">{active ? 'Selected' : ''}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="report-notes" className="text-sm font-semibold text-gray-900">
+                Anything else to add? (optional)
+              </label>
+              <textarea
+                id="report-notes"
+                value={reportNotes}
+                onChange={(e) => setReportNotes(e.target.value)}
+                maxLength={500}
+                className="w-full rounded-xl border border-slate-200 p-3 text-sm focus-ring"
+                placeholder="Example: It shared personal info or felt unsafe."
+              />
+              <p className="text-[11px] text-slate-500">We save this chat to review; we do not ask for your personal info.</p>
+            </div>
+            {reportError && <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">{reportError}</div>}
+            {reportSuccess && (
+              <div className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-2">
+                Thanks. We flagged this for review and will follow up via your parent account if needed.
+              </div>
+            )}
+            <div className="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setReportTarget(null);
+                  setReportNotes('');
+                  setReportError(null);
+                  setReportSuccess(false);
+                }}
+                className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-slate-100 focus-ring"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={reportSubmitting}
+                onClick={() => void handleReportSubmit()}
+                className="px-4 py-2 rounded-lg bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 disabled:opacity-50 focus-ring"
+              >
+                {reportSubmitting ? 'Sending…' : 'Send report'}
               </button>
             </div>
           </div>

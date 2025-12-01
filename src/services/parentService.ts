@@ -1,5 +1,10 @@
 import supabase from '../lib/supabaseClient';
-import type { ChildGoalTargets, GuardianChildLink, NotificationPreferences } from '../types';
+import type {
+  ChildGoalTargets,
+  GuardianChildLink,
+  NotificationPreferences,
+  ParentOnboardingState,
+} from '../types';
 
 type GoalPayload = ChildGoalTargets & {
   studentId: string;
@@ -16,6 +21,8 @@ export const upsertChildGoals = async (payload: GoalPayload): Promise<void> => {
       weekly_lessons_target: weeklyLessons ?? null,
       practice_minutes_target: practiceMinutes ?? null,
       mastery_targets: masteryTargets ?? {},
+      updated_by: parentId,
+      updated_source: 'parent_dashboard',
     },
     { onConflict: 'parent_id,student_id' },
   );
@@ -103,6 +110,18 @@ export const updateParentNotifications = async (
 
   if (error) {
     console.error('[Parent] Failed to update notification preferences', error);
+    throw error;
+  }
+};
+
+export const updateParentOnboardingState = async (
+  parentId: string,
+  state: ParentOnboardingState,
+): Promise<void> => {
+  const { error } = await supabase.from('parent_profiles').update({ onboarding_state: state }).eq('id', parentId);
+
+  if (error) {
+    console.error('[Parent] Failed to update onboarding state', error);
     throw error;
   }
 };

@@ -15,6 +15,20 @@ export const applyLearningPreferencesToPlan = (
   const cappedLength = maxLessonsForSession[pref.sessionLength] ?? 4;
 
   let ordered = plan.slice();
+  if (pref.studyMode === 'catch_up') {
+    ordered = ordered.sort((a, b) => {
+      const aScore = a.difficulty === 'hard' ? 2 : a.difficulty === 'medium' ? 1 : 0;
+      const bScore = b.difficulty === 'hard' ? 2 : b.difficulty === 'medium' ? 1 : 0;
+      return aScore - bScore;
+    });
+  } else if (pref.studyMode === 'get_ahead') {
+    ordered = ordered.sort((a, b) => {
+      const aScore = a.difficulty === 'hard' ? 2 : a.difficulty === 'medium' ? 1 : 0;
+      const bScore = b.difficulty === 'hard' ? 2 : b.difficulty === 'medium' ? 1 : 0;
+      return bScore - aScore;
+    });
+  }
+
   if (pref.focusSubject && pref.focusSubject !== 'balanced') {
     const focusLessons = ordered.filter((lesson) => lesson.subject === pref.focusSubject);
     const nonFocus = ordered.filter((lesson) => lesson.subject !== pref.focusSubject);
@@ -28,4 +42,3 @@ export const applyLearningPreferencesToPlan = (
 
   return ordered.slice(0, Math.max(1, cappedLength));
 };
-

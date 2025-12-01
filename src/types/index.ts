@@ -21,6 +21,9 @@ export interface Student extends User {
   level: number;
   badges: Badge[];
   streakDays: number;
+  tutorName?: string | null;
+  tutorAvatarId?: string | null;
+  studentAvatarId?: string | null;
   strengths: string[];
   weaknesses: string[];
   learningPath: LearningPathItem[];
@@ -34,6 +37,7 @@ export interface Parent extends User {
   subscriptionTier: 'free' | 'plus' | 'premium';
   notifications: NotificationPreferences;
   weeklyReport?: ParentWeeklyReport | null;
+  onboardingState?: ParentOnboardingState;
 }
 
 export type BadgeCategory =
@@ -80,7 +84,7 @@ export interface Mission {
   highlight?: string;
 }
 
-export type CelebrationKind = 'streak' | 'badge' | 'assessment' | 'mastery' | 'milestone';
+export type CelebrationKind = 'streak' | 'badge' | 'assessment' | 'mastery' | 'milestone' | 'level' | 'avatar' | 'mission';
 
 export interface CelebrationMoment {
   id: string;
@@ -107,6 +111,9 @@ export interface AvatarOption {
   };
   icon: string;
   rarity?: 'starter' | 'rare' | 'epic';
+  kind?: 'student' | 'tutor';
+  tags?: string[];
+  tone?: 'calm' | 'encouraging' | 'bold' | 'structured' | 'concise';
 }
 
 export interface LearningPathItem {
@@ -128,12 +135,36 @@ export interface LearningPreferences {
   sessionLength: SessionLengthPreference;
   focusSubject: Subject | 'balanced';
   focusIntensity: 'balanced' | 'focused';
+  weeklyPlanIntensity?: 'light' | 'normal' | 'challenge';
+  weeklyPlanFocus?: Subject | 'balanced';
+  chatMode?: 'guided_only' | 'guided_preferred' | 'free';
+  chatModeLocked?: boolean;
+  studyMode?: 'catch_up' | 'keep_up' | 'get_ahead';
+  studyModeSetAt?: string | null;
+  studyModeLocked?: boolean;
+  allowTutor?: boolean;
+  tutorLessonOnly?: boolean;
+  tutorDailyLimit?: number | null;
+  tutorSettingsUpdatedAt?: string | null;
+  tutorSettingsUpdatedBy?: string | null;
 }
 
 export const defaultLearningPreferences: LearningPreferences = {
   sessionLength: 'standard',
   focusSubject: 'balanced',
   focusIntensity: 'balanced',
+  weeklyPlanIntensity: 'normal',
+  weeklyPlanFocus: 'balanced',
+  chatMode: 'free',
+  chatModeLocked: false,
+  studyMode: 'keep_up',
+  studyModeSetAt: null,
+  studyModeLocked: false,
+  allowTutor: true,
+  tutorLessonOnly: false,
+  tutorDailyLimit: null,
+  tutorSettingsUpdatedAt: null,
+  tutorSettingsUpdatedBy: null,
 };
 
 export interface Assessment {
@@ -211,6 +242,33 @@ export interface NotificationItem {
   readAt?: string | null;
   createdAt: string;
 }
+
+export type ConcernCategory = 'safety' | 'content' | 'data' | 'account' | 'billing' | 'other';
+export type ConcernStatus = 'open' | 'in_review' | 'resolved' | 'closed';
+
+export interface ConcernReport {
+  id: number;
+  caseId: string;
+  requesterId: string;
+  studentId?: string | null;
+  category: ConcernCategory;
+  status: ConcernStatus;
+  description: string;
+  contactEmail?: string | null;
+  screenshotUrl?: string | null;
+  route: 'trust' | 'privacy' | 'support';
+  metadata?: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ParentOnboardingState = {
+  tourCompleted?: boolean;
+  tourCompletedAt?: string | null;
+  guideCompleted?: boolean;
+  guideCompletedAt?: string | null;
+  lastViewedStep?: string | null;
+};
 
 export type Subject = 'math' | 'english' | 'science' | 'social_studies' | 'study_skills';
 
@@ -313,8 +371,21 @@ export interface AssessmentSummary {
   masteryTarget?: number;
 }
 
+export interface StudentReflection {
+  id: string;
+  studentId: string;
+  questionId: string;
+  responseText: string;
+  lessonId?: string;
+  subject?: string;
+  sentiment?: string;
+  shareWithParent?: boolean;
+  createdAt: Date;
+}
+
 export interface StudentDashboardData {
   profile: Student;
+  parentGoals?: ChildGoalTargets | null;
   quickStats: {
     totalXp: number;
     level: number;
@@ -333,9 +404,19 @@ export interface StudentDashboardData {
   nextLessonUrl?: string | null;
   missions?: Mission[];
   celebrationMoments?: CelebrationMoment[];
+  reflections?: StudentReflection[];
   avatarOptions?: AvatarOption[];
   equippedAvatarId?: string | null;
   todayActivities?: DashboardActivity[];
+}
+
+export interface ParentCoachingSuggestion {
+  id: string;
+  subject: Subject;
+  action: string;
+  timeMinutes: number;
+  why: string;
+  source: 'library' | 'fallback';
 }
 
 export interface ParentChildSnapshot {
@@ -364,6 +445,13 @@ export interface ParentChildSnapshot {
   skillGaps?: SkillGapInsight[];
   homeExtensions?: DashboardActivity[];
   learningPreferences?: LearningPreferences;
+  subjectStatuses?: Array<{
+    subject: Subject;
+    status: 'on_track' | 'at_risk' | 'off_track';
+    drivers: string[];
+    recommendation: string;
+  }>;
+  coachingSuggestions?: ParentCoachingSuggestion[];
 }
 
 export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';
@@ -395,6 +483,13 @@ export interface AssignmentSummary {
   moduleId?: number | null;
   moduleTitle?: string | null;
   studentId: string;
+  checkpointScore?: number | null;
+  tutorChatCount?: number | null;
+  completedAt?: string | null;
+  updatedBy?: string | null;
+  updatedAt?: string | null;
+  auditSource?: string | null;
+  evidence?: Record<string, unknown>;
 }
 
 export interface AdminAssignmentOverview {

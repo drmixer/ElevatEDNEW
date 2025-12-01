@@ -35,6 +35,7 @@
     "audit:coverage-gaps": "tsx scripts/report_coverage_gaps.ts",
     "audit:traffic-report": "tsx scripts/report_high_traffic_modules.ts",
     "audit:practice": "tsx scripts/audit_practice_coverage.ts",
+    "audit:coaching-feedback": "tsx tools/report_coaching_feedback.ts",
     "seed:lessons": "tsx scripts/seed_lessons.ts",
     "seed:module-assessments": "tsx scripts/seed_module_assessments.ts",
     "import:worker": "tsx server/importWorker.ts",
