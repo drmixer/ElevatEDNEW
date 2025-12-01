@@ -14,7 +14,7 @@ export type AvatarManifest = {
   requiredStreak?: number;
   requiredBadges?: string[];
   tags?: string[];
-  tone?: 'calm' | 'encouraging' | 'bold' | 'structured';
+  tone?: 'calm' | 'encouraging' | 'bold' | 'structured' | 'concise';
 };
 
 export const STUDENT_AVATARS: AvatarManifest[] = [
@@ -110,76 +110,40 @@ export const STUDENT_AVATARS: AvatarManifest[] = [
 
 export const TUTOR_AVATARS: AvatarManifest[] = [
   {
-    id: 'tutor-horizon',
+    id: 'tutor-calm-coach',
     kind: 'tutor',
-    label: 'Horizon Guide',
-    description: 'Warm sunrise palette with calm encouragement.',
-    palette: { background: '#FFF7ED', accent: '#F59E0B', text: '#7C2D12' },
-    icon: '🌄',
-    tone: 'encouraging',
-  },
-  {
-    id: 'tutor-calm-tide',
-    kind: 'tutor',
-    label: 'Calm Tide',
-    description: 'Ocean blues for steady, patient tutoring.',
+    label: 'Calm Coach',
+    description: 'Steady, patient tutor who keeps you encouraged without rushing.',
     palette: { background: '#E0F2FE', accent: '#0284C7', text: '#0B172A' },
     icon: '🌊',
     tone: 'calm',
   },
   {
-    id: 'tutor-ivy',
+    id: 'tutor-step-guide',
     kind: 'tutor',
-    label: 'Ivy Mentor',
-    description: 'Growth-minded coach with grounded greens.',
-    palette: { background: '#ECFDF3', accent: '#34D399', text: '#064E3B' },
-    icon: '🌿',
-    tone: 'structured',
-  },
-  {
-    id: 'tutor-ember',
-    kind: 'tutor',
-    label: 'Ember Coach',
-    description: 'High-energy motivator with a warm glow.',
-    palette: { background: '#FEF3C7', accent: '#F97316', text: '#78350F' },
-    icon: '🔥',
-    tone: 'bold',
-  },
-  {
-    id: 'tutor-orbit',
-    kind: 'tutor',
-    label: 'Orbit Navigator',
-    description: 'Futuristic guide with clear direction.',
-    palette: { background: '#F1F5F9', accent: '#0EA5E9', text: '#0F172A' },
-    icon: '🪐',
-    tone: 'structured',
-  },
-  {
-    id: 'tutor-clarity',
-    kind: 'tutor',
-    label: 'Clarity Coach',
-    description: 'Minimal look for crisp, to-the-point help.',
-    palette: { background: '#FFFFFF', accent: '#94A3B8', text: '#0F172A' },
-    icon: '📘',
-    tone: 'calm',
-  },
-  {
-    id: 'tutor-summit',
-    kind: 'tutor',
-    label: 'Summit Sherpa',
-    description: 'Guide who keeps you moving step by step.',
+    label: 'Step-by-Step Guide',
+    description: 'Breaks work into small steps and checks understanding often.',
     palette: { background: '#EEF2FF', accent: '#6366F1', text: '#312E81' },
     icon: '🧭',
-    tone: 'encouraging',
+    tone: 'structured',
   },
   {
-    id: 'tutor-nova',
+    id: 'tutor-hype-coach',
     kind: 'tutor',
-    label: 'Nova Spark',
-    description: 'Bright, upbeat tutor with quick tips.',
+    label: 'Hype Coach',
+    description: 'High-energy motivator who keeps responses short and upbeat.',
     palette: { background: '#FFF1F2', accent: '#EC4899', text: '#4A044E' },
     icon: '✨',
     tone: 'bold',
+  },
+  {
+    id: 'tutor-quiet-expert',
+    kind: 'tutor',
+    label: 'Quiet Expert',
+    description: 'Concise helper who gets to the point with minimal fluff.',
+    palette: { background: '#F8FAFC', accent: '#94A3B8', text: '#0F172A' },
+    icon: '📘',
+    tone: 'concise',
   },
 ];
 

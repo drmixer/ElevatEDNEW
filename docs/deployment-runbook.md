@@ -78,6 +78,21 @@ npm run import:federal
 - **Comms:** Post status in the #ops channel with impact, ETA, and mitigation. Notify affected schools/parents if data rights or billing events are involved.
 - **Recovery:** Ship/rollback fixes, rerun the regression gates above, and replay failed webhooks/imports. Close the incident with a short blameless summary and link to any Supabase SQL or data patches applied.
 
+### 7a. Detailed Runbooks
+- **AI provider degradation/outage**
+  - Switch tutor to fallback model: set `AI_PROVIDER=fallback` or `TUTOR_MODEL=fallback-*` in env, restart API. If models hard-fail, force `ENFORCE_PLAN_LIMITS=false` to keep UI responsive and display “assistant unavailable” banner in tutor UI.
+  - Surface status to users: enable the maintenance banner in UI config or set `MAINTENANCE_MODE=true` in edge worker to show a read-only notice; keep lessons playable.
+  - Verification: send a low-risk tutor prompt in staging; confirm responses return (or UI shows the degraded state) and Sentry stops logging provider errors.
+- **Supabase connectivity issues**
+  - Identify scope: check Supabase status, log drain, and DB connections. If reads work but writes fail, set `MAINTENANCE_MODE=true` and keep lesson playback in read-only mode; disable writes that mutate progress by feature-flagging `ENFORCE_PLAN_LIMITS=false` and pausing background imports.
+  - Recovery: retry with Supabase CLI `supabase db reset` only in staging; in prod, avoid destructive commands. If PostgREST is unhealthy, recycle the service in the Supabase dashboard and verify RLS policies aren’t blocking expected actors.
+  - Verification: run a simple health call (`curl $SUPABASE_URL/rest/v1/health`) and execute a read/write via the API (e.g., GET `/api/v1/modules`, POST `/api/v1/assignments/assign` with a test cohort). Check Sentry/log drains for residual `postgres` or `403` RLS errors.
+- **Stripe/billing webhook failures**
+  - Detection: watch `alert:billing_webhook_failed` in Sentry and Stripe’s dashboard for delivery retries.
+  - Mitigation: toggle `BILLING_BYPASS_PARENTS=true` to unblock tutor access while reconciling. Do not delete subscriptions; instead, replay the failed webhooks from Stripe’s dashboard once the API is stable.
+  - Reconciliation: fetch the subscription via Stripe CLI `stripe subscriptions retrieve <id>` using the `metadata.stripe_subscription_id` stored in Supabase; confirm status matches Stripe. Manually set Supabase `subscriptions.status` if needed and note the manual change in an admin audit log or incident doc.
+  - Verification: trigger a test webhook (`stripe trigger invoice.payment_succeeded`) against staging, confirm receipt in logs and that `subscriptions` reflects the update. Re-enable `BILLING_BYPASS_PARENTS` to false after validation.
+
 ### 8. Staging validation (Phase 10)
 - Use synthetic seeds to hit 100+ lessons and 1K+ assets; verify `/catalog`, `/module/:id`, `/lesson/:id`, `/parent` load without slow warnings.
 - Ensure monitoring emits no `[modules] ... truncated` warnings; if it does, raise `MODULE_ASSET_LIMIT`/`MODULE_LESSON_LIMIT` or paginate assets.

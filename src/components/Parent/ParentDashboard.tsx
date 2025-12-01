@@ -42,10 +42,13 @@ import type {
   ParentChildSnapshot,
   PrivacyRequestStatus,
   PrivacyRequestType,
+  ConcernCategory,
+  ConcernReport,
   Subject,
   SkillGapInsight,
   LearningPreferences,
   defaultLearningPreferences,
+  ParentOnboardingState,
 } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
@@ -56,16 +59,21 @@ import {
   linkGuardianWithCode,
   revokeGuardianLink,
   upsertChildGoals,
+  updateParentOnboardingState,
 } from '../../services/parentService';
 import {
   openBillingPortal,
   startCheckoutSession,
 } from '../../services/billingService';
+import { listConcernReports, submitConcernReport } from '../../services/concernService';
 import { listPrivacyRequests, submitPrivacyRequest } from '../../services/privacyService';
 import { formatSubjectLabel } from '../../lib/subjects';
 import { studySkillsModules } from '../../data/studySkillsModules';
 import { limitLabel } from '../../lib/entitlements';
 import { updateLearningPreferences } from '../../services/profileService';
+import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
+import { computeSubjectStatuses, formatSubjectStatusTooltip, onTrackBadge, onTrackLabel } from '../../lib/onTrack';
+import { recordCoachingFeedback } from '../../services/coachingService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -145,8 +153,18 @@ const ParentDashboard: React.FC = () => {
     focusSubject: defaultLearningPreferences.focusSubject,
     focusIntensity: defaultLearningPreferences.focusIntensity,
   });
+  const [chatModeSetting, setChatModeSetting] = useState<'guided_only' | 'guided_preferred' | 'free'>(
+    defaultLearningPreferences.chatMode ?? 'free',
+  );
+  const [chatModeLocked, setChatModeLocked] = useState<boolean>(false);
+  const [allowTutorChats, setAllowTutorChats] = useState<boolean>(true);
+  const [lessonContextOnly, setLessonContextOnly] = useState<boolean>(false);
+  const [maxTutorChatsPerDay, setMaxTutorChatsPerDay] = useState<string>('');
+  const [tutorSettingsUpdatedAt, setTutorSettingsUpdatedAt] = useState<string | null>(null);
+  const [dismissedSuggestions, setDismissedSuggestions] = useState<Set<string>>(new Set());
   const [goalMessage, setGoalMessage] = useState<string | null>(null);
   const [goalError, setGoalError] = useState<string | null>(null);
+  const [highPaceAcknowledged, setHighPaceAcknowledged] = useState<boolean>(false);
   const [guardianCode, setGuardianCode] = useState('');
   const [guardianRelationship, setGuardianRelationship] = useState('');
   const [guardianMessage, setGuardianMessage] = useState<string | null>(null);
@@ -158,6 +176,15 @@ const ParentDashboard: React.FC = () => {
   const [privacyContact, setPrivacyContact] = useState(parent?.email ?? '');
   const [privacyMessage, setPrivacyMessage] = useState<string | null>(null);
   const [privacyError, setPrivacyError] = useState<string | null>(null);
+  const [concernCategory, setConcernCategory] = useState<ConcernCategory>('safety');
+  const [concernDescription, setConcernDescription] = useState('');
+  const [concernContact, setConcernContact] = useState(parent?.email ?? '');
+  const [concernScreenshotUrl, setConcernScreenshotUrl] = useState('');
+  const [concernMessage, setConcernMessage] = useState<string | null>(null);
+  const [concernError, setConcernError] = useState<string | null>(null);
+  const [showTour, setShowTour] = useState<boolean>(false);
+  const [tourStep, setTourStep] = useState<number>(0);
+  const [guideOpen, setGuideOpen] = useState<boolean>(false);
   const [newLearnerName, setNewLearnerName] = useState('');
   const [newLearnerGrade, setNewLearnerGrade] = useState<number>(3);
   const [generatedFamilyCode, setGeneratedFamilyCode] = useState('');
@@ -204,6 +231,7 @@ const ParentDashboard: React.FC = () => {
 
   useEffect(() => {
     setPrivacyContact(parent?.email ?? '');
+    setConcernContact(parent?.email ?? '');
   }, [parent?.email]);
 
   useEffect(() => {
@@ -241,9 +269,23 @@ const ParentDashboard: React.FC = () => {
 
   useEffect(() => {
     if (!currentChild) return;
+    setHighPaceAcknowledged(false);
     const preferences = currentChild.learningPreferences ?? defaultLearningPreferences;
     setGoalMessage(null);
     setGoalError(null);
+    setChatModeLocked(preferences.chatModeLocked ?? false);
+    setChatModeSetting(preferences.chatMode ?? defaultLearningPreferences.chatMode ?? 'free');
+    setAllowTutorChats(preferences.allowTutor ?? true);
+    const prefersLessonOnly =
+      preferences.tutorLessonOnly ??
+      ((currentChild.grade ?? 0) > 0 && (currentChild.grade ?? 0) < 13 ? true : defaultLearningPreferences.tutorLessonOnly);
+    setLessonContextOnly(prefersLessonOnly);
+    setMaxTutorChatsPerDay(
+      preferences.tutorDailyLimit != null && Number.isFinite(preferences.tutorDailyLimit)
+        ? String(preferences.tutorDailyLimit)
+        : '',
+    );
+    setTutorSettingsUpdatedAt(preferences.tutorSettingsUpdatedAt ?? null);
     setGoalForm({
       weeklyLessons: currentChild.goals?.weeklyLessons
         ? String(currentChild.goals.weeklyLessons)
@@ -265,6 +307,7 @@ const ParentDashboard: React.FC = () => {
 
   useEffect(() => {
     setInsightTab('overview');
+    setDismissedSuggestions(new Set());
   }, [currentChild?.id]);
 
   const familyActivityData = useMemo(() => {
@@ -323,6 +366,22 @@ const ParentDashboard: React.FC = () => {
     });
   }, [currentChild]);
 
+  const recommendedWeeklyLessons = useMemo(() => {
+    const baseline = Math.max(currentChild?.lessonsCompletedWeek ?? 0, 3);
+    const fallback = 6;
+    const planCap = typeof entitlements.lessonLimit === 'number' ? entitlements.lessonLimit : null;
+    const recommended = Math.max(baseline, fallback);
+    return planCap ? Math.min(recommended, planCap) : recommended;
+  }, [currentChild?.lessonsCompletedWeek, entitlements.lessonLimit]);
+
+  const paceWarningThreshold = Math.ceil(recommendedWeeklyLessons * 1.25);
+  const weeklyLessonsTargetValue = Number.isFinite(Number.parseInt(goalForm.weeklyLessons, 10))
+    ? Number.parseInt(goalForm.weeklyLessons, 10)
+    : currentChild?.goals?.weeklyLessons ?? null;
+  const practiceMinutesTargetValue = Number.isFinite(Number.parseInt(goalForm.practiceMinutes, 10))
+    ? Number.parseInt(goalForm.practiceMinutes, 10)
+    : currentChild?.goals?.practiceMinutes ?? null;
+
   const lessonsProgressPct = computePercent(
     currentChild?.lessonsCompletedWeek ?? 0,
     weeklyLessonsTargetValue ?? null,
@@ -333,6 +392,23 @@ const ParentDashboard: React.FC = () => {
   );
   const lessonsStatus = describeProgressStatus(lessonsProgressPct);
   const minutesStatus = describeProgressStatus(minutesProgressPct);
+  const atAGlanceStatuses = useMemo(
+    () => (currentChild?.subjectStatuses ?? []).slice(0, 3),
+    [currentChild?.subjectStatuses],
+  );
+  const primarySuggestion = useMemo(
+    () => currentChild?.coachingSuggestions?.[0] ?? null,
+    [currentChild?.coachingSuggestions],
+  );
+  const latestWin = useMemo(() => {
+    if (!celebrations.length) return null;
+    const byChild = celebrations.find((moment) => moment.studentId === currentChild?.id);
+    return byChild ?? celebrations[0];
+  }, [celebrations, currentChild?.id]);
+  const tutorLimitLabel = limitLabel(
+    currentChild?.learningPreferences?.tutorDailyLimit ?? entitlements.aiTutorDailyLimit,
+    'chats/day',
+  );
 
   const weeklySnapshot = useMemo(() => {
     if (!dashboard) return null;
@@ -484,12 +560,6 @@ const ParentDashboard: React.FC = () => {
   const weeklyLessonsTarget = currentChild?.goals?.weeklyLessons ?? null;
   const practiceMinutesTarget = currentChild?.goals?.practiceMinutes ?? null;
   const masteryTargets = currentChild?.goals?.masteryTargets ?? {};
-  const weeklyLessonsTargetValue = Number.isFinite(Number.parseInt(goalForm.weeklyLessons, 10))
-    ? Number.parseInt(goalForm.weeklyLessons, 10)
-    : weeklyLessonsTarget;
-  const practiceMinutesTargetValue = Number.isFinite(Number.parseInt(goalForm.practiceMinutes, 10))
-    ? Number.parseInt(goalForm.practiceMinutes, 10)
-    : practiceMinutesTarget;
 
   const focusConcepts = useMemo(() => {
     if (childSkillGaps.length) {
@@ -514,6 +584,47 @@ const ParentDashboard: React.FC = () => {
     [currentChild?.masteryBySubject],
   );
 
+  const subjectStatuses = useMemo(
+    () =>
+      currentChild?.subjectStatuses && currentChild.subjectStatuses.length
+        ? currentChild.subjectStatuses
+        : currentChild?.masteryBySubject?.length
+          ? computeSubjectStatuses({
+              masteryBySubject: currentChild.masteryBySubject,
+              lessonsCompletedWeek: currentChild.lessonsCompletedWeek ?? 0,
+              diagnosticCompletedAt: null,
+            })
+          : [],
+    [
+      currentChild?.subjectStatuses,
+      currentChild?.masteryBySubject,
+      currentChild?.lessonsCompletedWeek,
+    ],
+  );
+
+  const coachingSuggestions = useMemo(() => {
+    const base = currentChild?.coachingSuggestions ?? [];
+    return base.filter((suggestion) => !dismissedSuggestions.has(suggestion.id)).slice(0, 2);
+  }, [currentChild?.coachingSuggestions, dismissedSuggestions]);
+
+  const handleDismissSuggestion = (id: string, reason: 'done' | 'not_relevant') => {
+    setDismissedSuggestions((prev) => new Set([...prev, id]));
+    trackEvent('parent_coaching_suggestion_feedback', {
+      childId: currentChild?.id,
+      parentId: parent?.id,
+      suggestionId: id,
+      reason,
+    });
+    if (parent?.id && currentChild?.id) {
+      recordCoachingFeedback({
+        parentId: parent.id,
+        studentId: currentChild.id,
+        suggestionId: id,
+        reason,
+      }).catch((error) => console.warn('[Coaching] feedback failed', error));
+    }
+  };
+
   const focusSubjectOptions = useMemo(
     () => Array.from(new Set((currentChild?.masteryBySubject ?? []).map((entry) => entry.subject))),
     [currentChild?.masteryBySubject],
@@ -530,11 +641,55 @@ const ParentDashboard: React.FC = () => {
     return privacyRequests.filter((request) => request.studentId === currentChild.id);
   }, [privacyRequests, currentChild]);
 
+  useEffect(() => {
+    if (parent?.onboardingState?.tourCompleted) {
+      setShowTour(false);
+      return;
+    }
+    setShowTour(true);
+  }, [parent?.onboardingState?.tourCompleted]);
+
+  useEffect(() => {
+    if (weeklyLessonsTargetValue && weeklyLessonsTargetValue <= paceWarningThreshold) {
+      setHighPaceAcknowledged(false);
+    }
+  }, [weeklyLessonsTargetValue, paceWarningThreshold]);
+
+  const concernRouteCopy = useMemo(() => {
+    if (concernCategory === 'safety' || concernCategory === 'content') {
+      return 'Routes to Trust & Safety';
+    }
+    if (concernCategory === 'data') {
+      return 'Routes to Privacy & Security';
+    }
+    return 'Routes to Support';
+  }, [concernCategory]);
+
   const childProgress = currentChild?.progressSummary;
   const completedLessons = childProgress?.completed ?? currentChild?.lessonsCompletedWeek ?? 0;
   const inProgressLessons = childProgress?.inProgress ?? 0;
   const celebrations = dashboard?.celebrations ?? [];
   const celebrationPrompts = dashboard?.celebrationPrompts ?? [];
+  const tourSteps = useMemo(
+    () => [
+      {
+        title: 'See progress & status',
+        description: 'Subject cards show on-track/at-risk labels, pacing, and focus areas.',
+        anchor: 'weekly-snapshot',
+      },
+      {
+        title: 'Set weekly targets',
+        description: 'Use goals and assignments to set expectations and pacing guardrails.',
+        anchor: 'goal-planner',
+      },
+      {
+        title: 'Manage tutor & safety',
+        description: 'Control AI tutor access, limits, and report concerns anytime.',
+        anchor: 'safety-privacy',
+      },
+    ],
+    [],
+  );
 
   const modulesQuery = useQuery({
     queryKey: ['assignable-modules', moduleSearch],
@@ -549,6 +704,7 @@ const ParentDashboard: React.FC = () => {
   });
 
   const moduleOptions = modulesQuery.data?.data ?? [];
+  const recommendedModules = moduleOptions.slice(0, 3);
 
   useEffect(() => {
     if (!moduleOptions.length) {
@@ -574,6 +730,14 @@ const ParentDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 2,
   });
   const privacyRequests = privacyRequestsQuery.data ?? [];
+
+  const concernReportsQuery = useQuery({
+    queryKey: ['concern-reports', parent?.id, selectedChildId],
+    queryFn: () => listConcernReports({ requesterId: parent?.id ?? '', studentId: selectedChildId ?? null, limit: 15 }),
+    enabled: Boolean(parent),
+    staleTime: 1000 * 60 * 2,
+  });
+  const concernReports = concernReportsQuery.data ?? [];
 
   const {
     data: childAssignments,
@@ -601,7 +765,14 @@ const ParentDashboard: React.FC = () => {
     },
     onError: (error) => {
       console.error('[Assignments] failed to assign module', error);
-      setAssignErrorMessage(error instanceof Error ? error.message : 'Unable to assign module.');
+      const message = error instanceof Error ? error.message : 'Unable to assign module.';
+      if (message.toLowerCase().includes('too_far_ahead')) {
+        setAssignErrorMessage('We block assignments more than one unit ahead of the adaptive path. Pick something closer.');
+      } else if (message.toLowerCase().includes('pace')) {
+        setAssignErrorMessage('This exceeds pace guardrails. Lower the weekly target or confirm pacing.');
+      } else {
+        setAssignErrorMessage(message);
+      }
       setAssignMessage(null);
     },
   });
@@ -612,12 +783,20 @@ const ParentDashboard: React.FC = () => {
         throw new Error('You need to be signed in as a parent to save goals.');
       }
 
-      const weeklyLessonsTarget = goalForm.weeklyLessons.trim()
+      const weeklyLessonsTargetRaw = goalForm.weeklyLessons.trim()
         ? Number.parseInt(goalForm.weeklyLessons.trim(), 10)
         : null;
       const practiceMinutesTarget = goalForm.practiceMinutes.trim()
         ? Number.parseInt(goalForm.practiceMinutes.trim(), 10)
         : null;
+      const planLessonCap = typeof entitlements.lessonLimit === 'number' ? entitlements.lessonLimit : null;
+      let weeklyLessonsTarget =
+        weeklyLessonsTargetRaw != null && Number.isFinite(weeklyLessonsTargetRaw)
+          ? Math.max(1, weeklyLessonsTargetRaw)
+          : null;
+      if (weeklyLessonsTarget !== null && planLessonCap) {
+        weeklyLessonsTarget = Math.min(weeklyLessonsTarget, planLessonCap);
+      }
 
       const masteryTargets: Partial<Record<Subject, number>> = {};
       Object.entries(goalForm.masteryTargets).forEach(([subject, value]) => {
@@ -632,29 +811,67 @@ const ParentDashboard: React.FC = () => {
       const focusIntensity = goalForm.focusIntensity === 'focused' ? 'focused' : 'balanced';
       const sessionLength = deriveSessionLengthPreference(
         practiceMinutesTarget,
-        weeklyLessonsTarget,
+        weeklyLessonsTarget ?? weeklyLessonsTargetRaw,
         (child.learningPreferences ?? defaultLearningPreferences).sessionLength,
       );
+      const chatMode = chatModeLocked ? 'guided_only' : chatModeSetting;
+      const parsedTutorLimit = maxTutorChatsPerDay.trim().length
+        ? Number.parseInt(maxTutorChatsPerDay.trim(), 10)
+        : null;
+      const planTutorCap = entitlements.aiTutorDailyLimit;
+      let tutorDailyLimit =
+        parsedTutorLimit != null && Number.isFinite(parsedTutorLimit) ? Math.max(parsedTutorLimit, 0) : null;
+      if (typeof tutorDailyLimit === 'number' && typeof planTutorCap === 'number' && planTutorCap > 0) {
+        tutorDailyLimit = Math.min(tutorDailyLimit, planTutorCap);
+      }
+      const tutorSettingsUpdatedAt = new Date().toISOString();
+      const basePreferences = child.learningPreferences ?? defaultLearningPreferences;
+      const nextPreferences: LearningPreferences = {
+        ...basePreferences,
+        sessionLength,
+        focusSubject,
+        focusIntensity,
+        chatMode,
+        chatModeLocked,
+        allowTutor: allowTutorChats,
+        tutorLessonOnly: lessonContextOnly,
+        tutorDailyLimit,
+        tutorSettingsUpdatedAt,
+        tutorSettingsUpdatedBy: parent.id,
+      };
 
       await Promise.all([
         upsertChildGoals({
           parentId: parent.id,
           studentId: child.id,
-          weeklyLessons: Number.isFinite(weeklyLessonsTarget) ? weeklyLessonsTarget : null,
+          weeklyLessons: Number.isFinite(weeklyLessonsTarget ?? undefined) ? weeklyLessonsTarget : null,
           practiceMinutes: Number.isFinite(practiceMinutesTarget) ? practiceMinutesTarget : null,
           masteryTargets: Object.keys(masteryTargets).length ? masteryTargets : {},
         }),
         updateLearningPreferences(child.id, {
-          sessionLength,
-          focusSubject,
-          focusIntensity,
+          ...nextPreferences,
         }),
       ]);
     },
     onSuccess: async (_data, variables) => {
       setGoalMessage('Goals updated for this learner.');
       setGoalError(null);
+      setTutorSettingsUpdatedAt(nextPreferences.tutorSettingsUpdatedAt ?? null);
       trackEvent('parent_goals_saved', { parentId: parent?.id, childId: variables.child.id });
+      trackEvent('tutor_settings_updated', {
+        parentId: parent?.id,
+        childId: variables.child.id,
+        allowTutor: allowTutorChats,
+        tutorLessonOnly: lessonContextOnly,
+        tutorDailyLimit: nextPreferences.tutorDailyLimit ?? null,
+      });
+      trackEvent('chat_mode_set', {
+        mode: chatModeLocked ? 'guided_only' : chatModeSetting,
+        source: 'parent',
+        grade_band: (currentChild?.grade ?? 0) <= 5 ? 'g3-5' : (currentChild?.grade ?? 0) <= 8 ? 'g6-8' : 'g9-plus',
+        child_id: variables.child.id,
+        parent_locked: chatModeLocked,
+      });
       await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
       await refreshUser();
     },
@@ -732,6 +949,30 @@ const ParentDashboard: React.FC = () => {
     },
   });
 
+  const concernReportMutation = useMutation({
+    mutationFn: submitConcernReport,
+    onSuccess: (report) => {
+      setConcernMessage(
+        `Case ${report.caseId} received. We routed this to ${report.route === 'trust' ? 'Trust & Safety' : report.route === 'privacy' ? 'Privacy' : 'Support'} and will respond within one business day.`,
+      );
+      setConcernError(null);
+      setConcernDescription('');
+      setConcernScreenshotUrl('');
+      concernReportsQuery.refetch();
+      trackEvent('parent_concern_submitted', {
+        parentId: parent?.id,
+        studentId: currentChild?.id,
+        route: report.route,
+        category: report.category,
+      });
+    },
+    onError: (error) => {
+      console.error('[Concerns] Failed to submit concern', error);
+      setConcernMessage(null);
+      setConcernError(error instanceof Error ? error.message : 'Unable to submit concern right now.');
+    },
+  });
+
   const privacyRequestMutation = useMutation({
     mutationFn: submitPrivacyRequest,
     onSuccess: (request) => {
@@ -774,6 +1015,55 @@ const ParentDashboard: React.FC = () => {
     });
   };
 
+  const handleConcernSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!parent) {
+      setConcernError('Sign in as a parent to send a concern.');
+      return;
+    }
+    if (!concernDescription.trim()) {
+      setConcernError('Add a short description so we can help.');
+      return;
+    }
+
+    setConcernMessage(null);
+    setConcernError(null);
+
+    await concernReportMutation.mutateAsync({
+      requesterId: parent.id,
+      studentId: currentChild?.id ?? null,
+      category: concernCategory,
+      description: concernDescription,
+      contactEmail: concernContact || parent.email,
+      screenshotUrl: concernScreenshotUrl.trim() || undefined,
+      metadata: { selected_child: currentChild?.id, source: 'parent_dashboard' },
+    });
+  };
+
+  const handleQuickAssign = async (moduleId: number) => {
+    if (!parent || !selectedChildId || assignModuleMutation.isLoading) {
+      setAssignErrorMessage('Select a learner before assigning a module.');
+      return;
+    }
+    setAssignMessage(null);
+    setAssignErrorMessage(null);
+
+    await assignModuleMutation.mutateAsync({
+      moduleId,
+      studentIds: [selectedChildId],
+      creatorId: parent.id,
+      creatorRole: 'parent',
+      dueAt: null,
+    });
+
+    trackEvent('parent_assign_module_quick', {
+      parentId: parent.id,
+      studentId: selectedChildId,
+      moduleId,
+      source: 'recommended',
+    });
+  };
+
   const handleAssignModule = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!parent || !selectedChildId || !selectedModuleId || assignModuleMutation.isLoading) {
@@ -808,6 +1098,12 @@ const ParentDashboard: React.FC = () => {
     event.preventDefault();
     if (!currentChild) {
       setGoalError('Select a learner first.');
+      return;
+    }
+    if (weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && !highPaceAcknowledged) {
+      setGoalError(
+        `This target is above 125% of the recommended pace (${recommendedWeeklyLessons}/week). Check the box to confirm you want to set it.`,
+      );
       return;
     }
     setGoalMessage(null);
@@ -876,6 +1172,43 @@ const ParentDashboard: React.FC = () => {
     trackEvent('parent_onboarding_dismissed', { parentId: parent?.id });
   };
 
+  const persistOnboardingState = async (updates: ParentOnboardingState) => {
+    if (!parent?.id) return;
+    const nextState = { ...(parent.onboardingState ?? {}), ...updates };
+    await updateParentOnboardingState(parent.id, nextState);
+    await refreshUser();
+  };
+
+  const handleCompleteTour = async () => {
+    setShowTour(false);
+    setTourStep(0);
+    await persistOnboardingState({
+      tourCompleted: true,
+      tourCompletedAt: new Date().toISOString(),
+      lastViewedStep: 'done',
+    });
+    trackEvent('parent_tour_completed', { parentId: parent?.id });
+  };
+
+  const handleOpenGuide = async () => {
+    setGuideOpen(true);
+    await persistOnboardingState({
+      guideCompleted: true,
+      guideCompletedAt: new Date().toISOString(),
+    });
+    trackEvent('parent_guide_opened', { parentId: parent?.id });
+  };
+
+  const handleReplayTour = async () => {
+    setShowTour(true);
+    setTourStep(0);
+    await persistOnboardingState({
+      tourCompleted: false,
+      lastViewedStep: 'replayed',
+    });
+    trackEvent('parent_tour_replay', { parentId: parent?.id });
+  };
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -893,6 +1226,12 @@ const ParentDashboard: React.FC = () => {
     in_review: 'bg-blue-100 text-blue-700',
     fulfilled: 'bg-emerald-100 text-emerald-700',
     rejected: 'bg-rose-100 text-rose-700',
+  };
+  const concernStatusStyles: Record<ConcernReport['status'], string> = {
+    open: 'bg-amber-100 text-amber-700',
+    in_review: 'bg-blue-100 text-blue-700',
+    resolved: 'bg-emerald-100 text-emerald-700',
+    closed: 'bg-slate-100 text-slate-700',
   };
   const skillGapStatusStyles: Record<SkillGapInsight['status'], string> = {
     needs_attention: 'bg-rose-50 text-rose-700 border-rose-100',
@@ -1014,6 +1353,144 @@ const ParentDashboard: React.FC = () => {
                   <Bell className="h-5 w-5" />
                 </button>
               </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.04 }}
+          className="mb-6"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3 lg:col-span-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                    Guided tour
+                  </p>
+                  <h3 className="text-lg font-bold text-slate-900">New here? Take a 60-second tour</h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleReplayTour}
+                    className="text-xs font-semibold text-brand-blue hover:underline"
+                  >
+                    Replay
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowTour(false)}
+                    className="text-xs text-slate-600 hover:underline"
+                  >
+                    Hide
+                  </button>
+                </div>
+              </div>
+              {showTour && (
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+                  <p className="text-sm text-slate-700 mb-3">
+                    Step {tourStep + 1} of {tourSteps.length}: {tourSteps[tourStep].title}
+                  </p>
+                  <p className="text-sm text-slate-700">{tourSteps[tourStep].description}</p>
+                  <div className="flex items-center gap-2 mt-3 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => scrollToSection(tourSteps[tourStep].anchor)}
+                      className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
+                    >
+                      Jump there
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = tourStep + 1;
+                        if (next >= tourSteps.length) {
+                          handleCompleteTour();
+                        } else {
+                          setTourStep(next);
+                          persistOnboardingState({ lastViewedStep: tourSteps[next].title });
+                        }
+                      }}
+                      className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                    >
+                      {tourStep + 1 === tourSteps.length ? 'Finish' : 'Next'}
+                    </button>
+                    {tourStep > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const prev = Math.max(0, tourStep - 1);
+                          setTourStep(prev);
+                        }}
+                        className="text-xs text-slate-600 hover:underline"
+                      >
+                        Back
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleCompleteTour}
+                      className="text-xs text-slate-600 hover:underline"
+                    >
+                      Skip
+                    </button>
+                  </div>
+                </div>
+              )}
+              {!showTour && (
+                <p className="text-sm text-slate-600">
+                  Tour completed. Replay anytime to see where to set goals, assignments, and safety controls.
+                </p>
+              )}
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal">
+                    Parent guide
+                  </p>
+                  <h3 className="text-lg font-bold text-slate-900">Quick starter</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setGuideOpen((prev) => !prev)}
+                  className="text-xs font-semibold text-brand-blue hover:underline"
+                >
+                  {guideOpen ? 'Hide' : 'Open'}
+                </button>
+              </div>
+              {guideOpen ? (
+                <div className="space-y-3">
+                  <div className="aspect-video rounded-xl bg-gradient-to-br from-brand-blue/20 via-brand-violet/20 to-brand-teal/20 border border-slate-200 flex items-center justify-center text-xs text-slate-600">
+                    90-second overview video (coming soon)
+                  </div>
+                  <ul className="space-y-2 text-sm text-slate-700">
+                    <li>• Diagnostic → personalized path; weekly status labels use the same rules as digests.</li>
+                    <li>• Set weekly lessons & practice minutes in Goals; assignments sit one unit ahead of the path.</li>
+                    <li>• Tutor safety: toggle access, lesson-only mode, and daily caps; report concerns in Safety.</li>
+                    <li>• Need help? Use Data rights & Safety sections or reply to digest emails.</li>
+                  </ul>
+                  <div className="flex items-center gap-3">
+                    <Link to="/privacy" className="text-xs font-semibold text-brand-blue hover:underline">
+                      Privacy & safety policy
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleOpenGuide}
+                      className="text-xs font-semibold text-brand-teal hover:underline"
+                    >
+                      Mark guide viewed
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-slate-600">
+                  Skim key concepts, safety, and how to get help. Open to view the short guide.
+                </p>
+              )}
             </div>
           </div>
         </motion.div>
@@ -1725,6 +2202,158 @@ const ParentDashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="mb-8"
+        >
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal">
+                  This week at a glance
+                </p>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Digest highlights for {currentChild?.name ?? 'your learner'}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Status by subject, a quick win, and one coaching action. Refresh without leaving the page.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => refetch({ throwOnError: false })}
+                className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                disabled={isFetching}
+                aria-label="Refresh weekly digest"
+              >
+                <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Subject status</p>
+                  <span className="text-[11px] text-gray-500">Top {atAGlanceStatuses.length || 1}</span>
+                </div>
+                {atAGlanceStatuses.length ? (
+                  <ul className="space-y-2">
+                    {atAGlanceStatuses.map((entry) => {
+                      const badge =
+                        entry.status === 'on_track'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : entry.status === 'at_risk'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-rose-100 text-rose-700';
+                      return (
+                        <li
+                          key={entry.subject}
+                          className="flex items-center justify-between rounded-lg bg-white border border-slate-200 px-3 py-2"
+                        >
+                          <div className="min-w-0 pr-2">
+                            <p className="text-sm font-semibold text-gray-900 capitalize">
+                              {formatSubjectLabel(entry.subject)}
+                            </p>
+                            <p className="text-xs text-gray-600 line-clamp-1">
+                              {entry.drivers.slice(0, 2).join(' • ') || 'Tracking recent lessons'}
+                            </p>
+                          </div>
+                          <span className={`text-[11px] px-2 py-1 rounded-full capitalize ${badge}`}>
+                            {entry.status.replace('_', '-')}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-gray-600">We’ll show pacing once we have more lessons logged.</p>
+                )}
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Key win</p>
+                  <span className="text-[11px] text-gray-500">Badge or milestone</span>
+                </div>
+                {latestWin ? (
+                  <div className="rounded-lg bg-white border border-slate-200 p-3">
+                    <p className="text-sm font-semibold text-gray-900">{latestWin.title}</p>
+                    <p className="text-xs text-gray-600">{latestWin.description}</p>
+                    <p className="text-[11px] text-gray-500 mt-1">
+                      {new Date(latestWin.occurredAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-600">No wins logged yet—complete a lesson to unlock the first badge.</p>
+                )}
+                <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs text-gray-600">
+                  <p className="font-semibold text-gray-900 text-sm">Tutor usage</p>
+                  <p>{allowTutorChats ? `Limit: ${tutorLimitLabel}` : 'Tutor chats are off for this learner.'}</p>
+                  {maxTutorChatsPerDay && (
+                    <p>Custom cap: {maxTutorChatsPerDay} chats/day</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Coaching action</p>
+                  <span className="text-[11px] text-gray-500">Digest-ready</span>
+                </div>
+                {primarySuggestion ? (
+                  <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-gray-900">{primarySuggestion.action}</p>
+                      <span className="text-[11px] px-2 py-1 rounded-full bg-brand-light-teal text-brand-teal">
+                        {primarySuggestion.timeMinutes} min
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600">{primarySuggestion.why}</p>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          primarySuggestion?.id
+                            ? handleDismissSuggestion(primarySuggestion.id, 'done')
+                            : trackEvent('parent_coaching_suggestion_feedback', {
+                                childId: currentChild?.id,
+                                parentId: parent?.id,
+                                suggestionId: 'digest',
+                                reason: 'done',
+                              })
+                        }
+                        className="text-xs font-semibold text-brand-blue hover:underline"
+                      >
+                        Mark done
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          primarySuggestion?.id
+                            ? handleDismissSuggestion(primarySuggestion.id, 'not_relevant')
+                            : trackEvent('parent_coaching_suggestion_feedback', {
+                                childId: currentChild?.id,
+                                parentId: parent?.id,
+                                suggestionId: 'digest',
+                                reason: 'not_relevant',
+                              })
+                        }
+                        className="text-xs font-semibold text-slate-600 hover:underline"
+                      >
+                        Not relevant
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-600">We’ll add an action once we see a new skill focus.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
         >
@@ -2058,6 +2687,90 @@ const ParentDashboard: React.FC = () => {
                       </p>
                     </div>
                   </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+                    {subjectStatuses.map((entry) => (
+                      <div
+                        key={entry.subject}
+                        className={`rounded-xl border ${onTrackBadge(entry.status)} bg-white/60 p-3`}
+                        title={formatSubjectStatusTooltip(entry.status, entry.subject)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900 capitalize">
+                              {formatSubjectLabel(entry.subject)}
+                            </p>
+                            <p className="text-[11px] text-gray-600">
+                              {onTrackLabel(entry.status)} · {entry.drivers[0]}
+                            </p>
+                          </div>
+                          <span className={`text-[11px] px-2 py-1 rounded-full border ${onTrackBadge(entry.status)}`}>
+                            {onTrackLabel(entry.status)}
+                          </span>
+                        </div>
+                        <ul className="mt-2 space-y-1 text-xs text-gray-700 list-disc list-inside">
+                          {entry.drivers.slice(1).map((driver) => (
+                            <li key={driver}>{driver}</li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-xs text-gray-600">
+                          Recommendation: {entry.recommendation}
+                        </p>
+                      </div>
+                    ))}
+                    {subjectStatuses.length === 0 && (
+                      <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-gray-600">
+                        Complete a diagnostic and a lesson to see status by subject.
+                      </div>
+                    )}
+                  </div>
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-900">Coaching suggestions</h4>
+                        <p className="text-xs text-gray-600">Doable in 5–10 minutes; tuned to this learner.</p>
+                      </div>
+                      <span className="text-[11px] text-slate-600">
+                        Rotates weekly · Feedback improves picks
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {coachingSuggestions.map((suggestion) => (
+                        <div key={suggestion.id} className="rounded-xl border border-slate-200 bg-white p-3 space-y-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              {formatSubjectLabel(suggestion.subject)}
+                            </span>
+                            <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                              {suggestion.timeMinutes} min
+                            </span>
+                          </div>
+                          <p className="text-sm font-semibold text-gray-900">{suggestion.action}</p>
+                          <p className="text-xs text-gray-600">Why: {suggestion.why}</p>
+                          <div className="flex items-center gap-2 text-[11px]">
+                            <button
+                              type="button"
+                              onClick={() => handleDismissSuggestion(suggestion.id, 'done')}
+                              className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
+                            >
+                              Done
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDismissSuggestion(suggestion.id, 'not_relevant')}
+                              className="px-3 py-1 rounded-full bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100"
+                            >
+                              Not relevant
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      {coachingSuggestions.length === 0 && (
+                        <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-gray-600">
+                          No suggestions right now. Complete a lesson and we’ll refresh with a nudge.
+                        </div>
+                      )}
+                    </div>
+                  </div>
                   <div className="space-y-2">
                     {(currentChild?.adaptivePlanNotes ?? []).map((note, index) => (
                       <div key={index} className="flex items-start space-x-2">
@@ -2156,22 +2869,215 @@ const ParentDashboard: React.FC = () => {
                   </div>
 
                   <form onSubmit={handleSaveGoals} className="space-y-4">
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.allowLabel}</p>
+                          <p className="text-xs text-gray-600">
+                            Set per-learner access, context, and daily caps. Defaults follow your plan and age.
+                          </p>
+                        </div>
+                        <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                          Plan cap: {limitLabel(entitlements.aiTutorDailyLimit, 'chats/day')}
+                        </span>
+                      </div>
+                      <div className="mt-3 space-y-2">
+                        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.allowLabel}</p>
+                            <p className="text-[11px] text-gray-600">{tutorControlsCopy.allowDescription}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setAllowTutorChats((prev) => !prev)}
+                            aria-pressed={allowTutorChats}
+                            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                              allowTutorChats
+                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                : 'bg-slate-100 text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            {allowTutorChats ? 'On' : 'Off'}
+                          </button>
+                        </div>
+                        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.lessonOnlyLabel}</p>
+                            <p className="text-[11px] text-gray-600">{tutorControlsCopy.lessonOnlyDescription}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setLessonContextOnly((prev) => !prev)}
+                            aria-pressed={lessonContextOnly}
+                            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                              lessonContextOnly
+                                ? 'bg-brand-light-teal text-brand-teal border-brand-teal/50'
+                                : 'bg-slate-100 text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            {lessonContextOnly ? 'On' : 'Off'}
+                          </button>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.capLabel}</p>
+                              <p className="text-[11px] text-gray-600">{tutorControlsCopy.capDescription}</p>
+                            </div>
+                          </div>
+                          <div className="mt-2 flex items-center gap-2">
+                            <input
+                              type="number"
+                              min={0}
+                              inputMode="numeric"
+                              value={maxTutorChatsPerDay}
+                              onChange={(event) => setMaxTutorChatsPerDay(event.target.value)}
+                              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              placeholder="Plan cap"
+                            />
+                            <span className="text-[11px] text-gray-500">
+                              {tutorControlsCopy.planCapHelper}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500">
+                        <span>
+                          Students see a friendly notice when chats are off. Settings save instantly with your goal updates.
+                        </span>
+                        {tutorSettingsUpdatedAt && (
+                          <span className="text-slate-600">
+                            Last updated {new Date(tutorSettingsUpdatedAt).toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Chat safety mode</p>
+                          <p className="text-xs text-gray-600">Guide younger learners with prompt cards before free chat.</p>
+                        </div>
+                        {chatModeLocked && (
+                          <span className="text-[11px] px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                            Locked
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {([
+                          { mode: 'guided_only', label: 'Guided only (locked)' },
+                          { mode: 'guided_preferred', label: 'Guided preferred' },
+                          { mode: 'free', label: 'Allow free chat' },
+                        ] as const).map((option) => {
+                          const active = chatModeLocked
+                            ? option.mode === 'guided_only'
+                            : chatModeSetting === option.mode;
+                          return (
+                            <button
+                              key={option.mode}
+                              type="button"
+                              onClick={() => {
+                                if (option.mode === 'guided_only') {
+                                  setChatModeLocked(true);
+                                  setChatModeSetting('guided_only');
+                                } else {
+                                  setChatModeLocked(false);
+                                  setChatModeSetting(option.mode);
+                                }
+                              }}
+                              className={`px-3 py-2 rounded-lg text-sm font-semibold border transition ${
+                                active
+                                  ? 'bg-brand-blue text-white border-brand-blue'
+                                  : 'bg-white text-gray-700 border-slate-200 hover:border-brand-blue/60'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-2 text-[11px] text-gray-500">
+                        Guided only hides free text until a prompt card is used. You can loosen this later.
+                      </p>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label htmlFor="goal-weekly-lessons" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
                           Weekly lessons goal
                         </label>
-                        <input
-                          id="goal-weekly-lessons"
-                          type="number"
-                          min={0}
-                          value={goalForm.weeklyLessons}
-                          onChange={(event) =>
-                            setGoalForm((prev) => ({ ...prev, weeklyLessons: event.target.value }))
-                          }
-                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                          placeholder="e.g. 6"
-                        />
+                        <div className="mt-1 flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setGoalForm((prev) => {
+                                const next = Math.max(1, (Number.parseInt(prev.weeklyLessons || '0', 10) || 0) - 1);
+                                return { ...prev, weeklyLessons: String(next) };
+                              })
+                            }
+                            className="h-9 w-9 rounded-lg border border-slate-200 bg-white text-lg font-semibold text-gray-700 hover:border-brand-blue/60"
+                            aria-label="Decrease weekly lessons"
+                          >
+                            –
+                          </button>
+                          <input
+                            id="goal-weekly-lessons"
+                            type="number"
+                            min={1}
+                            max={typeof entitlements.lessonLimit === 'number' ? entitlements.lessonLimit : undefined}
+                            value={goalForm.weeklyLessons}
+                            onChange={(event) =>
+                              setGoalForm((prev) => ({ ...prev, weeklyLessons: event.target.value }))
+                            }
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                            placeholder="e.g. 6"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setGoalForm((prev) => {
+                                const current = Number.parseInt(prev.weeklyLessons || '0', 10) || 0;
+                                const maxCap =
+                                  typeof entitlements.lessonLimit === 'number'
+                                    ? entitlements.lessonLimit
+                                    : current + 1;
+                                const next = Math.min(Math.max(1, current + 1), maxCap);
+                                return { ...prev, weeklyLessons: String(next) };
+                              })
+                            }
+                            className="h-9 w-9 rounded-lg border border-slate-200 bg-white text-lg font-semibold text-gray-700 hover:border-brand-blue/60"
+                            aria-label="Increase weekly lessons"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="mt-2 text-[11px] text-gray-600 space-y-1">
+                          <p>Recommended: {recommendedWeeklyLessons}/week • 125% caution at {paceWarningThreshold}/week.</p>
+                          {typeof entitlements.lessonLimit === 'number' && (
+                            <p>Plan cap: {entitlements.lessonLimit} lessons/week.</p>
+                          )}
+                          {weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && (
+                            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1">
+                              Above recommended pace. Confirm below to proceed.
+                            </p>
+                          )}
+                          {weeklyLessonsTargetValue && typeof entitlements.lessonLimit === 'number' && weeklyLessonsTargetValue > entitlements.lessonLimit && (
+                            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1">
+                              We cap at your plan limit; higher values will be trimmed.
+                            </p>
+                          )}
+                        </div>
+                        {weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && (
+                          <label className="mt-2 flex items-center gap-2 text-xs text-gray-700">
+                            <input
+                              type="checkbox"
+                              checked={highPaceAcknowledged}
+                              onChange={(event) => setHighPaceAcknowledged(event.target.checked)}
+                              className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/30"
+                            />
+                            I understand this is above the recommended pace and want to set it anyway.
+                          </label>
+                        )}
                       </div>
                       <div>
                         <label htmlFor="goal-practice-minutes" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
@@ -2372,6 +3278,40 @@ const ParentDashboard: React.FC = () => {
                     <RefreshCw className={`h-4 w-4 ${modulesQuery.isFetching ? 'animate-spin' : ''}`} />
                   </button>
                 </div>
+                <div className="mb-3 text-xs text-gray-600 bg-slate-50 border border-slate-200 rounded-lg p-3">
+                  We keep assignments within one unit of the adaptive path. If you pick something too far ahead, we block it. Quick picks below are tuned to the next few lessons.
+                </div>
+                {recommendedModules.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-semibold text-gray-900">Recommended next modules</h4>
+                      <span className="text-[11px] text-gray-500">Top 3 suggested</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {recommendedModules.map((module) => (
+                        <div
+                          key={module.id}
+                          className="rounded-lg border border-slate-200 bg-white p-3 flex flex-col justify-between"
+                        >
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900 line-clamp-2">{module.title}</p>
+                            <p className="text-[11px] text-gray-600 mt-1 line-clamp-2">
+                              {module.summary ?? 'Next up on their path.'}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickAssign(module.id)}
+                            className="mt-3 inline-flex items-center justify-center rounded-lg bg-brand-blue px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                            disabled={assignModuleMutation.isLoading}
+                          >
+                            Assign to {currentChild?.name ?? 'learner'}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <form onSubmit={handleAssignModule} className="space-y-4">
                   <div>
                     <label htmlFor="assignment-child" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
@@ -2484,12 +3424,26 @@ const ParentDashboard: React.FC = () => {
                           key={assignment.id}
                           className="rounded-xl border border-slate-200 px-4 py-3 flex items-start justify-between gap-3"
                         >
-                          <div>
+                          <div className="space-y-1">
                             <p className="text-sm font-semibold text-gray-900">{assignment.title}</p>
                             <p className="text-xs text-gray-500">
                               {assignment.moduleTitle ?? 'Module'}
                               {assignment.dueAt ? ` • Due ${new Date(assignment.dueAt).toLocaleDateString()}` : ''}
                             </p>
+                            <div className="text-[11px] text-gray-600 space-y-1">
+                              {assignment.updatedBy && (
+                                <p>Last updated by {assignment.updatedBy}{assignment.updatedAt ? ` • ${new Date(assignment.updatedAt).toLocaleString()}` : ''}</p>
+                              )}
+                              {assignment.checkpointScore != null && (
+                                <p>Checkpoint score: {assignment.checkpointScore}%</p>
+                              )}
+                              {assignment.tutorChatCount != null && (
+                                <p>Tutor chats counted: {assignment.tutorChatCount}</p>
+                              )}
+                              {assignment.completedAt && (
+                                <p>Completed {new Date(assignment.completedAt).toLocaleDateString()}</p>
+                              )}
+                            </div>
                           </div>
                           <span
                             className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${statusBadgeStyles[assignment.status]}`}
@@ -2656,6 +3610,232 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.52 }}
+              id="safety-privacy"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-3">
+                  <ShieldCheck className="h-5 w-5 text-brand-teal" />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">Safety & Privacy</h3>
+                    <p className="text-xs text-gray-600">Plain-language guardrails plus a fast way to flag issues.</p>
+                  </div>
+                </div>
+                <span className="text-[11px] px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wide">
+                  Response &lt; 1 business day
+                </span>
+              </div>
+              <div className="grid gap-5 lg:grid-cols-2">
+                <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                  <p className="text-sm text-gray-700">
+                    The AI tutor stays on academic help only. We screen for safety violations, keep under-13 accounts
+                    consented and read-only until approved, and block personal contact info, social/dating advice, and off-topic requests.
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
+                      <span>Safety reviews on risky prompts and tutor chats; flagged items are routed to human review.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
+                      <span>Data kept minimal: learning progress, tutoring transcripts for safety, guardian consent logs, and assignment actions.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
+                      <span>Students see plain-language explanations when something is blocked and are reminded to ask a grown-up.</span>
+                    </li>
+                  </ul>
+                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs text-gray-700">
+                      <p className="font-semibold text-gray-900 text-sm">What we store</p>
+                      <p className="mt-1 text-gray-600">
+                        Progress, assignments, and safety-blocked chats with timestamps so families can request audits or exports.
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs text-gray-700">
+                      <p className="font-semibold text-gray-900 text-sm">Policy links</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        <Link to="/privacy" className="text-brand-blue font-semibold hover:underline">
+                          Privacy policy
+                        </Link>
+                        <a
+                          href="/docs/compliance.md"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-brand-blue font-semibold hover:underline"
+                        >
+                          docs/compliance.md
+                          <ArrowUpRight className="h-3 w-3" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                      <h4 className="text-sm font-semibold text-gray-900">Report a concern</h4>
+                    </div>
+                    <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                      {concernRouteCopy}
+                    </span>
+                  </div>
+                  <form onSubmit={handleConcernSubmit} className="space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                          Category
+                        </label>
+                        <select
+                          value={concernCategory}
+                          onChange={(event) => setConcernCategory(event.target.value as ConcernCategory)}
+                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                        >
+                          <option value="safety">Safety issue</option>
+                          <option value="content">Content quality</option>
+                          <option value="data">Data or privacy</option>
+                          <option value="account">Account or billing</option>
+                          <option value="billing">Payment issue</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                          Contact email
+                        </label>
+                        <input
+                          type="email"
+                          value={concernContact}
+                          onChange={(event) => setConcernContact(event.target.value)}
+                          placeholder={parent.email}
+                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                        What happened?
+                      </label>
+                      <textarea
+                        value={concernDescription}
+                        onChange={(event) => setConcernDescription(event.target.value)}
+                        rows={3}
+                        required
+                        placeholder="Tell us what felt off. Include where it happened (tutor chat, lesson, assignment) and which learner if relevant."
+                        className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                          Screenshot or link (optional)
+                        </label>
+                        <input
+                          type="url"
+                          value={concernScreenshotUrl}
+                          onChange={(event) => setConcernScreenshotUrl(event.target.value)}
+                          placeholder="Link to a screenshot or example"
+                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                        />
+                      </div>
+                      <div className="text-xs text-gray-600 rounded-lg bg-slate-50 border border-slate-100 p-3">
+                        We route safety/content to Trust & Safety and account/data to support. You will get a case ID and confirmation email.
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <button
+                        type="submit"
+                        disabled={concernReportMutation.isLoading || !concernDescription.trim()}
+                        className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                      >
+                        {concernReportMutation.isLoading ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Sending…
+                          </>
+                        ) : (
+                          'Send report'
+                        )}
+                      </button>
+                      <p className="text-xs text-gray-500">
+                        We respond within 1 business day with next steps and audit trail.
+                      </p>
+                    </div>
+                  </form>
+                  {concernMessage && (
+                    <p className="mt-3 text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                      {concernMessage}
+                    </p>
+                  )}
+                  {concernError && (
+                    <p className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                      {concernError}
+                    </p>
+                  )}
+
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h5 className="text-sm font-semibold text-gray-900">
+                        Recent reports{currentChild ? ` • ${currentChild.name}` : ''}
+                      </h5>
+                      <button
+                        type="button"
+                        onClick={() => concernReportsQuery.refetch()}
+                        className="p-1 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                        disabled={concernReportsQuery.isFetching}
+                      >
+                        <RefreshCw className={`h-4 w-4 ${concernReportsQuery.isFetching ? 'animate-spin' : ''}`} />
+                      </button>
+                    </div>
+                    {concernReportsQuery.isFetching ? (
+                      <SkeletonCard className="h-16" />
+                    ) : concernReports.length ? (
+                      <ul className="space-y-2">
+                        {concernReports.map((report) => (
+                          <li
+                            key={report.id}
+                            className="flex items-start justify-between rounded-lg border border-slate-200 px-3 py-2 gap-3"
+                          >
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-gray-900">
+                                Case {report.caseId}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {new Date(report.createdAt).toLocaleDateString()} • {report.category.replace('_', ' ')}
+                              </p>
+                              <p className="text-xs text-gray-600 mt-1 break-words">
+                                {report.description}
+                              </p>
+                            </div>
+                            <div className="flex flex-col items-end gap-1">
+                              <span
+                                className={`text-[11px] px-2 py-1 rounded-full capitalize ${concernStatusStyles[report.status]}`}
+                              >
+                                {report.status.replace('_', ' ')}
+                              </span>
+                              <span className="text-[11px] text-slate-500 capitalize">
+                                {report.route} queue
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-gray-600">
+                        No reports yet. If anything feels off, send it our way and we will follow up with a case ID.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
               className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
             >
               <div className="flex items-center justify-between mb-3">
@@ -2799,7 +3979,7 @@ const ParentDashboard: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
+              transition={{ delay: 0.58 }}
               id="weekly-snapshot"
               className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40"
             >

@@ -33,7 +33,13 @@ import {
   fetchAdminStudents,
 } from '../../services/assignmentService';
 import { fetchCatalogModules } from '../../services/catalogService';
-import { logAdminAuditEvent } from '../../services/adminService';
+import { logAdminAuditEvent, fetchOpsMetrics, type OpsMetricsSnapshot } from '../../services/adminService';
+import {
+  fetchTutorReports,
+  updateTutorReportStatus,
+  type TutorAdminReport,
+  type TutorReportStatus,
+} from '../../services/tutorAdminService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -50,6 +56,7 @@ const AdminDashboard: React.FC = () => {
   const [assignMessage, setAssignMessage] = useState<string | null>(null);
   const [assignError, setAssignError] = useState<string | null>(null);
   const [auditLogged, setAuditLogged] = useState(false);
+  const [reportStatusFilter, setReportStatusFilter] = useState<'all' | TutorReportStatus>('open');
 
   const {
     data: dashboard,
@@ -115,6 +122,28 @@ const AdminDashboard: React.FC = () => {
   });
 
   const assignmentsOverview = assignmentsQuery.data ?? [];
+
+  const opsMetricsQuery = useQuery({
+    queryKey: ['admin-ops-metrics'],
+    queryFn: fetchOpsMetrics,
+    refetchInterval: 30 * 1000,
+    staleTime: 15 * 1000,
+  });
+  const opsMetrics: OpsMetricsSnapshot | undefined = opsMetricsQuery.data;
+
+  const tutorReportsQuery = useQuery({
+    queryKey: ['admin-tutor-reports', reportStatusFilter],
+    queryFn: () => fetchTutorReports(reportStatusFilter === 'all' ? undefined : reportStatusFilter),
+    staleTime: 30 * 1000,
+  });
+
+  const updateTutorReportStatusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: number; status: TutorReportStatus }) =>
+      updateTutorReportStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-tutor-reports'] });
+    },
+  });
 
   const targetedStudentsCount = useMemo(() => {
     if (selectedGrade === 'all' || selectedGrade == null) {
@@ -462,6 +491,134 @@ const AdminDashboard: React.FC = () => {
                     ))}
               </div>
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.32 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Ops Signals</h3>
+                  <p className="text-sm text-slate-600">Last {Math.round((opsMetrics?.windowMs ?? 3600000) / 60000)} min</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => opsMetricsQuery.refetch()}
+                  className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                  disabled={opsMetricsQuery.isFetching}
+                >
+                  <RefreshCw className={`h-4 w-4 ${opsMetricsQuery.isFetching ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+              {opsMetricsQuery.isLoading ? (
+                <SkeletonCard className="h-28" />
+              ) : opsMetrics ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {([
+                      { label: 'Tutor successes', value: opsMetrics.totals.tutor_success, tone: 'default' },
+                      { label: 'Tutor errors', value: opsMetrics.totals.tutor_error, tone: 'warn' },
+                      { label: 'Safety blocks', value: opsMetrics.totals.tutor_safety_block, tone: 'amber' },
+                      { label: 'Plan/limit blocks', value: opsMetrics.totals.tutor_plan_limit, tone: 'amber' },
+                      { label: 'API failures', value: opsMetrics.totals.api_failure, tone: 'warn' },
+                      { label: 'Slow APIs', value: opsMetrics.totals.api_slow, tone: 'default' },
+                    ] as const).map((stat) => {
+                      const tone =
+                        stat.tone === 'warn'
+                          ? 'bg-rose-50 border-rose-200 text-rose-700'
+                          : stat.tone === 'amber'
+                            ? 'bg-amber-50 border-amber-200 text-amber-700'
+                            : 'bg-slate-50 border-slate-200 text-slate-800';
+                      return (
+                        <div key={stat.label} className={`rounded-xl border p-3 ${tone}`}>
+                          <p className="text-xs uppercase tracking-wide font-semibold">{stat.label}</p>
+                          <p className="text-2xl font-bold mt-1">{stat.value}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Top safety reasons</p>
+                      {opsMetrics.topSafetyReasons.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.topSafetyReasons.map((item) => (
+                            <li key={item.label} className="flex justify-between">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No safety blocks.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Plan/limit triggers</p>
+                      {opsMetrics.topPlanLimitReasons.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.topPlanLimitReasons.map((item) => (
+                            <li key={item.label} className="flex justify-between">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No plan/limit hits.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">API failures</p>
+                      {opsMetrics.apiFailuresByRoute.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.apiFailuresByRoute.map((item) => (
+                            <li key={item.label} className="flex justify-between">
+                              <span className="truncate max-w-[180px]" title={item.label}>
+                                {item.label}
+                              </span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No failures in window.</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-slate-200 bg-white p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Recent signals</p>
+                    {opsMetrics.recent.length ? (
+                      <ul className="divide-y divide-slate-100">
+                        {opsMetrics.recent.slice(0, 6).map((event, idx) => (
+                          <li key={idx} className="py-2 text-sm flex items-center justify-between gap-3">
+                            <div className="flex-1">
+                              <p className="font-semibold text-slate-900">{event.type}</p>
+                              <p className="text-xs text-slate-600">
+                                {event.reason ? `Reason: ${event.reason} • ` : ''}
+                                {event.route ? `Route: ${event.route}` : ''}
+                                {event.status ? ` (${event.status})` : ''}
+                                {event.plan ? ` • Plan: ${event.plan}` : ''}
+                                {event.durationMs ? ` • ${Math.round(event.durationMs)}ms` : ''}
+                              </p>
+                            </div>
+                            <span className="text-[11px] text-slate-500">
+                              {new Date(event.timestamp).toLocaleTimeString()}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-slate-600">No signals yet.</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-slate-600">Unable to load ops signals.</p>
+              )}
+            </motion.div>
           </div>
 
           <div className="space-y-8">
@@ -651,6 +808,100 @@ const AdminDashboard: React.FC = () => {
                 </p>
               )}
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Tutor Answer Reports</h3>
+                  <p className="text-sm text-slate-600">Flagged answers that need human review.</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <select
+                    value={reportStatusFilter}
+                    onChange={(event) =>
+                      setReportStatusFilter((event.target.value as 'all' | TutorReportStatus) ?? 'all')
+                    }
+                    className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  >
+                    <option value="all">All</option>
+                    <option value="open">Open</option>
+                    <option value="in_review">In review</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="dismissed">Dismissed</option>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => tutorReportsQuery.refetch()}
+                    className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                    disabled={tutorReportsQuery.isFetching}
+                  >
+                    <RefreshCw className={`h-4 w-4 ${tutorReportsQuery.isFetching ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+              </div>
+
+              {tutorReportsQuery.isLoading ? (
+                <SkeletonCard className="h-32" />
+              ) : (tutorReportsQuery.data ?? []).length ? (
+                <div className="space-y-3">
+                  {(tutorReportsQuery.data as TutorAdminReport[]).map((report) => (
+                    <div key={report.id} className="p-4 border border-slate-200 rounded-xl bg-slate-50">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">
+                            Report #{report.id}{' '}
+                            <span className="text-xs text-gray-500">
+                              {report.created_at ? new Date(report.created_at).toLocaleString() : ''}
+                            </span>
+                          </p>
+                          <p className="text-xs text-slate-600">
+                            Reason: {report.reason ?? 'unknown'} • Student {report.student_id ?? 'N/A'} • Conversation{' '}
+                            {report.conversation_id ?? 'N/A'}
+                          </p>
+                        </div>
+                        <select
+                          value={report.status}
+                          onChange={(event) =>
+                            updateTutorReportStatusMutation.mutate({
+                              id: report.id,
+                              status: event.target.value as TutorReportStatus,
+                            })
+                          }
+                          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                          disabled={updateTutorReportStatusMutation.isLoading}
+                        >
+                          <option value="open">Open</option>
+                          <option value="in_review">In review</option>
+                          <option value="resolved">Resolved</option>
+                          <option value="dismissed">Dismissed</option>
+                        </select>
+                      </div>
+                      <div className="mt-2 rounded-lg bg-white border border-slate-200 p-3 text-sm text-slate-800 whitespace-pre-wrap">
+                        {report.answer ?? 'No answer captured.'}
+                      </div>
+                      {report.reviewed_by && (
+                        <p className="mt-2 text-[11px] text-slate-500">
+                          Reviewed by {report.reviewed_by} {report.reviewed_at ? `• ${new Date(report.reviewed_at).toLocaleString()}` : ''}
+                        </p>
+                      )}
+                      {updateTutorReportStatusMutation.isError && (
+                        <p className="mt-2 text-xs text-rose-700">
+                          {(updateTutorReportStatusMutation.error as Error).message ?? 'Failed to update status.'}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-600">No tutor reports yet. New reports will appear here.</p>
+              )}
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

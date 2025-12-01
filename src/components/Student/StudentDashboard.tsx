@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Trophy,
   Bot,
+  Flame,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -38,9 +39,12 @@ import type {
   BadgeCategory,
   DashboardLesson,
   LearningPathItem,
+  LearningPreferences,
   Mission,
   Student,
+  StudentReflection,
   Subject,
+  CelebrationMoment,
 } from '../../types';
 const AssessmentFlow = lazy(() => import('./AssessmentFlow'));
 const LearningAssistant = lazy(() => import('./LearningAssistant'));
@@ -51,7 +55,9 @@ import { formatSubjectLabel, SUBJECTS } from '../../lib/subjects';
 import { studySkillsModules } from '../../data/studySkillsModules';
 import { saveStudentAvatar, saveTutorPersona } from '../../services/avatarService';
 import { TUTOR_AVATARS, isStudentAvatarUnlocked } from '../../../shared/avatarManifests';
+import { updateLearningPreferences } from '../../services/profileService';
 import { tutorNameErrorMessage, validateTutorName } from '../../../shared/nameSafety';
+import { fetchReflections, saveReflection, toggleReflectionShare } from '../../services/reflectionService';
 
 const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
   in_progress: 0,
@@ -74,9 +80,36 @@ const PATH_STATUS_STYLES: Record<LearningPathItem['status'], string> = {
   mastered: 'bg-purple-50 text-purple-700',
 };
 
+const formatAgo = (input: Date | string): string => {
+  const date = input instanceof Date ? input : new Date(input);
+  const diffMs = Date.now() - date.getTime();
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
 );
+
+const describeTutorTone = (tone?: AvatarOption['tone']): string => {
+  switch (tone) {
+    case 'calm':
+      return 'Calm coach';
+    case 'structured':
+      return 'Step-by-step';
+    case 'bold':
+      return 'Hype';
+    case 'concise':
+      return 'Quiet expert';
+    default:
+      return 'Supportive';
+  }
+};
 
 const StudentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
@@ -117,6 +150,33 @@ const StudentDashboard: React.FC = () => {
   const [tutorAvatarId, setTutorAvatarId] = useState<string>(student?.tutorAvatarId ?? TUTOR_AVATARS[0].id);
   const [tutorFeedback, setTutorFeedback] = useState<string | null>(null);
   const [tutorSaving, setTutorSaving] = useState(false);
+  const [tutorFlowStartedAt, setTutorFlowStartedAt] = useState<number | null>(null);
+  const [tutorFlowLogged, setTutorFlowLogged] = useState<boolean>(false);
+  const [weeklyPlanIntensity, setWeeklyPlanIntensity] = useState<'light' | 'normal' | 'challenge'>(
+    student?.learningPreferences?.weeklyPlanIntensity ?? 'normal',
+  );
+  const [weeklyPlanFocus, setWeeklyPlanFocus] = useState<Subject | 'balanced'>(
+    (student?.learningPreferences?.weeklyPlanFocus as Subject | 'balanced') ??
+      student?.learningPreferences?.focusSubject ??
+      'balanced',
+  );
+  const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
+    student?.learningPreferences?.studyMode ?? 'keep_up',
+  );
+  const studyModeLocked = student.learningPreferences.studyModeLocked ?? false;
+  const [weeklyPlanStatusTracked, setWeeklyPlanStatusTracked] = useState(false);
+  const [celebrationQueue, setCelebrationQueue] = useState<CelebrationMoment[]>([]);
+  const [celebrationShownIds, setCelebrationShownIds] = useState<Set<string>>(new Set());
+  const [reflections, setReflections] = useState<StudentReflection[]>([]);
+  const [reflectionModalOpen, setReflectionModalOpen] = useState(false);
+  const [reflectionQuestion, setReflectionQuestion] = useState<string>('what_learned');
+  const [reflectionText, setReflectionText] = useState<string>('');
+  const [reflectionShare, setReflectionShare] = useState<boolean>(false);
+  const [reflectionError, setReflectionError] = useState<string | null>(null);
+  const [reflectionSaving, setReflectionSaving] = useState(false);
+  const [studyModePromptLogged, setStudyModePromptLogged] = useState(false);
+  const [studyModeBannerLogged, setStudyModeBannerLogged] = useState(false);
+  const [reflectionTimerStarted, setReflectionTimerStarted] = useState(false);
 
   const {
     data: dashboard,
@@ -146,7 +206,123 @@ const StudentDashboard: React.FC = () => {
     if (!student) return;
     setTutorNameInput(student.tutorName ?? '');
     setTutorAvatarId(student.tutorAvatarId ?? TUTOR_AVATARS[0].id);
+    setWeeklyPlanIntensity(student.learningPreferences.weeklyPlanIntensity ?? 'normal');
+    setWeeklyPlanFocus(
+      (student.learningPreferences.weeklyPlanFocus as Subject | 'balanced') ??
+        student.learningPreferences.focusSubject ??
+        'balanced',
+    );
+    setStudyMode(student.learningPreferences.studyMode ?? 'keep_up');
   }, [student?.tutorName, student?.tutorAvatarId]);
+
+  useEffect(() => {
+    if (!student || tutorFlowLogged) return;
+    setTutorFlowLogged(true);
+    const startedAt = Date.now();
+    setTutorFlowStartedAt(startedAt);
+    trackEvent('tutor_onboarding_started', {
+      source: 'dashboard',
+      grade_band: gradeBand,
+      locale: typeof navigator !== 'undefined' ? navigator.language : 'unknown',
+    });
+    trackEvent('tutor_onboarding_step_completed', {
+      step: 'intro',
+      persona_id: tutorAvatarId,
+      avatar_id: tutorAvatarId,
+      provided_name: Boolean(student.tutorName?.trim()),
+    });
+  }, [gradeBand, student, tutorAvatarId, tutorFlowLogged]);
+
+  useEffect(() => {
+    if (!student) return;
+    fetchReflections(10)
+      .then((rows) => setReflections(rows))
+      .catch((err) => console.warn('[Reflections] Unable to load', err));
+  }, [student?.id]);
+
+  useEffect(() => {
+    if (!student) return;
+    if (studyModeExpired) {
+      trackEvent('study_mode_expired', { mode: studyMode, grade_band: gradeBand });
+    }
+  }, [gradeBand, studyMode, studyModeExpired, student]);
+
+  useEffect(() => {
+    if (!student) return;
+    const needsPrompt = studyModeExpired || !studyModeSetAt;
+    if (needsPrompt && !studyModePromptLogged) {
+      trackEvent('study_mode_prompt_shown', {
+        surface: 'dashboard',
+        reason: studyModeExpired ? 'expired' : 'first_time',
+        grade_band: gradeBand,
+      });
+      setStudyModePromptLogged(true);
+    }
+  }, [gradeBand, studyModeExpired, studyModePromptLogged, studyModeSetAt, student]);
+
+  useEffect(() => {
+    if (!student || studyModeBannerLogged) return;
+    trackEvent('study_mode_banner_viewed', { mode: studyMode, surface: 'dashboard', parent_locked: parentGoalActive });
+    setStudyModeBannerLogged(true);
+  }, [parentGoalActive, studyMode, studyModeBannerLogged, student]);
+
+  useEffect(() => {
+    if (!student || !dashboard || weeklyPlanStatusTracked) return;
+    trackEvent('weekly_plan_viewed', {
+      source: 'dashboard',
+      grade_band: gradeBand,
+      parent_goal: parentGoalActive,
+    });
+    trackEvent('weekly_plan_status', {
+      lessons_target: weeklyPlanTargets.lessons,
+      lessons_done: lessonsThisWeek,
+      minutes_target: weeklyPlanTargets.minutes,
+      minutes_done: minutesThisWeek,
+      status: weeklyPlanStatus,
+      parent_goal: parentGoalActive,
+    });
+    setWeeklyPlanStatusTracked(true);
+  }, [
+    dashboard,
+    gradeBand,
+    lessonsThisWeek,
+    minutesThisWeek,
+    parentGoalActive,
+    student,
+    weeklyPlanStatus,
+    weeklyPlanStatusTracked,
+    weeklyPlanTargets.lessons,
+    weeklyPlanTargets.minutes,
+  ]);
+
+  useEffect(() => {
+    if (parentGoalActive && student?.learningPreferences?.focusSubject) {
+      setWeeklyPlanFocus(student.learningPreferences.focusSubject as Subject | 'balanced');
+    }
+    if (parentGoalActive) {
+      setWeeklyPlanIntensity('normal');
+    }
+  }, [parentGoalActive, student?.learningPreferences?.focusSubject]);
+
+  useEffect(() => {
+    if (!student || reflectionTimerStarted) return;
+    const timer = setTimeout(() => {
+      if (!reflectionModalOpen) {
+        openReflectionModal('what_learned', 'long_session');
+      }
+    }, 20 * 60 * 1000);
+    setReflectionTimerStarted(true);
+    return () => clearTimeout(timer);
+  }, [openReflectionModal, reflectionModalOpen, reflectionTimerStarted, student]);
+
+  useEffect(() => {
+    const handleReflectionPrompt = (event: Event) => {
+      const detail = (event as CustomEvent<{ reason?: string; questionId?: string }>).detail ?? {};
+      openReflectionModal(detail.questionId, detail.reason);
+    };
+    window.addEventListener('reflection:prompt', handleReflectionPrompt as EventListener);
+    return () => window.removeEventListener('reflection:prompt', handleReflectionPrompt as EventListener);
+  }, [openReflectionModal]);
 
   useEffect(() => {
     if (autoRoutedDiagnostic || !student) return;
@@ -177,6 +353,11 @@ const StudentDashboard: React.FC = () => {
   const lessonsThisWeek = useMemo(() => {
     if (!dashboard?.dailyActivity) return 0;
     return dashboard.dailyActivity.reduce((acc, entry) => acc + (entry.lessonsCompleted ?? 0), 0);
+  }, [dashboard?.dailyActivity]);
+
+  const minutesThisWeek = useMemo(() => {
+    if (!dashboard?.dailyActivity) return 0;
+    return dashboard.dailyActivity.reduce((acc, entry) => acc + (entry.practiceMinutes ?? 0), 0);
   }, [dashboard?.dailyActivity]);
 
   const learningPath: LearningPathItem[] = useMemo(() => {
@@ -259,6 +440,13 @@ const StudentDashboard: React.FC = () => {
     [tutorAvatarId],
   );
 
+  const gradeBand = useMemo(() => {
+    if (!student?.grade) return 'unknown';
+    if (student.grade <= 5) return 'g3-5';
+    if (student.grade <= 8) return 'g6-8';
+    return 'g9-plus';
+  }, [student?.grade]);
+
   const tutorNameValidation = useMemo(() => {
     const trimmed = tutorNameInput.trim();
     if (!trimmed.length) {
@@ -285,6 +473,17 @@ const StudentDashboard: React.FC = () => {
 
   const celebrationMoments = dashboard?.celebrationMoments ?? [];
   const avatarOptions = dashboard?.avatarOptions ?? [];
+  const parentGoals = dashboard?.parentGoals ?? null;
+  const parentGoalActive = Boolean(parentGoals?.weeklyLessons || parentGoals?.practiceMinutes);
+  const activeCelebration = celebrationQueue[0] ?? null;
+  const quickStats = dashboard?.quickStats;
+  const studyModeSetAt = student.learningPreferences.studyModeSetAt
+    ? new Date(student.learningPreferences.studyModeSetAt)
+    : null;
+  const studyModeExpired =
+    studyModeSetAt != null
+      ? Date.now() - studyModeSetAt.getTime() > 1000 * 60 * 60 * 24 * 7
+      : false;
 
   const handleAssessmentComplete = async (result?: AssessmentResult | null) => {
     setActiveView('dashboard');
@@ -309,7 +508,6 @@ const StudentDashboard: React.FC = () => {
       : todaysPlan.filter((lesson) => lesson.subject === subjectFilter);
   const todayActivities = dashboard?.todayActivities ?? [];
   const extensionActivities = todayActivities.filter((activity) => activity.homeExtension);
-  const quickStats = dashboard?.quickStats;
   const activeLessonId = dashboard?.activeLessonId ?? null;
   const recommendedLesson =
     todaysPlan.find((lesson) => lesson.id === activeLessonId) ??
@@ -322,6 +520,141 @@ const StudentDashboard: React.FC = () => {
     const pct = total ? Math.round((completed / total) * 100) : 0;
     return { completed, total, pct };
   }, [todaysPlan]);
+
+  const currentPlanFocus = useMemo(() => {
+    if (parentGoalActive && student?.learningPreferences?.focusSubject) {
+      return student.learningPreferences.focusSubject as Subject | 'balanced';
+    }
+    return weeklyPlanFocus;
+  }, [parentGoalActive, student?.learningPreferences?.focusSubject, weeklyPlanFocus]);
+
+  useEffect(() => {
+    if (!student || !dashboard || !quickStats) return;
+    const snapshotKey = `celebration-snapshot-${student.id}`;
+    const seenKey = `celebration-seen-${student.id}`;
+    let seen = celebrationShownIds;
+    try {
+      const storedSeen = localStorage.getItem(seenKey);
+      if (storedSeen) {
+        seen = new Set(JSON.parse(storedSeen) as string[]);
+        setCelebrationShownIds(seen);
+      }
+    } catch (error) {
+      console.warn('[Celebrations] Failed to parse seen celebrations', error);
+    }
+
+    const snapshot = (() => {
+      try {
+        const raw = localStorage.getItem(snapshotKey);
+        return raw ? (JSON.parse(raw) as { level?: number; streakDays?: number }) : {};
+      } catch {
+        return {};
+      }
+    })();
+
+    const candidates: CelebrationMoment[] = [];
+    if (quickStats.level && (!snapshot.level || quickStats.level > snapshot.level)) {
+      candidates.push({
+        id: `level-${quickStats.level}`,
+        title: `Level up!`,
+        description: `You reached level ${quickStats.level} by finishing lessons.`,
+        kind: 'level',
+        occurredAt: new Date().toISOString(),
+        prompt: 'Start your next lesson to keep the momentum.',
+        studentId: student.id,
+      });
+    }
+
+    const streakMilestones = [7, 14, 30];
+    const streakDays = quickStats.streakDays ?? student.streakDays;
+    const reachedMilestone = streakMilestones.find(
+      (milestone) => streakDays >= milestone && (!snapshot.streakDays || snapshot.streakDays < milestone),
+    );
+    if (reachedMilestone) {
+      candidates.push({
+        id: `streak-${reachedMilestone}-${streakDays}`,
+        title: `${reachedMilestone}-day streak!`,
+        description: `You learned for ${reachedMilestone} days in a row.`,
+        kind: 'streak',
+        occurredAt: new Date().toISOString(),
+        prompt: 'Stay on a roll—try one more lesson today.',
+        studentId: student.id,
+      });
+    }
+
+    const serverCelebrations = celebrationMoments ?? [];
+    const queue = [...candidates, ...serverCelebrations]
+      .filter((celebration) => !seen.has(celebration.id))
+      .slice(0, 2);
+
+    if (queue.length) {
+      setCelebrationQueue(queue);
+      queue.forEach((item) => {
+        trackEvent('celebration_shown', {
+          kind: item.kind,
+          id: item.id,
+          level: quickStats.level,
+          streak_days: streakDays,
+          avatar_id: (item as { avatarId?: string }).avatarId,
+          mission_id: (item as { missionId?: string }).missionId,
+        });
+      });
+    }
+
+    try {
+      localStorage.setItem(
+        snapshotKey,
+        JSON.stringify({ level: quickStats.level, streakDays }),
+      );
+      localStorage.setItem(seenKey, JSON.stringify(Array.from(seen)));
+    } catch (error) {
+      console.warn('[Celebrations] Failed to persist snapshot', error);
+    }
+  }, [celebrationMoments, celebrationShownIds, dashboard, quickStats, student]);
+
+  const weeklyPlanTargets = useMemo(() => {
+    const lessonBase = parentGoals?.weeklyLessons ?? 5;
+    const minutesBase = parentGoals?.practiceMinutes ?? 60;
+    const factor =
+      parentGoalActive || !lessonBase
+        ? 1
+        : weeklyPlanIntensity === 'light'
+          ? 0.8
+          : weeklyPlanIntensity === 'challenge'
+            ? 1.2
+            : 1;
+    return {
+      lessons: Math.max(1, Math.round(lessonBase * factor)),
+      minutes: Math.max(15, Math.round(minutesBase * factor)),
+    };
+  }, [parentGoalActive, parentGoals?.practiceMinutes, parentGoals?.weeklyLessons, weeklyPlanIntensity]);
+
+  const weeklyPlanExpectedLessons = useMemo(() => {
+    const today = new Date();
+    const dayOfWeek = ((today.getDay() + 6) % 7) + 1; // Monday=1
+    return Math.ceil((weeklyPlanTargets.lessons * dayOfWeek) / 7);
+  }, [weeklyPlanTargets.lessons]);
+
+  const weeklyPlanStatus = useMemo(() => {
+    if (!weeklyPlanTargets.lessons) return 'on_track';
+    if (lessonsThisWeek >= weeklyPlanExpectedLessons) return 'on_track';
+    if (lessonsThisWeek >= weeklyPlanExpectedLessons - 1) return 'almost';
+    return 'behind';
+  }, [lessonsThisWeek, weeklyPlanExpectedLessons, weeklyPlanTargets.lessons]);
+
+  const dismissCelebration = (celebration: CelebrationMoment, reason: 'auto' | 'close' | 'cta') => {
+    const nextQueue = celebrationQueue.slice(1);
+    setCelebrationQueue(nextQueue);
+    const updatedSeen = new Set(celebrationShownIds);
+    updatedSeen.add(celebration.id);
+    setCelebrationShownIds(updatedSeen);
+    try {
+      localStorage.setItem(`celebration-seen-${student.id}`, JSON.stringify(Array.from(updatedSeen)));
+    } catch (error) {
+      console.warn('[Celebrations] Failed to persist seen ids', error);
+    }
+    trackEvent('celebration_dismissed', { kind: celebration.kind, id: celebration.id, reason });
+  };
 
   if (!student) {
     return null;
@@ -360,6 +693,14 @@ const StudentDashboard: React.FC = () => {
       lessonId: lesson.id,
       status: lesson.status,
     });
+    if (activeCelebration) {
+      trackEvent('celebration_next_activity_started', {
+        kind: activeCelebration.kind,
+        id: activeCelebration.id,
+        activity_type: 'lesson',
+      });
+      dismissCelebration(activeCelebration, 'cta');
+    }
     if (lesson.launchUrl) {
       window.open(lesson.launchUrl, '_blank', 'noopener');
     }
@@ -401,6 +742,135 @@ const StudentDashboard: React.FC = () => {
     }
   };
 
+  const openReflectionModal = (questionId?: string, reason?: string) => {
+    setReflectionQuestion(questionId ?? 'what_learned');
+    setReflectionText('');
+    setReflectionError(null);
+    setReflectionShare(false);
+    setReflectionModalOpen(true);
+    trackEvent('reflection_prompt_shown', {
+      reason: reason ?? 'manual',
+      lesson_id: dashboard?.activeLessonId,
+      subject: dashboard?.todayActivities?.[0]?.subject ?? null,
+    });
+  };
+
+  const handleSaveReflectionEntry = async () => {
+    const trimmed = reflectionText.trim();
+    if (trimmed.length < 10) {
+      setReflectionError('Add at least a short sentence (10+ characters).');
+      return;
+    }
+    if (trimmed.length > 220) {
+      setReflectionError('Keep it under 220 characters.');
+      return;
+    }
+    setReflectionSaving(true);
+    setReflectionError(null);
+    try {
+      const newEntry = await saveReflection({
+        questionId: reflectionQuestion,
+        responseText: trimmed,
+        lessonId: dashboard?.activeLessonId ?? undefined,
+        subject: dashboard?.todayActivities?.[0]?.subject ?? undefined,
+        sentiment: undefined,
+        shareWithParent: reflectionShare,
+      });
+      setReflections((prev) => [newEntry, ...prev].slice(0, 10));
+      setReflectionModalOpen(false);
+      setReflectionText('');
+      trackEvent('reflection_submitted', {
+        question_id: reflectionQuestion,
+        length: trimmed.length,
+        lesson_id: dashboard?.activeLessonId,
+        subject: dashboard?.todayActivities?.[0]?.subject ?? null,
+      });
+      if (reflectionShare) {
+        trackEvent('reflection_share_toggled', { shared: true, source: 'prompt' });
+      }
+    } catch (err) {
+      console.error('[Reflections] Save failed', err);
+      setReflectionError(err instanceof Error ? err.message : 'Unable to save right now.');
+    } finally {
+      setReflectionSaving(false);
+    }
+  };
+
+  const handleToggleReflectionShare = async (id: string, share: boolean) => {
+    setReflections((prev) => prev.map((entry) => (entry.id === id ? { ...entry, shareWithParent: share } : entry)));
+    try {
+      await toggleReflectionShare(id, share);
+      trackEvent('reflection_share_toggled', { shared: share, source: 'dashboard' });
+    } catch (err) {
+      console.warn('[Reflections] Toggle share failed', err);
+      setReflections((prev) => prev.map((entry) => (entry.id === id ? { ...entry, shareWithParent: !share } : entry)));
+    }
+  };
+
+  const persistWeeklyPlanPrefs = async (updates: Partial<LearningPreferences>) => {
+    if (!student) return;
+    const merged: LearningPreferences = {
+      ...student.learningPreferences,
+      ...updates,
+    };
+    try {
+      await updateLearningPreferences(student.id, merged);
+    } catch (error) {
+      console.warn('[StudentDashboard] Unable to persist weekly plan prefs', error);
+    }
+  };
+
+  const handleWeeklyPlanIntensityChange = (value: 'light' | 'normal' | 'challenge') => {
+    if (parentGoalActive) return;
+    if (value === weeklyPlanIntensity) return;
+    setWeeklyPlanIntensity(value);
+    setWeeklyPlanStatusTracked(false);
+    trackEvent('weekly_plan_intensity_changed', {
+      from: weeklyPlanIntensity,
+      to: value,
+      parent_override: parentGoalActive,
+    });
+    void persistWeeklyPlanPrefs({ weeklyPlanIntensity: value });
+  };
+
+  const handleWeeklyPlanFocusChange = (value: Subject | 'balanced') => {
+    if (parentGoalActive) return;
+    if (value === weeklyPlanFocus) return;
+    setWeeklyPlanFocus(value);
+    setWeeklyPlanStatusTracked(false);
+    trackEvent('weekly_plan_focus_changed', {
+      from: weeklyPlanFocus,
+      to: value,
+      parent_override: parentGoalActive,
+    });
+    void persistWeeklyPlanPrefs({ weeklyPlanFocus: value, focusSubject: value === 'balanced' ? 'balanced' : value });
+  };
+
+  const handleStudyModeChange = (
+    value: 'catch_up' | 'keep_up' | 'get_ahead',
+    source: 'dashboard' | 'expired_confirm' = 'dashboard',
+  ) => {
+    if (value === studyMode && source !== 'expired_confirm') return;
+    if ((parentGoalActive || studyModeLocked) && value === 'get_ahead') return;
+    setStudyMode(value);
+    trackEvent('study_mode_set', {
+      mode: value,
+      source,
+      grade_band: gradeBand,
+    });
+    void persistWeeklyPlanPrefs({ studyMode: value, studyModeSetAt: new Date().toISOString() });
+  };
+
+  const handleSelectTutorAvatar = (avatarId: string) => {
+    setTutorAvatarId(avatarId);
+    trackEvent('tutor_onboarding_step_completed', {
+      step: 'persona',
+      persona_id: avatarId,
+      avatar_id: avatarId,
+      provided_name: Boolean(tutorNameInput.trim()),
+    });
+  };
+
   const handleSaveTutorPersona = async () => {
     setTutorFeedback(null);
     const trimmedName = tutorNameInput.trim();
@@ -409,11 +879,24 @@ const StudentDashboard: React.FC = () => {
       setTutorFeedback(tutorNameErrorMessage(validation));
       return;
     }
+    trackEvent('tutor_onboarding_step_completed', {
+      step: 'name',
+      persona_id: tutorAvatarId,
+      avatar_id: tutorAvatarId,
+      provided_name: Boolean(trimmedName),
+    });
     setTutorSaving(true);
     try {
       await saveTutorPersona({
         name: trimmedName.length ? validation.value : null,
         avatarId: tutorAvatarId,
+      });
+      const durationSec = tutorFlowStartedAt ? Math.round((Date.now() - tutorFlowStartedAt) / 1000) : null;
+      trackEvent('tutor_onboarding_completed', {
+        persona_id: tutorAvatarId,
+        avatar_id: tutorAvatarId,
+        name_set: Boolean(trimmedName),
+        duration_sec: durationSec,
       });
       setTutorFeedback(
         trimmedName.length
@@ -431,7 +914,7 @@ const StudentDashboard: React.FC = () => {
 
   const handleRandomizeTutorAvatar = () => {
     const next = TUTOR_AVATARS[Math.floor(Math.random() * TUTOR_AVATARS.length)];
-    setTutorAvatarId(next.id);
+    handleSelectTutorAvatar(next.id);
   };
 
   const handleEquipAvatar = async (option: AvatarOption) => {
@@ -789,6 +1272,230 @@ const StudentDashboard: React.FC = () => {
           <div className="lg:col-span-2 space-y-8">
             {activeTab === 'today' ? (
               <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              {renderCelebration()}
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
+                    <Target className="h-4 w-4" />
+                    <span>This week&apos;s plan</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mt-1">
+                    {weeklyPlanTargets.lessons} lessons • {weeklyPlanTargets.minutes} minutes • focus:{' '}
+                    {currentPlanFocus === 'balanced'
+                      ? 'Balanced'
+                      : formatSubjectLabel(currentPlanFocus as Subject)}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Stay on track with a simple weekly target. Adjust how this week feels anytime.
+                    {parentGoalActive ? ' Targets set by your parent.' : ''}
+                  </p>
+                </div>
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
+                    weeklyPlanStatus === 'on_track'
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                          : weeklyPlanStatus === 'almost'
+                            ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                            : 'bg-rose-50 text-rose-700 border border-rose-100'
+                      }`}
+                      aria-label="Weekly plan status"
+                    >
+                      {weeklyPlanStatus === 'on_track'
+                        ? 'On track'
+                        : weeklyPlanStatus === 'almost'
+                          ? 'Almost there'
+                          : 'Behind'}
+                    </span>
+                  </div>
+
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-xl border border-slate-200 p-3">
+                      <div className="flex items-center justify-between text-sm font-semibold text-gray-800">
+                        <span>Lessons</span>
+                        <span>
+                          {lessonsThisWeek}/{weeklyPlanTargets.lessons}
+                        </span>
+                      </div>
+                      <div className="mt-2 h-2 rounded-full bg-gray-100 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-brand-teal to-brand-blue transition-all"
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.round((lessonsThisWeek / weeklyPlanTargets.lessons) * 100),
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        Expected by today: {weeklyPlanExpectedLessons} lesson
+                        {weeklyPlanExpectedLessons === 1 ? '' : 's'}.
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 p-3">
+                      <div className="flex items-center justify-between text-sm font-semibold text-gray-800">
+                        <span>Minutes</span>
+                        <span>
+                          {minutesThisWeek}/{weeklyPlanTargets.minutes}
+                        </span>
+                      </div>
+                      <div className="mt-2 h-2 rounded-full bg-gray-100 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-brand-teal to-brand-blue transition-all"
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.round((minutesThisWeek / weeklyPlanTargets.minutes) * 100),
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">Minutes include practice and lessons.</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-col gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Today I want to...</p>
+                      {studyModeExpired && (
+                        <div className="mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+                          It&apos;s been a while since you picked a mode. Keep &ldquo;{studyMode.replace('_', ' ')}&rdquo; or choose again.
+                          <button
+                            type="button"
+                            onClick={() => handleStudyModeChange(studyMode, 'expired_confirm')}
+                            className="ml-2 underline font-semibold"
+                          >
+                            Keep it
+                          </button>
+                        </div>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {([
+                          { id: 'catch_up', label: 'Catch up', helper: 'More review and reassurance' },
+                          { id: 'keep_up', label: 'Keep up', helper: 'Stay on plan' },
+                          { id: 'get_ahead', label: 'Get ahead', helper: 'Stretch and challenge' },
+                        ] as const).map((option) => {
+                          const active = studyMode === option.id;
+                          const disabled = (parentGoalActive || studyModeLocked) && option.id === 'get_ahead';
+                          return (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => handleStudyModeChange(option.id)}
+                              disabled={disabled}
+                              className={`px-3 py-2 rounded-xl border text-sm text-left transition ${
+                                active
+                                  ? 'bg-brand-violet text-white border-brand-violet shadow-sm'
+                                  : 'bg-white text-gray-800 border-slate-200 hover:border-brand-violet/60'
+                              } ${disabled ? 'opacity-70 cursor-not-allowed' : ''}`}
+                            >
+                              <div className="font-semibold">{option.label}</div>
+                              <div className="text-[11px] text-gray-600">{option.helper}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        {parentGoalActive || studyModeLocked
+                          ? 'Some modes may be locked to match your parent or teacher plan.'
+                          : 'We remember your last pick for 7 days.'}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">This week feels</p>
+                      <div className="inline-flex rounded-full border border-slate-200 bg-gray-50 p-1 text-sm font-semibold">
+                        {(['light', 'normal', 'challenge'] as const).map((value) => {
+                          const active = weeklyPlanIntensity === value;
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => handleWeeklyPlanIntensityChange(value)}
+                              disabled={parentGoalActive}
+                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${
+                                active
+                                  ? 'bg-brand-blue text-white shadow'
+                                  : 'text-gray-700 hover:text-brand-blue'
+                              }`}
+                            >
+                              {value}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {parentGoalActive && (
+                        <p className="mt-1 text-xs text-gray-500">Set by your parent.</p>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Focus</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(['balanced', ...SUBJECTS] as Array<Subject | 'balanced'>).map((subject) => {
+                          const active = currentPlanFocus === subject;
+                          return (
+                            <button
+                              key={subject}
+                              type="button"
+                              onClick={() => handleWeeklyPlanFocusChange(subject)}
+                              disabled={parentGoalActive}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
+                                active
+                                  ? 'bg-brand-teal text-white border-brand-teal shadow-sm'
+                                  : 'border-slate-200 text-gray-700 hover:border-brand-teal/60'
+                              }`}
+                            >
+                              {subject === 'balanced' ? 'Balanced' : formatSubjectLabel(subject)}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {parentGoalActive && (
+                        <p className="mt-1 text-xs text-gray-500">Focus set by your parent.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (recommendedLesson) {
+                          trackEvent('weekly_plan_started_next', {
+                            lesson_id: recommendedLesson.id,
+                            subject: recommendedLesson.subject,
+                            plan_status: weeklyPlanStatus,
+                            parent_goal: parentGoalActive,
+                          });
+                          handleStartLesson(recommendedLesson);
+                        }
+                      }}
+                      disabled={!recommendedLesson}
+                      className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${
+                        recommendedLesson
+                          ? 'bg-brand-blue text-white hover:bg-brand-blue/90'
+                          : 'bg-gray-200 text-gray-500'
+                      }`}
+                    >
+                      <Play className="h-4 w-4" />
+                      <span>{recommendedLesson ? 'Start next lesson' : 'No lesson ready'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('journey')}
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                      <span>See my journey</span>
+                    </button>
+                  </div>
+                </motion.div>
+
                 {!showSkeleton && !(dashboard?.quickStats.assessmentCompleted ?? student.assessmentCompleted) && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -815,6 +1522,63 @@ const StudentDashboard: React.FC = () => {
                     </div>
                   </motion.div>
                 )}
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">My takeaways</h3>
+                      <p className="text-sm text-gray-600">Save quick reflections after tough lessons or chats.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => openReflectionModal()}
+                      className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Add reflection
+                    </button>
+                  </div>
+                  {reflections.length === 0 && (
+                    <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-gray-600">
+                      No reflections yet. Capture one after your next lesson or when something feels tricky.
+                    </div>
+                  )}
+                  <div className="space-y-3">
+                    {reflections.slice(0, 3).map((entry) => (
+                      <div key={entry.id} className="rounded-xl border border-slate-200 p-3 bg-slate-50">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                            {entry.questionId === 'what_learned'
+                              ? 'What I learned'
+                              : entry.questionId === 'try_next'
+                                ? 'What I will try next'
+                                : 'Confidence check'}
+                          </div>
+                          <div className="flex items-center gap-2 text-[11px] text-gray-500">
+                            <span>{formatAgo(entry.createdAt)}</span>
+                            <label className="inline-flex items-center gap-1 text-[11px]">
+                              <input
+                                type="checkbox"
+                                checked={Boolean(entry.shareWithParent)}
+                                onChange={(e) => void handleToggleReflectionShare(entry.id, e.target.checked)}
+                              />
+                              <span>Share</span>
+                            </label>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-800 mt-1">{entry.responseText}</p>
+                        {entry.subject && (
+                          <p className="mt-1 text-[11px] text-gray-500">Subject: {entry.subject}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1618,7 +2382,7 @@ const StudentDashboard: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-bold text-gray-900">AI Tutor Persona</h3>
                   <p className="text-sm text-gray-600">
-                    Name your tutor and pick a calm, school-safe avatar just for them.
+                    Meet your tutor—pick a persona and name. They are a helper, not your teacher, and won’t help you cheat.
                   </p>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-600">
@@ -1667,7 +2431,7 @@ const StudentDashboard: React.FC = () => {
                       </div>
                     </div>
                     <p className="text-xs text-gray-600 mt-2">
-                      Your tutor will introduce with this name and keep a {selectedTutorAvatar.tone ?? 'calm'} tone.
+                      Your tutor will introduce with this name and keep a {describeTutorTone(selectedTutorAvatar.tone).toLowerCase()} tone.
                     </p>
                   </div>
                 </div>
@@ -1678,7 +2442,7 @@ const StudentDashboard: React.FC = () => {
                       <button
                         key={avatar.id}
                         type="button"
-                        onClick={() => setTutorAvatarId(avatar.id)}
+                        onClick={() => handleSelectTutorAvatar(avatar.id)}
                         className={`flex items-start gap-3 rounded-xl border p-3 text-left transition shadow-sm ${
                           isSelected
                             ? 'border-brand-blue ring-2 ring-brand-blue/30 bg-brand-light-blue/30'
@@ -1696,8 +2460,8 @@ const StudentDashboard: React.FC = () => {
                         <div className="space-y-0.5">
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-gray-900">{avatar.label}</span>
-                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 capitalize">
-                              {avatar.tone ?? 'steady'}
+                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                              {describeTutorTone(avatar.tone)}
                             </span>
                           </div>
                           <p className="text-xs text-gray-600">{avatar.description}</p>
@@ -1741,6 +2505,7 @@ const StudentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
+              id="avatar-lab"
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -1923,6 +2688,91 @@ const StudentDashboard: React.FC = () => {
         </div>
       </div>
 
+      {reflectionModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Reflection</p>
+                <h4 className="text-lg font-bold text-gray-900">Jot a quick takeaway</h4>
+                <p className="text-sm text-gray-600">Takes <10s. Share with family if you want.</p>
+              </div>
+              <button
+                onClick={() => {
+                  setReflectionModalOpen(false);
+                  trackEvent('reflection_skipped', { reason: 'skip' });
+                }}
+                className="p-1 rounded-full hover:bg-slate-100 focus-ring"
+                aria-label="Close reflection"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-gray-800">
+                Prompt
+                <select
+                  value={reflectionQuestion}
+                  onChange={(e) => setReflectionQuestion(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                >
+                  <option value="what_learned">What did you learn?</option>
+                  <option value="try_next">What will you try next time?</option>
+                  <option value="confidence">How confident do you feel? (Low / Medium / High)</option>
+                </select>
+              </label>
+              <label className="block text-sm font-semibold text-gray-800">
+                Your takeaway
+                <textarea
+                  value={reflectionText}
+                  onChange={(e) => setReflectionText(e.target.value)}
+                  maxLength={220}
+                  rows={3}
+                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                  placeholder="One thing I’d try differently next time is..."
+                />
+              </label>
+              <div className="flex items-center gap-2 text-sm">
+                <input
+                  id="reflection-share"
+                  type="checkbox"
+                  checked={reflectionShare}
+                  onChange={(e) => setReflectionShare(e.target.checked)}
+                />
+                <label htmlFor="reflection-share" className="text-gray-700">
+                  Share with parent/guardian
+                </label>
+              </div>
+              {reflectionError && (
+                <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-md px-2 py-1">
+                  {reflectionError}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  setReflectionModalOpen(false);
+                  trackEvent('reflection_skipped', { reason: 'skip' });
+                }}
+                className="text-sm font-semibold text-gray-600 hover:text-gray-800 focus-ring"
+              >
+                Skip for now
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleSaveReflectionEntry()}
+                disabled={reflectionSaving}
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-4 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-50"
+              >
+                {reflectionSaving ? 'Saving...' : 'Save reflection'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Suspense fallback={<div className="px-4 py-8 text-sm text-gray-500">Loading assistant…</div>}>
         <LearningAssistant />
       </Suspense>
@@ -1931,3 +2781,89 @@ const StudentDashboard: React.FC = () => {
 };
 
 export default StudentDashboard;
+  const renderCelebration = () => {
+    if (!activeCelebration) return null;
+    const isMission = activeCelebration.kind === 'mission';
+    const isAvatar = activeCelebration.kind === 'avatar';
+    const isLevel = activeCelebration.kind === 'level';
+    const isStreak = activeCelebration.kind === 'streak';
+    const icon = isLevel ? <Star className="h-5 w-5 text-amber-500" /> : isStreak ? <Flame className="h-5 w-5 text-orange-500" /> : isAvatar ? <Palette className="h-5 w-5 text-brand-violet" /> : <Trophy className="h-5 w-5 text-emerald-500" />;
+    const primaryLabel =
+      recommendedLesson && (isLevel || isStreak || isMission)
+        ? 'Start next lesson'
+        : isAvatar
+          ? 'Change avatar'
+          : 'View my journey';
+    const onPrimaryClick = () => {
+      trackEvent('celebration_cta_clicked', {
+        kind: activeCelebration.kind,
+        id: activeCelebration.id,
+        cta: recommendedLesson && (isLevel || isStreak || isMission) ? 'start_lesson' : isAvatar ? 'avatar' : 'journey',
+      });
+      if (recommendedLesson && (isLevel || isStreak || isMission)) {
+        handleStartLesson(recommendedLesson);
+      } else if (isAvatar) {
+        document.getElementById('avatar-lab')?.scrollIntoView({ behavior: 'smooth' });
+        dismissCelebration(activeCelebration, 'cta');
+      } else {
+        setActiveTab('journey');
+        dismissCelebration(activeCelebration, 'cta');
+      }
+    };
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        className="mb-4 rounded-2xl border border-amber-100 bg-gradient-to-r from-amber-50 via-white to-emerald-50 p-4 shadow-sm"
+      >
+        <div className="flex items-start gap-3">
+          <div className="mt-1">{icon}</div>
+          <div className="flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{activeCelebration.title}</p>
+                <p className="text-sm text-gray-700">{activeCelebration.description}</p>
+                {activeCelebration.prompt && (
+                  <p className="text-xs text-gray-600 mt-1">{activeCelebration.prompt}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => dismissCelebration(activeCelebration, 'close')}
+                className="text-gray-500 hover:text-gray-700 focus-ring rounded-full p-1"
+                aria-label="Dismiss celebration"
+              >
+                X
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onPrimaryClick}
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-blue/90 focus-ring"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>{primaryLabel}</span>
+              </button>
+              {isAvatar && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackEvent('celebration_cta_clicked', { kind: activeCelebration.kind, id: activeCelebration.id, cta: 'avatar' });
+                    document.getElementById('avatar-lab')?.scrollIntoView({ behavior: 'smooth' });
+                    dismissCelebration(activeCelebration, 'cta');
+                  }}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold text-gray-700 hover:border-brand-violet/60 focus-ring"
+                >
+                  <Palette className="h-4 w-4 text-brand-violet" />
+                  <span>Open Avatar Lab</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };

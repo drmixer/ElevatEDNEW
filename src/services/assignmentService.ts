@@ -42,8 +42,8 @@ export const fetchChildAssignments = async (studentId: string): Promise<Assignme
   const { data, error } = await supabase
     .from('student_assignments')
     .select(
-      `id, status, due_at, student_id,
-       assignments ( id, title, metadata, due_at )
+      `id, status, due_at, student_id, completed_at, updated_at, updated_by, checkpoint_score, tutor_chat_count, audit_source, evidence,
+       assignments ( id, title, metadata, due_at, created_at )
       `,
     )
     .eq('student_id', studentId)
@@ -63,6 +63,19 @@ export const fetchChildAssignments = async (studentId: string): Promise<Assignme
     } | null;
     const moduleId = assignment?.metadata?.module_id as number | null | undefined;
     const moduleTitle = (assignment?.metadata?.module_title as string | undefined) ?? assignment?.title ?? null;
+    const checkpointScore = assignment?.metadata?.checkpoint_score as number | undefined;
+    const tutorChatCount = assignment?.metadata?.tutor_chat_count as number | undefined;
+    const completedAt = (row.completed_at as string | null) ?? (assignment?.metadata?.completed_at as string | undefined) ?? null;
+    const updatedBy =
+      (row.updated_by as string | null) ??
+      ((assignment?.metadata?.updated_by as string | undefined) ?? null);
+    const updatedAt =
+      (row.updated_at as string | null) ??
+      ((assignment?.metadata?.updated_at as string | undefined) ?? null);
+    const auditSource =
+      (row.audit_source as string | null) ??
+      ((assignment?.metadata?.source as string | undefined) ?? null);
+    const evidence = (row.evidence as Record<string, unknown> | null) ?? {};
 
     return {
       id: row.id as number,
@@ -72,6 +85,13 @@ export const fetchChildAssignments = async (studentId: string): Promise<Assignme
       moduleId: moduleId ?? null,
       moduleTitle,
       studentId: row.student_id as string,
+      checkpointScore: typeof checkpointScore === 'number' ? checkpointScore : null,
+      tutorChatCount: typeof tutorChatCount === 'number' ? tutorChatCount : null,
+      completedAt,
+      updatedBy,
+      updatedAt,
+      auditSource,
+      evidence,
     } satisfies AssignmentSummary;
   });
 };

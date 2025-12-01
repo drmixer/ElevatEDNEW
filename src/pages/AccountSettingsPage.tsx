@@ -279,9 +279,57 @@ const AccountSettingsPage: React.FC = () => {
               <h2 className="text-lg font-semibold text-slate-900">Privacy & Safety</h2>
             </div>
             <p className="text-sm text-slate-600">
-              We avoid sending student PII to third parties and rely on Supabase row-level security to govern access.
-              Parents can request data export/deletion from the Family Dashboard.
+              School-safe tutor: short, on-topic answers; no personal info collection; safety filters on risky prompts.
             </p>
+            <div className="mt-3 grid gap-3">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-1">What we store</p>
+                <ul className="space-y-1 text-sm text-slate-700">
+                  <li>• Progress, assignments, and guardian links.</li>
+                  <li>• Recent tutor chats for safety review (short retention).</li>
+                  <li>• Minimal device/session data to keep accounts secure.</li>
+                </ul>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-1">Guardrails</p>
+                <ul className="space-y-1 text-sm text-slate-700">
+                  <li>• Tutor avoids tests/cheats, personal contact info, and off-topic/dating/social advice.</li>
+                  <li>• Under-13 accounts stay restricted until guardians approve.</li>
+                  <li>• Blocked/flagged chats route to Trust & Safety for review.</li>
+                </ul>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-1">Need help?</p>
+                <ul className="space-y-1 text-sm text-slate-700">
+                  <li>• View or submit concerns in the Family Dashboard Safety panel.</li>
+                  <li>• Request data export or deletion from this page.</li>
+                  <li>• Email support if something feels unsafe or incorrect.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                to="/parent#safety-privacy"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-light-teal/50 text-brand-teal px-3 py-2 text-sm font-semibold border border-brand-light-teal/60 hover:bg-brand-light-teal/70 transition-colors"
+              >
+                Go to Family Safety
+                <ArrowLeft className="h-4 w-4 rotate-180" />
+              </Link>
+              <Link
+                to="/legal/privacy"
+                className="inline-flex items-center gap-2 rounded-lg bg-slate-100 text-slate-800 px-3 py-2 text-sm font-semibold border border-slate-200 hover:bg-slate-200 transition-colors"
+              >
+                Privacy policy
+                <FileText className="h-4 w-4" />
+              </Link>
+              <a
+                href="mailto:support@elevated.edu"
+                className="inline-flex items-center gap-2 rounded-lg bg-white text-slate-800 px-3 py-2 text-sm font-semibold border border-slate-200 hover:border-brand-blue hover:text-brand-blue transition-colors"
+              >
+                Contact support
+                <Shield className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
           <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">

@@ -143,8 +143,15 @@ const parseLimit = (value: string | undefined, fallback: number): number => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
+const parseMinLessons = (value: string | undefined, fallback: number): number => {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+};
+
 const MODULE_ASSET_LIMIT = parseLimit(process.env.MODULE_ASSET_LIMIT, 400);
 const MODULE_LESSON_LIMIT = parseLimit(process.env.MODULE_LESSON_LIMIT, 120);
+const MIN_LESSONS_PER_MODULE = parseMinLessons(process.env.MIN_LESSONS_PER_MODULE, 2);
 
 type LessonRow = {
   id: number;
@@ -353,9 +360,48 @@ export const listModules = async (
     throw new Error(`Failed to list modules: ${error.message}`);
   }
 
+  const modules = (data ?? []) as ModuleListItem[];
+  const moduleIds = modules.map((module) => module.id);
+  let lessonCountByModule = new Map<number, number>();
+
+  if (moduleIds.length > 0) {
+    const { data: lessonCountRows, error: lessonCountError } = await supabase
+      .from('lessons')
+      .select('module_id')
+      .in('module_id', moduleIds)
+      .eq('visibility', 'public');
+
+    if (lessonCountError) {
+      throw new Error(`Failed to compute module lesson counts: ${lessonCountError.message}`);
+    }
+
+    lessonCountByModule = (lessonCountRows ?? []).reduce((map, row) => {
+      const moduleId = (row as { module_id: number | null }).module_id;
+      if (typeof moduleId === 'number') {
+        map.set(moduleId, (map.get(moduleId) ?? 0) + 1);
+      }
+      return map;
+    }, new Map<number, number>());
+  }
+
+  const filteredModules = modules.filter((module) => {
+    const lessonCount = lessonCountByModule.get(module.id) ?? 0;
+    const meetsThreshold = lessonCount >= MIN_LESSONS_PER_MODULE;
+    if (!meetsThreshold) {
+      captureServerMessage('[modules] filtered thin module', {
+        moduleId: module.id,
+        subject: module.subject,
+        grade: module.grade_band,
+        lessonCount,
+        minLessons: MIN_LESSONS_PER_MODULE,
+      });
+    }
+    return meetsThreshold;
+  });
+
   return {
-    data: (data ?? []) as ModuleListItem[],
-    total: count ?? 0,
+    data: filteredModules,
+    total: (count ?? modules.length) - (modules.length - filteredModules.length),
   };
 };
 

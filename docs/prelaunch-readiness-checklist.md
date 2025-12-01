@@ -17,77 +17,77 @@
 ## 1. First-run & core UX
 
 ### 1.1 “Meet your tutor” onboarding
-- [ ] Add a first-run flow for new student profiles (or after a major reset) that:
-  - [ ] Introduces the AI tutor in one screen (purpose + what it can/can’t do).
-  - [ ] Asks the student to:
-    - [ ] Pick a tutor avatar (from the tutor-only set).
-    - [ ] Optionally name the tutor (with clear examples and safety checks).
-    - [ ] Confirm their own student avatar or pick one.
-  - [ ] Shows a short preview: “Try asking me…” with 2–3 good starter questions.
-- [ ] Ensure this flow is skippable but easily re-opened from the student dashboard (e.g., “Customize my tutor” entry).
+- [x] Add a first-run flow for new student profiles (or after a major reset) that:
+  - [x] Introduces the AI tutor in one screen (purpose + what it can/can’t do).
+  - [x] Asks the student to:
+    - [x] Pick a tutor avatar (from the tutor-only set).
+    - [x] Optionally name the tutor (with clear examples and safety checks).
+    - [x] Confirm their own student avatar or pick one.
+  - [x] Shows a short preview: “Try asking me…” with 2–3 good starter questions.
+- [x] Ensure this flow is skippable but easily re-opened from the student dashboard (e.g., “Customize my tutor” entry).
 
 ### 1.2 Weekly plan & “what’s next”
-- [ ] Add a “My week” card on the student dashboard that:
-  - [ ] Summarizes a simple plan (e.g., “5 lessons • 60 minutes • focus: Math”).
-  - [ ] Shows current progress vs plan with very simple visuals.
-  - [ ] Links to the recommended next lesson/practice.
-- [ ] Confirm that, after login, the student can:
-  - [ ] Reach their next recommended learning activity in ≤2 clicks.
-  - [ ] See a clear “why this next” explanation.
+- [x] Add a “My week” card on the student dashboard that:
+  - [x] Summarizes a simple plan (e.g., “5 lessons • 60 minutes • focus: Math”).
+  - [x] Shows current progress vs plan with very simple visuals.
+  - [x] Links to the recommended next lesson/practice.
+- [x] Confirm that, after login, the student can:
+  - [x] Reach their next recommended learning activity in ≤2 clicks.
+  - [x] See a clear “why this next” explanation.
 
 ---
 
 ## 2. Safety, guardrails, and reporting
 
 ### 2.1 Tutor behavior & prompts
-- [ ] Lock in a single primary system prompt for the learning assistant that enforces:
-  - [ ] Structure for responses: quick check → 2–3 steps → recap → “tiny next action.”
-  - [ ] Hints-first behavior unless the student explicitly asks for a full solution.
-  - [ ] Age-appropriate phrasing per grade band (already partially implemented; confirm it’s used consistently).
-- [ ] Validate that safety filters cover:
-  - [ ] Basic PII patterns (emails, phone numbers, addresses).
-  - [ ] Obvious unsafe topics and prompt-injection patterns.
-  - [ ] Under-13 specific topics (e.g., no social/dating advice).
+- [x] Lock in a single primary system prompt for the learning assistant that enforces:
+  - [x] Structure for responses: quick check → 2–3 steps → recap → “tiny next action.”
+  - [x] Hints-first behavior unless the student explicitly asks for a full solution.
+  - [x] Age-appropriate phrasing per grade band (already partially implemented; confirm it’s used consistently).
+- [x] Validate that safety filters cover:
+  - [x] Basic PII patterns (emails, phone numbers, addresses).
+  - [x] Obvious unsafe topics and prompt-injection patterns.
+  - [x] Under-13 specific topics (e.g., no social/dating advice).
 
 ### 2.2 “Report answer” + review loop
-- [ ] Add a visible “Report this answer” affordance to the tutor UI with:
-  - [ ] Simple reasons (e.g., “incorrect,” “confusing,” “not school-safe”).
-  - [ ] Optional free-text field (capped length; no PII requested).
+- [x] Add a visible “Report this answer” affordance to the tutor UI with:
+  - [x] Simple reasons (e.g., “incorrect,” “confusing,” “not school-safe”).
+  - [x] Optional free-text field (capped length; no PII requested).
 - [ ] On report:
-  - [ ] Log the conversation ID, student id, reason, and the model’s answer.
-  - [ ] Flag the conversation in a lightweight review queue (start with a simple admin table + filter).
-  - [ ] Show a confirmation to the student with a reassuring message (“Thanks for flagging, an adult will review this.”).
+  - [x] Log the conversation ID, student id, reason, and the model’s answer.
+  - [x] Flag the conversation in a lightweight review queue (start with a simple admin table + filter).
+  - [x] Show a confirmation to the student with a reassuring message (“Thanks for flagging, an adult will review this.”).
 
 ### 2.3 Visible safety & privacy messaging
 - [ ] Add a short “Safety & Privacy” panel accessible from:
-  - [ ] The tutor panel itself.
-  - [ ] Parent account settings.
+  - [x] The tutor panel itself.
+  - [x] Parent account settings.
 - [ ] Include:
-  - [ ] What the tutor can and can’t do.
-  - [ ] What data are stored and why (high level).
-  - [ ] How to contact support or report broader issues.
-- [ ] Confirm alignment with `docs/compliance.md` and `docs/family-ready.md`.
+  - [x] What the tutor can and can’t do.
+  - [x] What data are stored and why (high level).
+  - [x] How to contact support or report broader issues.
+- [x] Confirm alignment with `docs/compliance.md` and `docs/family-ready.md`.
 
 ---
 
 ## 3. Parent controls & transparency
 
 ### 3.1 AI controls per learner
-- [ ] Expose at least the following toggles in the parent dashboard, per learner:
-  - [ ] “Allow AI tutor chats” (On/Off).
-  - [ ] “Limit open chat to lesson context only” (On/Off).
-  - [ ] Optional: “Soft limit on chats/day” (e.g., 0–5, within plan cap).
-- [ ] Ensure server-side enforcement:
-  - [ ] Tutor endpoint checks the per-learner flags before serving responses.
-  - [ ] UI shows a friendly explanation if a parent has disabled or limited the tutor.
+- [x] Expose at least the following toggles in the parent dashboard, per learner:
+  - [x] “Allow AI tutor chats” (On/Off).
+  - [x] “Limit open chat to lesson context only” (On/Off).
+  - [x] Optional: “Soft limit on chats/day” (e.g., 0–5, within plan cap).
+- [x] Ensure server-side enforcement:
+  - [x] Tutor endpoint checks the per-learner flags before serving responses.
+  - [x] UI shows a friendly explanation if a parent has disabled or limited the tutor.
 
 ### 3.2 Progress & coaching clarity
-- [ ] Extend the parent dashboard to include:
-  - [ ] Clear subject status cards (on-track / at-risk / off-track) using shared logic with `docs/family-ready.md`.
-  - [ ] 1–2 suggested “conversation starters” per week based on a child’s weak areas.
-- [ ] Confirm that:
-  - [ ] Status labels seen in the parent view match the student experience (no conflicting messages).
-  - [ ] Weekly digest emails (if enabled) reuse the same status and coaching snippets.
+- [x] Extend the parent dashboard to include:
+  - [x] Clear subject status cards (on-track / at-risk / off-track) using shared logic with `docs/family-ready.md`.
+  - [x] 1–2 suggested “conversation starters” per week based on a child’s weak areas.
+- [x] Confirm that:
+  - [x] Status labels seen in the parent view match the student experience (no conflicting messages).
+  - [x] Weekly digest emails (if enabled) reuse the same status and coaching snippets.
 
 ---
 
@@ -162,4 +162,3 @@
 - [ ] Safety/compliance sign-off that the assistant behavior and reporting paths align with policy.
 - [ ] Eng/Ops sign-off that monitoring, runbooks, and E2E coverage are sufficient.
 - [ ] Data sign-off that key activation and usage KPIs can be measured without schema churn.
-

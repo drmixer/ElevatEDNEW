@@ -33,6 +33,7 @@ type StudentProfileRow = {
 type ParentProfileRow = {
   subscription_tier: 'free' | 'plus' | 'premium' | null;
   notifications: Record<string, boolean> | null;
+  onboarding_state?: Record<string, unknown> | null;
 };
 
 type AdminProfileRow = {
@@ -196,6 +197,88 @@ export const castLearningPreferences = (input: unknown): LearningPreferences => 
     prefs.focusIntensity = intensity;
   }
 
+  const planIntensity = raw.weeklyPlanIntensity ?? raw.weekly_plan_intensity ?? raw.planIntensity;
+  if (planIntensity === 'light' || planIntensity === 'normal' || planIntensity === 'challenge') {
+    prefs.weeklyPlanIntensity = planIntensity;
+  }
+
+  const planFocus = raw.weeklyPlanFocus ?? raw.weekly_plan_focus ?? raw.planFocus;
+  const normalizedPlanFocus = toSubjectKey(planFocus);
+  if (normalizedPlanFocus) {
+    prefs.weeklyPlanFocus = normalizedPlanFocus;
+  } else if (planFocus === 'balanced') {
+    prefs.weeklyPlanFocus = 'balanced';
+  }
+
+  const chatMode = raw.chatMode ?? raw.chat_mode ?? raw.mode;
+  if (chatMode === 'guided_only' || chatMode === 'guided_preferred' || chatMode === 'free') {
+    prefs.chatMode = chatMode;
+  }
+
+  const chatModeLocked = raw.chatModeLocked ?? raw.chat_mode_locked ?? raw.chatModeEnforced;
+  if (typeof chatModeLocked === 'boolean') {
+    prefs.chatModeLocked = chatModeLocked;
+  }
+
+  const studyMode = raw.studyMode ?? raw.study_mode;
+  if (studyMode === 'catch_up' || studyMode === 'keep_up' || studyMode === 'get_ahead') {
+    prefs.studyMode = studyMode;
+  }
+
+  const studyModeSetAt = raw.studyModeSetAt ?? raw.study_mode_set_at;
+  if (typeof studyModeSetAt === 'string') {
+    prefs.studyModeSetAt = studyModeSetAt;
+  }
+
+  const studyModeLocked = raw.studyModeLocked ?? raw.study_mode_locked ?? raw.studyModeEnforced;
+  if (typeof studyModeLocked === 'boolean') {
+    prefs.studyModeLocked = studyModeLocked;
+  }
+
+  const allowTutor = raw.allowTutor ?? raw.allow_tutor ?? raw.ai_enabled ?? raw.aiEnabled;
+  if (typeof allowTutor === 'boolean') {
+    prefs.allowTutor = allowTutor;
+  }
+
+  const lessonOnly =
+    raw.tutorLessonOnly ??
+    raw.tutor_lesson_only ??
+    raw.lessonOnly ??
+    raw.lesson_only ??
+    raw.limitTutorToLessonContext ??
+    raw.ai_lesson_only;
+  if (typeof lessonOnly === 'boolean') {
+    prefs.tutorLessonOnly = lessonOnly;
+  }
+
+  const tutorDailyLimit =
+    raw.tutorDailyLimit ??
+    raw.tutor_daily_limit ??
+    raw.maxTutorChatsPerDay ??
+    raw.max_tutor_chats_per_day ??
+    raw.dailyTutorLimit ??
+    raw.daily_tutor_limit;
+  if (typeof tutorDailyLimit === 'number' && Number.isFinite(tutorDailyLimit)) {
+    prefs.tutorDailyLimit = tutorDailyLimit;
+  } else if (typeof tutorDailyLimit === 'string') {
+    const parsed = Number.parseInt(tutorDailyLimit, 10);
+    if (Number.isFinite(parsed)) {
+      prefs.tutorDailyLimit = parsed;
+    }
+  }
+
+  const tutorSettingsUpdatedAt =
+    raw.tutorSettingsUpdatedAt ?? raw.tutor_settings_updated_at ?? raw.ai_settings_updated_at;
+  if (typeof tutorSettingsUpdatedAt === 'string') {
+    prefs.tutorSettingsUpdatedAt = tutorSettingsUpdatedAt;
+  }
+
+  const tutorSettingsUpdatedBy =
+    raw.tutorSettingsUpdatedBy ?? raw.tutor_settings_updated_by ?? raw.ai_settings_updated_by;
+  if (typeof tutorSettingsUpdatedBy === 'string') {
+    prefs.tutorSettingsUpdatedBy = tutorSettingsUpdatedBy;
+  }
+
   return prefs;
 };
 
@@ -226,7 +309,8 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
     ),
       parent_profiles(
         subscription_tier,
-        notifications
+        notifications,
+        onboarding_state
       ),
       admin_profiles(
         title,
@@ -411,6 +495,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       assignments: parentDetails?.notifications?.assignments ?? true,
       streaks: parentDetails?.notifications?.streaks ?? true,
     },
+    onboardingState: (parentDetails?.onboarding_state ?? {}) as Parent['onboardingState'],
     weeklyReport,
   };
 

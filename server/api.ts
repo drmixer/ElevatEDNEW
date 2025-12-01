@@ -58,6 +58,9 @@ import {
   grantBypassSubscription,
 } from './billing.js';
 import { NotificationScheduler, notifyAssignmentCreated } from './notifications.js';
+import { HttpError } from './httpError.js';
+import { listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
+import { getOpsSnapshot } from './opsMetrics.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -68,19 +71,6 @@ const API_PREFIX = '/api';
 const VERSIONED_PREFIX = `${API_PREFIX}/${API_VERSION}`;
 const DEFAULT_PREMIUM_PLAN_SLUG = process.env.DEFAULT_PREMIUM_PLAN_SLUG ?? 'family-premium';
 const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:5173';
-
-class HttpError extends Error {
-  status: number;
-  code: string;
-  details?: unknown;
-
-  constructor(status: number, message: string, code = 'bad_request', details?: unknown) {
-    super(message);
-    this.status = status;
-    this.code = code;
-    this.details = details;
-  }
-}
 
 type ApiContext = {
   serviceSupabase: SupabaseClient;
@@ -155,7 +145,7 @@ const createModuleAssignment = async (
 
   const { data: moduleRow, error: moduleError } = await supabase
     .from('modules')
-    .select('id, title')
+    .select('id, title, slug, metadata')
     .eq('id', payload.moduleId)
     .maybeSingle();
 
@@ -182,6 +172,36 @@ const createModuleAssignment = async (
     ? payload.title.trim()
     : `${moduleRow.title} module focus`;
 
+  // Guardrail: block assigning modules more than one unit ahead of the adaptive path when data is available.
+  const learningPaths = await Promise.all(
+    studentIds.map(async (studentId) => {
+      const { data, error } = await supabase
+        .from('student_profiles')
+        .select('learning_path')
+        .eq('id', studentId)
+        .maybeSingle();
+      if (error) {
+        console.warn('[assignments] unable to read learning_path for guardrail', { studentId, error });
+        return null;
+      }
+      return (data?.learning_path as unknown) ?? null;
+    }),
+  );
+
+  const moduleSlug = moduleRow.slug as string;
+  const guardrailBreaches = learningPaths.some((path) => {
+    if (!Array.isArray(path)) return false;
+    const normalized = path as Array<{ moduleSlug?: string | null; status?: string | null }>;
+    const currentIndex = normalized.findIndex((item) => item.status === 'in_progress' || item.status === 'not_started');
+    const targetIndex = normalized.findIndex((item) => item.moduleSlug === moduleSlug);
+    if (targetIndex === -1 || currentIndex === -1) return false;
+    return targetIndex - currentIndex > 1;
+  });
+
+  if (guardrailBreaches) {
+    throw new HttpError(400, 'Assignment is too far ahead of the adaptive path.', 'too_far_ahead');
+  }
+
   const { data: assignmentRow, error: assignmentError } = await supabase
     .from('assignments')
     .insert({
@@ -194,6 +214,9 @@ const createModuleAssignment = async (
         module_id: payload.moduleId,
         module_title: moduleRow.title,
         assigned_by_role: payload.creatorRole ?? 'parent',
+        updated_by: payload.creatorId,
+        updated_at: new Date().toISOString(),
+        source: payload.creatorRole ?? 'parent',
       },
     })
     .select('id')
@@ -228,7 +251,12 @@ const createModuleAssignment = async (
     metadata: {
       module_id: payload.moduleId,
       module_title: moduleRow.title,
+      updated_by: payload.creatorId,
+      updated_at: new Date().toISOString(),
+      source: payload.creatorRole ?? 'parent',
     },
+    updated_by: payload.creatorId,
+    audit_source: payload.creatorRole ?? 'parent',
   }));
 
   const { data: assignedRows, error: assignError } = await supabase
@@ -1190,7 +1218,8 @@ export const createApiHandler = (context: ApiContext) => {
     if (method === 'GET' && path === '/modules') {
       return handleRoute(async () => {
         const filters = parseModuleFilters(url.query);
-        const result = await listModules(supabase, filters);
+        // Use service role client so public catalog reads aren’t blocked by RLS.
+        const result = await listModules(serviceSupabase, filters);
         sendJson(res, 200, result, API_VERSION);
       });
     }
@@ -1202,7 +1231,7 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(404, 'Not found.', 'not_found');
         }
         const lessonId = parsePositiveIntParam(parts[1], 'lessonId');
-        const detail = await getLessonDetail(supabase, lessonId);
+        const detail = await getLessonDetail(serviceSupabase, lessonId);
         if (!detail) {
           throw new HttpError(404, 'Lesson not found.', 'not_found');
         }
@@ -1280,6 +1309,44 @@ export const createApiHandler = (context: ApiContext) => {
               'invalid_payload',
             );
           }
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/tutor-reports') {
+        return handleRoute(async () => {
+          const status = parseReportStatus(typeof url.query.status === 'string' ? url.query.status : undefined);
+          const limit =
+            typeof url.query.limit === 'string' && !Number.isNaN(Number(url.query.limit))
+              ? Number(url.query.limit)
+              : 50;
+          const reports = await listTutorReports(serviceSupabase, { status, limit });
+          sendJson(res, 200, { reports }, API_VERSION);
+        });
+      }
+
+      if (method === 'POST' && path === '/admins/tutor-reports/update') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ id?: number; status?: string }>(req);
+          if (typeof body.id !== 'number' || body.id <= 0) {
+            throw new HttpError(400, 'id is required to update a tutor report.', 'invalid_payload');
+          }
+          const status = parseReportStatus(body.status);
+          if (!status) {
+            throw new HttpError(400, 'status is required.', 'invalid_payload');
+          }
+          const updated = await updateTutorReportStatus(serviceSupabase, body.id, status, admin.id);
+          sendJson(res, 200, { report: updated }, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/ops-metrics') {
+        return handleRoute(async () => {
+          const windowMs =
+            typeof url.query.windowMs === 'string' && !Number.isNaN(Number(url.query.windowMs))
+              ? Number(url.query.windowMs)
+              : undefined;
+          const snapshot = getOpsSnapshot(windowMs);
+          sendJson(res, 200, snapshot, API_VERSION);
         });
       }
 
@@ -1438,7 +1505,7 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(404, 'Not found.', 'not_found');
         }
         const moduleId = parsePositiveIntParam(parts[1], 'Module id');
-        const detail = await getModuleAssessment(supabase, moduleId);
+        const detail = await getModuleAssessment(serviceSupabase, moduleId);
         if (!detail) {
           throw new HttpError(404, 'Module assessment not found.', 'not_found');
         }
@@ -1453,7 +1520,8 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(404, 'Not found.', 'not_found');
         }
         const moduleId = parsePositiveIntParam(parts[1], 'Module id');
-        const detail = await getModuleDetail(supabase, moduleId);
+        // Use service role client so public catalog reads aren’t blocked by RLS.
+        const detail = await getModuleDetail(serviceSupabase, moduleId);
         if (!detail) {
           throw new HttpError(404, 'Module not found.', 'not_found');
         }
