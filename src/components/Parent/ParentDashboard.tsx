@@ -557,8 +557,6 @@ const ParentDashboard: React.FC = () => {
     return { label: 'Behind', badge: 'bg-rose-100 text-rose-700', tone: 'text-rose-700' };
   };
 
-  const weeklyLessonsTarget = currentChild?.goals?.weeklyLessons ?? null;
-  const practiceMinutesTarget = currentChild?.goals?.practiceMinutes ?? null;
   const masteryTargets = currentChild?.goals?.masteryTargets ?? {};
 
   const focusConcepts = useMemo(() => {

@@ -3,6 +3,7 @@ import process from 'node:process';
 import { createServiceRoleClient } from '../scripts/utils/supabase.js';
 import { buildCoachingSuggestions } from '../src/lib/parentSuggestions';
 import { normalizeSubject } from '../src/lib/subjects';
+import type { ParentChildSnapshot } from '../src/types';
 
 type ParentWeeklyReportRow = {
   parent_id: string;
@@ -198,24 +199,22 @@ export const runWeeklyEmailJob = async (): Promise<void> => {
         subject: normalizeSubject(entry.subject) ?? 'math',
         mastery: entry.mastery,
       }));
-      const suggestion = buildCoachingSuggestions(
-        {
-          id: topChild.id,
-          name: topChild.name ?? 'Learner',
-          grade: topChild.grade ?? 5,
-          level: 0,
-          xp: 0,
-          streakDays: 0,
-          strengths: [],
-          focusAreas: [],
-          lessonsCompletedWeek: 0,
-          practiceMinutesWeek: 0,
-          xpEarnedWeek: 0,
-          masteryBySubject: mastery as any,
-          recentActivity: [],
-        } as any,
-        { max: 1, seed: report.week_start },
-      )[0];
+      const childSnapshot: ParentChildSnapshot = {
+        id: topChild.id,
+        name: topChild.name ?? 'Learner',
+        grade: topChild.grade ?? 5,
+        level: 0,
+        xp: 0,
+        streakDays: 0,
+        strengths: [],
+        focusAreas: [],
+        lessonsCompletedWeek: 0,
+        practiceMinutesWeek: 0,
+        xpEarnedWeek: 0,
+        masteryBySubject: mastery,
+        recentActivity: [],
+      };
+      const suggestion = buildCoachingSuggestions(childSnapshot, { max: 1, seed: report.week_start })[0];
       if (suggestion) {
         coachingNudge = {
           action: suggestion.action,

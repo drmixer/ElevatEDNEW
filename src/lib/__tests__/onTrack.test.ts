@@ -7,6 +7,7 @@ import {
   onTrackDescription,
   onTrackLabel,
 } from '../onTrack';
+import type { Subject, SubjectMastery } from '../../types';
 
 describe('onTrack helpers', () => {
   it('classifies on-track when pacing and mastery are healthy', () => {
@@ -27,11 +28,12 @@ describe('onTrack helpers', () => {
   });
 
   it('spreads lessons across subjects when per-subject count missing', () => {
+    const mastery: SubjectMastery[] = [
+      { subject: 'math', mastery: 75 },
+      { subject: 'english', mastery: 65 },
+    ];
     const statuses = computeSubjectStatuses({
-      masteryBySubject: [
-        { subject: 'math', mastery: 75 },
-        { subject: 'english', mastery: 65 },
-      ] as any,
+      masteryBySubject: mastery,
       lessonsCompletedWeek: 4,
     });
     expect(statuses).toHaveLength(2);
@@ -39,15 +41,16 @@ describe('onTrack helpers', () => {
   });
 
   it('uses per-subject lessons and diagnostic freshness when provided', () => {
-    const lessonsBySubject = new Map<any, number>([
+    const lessonsBySubject = new Map<Subject, number>([
       ['math', 1],
       ['english', 3],
     ]);
+    const mastery: SubjectMastery[] = [
+      { subject: 'math', mastery: 80 },
+      { subject: 'english', mastery: 80 },
+    ];
     const statuses = computeSubjectStatuses({
-      masteryBySubject: [
-        { subject: 'math', mastery: 80 },
-        { subject: 'english', mastery: 80 },
-      ] as any,
+      masteryBySubject: mastery,
       lessonsCompletedWeek: 4,
       lessonsBySubject,
       diagnosticCompletedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),

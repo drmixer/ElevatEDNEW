@@ -145,13 +145,6 @@ type LessonMetadataEntry = {
   masteryPct: number | null;
 };
 
-type PlanPreferences = LearningPreferences & {
-  focusSubject: LearningPreferences['focusSubject'];
-  weeklyPlanFocus: LearningPreferences['weeklyPlanFocus'];
-  weeklyPlanIntensity: LearningPreferences['weeklyPlanIntensity'];
-  studyMode?: LearningPreferences['studyMode'];
-};
-
 type ParentDashboardChildRow = {
   parent_id: string;
   student_id: string;

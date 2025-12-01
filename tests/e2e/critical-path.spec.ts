@@ -5,8 +5,6 @@ const shouldRun = process.env.RUN_E2E === 'true' || Boolean(process.env.E2E_BASE
 const installApiFixtures = async (page: Page) => {
   const moduleId = 101;
   const lessonId = 501;
-  const studentId = 'student-123';
-  const parentId = 'parent-123';
 
   await page.route('**/api/v1/modules?*', (route) => {
     route.fulfill({

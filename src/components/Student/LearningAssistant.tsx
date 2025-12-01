@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, X, Bot, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, ShieldCheck, Flag } from 'lucide-react';
+import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, ShieldCheck, Flag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student, Subject } from '../../types';
@@ -165,7 +165,7 @@ const LearningAssistant: React.FC = () => {
       return [...contextual, ...base];
     },
     [lessonContext],
-  ];
+  );
 
 
   const detectGuardrail = (message: string): string | null => {
@@ -836,56 +836,58 @@ const LearningAssistant: React.FC = () => {
               ))}
             </div>
             {(chatMode === 'guided_only' || chatMode === 'guided_preferred') && (
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {guidedCards.map((card) => (
-                  <button
-                    key={card.id}
-                    onClick={() => {
-                      setSelectedCardId(card.id);
-                      trackEvent('chat_prompt_card_selected', {
-                        card_id: card.id,
-                        mode: chatMode,
-                        has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
-                      });
-                      void handleSendMessage(card.prompt, { source: 'card', cardId: card.id });
-                    }}
-                    className="rounded-lg border border-gray-200 bg-gray-50 hover:border-brand-blue/60 text-left p-3 text-sm font-semibold text-gray-800 transition focus-ring"
-                  >
-                    <span className="block">{card.label}</span>
-                    <span className="text-xs text-gray-500">
-                      {lessonContext?.subject ? 'Context aware' : 'Quick start'}
-                    </span>
-                  </button>
-                ))}
-              </div>
-              {selectedCardId && (
-                <div className="mt-2">
-                  <p className="text-xs font-semibold text-gray-700 mb-1">Quick clarifiers</p>
-                  <div className="flex flex-wrap gap-2">
-                    {clarifierChips.map((chip) => (
-                      <button
-                        key={chip}
-                        className="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
-                        onClick={() => {
-                          trackEvent('chat_prompt_clarifier_selected', {
-                            card_id: selectedCardId,
-                            mode: chatMode,
-                            has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
-                            clarifier: chip,
-                          });
-                          const basePrompt = guidedCards.find((c) => c.id === selectedCardId)?.prompt ?? '';
-                          void handleSendMessage(`${basePrompt} ${chip}`, {
-                            source: 'card',
-                            cardId: selectedCardId,
-                          });
-                        }}
-                      >
-                        {chip}
-                      </button>
-                    ))}
-                  </div>
+              <>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {guidedCards.map((card) => (
+                    <button
+                      key={card.id}
+                      onClick={() => {
+                        setSelectedCardId(card.id);
+                        trackEvent('chat_prompt_card_selected', {
+                          card_id: card.id,
+                          mode: chatMode,
+                          has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
+                        });
+                        void handleSendMessage(card.prompt, { source: 'card', cardId: card.id });
+                      }}
+                      className="rounded-lg border border-gray-200 bg-gray-50 hover:border-brand-blue/60 text-left p-3 text-sm font-semibold text-gray-800 transition focus-ring"
+                    >
+                      <span className="block">{card.label}</span>
+                      <span className="text-xs text-gray-500">
+                        {lessonContext?.subject ? 'Context aware' : 'Quick start'}
+                      </span>
+                    </button>
+                  ))}
                 </div>
-              )}
+                {selectedCardId && (
+                  <div className="mt-2">
+                    <p className="text-xs font-semibold text-gray-700 mb-1">Quick clarifiers</p>
+                    <div className="flex flex-wrap gap-2">
+                      {clarifierChips.map((chip) => (
+                        <button
+                          key={chip}
+                          className="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
+                          onClick={() => {
+                            trackEvent('chat_prompt_clarifier_selected', {
+                              card_id: selectedCardId,
+                              mode: chatMode,
+                              has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
+                              clarifier: chip,
+                            });
+                            const basePrompt = guidedCards.find((c) => c.id === selectedCardId)?.prompt ?? '';
+                            void handleSendMessage(`${basePrompt} ${chip}`, {
+                              source: 'card',
+                              cardId: selectedCardId,
+                            });
+                          }}
+                        >
+                          {chip}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
 

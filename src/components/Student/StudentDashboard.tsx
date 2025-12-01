@@ -2695,7 +2695,7 @@ const StudentDashboard: React.FC = () => {
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Reflection</p>
                 <h4 className="text-lg font-bold text-gray-900">Jot a quick takeaway</h4>
-                <p className="text-sm text-gray-600">Takes <10s. Share with family if you want.</p>
+                <p className="text-sm text-gray-600">Takes &lt;10s. Share with family if you want.</p>
               </div>
               <button
                 onClick={() => {
