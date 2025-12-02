@@ -54,11 +54,22 @@ const ensureQuestionsValid = (moduleSlug: string, quiz: QuizDefinition): void =>
     throw new Error(`Module ${moduleSlug} quiz must include at least one question.`);
   }
   quiz.questions.forEach((question, index) => {
-    if (!question.prompt || !question.options || question.options.length < 2) {
-      throw new Error(`Question ${index + 1} for module ${moduleSlug} must include prompt and >=2 options.`);
+    if (!question.prompt) {
+      throw new Error(`Question ${index + 1} for module ${moduleSlug} is missing a prompt.`);
     }
-    if (!question.options.some((option) => option.isCorrect)) {
-      throw new Error(`Question ${index + 1} for module ${moduleSlug} must include a correct option.`);
+
+    const type = question.type ?? 'multiple_choice';
+    const requiresOptions = type !== 'short_answer' && type !== 'essay';
+
+    if (requiresOptions) {
+      if (!question.options || question.options.length < 2) {
+        throw new Error(
+          `Question ${index + 1} for module ${moduleSlug} must include at least two options for type "${type}".`,
+        );
+      }
+      if (!question.options.some((option) => option.isCorrect)) {
+        throw new Error(`Question ${index + 1} for module ${moduleSlug} must include a correct option.`);
+      }
     }
   });
 };
@@ -187,12 +198,13 @@ const insertQuestion = async (
   question: QuizQuestion,
   index: number,
 ): Promise<number> => {
-  const options = question.options.map((option, optionIndex) => ({
-    option_order: optionIndex + 1,
-    content: option.text,
-    is_correct: Boolean(option.isCorrect),
-    feedback: option.feedback ?? null,
-  }));
+  const options =
+    question.options?.map((option, optionIndex) => ({
+      option_order: optionIndex + 1,
+      content: option.text,
+      is_correct: Boolean(option.isCorrect),
+      feedback: option.feedback ?? null,
+    })) ?? [];
 
   const metadata: Record<string, unknown> = {
     module_slug: module.slug,
@@ -225,18 +237,19 @@ const insertQuestion = async (
   }
 
   const questionId = data.id as number;
-
-  const { error: optionsError } = await supabase.from('question_options').insert(
-    options.map((option) => ({
-      ...option,
-      question_id: questionId,
-    })),
-  );
-
-  if (optionsError) {
-    throw new Error(
-      `Failed to insert options for question ${index + 1} (module ${module.slug}): ${optionsError.message}`,
+  if (options.length > 0) {
+    const { error: optionsError } = await supabase.from('question_options').insert(
+      options.map((option) => ({
+        ...option,
+        question_id: questionId,
+      })),
     );
+
+    if (optionsError) {
+      throw new Error(
+        `Failed to insert options for question ${index + 1} (module ${module.slug}): ${optionsError.message}`,
+      );
+    }
   }
 
   return questionId;

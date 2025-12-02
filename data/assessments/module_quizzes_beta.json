@@ -1,0 +1,946 @@
+{
+  "3-mathematics-number-and-operations-multiplication-division": {
+    "title": "3.OA.3 Word Problems",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 3.OA.A.3"],
+    "questions": [
+      {
+        "prompt": "A class has 4 rows of 6 desks. How many desks are there in all?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 3.OA.A.3"],
+        "options": [
+          { "text": "18", "isCorrect": false },
+          { "text": "24", "isCorrect": true, "feedback": "4 groups of 6 = 24." },
+          { "text": "30", "isCorrect": false },
+          { "text": "36", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Mia has 28 stickers to share equally among 4 friends. How many stickers per friend?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 3.OA.A.3"],
+        "options": [
+          { "text": "6", "isCorrect": false },
+          { "text": "7", "isCorrect": true, "feedback": "28 ÷ 4 = 7." },
+          { "text": "8", "isCorrect": false },
+          { "text": "9", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A baker makes 5 trays of 8 muffins. Which equation shows the total muffins?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 3.OA.A.3"],
+        "options": [
+          { "text": "5 × 8 = 40", "isCorrect": true, "feedback": "Equal groups multiply to find the total." },
+          { "text": "5 + 8 = 13", "isCorrect": false },
+          { "text": "8 − 5 = 3", "isCorrect": false },
+          { "text": "5 ÷ 8 = 0.625", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "4-mathematics-number-and-operations-fractions-concepts-equivalence": {
+    "title": "4.NF.B.3 Fraction Sums",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 4.NF.B.3"],
+    "questions": [
+      {
+        "prompt": "What is 3/8 + 2/8?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 4.NF.B.3"],
+        "options": [
+          { "text": "5/8", "isCorrect": true, "feedback": "Add numerators when denominators match." },
+          { "text": "1/8", "isCorrect": false },
+          { "text": "5/16", "isCorrect": false },
+          { "text": "6/8", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Add the mixed numbers: 1 1/4 + 2 3/4",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 4.NF.B.3"],
+        "options": [
+          { "text": "3 1/2", "isCorrect": false },
+          { "text": "4", "isCorrect": true, "feedback": "1/4 + 3/4 = 1; 1 + 2 + 1 = 4." },
+          { "text": "4 1/4", "isCorrect": false },
+          { "text": "3 3/4", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which expression is equal to 5/6 − 1/6?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 4.NF.B.3"],
+        "options": [
+          { "text": "4/6", "isCorrect": true, "feedback": "Subtract numerators: 5 − 1 = 4." },
+          { "text": "6/6", "isCorrect": false },
+          { "text": "5/12", "isCorrect": false },
+          { "text": "1/36", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "5-mathematics-number-and-operations-fractions-concepts-equivalence": {
+    "title": "5.NF.B.4 Fraction Multiplication",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 5.NF.B.4"],
+    "questions": [
+      {
+        "prompt": "What is 2/3 × 3/4?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 5.NF.B.4"],
+        "options": [
+          { "text": "1/2", "isCorrect": true, "feedback": "Multiply numerators and denominators: 6/12 = 1/2." },
+          { "text": "5/12", "isCorrect": false },
+          { "text": "3/7", "isCorrect": false },
+          { "text": "2/7", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A rectangle is 5/6 yd by 2/5 yd. What is its area?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 5.NF.B.4"],
+        "options": [
+          { "text": "1/3 square yd", "isCorrect": true, "feedback": "(5/6) × (2/5) = 10/30 = 1/3." },
+          { "text": "1/2 square yd", "isCorrect": false },
+          { "text": "7/10 square yd", "isCorrect": false },
+          { "text": "5/11 square yd", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Compute 3/5 × 4/7",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 5.NF.B.4"],
+        "options": [
+          { "text": "12/35", "isCorrect": true, "feedback": "Multiply across: 3×4 over 5×7." },
+          { "text": "7/20", "isCorrect": false },
+          { "text": "12/12", "isCorrect": false },
+          { "text": "3/12", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
+    "title": "6.RP.A.3 Ratios & Unit Rates",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 6.RP.A.3"],
+    "questions": [
+      {
+        "prompt": "A recipe uses 2 cups of juice for every 3 cups of soda. How many cups of juice for 9 cups of soda?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.RP.A.3"],
+        "options": [
+          { "text": "4", "isCorrect": false },
+          { "text": "6", "isCorrect": true, "feedback": "Scale 2:3 by 3 → 6:9." },
+          { "text": "8", "isCorrect": false },
+          { "text": "12", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A car goes 180 miles on 6 gallons of gas. What is the unit rate (mpg)?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.RP.A.3"],
+        "options": [
+          { "text": "15 mpg", "isCorrect": false },
+          { "text": "30 mpg", "isCorrect": true, "feedback": "180 ÷ 6 = 30." },
+          { "text": "36 mpg", "isCorrect": false },
+          { "text": "12 mpg", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "The ratio of red to blue beads is 5:2. If there are 14 blue beads, how many red beads?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 6.RP.A.3"],
+        "options": [
+          { "text": "10", "isCorrect": false },
+          { "text": "35", "isCorrect": true, "feedback": "Scale factor 7: 5×7 = 35 red." },
+          { "text": "28", "isCorrect": false },
+          { "text": "21", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "6-mathematics-number-and-operations-expressions-and-equations": {
+    "title": "6.EE.B.7 One-Step Equations",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 6.EE.B.7"],
+    "questions": [
+      {
+        "prompt": "Solve for x: x + 9 = 21",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.EE.B.7"],
+        "options": [
+          { "text": "12", "isCorrect": true, "feedback": "Subtract 9 from both sides." },
+          { "text": "30", "isCorrect": false },
+          { "text": "9", "isCorrect": false },
+          { "text": "3", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve for y: 4y = 28",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.EE.B.7"],
+        "options": [
+          { "text": "7", "isCorrect": true, "feedback": "Divide both sides by 4." },
+          { "text": "32", "isCorrect": false },
+          { "text": "24", "isCorrect": false },
+          { "text": "4", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve for z: z − 15 = 4",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.EE.B.7"],
+        "options": [
+          { "text": "11", "isCorrect": false },
+          { "text": "19", "isCorrect": true, "feedback": "Add 15 to both sides: 4 + 15 = 19." },
+          { "text": "9", "isCorrect": false },
+          { "text": "4", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve for m: m/3 = 5",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.EE.B.7"],
+        "options": [
+          { "text": "8", "isCorrect": false },
+          { "text": "15", "isCorrect": true, "feedback": "Multiply both sides by 3: 5 × 3 = 15." },
+          { "text": "5", "isCorrect": false },
+          { "text": "12", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve for p: 18 = p − 6",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 6.EE.B.7"],
+        "options": [
+          { "text": "12", "isCorrect": false },
+          { "text": "24", "isCorrect": true, "feedback": "Add 6 to both sides: 18 + 6 = 24." },
+          { "text": "6", "isCorrect": false },
+          { "text": "30", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "7-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
+    "title": "7.RP.A.2 Proportional Relationships",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 7.RP.A.2"],
+    "questions": [
+      {
+        "prompt": "A graph passes through the origin and the point (4, 10). What is the unit rate (slope)?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 7.RP.A.2"],
+        "options": [
+          { "text": "2.5", "isCorrect": true, "feedback": "10 ÷ 4 = 2.5; constant rate." },
+          { "text": "4", "isCorrect": false },
+          { "text": "10", "isCorrect": false },
+          { "text": "0.4", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Is the table proportional? x: 2,4,6 | y: 6,12,18",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 7.RP.A.2"],
+        "options": [
+          { "text": "Yes, y/x is always 3.", "isCorrect": true, "feedback": "The ratio y/x = 3 for all pairs." },
+          { "text": "No, the ratios change.", "isCorrect": false },
+          { "text": "No, it doesn't start at 0.", "isCorrect": false },
+          { "text": "Cannot tell", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A shirt costs $18 after a 25% discount. What was the original price?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 7.RP.A.2"],
+        "options": [
+          { "text": "$18", "isCorrect": false },
+          { "text": "$20", "isCorrect": false },
+          { "text": "$24", "isCorrect": true, "feedback": "$18 is 75% of the original; 18 ÷ 0.75 = 24." },
+          { "text": "$27", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "7-mathematics-number-and-operations-expressions-and-equations": {
+    "title": "7.EE.B.4a Two-Step Equations",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 7.EE.B.4a"],
+    "questions": [
+      {
+        "prompt": "Solve for x: 3x − 5 = 16",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 7.EE.B.4a"],
+        "options": [
+          { "text": "7", "isCorrect": true, "feedback": "Add 5 → 21, then divide by 3 → 7." },
+          { "text": "11", "isCorrect": false },
+          { "text": "3.6", "isCorrect": false },
+          { "text": "5", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve for y: 4y + 9 = 33",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 7.EE.B.4a"],
+        "options": [
+          { "text": "6", "isCorrect": true, "feedback": "Subtract 9 → 24; divide by 4 → 6." },
+          { "text": "5", "isCorrect": false },
+          { "text": "8", "isCorrect": false },
+          { "text": "4", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve for z: (z / 5) + 2 = 9",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 7.EE.B.4a"],
+        "options": [
+          { "text": "35", "isCorrect": true, "feedback": "Subtract 2 → 7; multiply by 5 → 35." },
+          { "text": "25", "isCorrect": false },
+          { "text": "7/5", "isCorrect": false },
+          { "text": "45", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which of these is equivalent to 4(x − 2) = 28?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 7.EE.B.3"],
+        "options": [
+          { "text": "x − 2 = 7", "isCorrect": false },
+          { "text": "4x − 8 = 28", "isCorrect": true, "feedback": "Distribute 4 across (x − 2)." },
+          { "text": "4x = 26", "isCorrect": false },
+          { "text": "x + 2 = 7", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve 2x + 7 = 31",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 7.EE.B.4a"],
+        "options": [
+          { "text": "12", "isCorrect": true, "feedback": "Subtract 7 → 24, divide by 2 → 12." },
+          { "text": "19", "isCorrect": false },
+          { "text": "15", "isCorrect": false },
+          { "text": "2", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "8-mathematics-number-and-operations-expressions-and-equations": {
+    "title": "8.EE.C.8 Systems of Equations",
+    "estimatedDuration": 7,
+    "standards": ["CCSS-M 8.EE.C.8"],
+    "questions": [
+      {
+        "prompt": "Solve the system: y = 2x + 1 and y = x + 7",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 8.EE.C.8"],
+        "options": [
+          { "text": "(6, 13)", "isCorrect": true, "feedback": "Set 2x+1 = x+7 → x = 6, y = 13." },
+          { "text": "(7, 15)", "isCorrect": false },
+          { "text": "(3, 7)", "isCorrect": false },
+          { "text": "(1, 7)", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A system has no solution. Which graph description fits?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 8.EE.C.8"],
+        "options": [
+          { "text": "Two parallel lines", "isCorrect": true, "feedback": "Parallel lines never meet." },
+          { "text": "Two lines that intersect once", "isCorrect": false },
+          { "text": "The same line twice", "isCorrect": false },
+          { "text": "Two lines that intersect twice", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve the system: 2x + 3y = 12 and x − y = 1",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 8.EE.C.8"],
+        "options": [
+          { "text": "(3, 2)", "isCorrect": true, "feedback": "From x − y = 1 → y = x − 1; substitute into 2x + 3(x − 1) = 12 → x = 3, y = 2." },
+          { "text": "(2, 3)", "isCorrect": false },
+          { "text": "(4, 1)", "isCorrect": false },
+          { "text": "(1, 4)", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Classify the system: y = 3x + 2 and 6x − 2y = 5",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 8.EE.A.2"],
+        "options": [
+          { "text": "One solution", "isCorrect": true, "feedback": "Slopes are different, so lines intersect once." },
+          { "text": "No solution", "isCorrect": false },
+          { "text": "Infinite solutions", "isCorrect": false },
+          { "text": "Cannot be determined", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which system has infinitely many solutions?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 8.EE.A.2"],
+        "options": [
+          { "text": "y = 2x + 3 and 4x − 2y = -6", "isCorrect": true, "feedback": "The second equation is an equivalent rewrite of the first; same line." },
+          { "text": "y = -x and y = 3x", "isCorrect": false },
+          { "text": "y = x + 1 and y = x − 1", "isCorrect": false },
+          { "text": "y = 0.5x and y = -0.5x + 2", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Solve the system: y = -x + 1 and y = 2x - 5",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 8.EE.C.8"],
+        "options": [
+          { "text": "(2, -1)", "isCorrect": true, "feedback": "Set -x+1 = 2x-5 → 3x = 6 → x = 2, y = -1." },
+          { "text": "(1, 2)", "isCorrect": false },
+          { "text": "(-2, 5)", "isCorrect": false },
+          { "text": "(0, 1)", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "8-mathematics-geometry-and-measurement-pythagorean-theorem": {
+    "title": "8.G.B.6 Pythagorean Theorem",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-M 8.G.B.6"],
+    "questions": [
+      {
+        "prompt": "In a right triangle with legs 6 and 8, what is the hypotenuse length?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 8.G.B.6"],
+        "options": [
+          { "text": "10", "isCorrect": true, "feedback": "6² + 8² = 36 + 64 = 100; √100 = 10." },
+          { "text": "12", "isCorrect": false },
+          { "text": "9", "isCorrect": false },
+          { "text": "7", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A ladder reaches 15 ft up a wall while its base is 9 ft from the wall. What is the ladder length?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["CCSS-M 8.G.B.6"],
+        "options": [
+          { "text": "15 ft", "isCorrect": false },
+          { "text": "17.5 ft", "isCorrect": true, "feedback": "Hypotenuse = √(9² + 15²) ≈ 17.5." },
+          { "text": "18 ft", "isCorrect": false },
+          { "text": "20 ft", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A square has diagonal 10 cm. What is the side length?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-M 8.G.B.6"],
+        "options": [
+          { "text": "10 cm", "isCorrect": false },
+          { "text": "5√2 cm", "isCorrect": true, "feedback": "Sides form a 45-45-90 triangle: side = diagonal/√2 = 5√2." },
+          { "text": "7 cm", "isCorrect": false },
+          { "text": "8 cm", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "3-english-language-arts-reading-literature-short-stories-pd": {
+    "title": "RL.3.1 Text-Dependent Questions",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA RL.3.1"],
+    "questions": [
+      {
+        "prompt": "If a story says, “Lena rushed to grab her backpack as the bus honked,” what detail shows why Lena rushed?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RL.3.1"],
+        "options": [
+          { "text": "She was late for school.", "isCorrect": true, "feedback": "The honking bus implies she needed to catch it for school." },
+          { "text": "She wanted to read a book.", "isCorrect": false },
+          { "text": "She was going to the park.", "isCorrect": false },
+          { "text": "She lost her backpack.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Why did the character look out the window when hearing thunder in the story?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RL.3.1"],
+        "options": [
+          { "text": "To check the weather changing", "isCorrect": true, "feedback": "Thunder signals a storm; looking out checks the weather." },
+          { "text": "To see a friend", "isCorrect": false },
+          { "text": "To find a lost toy", "isCorrect": false },
+          { "text": "To close the curtains for bedtime", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics": {
+    "title": "W.3.1 Opinion Writing Basics",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA W.3.1"],
+    "questions": [
+      {
+        "prompt": "Which sentence clearly states an opinion for a paragraph about recess?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA W.3.1"],
+        "options": [
+          { "text": "Recess is the best part of the day because we get to move around.", "isCorrect": true, "feedback": "It includes a judgment and a reason." },
+          { "text": "Recess starts at 10:30.", "isCorrect": false },
+          { "text": "Recess lasts 20 minutes.", "isCorrect": false },
+          { "text": "Recess happens after math.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which detail supports the opinion that “Class pets make school more fun”?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA W.3.1"],
+        "options": [
+          { "text": "We take turns feeding the hamster and feel responsible.", "isCorrect": true, "feedback": "It gives a reason tied to the opinion." },
+          { "text": "Hamsters are small animals.", "isCorrect": false },
+          { "text": "Pets need cages and food.", "isCorrect": false },
+          { "text": "Some pets sleep during the day.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which transition word fits an opinion paragraph: \"____, school lunches should include more fruits\"?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA W.3.1"],
+        "options": [
+          { "text": "I think", "isCorrect": true, "feedback": "Signals an opinion statement." },
+          { "text": "First of all", "isCorrect": false },
+          { "text": "Next", "isCorrect": false },
+          { "text": "Finally", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which sentence adds a clear reason to support an opinion?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA W.3.2"],
+        "options": [
+          { "text": "Recycling bins should be in every classroom because they reduce trash.", "isCorrect": true },
+          { "text": "Recycling bins are blue.", "isCorrect": false },
+          { "text": "Trash cans are heavy.", "isCorrect": false },
+          { "text": "Classrooms have desks.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which word best replaces the underlined word for clarity? \"The loud storm was very *big*.\"",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA L.3.4"],
+        "options": [
+          { "text": "Severe", "isCorrect": true, "feedback": "Uses a precise synonym." },
+          { "text": "Small", "isCorrect": false },
+          { "text": "Tiny", "isCorrect": false },
+          { "text": "Quiet", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which concluding sentence matches an opinion paragraph about recess?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA W.3.1"],
+        "options": [
+          { "text": "That’s why recess should stay long—it helps us focus afterward.", "isCorrect": true, "feedback": "Restates opinion with a reason." },
+          { "text": "Recess is after math class.", "isCorrect": false },
+          { "text": "The playground has swings.", "isCorrect": false },
+          { "text": "Recess is outside.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which phrase best introduces a reason in an informational paragraph?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA W.3.2"],
+        "options": [
+          { "text": "One reason is that...", "isCorrect": true, "feedback": "Signals supporting detail." },
+          { "text": "In conclusion,", "isCorrect": false },
+          { "text": "For example,", "isCorrect": false },
+          { "text": "Yesterday,", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Choose the best word to replace *nice* in a report about a helpful librarian.",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA L.3.4"],
+        "options": [
+          { "text": "Helpful", "isCorrect": true },
+          { "text": "Mean", "isCorrect": false },
+          { "text": "Late", "isCorrect": false },
+          { "text": "Loud", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "4-english-language-arts-reading-informational-nonfiction-articles-open-licensed": {
+    "title": "RI.4.5 Text Structures",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA RI.4.5"],
+    "questions": [
+      {
+        "prompt": "An article lists causes of pollution and then lists ways to reduce it. What text structure is this?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.4.5"],
+        "options": [
+          { "text": "Cause and effect", "isCorrect": true, "feedback": "It links causes with effects/solutions." },
+          { "text": "Chronological", "isCorrect": false },
+          { "text": "Compare and contrast", "isCorrect": false },
+          { "text": "Description", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "A passage explains steps to make a paper airplane. Which structure is used?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.4.5"],
+        "options": [
+          { "text": "Sequence", "isCorrect": true, "feedback": "Giving steps is a sequence/chronology structure." },
+          { "text": "Problem/solution", "isCorrect": false },
+          { "text": "Compare/contrast", "isCorrect": false },
+          { "text": "Cause/effect", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "If an article compares two kinds of habitats, which structure is it likely using?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.4.5"],
+        "options": [
+          { "text": "Compare and contrast", "isCorrect": true },
+          { "text": "Sequence", "isCorrect": false },
+          { "text": "Description", "isCorrect": false },
+          { "text": "Cause and effect", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "5-english-language-arts-reading-literature-short-stories-pd": {
+    "title": "RL.5.2 Theme & Summary",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA RL.5.2"],
+    "questions": [
+      {
+        "prompt": "A story shows a character learning to ask for help instead of giving up. What theme fits best?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RL.5.2"],
+        "options": [
+          { "text": "Perseverance and teamwork matter", "isCorrect": true },
+          { "text": "Always work alone", "isCorrect": false },
+          { "text": "Asking for help is a weakness", "isCorrect": false },
+          { "text": "Only winning matters", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which detail belongs in a summary, not a theme statement?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RL.5.2"],
+        "options": [
+          { "text": "The main character loses a race but learns to practice daily.", "isCorrect": true, "feedback": "A summary includes key plot points." },
+          { "text": "Hard work can lead to improvement over time.", "isCorrect": false },
+          { "text": "Friendship requires trust.", "isCorrect": false },
+          { "text": "Sharing makes challenges easier.", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "6-english-language-arts-reading-literature-novellas-short-novels-pd": {
+    "title": "RL.6.1 Cite Evidence",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA RL.6.1"],
+    "questions": [
+      {
+        "prompt": "A character hides a letter under a floorboard. Which evidence shows this detail?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RL.6.1"],
+        "options": [
+          { "text": "\"He slid the envelope under the loose board before anyone entered.\"", "isCorrect": true, "feedback": "It is a direct quote supporting the detail." },
+          { "text": "He worried about his secret.", "isCorrect": false },
+          { "text": "The room was quiet.", "isCorrect": false },
+          { "text": "She wrote letters often.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which statement best cites evidence for why the character was nervous?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RL.6.1"],
+        "options": [
+          { "text": "\"His hands shook as he reached for the doorknob.\"", "isCorrect": true, "feedback": "Direct evidence shows nervousness." },
+          { "text": "He wanted to leave quickly.", "isCorrect": false },
+          { "text": "He liked doors.", "isCorrect": false },
+          { "text": "He smiled and relaxed.", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "7-english-language-arts-reading-informational-science-tech-articles-open-licensed": {
+    "title": "RI.7.8 Evaluate Arguments",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA RI.7.8"],
+    "questions": [
+      {
+        "prompt": "An article claims a new filter cleans 99% of water pollutants but provides no data. What is the weak point?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.7.8"],
+        "options": [
+          { "text": "Lack of evidence to support the claim", "isCorrect": true },
+          { "text": "Too many statistics", "isCorrect": false },
+          { "text": "Too many examples", "isCorrect": false },
+          { "text": "The claim is about water", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which statement shows sound reasoning in a science article?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.7.8"],
+        "options": [
+          { "text": "It links a claim to experimental results with sources cited.", "isCorrect": true },
+          { "text": "It repeats the claim without evidence.", "isCorrect": false },
+          { "text": "It uses emotional language only.", "isCorrect": false },
+          { "text": "It relies on unrelated anecdotes.", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "8-english-language-arts-reading-informational-science-tech-articles-open-licensed": {
+    "title": "RI.8.8 Evaluate Claims & Evidence",
+    "estimatedDuration": 6,
+    "standards": ["CCSS-ELA RI.8.8"],
+    "questions": [
+      {
+        "prompt": "A claim says a device saves 50% energy but cites only one user’s experience. What is missing?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.8.8"],
+        "options": [
+          { "text": "Broad evidence and reliable data", "isCorrect": true },
+          { "text": "Anecdotes", "isCorrect": false },
+          { "text": "Opinion statements", "isCorrect": false },
+          { "text": "More adjectives", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which source best strengthens a claim about cleaner air near schools?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["CCSS-ELA RI.8.8"],
+        "options": [
+          { "text": "A peer-reviewed study measuring air quality before and after changes", "isCorrect": true },
+          { "text": "A single parent’s comment", "isCorrect": false },
+          { "text": "An unrelated advertisement", "isCorrect": false },
+          { "text": "A fictional story", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "6-science-earth-and-space-plate-tectonics": {
+    "title": "MS-ESS2-2 Earth Systems",
+    "estimatedDuration": 7,
+    "standards": ["NGSS MS-ESS2-2"],
+    "questions": [
+      {
+        "prompt": "Which evidence supports that tectonic plates move over time?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-ESS2-2"],
+        "options": [
+          { "text": "Matching fossils found on continents now separated by oceans", "isCorrect": true },
+          { "text": "Identical weather on all continents", "isCorrect": false },
+          { "text": "Mountains never change height", "isCorrect": false },
+          { "text": "Oceans are the same depth everywhere", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "What typically occurs at a convergent boundary of oceanic and continental plates?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["NGSS MS-ESS2-2"],
+        "options": [
+          { "text": "The oceanic plate subducts, forming trenches and volcanoes", "isCorrect": true },
+          { "text": "New crust forms and plates spread apart", "isCorrect": false },
+          { "text": "Plates slide without vertical movement", "isCorrect": false },
+          { "text": "Plates remain stationary", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which layer includes the rigid plates that move over the asthenosphere?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-ESS2-2"],
+        "options": [
+          { "text": "Lithosphere", "isCorrect": true },
+          { "text": "Inner core", "isCorrect": false },
+          { "text": "Outer core", "isCorrect": false },
+          { "text": "Mesosphere", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "7-science-life-science-ecology-and-biodiversity": {
+    "title": "MS-LS2-3 Cycling Matter & Energy",
+    "estimatedDuration": 7,
+    "standards": ["NGSS MS-LS2-3"],
+    "questions": [
+      {
+        "prompt": "Why does removing a top predator often disrupt an ecosystem?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-LS2-3"],
+        "options": [
+          { "text": "It can cause prey populations to explode and unbalance food webs.", "isCorrect": true },
+          { "text": "It always increases biodiversity.", "isCorrect": false },
+          { "text": "It stops photosynthesis.", "isCorrect": false },
+          { "text": "It eliminates decomposers.", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Which process returns nutrients to the soil in a food web?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-LS2-3"],
+        "options": [
+          { "text": "Decomposition by bacteria and fungi", "isCorrect": true },
+          { "text": "Evaporation", "isCorrect": false },
+          { "text": "Condensation", "isCorrect": false },
+          { "text": "Erosion only", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Why do food webs show multiple arrows from one organism?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-LS2-3"],
+        "options": [
+          { "text": "Organisms can have multiple predators and prey, showing energy pathways.", "isCorrect": true },
+          { "text": "Energy only flows one way.", "isCorrect": false },
+          { "text": "Only producers have arrows.", "isCorrect": false },
+          { "text": "Consumers do not transfer energy.", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "7-science-physical-science-chemistry-atoms-bonding-reactions": {
+    "title": "MS-PS1-2 Chemical Reactions Evidence",
+    "estimatedDuration": 7,
+    "standards": ["NGSS MS-PS1-2"],
+    "questions": [
+      {
+        "prompt": "Which observation best shows a chemical reaction occurred?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-PS1-2"],
+        "options": [
+          { "text": "A gas is produced when two solutions mix", "isCorrect": true },
+          { "text": "Water freezes into ice", "isCorrect": false },
+          { "text": "Salt dissolves in water", "isCorrect": false },
+          { "text": "Sugar melts when heated", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Why is a color change evidence of a reaction?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-PS1-2"],
+        "options": [
+          { "text": "New substances with different properties formed", "isCorrect": true },
+          { "text": "Temperature stayed the same", "isCorrect": false },
+          { "text": "No bonds changed", "isCorrect": false },
+          { "text": "It always means physical change", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "What evidence shows mass is conserved in a reaction?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": ["NGSS MS-PS1-2"],
+        "options": [
+          { "text": "Total mass of reactants equals total mass of products", "isCorrect": true },
+          { "text": "Products have more mass than reactants", "isCorrect": false },
+          { "text": "Reactants vanish completely", "isCorrect": false },
+          { "text": "Products weigh less because gas escaped", "isCorrect": false }
+        ]
+      }
+    ]
+  },
+  "7-science-physical-science-kinematics-and-forces": {
+    "title": "MS-PS2-2 Forces & Motion",
+    "estimatedDuration": 7,
+    "standards": ["NGSS MS-PS2-2"],
+    "questions": [
+      {
+        "prompt": "What happens to acceleration if net force stays the same but mass increases?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-PS2-2"],
+        "options": [
+          { "text": "Acceleration decreases", "isCorrect": true },
+          { "text": "Acceleration increases", "isCorrect": false },
+          { "text": "Acceleration stays the same", "isCorrect": false },
+          { "text": "Acceleration becomes zero", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "Two equal forces act in opposite directions on an object. The net force is:",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-PS2-2"],
+        "options": [
+          { "text": "Zero", "isCorrect": true, "feedback": "Balanced forces give net force 0." },
+          { "text": "Twice one force", "isCorrect": false },
+          { "text": "Half one force", "isCorrect": false },
+          { "text": "Depends on mass only", "isCorrect": false }
+        ]
+      },
+      {
+        "prompt": "If a 10 N net force acts on a 2 kg cart, what is its acceleration?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": ["NGSS MS-PS2-2"],
+        "options": [
+          { "text": "5 m/s²", "isCorrect": true, "feedback": "a = F/m = 10/2 = 5." },
+          { "text": "2 m/s²", "isCorrect": false },
+          { "text": "10 m/s²", "isCorrect": false },
+          { "text": "20 m/s²", "isCorrect": false }
+        ]
+      }
+    ]
+  }
+}

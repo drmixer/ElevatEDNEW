@@ -1,0 +1,2482 @@
+{
+  "3-mathematics-data-and-probability-statistics-bar-line-plots": {
+    "title": "Bar/Line Plots",
+    "summary": "Explore how to organize and display data using bar plots and line plots. Learn to interpret visual representations of information.",
+    "objectives": [
+      "Create bar plots to display categorical data",
+      "Create line plots to display measurement data",
+      "Read and interpret information from plots",
+      "Compare quantities shown in plots"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.MD.B.3"
+    ],
+    "outline": {
+      "hook": "Show a bar plot of favorite ice cream flavors. Ask: 'How can we tell which flavor is most popular?' Discuss how the height of bars helps us compare.",
+      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. Demonstrate creating a bar plot by counting votes for 3 favorite fruits. Show line plots use X marks to display measurements. Create a line plot of student heights together as a class.",
+      "guided_practice": "In pairs, students create a bar plot showing classroom pet preferences. Then they make a line plot of coin flip results from 10 trials. Check for understanding by asking questions about the plots.",
+      "independent_practice": "Students survey classmates about favorite pizza toppings and create their own bar plot. They then measure pencil lengths and make a line plot of the data.",
+      "check_for_understanding": "Ask: 'How many more people chose pepperoni over cheese?' 'Which measurement appears most often?' Have students explain their reasoning.",
+      "exit_ticket": "Students draw a simple bar plot or line plot and answer one comparison question about their data.",
+      "materials": [
+        "Grid paper or plot templates",
+        "Markers",
+        "Ruler",
+        "Sample data cards",
+        "Coins (for experiments)"
+      ]
+    }
+  },
+  "3-mathematics-data-and-probability-statistics-interpreting-tables-charts": {
+    "title": "Interpreting Tables/Charts",
+    "summary": "Learn to read and understand data presented in tables and charts. Practice finding information and making comparisons.",
+    "objectives": [
+      "Locate specific data in tables and charts",
+      "Compare quantities in different rows or columns",
+      "Answer questions using table data",
+      "Identify patterns in tabular data"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.MD.B.3"
+    ],
+    "outline": {
+      "hook": "Show a simple table of classroom supplies. Ask: 'How many pencils do we have?' 'Do we have more pens or erasers?' Let students practice finding information.",
+      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. Demonstrate with a food preferences table: find Emma's favorite by locating her row.",
+      "guided_practice": "Students work with a class weather table. Together, find the warmest day, coldest day, and which days were similar. Do addition and subtraction with table data.",
+      "independent_practice": "Students receive a table of sports participation. They answer guided questions: 'Who plays soccer?' 'How many more basketball players than tennis?' 'What's the total?'",
+      "check_for_understanding": "Have students verbally explain how to find specific pieces of information in a table. Ask them to create their own simple table.",
+      "exit_ticket": "Students answer 2-3 questions about a provided table without teacher help.",
+      "materials": [
+        "Sample data tables (printed)",
+        "Colored pencils",
+        "Chart paper"
+      ]
+    }
+  },
+  "3-mathematics-data-and-probability-statistics-intro-probability-experimental": {
+    "title": "Intro Probability (experimental)",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.MD.B.3"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "3-mathematics-data-and-probability-statistics-mean-median-mode": {
+    "title": "Mean/Median/Mode",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.MD.B.3"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "3-mathematics-geometry-and-measurement-angles-and-lines": {
+    "title": "Angles & Lines",
+    "summary": "Identify and measure angles. Classify lines as parallel, intersecting, or perpendicular. Explore angles in real objects.",
+    "objectives": [
+      "Identify different types of angles",
+      "Measure angles using a protractor",
+      "Recognize parallel and perpendicular lines",
+      "Find angles in geometric figures"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.G.A.1"
+    ],
+    "outline": {
+      "hook": "Show a clock face. Ask: 'What angle do the hands make at 3 o'clock?' Point to a right angle in the classroom. Have students find right angles around them.",
+      "direct_instruction": "An angle is formed by two rays sharing a point. Right angles are 90\u00b0. Acute angles are smaller than 90\u00b0. Obtuse angles are larger. Show parallel lines (never meet) and perpendicular lines (meet at right angles).",
+      "guided_practice": "Students use a protractor to measure angles you've drawn. Identify angles in classroom objects. Draw parallel and perpendicular lines on the board together.",
+      "independent_practice": "Students measure 5 angles on a handout. Classify each as acute, right, or obtuse. Draw one example of parallel lines and one of perpendicular lines.",
+      "check_for_understanding": "Show an angle and ask students to estimate the measure before measuring. Discuss if their estimate was close.",
+      "exit_ticket": "Students identify whether given lines are parallel or perpendicular, and classify one angle they see in the classroom.",
+      "materials": [
+        "Protractors",
+        "Rulers",
+        "Angle measurement handouts",
+        "Images of angles in real objects"
+      ]
+    }
+  },
+  "3-mathematics-geometry-and-measurement-area-perimeter": {
+    "title": "Area/Perimeter",
+    "summary": "Understand the difference between area and perimeter. Measure and calculate these for rectangles, squares, and other shapes.",
+    "objectives": [
+      "Calculate perimeter by adding all sides",
+      "Calculate area by multiplying length and width",
+      "Solve real-world area and perimeter problems",
+      "Apply formulas to different shapes"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.MD.C.5"
+    ],
+    "outline": {
+      "hook": "Walk around the perimeter of the classroom. Count your steps. Then ask: 'How much space is inside?' Explain: perimeter is the distance around, area is the space inside.",
+      "direct_instruction": "Perimeter = distance around (add all sides). Area = space inside (multiply length \u00d7 width for rectangles). Show examples with grid paper: count squares for area.",
+      "guided_practice": "Find the perimeter of a rectangle by measuring and adding. Find the area by multiplying dimensions. Do several examples together on the board.",
+      "independent_practice": "Students measure a rectangle and calculate both perimeter and area. Try different rectangles to see how changes affect each measurement.",
+      "check_for_understanding": "Ask: 'Does a bigger perimeter always mean a bigger area?' (No!) Have them test with different rectangles.",
+      "exit_ticket": "Given a rectangle's dimensions, students calculate perimeter and area. Write or draw which one is larger.",
+      "materials": [
+        "Rulers",
+        "Grid paper",
+        "Rectangles (drawn or printed)",
+        "Measuring tape (for classroom features)"
+      ]
+    }
+  },
+  "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i": {
+    "title": "Coordinate Plane (Quadrant I)",
+    "summary": "Plot points on a coordinate plane using ordered pairs. Move and identify locations using coordinates.",
+    "objectives": [
+      "Understand ordered pairs (x, y)",
+      "Plot points on a coordinate plane",
+      "Read coordinates of plotted points",
+      "Move between locations using coordinates"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.G.A.1"
+    ],
+    "outline": {
+      "hook": "Show a coordinate plane with one point plotted. Ask: 'Where is this point?' Explain the x-axis (left-right) and y-axis (up-down).",
+      "direct_instruction": "Ordered pair (x, y) tells location. Start at origin (0, 0). Move right (positive x) or left (negative x). Move up (positive y) or down (negative y).",
+      "guided_practice": "Plot points together: (2, 3), (4, 1), (1, 4). Name the coordinates of points already plotted. Play a game finding treasure at coordinates.",
+      "independent_practice": "Students plot 5-8 given points on graph paper. Then name the coordinates of points you show them. Create their own shape using coordinates.",
+      "check_for_understanding": "Ask: 'What are the coordinates of that point?' 'Is (3, 2) the same as (2, 3)?' Have them explain why order matters.",
+      "exit_ticket": "Plot 2-3 points on a coordinate plane and identify the location of 1-2 given points.",
+      "materials": [
+        "Coordinate plane grid (printed or drawn)",
+        "Graph paper",
+        "Colored dots or stickers",
+        "Grid-based games"
+      ]
+    }
+  },
+  "3-mathematics-geometry-and-measurement-transformations-intro": {
+    "title": "Transformations (intro)",
+    "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "objectives": [
+      "Identify rotations, reflections, and translations",
+      "Perform transformations on shapes",
+      "Understand congruence through transformations",
+      "Describe transformations using direction and amount"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.G.A.2"
+    ],
+    "outline": {
+      "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
+      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
+      "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
+      "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
+      "exit_ticket": "Students identify the transformation shown and describe it (e.g., 'Slide 3 units right').",
+      "materials": [
+        "Shape cutouts",
+        "Mirrors",
+        "Grid paper",
+        "Tracing paper"
+      ]
+    }
+  },
+  "3-mathematics-geometry-and-measurement-volume": {
+    "title": "Volume",
+    "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "objectives": [
+      "Understand volume as cubic units",
+      "Count unit cubes to find volume",
+      "Use the formula length \u00d7 width \u00d7 height",
+      "Solve volume problems with real objects"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.MD.C.5"
+    ],
+    "outline": {
+      "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
+      "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
+      "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
+      "exit_ticket": "Given dimensions, students calculate volume or count cubes for a provided figure.",
+      "materials": [
+        "Unit cubes or blocks",
+        "Rectangular prism models (paper or plastic)",
+        "Grid paper",
+        "Rulers"
+      ]
+    }
+  },
+  "3-mathematics-number-and-operations-decimals-intro": {
+    "title": "Decimals (intro)",
+    "summary": "Connect fractions and decimals. Understand place value to the tenths and hundredths. Read, write, and compare decimal numbers.",
+    "objectives": [
+      "Understand decimals as fractions with denominators of 10 or 100",
+      "Read and write decimals",
+      "Compare and order decimals",
+      "Use decimals in real contexts (money, measurement)"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.NF.A.3"
+    ],
+    "outline": {
+      "hook": "Show a dollar bill and a dime. Explain: a dime is 0.1 dollars, or 1/10. Connect to decimal notation.",
+      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions. 0.5 = 5/10 = 1/2.",
+      "guided_practice": "Shade decimal grids to represent 0.3, 0.25, etc. Write decimals and fractions that match. Compare decimals: is 0.5 bigger than 0.3?",
+      "independent_practice": "Students write decimals for shaded grids. Compare decimal numbers. Use decimals to record measurements and money amounts.",
+      "check_for_understanding": "Ask: 'What is 0.7 as a fraction?' 'Is 0.25 the same as 1/4?' Have them explain.",
+      "exit_ticket": "Students write a decimal and its matching fraction, or identify the larger of two decimals.",
+      "materials": [
+        "Decimal grids (10\u00d710 squares)",
+        "Place value chart",
+        "Money (coins and bills)",
+        "Rulers with decimals"
+      ]
+    }
+  },
+  "3-mathematics-number-and-operations-fractions-concepts-equivalence": {
+    "title": "Fractions (concepts, equivalence)",
+    "summary": "Explore parts of a whole. Understand unit fractions, equal shares, and equivalent fractions.",
+    "objectives": [
+      "Understand fractions as equal parts",
+      "Read and write fractions",
+      "Identify equivalent fractions",
+      "Compare fractions with same denominators"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.NF.A.1"
+    ],
+    "outline": {
+      "hook": "Divide a pizza into equal slices. Ask: 'How many slices is the whole pizza?' 'If I eat 2 slices out of 8, what fraction did I eat?'",
+      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total.",
+      "guided_practice": "Shade fraction models to represent 1/2, 1/3, 1/4, etc. Show equivalent fractions (1/2 = 2/4). Compare 1/2 and 1/3.",
+      "independent_practice": "Students shade models for given fractions. Find equivalent fractions. Compare fractions with same denominators.",
+      "check_for_understanding": "Ask: 'Is 1/2 bigger than 1/3?' 'Are 2/4 and 1/2 the same?' Have them explain their reasoning.",
+      "exit_ticket": "Students shade a model to show a fraction and write it, or identify equivalent fractions.",
+      "materials": [
+        "Fraction circles or bar models",
+        "Shading paper",
+        "Real objects (pizzas, candy, paper strips)",
+        "Fraction comparison charts"
+      ]
+    }
+  },
+  "3-mathematics-number-and-operations-multiplication-division": {
+    "title": "Multiplication/Division",
+    "summary": "Understand multiplication as repeated addition and equal groups. Master facts and multi-digit multiplication.",
+    "objectives": [
+      "Represent multiplication as equal groups or arrays",
+      "Understand the commutative property",
+      "Memorize multiplication facts",
+      "Solve multiplication word problems"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.OA.A.1"
+    ],
+    "outline": {
+      "hook": "Show 3 bags with 4 apples each. Ask: 'How many total?' Introduce: 3 \u00d7 4 = 12.",
+      "direct_instruction": "Multiplication is repeated addition. 3 \u00d7 4 means 4 + 4 + 4. Arrays show rows and columns. 3 rows of 4 = 3 \u00d7 4 = 12.",
+      "guided_practice": "Create arrays with objects or drawings. Write multiplication sentences. Skip count by 2s, 5s, 10s.",
+      "independent_practice": "Students create arrays for given multiplications. Solve word problems involving equal groups.",
+      "check_for_understanding": "Ask: 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' (Yes!) Have them draw arrays to prove it.",
+      "exit_ticket": "Students draw an array or groups to match a multiplication sentence.",
+      "materials": [
+        "Objects (counters, beans, blocks)",
+        "Grid paper for arrays",
+        "Multiplication charts",
+        "Word problem cards"
+      ]
+    }
+  },
+  "3-mathematics-number-and-operations-place-value-thousands-millions": {
+    "title": "Place Value (thousands/millions)",
+    "summary": "Understand the value of digits in numbers. Work with thousands, millions, and other place values.",
+    "objectives": [
+      "Identify place value of digits (ones, tens, hundreds, thousands, etc.)",
+      "Read and write numbers in expanded form",
+      "Compare numbers using place value",
+      "Round numbers to different places"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.NBT.A.1"
+    ],
+    "outline": {
+      "hook": "Write 345. Ask: 'What does the 4 represent?' (40) 'The 3?' (300) Discuss how the same digit means different amounts.",
+      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands. Show with place value blocks or charts.",
+      "guided_practice": "Write numbers in expanded form: 234 = 200 + 30 + 4. Compare numbers using place value. Round to nearest 10 or 100.",
+      "independent_practice": "Students identify place values in numbers. Write numbers in expanded form. Compare numbers and round.",
+      "check_for_understanding": "Ask: 'What is 5 in 5,432?' (5 thousands, or 5,000) 'Is 234 or 324 bigger?'",
+      "exit_ticket": "Students write a number in expanded form or identify the place value of one digit.",
+      "materials": [
+        "Place value blocks",
+        "Place value charts",
+        "Number cards",
+        "Rounding number lines"
+      ]
+    }
+  },
+  "3-mathematics-number-and-operations-rounding-and-estimation": {
+    "title": "Rounding & Estimation",
+    "summary": "Round numbers to the nearest 10, 100, or 1000. Estimate sums and differences using rounding.",
+    "objectives": [
+      "Round numbers to different place values",
+      "Understand when and why to round",
+      "Estimate using rounded numbers",
+      "Check reasonableness of answers"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Mathematics",
+    "standards": [
+      "3.NBT.A.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'Is 48 closer to 40 or 50?' Show a number line. Round 48 to 50. Explain using a number line.",
+      "direct_instruction": "Look at the digit to the right of the place you're rounding to. If 5 or more, round up. If less than 5, round down.",
+      "guided_practice": "Round several numbers together: 23 to nearest 10, 156 to nearest 100. Use number lines.",
+      "independent_practice": "Students round 8-10 numbers to specified place values. Estimate sums by rounding first.",
+      "check_for_understanding": "Ask: 'What is 67 rounded to the nearest 10?' 'Is that reasonable?' Have them explain their thinking.",
+      "exit_ticket": "Students round 2 numbers and optionally estimate a sum.",
+      "materials": [
+        "Number lines",
+        "Rounding worksheets",
+        "Place value charts"
+      ]
+    }
+  },
+  "4-mathematics-data-and-probability-statistics-bar-line-plots": {
+    "title": "Bar/Line Plots",
+    "summary": "Explore how to organize and display data using bar plots and line plots. Learn to interpret visual representations of information.",
+    "objectives": [
+      "Create bar plots to display categorical data",
+      "Create line plots to display measurement data",
+      "Read and interpret information from plots",
+      "Compare quantities shown in plots"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.B.4"
+    ],
+    "outline": {
+      "hook": "Show a bar plot of favorite ice cream flavors. Ask: 'How can we tell which flavor is most popular?' Discuss how the height of bars helps us compare.",
+      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. Demonstrate creating a bar plot by counting votes for 3 favorite fruits. Show line plots use X marks to display measurements. Create a line plot of student heights together as a class.",
+      "guided_practice": "In pairs, students create a bar plot showing classroom pet preferences. Then they make a line plot of coin flip results from 10 trials. Check for understanding by asking questions about the plots.",
+      "independent_practice": "Students survey classmates about favorite pizza toppings and create their own bar plot. They then measure pencil lengths and make a line plot of the data.",
+      "check_for_understanding": "Ask: 'How many more people chose pepperoni over cheese?' 'Which measurement appears most often?' Have students explain their reasoning.",
+      "exit_ticket": "Students draw a simple bar plot or line plot and answer one comparison question about their data.",
+      "materials": [
+        "Grid paper or plot templates",
+        "Markers",
+        "Ruler",
+        "Sample data cards",
+        "Coins (for experiments)"
+      ]
+    }
+  },
+  "4-mathematics-data-and-probability-statistics-interpreting-tables-charts": {
+    "title": "Interpreting Tables/Charts",
+    "summary": "Learn to read and understand data presented in tables and charts. Practice finding information and making comparisons.",
+    "objectives": [
+      "Locate specific data in tables and charts",
+      "Compare quantities in different rows or columns",
+      "Answer questions using table data",
+      "Identify patterns in tabular data"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.B.4"
+    ],
+    "outline": {
+      "hook": "Show a simple table of classroom supplies. Ask: 'How many pencils do we have?' 'Do we have more pens or erasers?' Let students practice finding information.",
+      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. Demonstrate with a food preferences table: find Emma's favorite by locating her row.",
+      "guided_practice": "Students work with a class weather table. Together, find the warmest day, coldest day, and which days were similar. Do addition and subtraction with table data.",
+      "independent_practice": "Students receive a table of sports participation. They answer guided questions: 'Who plays soccer?' 'How many more basketball players than tennis?' 'What's the total?'",
+      "check_for_understanding": "Have students verbally explain how to find specific pieces of information in a table. Ask them to create their own simple table.",
+      "exit_ticket": "Students answer 2-3 questions about a provided table without teacher help.",
+      "materials": [
+        "Sample data tables (printed)",
+        "Colored pencils",
+        "Chart paper"
+      ]
+    }
+  },
+  "4-mathematics-data-and-probability-statistics-intro-probability-experimental": {
+    "title": "Intro Probability (experimental)",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.B.4"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "4-mathematics-data-and-probability-statistics-mean-median-mode": {
+    "title": "Mean/Median/Mode",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.B.4"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "4-mathematics-geometry-and-measurement-angles-and-lines": {
+    "title": "Angles & Lines",
+    "summary": "Identify and measure angles. Classify lines as parallel, intersecting, or perpendicular. Explore angles in real objects.",
+    "objectives": [
+      "Identify different types of angles",
+      "Measure angles using a protractor",
+      "Recognize parallel and perpendicular lines",
+      "Find angles in geometric figures"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.C.5"
+    ],
+    "outline": {
+      "hook": "Show a clock face. Ask: 'What angle do the hands make at 3 o'clock?' Point to a right angle in the classroom. Have students find right angles around them.",
+      "direct_instruction": "An angle is formed by two rays sharing a point. Right angles are 90\u00b0. Acute angles are smaller than 90\u00b0. Obtuse angles are larger. Show parallel lines (never meet) and perpendicular lines (meet at right angles).",
+      "guided_practice": "Students use a protractor to measure angles you've drawn. Identify angles in classroom objects. Draw parallel and perpendicular lines on the board together.",
+      "independent_practice": "Students measure 5 angles on a handout. Classify each as acute, right, or obtuse. Draw one example of parallel lines and one of perpendicular lines.",
+      "check_for_understanding": "Show an angle and ask students to estimate the measure before measuring. Discuss if their estimate was close.",
+      "exit_ticket": "Students identify whether given lines are parallel or perpendicular, and classify one angle they see in the classroom.",
+      "materials": [
+        "Protractors",
+        "Rulers",
+        "Angle measurement handouts",
+        "Images of angles in real objects"
+      ]
+    }
+  },
+  "4-mathematics-geometry-and-measurement-area-perimeter": {
+    "title": "Area/Perimeter",
+    "summary": "Understand the difference between area and perimeter. Measure and calculate these for rectangles, squares, and other shapes.",
+    "objectives": [
+      "Calculate perimeter by adding all sides",
+      "Calculate area by multiplying length and width",
+      "Solve real-world area and perimeter problems",
+      "Apply formulas to different shapes"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.A.3"
+    ],
+    "outline": {
+      "hook": "Walk around the perimeter of the classroom. Count your steps. Then ask: 'How much space is inside?' Explain: perimeter is the distance around, area is the space inside.",
+      "direct_instruction": "Perimeter = distance around (add all sides). Area = space inside (multiply length \u00d7 width for rectangles). Show examples with grid paper: count squares for area.",
+      "guided_practice": "Find the perimeter of a rectangle by measuring and adding. Find the area by multiplying dimensions. Do several examples together on the board.",
+      "independent_practice": "Students measure a rectangle and calculate both perimeter and area. Try different rectangles to see how changes affect each measurement.",
+      "check_for_understanding": "Ask: 'Does a bigger perimeter always mean a bigger area?' (No!) Have them test with different rectangles.",
+      "exit_ticket": "Given a rectangle's dimensions, students calculate perimeter and area. Write or draw which one is larger.",
+      "materials": [
+        "Rulers",
+        "Grid paper",
+        "Rectangles (drawn or printed)",
+        "Measuring tape (for classroom features)"
+      ]
+    }
+  },
+  "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i": {
+    "title": "Coordinate Plane (Quadrant I)",
+    "summary": "Plot points on a coordinate plane using ordered pairs. Move and identify locations using coordinates.",
+    "objectives": [
+      "Understand ordered pairs (x, y)",
+      "Plot points on a coordinate plane",
+      "Read coordinates of plotted points",
+      "Move between locations using coordinates"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.G.A.1"
+    ],
+    "outline": {
+      "hook": "Show a coordinate plane with one point plotted. Ask: 'Where is this point?' Explain the x-axis (left-right) and y-axis (up-down).",
+      "direct_instruction": "Ordered pair (x, y) tells location. Start at origin (0, 0). Move right (positive x) or left (negative x). Move up (positive y) or down (negative y).",
+      "guided_practice": "Plot points together: (2, 3), (4, 1), (1, 4). Name the coordinates of points already plotted. Play a game finding treasure at coordinates.",
+      "independent_practice": "Students plot 5-8 given points on graph paper. Then name the coordinates of points you show them. Create their own shape using coordinates.",
+      "check_for_understanding": "Ask: 'What are the coordinates of that point?' 'Is (3, 2) the same as (2, 3)?' Have them explain why order matters.",
+      "exit_ticket": "Plot 2-3 points on a coordinate plane and identify the location of 1-2 given points.",
+      "materials": [
+        "Coordinate plane grid (printed or drawn)",
+        "Graph paper",
+        "Colored dots or stickers",
+        "Grid-based games"
+      ]
+    }
+  },
+  "4-mathematics-geometry-and-measurement-transformations-intro": {
+    "title": "Transformations (intro)",
+    "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "objectives": [
+      "Identify rotations, reflections, and translations",
+      "Perform transformations on shapes",
+      "Understand congruence through transformations",
+      "Describe transformations using direction and amount"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.G.A.2"
+    ],
+    "outline": {
+      "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
+      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
+      "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
+      "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
+      "exit_ticket": "Students identify the transformation shown and describe it (e.g., 'Slide 3 units right').",
+      "materials": [
+        "Shape cutouts",
+        "Mirrors",
+        "Grid paper",
+        "Tracing paper"
+      ]
+    }
+  },
+  "4-mathematics-geometry-and-measurement-volume": {
+    "title": "Volume",
+    "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "objectives": [
+      "Understand volume as cubic units",
+      "Count unit cubes to find volume",
+      "Use the formula length \u00d7 width \u00d7 height",
+      "Solve volume problems with real objects"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.MD.A.3"
+    ],
+    "outline": {
+      "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
+      "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
+      "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
+      "exit_ticket": "Given dimensions, students calculate volume or count cubes for a provided figure.",
+      "materials": [
+        "Unit cubes or blocks",
+        "Rectangular prism models (paper or plastic)",
+        "Grid paper",
+        "Rulers"
+      ]
+    }
+  },
+  "4-mathematics-number-and-operations-decimals-intro": {
+    "title": "Decimals (intro)",
+    "summary": "Connect fractions and decimals. Understand place value to the tenths and hundredths. Read, write, and compare decimal numbers.",
+    "objectives": [
+      "Understand decimals as fractions with denominators of 10 or 100",
+      "Read and write decimals",
+      "Compare and order decimals",
+      "Use decimals in real contexts (money, measurement)"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.NF.C.6"
+    ],
+    "outline": {
+      "hook": "Show a dollar bill and a dime. Explain: a dime is 0.1 dollars, or 1/10. Connect to decimal notation.",
+      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions. 0.5 = 5/10 = 1/2.",
+      "guided_practice": "Shade decimal grids to represent 0.3, 0.25, etc. Write decimals and fractions that match. Compare decimals: is 0.5 bigger than 0.3?",
+      "independent_practice": "Students write decimals for shaded grids. Compare decimal numbers. Use decimals to record measurements and money amounts.",
+      "check_for_understanding": "Ask: 'What is 0.7 as a fraction?' 'Is 0.25 the same as 1/4?' Have them explain.",
+      "exit_ticket": "Students write a decimal and its matching fraction, or identify the larger of two decimals.",
+      "materials": [
+        "Decimal grids (10\u00d710 squares)",
+        "Place value chart",
+        "Money (coins and bills)",
+        "Rulers with decimals"
+      ]
+    }
+  },
+  "4-mathematics-number-and-operations-fractions-concepts-equivalence": {
+    "title": "Fractions (concepts, equivalence)",
+    "summary": "Explore parts of a whole. Understand unit fractions, equal shares, and equivalent fractions.",
+    "objectives": [
+      "Understand fractions as equal parts",
+      "Read and write fractions",
+      "Identify equivalent fractions",
+      "Compare fractions with same denominators"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.NF.A.1"
+    ],
+    "outline": {
+      "hook": "Divide a pizza into equal slices. Ask: 'How many slices is the whole pizza?' 'If I eat 2 slices out of 8, what fraction did I eat?'",
+      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total.",
+      "guided_practice": "Shade fraction models to represent 1/2, 1/3, 1/4, etc. Show equivalent fractions (1/2 = 2/4). Compare 1/2 and 1/3.",
+      "independent_practice": "Students shade models for given fractions. Find equivalent fractions. Compare fractions with same denominators.",
+      "check_for_understanding": "Ask: 'Is 1/2 bigger than 1/3?' 'Are 2/4 and 1/2 the same?' Have them explain their reasoning.",
+      "exit_ticket": "Students shade a model to show a fraction and write it, or identify equivalent fractions.",
+      "materials": [
+        "Fraction circles or bar models",
+        "Shading paper",
+        "Real objects (pizzas, candy, paper strips)",
+        "Fraction comparison charts"
+      ]
+    }
+  },
+  "4-mathematics-number-and-operations-multiplication-division": {
+    "title": "Multiplication/Division",
+    "summary": "Understand multiplication as repeated addition and equal groups. Master facts and multi-digit multiplication.",
+    "objectives": [
+      "Represent multiplication as equal groups or arrays",
+      "Understand the commutative property",
+      "Memorize multiplication facts",
+      "Solve multiplication word problems"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.OA.A.1"
+    ],
+    "outline": {
+      "hook": "Show 3 bags with 4 apples each. Ask: 'How many total?' Introduce: 3 \u00d7 4 = 12.",
+      "direct_instruction": "Multiplication is repeated addition. 3 \u00d7 4 means 4 + 4 + 4. Arrays show rows and columns. 3 rows of 4 = 3 \u00d7 4 = 12.",
+      "guided_practice": "Create arrays with objects or drawings. Write multiplication sentences. Skip count by 2s, 5s, 10s.",
+      "independent_practice": "Students create arrays for given multiplications. Solve word problems involving equal groups.",
+      "check_for_understanding": "Ask: 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' (Yes!) Have them draw arrays to prove it.",
+      "exit_ticket": "Students draw an array or groups to match a multiplication sentence.",
+      "materials": [
+        "Objects (counters, beans, blocks)",
+        "Grid paper for arrays",
+        "Multiplication charts",
+        "Word problem cards"
+      ]
+    }
+  },
+  "4-mathematics-number-and-operations-place-value-thousands-millions": {
+    "title": "Place Value (thousands/millions)",
+    "summary": "Understand the value of digits in numbers. Work with thousands, millions, and other place values.",
+    "objectives": [
+      "Identify place value of digits (ones, tens, hundreds, thousands, etc.)",
+      "Read and write numbers in expanded form",
+      "Compare numbers using place value",
+      "Round numbers to different places"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.NBT.A.1"
+    ],
+    "outline": {
+      "hook": "Write 345. Ask: 'What does the 4 represent?' (40) 'The 3?' (300) Discuss how the same digit means different amounts.",
+      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands. Show with place value blocks or charts.",
+      "guided_practice": "Write numbers in expanded form: 234 = 200 + 30 + 4. Compare numbers using place value. Round to nearest 10 or 100.",
+      "independent_practice": "Students identify place values in numbers. Write numbers in expanded form. Compare numbers and round.",
+      "check_for_understanding": "Ask: 'What is 5 in 5,432?' (5 thousands, or 5,000) 'Is 234 or 324 bigger?'",
+      "exit_ticket": "Students write a number in expanded form or identify the place value of one digit.",
+      "materials": [
+        "Place value blocks",
+        "Place value charts",
+        "Number cards",
+        "Rounding number lines"
+      ]
+    }
+  },
+  "4-mathematics-number-and-operations-rounding-and-estimation": {
+    "title": "Rounding & Estimation",
+    "summary": "Round numbers to the nearest 10, 100, or 1000. Estimate sums and differences using rounding.",
+    "objectives": [
+      "Round numbers to different place values",
+      "Understand when and why to round",
+      "Estimate using rounded numbers",
+      "Check reasonableness of answers"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Mathematics",
+    "standards": [
+      "4.NBT.A.3"
+    ],
+    "outline": {
+      "hook": "Ask: 'Is 48 closer to 40 or 50?' Show a number line. Round 48 to 50. Explain using a number line.",
+      "direct_instruction": "Look at the digit to the right of the place you're rounding to. If 5 or more, round up. If less than 5, round down.",
+      "guided_practice": "Round several numbers together: 23 to nearest 10, 156 to nearest 100. Use number lines.",
+      "independent_practice": "Students round 8-10 numbers to specified place values. Estimate sums by rounding first.",
+      "check_for_understanding": "Ask: 'What is 67 rounded to the nearest 10?' 'Is that reasonable?' Have them explain their thinking.",
+      "exit_ticket": "Students round 2 numbers and optionally estimate a sum.",
+      "materials": [
+        "Number lines",
+        "Rounding worksheets",
+        "Place value charts"
+      ]
+    }
+  },
+  "5-mathematics-data-and-probability-statistics-bar-line-plots": {
+    "title": "Bar/Line Plots",
+    "summary": "Explore how to organize and display data using bar plots and line plots. Learn to interpret visual representations of information.",
+    "objectives": [
+      "Create bar plots to display categorical data",
+      "Create line plots to display measurement data",
+      "Read and interpret information from plots",
+      "Compare quantities shown in plots"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.B.2"
+    ],
+    "outline": {
+      "hook": "Show a bar plot of favorite ice cream flavors. Ask: 'How can we tell which flavor is most popular?' Discuss how the height of bars helps us compare.",
+      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. Demonstrate creating a bar plot by counting votes for 3 favorite fruits. Show line plots use X marks to display measurements. Create a line plot of student heights together as a class.",
+      "guided_practice": "In pairs, students create a bar plot showing classroom pet preferences. Then they make a line plot of coin flip results from 10 trials. Check for understanding by asking questions about the plots.",
+      "independent_practice": "Students survey classmates about favorite pizza toppings and create their own bar plot. They then measure pencil lengths and make a line plot of the data.",
+      "check_for_understanding": "Ask: 'How many more people chose pepperoni over cheese?' 'Which measurement appears most often?' Have students explain their reasoning.",
+      "exit_ticket": "Students draw a simple bar plot or line plot and answer one comparison question about their data.",
+      "materials": [
+        "Grid paper or plot templates",
+        "Markers",
+        "Ruler",
+        "Sample data cards",
+        "Coins (for experiments)"
+      ]
+    }
+  },
+  "5-mathematics-data-and-probability-statistics-interpreting-tables-charts": {
+    "title": "Interpreting Tables/Charts",
+    "summary": "Learn to read and understand data presented in tables and charts. Practice finding information and making comparisons.",
+    "objectives": [
+      "Locate specific data in tables and charts",
+      "Compare quantities in different rows or columns",
+      "Answer questions using table data",
+      "Identify patterns in tabular data"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.B.2"
+    ],
+    "outline": {
+      "hook": "Show a simple table of classroom supplies. Ask: 'How many pencils do we have?' 'Do we have more pens or erasers?' Let students practice finding information.",
+      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. Demonstrate with a food preferences table: find Emma's favorite by locating her row.",
+      "guided_practice": "Students work with a class weather table. Together, find the warmest day, coldest day, and which days were similar. Do addition and subtraction with table data.",
+      "independent_practice": "Students receive a table of sports participation. They answer guided questions: 'Who plays soccer?' 'How many more basketball players than tennis?' 'What's the total?'",
+      "check_for_understanding": "Have students verbally explain how to find specific pieces of information in a table. Ask them to create their own simple table.",
+      "exit_ticket": "Students answer 2-3 questions about a provided table without teacher help.",
+      "materials": [
+        "Sample data tables (printed)",
+        "Colored pencils",
+        "Chart paper"
+      ]
+    }
+  },
+  "5-mathematics-data-and-probability-statistics-intro-probability-experimental": {
+    "title": "Intro Probability (experimental)",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.B.2"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "5-mathematics-data-and-probability-statistics-mean-median-mode": {
+    "title": "Mean/Median/Mode",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.B.2"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "5-mathematics-geometry-and-measurement-angles-and-lines": {
+    "title": "Angles & Lines",
+    "summary": "Identify and measure angles. Classify lines as parallel, intersecting, or perpendicular. Explore angles in real objects.",
+    "objectives": [
+      "Identify different types of angles",
+      "Measure angles using a protractor",
+      "Recognize parallel and perpendicular lines",
+      "Find angles in geometric figures"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.C.3"
+    ],
+    "outline": {
+      "hook": "Show a clock face. Ask: 'What angle do the hands make at 3 o'clock?' Point to a right angle in the classroom. Have students find right angles around them.",
+      "direct_instruction": "An angle is formed by two rays sharing a point. Right angles are 90\u00b0. Acute angles are smaller than 90\u00b0. Obtuse angles are larger. Show parallel lines (never meet) and perpendicular lines (meet at right angles).",
+      "guided_practice": "Students use a protractor to measure angles you've drawn. Identify angles in classroom objects. Draw parallel and perpendicular lines on the board together.",
+      "independent_practice": "Students measure 5 angles on a handout. Classify each as acute, right, or obtuse. Draw one example of parallel lines and one of perpendicular lines.",
+      "check_for_understanding": "Show an angle and ask students to estimate the measure before measuring. Discuss if their estimate was close.",
+      "exit_ticket": "Students identify whether given lines are parallel or perpendicular, and classify one angle they see in the classroom.",
+      "materials": [
+        "Protractors",
+        "Rulers",
+        "Angle measurement handouts",
+        "Images of angles in real objects"
+      ]
+    }
+  },
+  "5-mathematics-geometry-and-measurement-area-perimeter": {
+    "title": "Area/Perimeter",
+    "summary": "Understand the difference between area and perimeter. Measure and calculate these for rectangles, squares, and other shapes.",
+    "objectives": [
+      "Calculate perimeter by adding all sides",
+      "Calculate area by multiplying length and width",
+      "Solve real-world area and perimeter problems",
+      "Apply formulas to different shapes"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.A.1"
+    ],
+    "outline": {
+      "hook": "Walk around the perimeter of the classroom. Count your steps. Then ask: 'How much space is inside?' Explain: perimeter is the distance around, area is the space inside.",
+      "direct_instruction": "Perimeter = distance around (add all sides). Area = space inside (multiply length \u00d7 width for rectangles). Show examples with grid paper: count squares for area.",
+      "guided_practice": "Find the perimeter of a rectangle by measuring and adding. Find the area by multiplying dimensions. Do several examples together on the board.",
+      "independent_practice": "Students measure a rectangle and calculate both perimeter and area. Try different rectangles to see how changes affect each measurement.",
+      "check_for_understanding": "Ask: 'Does a bigger perimeter always mean a bigger area?' (No!) Have them test with different rectangles.",
+      "exit_ticket": "Given a rectangle's dimensions, students calculate perimeter and area. Write or draw which one is larger.",
+      "materials": [
+        "Rulers",
+        "Grid paper",
+        "Rectangles (drawn or printed)",
+        "Measuring tape (for classroom features)"
+      ]
+    }
+  },
+  "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i": {
+    "title": "Coordinate Plane (Quadrant I)",
+    "summary": "Plot points on a coordinate plane using ordered pairs. Move and identify locations using coordinates.",
+    "objectives": [
+      "Understand ordered pairs (x, y)",
+      "Plot points on a coordinate plane",
+      "Read coordinates of plotted points",
+      "Move between locations using coordinates"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.G.A.1"
+    ],
+    "outline": {
+      "hook": "Show a coordinate plane with one point plotted. Ask: 'Where is this point?' Explain the x-axis (left-right) and y-axis (up-down).",
+      "direct_instruction": "Ordered pair (x, y) tells location. Start at origin (0, 0). Move right (positive x) or left (negative x). Move up (positive y) or down (negative y).",
+      "guided_practice": "Plot points together: (2, 3), (4, 1), (1, 4). Name the coordinates of points already plotted. Play a game finding treasure at coordinates.",
+      "independent_practice": "Students plot 5-8 given points on graph paper. Then name the coordinates of points you show them. Create their own shape using coordinates.",
+      "check_for_understanding": "Ask: 'What are the coordinates of that point?' 'Is (3, 2) the same as (2, 3)?' Have them explain why order matters.",
+      "exit_ticket": "Plot 2-3 points on a coordinate plane and identify the location of 1-2 given points.",
+      "materials": [
+        "Coordinate plane grid (printed or drawn)",
+        "Graph paper",
+        "Colored dots or stickers",
+        "Grid-based games"
+      ]
+    }
+  },
+  "5-mathematics-geometry-and-measurement-transformations-intro": {
+    "title": "Transformations (intro)",
+    "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "objectives": [
+      "Identify rotations, reflections, and translations",
+      "Perform transformations on shapes",
+      "Understand congruence through transformations",
+      "Describe transformations using direction and amount"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.G.A.2"
+    ],
+    "outline": {
+      "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
+      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
+      "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
+      "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
+      "exit_ticket": "Students identify the transformation shown and describe it (e.g., 'Slide 3 units right').",
+      "materials": [
+        "Shape cutouts",
+        "Mirrors",
+        "Grid paper",
+        "Tracing paper"
+      ]
+    }
+  },
+  "5-mathematics-geometry-and-measurement-volume": {
+    "title": "Volume",
+    "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "objectives": [
+      "Understand volume as cubic units",
+      "Count unit cubes to find volume",
+      "Use the formula length \u00d7 width \u00d7 height",
+      "Solve volume problems with real objects"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.MD.C.3"
+    ],
+    "outline": {
+      "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
+      "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
+      "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
+      "exit_ticket": "Given dimensions, students calculate volume or count cubes for a provided figure.",
+      "materials": [
+        "Unit cubes or blocks",
+        "Rectangular prism models (paper or plastic)",
+        "Grid paper",
+        "Rulers"
+      ]
+    }
+  },
+  "5-mathematics-number-and-operations-decimals-intro": {
+    "title": "Decimals (intro)",
+    "summary": "Connect fractions and decimals. Understand place value to the tenths and hundredths. Read, write, and compare decimal numbers.",
+    "objectives": [
+      "Understand decimals as fractions with denominators of 10 or 100",
+      "Read and write decimals",
+      "Compare and order decimals",
+      "Use decimals in real contexts (money, measurement)"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.NBT.A.3"
+    ],
+    "outline": {
+      "hook": "Show a dollar bill and a dime. Explain: a dime is 0.1 dollars, or 1/10. Connect to decimal notation.",
+      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions. 0.5 = 5/10 = 1/2.",
+      "guided_practice": "Shade decimal grids to represent 0.3, 0.25, etc. Write decimals and fractions that match. Compare decimals: is 0.5 bigger than 0.3?",
+      "independent_practice": "Students write decimals for shaded grids. Compare decimal numbers. Use decimals to record measurements and money amounts.",
+      "check_for_understanding": "Ask: 'What is 0.7 as a fraction?' 'Is 0.25 the same as 1/4?' Have them explain.",
+      "exit_ticket": "Students write a decimal and its matching fraction, or identify the larger of two decimals.",
+      "materials": [
+        "Decimal grids (10\u00d710 squares)",
+        "Place value chart",
+        "Money (coins and bills)",
+        "Rulers with decimals"
+      ]
+    }
+  },
+  "5-mathematics-number-and-operations-fractions-concepts-equivalence": {
+    "title": "Fractions (concepts, equivalence)",
+    "summary": "Explore parts of a whole. Understand unit fractions, equal shares, and equivalent fractions.",
+    "objectives": [
+      "Understand fractions as equal parts",
+      "Read and write fractions",
+      "Identify equivalent fractions",
+      "Compare fractions with same denominators"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.NF.A.1"
+    ],
+    "outline": {
+      "hook": "Divide a pizza into equal slices. Ask: 'How many slices is the whole pizza?' 'If I eat 2 slices out of 8, what fraction did I eat?'",
+      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total.",
+      "guided_practice": "Shade fraction models to represent 1/2, 1/3, 1/4, etc. Show equivalent fractions (1/2 = 2/4). Compare 1/2 and 1/3.",
+      "independent_practice": "Students shade models for given fractions. Find equivalent fractions. Compare fractions with same denominators.",
+      "check_for_understanding": "Ask: 'Is 1/2 bigger than 1/3?' 'Are 2/4 and 1/2 the same?' Have them explain their reasoning.",
+      "exit_ticket": "Students shade a model to show a fraction and write it, or identify equivalent fractions.",
+      "materials": [
+        "Fraction circles or bar models",
+        "Shading paper",
+        "Real objects (pizzas, candy, paper strips)",
+        "Fraction comparison charts"
+      ]
+    }
+  },
+  "5-mathematics-number-and-operations-multiplication-division": {
+    "title": "Multiplication/Division",
+    "summary": "Understand multiplication as repeated addition and equal groups. Master facts and multi-digit multiplication.",
+    "objectives": [
+      "Represent multiplication as equal groups or arrays",
+      "Understand the commutative property",
+      "Memorize multiplication facts",
+      "Solve multiplication word problems"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.OA.A.1"
+    ],
+    "outline": {
+      "hook": "Show 3 bags with 4 apples each. Ask: 'How many total?' Introduce: 3 \u00d7 4 = 12.",
+      "direct_instruction": "Multiplication is repeated addition. 3 \u00d7 4 means 4 + 4 + 4. Arrays show rows and columns. 3 rows of 4 = 3 \u00d7 4 = 12.",
+      "guided_practice": "Create arrays with objects or drawings. Write multiplication sentences. Skip count by 2s, 5s, 10s.",
+      "independent_practice": "Students create arrays for given multiplications. Solve word problems involving equal groups.",
+      "check_for_understanding": "Ask: 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' (Yes!) Have them draw arrays to prove it.",
+      "exit_ticket": "Students draw an array or groups to match a multiplication sentence.",
+      "materials": [
+        "Objects (counters, beans, blocks)",
+        "Grid paper for arrays",
+        "Multiplication charts",
+        "Word problem cards"
+      ]
+    }
+  },
+  "5-mathematics-number-and-operations-place-value-thousands-millions": {
+    "title": "Place Value (thousands/millions)",
+    "summary": "Understand the value of digits in numbers. Work with thousands, millions, and other place values.",
+    "objectives": [
+      "Identify place value of digits (ones, tens, hundreds, thousands, etc.)",
+      "Read and write numbers in expanded form",
+      "Compare numbers using place value",
+      "Round numbers to different places"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.NBT.A.1"
+    ],
+    "outline": {
+      "hook": "Write 345. Ask: 'What does the 4 represent?' (40) 'The 3?' (300) Discuss how the same digit means different amounts.",
+      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands. Show with place value blocks or charts.",
+      "guided_practice": "Write numbers in expanded form: 234 = 200 + 30 + 4. Compare numbers using place value. Round to nearest 10 or 100.",
+      "independent_practice": "Students identify place values in numbers. Write numbers in expanded form. Compare numbers and round.",
+      "check_for_understanding": "Ask: 'What is 5 in 5,432?' (5 thousands, or 5,000) 'Is 234 or 324 bigger?'",
+      "exit_ticket": "Students write a number in expanded form or identify the place value of one digit.",
+      "materials": [
+        "Place value blocks",
+        "Place value charts",
+        "Number cards",
+        "Rounding number lines"
+      ]
+    }
+  },
+  "5-mathematics-number-and-operations-rounding-and-estimation": {
+    "title": "Rounding & Estimation",
+    "summary": "Round numbers to the nearest 10, 100, or 1000. Estimate sums and differences using rounding.",
+    "objectives": [
+      "Round numbers to different place values",
+      "Understand when and why to round",
+      "Estimate using rounded numbers",
+      "Check reasonableness of answers"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Mathematics",
+    "standards": [
+      "5.NBT.A.4"
+    ],
+    "outline": {
+      "hook": "Ask: 'Is 48 closer to 40 or 50?' Show a number line. Round 48 to 50. Explain using a number line.",
+      "direct_instruction": "Look at the digit to the right of the place you're rounding to. If 5 or more, round up. If less than 5, round down.",
+      "guided_practice": "Round several numbers together: 23 to nearest 10, 156 to nearest 100. Use number lines.",
+      "independent_practice": "Students round 8-10 numbers to specified place values. Estimate sums by rounding first.",
+      "check_for_understanding": "Ask: 'What is 67 rounded to the nearest 10?' 'Is that reasonable?' Have them explain their thinking.",
+      "exit_ticket": "Students round 2 numbers and optionally estimate a sum.",
+      "materials": [
+        "Number lines",
+        "Rounding worksheets",
+        "Place value charts"
+      ]
+    }
+  },
+  "6-mathematics-data-and-probability-statistics-probability-rules": {
+    "title": "Probability Rules",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.SP.A.1"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro": {
+    "title": "Sampling & Inference (intro)",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.SP.A.1"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
+    "title": "Scatterplots & Correlation",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.SP.B.5"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "6-mathematics-data-and-probability-statistics-two-way-tables": {
+    "title": "Two-way Tables",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.SP.B.4"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "6-mathematics-geometry-and-measurement-coordinate-geometry": {
+    "title": "Coordinate Geometry",
+    "summary": "Explore the concepts and skills of Coordinate Geometry. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Coordinate Geometry",
+      "Apply skills from Coordinate Geometry to solve problems",
+      "Communicate reasoning about Coordinate Geometry",
+      "Build fluency and confidence with Coordinate Geometry"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.G.A.3"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-geometry-and-measurement-pythagorean-theorem": {
+    "title": "Pythagorean Theorem",
+    "summary": "Explore the concepts and skills of Pythagorean Theorem. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Pythagorean Theorem",
+      "Apply skills from Pythagorean Theorem to solve problems",
+      "Communicate reasoning about Pythagorean Theorem",
+      "Build fluency and confidence with Pythagorean Theorem"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.G.A.3"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-geometry-and-measurement-similarity-and-congruence": {
+    "title": "Similarity & Congruence",
+    "summary": "Explore the concepts and skills of Similarity & Congruence. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Similarity & Congruence",
+      "Apply skills from Similarity & Congruence to solve problems",
+      "Communicate reasoning about Similarity & Congruence",
+      "Build fluency and confidence with Similarity & Congruence"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.G.A.2"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-geometry-and-measurement-transformations-and-symmetry": {
+    "title": "Transformations & Symmetry",
+    "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "objectives": [
+      "Identify rotations, reflections, and translations",
+      "Perform transformations on shapes",
+      "Understand congruence through transformations",
+      "Describe transformations using direction and amount"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.G.A.3"
+    ],
+    "outline": {
+      "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
+      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
+      "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
+      "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
+      "exit_ticket": "Students identify the transformation shown and describe it (e.g., 'Slide 3 units right').",
+      "materials": [
+        "Shape cutouts",
+        "Mirrors",
+        "Grid paper",
+        "Tracing paper"
+      ]
+    }
+  },
+  "6-mathematics-geometry-and-measurement-volume-and-surface-area": {
+    "title": "Volume & Surface Area",
+    "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "objectives": [
+      "Understand volume as cubic units",
+      "Count unit cubes to find volume",
+      "Use the formula length \u00d7 width \u00d7 height",
+      "Solve volume problems with real objects"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.G.A.2"
+    ],
+    "outline": {
+      "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
+      "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
+      "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
+      "exit_ticket": "Given dimensions, students calculate volume or count cubes for a provided figure.",
+      "materials": [
+        "Unit cubes or blocks",
+        "Rectangular prism models (paper or plastic)",
+        "Grid paper",
+        "Rulers"
+      ]
+    }
+  },
+  "6-mathematics-number-and-operations-expressions-and-equations": {
+    "title": "Expressions & Equations",
+    "summary": "Explore the concepts and skills of Expressions & Equations. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Expressions & Equations",
+      "Apply skills from Expressions & Equations to solve problems",
+      "Communicate reasoning about Expressions & Equations",
+      "Build fluency and confidence with Expressions & Equations"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.EE.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-number-and-operations-functions-intro": {
+    "title": "Functions (intro)",
+    "summary": "Explore the concepts and skills of Functions (intro). Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Functions (intro)",
+      "Apply skills from Functions (intro) to solve problems",
+      "Communicate reasoning about Functions (intro)",
+      "Build fluency and confidence with Functions (intro)"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.EE.C.9"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-number-and-operations-integers-and-rational-numbers": {
+    "title": "Integers & Rational Numbers",
+    "summary": "Explore the concepts and skills of Integers & Rational Numbers. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Integers & Rational Numbers",
+      "Apply skills from Integers & Rational Numbers to solve problems",
+      "Communicate reasoning about Integers & Rational Numbers",
+      "Build fluency and confidence with Integers & Rational Numbers"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.NS.C.6"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-number-and-operations-percent-and-rates": {
+    "title": "Percent & Rates",
+    "summary": "Explore the concepts and skills of Percent & Rates. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Percent & Rates",
+      "Apply skills from Percent & Rates to solve problems",
+      "Communicate reasoning about Percent & Rates",
+      "Build fluency and confidence with Percent & Rates"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.RP.A.3"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
+    "title": "Ratios & Proportional Reasoning",
+    "summary": "Explore the concepts and skills of Ratios & Proportional Reasoning. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Ratios & Proportional Reasoning",
+      "Apply skills from Ratios & Proportional Reasoning to solve problems",
+      "Communicate reasoning about Ratios & Proportional Reasoning",
+      "Build fluency and confidence with Ratios & Proportional Reasoning"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.RP.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "6-mathematics-number-operations-ratios-proportional-reasoning": {
+    "title": "Ratios and Proportional Reasoning (Grade 6)",
+    "summary": "Explore the concepts and skills of Ratios and Proportional Reasoning (Grade 6). Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Ratios and Proportional Reasoning (Grade 6)",
+      "Apply skills from Ratios and Proportional Reasoning (Grade 6) to solve problems",
+      "Communicate reasoning about Ratios and Proportional Reasoning (Grade 6)",
+      "Build fluency and confidence with Ratios and Proportional Reasoning (Grade 6)"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Mathematics",
+    "standards": [
+      "6.RP.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-data-and-probability-statistics-probability-rules": {
+    "title": "Probability Rules",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.SP.C.5"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro": {
+    "title": "Sampling & Inference (intro)",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.SP.A.1"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
+    "title": "Scatterplots & Correlation",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.SP.B.5"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "7-mathematics-data-and-probability-statistics-two-way-tables": {
+    "title": "Two-way Tables",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.SP.B.4"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "7-mathematics-geometry-and-measurement-coordinate-geometry": {
+    "title": "Coordinate Geometry",
+    "summary": "Explore the concepts and skills of Coordinate Geometry. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Coordinate Geometry",
+      "Apply skills from Coordinate Geometry to solve problems",
+      "Communicate reasoning about Coordinate Geometry",
+      "Build fluency and confidence with Coordinate Geometry"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.G.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-geometry-and-measurement-pythagorean-theorem": {
+    "title": "Pythagorean Theorem",
+    "summary": "Explore the concepts and skills of Pythagorean Theorem. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Pythagorean Theorem",
+      "Apply skills from Pythagorean Theorem to solve problems",
+      "Communicate reasoning about Pythagorean Theorem",
+      "Build fluency and confidence with Pythagorean Theorem"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.G.B.6"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-geometry-and-measurement-similarity-and-congruence": {
+    "title": "Similarity & Congruence",
+    "summary": "Explore the concepts and skills of Similarity & Congruence. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Similarity & Congruence",
+      "Apply skills from Similarity & Congruence to solve problems",
+      "Communicate reasoning about Similarity & Congruence",
+      "Build fluency and confidence with Similarity & Congruence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.G.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-geometry-and-measurement-transformations-and-symmetry": {
+    "title": "Transformations & Symmetry",
+    "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "objectives": [
+      "Identify rotations, reflections, and translations",
+      "Perform transformations on shapes",
+      "Understand congruence through transformations",
+      "Describe transformations using direction and amount"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.G.A.2"
+    ],
+    "outline": {
+      "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
+      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
+      "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
+      "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
+      "exit_ticket": "Students identify the transformation shown and describe it (e.g., 'Slide 3 units right').",
+      "materials": [
+        "Shape cutouts",
+        "Mirrors",
+        "Grid paper",
+        "Tracing paper"
+      ]
+    }
+  },
+  "7-mathematics-geometry-and-measurement-volume-and-surface-area": {
+    "title": "Volume & Surface Area",
+    "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "objectives": [
+      "Understand volume as cubic units",
+      "Count unit cubes to find volume",
+      "Use the formula length \u00d7 width \u00d7 height",
+      "Solve volume problems with real objects"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.G.B.6"
+    ],
+    "outline": {
+      "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
+      "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
+      "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
+      "exit_ticket": "Given dimensions, students calculate volume or count cubes for a provided figure.",
+      "materials": [
+        "Unit cubes or blocks",
+        "Rectangular prism models (paper or plastic)",
+        "Grid paper",
+        "Rulers"
+      ]
+    }
+  },
+  "7-mathematics-number-and-operations-expressions-and-equations": {
+    "title": "Expressions & Equations",
+    "summary": "Explore the concepts and skills of Expressions & Equations. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Expressions & Equations",
+      "Apply skills from Expressions & Equations to solve problems",
+      "Communicate reasoning about Expressions & Equations",
+      "Build fluency and confidence with Expressions & Equations"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.EE.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-number-and-operations-functions-intro": {
+    "title": "Functions (intro)",
+    "summary": "Explore the concepts and skills of Functions (intro). Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Functions (intro)",
+      "Apply skills from Functions (intro) to solve problems",
+      "Communicate reasoning about Functions (intro)",
+      "Build fluency and confidence with Functions (intro)"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.EE.B.4"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-number-and-operations-integers-and-rational-numbers": {
+    "title": "Integers & Rational Numbers",
+    "summary": "Explore the concepts and skills of Integers & Rational Numbers. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Integers & Rational Numbers",
+      "Apply skills from Integers & Rational Numbers to solve problems",
+      "Communicate reasoning about Integers & Rational Numbers",
+      "Build fluency and confidence with Integers & Rational Numbers"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.NS.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-number-and-operations-percent-and-rates": {
+    "title": "Percent & Rates",
+    "summary": "Explore the concepts and skills of Percent & Rates. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Percent & Rates",
+      "Apply skills from Percent & Rates to solve problems",
+      "Communicate reasoning about Percent & Rates",
+      "Build fluency and confidence with Percent & Rates"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.RP.A.3"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "7-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
+    "title": "Ratios & Proportional Reasoning",
+    "summary": "Explore the concepts and skills of Ratios & Proportional Reasoning. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Ratios & Proportional Reasoning",
+      "Apply skills from Ratios & Proportional Reasoning to solve problems",
+      "Communicate reasoning about Ratios & Proportional Reasoning",
+      "Build fluency and confidence with Ratios & Proportional Reasoning"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Mathematics",
+    "standards": [
+      "7.RP.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-data-and-probability-statistics-probability-rules": {
+    "title": "Probability Rules",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.SP.A.4"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "8-mathematics-data-and-probability-statistics-sampling-and-inference-intro": {
+    "title": "Sampling & Inference (intro)",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.SP.A.1"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
+    "title": "Scatterplots & Correlation",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.SP.A.2"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "8-mathematics-data-and-probability-statistics-two-way-tables": {
+    "title": "Two-way Tables",
+    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "objectives": [
+      "Conduct simple probability experiments",
+      "Record experimental outcomes accurately",
+      "Compare frequencies of events",
+      "Predict outcomes based on experimental data"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.SP.A.4"
+    ],
+    "outline": {
+      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
+      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
+      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
+      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
+      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "materials": [
+        "Coins",
+        "Dice",
+        "Spinners",
+        "Recording sheets",
+        "Tally chart templates"
+      ]
+    }
+  },
+  "8-mathematics-geometry-and-measurement-coordinate-geometry": {
+    "title": "Coordinate Geometry",
+    "summary": "Explore the concepts and skills of Coordinate Geometry. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Coordinate Geometry",
+      "Apply skills from Coordinate Geometry to solve problems",
+      "Communicate reasoning about Coordinate Geometry",
+      "Build fluency and confidence with Coordinate Geometry"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.G.A.3"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-geometry-and-measurement-pythagorean-theorem": {
+    "title": "Pythagorean Theorem",
+    "summary": "Explore the concepts and skills of Pythagorean Theorem. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Pythagorean Theorem",
+      "Apply skills from Pythagorean Theorem to solve problems",
+      "Communicate reasoning about Pythagorean Theorem",
+      "Build fluency and confidence with Pythagorean Theorem"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.G.B.6"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-geometry-and-measurement-similarity-and-congruence": {
+    "title": "Similarity & Congruence",
+    "summary": "Explore the concepts and skills of Similarity & Congruence. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Similarity & Congruence",
+      "Apply skills from Similarity & Congruence to solve problems",
+      "Communicate reasoning about Similarity & Congruence",
+      "Build fluency and confidence with Similarity & Congruence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.G.A.4"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-geometry-and-measurement-transformations-and-symmetry": {
+    "title": "Transformations & Symmetry",
+    "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "objectives": [
+      "Identify rotations, reflections, and translations",
+      "Perform transformations on shapes",
+      "Understand congruence through transformations",
+      "Describe transformations using direction and amount"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.G.A.1"
+    ],
+    "outline": {
+      "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
+      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
+      "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
+      "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
+      "exit_ticket": "Students identify the transformation shown and describe it (e.g., 'Slide 3 units right').",
+      "materials": [
+        "Shape cutouts",
+        "Mirrors",
+        "Grid paper",
+        "Tracing paper"
+      ]
+    }
+  },
+  "8-mathematics-geometry-and-measurement-volume-and-surface-area": {
+    "title": "Volume & Surface Area",
+    "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "objectives": [
+      "Understand volume as cubic units",
+      "Count unit cubes to find volume",
+      "Use the formula length \u00d7 width \u00d7 height",
+      "Solve volume problems with real objects"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.G.C.9"
+    ],
+    "outline": {
+      "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
+      "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
+      "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
+      "exit_ticket": "Given dimensions, students calculate volume or count cubes for a provided figure.",
+      "materials": [
+        "Unit cubes or blocks",
+        "Rectangular prism models (paper or plastic)",
+        "Grid paper",
+        "Rulers"
+      ]
+    }
+  },
+  "8-mathematics-number-and-operations-expressions-and-equations": {
+    "title": "Expressions & Equations",
+    "summary": "Explore the concepts and skills of Expressions & Equations. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Expressions & Equations",
+      "Apply skills from Expressions & Equations to solve problems",
+      "Communicate reasoning about Expressions & Equations",
+      "Build fluency and confidence with Expressions & Equations"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.EE.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-number-and-operations-functions-intro": {
+    "title": "Functions (intro)",
+    "summary": "Explore the concepts and skills of Functions (intro). Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Functions (intro)",
+      "Apply skills from Functions (intro) to solve problems",
+      "Communicate reasoning about Functions (intro)",
+      "Build fluency and confidence with Functions (intro)"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.F.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-number-and-operations-integers-and-rational-numbers": {
+    "title": "Integers & Rational Numbers",
+    "summary": "Explore the concepts and skills of Integers & Rational Numbers. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Integers & Rational Numbers",
+      "Apply skills from Integers & Rational Numbers to solve problems",
+      "Communicate reasoning about Integers & Rational Numbers",
+      "Build fluency and confidence with Integers & Rational Numbers"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.NS.A.1"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-number-and-operations-percent-and-rates": {
+    "title": "Percent & Rates",
+    "summary": "Explore the concepts and skills of Percent & Rates. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Percent & Rates",
+      "Apply skills from Percent & Rates to solve problems",
+      "Communicate reasoning about Percent & Rates",
+      "Build fluency and confidence with Percent & Rates"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.EE.B.5"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  },
+  "8-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
+    "title": "Ratios & Proportional Reasoning",
+    "summary": "Explore the concepts and skills of Ratios & Proportional Reasoning. Develop understanding and apply learning to new situations.",
+    "objectives": [
+      "Understand key concepts in Ratios & Proportional Reasoning",
+      "Apply skills from Ratios & Proportional Reasoning to solve problems",
+      "Communicate reasoning about Ratios & Proportional Reasoning",
+      "Build fluency and confidence with Ratios & Proportional Reasoning"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Mathematics",
+    "standards": [
+      "8.EE.B.5"
+    ],
+    "outline": {
+      "hook": "Start with a real-world connection or interesting question related to the topic.",
+      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
+      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
+      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
+      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
+      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "materials": [
+        "Teaching materials specific to the topic",
+        "Visual aids",
+        "Manipulatives if appropriate",
+        "Practice worksheets"
+      ]
+    }
+  }
+}

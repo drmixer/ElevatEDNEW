@@ -24,6 +24,7 @@
     "import:provider": "tsx tools/importers/providers/index.ts",
     "import:standards": "tsx scripts/import_standards.ts",
     "import:module-standards": "tsx scripts/import_module_standards.ts",
+    "seed:authored-launch-lessons": "tsx scripts/seed_authored_launch_lessons.ts",
     "seed:launch-all": "tsx scripts/seed_launch_lessons_all.ts",
     "seed:module-standards-auto": "tsx scripts/seed_module_standards_auto.ts",
     "seed:lesson-metadata": "tsx scripts/seed_lesson_metadata.ts",
