@@ -84,6 +84,35 @@ const fetchSubjects = async (supabase: SupabaseClient): Promise<Map<string, Subj
   return map;
 };
 
+const flattenPracticeDataset = (raw: unknown): PracticeItem[] => {
+  if (Array.isArray(raw)) {
+    return raw as PracticeItem[];
+  }
+
+  if (raw && typeof raw === 'object') {
+    const entries = Object.entries(raw as Record<string, unknown>);
+    const items: PracticeItem[] = [];
+
+    for (const [moduleSlug, value] of entries) {
+      if (!Array.isArray(value)) {
+        continue;
+      }
+      for (const item of value) {
+        if (item && typeof item === 'object') {
+          items.push({
+            ...(item as Omit<PracticeItem, 'moduleSlug'>),
+            moduleSlug,
+          });
+        }
+      }
+    }
+
+    return items;
+  }
+
+  throw new Error('Unsupported practice dataset shape. Expected an array or mapping of moduleSlug -> items[].');
+};
+
 const insertQuestion = async (
   supabase: SupabaseClient,
   subjectId: number,
@@ -159,7 +188,8 @@ const parseArgs = (): { file: string } => {
 
 const main = async () => {
   const { file } = parseArgs();
-  const items = (await loadStructuredFile<PracticeItem[]>(file)).map(normalizeItem);
+  const raw = await loadStructuredFile<unknown>(file);
+  const items = flattenPracticeDataset(raw).map(normalizeItem);
   if (!Array.isArray(items) || items.length === 0) {
     console.log(`No practice items found in ${file}`);
     return;

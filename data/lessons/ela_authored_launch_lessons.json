@@ -1,0 +1,1457 @@
+{
+  "3-english-language-arts-reading-informational-biographies-pd": {
+    "title": "Biographies (PD)",
+    "summary": "Develop skills and understanding in Biographies (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.3.1",
+      "CCSS.ELA-LITERACY.RI.3.3"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "3-english-language-arts-reading-informational-nonfiction-articles-open-licensed": {
+    "title": "Nonfiction Articles (open-licensed)",
+    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "objectives": [
+      "Identify main ideas and supporting details in articles",
+      "Distinguish between facts and opinions",
+      "Understand how articles are organized",
+      "Evaluate the credibility of sources"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.3.2",
+      "CCSS.ELA-LITERACY.RI.3.4"
+    ],
+    "outline": {
+      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
+      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
+      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
+      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
+      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
+      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "materials": [
+        "Age-appropriate informational articles",
+        "Main idea and detail organizer",
+        "Fact/opinion chart",
+        "Credibility checklist"
+      ]
+    }
+  },
+  "3-english-language-arts-reading-literature-chapter-books-pd": {
+    "title": "Chapter Books (PD)",
+    "summary": "Dive into chapter books and discover complete stories. Learn to follow complex plots, understand character growth, and enjoy extended narratives.",
+    "objectives": [
+      "Follow a multi-chapter storyline",
+      "Understand character development across chapters",
+      "Make predictions based on story clues",
+      "Analyze theme and author's message"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.3.1",
+      "CCSS.ELA-LITERACY.RL.3.3"
+    ],
+    "outline": {
+      "hook": "Show the cover and read the back of a chapter book. Ask: 'Why would someone want to read this whole book instead of a short story? What might happen to the main character?'",
+      "direct_instruction": "Explain that chapter books tell longer stories in manageable sections. Each chapter often ends with questions that make readers want to continue. Characters change and grow over the story. Readers predict what will happen next using clues.",
+      "guided_practice": "Read the first chapter aloud together. Pause to identify: the main character, the setting, the first problem. Ask: 'What might happen next? What clues help you predict?' Create a prediction chart.",
+      "independent_practice": "Students read chapters independently. After each, they record predictions and explain them. They notice how the character changes.",
+      "check_for_understanding": "Ask: 'How has the character changed since the beginning?' 'What do you predict will happen in the next chapter? Why?' Have them support answers with text evidence.",
+      "exit_ticket": "Students draw or write a prediction for what will happen in the next chapter with one reason why.",
+      "materials": [
+        "Chapter book (grade-appropriate series)",
+        "Prediction chart",
+        "Character change tracker",
+        "Chapter discussion prompts"
+      ]
+    }
+  },
+  "3-english-language-arts-reading-literature-myths-legends-pd": {
+    "title": "Myths/Legends (PD)",
+    "summary": "Explore timeless stories from cultures around the world. Understand how myths and legends teach values and explain the world.",
+    "objectives": [
+      "Understand what myths and legends are",
+      "Identify universal themes across myths",
+      "Analyze lessons and values in stories",
+      "Recognize cultural differences in storytelling"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.3.2",
+      "CCSS.ELA-LITERACY.RL.3.6"
+    ],
+    "outline": {
+      "hook": "Tell a short myth excerpt with drama and expression. Ask: 'Do you think this really happened? Why did people tell this story? What does it teach?'",
+      "direct_instruction": "Explain that myths are ancient stories that explain natural events and teach lessons. They feature gods, heroes, and magical events. Although not historically true, myths reveal what cultures valued. Discuss examples from different civilizations.",
+      "guided_practice": "Read a myth aloud. Pause to identify: the hero, the challenge, the lesson. Discuss what the story teaches about courage, cleverness, or consequences.",
+      "independent_practice": "Students read a myth independently. They identify the main character's goal, the obstacle, and the outcome. They write what lesson the myth teaches.",
+      "check_for_understanding": "Ask: 'What lesson does this myth teach?' 'How is it different from a true story?' 'Would people from this culture find it meaningful? Why?'",
+      "exit_ticket": "Students draw a scene from the myth and label the lesson it teaches.",
+      "materials": [
+        "Age-appropriate myth texts",
+        "Story map template",
+        "Lesson identification chart",
+        "Illustrations of mythological characters"
+      ]
+    }
+  },
+  "3-english-language-arts-reading-literature-short-stories-pd": {
+    "title": "Short Stories (PD)",
+    "summary": "Develop skills and understanding in Short Stories (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.3.1",
+      "CCSS.ELA-LITERACY.RL.3.2"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "3-english-language-arts-speaking-and-listening-presentations-summaries": {
+    "title": "Presentations, Summaries",
+    "summary": "Develop skills to share information effectively. Learn to summarize texts and present ideas to audiences with confidence and clarity.",
+    "objectives": [
+      "Write effective summaries of texts",
+      "Organize information logically for presentations",
+      "Deliver information with confidence",
+      "Engage an audience through clear communication"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.SL.3.4",
+      "CCSS.ELA-LITERACY.SL.3.6"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you had 30 seconds to tell a friend about your favorite book, what would you say?' Discuss what information matters most in a summary.",
+      "direct_instruction": "Teach that summaries include main ideas and important details, not every small fact. Practice summarizing by removing less important sentences. Show how to organize presentations with a clear beginning, middle, and end.",
+      "guided_practice": "Read a short text together. As a class, write a summary by identifying the main idea and key supporting points. Remove extra details. Then practice presenting this summary aloud as a group.",
+      "independent_practice": "Students read a text and write a summary (3-5 sentences). They practice presenting it aloud. They give each other feedback on clarity and organization.",
+      "check_for_understanding": "Ask: 'What should you always include in a summary?' 'What should you leave out?' Have students show their summaries and explain their choices.",
+      "exit_ticket": "Students deliver their summary to a partner and receive one piece of positive feedback.",
+      "materials": [
+        "Short texts for summarizing",
+        "Summary template (beginning, middle, end)",
+        "Presentation outline",
+        "Peer feedback form"
+      ]
+    }
+  },
+  "3-english-language-arts-vocabulary-roots-prefixes-suffixes": {
+    "title": "Roots/Prefixes/Suffixes",
+    "summary": "Build vocabulary power by learning word parts. Discover how roots, prefixes, and suffixes help you understand new words.",
+    "objectives": [
+      "Identify and define common roots, prefixes, and suffixes",
+      "Use word parts to determine meaning of unfamiliar words",
+      "Apply word knowledge to improve reading and writing",
+      "Build academic vocabulary"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.L.3.4",
+      "CCSS.ELA-LITERACY.L.3.4.b"
+    ],
+    "outline": {
+      "hook": "Write a word like 'unhappy' on the board. Break it apart: un + happy. Ask: 'What does 'un' mean? How does it change the word?' Discuss how knowing parts helps us understand new words.",
+      "direct_instruction": "Teach common prefixes (un-, re-, pre-, dis-), suffixes (-tion, -ly, -able, -ment), and roots (struct, port, dict, graph). Show how each changes word meaning. Demonstrate with examples and let students practice breaking apart words.",
+      "guided_practice": "Together, take apart 5-10 words. Ask: 'What does the prefix mean? The suffix? So what does the whole word mean?' Check predictions using a dictionary.",
+      "independent_practice": "Students receive word lists. They break apart each word, identify roots/prefixes/suffixes, and predict meanings before checking a dictionary.",
+      "check_for_understanding": "Give students new words with familiar parts. Ask them to predict meaning and explain their reasoning. Verify answers.",
+      "exit_ticket": "Students create their own word by combining a root, prefix, and/or suffix, define it, and use it in a sentence.",
+      "materials": [
+        "Root, prefix, suffix charts",
+        "Word breakdown worksheets",
+        "Dictionary",
+        "Word part flash cards"
+      ]
+    }
+  },
+  "3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics": {
+    "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics",
+    "summary": "Master writing skills from sentences to essays. Learn to express ideas clearly with proper grammar, organization, and detail.",
+    "objectives": [
+      "Write well-organized paragraphs with topic sentences and supporting details",
+      "Use correct grammar and punctuation",
+      "Write narratives that tell stories effectively",
+      "Write essays that explain and persuade"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.W.3.3",
+      "CCSS.ELA-LITERACY.L.3.1"
+    ],
+    "outline": {
+      "hook": "Show two paragraphs: one organized and clear, one confusing and rambling. Ask: 'Which is easier to understand? Why?' Discuss how organization matters.",
+      "direct_instruction": "Teach paragraph structure: topic sentence (main idea), supporting details (explanation and examples), concluding sentence. Show how each part works. Demonstrate writing a paragraph together, starting with a topic sentence.",
+      "guided_practice": "Write a paragraph as a class on a simple topic (favorite food, weekend activity). Start with topic sentence, add 2-3 details, end with conclusion. Read aloud and discuss what works.",
+      "independent_practice": "Students write their own paragraph on a provided topic. They include a topic sentence, at least two supporting sentences, and a concluding sentence. They check for proper grammar.",
+      "check_for_understanding": "Ask: 'What is the topic sentence?' 'How many details support it?' 'Does every sentence relate to the topic?' Have students read their paragraphs aloud.",
+      "exit_ticket": "Students identify the topic sentence in a provided paragraph and circle one supporting detail.",
+      "materials": [
+        "Paragraph template",
+        "Topic sentence examples",
+        "Graphic organizer (web or outline)",
+        "Grammar reference sheet",
+        "Rubric for paragraph evaluation"
+      ]
+    }
+  },
+  "4-english-language-arts-reading-informational-biographies-pd": {
+    "title": "Biographies (PD)",
+    "summary": "Develop skills and understanding in Biographies (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.4.1",
+      "CCSS.ELA-LITERACY.RI.4.3"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "4-english-language-arts-reading-informational-nonfiction-articles-open-licensed": {
+    "title": "Nonfiction Articles (open-licensed)",
+    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "objectives": [
+      "Identify main ideas and supporting details in articles",
+      "Distinguish between facts and opinions",
+      "Understand how articles are organized",
+      "Evaluate the credibility of sources"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.4.2",
+      "CCSS.ELA-LITERACY.RI.4.4"
+    ],
+    "outline": {
+      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
+      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
+      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
+      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
+      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
+      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "materials": [
+        "Age-appropriate informational articles",
+        "Main idea and detail organizer",
+        "Fact/opinion chart",
+        "Credibility checklist"
+      ]
+    }
+  },
+  "4-english-language-arts-reading-literature-chapter-books-pd": {
+    "title": "Chapter Books (PD)",
+    "summary": "Dive into chapter books and discover complete stories. Learn to follow complex plots, understand character growth, and enjoy extended narratives.",
+    "objectives": [
+      "Follow a multi-chapter storyline",
+      "Understand character development across chapters",
+      "Make predictions based on story clues",
+      "Analyze theme and author's message"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.4.1",
+      "CCSS.ELA-LITERACY.RL.4.3"
+    ],
+    "outline": {
+      "hook": "Show the cover and read the back of a chapter book. Ask: 'Why would someone want to read this whole book instead of a short story? What might happen to the main character?'",
+      "direct_instruction": "Explain that chapter books tell longer stories in manageable sections. Each chapter often ends with questions that make readers want to continue. Characters change and grow over the story. Readers predict what will happen next using clues.",
+      "guided_practice": "Read the first chapter aloud together. Pause to identify: the main character, the setting, the first problem. Ask: 'What might happen next? What clues help you predict?' Create a prediction chart.",
+      "independent_practice": "Students read chapters independently. After each, they record predictions and explain them. They notice how the character changes.",
+      "check_for_understanding": "Ask: 'How has the character changed since the beginning?' 'What do you predict will happen in the next chapter? Why?' Have them support answers with text evidence.",
+      "exit_ticket": "Students draw or write a prediction for what will happen in the next chapter with one reason why.",
+      "materials": [
+        "Chapter book (grade-appropriate series)",
+        "Prediction chart",
+        "Character change tracker",
+        "Chapter discussion prompts"
+      ]
+    }
+  },
+  "4-english-language-arts-reading-literature-myths-legends-pd": {
+    "title": "Myths/Legends (PD)",
+    "summary": "Explore timeless stories from cultures around the world. Understand how myths and legends teach values and explain the world.",
+    "objectives": [
+      "Understand what myths and legends are",
+      "Identify universal themes across myths",
+      "Analyze lessons and values in stories",
+      "Recognize cultural differences in storytelling"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.4.2",
+      "CCSS.ELA-LITERACY.RL.4.6"
+    ],
+    "outline": {
+      "hook": "Tell a short myth excerpt with drama and expression. Ask: 'Do you think this really happened? Why did people tell this story? What does it teach?'",
+      "direct_instruction": "Explain that myths are ancient stories that explain natural events and teach lessons. They feature gods, heroes, and magical events. Although not historically true, myths reveal what cultures valued. Discuss examples from different civilizations.",
+      "guided_practice": "Read a myth aloud. Pause to identify: the hero, the challenge, the lesson. Discuss what the story teaches about courage, cleverness, or consequences.",
+      "independent_practice": "Students read a myth independently. They identify the main character's goal, the obstacle, and the outcome. They write what lesson the myth teaches.",
+      "check_for_understanding": "Ask: 'What lesson does this myth teach?' 'How is it different from a true story?' 'Would people from this culture find it meaningful? Why?'",
+      "exit_ticket": "Students draw a scene from the myth and label the lesson it teaches.",
+      "materials": [
+        "Age-appropriate myth texts",
+        "Story map template",
+        "Lesson identification chart",
+        "Illustrations of mythological characters"
+      ]
+    }
+  },
+  "4-english-language-arts-reading-literature-short-stories-pd": {
+    "title": "Short Stories (PD)",
+    "summary": "Develop skills and understanding in Short Stories (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.4.1",
+      "CCSS.ELA-LITERACY.RL.4.2"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "4-english-language-arts-speaking-and-listening-presentations-summaries": {
+    "title": "Presentations, Summaries",
+    "summary": "Develop skills to share information effectively. Learn to summarize texts and present ideas to audiences with confidence and clarity.",
+    "objectives": [
+      "Write effective summaries of texts",
+      "Organize information logically for presentations",
+      "Deliver information with confidence",
+      "Engage an audience through clear communication"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.SL.4.4",
+      "CCSS.ELA-LITERACY.SL.4.6"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you had 30 seconds to tell a friend about your favorite book, what would you say?' Discuss what information matters most in a summary.",
+      "direct_instruction": "Teach that summaries include main ideas and important details, not every small fact. Practice summarizing by removing less important sentences. Show how to organize presentations with a clear beginning, middle, and end.",
+      "guided_practice": "Read a short text together. As a class, write a summary by identifying the main idea and key supporting points. Remove extra details. Then practice presenting this summary aloud as a group.",
+      "independent_practice": "Students read a text and write a summary (3-5 sentences). They practice presenting it aloud. They give each other feedback on clarity and organization.",
+      "check_for_understanding": "Ask: 'What should you always include in a summary?' 'What should you leave out?' Have students show their summaries and explain their choices.",
+      "exit_ticket": "Students deliver their summary to a partner and receive one piece of positive feedback.",
+      "materials": [
+        "Short texts for summarizing",
+        "Summary template (beginning, middle, end)",
+        "Presentation outline",
+        "Peer feedback form"
+      ]
+    }
+  },
+  "4-english-language-arts-vocabulary-roots-prefixes-suffixes": {
+    "title": "Roots/Prefixes/Suffixes",
+    "summary": "Build vocabulary power by learning word parts. Discover how roots, prefixes, and suffixes help you understand new words.",
+    "objectives": [
+      "Identify and define common roots, prefixes, and suffixes",
+      "Use word parts to determine meaning of unfamiliar words",
+      "Apply word knowledge to improve reading and writing",
+      "Build academic vocabulary"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.L.4.4",
+      "CCSS.ELA-LITERACY.L.4.4.b"
+    ],
+    "outline": {
+      "hook": "Write a word like 'unhappy' on the board. Break it apart: un + happy. Ask: 'What does 'un' mean? How does it change the word?' Discuss how knowing parts helps us understand new words.",
+      "direct_instruction": "Teach common prefixes (un-, re-, pre-, dis-), suffixes (-tion, -ly, -able, -ment), and roots (struct, port, dict, graph). Show how each changes word meaning. Demonstrate with examples and let students practice breaking apart words.",
+      "guided_practice": "Together, take apart 5-10 words. Ask: 'What does the prefix mean? The suffix? So what does the whole word mean?' Check predictions using a dictionary.",
+      "independent_practice": "Students receive word lists. They break apart each word, identify roots/prefixes/suffixes, and predict meanings before checking a dictionary.",
+      "check_for_understanding": "Give students new words with familiar parts. Ask them to predict meaning and explain their reasoning. Verify answers.",
+      "exit_ticket": "Students create their own word by combining a root, prefix, and/or suffix, define it, and use it in a sentence.",
+      "materials": [
+        "Root, prefix, suffix charts",
+        "Word breakdown worksheets",
+        "Dictionary",
+        "Word part flash cards"
+      ]
+    }
+  },
+  "4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics": {
+    "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics",
+    "summary": "Master writing skills from sentences to essays. Learn to express ideas clearly with proper grammar, organization, and detail.",
+    "objectives": [
+      "Write well-organized paragraphs with topic sentences and supporting details",
+      "Use correct grammar and punctuation",
+      "Write narratives that tell stories effectively",
+      "Write essays that explain and persuade"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.W.4.3",
+      "CCSS.ELA-LITERACY.L.4.1"
+    ],
+    "outline": {
+      "hook": "Show two paragraphs: one organized and clear, one confusing and rambling. Ask: 'Which is easier to understand? Why?' Discuss how organization matters.",
+      "direct_instruction": "Teach paragraph structure: topic sentence (main idea), supporting details (explanation and examples), concluding sentence. Show how each part works. Demonstrate writing a paragraph together, starting with a topic sentence.",
+      "guided_practice": "Write a paragraph as a class on a simple topic (favorite food, weekend activity). Start with topic sentence, add 2-3 details, end with conclusion. Read aloud and discuss what works.",
+      "independent_practice": "Students write their own paragraph on a provided topic. They include a topic sentence, at least two supporting sentences, and a concluding sentence. They check for proper grammar.",
+      "check_for_understanding": "Ask: 'What is the topic sentence?' 'How many details support it?' 'Does every sentence relate to the topic?' Have students read their paragraphs aloud.",
+      "exit_ticket": "Students identify the topic sentence in a provided paragraph and circle one supporting detail.",
+      "materials": [
+        "Paragraph template",
+        "Topic sentence examples",
+        "Graphic organizer (web or outline)",
+        "Grammar reference sheet",
+        "Rubric for paragraph evaluation"
+      ]
+    }
+  },
+  "5-english-language-arts-reading-informational-biographies-pd": {
+    "title": "Biographies (PD)",
+    "summary": "Develop skills and understanding in Biographies (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.5.1",
+      "CCSS.ELA-LITERACY.RI.5.3"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "5-english-language-arts-reading-informational-nonfiction-articles-open-licensed": {
+    "title": "Nonfiction Articles (open-licensed)",
+    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "objectives": [
+      "Identify main ideas and supporting details in articles",
+      "Distinguish between facts and opinions",
+      "Understand how articles are organized",
+      "Evaluate the credibility of sources"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.5.2",
+      "CCSS.ELA-LITERACY.RI.5.4"
+    ],
+    "outline": {
+      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
+      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
+      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
+      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
+      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
+      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "materials": [
+        "Age-appropriate informational articles",
+        "Main idea and detail organizer",
+        "Fact/opinion chart",
+        "Credibility checklist"
+      ]
+    }
+  },
+  "5-english-language-arts-reading-literature-chapter-books-pd": {
+    "title": "Chapter Books (PD)",
+    "summary": "Dive into chapter books and discover complete stories. Learn to follow complex plots, understand character growth, and enjoy extended narratives.",
+    "objectives": [
+      "Follow a multi-chapter storyline",
+      "Understand character development across chapters",
+      "Make predictions based on story clues",
+      "Analyze theme and author's message"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.5.1",
+      "CCSS.ELA-LITERACY.RL.5.3"
+    ],
+    "outline": {
+      "hook": "Show the cover and read the back of a chapter book. Ask: 'Why would someone want to read this whole book instead of a short story? What might happen to the main character?'",
+      "direct_instruction": "Explain that chapter books tell longer stories in manageable sections. Each chapter often ends with questions that make readers want to continue. Characters change and grow over the story. Readers predict what will happen next using clues.",
+      "guided_practice": "Read the first chapter aloud together. Pause to identify: the main character, the setting, the first problem. Ask: 'What might happen next? What clues help you predict?' Create a prediction chart.",
+      "independent_practice": "Students read chapters independently. After each, they record predictions and explain them. They notice how the character changes.",
+      "check_for_understanding": "Ask: 'How has the character changed since the beginning?' 'What do you predict will happen in the next chapter? Why?' Have them support answers with text evidence.",
+      "exit_ticket": "Students draw or write a prediction for what will happen in the next chapter with one reason why.",
+      "materials": [
+        "Chapter book (grade-appropriate series)",
+        "Prediction chart",
+        "Character change tracker",
+        "Chapter discussion prompts"
+      ]
+    }
+  },
+  "5-english-language-arts-reading-literature-myths-legends-pd": {
+    "title": "Myths/Legends (PD)",
+    "summary": "Explore timeless stories from cultures around the world. Understand how myths and legends teach values and explain the world.",
+    "objectives": [
+      "Understand what myths and legends are",
+      "Identify universal themes across myths",
+      "Analyze lessons and values in stories",
+      "Recognize cultural differences in storytelling"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.5.2",
+      "CCSS.ELA-LITERACY.RL.5.6"
+    ],
+    "outline": {
+      "hook": "Tell a short myth excerpt with drama and expression. Ask: 'Do you think this really happened? Why did people tell this story? What does it teach?'",
+      "direct_instruction": "Explain that myths are ancient stories that explain natural events and teach lessons. They feature gods, heroes, and magical events. Although not historically true, myths reveal what cultures valued. Discuss examples from different civilizations.",
+      "guided_practice": "Read a myth aloud. Pause to identify: the hero, the challenge, the lesson. Discuss what the story teaches about courage, cleverness, or consequences.",
+      "independent_practice": "Students read a myth independently. They identify the main character's goal, the obstacle, and the outcome. They write what lesson the myth teaches.",
+      "check_for_understanding": "Ask: 'What lesson does this myth teach?' 'How is it different from a true story?' 'Would people from this culture find it meaningful? Why?'",
+      "exit_ticket": "Students draw a scene from the myth and label the lesson it teaches.",
+      "materials": [
+        "Age-appropriate myth texts",
+        "Story map template",
+        "Lesson identification chart",
+        "Illustrations of mythological characters"
+      ]
+    }
+  },
+  "5-english-language-arts-reading-literature-short-stories-pd": {
+    "title": "Short Stories (PD)",
+    "summary": "Develop skills and understanding in Short Stories (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.5.1",
+      "CCSS.ELA-LITERACY.RL.5.2"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "5-english-language-arts-speaking-and-listening-presentations-summaries": {
+    "title": "Presentations, Summaries",
+    "summary": "Develop skills to share information effectively. Learn to summarize texts and present ideas to audiences with confidence and clarity.",
+    "objectives": [
+      "Write effective summaries of texts",
+      "Organize information logically for presentations",
+      "Deliver information with confidence",
+      "Engage an audience through clear communication"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.SL.5.4",
+      "CCSS.ELA-LITERACY.SL.5.6"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you had 30 seconds to tell a friend about your favorite book, what would you say?' Discuss what information matters most in a summary.",
+      "direct_instruction": "Teach that summaries include main ideas and important details, not every small fact. Practice summarizing by removing less important sentences. Show how to organize presentations with a clear beginning, middle, and end.",
+      "guided_practice": "Read a short text together. As a class, write a summary by identifying the main idea and key supporting points. Remove extra details. Then practice presenting this summary aloud as a group.",
+      "independent_practice": "Students read a text and write a summary (3-5 sentences). They practice presenting it aloud. They give each other feedback on clarity and organization.",
+      "check_for_understanding": "Ask: 'What should you always include in a summary?' 'What should you leave out?' Have students show their summaries and explain their choices.",
+      "exit_ticket": "Students deliver their summary to a partner and receive one piece of positive feedback.",
+      "materials": [
+        "Short texts for summarizing",
+        "Summary template (beginning, middle, end)",
+        "Presentation outline",
+        "Peer feedback form"
+      ]
+    }
+  },
+  "5-english-language-arts-vocabulary-roots-prefixes-suffixes": {
+    "title": "Roots/Prefixes/Suffixes",
+    "summary": "Build vocabulary power by learning word parts. Discover how roots, prefixes, and suffixes help you understand new words.",
+    "objectives": [
+      "Identify and define common roots, prefixes, and suffixes",
+      "Use word parts to determine meaning of unfamiliar words",
+      "Apply word knowledge to improve reading and writing",
+      "Build academic vocabulary"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.L.5.4",
+      "CCSS.ELA-LITERACY.L.5.4.b"
+    ],
+    "outline": {
+      "hook": "Write a word like 'unhappy' on the board. Break it apart: un + happy. Ask: 'What does 'un' mean? How does it change the word?' Discuss how knowing parts helps us understand new words.",
+      "direct_instruction": "Teach common prefixes (un-, re-, pre-, dis-), suffixes (-tion, -ly, -able, -ment), and roots (struct, port, dict, graph). Show how each changes word meaning. Demonstrate with examples and let students practice breaking apart words.",
+      "guided_practice": "Together, take apart 5-10 words. Ask: 'What does the prefix mean? The suffix? So what does the whole word mean?' Check predictions using a dictionary.",
+      "independent_practice": "Students receive word lists. They break apart each word, identify roots/prefixes/suffixes, and predict meanings before checking a dictionary.",
+      "check_for_understanding": "Give students new words with familiar parts. Ask them to predict meaning and explain their reasoning. Verify answers.",
+      "exit_ticket": "Students create their own word by combining a root, prefix, and/or suffix, define it, and use it in a sentence.",
+      "materials": [
+        "Root, prefix, suffix charts",
+        "Word breakdown worksheets",
+        "Dictionary",
+        "Word part flash cards"
+      ]
+    }
+  },
+  "5-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics": {
+    "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics",
+    "summary": "Master writing skills from sentences to essays. Learn to express ideas clearly with proper grammar, organization, and detail.",
+    "objectives": [
+      "Write well-organized paragraphs with topic sentences and supporting details",
+      "Use correct grammar and punctuation",
+      "Write narratives that tell stories effectively",
+      "Write essays that explain and persuade"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.W.5.3",
+      "CCSS.ELA-LITERACY.L.5.1"
+    ],
+    "outline": {
+      "hook": "Show two paragraphs: one organized and clear, one confusing and rambling. Ask: 'Which is easier to understand? Why?' Discuss how organization matters.",
+      "direct_instruction": "Teach paragraph structure: topic sentence (main idea), supporting details (explanation and examples), concluding sentence. Show how each part works. Demonstrate writing a paragraph together, starting with a topic sentence.",
+      "guided_practice": "Write a paragraph as a class on a simple topic (favorite food, weekend activity). Start with topic sentence, add 2-3 details, end with conclusion. Read aloud and discuss what works.",
+      "independent_practice": "Students write their own paragraph on a provided topic. They include a topic sentence, at least two supporting sentences, and a concluding sentence. They check for proper grammar.",
+      "check_for_understanding": "Ask: 'What is the topic sentence?' 'How many details support it?' 'Does every sentence relate to the topic?' Have students read their paragraphs aloud.",
+      "exit_ticket": "Students identify the topic sentence in a provided paragraph and circle one supporting detail.",
+      "materials": [
+        "Paragraph template",
+        "Topic sentence examples",
+        "Graphic organizer (web or outline)",
+        "Grammar reference sheet",
+        "Rubric for paragraph evaluation"
+      ]
+    }
+  },
+  "6-english-language-arts-reading-informational-historical-documents-pd": {
+    "title": "Historical Documents (PD)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.6.1",
+      "CCSS.ELA-LITERACY.RI.6.3"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "6-english-language-arts-reading-informational-science-tech-articles-open-licensed": {
+    "title": "Science/Tech Articles (open-licensed)",
+    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "objectives": [
+      "Identify main ideas and supporting details in articles",
+      "Distinguish between facts and opinions",
+      "Understand how articles are organized",
+      "Evaluate the credibility of sources"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.6.2",
+      "CCSS.ELA-LITERACY.RI.6.5"
+    ],
+    "outline": {
+      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
+      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
+      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
+      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
+      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
+      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "materials": [
+        "Age-appropriate informational articles",
+        "Main idea and detail organizer",
+        "Fact/opinion chart",
+        "Credibility checklist"
+      ]
+    }
+  },
+  "6-english-language-arts-reading-literature-novellas-short-novels-pd": {
+    "title": "Novellas/Short Novels (PD)",
+    "summary": "Develop skills and understanding in Novellas/Short Novels (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.6.1",
+      "CCSS.ELA-LITERACY.RL.6.3"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "6-english-language-arts-reading-literature-poetry-and-drama-pd": {
+    "title": "Poetry & Drama (PD)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.6.4",
+      "CCSS.ELA-LITERACY.RL.6.5"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "6-english-language-arts-reading-literature-world-literature-pd-where-possible": {
+    "title": "World Literature (PD where possible)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.6.1",
+      "CCSS.ELA-LITERACY.RL.6.6"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "6-english-language-arts-speaking-and-listening-debates-multimedia-presentations": {
+    "title": "Debates, Multimedia Presentations",
+    "summary": "Develop skills to share information effectively. Learn to summarize texts and present ideas to audiences with confidence and clarity.",
+    "objectives": [
+      "Write effective summaries of texts",
+      "Organize information logically for presentations",
+      "Deliver information with confidence",
+      "Engage an audience through clear communication"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.SL.6.4",
+      "CCSS.ELA-LITERACY.SL.6.6"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you had 30 seconds to tell a friend about your favorite book, what would you say?' Discuss what information matters most in a summary.",
+      "direct_instruction": "Teach that summaries include main ideas and important details, not every small fact. Practice summarizing by removing less important sentences. Show how to organize presentations with a clear beginning, middle, and end.",
+      "guided_practice": "Read a short text together. As a class, write a summary by identifying the main idea and key supporting points. Remove extra details. Then practice presenting this summary aloud as a group.",
+      "independent_practice": "Students read a text and write a summary (3-5 sentences). They practice presenting it aloud. They give each other feedback on clarity and organization.",
+      "check_for_understanding": "Ask: 'What should you always include in a summary?' 'What should you leave out?' Have students show their summaries and explain their choices.",
+      "exit_ticket": "Students deliver their summary to a partner and receive one piece of positive feedback.",
+      "materials": [
+        "Short texts for summarizing",
+        "Summary template (beginning, middle, end)",
+        "Presentation outline",
+        "Peer feedback form"
+      ]
+    }
+  },
+  "6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots": {
+    "title": "Academic Vocabulary, Greek/Latin Roots",
+    "summary": "Build vocabulary power by learning word parts. Discover how roots, prefixes, and suffixes help you understand new words.",
+    "objectives": [
+      "Identify and define common roots, prefixes, and suffixes",
+      "Use word parts to determine meaning of unfamiliar words",
+      "Apply word knowledge to improve reading and writing",
+      "Build academic vocabulary"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.L.6.4",
+      "CCSS.ELA-LITERACY.L.6.4.b"
+    ],
+    "outline": {
+      "hook": "Write a word like 'unhappy' on the board. Break it apart: un + happy. Ask: 'What does 'un' mean? How does it change the word?' Discuss how knowing parts helps us understand new words.",
+      "direct_instruction": "Teach common prefixes (un-, re-, pre-, dis-), suffixes (-tion, -ly, -able, -ment), and roots (struct, port, dict, graph). Show how each changes word meaning. Demonstrate with examples and let students practice breaking apart words.",
+      "guided_practice": "Together, take apart 5-10 words. Ask: 'What does the prefix mean? The suffix? So what does the whole word mean?' Check predictions using a dictionary.",
+      "independent_practice": "Students receive word lists. They break apart each word, identify roots/prefixes/suffixes, and predict meanings before checking a dictionary.",
+      "check_for_understanding": "Give students new words with familiar parts. Ask them to predict meaning and explain their reasoning. Verify answers.",
+      "exit_ticket": "Students create their own word by combining a root, prefix, and/or suffix, define it, and use it in a sentence.",
+      "materials": [
+        "Root, prefix, suffix charts",
+        "Word breakdown worksheets",
+        "Dictionary",
+        "Word part flash cards"
+      ]
+    }
+  },
+  "6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage": {
+    "title": "Essays, Research, Argumentative Writing, Grammar & Usage",
+    "summary": "Master writing skills from sentences to essays. Learn to express ideas clearly with proper grammar, organization, and detail.",
+    "objectives": [
+      "Write well-organized paragraphs with topic sentences and supporting details",
+      "Use correct grammar and punctuation",
+      "Write narratives that tell stories effectively",
+      "Write essays that explain and persuade"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.W.6.1",
+      "CCSS.ELA-LITERACY.L.6.1"
+    ],
+    "outline": {
+      "hook": "Show two paragraphs: one organized and clear, one confusing and rambling. Ask: 'Which is easier to understand? Why?' Discuss how organization matters.",
+      "direct_instruction": "Teach paragraph structure: topic sentence (main idea), supporting details (explanation and examples), concluding sentence. Show how each part works. Demonstrate writing a paragraph together, starting with a topic sentence.",
+      "guided_practice": "Write a paragraph as a class on a simple topic (favorite food, weekend activity). Start with topic sentence, add 2-3 details, end with conclusion. Read aloud and discuss what works.",
+      "independent_practice": "Students write their own paragraph on a provided topic. They include a topic sentence, at least two supporting sentences, and a concluding sentence. They check for proper grammar.",
+      "check_for_understanding": "Ask: 'What is the topic sentence?' 'How many details support it?' 'Does every sentence relate to the topic?' Have students read their paragraphs aloud.",
+      "exit_ticket": "Students identify the topic sentence in a provided paragraph and circle one supporting detail.",
+      "materials": [
+        "Paragraph template",
+        "Topic sentence examples",
+        "Graphic organizer (web or outline)",
+        "Grammar reference sheet",
+        "Rubric for paragraph evaluation"
+      ]
+    }
+  },
+  "7-english-language-arts-reading-informational-historical-documents-pd": {
+    "title": "Historical Documents (PD)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.7.1",
+      "CCSS.ELA-LITERACY.RI.7.3"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "7-english-language-arts-reading-informational-science-tech-articles-open-licensed": {
+    "title": "Science/Tech Articles (open-licensed)",
+    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "objectives": [
+      "Identify main ideas and supporting details in articles",
+      "Distinguish between facts and opinions",
+      "Understand how articles are organized",
+      "Evaluate the credibility of sources"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.7.2",
+      "CCSS.ELA-LITERACY.RI.7.5"
+    ],
+    "outline": {
+      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
+      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
+      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
+      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
+      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
+      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "materials": [
+        "Age-appropriate informational articles",
+        "Main idea and detail organizer",
+        "Fact/opinion chart",
+        "Credibility checklist"
+      ]
+    }
+  },
+  "7-english-language-arts-reading-literature-novellas-short-novels-pd": {
+    "title": "Novellas/Short Novels (PD)",
+    "summary": "Develop skills and understanding in Novellas/Short Novels (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.7.1",
+      "CCSS.ELA-LITERACY.RL.7.3"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "7-english-language-arts-reading-literature-poetry-and-drama-pd": {
+    "title": "Poetry & Drama (PD)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.7.4",
+      "CCSS.ELA-LITERACY.RL.7.5"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "7-english-language-arts-reading-literature-world-literature-pd-where-possible": {
+    "title": "World Literature (PD where possible)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.7.1",
+      "CCSS.ELA-LITERACY.RL.7.6"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "7-english-language-arts-speaking-and-listening-debates-multimedia-presentations": {
+    "title": "Debates, Multimedia Presentations",
+    "summary": "Develop skills to share information effectively. Learn to summarize texts and present ideas to audiences with confidence and clarity.",
+    "objectives": [
+      "Write effective summaries of texts",
+      "Organize information logically for presentations",
+      "Deliver information with confidence",
+      "Engage an audience through clear communication"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.SL.7.4",
+      "CCSS.ELA-LITERACY.SL.7.6"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you had 30 seconds to tell a friend about your favorite book, what would you say?' Discuss what information matters most in a summary.",
+      "direct_instruction": "Teach that summaries include main ideas and important details, not every small fact. Practice summarizing by removing less important sentences. Show how to organize presentations with a clear beginning, middle, and end.",
+      "guided_practice": "Read a short text together. As a class, write a summary by identifying the main idea and key supporting points. Remove extra details. Then practice presenting this summary aloud as a group.",
+      "independent_practice": "Students read a text and write a summary (3-5 sentences). They practice presenting it aloud. They give each other feedback on clarity and organization.",
+      "check_for_understanding": "Ask: 'What should you always include in a summary?' 'What should you leave out?' Have students show their summaries and explain their choices.",
+      "exit_ticket": "Students deliver their summary to a partner and receive one piece of positive feedback.",
+      "materials": [
+        "Short texts for summarizing",
+        "Summary template (beginning, middle, end)",
+        "Presentation outline",
+        "Peer feedback form"
+      ]
+    }
+  },
+  "7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots": {
+    "title": "Academic Vocabulary, Greek/Latin Roots",
+    "summary": "Build vocabulary power by learning word parts. Discover how roots, prefixes, and suffixes help you understand new words.",
+    "objectives": [
+      "Identify and define common roots, prefixes, and suffixes",
+      "Use word parts to determine meaning of unfamiliar words",
+      "Apply word knowledge to improve reading and writing",
+      "Build academic vocabulary"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.L.7.4",
+      "CCSS.ELA-LITERACY.L.7.4.b"
+    ],
+    "outline": {
+      "hook": "Write a word like 'unhappy' on the board. Break it apart: un + happy. Ask: 'What does 'un' mean? How does it change the word?' Discuss how knowing parts helps us understand new words.",
+      "direct_instruction": "Teach common prefixes (un-, re-, pre-, dis-), suffixes (-tion, -ly, -able, -ment), and roots (struct, port, dict, graph). Show how each changes word meaning. Demonstrate with examples and let students practice breaking apart words.",
+      "guided_practice": "Together, take apart 5-10 words. Ask: 'What does the prefix mean? The suffix? So what does the whole word mean?' Check predictions using a dictionary.",
+      "independent_practice": "Students receive word lists. They break apart each word, identify roots/prefixes/suffixes, and predict meanings before checking a dictionary.",
+      "check_for_understanding": "Give students new words with familiar parts. Ask them to predict meaning and explain their reasoning. Verify answers.",
+      "exit_ticket": "Students create their own word by combining a root, prefix, and/or suffix, define it, and use it in a sentence.",
+      "materials": [
+        "Root, prefix, suffix charts",
+        "Word breakdown worksheets",
+        "Dictionary",
+        "Word part flash cards"
+      ]
+    }
+  },
+  "7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage": {
+    "title": "Essays, Research, Argumentative Writing, Grammar & Usage",
+    "summary": "Master writing skills from sentences to essays. Learn to express ideas clearly with proper grammar, organization, and detail.",
+    "objectives": [
+      "Write well-organized paragraphs with topic sentences and supporting details",
+      "Use correct grammar and punctuation",
+      "Write narratives that tell stories effectively",
+      "Write essays that explain and persuade"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.W.7.1",
+      "CCSS.ELA-LITERACY.L.7.1"
+    ],
+    "outline": {
+      "hook": "Show two paragraphs: one organized and clear, one confusing and rambling. Ask: 'Which is easier to understand? Why?' Discuss how organization matters.",
+      "direct_instruction": "Teach paragraph structure: topic sentence (main idea), supporting details (explanation and examples), concluding sentence. Show how each part works. Demonstrate writing a paragraph together, starting with a topic sentence.",
+      "guided_practice": "Write a paragraph as a class on a simple topic (favorite food, weekend activity). Start with topic sentence, add 2-3 details, end with conclusion. Read aloud and discuss what works.",
+      "independent_practice": "Students write their own paragraph on a provided topic. They include a topic sentence, at least two supporting sentences, and a concluding sentence. They check for proper grammar.",
+      "check_for_understanding": "Ask: 'What is the topic sentence?' 'How many details support it?' 'Does every sentence relate to the topic?' Have students read their paragraphs aloud.",
+      "exit_ticket": "Students identify the topic sentence in a provided paragraph and circle one supporting detail.",
+      "materials": [
+        "Paragraph template",
+        "Topic sentence examples",
+        "Graphic organizer (web or outline)",
+        "Grammar reference sheet",
+        "Rubric for paragraph evaluation"
+      ]
+    }
+  },
+  "8-english-language-arts-reading-informational-historical-documents-pd": {
+    "title": "Historical Documents (PD)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.8.1",
+      "CCSS.ELA-LITERACY.RI.8.3"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "8-english-language-arts-reading-informational-science-tech-articles-open-licensed": {
+    "title": "Science/Tech Articles (open-licensed)",
+    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "objectives": [
+      "Identify main ideas and supporting details in articles",
+      "Distinguish between facts and opinions",
+      "Understand how articles are organized",
+      "Evaluate the credibility of sources"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RI.8.2",
+      "CCSS.ELA-LITERACY.RI.8.5"
+    ],
+    "outline": {
+      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
+      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
+      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
+      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
+      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
+      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "materials": [
+        "Age-appropriate informational articles",
+        "Main idea and detail organizer",
+        "Fact/opinion chart",
+        "Credibility checklist"
+      ]
+    }
+  },
+  "8-english-language-arts-reading-literature-novellas-short-novels-pd": {
+    "title": "Novellas/Short Novels (PD)",
+    "summary": "Develop skills and understanding in Novellas/Short Novels (PD).",
+    "objectives": [
+      "Understand key concepts in this module",
+      "Apply skills to real reading and writing",
+      "Communicate clearly and thoughtfully",
+      "Build confidence with this skill set"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.8.1",
+      "CCSS.ELA-LITERACY.RL.8.3"
+    ],
+    "outline": {
+      "hook": "Connect the topic to students' experiences. Ask a question that builds interest.",
+      "direct_instruction": "Teach the key concepts directly. Use examples and model thinking aloud.",
+      "guided_practice": "Work through examples together as a class, with your support.",
+      "independent_practice": "Students practice independently with your observation and feedback.",
+      "check_for_understanding": "Ask questions and listen to student thinking. Adjust if needed.",
+      "exit_ticket": "Students show understanding through a quick written or verbal response.",
+      "materials": [
+        "Age-appropriate texts and resources",
+        "Graphic organizers",
+        "Templates and examples",
+        "Assessment tools"
+      ]
+    }
+  },
+  "8-english-language-arts-reading-literature-poetry-and-drama-pd": {
+    "title": "Poetry & Drama (PD)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.8.4",
+      "CCSS.ELA-LITERACY.RL.8.5"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "8-english-language-arts-reading-literature-world-literature-pd-where-possible": {
+    "title": "World Literature (PD where possible)",
+    "summary": "Explore significant texts and perspectives. Read and analyze documents, poetry, and literature that have shaped the world.",
+    "objectives": [
+      "Read and understand complex texts",
+      "Analyze author's purpose and perspective",
+      "Make connections between texts and history",
+      "Appreciate diverse voices and cultures"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.RL.8.1",
+      "CCSS.ELA-LITERACY.RL.8.6"
+    ],
+    "outline": {
+      "hook": "Show an image or read a passage from a significant text. Ask: 'Who wrote this? When? Why do you think it matters today?' Build curiosity about the text's relevance.",
+      "direct_instruction": "Provide historical or cultural context for the text. Explain key vocabulary and concepts. Read an excerpt together, modeling how to pause and reflect on meaning.",
+      "guided_practice": "Read more of the text together. Stop to discuss: What is the author trying to say? Who would be affected by this? How do you know? What questions do you have?",
+      "independent_practice": "Students read sections independently. They annotate by underlining important lines and writing notes about meaning. They write one reflection on what they learned.",
+      "check_for_understanding": "Ask: 'What was the author's main message?' 'How does this connect to things happening today?' 'What perspective does this text offer?' Have students support answers with text evidence.",
+      "exit_ticket": "Students share one powerful line from the text and explain why it matters.",
+      "materials": [
+        "Primary or significant texts (age-appropriate excerpts)",
+        "Historical background information",
+        "Vocabulary list",
+        "Annotation guide",
+        "Discussion prompts"
+      ]
+    }
+  },
+  "8-english-language-arts-speaking-and-listening-debates-multimedia-presentations": {
+    "title": "Debates, Multimedia Presentations",
+    "summary": "Develop skills to share information effectively. Learn to summarize texts and present ideas to audiences with confidence and clarity.",
+    "objectives": [
+      "Write effective summaries of texts",
+      "Organize information logically for presentations",
+      "Deliver information with confidence",
+      "Engage an audience through clear communication"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.SL.8.4",
+      "CCSS.ELA-LITERACY.SL.8.6"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you had 30 seconds to tell a friend about your favorite book, what would you say?' Discuss what information matters most in a summary.",
+      "direct_instruction": "Teach that summaries include main ideas and important details, not every small fact. Practice summarizing by removing less important sentences. Show how to organize presentations with a clear beginning, middle, and end.",
+      "guided_practice": "Read a short text together. As a class, write a summary by identifying the main idea and key supporting points. Remove extra details. Then practice presenting this summary aloud as a group.",
+      "independent_practice": "Students read a text and write a summary (3-5 sentences). They practice presenting it aloud. They give each other feedback on clarity and organization.",
+      "check_for_understanding": "Ask: 'What should you always include in a summary?' 'What should you leave out?' Have students show their summaries and explain their choices.",
+      "exit_ticket": "Students deliver their summary to a partner and receive one piece of positive feedback.",
+      "materials": [
+        "Short texts for summarizing",
+        "Summary template (beginning, middle, end)",
+        "Presentation outline",
+        "Peer feedback form"
+      ]
+    }
+  },
+  "8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots": {
+    "title": "Academic Vocabulary, Greek/Latin Roots",
+    "summary": "Build vocabulary power by learning word parts. Discover how roots, prefixes, and suffixes help you understand new words.",
+    "objectives": [
+      "Identify and define common roots, prefixes, and suffixes",
+      "Use word parts to determine meaning of unfamiliar words",
+      "Apply word knowledge to improve reading and writing",
+      "Build academic vocabulary"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.L.8.4",
+      "CCSS.ELA-LITERACY.L.8.4.b"
+    ],
+    "outline": {
+      "hook": "Write a word like 'unhappy' on the board. Break it apart: un + happy. Ask: 'What does 'un' mean? How does it change the word?' Discuss how knowing parts helps us understand new words.",
+      "direct_instruction": "Teach common prefixes (un-, re-, pre-, dis-), suffixes (-tion, -ly, -able, -ment), and roots (struct, port, dict, graph). Show how each changes word meaning. Demonstrate with examples and let students practice breaking apart words.",
+      "guided_practice": "Together, take apart 5-10 words. Ask: 'What does the prefix mean? The suffix? So what does the whole word mean?' Check predictions using a dictionary.",
+      "independent_practice": "Students receive word lists. They break apart each word, identify roots/prefixes/suffixes, and predict meanings before checking a dictionary.",
+      "check_for_understanding": "Give students new words with familiar parts. Ask them to predict meaning and explain their reasoning. Verify answers.",
+      "exit_ticket": "Students create their own word by combining a root, prefix, and/or suffix, define it, and use it in a sentence.",
+      "materials": [
+        "Root, prefix, suffix charts",
+        "Word breakdown worksheets",
+        "Dictionary",
+        "Word part flash cards"
+      ]
+    }
+  },
+  "8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage": {
+    "title": "Essays, Research, Argumentative Writing, Grammar & Usage",
+    "summary": "Master writing skills from sentences to essays. Learn to express ideas clearly with proper grammar, organization, and detail.",
+    "objectives": [
+      "Write well-organized paragraphs with topic sentences and supporting details",
+      "Use correct grammar and punctuation",
+      "Write narratives that tell stories effectively",
+      "Write essays that explain and persuade"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "English Language Arts",
+    "standards": [
+      "CCSS.ELA-LITERACY.W.8.1",
+      "CCSS.ELA-LITERACY.L.8.1"
+    ],
+    "outline": {
+      "hook": "Show two paragraphs: one organized and clear, one confusing and rambling. Ask: 'Which is easier to understand? Why?' Discuss how organization matters.",
+      "direct_instruction": "Teach paragraph structure: topic sentence (main idea), supporting details (explanation and examples), concluding sentence. Show how each part works. Demonstrate writing a paragraph together, starting with a topic sentence.",
+      "guided_practice": "Write a paragraph as a class on a simple topic (favorite food, weekend activity). Start with topic sentence, add 2-3 details, end with conclusion. Read aloud and discuss what works.",
+      "independent_practice": "Students write their own paragraph on a provided topic. They include a topic sentence, at least two supporting sentences, and a concluding sentence. They check for proper grammar.",
+      "check_for_understanding": "Ask: 'What is the topic sentence?' 'How many details support it?' 'Does every sentence relate to the topic?' Have students read their paragraphs aloud.",
+      "exit_ticket": "Students identify the topic sentence in a provided paragraph and circle one supporting detail.",
+      "materials": [
+        "Paragraph template",
+        "Topic sentence examples",
+        "Graphic organizer (web or outline)",
+        "Grammar reference sheet",
+        "Rubric for paragraph evaluation"
+      ]
+    }
+  }
+}
