@@ -4,6 +4,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { captureServerException, captureServerMessage } from './monitoring.js';
 import { recordOpsEvent } from './opsMetrics.js';
+import { getRuntimeConfig } from './config.js';
+import { getAdaptiveContext } from './learningPaths.js';
 import { MARKETING_KNOWLEDGE, MARKETING_SYSTEM_PROMPT } from '../shared/marketingContent.js';
 
 type TutorMode = 'learning' | 'marketing';
@@ -32,6 +34,17 @@ type StudentContext = {
   activeLesson?: LessonSnapshot | null;
   nextLesson?: LessonSnapshot | null;
   masteryBySubject: Array<{ subject: string; mastery: number }>;
+  aiOptIn?: boolean | null;
+  persona?: {
+    name: string;
+    tone?: string | null;
+    constraints?: string | null;
+    promptSnippet?: string | null;
+    sampleReplies?: string[] | null;
+  };
+  targetDifficulty?: number | null;
+  misconceptions?: string[];
+  recentAttempts?: Array<{ standard: string; correct: boolean; difficulty: number | null; source: string }>;
   chatMode?: 'guided_only' | 'guided_preferred' | 'free';
   chatModeLocked?: boolean;
   studyMode?: 'catch_up' | 'keep_up' | 'get_ahead';
@@ -39,6 +52,7 @@ type StudentContext = {
   allowTutor?: boolean;
   tutorLessonOnly?: boolean;
   tutorDailyLimit?: number | null;
+  weeklyIntent?: 'precision' | 'speed' | 'stretch' | 'balanced';
 };
 
 type LessonSnapshot = {
@@ -66,6 +80,23 @@ type TutorPlanContext = {
   aiAccess?: boolean;
 };
 
+const CONTEXT_CACHE_TTL_MS = 30 * 1000;
+const contextCache = new Map<string, { expires: number; context: StudentContext }>();
+
+const cacheStudentContext = (studentId: string, context: StudentContext) => {
+  contextCache.set(studentId, { context, expires: Date.now() + CONTEXT_CACHE_TTL_MS });
+};
+
+const getCachedStudentContext = (studentId: string): StudentContext | null => {
+  const entry = contextCache.get(studentId);
+  if (!entry) return null;
+  if (entry.expires < Date.now()) {
+    contextCache.delete(studentId);
+    return null;
+  }
+  return entry.context;
+};
+
 type TutorRequestOptions = {
   userId?: string | null;
   role?: string | null;
@@ -85,6 +116,7 @@ const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 // Keep the marketing assistant aligned with the tutor: OpenRouter + Mistral 7B Instruct (free).
 const PRIMARY_MODEL = 'mistralai/mistral-7b-instruct:free';
 const FALLBACK_MODEL = 'mistralai/mistral-7b-instruct:free';
+const DEFAULT_MODEL_TIMEOUT_MS = 12000;
 
 const MAX_PROMPT_CHARS = 1200;
 const MAX_SYSTEM_PROMPT_CHARS = 1400;
@@ -94,6 +126,27 @@ const MAX_RESPONSE_CHARS = 1600;
 const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const PHONE_REGEX = /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})\b/g;
 const LONG_NUMBER_REGEX = /\b\d{9,}\b/g;
+const recentPromptCache = new Map<string, { hash: string; at: number }>();
+
+const normalizePrompt = (value: string): string =>
+  value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const detectHallucinatedStandard = (message: string): string | null => {
+  const lower = message.toLowerCase();
+  if (lower.includes('placeholder') || lower.includes('lorem ipsum')) {
+    return 'placeholder_text';
+  }
+  if (/\bstandard[_-]?code\b/.test(lower) || /\bngss[_-]?xxx\b/i.test(message)) {
+    return 'placeholder_standard';
+  }
+  if (/\bstd[-_ ]?(?:xxx|000|999)\b/i.test(message)) {
+    return 'fake_standard';
+  }
+  return null;
+};
 const UNSAFE_KEYWORDS = [
   'violence',
   'harm',
@@ -374,6 +427,27 @@ const formatStudentContext = (context: StudentContext | undefined): string => {
       .join(' | ');
     lines.push(`Recent mastery: ${masteryLines}`);
   }
+  if (context.persona) {
+    const personaTone = context.persona.tone ? ` (${context.persona.tone})` : '';
+    lines.push(`Tutor persona: ${context.persona.name}${personaTone}`);
+  }
+  if (context.aiOptIn === false) {
+    lines.push('AI opt-in: false; keep answers brief and privacy-safe.');
+  }
+  if (context.targetDifficulty != null) {
+    lines.push(`Adaptive target difficulty: ~${context.targetDifficulty} with accuracy 65-80%.`);
+  }
+  if (context.misconceptions && context.misconceptions.length) {
+    lines.push(`Current struggles: ${context.misconceptions.slice(0, 4).join(', ')}`);
+  }
+  if (context.recentAttempts && context.recentAttempts.length) {
+    const attempts = context.recentAttempts.slice(0, 3).map((attempt) => {
+      const standard = attempt.standard ?? 'general';
+      const difficulty = attempt.difficulty != null ? `@${attempt.difficulty}` : '';
+      return `${attempt.source}:${attempt.correct ? '✅' : '❌'}${difficulty} ${standard}`;
+    });
+    lines.push(`Recent attempts: ${attempts.join(' | ')}`);
+  }
   if (context.activeLesson) {
     const lesson = context.activeLesson;
     const lessonBits = [
@@ -398,6 +472,9 @@ const formatStudentContext = (context: StudentContext | undefined): string => {
   if (context.studyMode) {
     lines.push(`Study mode: ${context.studyMode}`);
   }
+  if (context.weeklyIntent) {
+    lines.push(`Weekly intent: ${context.weeklyIntent}`);
+  }
   if (context.allowTutor === false) {
     lines.push('Tutor access: disabled by parent/guardian.');
   }
@@ -412,6 +489,10 @@ const formatStudentContext = (context: StudentContext | undefined): string => {
 };
 
 const fetchStudentContext = async (supabase: SupabaseClient, studentId: string): Promise<StudentContext> => {
+  const cached = getCachedStudentContext(studentId);
+  if (cached) {
+    return cached;
+  }
   const learnerRef = anonymize(studentId) ?? 'learner';
 
   const [
@@ -420,6 +501,8 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
     { data: masteryRows, error: masteryError },
     { data: skills, error: skillsError },
     { data: subjects, error: subjectsError },
+    { data: preferencesRow, error: preferencesError },
+    adaptiveContext,
   ] = await Promise.all([
     supabase
       .from('student_profiles')
@@ -442,6 +525,11 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
     supabase.from('student_mastery').select('skill_id, mastery_pct').eq('student_id', studentId),
     supabase.from('skills').select('id, subject_id, name'),
     supabase.from('subjects').select('id, name'),
+    supabase.from('student_preferences').select('opt_in_ai, tutor_persona_id').eq('student_id', studentId).maybeSingle(),
+    getAdaptiveContext(supabase, studentId).catch((error) => {
+      console.warn('[ai] Failed to load adaptive context', error);
+      return { targetDifficulty: 1, misconceptions: [], recentAttempts: [] };
+    }),
   ]);
 
   if (profileError) {
@@ -458,6 +546,9 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
   }
   if (subjectsError) {
     console.warn('[ai] Failed to load subject metadata', subjectsError);
+  }
+  if (preferencesError) {
+    console.warn('[ai] Failed to load student preferences', preferencesError);
   }
 
   const strengths = Array.isArray(profile?.strengths)
@@ -495,6 +586,11 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
       : typeof learningStyle?.study_mode_locked === 'boolean'
         ? (learningStyle?.study_mode_locked as boolean)
         : false;
+  const weeklyIntentRaw = learningStyle?.weeklyIntent ?? learningStyle?.weekly_intent ?? learningStyle?.intent;
+  const weeklyIntent: 'precision' | 'speed' | 'stretch' | 'balanced' | undefined =
+    weeklyIntentRaw === 'precision' || weeklyIntentRaw === 'speed' || weeklyIntentRaw === 'stretch' || weeklyIntentRaw === 'balanced'
+      ? weeklyIntentRaw
+      : undefined;
   const allowTutorRaw =
     learningStyle?.allowTutor ??
     learningStyle?.allow_tutor ??
@@ -525,6 +621,52 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
       : typeof tutorDailyLimitRaw === 'string' && Number.isFinite(Number.parseInt(tutorDailyLimitRaw, 10))
         ? Number.parseInt(tutorDailyLimitRaw, 10)
         : null;
+  const optInAi = (preferencesRow?.opt_in_ai as boolean | null | undefined) ?? true;
+
+  let persona: StudentContext['persona'] = undefined;
+  const personaId = (preferencesRow?.tutor_persona_id as string | null | undefined) ?? null;
+  if (personaId) {
+    try {
+      const { data: personaRow, error: personaError } = await supabase
+        .from('tutor_personas')
+        .select('id, name, tone, constraints, prompt_snippet, sample_replies')
+        .eq('id', personaId)
+        .maybeSingle();
+      if (personaError) {
+        console.warn('[ai] Failed to load tutor persona', personaError);
+      } else if (personaRow) {
+        persona = {
+          name: (personaRow.name as string | null | undefined) ?? 'Tutor',
+          tone: (personaRow.tone as string | null | undefined) ?? null,
+          constraints: (personaRow.constraints as string | null | undefined) ?? null,
+          promptSnippet: (personaRow.prompt_snippet as string | null | undefined) ?? null,
+          sampleReplies: Array.isArray(personaRow.sample_replies)
+            ? (personaRow.sample_replies as string[])
+                .filter((entry) => typeof entry === 'string' && entry.trim().length > 0)
+                .slice(0, 4)
+            : null,
+        };
+      }
+    } catch (personaError) {
+      console.warn('[ai] Unexpected error while loading tutor persona', personaError);
+    }
+  }
+
+  const adaptive = (adaptiveContext as {
+    targetDifficulty?: number | null;
+    misconceptions?: string[];
+    recentAttempts?: Array<{ standards?: string[]; correct: boolean; difficulty: number | null; source: string }>;
+  }) ?? { targetDifficulty: 1, misconceptions: [], recentAttempts: [] };
+
+  const recentAttempts =
+    Array.isArray(adaptive.recentAttempts)
+      ? adaptive.recentAttempts.map((attempt) => ({
+          standard: Array.isArray(attempt.standards) && attempt.standards.length ? attempt.standards[0] ?? 'general' : 'general',
+          correct: attempt.correct,
+          difficulty: attempt.difficulty ?? null,
+          source: attempt.source ?? 'event',
+        }))
+      : [];
 
   const activeProgress = (progressRows ?? []).find((row) => row?.lessons?.title) ?? null;
   const activeLesson: LessonSnapshot | null = activeProgress
@@ -591,8 +733,9 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
     : masteryBySubject
         .slice(0, 2)
         .map((entry) => entry.subject);
+  const misconceptions = Array.isArray(adaptive.misconceptions) ? adaptive.misconceptions : [];
 
-  return {
+  const context: StudentContext = {
     learnerRef,
     grade: (profile?.grade as number | null) ?? null,
     level: (profile?.level as number | null) ?? null,
@@ -601,6 +744,11 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
     activeLesson,
     nextLesson,
     masteryBySubject,
+    aiOptIn: optInAi,
+    persona,
+    targetDifficulty: adaptive.targetDifficulty ?? null,
+    misconceptions,
+    recentAttempts,
     chatMode,
     chatModeLocked,
     studyMode,
@@ -608,7 +756,11 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
     allowTutor,
     tutorLessonOnly,
     tutorDailyLimit,
+    weeklyIntent,
   };
+
+  cacheStudentContext(studentId, context);
+  return context;
 };
 
 const buildTutorContext = (payload: TutorRequestBody, studentContext?: StudentContext): TutorContext => {
@@ -646,6 +798,40 @@ const buildMessages = (context: TutorContext) => {
       messages.push({
         role: 'system',
         content: `Learner context (use for tailoring, never repeat sensitive data):\n${learnerContext}`,
+      });
+    }
+    if (context.studentContext.persona) {
+      const persona = context.studentContext.persona;
+      const personaLines = [
+        `Tutor persona: ${persona.name}`,
+        persona.tone ? `Tone: ${persona.tone}` : null,
+        persona.constraints ? `Constraints: ${persona.constraints}` : null,
+        persona.promptSnippet ? `Style: ${persona.promptSnippet}` : null,
+      ]
+        .filter(Boolean)
+        .join('\n');
+      if (personaLines.length) {
+        messages.push({ role: 'system', content: personaLines });
+      }
+      if (persona.sampleReplies?.length) {
+        const examples = persona.sampleReplies.slice(0, 3).map((reply) => `- ${reply}`).join('\n');
+        messages.push({
+          role: 'system',
+          content: `Persona example replies (match this voice):\n${examples}`,
+        });
+      }
+    }
+    if (context.studentContext.aiOptIn === false) {
+      messages.push({
+        role: 'system',
+        content:
+          'Learner opt-in: false. Keep responses concise, avoid collecting personal details, and do not infer beyond the provided context.',
+      });
+    }
+    if (context.studentContext.targetDifficulty != null) {
+      messages.push({
+        role: 'system',
+        content: `Adaptive target: aim for difficulty level ${context.studentContext.targetDifficulty} with accuracy around 65-80%; adjust hints to stay near that band.`,
       });
     }
   }
@@ -708,21 +894,40 @@ const buildMessages = (context: TutorContext) => {
   return messages;
 };
 
-const callOpenRouter = async (context: TutorContext, model: string, apiKey: string): Promise<TutorResponse> => {
-  const response = await fetch(OPENROUTER_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': process.env.APP_BASE_URL ?? 'https://elevated.chat',
-      'X-Title': 'ElevatED',
-    },
-    body: JSON.stringify({
-      model,
-      messages: buildMessages(context),
-      temperature: 0.4,
-    }),
-  });
+const callOpenRouter = async (
+  context: TutorContext,
+  model: string,
+  apiKey: string,
+  timeoutMs: number,
+): Promise<TutorResponse> => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  let response: Response;
+  try {
+    response = await fetch(OPENROUTER_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': process.env.APP_BASE_URL ?? 'https://elevated.chat',
+        'X-Title': 'ElevatED',
+      },
+      body: JSON.stringify({
+        model,
+        messages: buildMessages(context),
+        temperature: 0.4,
+      }),
+      signal: controller.signal,
+    });
+  } catch (error) {
+    clearTimeout(timeout);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Tutor request timed out.');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -766,6 +971,8 @@ export const handleTutorRequest = async (
   supabase: SupabaseClient,
   opts: TutorRequestOptions,
 ): Promise<TutorResponse> => {
+  const runtimeConfig = await getRuntimeConfig(supabase);
+  const timeoutMs = runtimeConfig.tutor.timeoutMs || DEFAULT_MODEL_TIMEOUT_MS;
   const apiKey = process.env.OPENROUTER_API_KEY ?? process.env.VITE_OPENROUTER_API_KEY;
   if (!apiKey) {
     throw new AiRequestError(500, 'AI is not configured. Missing OPENROUTER_API_KEY.');
@@ -824,6 +1031,12 @@ export const handleTutorRequest = async (
       : null;
 
   const tutorContext = buildTutorContext(payload, studentContext);
+  const normalizedPrompt = normalizePrompt(tutorContext.prompt);
+  const cachedPrompt = recentPromptCache.get(usageKey);
+  if (cachedPrompt && cachedPrompt.hash === normalizedPrompt && Date.now() - cachedPrompt.at < 30_000) {
+    throw new AiRequestError(429, 'You just asked this—try a different question or wait a moment.');
+  }
+  recentPromptCache.set(usageKey, { hash: normalizedPrompt, at: Date.now() });
 
   const safetyIssue = detectUnsafePrompt(tutorContext.prompt, studentContext);
   if (safetyIssue) {
@@ -871,10 +1084,11 @@ export const handleTutorRequest = async (
   });
 
   let aiResult: TutorResponse | null = null;
+  const startedAt = Date.now();
 
   try {
     try {
-      const result = await callOpenRouter(tutorContext, PRIMARY_MODEL, apiKey);
+      const result = await callOpenRouter(tutorContext, PRIMARY_MODEL, apiKey, timeoutMs);
       aiResult = result;
       captureServerMessage('[ai] tutor success', {
         mode: tutorContext.mode,
@@ -890,7 +1104,7 @@ export const handleTutorRequest = async (
       });
     } catch (primaryError) {
       captureServerException(primaryError, { model: PRIMARY_MODEL, mode: tutorContext.mode });
-      const fallback = await callOpenRouter(tutorContext, FALLBACK_MODEL, apiKey);
+      const fallback = await callOpenRouter(tutorContext, FALLBACK_MODEL, apiKey, timeoutMs);
       aiResult = fallback;
       captureServerMessage('[ai] tutor fallback success', {
         mode: tutorContext.mode,
@@ -909,6 +1123,29 @@ export const handleTutorRequest = async (
     if (!aiResult) {
       throw new AiRequestError(502, 'The tutor is unavailable right now. Please try again shortly.');
     }
+
+    const hallucination = detectHallucinatedStandard(aiResult.message);
+    if (hallucination) {
+      captureServerMessage('[ai] tutor hallucination_filter', { hallucination, hashedUser, hashedIp }, 'warning');
+      throw new AiRequestError(422, 'Let me try a different way—ask again with a bit more detail.');
+    }
+    if (Math.random() < 0.02) {
+      captureServerMessage('[ai] tutor_qa_sample', {
+        hashedUser,
+        hashedIp,
+        mode: tutorContext.mode,
+        promptPreview: tutorContext.prompt.slice(0, 120),
+        responsePreview: aiResult.message.slice(0, 200),
+        model: aiResult.model,
+      });
+    }
+
+    recordOpsEvent({
+      type: 'tutor_latency',
+      durationMs: Date.now() - startedAt,
+      label: aiResult.model,
+      plan: opts.plan?.slug ?? null,
+    });
 
     return {
       ...aiResult,

@@ -10,17 +10,81 @@ import { updateLearningPreferences } from '../../services/profileService';
 import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { fetchReflections } from '../../services/reflectionService';
 import { submitTutorAnswerReport, type TutorReportReason } from '../../services/tutorReportService';
+import { useStudentPath, useTutorPersona } from '../../hooks/useStudentData';
+
+const defaultPalette = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+
+const resolvePalette = (metadata?: Record<string, unknown> | null) => {
+  const palette = (metadata?.palette as { background?: string; accent?: string; text?: string } | undefined) ?? undefined;
+  return {
+    background: palette?.background ?? defaultPalette.background,
+    accent: palette?.accent ?? defaultPalette.accent,
+    text: palette?.text ?? defaultPalette.text,
+  };
+};
+
+const humanizeStandard = (code?: string | null): string | null => {
+  if (!code) return null;
+  const trimmed = code.toString().trim();
+  if (!trimmed.length) return null;
+  const withoutFramework = trimmed.includes(':') ? trimmed.split(':').pop() ?? trimmed : trimmed;
+  const cleaned = withoutFramework.replace(/[_.]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!cleaned.length) return null;
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+};
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
   const student = user as Student;
+  const { persona: tutorPersona } = useTutorPersona(student?.id);
+  const pathQuery = useStudentPath(student?.id);
   const tutorAvatar = useMemo(
     () => TUTOR_AVATARS.find((avatar) => avatar.id === student.tutorAvatarId) ?? TUTOR_AVATARS[0],
     [student.tutorAvatarId],
   );
-  const tutorPalette =
-    tutorAvatar?.palette ?? { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+  const personaPalette = useMemo(
+    () => (tutorPersona ? resolvePalette((tutorPersona.metadata ?? {}) as Record<string, unknown>) : null),
+    [tutorPersona],
+  );
+  const tutorPalette = personaPalette ?? tutorAvatar?.palette ?? defaultPalette;
+  const pathMetadata = useMemo(
+    () => ((pathQuery.path?.metadata ?? {}) as Record<string, unknown> | null | undefined),
+    [pathQuery.path?.metadata],
+  );
+  const adaptiveMisconceptions = useMemo(() => {
+    const adaptive =
+      (pathMetadata?.adaptive_state as Record<string, unknown> | null | undefined) ??
+      ((pathMetadata?.adaptive as Record<string, unknown> | null | undefined) ?? {});
+    const list = Array.isArray(adaptive.misconceptions)
+      ? adaptive.misconceptions.filter((entry): entry is string => typeof entry === 'string')
+      : [];
+    return list;
+  }, [pathMetadata]);
+  const strongestSubject = useMemo(() => humanizeStandard(student.strengths[0] ?? null), [student.strengths]);
+  const adaptivePromptHint = useMemo(() => {
+    const pieces: string[] = [];
+    if (adaptiveMisconceptions.length) {
+      const label = humanizeStandard(adaptiveMisconceptions[0]) ?? 'your recent focus';
+      pieces.push(
+        `Roughly one in three replies, start with a quick nod like "You've been working on ${label}; let's tackle it in small steps." Keep it one short sentence.`,
+      );
+    }
+    if (strongestSubject) {
+      pieces.push(
+        `When it helps, use ${strongestSubject} as an analogy for tougher ideas, but keep it brief so it doesn't distract.`,
+      );
+    }
+    return pieces.join(' ');
+  }, [adaptiveMisconceptions, strongestSubject]);
+
   const tutorDisplayName = student.tutorName?.trim() || 'Learning Assistant';
+  const personaTone = tutorPersona?.tone ?? tutorAvatar?.tone;
+  const personaIdForEvents = tutorPersona?.id ?? tutorAvatar?.id ?? null;
+  const tutorIcon =
+    typeof ((tutorPersona?.metadata ?? {}) as Record<string, unknown>).icon === 'string'
+      ? (((tutorPersona?.metadata ?? {}) as Record<string, unknown>).icon as string)
+      : tutorAvatar.icon;
+  const tutorLabel = tutorPersona?.name ?? tutorAvatar.label;
   const autoChatMode: 'guided_only' | 'guided_preferred' | 'free' =
     student.grade <= 3 ? 'guided_only' : student.grade <= 5 ? 'guided_preferred' : 'free';
   const tutorDisabled = student.learningPreferences.allowTutor === false;
@@ -33,7 +97,7 @@ const LearningAssistant: React.FC = () => {
   const chatModeLocked = student.learningPreferences.chatModeLocked ?? false;
   const [guidedCardUsed, setGuidedCardUsed] = useState(false);
   const tutorToneDescriptor = useMemo(() => {
-    switch (tutorAvatar?.tone) {
+    switch (personaTone) {
       case 'calm':
         return 'I keep answers calm and patient.';
       case 'bold':
@@ -45,15 +109,16 @@ const LearningAssistant: React.FC = () => {
       default:
         return 'I’ll cheer you on with short encouragement.';
     }
-  }, [tutorAvatar?.tone]);
+  }, [personaTone]);
   const buildIntroMessage = useCallback(() => {
     const preferredName = student.tutorName?.trim();
     const introName =
       preferredName && preferredName.length ? `${preferredName}, your personal learning guide` : 'your personal learning assistant';
     const strengths = student.strengths[0] || 'your current subjects';
     const safetyLine = 'I stay school-safe, will not help with cheating, and I do not replace your teacher';
-    return `Hi there! I'm ${introName}. I can help with ${strengths}, study tips, or motivation. ${tutorToneDescriptor} ${safetyLine}. What would you like to work on today?`;
-  }, [student.strengths, student.tutorName, tutorToneDescriptor]);
+    const personaStyleHint = tutorPersona?.prompt_snippet ?? tutorToneDescriptor;
+    return `Hi there! I'm ${introName}. I can help with ${strengths}, study tips, or motivation. ${personaStyleHint} ${safetyLine}. What would you like to work on today?`;
+  }, [student.strengths, student.tutorName, tutorPersona?.prompt_snippet, tutorToneDescriptor]);
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
@@ -380,13 +445,13 @@ const LearningAssistant: React.FC = () => {
     if (message) {
       trackEvent('tutor_onboarding_step_completed', {
         step: 'prompts',
-        persona_id: tutorAvatar?.id ?? null,
-        avatar_id: tutorAvatar?.id ?? null,
+        persona_id: personaIdForEvents,
+        avatar_id: personaIdForEvents,
         provided_name: Boolean(student.tutorName?.trim()),
       });
       trackEvent('tutor_onboarding_question_used', {
         question_id: action,
-        persona_id: tutorAvatar?.id ?? null,
+        persona_id: personaIdForEvents,
       });
       void handleSendMessage(message, { source: 'card', cardId: action });
     }
@@ -488,23 +553,36 @@ const LearningAssistant: React.FC = () => {
 
       const promptForModel = `${contextWindow}\nAssistant:`.slice(-1100);
       const personaName = student.tutorName?.trim();
-      const personaTone =
-        tutorAvatar?.tone === 'calm'
+      const personaStyle =
+        tutorPersona?.prompt_snippet ??
+        (personaTone === 'calm'
           ? 'calm, patient tone'
-          : tutorAvatar?.tone === 'structured'
+          : personaTone === 'structured'
             ? 'structured, step-by-step coaching tone'
-            : tutorAvatar?.tone === 'bold'
+            : personaTone === 'bold'
               ? 'upbeat, high-energy tone'
-              : tutorAvatar?.tone === 'concise'
+              : personaTone === 'concise'
                 ? 'concise, to-the-point tone'
-                : 'encouraging, warm tone';
+                : 'encouraging, warm tone');
       const planIntensity = student.learningPreferences?.weeklyPlanIntensity ?? 'normal';
+      const planIntent = student.learningPreferences?.weeklyIntent ?? 'balanced';
       const planTone =
         planIntensity === 'light'
           ? 'Keep encouragement gentle and celebrate small wins.'
           : planIntensity === 'challenge'
             ? 'Use a bit more upbeat motivation and suggest one extra stretch step.'
             : 'Use a balanced encouragement tone.';
+      const intentCoaching =
+        planIntent === 'precision'
+          ? 'Prioritize accuracy and careful checks; slow the pace slightly and praise correct steps.'
+          : planIntent === 'speed'
+            ? 'Keep answers brisk and confidence-building; avoid over-long hints.'
+            : planIntent === 'stretch'
+              ? 'Offer a small extension or challenge when the learner seems ready.'
+              : 'Balance accuracy and pace.';
+      const focusLabel = adaptiveMisconceptions.length
+        ? humanizeStandard(adaptiveMisconceptions[0]) ?? adaptiveMisconceptions[0]
+        : null;
       const chatModePrompt =
         chatMode === 'guided_only'
           ? 'You are in guided-only mode. Ask 1-2 clarifying questions before longer answers. Keep responses short (2-3 steps). Decline off-topic or personal requests and suggest picking another prompt.'
@@ -516,16 +594,20 @@ const LearningAssistant: React.FC = () => {
             lessonContext.subject ?? 'this subject'
           }. Keep answers concise (2-3 steps), avoid unrelated tangents, and remind the learner to try before giving full solutions. You are a helper, not a teacher, so keep it light and encouraging.`
         : 'You are ElevatED tutor. Stay concise, age-appropriate, and prioritize small next steps over long answers. You are a helper, not a teacher, and you never assist with cheating or collecting personal info.';
-      const personaGuardrails = `${personaName ? `The student calls you "${personaName}".` : 'You have a chosen tutor persona.'} Keep a ${personaTone} and use that name when referring to yourself. ${planTone} ${chatModePrompt} Never assist with cheating, personal data, or off-topic requests; politely decline and redirect to a trusted adult if needed.`;
+      const personaGuardrails = `${personaName ? `The student calls you "${personaName}".` : 'You have a chosen tutor persona.'} Keep a ${personaStyle} and use that name when referring to yourself. ${
+        tutorPersona?.constraints ?? ''
+      } ${planTone} ${chatModePrompt} Never assist with cheating, personal data, or off-topic requests; politely decline and redirect to a trusted adult if needed.`;
       const lessonOnlyGuardrail = lessonOnlyMode
         ? 'The learner is restricted to lesson-only tutoring. If a request feels unrelated to the active lesson, decline and remind them to return to their current module.'
         : '';
-      const guardrails = `${baseGuardrails} ${personaGuardrails} ${lessonOnlyGuardrail}`.trim();
+      const guardrails = `${baseGuardrails} ${personaGuardrails} ${lessonOnlyGuardrail} ${intentCoaching} ${adaptivePromptHint}`.trim();
       const knowledgeContext = [
         lessonContext?.moduleTitle ? `Module: ${lessonContext.moduleTitle}` : null,
         lessonContext?.lessonTitle ? `Lesson: ${lessonContext.lessonTitle}` : null,
         lessonContext?.subject ? `Subject: ${lessonContext.subject}` : null,
         contextHint ? `Context: ${contextHint}` : null,
+        focusLabel ? `Current focus: ${focusLabel}` : null,
+        planIntent !== 'balanced' ? `Weekly intent: ${planIntent}` : null,
         recentReflections.length
           ? `Recent reflections: ${recentReflections
               .map((entry) => entry.responseText.trim())
@@ -688,7 +770,7 @@ const LearningAssistant: React.FC = () => {
         }}
       >
         <span className="text-xl" aria-hidden>
-          {tutorAvatar.icon}
+          {tutorIcon}
         </span>
       </motion.button>
 
@@ -723,7 +805,7 @@ const LearningAssistant: React.FC = () => {
                     style={{ color: tutorPalette.text }}
                   >
                     <span aria-hidden className="text-lg">
-                      {tutorAvatar.icon}
+                      {tutorIcon}
                     </span>
                   </div>
                   <div>
@@ -731,7 +813,7 @@ const LearningAssistant: React.FC = () => {
                       {tutorDisplayName}
                     </h3>
                     <p className="text-xs opacity-90" id="learning-assistant-description">
-                      {tutorAvatar.label} • Hints first, full solutions on request.
+                      {tutorLabel} • {tutorToneDescriptor}
                     </p>
                   </div>
                 </div>

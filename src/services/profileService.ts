@@ -210,6 +210,11 @@ export const castLearningPreferences = (input: unknown): LearningPreferences => 
     prefs.weeklyPlanFocus = 'balanced';
   }
 
+  const weeklyIntent = raw.weeklyIntent ?? raw.weekly_intent ?? raw.intent;
+  if (weeklyIntent === 'precision' || weeklyIntent === 'speed' || weeklyIntent === 'stretch' || weeklyIntent === 'balanced') {
+    prefs.weeklyIntent = weeklyIntent;
+  }
+
   const chatMode = raw.chatMode ?? raw.chat_mode ?? raw.mode;
   if (chatMode === 'guided_only' || chatMode === 'guided_preferred' || chatMode === 'free') {
     prefs.chatMode = chatMode;

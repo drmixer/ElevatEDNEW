@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -15,7 +15,11 @@ import {
   Video,
   XCircle,
   Bot,
+  RefreshCw,
+  Gauge,
+  Info,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -32,6 +36,8 @@ import type { LessonPracticeQuestion, Student, Subject } from '../types';
 import trackEvent from '../lib/analytics';
 import supabase from '../lib/supabaseClient';
 import LearningAssistant from '../components/Student/LearningAssistant';
+import { useStudentEvent, useStudentPath, useTutorPersona, useXP } from '../hooks/useStudentData';
+import { describePathEntryReason } from '../lib/pathReason';
 
 const MARKDOWN_PLUGINS = [remarkGfm];
 
@@ -123,6 +129,20 @@ const LessonPlayerPage: React.FC = () => {
   const [questionSaving, setQuestionSaving] = useState(false);
   const studentId = user?.role === 'student' ? user.id : null;
   const studentUser = user?.role === 'student' ? (user as Student) : null;
+  const pathQuery = useStudentPath(studentId);
+  const { emitStudentEvent } = useStudentEvent(studentId);
+  const { persona: tutorPersona } = useTutorPersona(studentId);
+  const xpState = useXP(studentId, {
+    xp: studentUser?.xp,
+    streakDays: studentUser?.streakDays,
+    badges: studentUser?.badges?.length ?? null,
+  });
+  const pathLoading = pathQuery.isLoading || pathQuery.isFetching;
+  const tutorIcon =
+    typeof ((tutorPersona?.metadata ?? {}) as Record<string, unknown>).icon === 'string'
+      ? (((tutorPersona?.metadata ?? {}) as Record<string, unknown>).icon as string)
+      : '🤝';
+  const tutorLabel = tutorPersona?.name ?? 'ElevatED tutor';
 
   const isLessonIdValid = Number.isFinite(lessonId);
 
@@ -138,6 +158,13 @@ const LessonPlayerPage: React.FC = () => {
   }, [lessonId]);
 
   const lessonDetail = lessonQuery.data ?? null;
+  const lessonStartedAt = useRef<number>(Date.now());
+  const lessonCompletionLogged = useRef<boolean>(false);
+
+  useEffect(() => {
+    lessonStartedAt.current = Date.now();
+    lessonCompletionLogged.current = false;
+  }, [lessonId]);
 
   const practiceQuestionQuery = useQuery({
     queryKey: ['lesson-questions', lessonId, lessonDetail?.module.subject],
@@ -151,6 +178,47 @@ const LessonPlayerPage: React.FC = () => {
   });
 
   const practiceQuestions: LessonPracticeQuestion[] = practiceQuestionQuery.data ?? [];
+  const lessonStandards = useMemo(() => {
+    if (!lessonDetail?.standards) return [];
+    return lessonDetail.standards
+      .map((standard) => {
+        const code = (standard.code ?? '').toString().trim();
+        const framework = (standard.framework ?? '').toString().trim();
+        if (framework && code) return `${framework}:${code}`;
+        return code || framework;
+      })
+      .filter((value): value is string => Boolean(value && value.length));
+  }, [lessonDetail?.standards]);
+
+  const lessonDifficulty = useMemo(() => {
+    const minutes = lessonDetail?.lesson.estimatedDurationMinutes;
+    if (minutes == null || Number.isNaN(minutes)) return 2;
+    if (minutes <= 12) return 1;
+    if (minutes >= 30) return 3;
+    return 2;
+  }, [lessonDetail?.lesson.estimatedDurationMinutes]);
+
+  const adaptiveDifficultyFromPath = useMemo(() => {
+    const metadata = (pathQuery.path?.metadata ?? {}) as Record<string, unknown>;
+    const adaptive = (metadata?.adaptive_state as Record<string, unknown> | null | undefined) ??
+      ((metadata?.adaptive as Record<string, unknown> | null | undefined) ?? {});
+    const target = adaptive.current_difficulty;
+    if (typeof target === 'number' && Number.isFinite(target)) {
+      return Math.max(1, Math.min(5, Math.round(target)));
+    }
+    return null;
+  }, [pathQuery.path?.metadata]);
+
+  const adaptiveDifficulty = useMemo(
+    () => adaptiveDifficultyFromPath ?? lessonDifficulty,
+    [adaptiveDifficultyFromPath, lessonDifficulty],
+  );
+
+  const difficultyLabel = useMemo(() => {
+    if (adaptiveDifficulty <= 1) return 'gentle';
+    if (adaptiveDifficulty >= 4) return 'challenge';
+    return 'steady';
+  }, [adaptiveDifficulty]);
 
   const sections = useMemo(() => {
     if (!lessonDetail) {
@@ -222,6 +290,33 @@ const LessonPlayerPage: React.FC = () => {
   );
 
   const progressDisabled = progressController.isLoading || progressController.isSaving;
+
+  useEffect(() => {
+    if (!studentId || !lessonDetail) {
+      return;
+    }
+    if (progressController.status === 'completed' && !lessonCompletionLogged.current) {
+      lessonCompletionLogged.current = true;
+      const elapsedSeconds = Math.max(1, Math.round((Date.now() - lessonStartedAt.current) / 1000));
+      void emitStudentEvent({
+        eventType: 'lesson_completed',
+        status: 'completed',
+        timeSpentSeconds: elapsedSeconds,
+        difficulty: adaptiveDifficulty,
+        payload: {
+          lesson_id: lessonId,
+          module_id: lessonDetail.module.id ?? null,
+          standards: lessonStandards,
+          difficulty: adaptiveDifficulty,
+          time_spent: elapsedSeconds,
+        },
+      }).catch((eventError) => {
+        console.warn('[lesson] Failed to emit lesson completion', eventError);
+      });
+    } else if (progressController.status !== 'completed') {
+      lessonCompletionLogged.current = false;
+    }
+  }, [lessonDetail, lessonId, lessonStandards, progressController.status, studentId]);
 
   const logContextualHelp = useCallback(
     async (payload: { prompt: string; source: string }) => {
@@ -319,6 +414,10 @@ const LessonPlayerPage: React.FC = () => {
     currentLessonIndex >= 0 && currentLessonIndex < moduleLessons.length - 1
       ? moduleLessons[currentLessonIndex + 1]
       : null;
+  const upNextEntries = useMemo(
+    () => pathQuery.upNext.filter((entry) => (lessonId ? entry.lesson_id !== lessonId : true)),
+    [lessonId, pathQuery.upNext],
+  );
 
   const filteredAssets = useMemo(() => {
     if (!lessonDetail) {
@@ -386,6 +485,25 @@ const LessonPlayerPage: React.FC = () => {
         attempts: progressController.attempts ?? 1,
         eventOrder: eventOrder ?? undefined,
       });
+      if (studentId) {
+        void emitStudentEvent({
+          eventType: 'practice_answered',
+          status,
+          timeSpentSeconds: elapsedSeconds,
+          difficulty: adaptiveDifficulty,
+          payload: {
+            question_id: currentPracticeQuestion.id,
+            lesson_id: lessonId,
+            module_id: lessonDetail?.module.id ?? null,
+            standards: lessonStandards,
+          correct: isCorrect,
+          difficulty: adaptiveDifficulty,
+          time_spent: elapsedSeconds,
+        },
+      }).catch((eventError) => {
+        console.warn('[lesson] Failed to emit practice event', eventError);
+      });
+      }
     } catch (error) {
       console.warn('[lesson] Failed to sync practice answer', error);
     } finally {
@@ -532,6 +650,17 @@ const LessonPlayerPage: React.FC = () => {
                   <Clock className="h-4 w-4" />
                   {formatDuration(lessonDetail.lesson.estimatedDurationMinutes)}
                 </span>
+                <motion.span
+                  key={difficultyLabel}
+                  initial={{ opacity: 0, scale: 0.95, y: -4 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                >
+                  <Gauge className="h-3 w-3 text-brand-blue" />
+                  Difficulty: {difficultyLabel.charAt(0).toUpperCase() + difficultyLabel.slice(1)}{' '}
+                  <span className="text-[11px] font-normal text-slate-500">(aiming for 65–80% correct)</span>
+                </motion.span>
                 {lessonDetail.lesson.openTrack && (
                   <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-600">
                     <Sparkles className="h-3 w-3" /> Open Track friendly
@@ -563,7 +692,7 @@ const LessonPlayerPage: React.FC = () => {
               )}
             </div>
           </div>
-          {studentUser && (
+            {studentUser && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <div className="text-xs text-slate-500">Lesson progress</div>
@@ -579,12 +708,12 @@ const LessonPlayerPage: React.FC = () => {
               </div>
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <div className="text-xs text-slate-500">Streak</div>
-                <div className="text-lg font-semibold text-amber-600">{studentUser.streakDays} days</div>
+                <div className="text-lg font-semibold text-amber-600">{xpState.streakDays} days</div>
                 <div className="text-[11px] text-slate-500">Keep it going for badge boosts</div>
               </div>
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <div className="text-xs text-slate-500">XP</div>
-                <div className="text-lg font-semibold text-emerald-600">{studentUser.xp}</div>
+                <div className="text-lg font-semibold text-emerald-600">{xpState.xp}</div>
                 <div className="text-[11px] text-slate-500">Earn more by finishing this lesson</div>
               </div>
             </div>
@@ -594,6 +723,92 @@ const LessonPlayerPage: React.FC = () => {
 
       <main className="max-w-6xl mx-auto px-6 mt-10 grid gap-8 lg:grid-cols-[320px_1fr]">
         <aside className="space-y-6">
+          {studentId && (
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-slate-500">Up next</p>
+                  <h2 className="text-lg font-semibold text-slate-900">Adaptive path</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => pathQuery.refresh()}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
+                >
+                  <RefreshCw className={`h-3 w-3 ${pathLoading ? 'animate-spin' : ''}`} /> Refresh
+                </button>
+              </div>
+              {pathLoading ? (
+                <div className="space-y-2">
+                  {[0, 1, 2].map((idx) => (
+                    <div key={idx} className="h-14 rounded-xl bg-slate-100 animate-pulse" />
+                  ))}
+                </div>
+              ) : upNextEntries.length === 0 ? (
+                <p className="text-sm text-slate-600">Start this lesson to see your next recommendations.</p>
+              ) : (
+                <div className="space-y-3">
+                  {upNextEntries.map((entry) => {
+                    const meta = (entry.metadata ?? {}) as Record<string, unknown>;
+                    const title =
+                      (meta.lesson_title as string | undefined) ??
+                      (meta.module_title as string | undefined) ??
+                      (meta.module_slug as string | undefined) ??
+                      `Path item ${entry.position ?? entry.id}`;
+                    const reasonCopy = describePathEntryReason(entry);
+                    const target =
+                      entry.lesson_id != null
+                        ? `/lesson/${entry.lesson_id}`
+                        : entry.module_id != null
+                          ? `/module/${entry.module_id}`
+                          : null;
+                    const isCurrentLesson = entry.lesson_id === lessonId;
+                    const statusLabel =
+                      entry.status === 'not_started'
+                        ? 'Ready'
+                        : entry.status
+                            .replace(/_/g, ' ')
+                            .replace(/\b\w/g, (char) => char.toUpperCase());
+
+                    return (
+                      <div
+                        key={entry.id}
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 flex items-center justify-between gap-3"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">{title}</p>
+                          <p className="text-xs text-slate-600 capitalize">
+                            {entry.type} • {statusLabel}
+                          </p>
+                          <div className="mt-1 inline-flex items-center gap-1 text-[11px] text-slate-500">
+                            <Info className="h-3.5 w-3.5" />
+                            <span>
+                              <span className="font-semibold">Why this?</span> {reasonCopy}
+                            </span>
+                          </div>
+                        </div>
+                        {target ? (
+                          <Link
+                            to={target}
+                            className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold focus-ring ${
+                              isCurrentLesson
+                                ? 'bg-brand-blue/10 text-brand-blue border border-brand-blue/40'
+                                : 'border border-slate-200 text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue'
+                            }`}
+                          >
+                            {isCurrentLesson ? 'In progress' : 'Go'}
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        ) : (
+                          <span className="text-[11px] font-semibold text-slate-500">Auto-progress</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          )}
           <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-slate-900">Progress tracker</h2>
@@ -783,7 +998,7 @@ const LessonPlayerPage: React.FC = () => {
                       type="button"
                       onClick={() =>
                         openTutorWithContext(
-                          `I'm stuck on this practice question: ${currentPracticeQuestion.prompt}`,
+                          `I'm stuck on this practice question: ${currentPracticeQuestion.prompt}. Give me a ${difficultyLabel} hint first before revealing more.`,
                           `practice:${currentPracticeQuestion.id}`,
                         )
                       }
@@ -792,6 +1007,10 @@ const LessonPlayerPage: React.FC = () => {
                       <Bot className="h-3 w-3" />
                       Ask ElevatED for a hint
                     </button>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600">
+                      <span>{tutorIcon}</span>
+                      {tutorLabel} · {difficultyLabel} pacing
+                    </span>
                     <span className="text-slate-400">Try your best first, then get a guided nudge.</span>
                   </div>
                   <div className="space-y-3">

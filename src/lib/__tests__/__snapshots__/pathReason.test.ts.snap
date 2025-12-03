@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`describePathEntryReason > covers primary reason variants 1`] = `
+[
+  "From your placement – covers Math geo 1.",
+  "Review on Ela read 2 based on recent misses.",
+  "Stretch practice in Sci wave 3 because you've been doing well.",
+  "Baseline card to keep you warmed up.",
+  "Covers Math num 1 from your adaptive path.",
+]
+`;
