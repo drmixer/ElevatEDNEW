@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import type { UserRole } from '../../types';
+import supabase from '../../lib/supabaseClient';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-  const [isLogin, setIsLogin] = useState(true);
+  const [authView, setAuthView] = useState<'login' | 'signup' | 'reset'>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -30,14 +31,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState<{ type: 'info' | 'success'; message: string } | null>(null);
+  const [resendMessage, setResendMessage] = useState<string | null>(null);
+  const [resendError, setResendError] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMode, setResendMode] = useState<'signup' | 'email_change'>('signup');
+  const [resendCooldown, setResendCooldown] = useState(false);
   const [guardianConsent, setGuardianConsent] = useState(false);
 
   const { login, register } = useAuth();
   const parsedAge = Number.parseInt(formData.age, 10);
   const hasValidAge = Number.isFinite(parsedAge) && parsedAge > 0;
   const isUnder13 = hasValidAge && parsedAge < 13;
+  const isLogin = authView === 'login';
+  const isSignup = authView === 'signup';
+  const isReset = authView === 'reset';
   const studentSubmissionBlocked =
-    !isLogin &&
+    isSignup &&
     formData.role === 'student' &&
     (!hasValidAge || (isUnder13 && !guardianConsent));
 
@@ -94,11 +104,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setNotice(null);
+    setResendMessage(null);
+    setResendError(null);
+    setResendMode('signup');
 
     try {
-      if (isLogin) {
+      if (authView === 'login') {
         await login(formData.email, formData.password);
-      } else {
+      } else if (authView === 'signup') {
         if (formData.role === 'student' && !hasValidAge) {
           setError('Tell us the learner’s age so we can route consent correctly.');
           setLoading(false);
@@ -129,12 +143,79 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           parentEmail: formData.parentEmail?.trim() || null,
           focusSubject: formData.focusSubject,
         });
+        setNotice({ type: 'info', message: 'Sign-up successful. Please check your email to confirm your account, then sign in.' });
+        setResendMode('signup');
+        setAuthView('login');
+        return;
+      } else {
+        const emailRedirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/reset` : undefined;
+        const { error: resetError } = await supabase.auth.resetPasswordForEmail(formData.email.trim(), {
+          redirectTo: emailRedirectTo,
+        });
+        if (resetError) {
+          throw resetError;
+        }
+        setNotice({ type: 'info', message: 'Password reset email sent. Please check your inbox and spam folder.' });
+        setAuthView('login');
+        setLoading(false);
+        return;
       }
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      const isEmailNotConfirmedError =
+        err instanceof Error && ((err as { code?: string }).code === 'email_not_confirmed' || err.message === 'email_not_confirmed');
+
+      if (authView === 'signup' && err instanceof Error && err.message.toLowerCase().includes('sign-up successful')) {
+        setNotice({ type: 'info', message: err.message });
+        setResendMode('signup');
+        setAuthView('login');
+      } else if (authView === 'login' && isEmailNotConfirmedError) {
+        const normalizedEmail = formData.email.trim() || 'your new email address';
+        setNotice({
+          type: 'info',
+          message: `You changed your email to ${normalizedEmail}. Confirm it to continue.`,
+        });
+        setResendMode('email_change');
+        setError('');
+        setAuthView('login');
+      } else {
+        setError(err instanceof Error ? err.message : 'Something went wrong');
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setResendError(null);
+    setResendMessage(null);
+    const email = formData.email.trim();
+    if (!email) {
+      setResendError('Enter an email to resend the link.');
+      return;
+    }
+    if (resendCooldown) return;
+
+    setResendLoading(true);
+    const emailRedirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
+    try {
+      const { error: resendErr } = await supabase.auth.resend({
+        type: resendMode,
+        email,
+        options: { emailRedirectTo },
+      });
+
+      if (resendErr) {
+        setResendError(resendErr.message ?? 'Unable to resend verification email.');
+      } else {
+        setResendMessage('If an account exists, we sent a fresh verification link to that email.');
+        setResendCooldown(true);
+        setTimeout(() => setResendCooldown(false), 15000);
+      }
+    } catch (resendCatch) {
+      setResendError(resendCatch instanceof Error ? resendCatch.message : 'Unable to resend verification email.');
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -180,10 +261,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 <img src="https://i.imgur.com/tBePI5o.png" alt="ElevatED" className="h-8 w-8" />
                 <div>
                   <h2 className="text-xl font-bold" id={headingId}>
-                    {isLogin ? 'Welcome Back!' : 'Join ElevatED'}
+                    {isLogin ? 'Welcome Back!' : isReset ? 'Reset your password' : 'Join ElevatED'}
                   </h2>
                   <p className="text-sm opacity-90" id={descriptionId}>
-                    {isLogin ? 'Sign in to continue learning' : 'Pick who is signing up to keep things clear'}
+                    {isLogin
+                      ? 'Sign in to continue learning'
+                      : isReset
+                        ? 'Enter your email and we’ll send a reset link'
+                        : 'Pick who is signing up to keep things clear'}
                   </p>
                 </div>
               </div>
@@ -192,7 +277,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             {/* Form */}
             <div className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
-                {!isLogin && (
+                {isSignup && (
                   <>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -414,35 +499,80 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
                       placeholder="Enter your email"
-                      ref={isLogin ? firstFieldRef : undefined}
+                      ref={isLogin || isReset ? firstFieldRef : undefined}
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
-                      placeholder="Enter your password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus-ring"
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
+                {!isReset && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                        placeholder="Enter your password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus-ring"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {notice && (
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-800 text-sm" role="status" aria-live="polite">
+                    {notice.message}
+                    {notice.type === 'info' && (
+                      <div className="mt-2 flex flex-col gap-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs text-blue-700">
+                            {resendMode === 'email_change' ? 'Didn’t see the change-email link?' : 'Didn’t get the email?'}
+                          </span>
+                          <button
+                            type="button"
+                            disabled={resendLoading || resendCooldown || !formData.email.trim()}
+                            onClick={handleResendVerification}
+                            className="text-brand-blue hover:text-brand-teal text-xs font-semibold focus-ring disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {resendLoading ? 'Sending…' : resendCooldown ? 'Sent' : 'Resend email'}
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-blue-700">
+                          We’ll resend to {formData.email.trim() || 'your email'}. If that inbox is unreachable,
+                          <a
+                            className="underline ml-1"
+                            href="mailto:support@elevated.edu?subject=Email%20verification%20help"
+                          >
+                            contact support
+                          </a>
+                          .
+                        </p>
+                      </div>
+                    )}
+                    {resendMessage && (
+                      <div className="mt-2 text-xs text-blue-700" role="status" aria-live="polite">
+                        {resendMessage}
+                      </div>
+                    )}
+                    {resendError && (
+                      <div className="mt-2 text-xs text-red-700" role="alert" aria-live="assertive">
+                        {resendError}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {error && (
                   <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm" role="alert" aria-live="assertive">
@@ -455,7 +585,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   disabled={loading || studentSubmissionBlocked}
                   className="w-full bg-gradient-to-r from-brand-teal to-brand-blue text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
                   >
-                  {loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}
+                  {loading
+                    ? 'Loading...'
+                    : isReset
+                      ? 'Send reset link'
+                      : isLogin
+                        ? 'Sign In'
+                        : 'Create Account'}
                 </button>
               </form>
 
@@ -476,16 +612,59 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               </p>
 
               <div className="mt-6 text-center">
-                <button
-                  onClick={() => {
-                    setIsLogin(!isLogin);
-                    setGuardianConsent(false);
-                    setError('');
-                  }}
-                  className="text-brand-blue hover:text-brand-teal transition-colors font-medium focus-ring"
-                >
-                  {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-                </button>
+                {isLogin && (
+                  <div className="flex flex-col gap-2 items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthView('signup');
+                        setGuardianConsent(false);
+                        setError('');
+                        setNotice(null);
+                        setResendMessage(null);
+                        setResendError(null);
+                        setResendMode('signup');
+                        setResendCooldown(false);
+                      }}
+                      className="text-brand-blue hover:text-brand-teal transition-colors font-medium focus-ring"
+                    >
+                      Don&apos;t have an account? Sign up
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthView('reset');
+                        setGuardianConsent(false);
+                        setError('');
+                        setNotice(null);
+                        setResendMessage(null);
+                        setResendError(null);
+                        setResendMode('signup');
+                        setResendCooldown(false);
+                      }}
+                      className="text-sm text-slate-600 hover:text-brand-teal transition-colors focus-ring"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+                )}
+                {!isLogin && (
+                  <button
+                    onClick={() => {
+                      setAuthView('login');
+                      setGuardianConsent(false);
+                      setError('');
+                      setNotice(null);
+                      setResendMessage(null);
+                      setResendError(null);
+                      setResendMode('signup');
+                      setResendCooldown(false);
+                    }}
+                    className="text-brand-blue hover:text-brand-teal transition-colors font-medium focus-ring"
+                  >
+                    Back to sign in
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>

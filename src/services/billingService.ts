@@ -18,6 +18,7 @@ export type BillingSummary = {
     cancelAt: string | null;
     metadata: Record<string, unknown>;
   } | null;
+  billingRequired?: boolean;
   payments: Array<{
     id: number;
     amount_cents: number;
@@ -58,6 +59,7 @@ export type BillingContext = {
     seatLimit?: number | null;
   };
   subscription: BillingSummary['subscription'] | null;
+  billingRequired?: boolean;
 };
 
 export const fetchBillingContext = async (): Promise<BillingContext> => {

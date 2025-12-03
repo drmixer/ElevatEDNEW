@@ -6,6 +6,8 @@ import { EntitlementsProvider } from './contexts/EntitlementsContext';
 import LandingPage from './components/Landing/LandingPage';
 import AuthModal from './components/Auth/AuthModal';
 import Header from './components/Layout/Header';
+import AuthCallbackPage from './pages/AuthCallbackPage';
+import AuthResetPage from './pages/AuthResetPage';
 import type { UserRole } from './types';
 
 const StudentDashboard = lazy(() => import('./components/Student/StudentDashboard'));
@@ -101,6 +103,8 @@ const AppContent: React.FC = () => {
               )
             }
           />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route path="/auth/reset" element={<AuthResetPage />} />
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/module/:id" element={<ModulePage />} />
           <Route path="/lesson/:id" element={<LessonPlayerPage />} />

@@ -12,6 +12,8 @@ import {
   Bell,
   RefreshCw,
   Shield,
+  Trash2,
+  AlertTriangle,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import type {
@@ -29,6 +31,8 @@ import trackEvent from '../lib/analytics';
 import { formatSubjectLabel, SUBJECTS } from '../lib/subjects';
 import { listPrivacyRequests, submitPrivacyRequest } from '../services/privacyService';
 import { updateParentNotifications } from '../services/parentService';
+import { submitAccountDeletionRequest } from '../services/accountDeletionService';
+import supabase from '../lib/supabaseClient';
 
 const roleLabels: Record<string, string> = {
   student: 'Student',
@@ -66,6 +70,21 @@ const AccountSettingsPage: React.FC = () => {
   const [privacyLoading, setPrivacyLoading] = useState(false);
   const [privacyMessage, setPrivacyMessage] = useState<string | null>(null);
   const [privacyError, setPrivacyError] = useState<string | null>(null);
+  const [emailUpdate, setEmailUpdate] = useState('');
+  const [emailMessage, setEmailMessage] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailSaving, setEmailSaving] = useState(false);
+  const [erasureReason, setErasureReason] = useState('');
+  const [erasureMessage, setErasureMessage] = useState<string | null>(null);
+  const [erasureError, setErasureError] = useState<string | null>(null);
+  const [erasureSaving, setErasureSaving] = useState(false);
+  const [parentDeletionScope, setParentDeletionScope] = useState<'parent_only' | 'parent_and_students'>('parent_only');
+  const [parentDeletionReason, setParentDeletionReason] = useState('');
+  const [parentDeletionConfirm, setParentDeletionConfirm] = useState(false);
+  const [parentDeletionMessage, setParentDeletionMessage] = useState<string | null>(null);
+  const [parentDeletionError, setParentDeletionError] = useState<string | null>(null);
+  const [parentDeletionSaving, setParentDeletionSaving] = useState(false);
+  const [parentDeletionStudentIds, setParentDeletionStudentIds] = useState<string[]>(parentUser?.children?.map((child) => child.id) ?? []);
 
   useEffect(() => {
     if (!studentUser) return;
@@ -86,6 +105,14 @@ const AccountSettingsPage: React.FC = () => {
       setSelectedChildId(parentUser.children[0].id);
     }
   }, [parentUser?.children, parentUser?.children?.length, selectedChildId]);
+
+  useEffect(() => {
+    if (!parentUser?.children) {
+      setParentDeletionStudentIds([]);
+      return;
+    }
+    setParentDeletionStudentIds(parentUser.children.map((child) => child.id));
+  }, [parentUser?.children]);
 
   const handleSavePreferences = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -167,6 +194,136 @@ const AccountSettingsPage: React.FC = () => {
       loadPrivacyRequests();
     }
   }, [parentUser?.id, loadPrivacyRequests]);
+
+  const handleEmailChange = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!emailUpdate.trim()) {
+      setEmailError('Enter a new email address.');
+      return;
+    }
+    setEmailSaving(true);
+    setEmailMessage(null);
+    setEmailError(null);
+    try {
+      const redirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
+      const { error } = await supabase.auth.updateUser(
+        { email: emailUpdate.trim() },
+        { emailRedirectTo: redirectTo },
+      );
+      if (error) {
+        throw error;
+      }
+      setEmailMessage('Check your new email to confirm the change. Until confirmed, your current email stays active.');
+      trackEvent('account_email_change_requested', { userId: user?.id, role: user?.role });
+    } catch (err) {
+      setEmailError(err instanceof Error ? err.message : 'Unable to start email change.');
+    } finally {
+      setEmailSaving(false);
+    }
+  };
+
+  const handleErasureRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!studentUser) {
+      setErasureError('Account deletion requests are only available for student accounts here.');
+      return;
+    }
+    setErasureSaving(true);
+    setErasureMessage(null);
+    setErasureError(null);
+    try {
+      await submitPrivacyRequest({
+        requesterId: studentUser.id,
+        studentId: studentUser.id,
+        requestType: 'erasure',
+        reason: erasureReason,
+        contactEmail: studentUser.email,
+        metadata: { source: 'account_settings', actor: studentUser.name },
+      });
+      setErasureMessage('Deletion request sent. We will email you to confirm next steps.');
+      trackEvent('account_erasure_requested', { userId: studentUser.id, role: studentUser.role });
+      setErasureReason('');
+    } catch (err) {
+      setErasureError(err instanceof Error ? err.message : 'Unable to submit deletion request.');
+    } finally {
+      setErasureSaving(false);
+    }
+  };
+
+  const toggleParentDeletionStudent = (studentId: string) => {
+    setParentDeletionStudentIds((prev) => {
+      if (prev.includes(studentId)) {
+        return prev.filter((id) => id !== studentId);
+      }
+      return [...prev, studentId];
+    });
+  };
+
+  const handleParentDeletionRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!parentUser) return;
+    if (!parentDeletionConfirm) {
+      setParentDeletionError('Please confirm you understand access ends immediately.');
+      return;
+    }
+    if (parentDeletionScope === 'parent_and_students' && parentDeletionStudentIds.length === 0) {
+      setParentDeletionError('Select at least one linked student to include.');
+      return;
+    }
+
+    setParentDeletionSaving(true);
+    setParentDeletionMessage(null);
+    setParentDeletionError(null);
+
+    try {
+      await submitAccountDeletionRequest({
+        requesterId: parentUser.id,
+        scope: parentDeletionScope,
+        studentIds: parentDeletionScope === 'parent_and_students' ? parentDeletionStudentIds : [],
+        reason: parentDeletionReason,
+        contactEmail: parentUser.email,
+        metadata: {
+          source: 'account_settings',
+          includeStudents: parentDeletionScope === 'parent_and_students',
+        },
+      });
+
+      if (parentDeletionScope === 'parent_and_students' && parentDeletionStudentIds.length) {
+        await Promise.all(
+          parentDeletionStudentIds.map((studentId) =>
+            submitPrivacyRequest({
+              requesterId: parentUser.id,
+              studentId,
+              requestType: 'erasure',
+              reason: parentDeletionReason,
+              contactEmail: parentUser.email,
+              metadata: { source: 'account_settings_parent_delete' },
+            }),
+          ),
+        );
+      }
+
+      setParentDeletionMessage(
+        parentDeletionScope === 'parent_and_students'
+          ? 'Request received. We will delete your parent account and the selected students after verification.'
+          : 'Request received. We will delete your parent account after verification. If you also need linked students removed, select that option above.',
+      );
+      setParentDeletionReason('');
+      setParentDeletionConfirm(false);
+      trackEvent('parent_account_deletion_requested', {
+        parentId: parentUser.id,
+        includeStudents: parentDeletionScope === 'parent_and_students',
+        studentCount: parentDeletionScope === 'parent_and_students' ? parentDeletionStudentIds.length : 0,
+      });
+    } catch (error) {
+      console.error('[Settings] failed to submit parent deletion request', error);
+      setParentDeletionError(
+        error instanceof Error ? error.message : 'Unable to submit your account deletion request right now.',
+      );
+    } finally {
+      setParentDeletionSaving(false);
+    }
+  };
 
   const handleSubmitPrivacyRequest = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -342,6 +499,220 @@ const AccountSettingsPage: React.FC = () => {
               dashboards log access events for accountability.
             </p>
           </div>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4 mb-6">
+          <div className="flex items-center gap-3">
+            <Shield className="h-5 w-5 text-brand-blue" />
+            <h3 className="text-xl font-bold text-slate-900">Email & security</h3>
+          </div>
+          <p className="text-sm text-slate-700">
+            Change your sign-in email. We’ll send a verification link to the new address before switching.
+          </p>
+          <form onSubmit={handleEmailChange} className="grid gap-3 md:grid-cols-[2fr_auto] items-end">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">New email</label>
+              <input
+                type="email"
+                value={emailUpdate}
+                onChange={(e) => setEmailUpdate(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={emailSaving}
+              className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-60"
+            >
+              {emailSaving ? 'Sending…' : 'Send verification'}
+            </button>
+          </form>
+          {emailMessage && (
+            <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+              {emailMessage}
+            </p>
+          )}
+          {emailError && (
+            <p className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+              {emailError}
+            </p>
+          )}
+          {studentUser && (
+            <div className="mt-2 border-t border-slate-200 pt-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Lock className="h-4 w-4 text-rose-500" />
+                <h4 className="text-sm font-semibold text-slate-900">Request account deletion</h4>
+              </div>
+              <p className="text-xs text-slate-600 mb-2">
+                We’ll verify this request and email you before deleting your student account and progress.
+              </p>
+              <form onSubmit={handleErasureRequest} className="space-y-2">
+                <textarea
+                  value={erasureReason}
+                  onChange={(e) => setErasureReason(e.target.value)}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  placeholder="Optional: add context for why you want your account deleted."
+                  rows={3}
+                />
+                <button
+                  type="submit"
+                  disabled={erasureSaving}
+                  className="inline-flex items-center px-4 py-2 rounded-lg bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 disabled:opacity-60"
+                >
+                  {erasureSaving ? 'Submitting…' : 'Submit deletion request'}
+                </button>
+              </form>
+              {erasureMessage && (
+                <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 mt-2">
+                  {erasureMessage}
+                </p>
+              )}
+              {erasureError && (
+                <p className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2 mt-2">
+                  {erasureError}
+                </p>
+              )}
+            </div>
+          )}
+
+          {parentUser && (
+            <div className="mt-4 border-t border-slate-200 pt-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <Trash2 className="h-4 w-4 text-rose-500" />
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900">Delete my parent account</h4>
+                  <p className="text-xs text-slate-600">
+                    Choose whether to delete only your parent account or your account and linked students. Access ends
+                    immediately after confirmation.
+                  </p>
+                </div>
+              </div>
+
+              <form onSubmit={handleParentDeletionRequest} className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <label className={`rounded-lg border px-3 py-2 text-sm cursor-pointer ${
+                    parentDeletionScope === 'parent_only'
+                      ? 'border-rose-300 bg-rose-50 text-rose-800'
+                      : 'border-slate-200 text-slate-700 hover:border-rose-200'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="parent-deletion-scope"
+                      className="sr-only"
+                      checked={parentDeletionScope === 'parent_only'}
+                      onChange={() => setParentDeletionScope('parent_only')}
+                    />
+                    <div className="font-semibold">Delete my parent account only</div>
+                    <p className="text-xs mt-1">Cancels billing and removes your guardian access.</p>
+                  </label>
+
+                  <label className={`rounded-lg border px-3 py-2 text-sm cursor-pointer ${
+                    parentDeletionScope === 'parent_and_students'
+                      ? 'border-rose-300 bg-rose-50 text-rose-800'
+                      : 'border-slate-200 text-slate-700 hover:border-rose-200'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="parent-deletion-scope"
+                      className="sr-only"
+                      checked={parentDeletionScope === 'parent_and_students'}
+                      onChange={() => setParentDeletionScope('parent_and_students')}
+                    />
+                    <div className="font-semibold">Delete parent + linked students</div>
+                    <p className="text-xs mt-1">We&apos;ll queue deletion for selected students too.</p>
+                  </label>
+                </div>
+
+                {parentDeletionScope === 'parent_and_students' && (
+                  <div className="space-y-2 rounded-lg border border-rose-100 bg-rose-50 p-3">
+                    <p className="text-xs font-semibold text-rose-800 uppercase tracking-wide">Students to delete</p>
+                    {parentUser.children?.length ? (
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {parentUser.children.map((child) => {
+                          const checked = parentDeletionStudentIds.includes(child.id);
+                          return (
+                            <label
+                              key={child.id}
+                              className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm cursor-pointer ${
+                                checked
+                                  ? 'border-rose-300 bg-white text-slate-900'
+                                  : 'border-rose-100 bg-white hover:border-rose-200'
+                              }`}
+                            >
+                              <span>{child.name} (Grade {child.grade})</span>
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={() => toggleParentDeletionStudent(child.id)}
+                                className="h-4 w-4 text-rose-500 border-rose-200 rounded"
+                              />
+                            </label>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-rose-700">No linked students to remove.</p>
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wide">
+                    Reason (optional)
+                  </label>
+                  <textarea
+                    value={parentDeletionReason}
+                    onChange={(event) => setParentDeletionReason(event.target.value)}
+                    className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-rose-400 focus:ring-2 focus:ring-rose-200"
+                    rows={2}
+                    placeholder="Tell us why you want to close your account."
+                  />
+                </div>
+
+                <label className="flex items-start gap-2 text-xs text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={parentDeletionConfirm}
+                    onChange={(event) => setParentDeletionConfirm(event.target.checked)}
+                    className="mt-0.5 h-4 w-4 text-rose-500 border-rose-200 rounded"
+                  />
+                  <span>
+                    I understand billing will be cancelled and access ends immediately after deletion is processed.
+                  </span>
+                </label>
+
+                <div className="flex items-center gap-3 flex-wrap">
+                  <button
+                    type="submit"
+                    disabled={parentDeletionSaving}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 disabled:opacity-60"
+                  >
+                    {parentDeletionSaving ? 'Submitting…' : 'Request deletion'}
+                  </button>
+                  <p className="text-[11px] text-slate-600 flex items-center gap-1">
+                    <AlertTriangle className="h-4 w-4 text-amber-500" />
+                    We verify guardianship and email you before removal.
+                  </p>
+                </div>
+
+                {parentDeletionMessage && (
+                  <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                    {parentDeletionMessage}
+                  </p>
+                )}
+                {parentDeletionError && (
+                  <p className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                    {parentDeletionError}
+                  </p>
+                )}
+                <p className="text-[11px] text-slate-600">
+                  Need help? Email <a className="text-brand-blue font-semibold" href="mailto:support@elevated.edu">support@elevated.edu</a> with your account email and we&apos;ll coordinate deletion.
+                </p>
+              </form>
+            </div>
+          )}
         </div>
 
         {studentUser && (

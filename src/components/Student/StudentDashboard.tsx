@@ -401,22 +401,26 @@ const StudentDashboard: React.FC = () => {
     const reason = (adaptiveFlash.nextReason ?? '').toLowerCase();
     const difficulty = adaptiveFlash.targetDifficulty ?? null;
     const focusLabel = adaptiveFocusLabel ?? 'your latest work';
+    const misLabels = (adaptiveFlash.misconceptions ?? [])
+      .map((code) => humanizeStandard(code))
+      .filter(Boolean) as string[];
+    const focusPhrase = misLabels.length ? misLabels.slice(0, 2).join(', ') : focusLabel;
     if (reason === 'remediation' || (adaptiveFlash.misconceptions?.length ?? 0) > 0) {
       return {
         title: 'Plan updated for review',
-        body: `We added a short review on ${focusLabel} to help you solidify that concept.`,
+        body: `We added a short review on ${focusPhrase} to help you solidify that concept.`,
       };
     }
     if (reason === 'stretch' || (difficulty ?? 0) >= 4) {
       return {
         title: 'Plan updated for stretch',
-        body: `Nice work! We nudged your practice to a slightly harder level around ${focusLabel}.`,
+        body: `Nice work! We nudged your practice to a slightly harder level around ${focusPhrase}.`,
       };
     }
     if (difficulty && difficulty <= 2) {
       return {
         title: 'Plan tuned for comfort',
-        body: `We're keeping practice gentle while you build confidence on ${focusLabel}.`,
+        body: `We're keeping practice gentle while you build confidence on ${focusPhrase}.`,
       };
     }
     return {
@@ -1526,10 +1530,13 @@ const StudentDashboard: React.FC = () => {
                           {entry.type} · {entry.status === 'not_started' ? 'Ready' : entry.status}
                         </p>
                         <div className="mt-2 inline-flex items-center gap-1 text-[11px] text-slate-500">
-                          <Info className="h-3.5 w-3.5" />
-                          <span>
-                            <span className="font-semibold">Why this?</span> {reasonCopy}
-                          </span>
+                          <div className="relative group inline-flex items-center gap-1">
+                            <Info className="h-3.5 w-3.5" />
+                            <span className="font-semibold">Why this?</span>
+                            <div className="absolute left-0 mt-6 z-10 hidden min-w-[220px] rounded-lg border border-slate-200 bg-white p-3 text-[11px] text-slate-600 shadow-lg group-hover:block">
+                              {reasonCopy}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </motion.div>

@@ -198,6 +198,12 @@ const LessonPlayerPage: React.FC = () => {
     return 2;
   }, [lessonDetail?.lesson.estimatedDurationMinutes]);
 
+  const difficultyLabel = useMemo(() => {
+    if (lessonDifficulty <= 1) return 'Gentle';
+    if (lessonDifficulty >= 3) return 'Challenge';
+    return 'Steady';
+  }, [lessonDifficulty]);
+
   const adaptiveDifficultyFromPath = useMemo(() => {
     const metadata = (pathQuery.path?.metadata ?? {}) as Record<string, unknown>;
     const adaptive = (metadata?.adaptive_state as Record<string, unknown> | null | undefined) ??

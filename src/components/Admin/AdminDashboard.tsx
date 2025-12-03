@@ -7,9 +7,11 @@ import {
   Beaker,
   ClipboardList,
   Clock,
+  CheckCircle2,
   Loader2,
   RefreshCw,
   Shield,
+  Trash2,
   Users,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -25,7 +27,7 @@ import {
   Bar,
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
-import type { Admin } from '../../types';
+import type { AccountDeletionRequest, Admin } from '../../types';
 import { fetchAdminDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
 import {
@@ -34,7 +36,16 @@ import {
   fetchAdminStudents,
 } from '../../services/assignmentService';
 import { fetchCatalogModules } from '../../services/catalogService';
-import { logAdminAuditEvent, fetchOpsMetrics, updatePlatformConfig, type OpsMetricsSnapshot } from '../../services/adminService';
+import {
+  logAdminAuditEvent,
+  fetchOpsMetrics,
+  updatePlatformConfig,
+  fetchPlatformConfig,
+  fetchAccountDeletionRequests,
+  resolveAccountDeletionRequest,
+  processAccountDeletionQueue,
+  type OpsMetricsSnapshot,
+} from '../../services/adminService';
 import {
   fetchTutorReports,
   updateTutorReportStatus,
@@ -96,6 +107,9 @@ const AdminDashboard: React.FC = () => {
   const [configValue, setConfigValue] = useState('');
   const [configSaving, setConfigSaving] = useState(false);
   const [configMessage, setConfigMessage] = useState<string | null>(null);
+  const BILLING_FLAG_KEY = 'billing.require_subscription';
+  const [billingSaving, setBillingSaving] = useState(false);
+  const [billingMessage, setBillingMessage] = useState<string | null>(null);
 
   const {
     data: dashboard,
@@ -160,6 +174,20 @@ const AdminDashboard: React.FC = () => {
     staleTime: 1000 * 60,
   });
 
+  const deletionRequestsQuery = useQuery({
+    queryKey: ['admin-account-deletion-requests'],
+    queryFn: fetchAccountDeletionRequests,
+    enabled: Boolean(admin),
+    staleTime: 30 * 1000,
+  });
+
+  const billingConfigQuery = useQuery({
+    queryKey: ['admin-platform-config', admin?.id],
+    queryFn: () => fetchPlatformConfig([BILLING_FLAG_KEY]),
+    enabled: Boolean(admin),
+    staleTime: 1000 * 60 * 5,
+  });
+
   const assignmentsOverview = assignmentsQuery.data ?? [];
 
   const opsMetricsQuery = useQuery({
@@ -218,6 +246,17 @@ const AdminDashboard: React.FC = () => {
     }
     return students.filter((student) => student.grade === selectedGrade).length;
   }, [students, selectedGrade]);
+
+  const billingRequired = useMemo(() => {
+    const raw = billingConfigQuery.data?.[BILLING_FLAG_KEY];
+    if (typeof raw === 'boolean') return raw;
+    if (typeof raw === 'string') {
+      const lowered = raw.toLowerCase();
+      if (lowered === 'false' || lowered === '0') return false;
+      if (lowered === 'true' || lowered === '1') return true;
+    }
+    return true; // default to requiring billing unless explicitly disabled
+  }, [billingConfigQuery.data]);
 
   useEffect(() => {
     if (!admin || auditLogged || studentsQuery.isLoading || assignmentsQuery.isLoading) {
@@ -336,6 +375,28 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleBillingToggle = async () => {
+    if (!admin) return;
+    setBillingSaving(true);
+    setBillingMessage(null);
+    try {
+      await updatePlatformConfig(BILLING_FLAG_KEY, !billingRequired);
+      await logAdminAuditEvent(admin.id, 'toggle_billing_requirement', {
+        require_subscription: !billingRequired,
+      });
+      setBillingMessage(
+        !billingRequired
+          ? 'Billing requirement enabled. New users will be asked to choose a plan.'
+          : 'Billing requirement disabled. Users can sign up and use the product without choosing a plan.',
+      );
+      billingConfigQuery.refetch().catch(() => undefined);
+    } catch (error) {
+      setBillingMessage(error instanceof Error ? error.message : 'Unable to update billing toggle.');
+    } finally {
+      setBillingSaving(false);
+    }
+  };
+
   const growthData = useMemo(() => {
     if (!dashboard) return [];
     return dashboard.growthSeries.map((point) => ({
@@ -359,6 +420,21 @@ const AdminDashboard: React.FC = () => {
       trend: subject.trend,
     }));
   }, [dashboard]);
+
+  const resolveDeletionMutation = useMutation({
+    mutationFn: (payload: { id: number; status: 'completed' | 'canceled' }) =>
+      resolveAccountDeletionRequest(payload.id, payload.status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-account-deletion-requests'] });
+    },
+  });
+
+  const processDeletionQueueMutation = useMutation({
+    mutationFn: processAccountDeletionQueue,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-account-deletion-requests'] });
+    },
+  });
 
   if (!admin) {
     return null;
@@ -1003,6 +1079,42 @@ const AdminDashboard: React.FC = () => {
                   xp.streak_bonus_multiplier together so you can tune reward feel without code changes.
                 </p>
               </div>
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50/60 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-amber-900">Billing requirement</p>
+                    <p className="text-xs text-amber-800">
+                      {billingConfigQuery.isLoading
+                        ? 'Loading billing status…'
+                        : billingRequired
+                          ? 'Billing ON: new users will be asked to pick a plan/checkout.'
+                          : 'Billing OFF: users can sign up and use without choosing a plan.'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleBillingToggle}
+                    disabled={billingSaving || billingConfigQuery.isLoading}
+                    className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold focus-ring ${
+                      billingRequired
+                        ? 'bg-amber-600 text-white hover:bg-amber-700'
+                        : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                    } disabled:opacity-60 disabled:cursor-not-allowed`}
+                  >
+                    {billingSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                    {billingRequired ? 'Turn billing off' : 'Turn billing on'}
+                  </button>
+                </div>
+                <p className="text-[11px] text-amber-800">
+                  Toggle to bypass billing during testing/soft launch. Uses platform config key `{BILLING_FLAG_KEY}` and
+                  is logged in audit trail.
+                </p>
+                {billingMessage && (
+                  <p className="text-[11px] text-amber-900 bg-white/60 border border-amber-100 rounded-lg px-3 py-2">
+                    {billingMessage}
+                  </p>
+                )}
+              </div>
               <p className="text-[11px] text-slate-500 mt-3 leading-snug">
                 Keys: adaptive.target_accuracy_min/max, adaptive.max_remediation_pending, adaptive.max_practice_pending,
                 adaptive.struggle_consecutive_misses, xp.multiplier, xp.difficulty_bonus_multiplier,
@@ -1221,6 +1333,142 @@ const AdminDashboard: React.FC = () => {
             </motion.div>
           </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.65 }}
+          className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mt-8"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">Account deletion requests</h3>
+              <p className="text-sm text-slate-600">
+                Parents can request deletion for themselves and linked students. Process or cancel below.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => deletionRequestsQuery.refetch()}
+              className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+              disabled={deletionRequestsQuery.isFetching}
+            >
+              <RefreshCw className={`h-4 w-4 ${deletionRequestsQuery.isFetching ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 mb-3">
+            <button
+              type="button"
+              onClick={() => processDeletionQueueMutation.mutate()}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-blue text-white text-xs font-semibold hover:bg-brand-blue/90 disabled:opacity-60"
+              disabled={processDeletionQueueMutation.isLoading}
+            >
+              {processDeletionQueueMutation.isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Processing…
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="h-4 w-4" /> Process pending requests
+                </>
+              )}
+            </button>
+            {processDeletionQueueMutation.data && (
+              <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                Processed {processDeletionQueueMutation.data.processed} pending; errors: {processDeletionQueueMutation.data.errors.length}
+              </span>
+            )}
+            {processDeletionQueueMutation.isError && (
+              <span className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                Failed to process queue.
+              </span>
+            )}
+          </div>
+
+          {deletionRequestsQuery.isLoading ? (
+            <SkeletonCard className="h-20" />
+          ) : (deletionRequestsQuery.data as AccountDeletionRequest[] | undefined)?.length ? (
+            <div className="overflow-hidden rounded-xl border border-slate-200">
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th className="px-4 py-2 text-left font-medium">Request</th>
+                    <th className="px-4 py-2 text-left font-medium">Scope</th>
+                    <th className="px-4 py-2 text-left font-medium">Students</th>
+                    <th className="px-4 py-2 text-left font-medium">Status</th>
+                    <th className="px-4 py-2 text-left font-medium">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(deletionRequestsQuery.data as AccountDeletionRequest[]).map((request) => {
+                    const isPending = request.status === 'pending';
+                    return (
+                      <tr key={request.id} className="border-t border-slate-100">
+                        <td className="px-4 py-2">
+                          <div className="font-semibold text-slate-900">#{request.id}</div>
+                          <div className="text-xs text-slate-500">
+                            {new Date(request.createdAt).toLocaleString()} • {request.requesterId}
+                          </div>
+                          {request.reason && <div className="text-xs text-slate-600 mt-1">{request.reason}</div>}
+                        </td>
+                        <td className="px-4 py-2 text-slate-800">
+                          {request.scope === 'parent_and_students'
+                            ? 'Parent + students'
+                            : request.scope === 'parent_only'
+                              ? 'Parent only'
+                              : 'Students only'}
+                        </td>
+                        <td className="px-4 py-2 text-slate-800">{request.includeStudentIds.length || '—'}</td>
+                        <td className="px-4 py-2">
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              request.status === 'pending'
+                                ? 'bg-amber-100 text-amber-800'
+                                : request.status === 'completed'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-slate-100 text-slate-700'
+                            }`}
+                          >
+                            {request.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => resolveDeletionMutation.mutate({ id: request.id, status: 'completed' })}
+                              disabled={!isPending || resolveDeletionMutation.isLoading}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 disabled:opacity-50"
+                            >
+                              <CheckCircle2 className="h-4 w-4" /> Complete
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => resolveDeletionMutation.mutate({ id: request.id, status: 'canceled' })}
+                              disabled={!isPending || resolveDeletionMutation.isLoading}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 disabled:opacity-50"
+                            >
+                              <Trash2 className="h-4 w-4" /> Cancel
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-sm text-slate-600">No deletion requests yet.</p>
+          )}
+
+          {resolveDeletionMutation.isError && (
+            <p className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+              Unable to update the request right now.
+            </p>
+          )}
+        </motion.div>
       </div>
     </div>
   );
