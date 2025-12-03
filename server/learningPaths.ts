@@ -1329,7 +1329,7 @@ export const applyAdaptiveEvent = async (
     payload?: Record<string, unknown> | null;
   },
 ): Promise<{ path: { path: PathSummary; entries: PathEntry[] } | null; next: PathEntry | null; adaptive: { targetDifficulty: number; misconceptions: string[]; recentAttempts: AdaptiveAttempt[] } }> => {
-  const runtimeConfig = await syncAdaptiveConfig(supabase);
+  await syncAdaptiveConfig(supabase);
   const currentPath = await getStudentPath(supabase, studentId);
   if (!currentPath) {
     return { path: null, next: null, adaptive: { targetDifficulty: 1, misconceptions: [], recentAttempts: [] } };

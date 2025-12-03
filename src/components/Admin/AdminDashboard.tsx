@@ -330,7 +330,7 @@ const AdminDashboard: React.FC = () => {
       setConfigMessage(`${profile.label} XP profile applied.`);
       trackEvent('admin_xp_profile_applied', { adminId: admin?.id, profile: profileKey });
     } catch (error) {
-      setConfigMessage('Unable to apply XP profile right now.');
+      setConfigMessage(error instanceof Error ? error.message : 'Unable to apply XP profile right now.');
     } finally {
       setConfigSaving(false);
     }

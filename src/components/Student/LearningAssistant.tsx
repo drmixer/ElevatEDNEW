@@ -28,7 +28,7 @@ const humanizeStandard = (code?: string | null): string | null => {
   const trimmed = code.toString().trim();
   if (!trimmed.length) return null;
   const withoutFramework = trimmed.includes(':') ? trimmed.split(':').pop() ?? trimmed : trimmed;
-  const cleaned = withoutFramework.replace(/[_\.]/g, ' ').replace(/\s+/g, ' ').trim();
+  const cleaned = withoutFramework.replace(/[_.]/g, ' ').replace(/\s+/g, ' ').trim();
   if (!cleaned.length) return null;
   return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 };

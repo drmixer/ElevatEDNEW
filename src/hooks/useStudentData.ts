@@ -5,7 +5,6 @@ import {
   fetchStudentPath,
   listTutorPersonas,
   type StudentPath,
-  type StudentPathEntry,
   type StudentPreferences,
   type TutorPersona,
 } from '../services/onboardingService';

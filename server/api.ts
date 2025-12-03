@@ -61,7 +61,6 @@ import { NotificationScheduler, notifyAssignmentCreated } from './notifications.
 import { HttpError } from './httpError.js';
 import { listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
 import { getOpsSnapshot } from './opsMetrics.js';
-import { getRuntimeConfig } from './config.js';
 import {
   getParentOverview,
   getStudentPath,
