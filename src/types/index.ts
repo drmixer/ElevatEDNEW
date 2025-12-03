@@ -137,6 +137,7 @@ export interface LearningPreferences {
   focusIntensity: 'balanced' | 'focused';
   weeklyPlanIntensity?: 'light' | 'normal' | 'challenge';
   weeklyPlanFocus?: Subject | 'balanced';
+  weeklyIntent?: 'precision' | 'speed' | 'stretch' | 'balanced';
   chatMode?: 'guided_only' | 'guided_preferred' | 'free';
   chatModeLocked?: boolean;
   studyMode?: 'catch_up' | 'keep_up' | 'get_ahead';
@@ -155,6 +156,7 @@ export const defaultLearningPreferences: LearningPreferences = {
   focusIntensity: 'balanced',
   weeklyPlanIntensity: 'normal',
   weeklyPlanFocus: 'balanced',
+  weeklyIntent: 'balanced',
   chatMode: 'free',
   chatModeLocked: false,
   studyMode: 'keep_up',
@@ -431,6 +433,14 @@ export interface ParentChildSnapshot {
   lessonsCompletedWeek: number;
   practiceMinutesWeek: number;
   xpEarnedWeek: number;
+  weeklyChange?: {
+    lessons: number;
+    minutes: number;
+    xp: number;
+    deltaLessons: number;
+    deltaMinutes: number;
+    deltaXp: number;
+  };
   masteryBySubject: SubjectMastery[];
   recentActivity: ParentChildActivity[];
   goals?: ChildGoalTargets;

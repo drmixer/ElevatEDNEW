@@ -463,6 +463,14 @@ const mapParentDashboardChildRow = (row: ParentDashboardChildRow): ParentChildSn
     lessonsCompletedWeek: row.lessons_completed_week ?? 0,
     practiceMinutesWeek: row.practice_minutes_week ?? 0,
     xpEarnedWeek: row.xp_earned_week ?? 0,
+    weeklyChange: {
+      lessons: row.lessons_completed_week ?? 0,
+      minutes: row.practice_minutes_week ?? 0,
+      xp: row.xp_earned_week ?? 0,
+      deltaLessons: 0,
+      deltaMinutes: 0,
+      deltaXp: 0,
+    },
     masteryBySubject: masteryBySubject.length ? masteryBySubject : fallbackStudentMastery(),
     recentActivity: [],
     goals: {
@@ -2036,7 +2044,7 @@ export const fetchParentDashboardData = async (
             .from('student_daily_activity')
             .select('*')
             .in('student_id', childIds)
-            .gte('activity_date', new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString())
+            .gte('activity_date', new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString())
         : Promise.resolve({ data: [] as StudentDailyActivityRow[], error: null }),
   supabase.from('skills').select('id, subject_id'),
   supabase.from('subjects').select('id, name'),
@@ -2176,6 +2184,25 @@ export const fetchParentDashboardData = async (
       list.push(row);
       xpByChild.set(row.student_id, list);
     });
+    const weekCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const weeklyChangeByChild = new Map<
+      string,
+      { current: { lessons: number; minutes: number; xp: number }; prior: { lessons: number; minutes: number; xp: number } }
+    >();
+    (activityRows as StudentDailyActivityRow[]).forEach((row) => {
+      if (!childIds.includes(row.student_id)) return;
+      const bucket: 'current' | 'prior' =
+        new Date(row.activity_date).getTime() >= weekCutoff ? 'current' : 'prior';
+      const entry =
+        weeklyChangeByChild.get(row.student_id) ?? {
+          current: { lessons: 0, minutes: 0, xp: 0 },
+          prior: { lessons: 0, minutes: 0, xp: 0 },
+        };
+      entry[bucket].lessons += row.lessons_completed ?? 0;
+      entry[bucket].minutes += row.practice_minutes ?? 0;
+      entry[bucket].xp += row.xp_earned ?? 0;
+      weeklyChangeByChild.set(row.student_id, entry);
+    });
 
     const enrichedChildren: ParentChildSnapshot[] = baseChildren.map((child) => {
       const masteryFromLive = childMasteryById.get(child.id) ?? [];
@@ -2227,6 +2254,14 @@ export const fetchParentDashboardData = async (
         seed: dashboardWeekSeed,
         excludeIds: feedbackByStudent.get(child.id),
       });
+      const weeklyChange = weeklyChangeByChild.get(child.id) ?? {
+        current: {
+          lessons: child.lessonsCompletedWeek ?? 0,
+          minutes: child.practiceMinutesWeek ?? 0,
+          xp: child.xpEarnedWeek ?? 0,
+        },
+        prior: { lessons: 0, minutes: 0, xp: 0 },
+      };
       const snapshot: ParentChildSnapshot = {
         ...child,
         masteryBySubject: mastery,
@@ -2241,6 +2276,14 @@ export const fetchParentDashboardData = async (
         learningPreferences,
         subjectStatuses,
         coachingSuggestions,
+        weeklyChange: {
+          lessons: weeklyChange.current.lessons,
+          minutes: weeklyChange.current.minutes,
+          xp: weeklyChange.current.xp,
+          deltaLessons: weeklyChange.current.lessons - weeklyChange.prior.lessons,
+          deltaMinutes: weeklyChange.current.minutes - weeklyChange.prior.minutes,
+          deltaXp: weeklyChange.current.xp - weeklyChange.prior.xp,
+        },
       };
 
       snapshot.coachingSuggestions = buildCoachingSuggestions(snapshot, {

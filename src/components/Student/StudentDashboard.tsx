@@ -1,6 +1,6 @@
-import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangle,
   Brain,
@@ -21,6 +21,8 @@ import {
   Trophy,
   Bot,
   Flame,
+  Info,
+  X,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -46,18 +48,37 @@ import type {
   Subject,
   CelebrationMoment,
 } from '../../types';
-const AssessmentFlow = lazy(() => import('./AssessmentFlow'));
+const OnboardingFlow = lazy(() => import('./OnboardingFlow'));
 const LearningAssistant = lazy(() => import('./LearningAssistant'));
 import { fetchStudentDashboardData } from '../../services/dashboardService';
+import type { StudentStats } from '../../services/statsService';
 import trackEvent from '../../lib/analytics';
-import type { AssessmentResult } from '../../services/assessmentService';
 import { formatSubjectLabel, SUBJECTS } from '../../lib/subjects';
 import { studySkillsModules } from '../../data/studySkillsModules';
-import { saveStudentAvatar, saveTutorPersona } from '../../services/avatarService';
-import { TUTOR_AVATARS, isStudentAvatarUnlocked } from '../../../shared/avatarManifests';
+import { saveTutorPersona } from '../../services/avatarService';
 import { updateLearningPreferences } from '../../services/profileService';
 import { tutorNameErrorMessage, validateTutorName } from '../../../shared/nameSafety';
 import { fetchReflections, saveReflection, toggleReflectionShare } from '../../services/reflectionService';
+import {
+  fetchPreferences,
+  listAvatars as listCatalogAvatars,
+  listTutorPersonas,
+  updatePreferences as updateStudentPreferences,
+} from '../../services/onboardingService';
+import type {
+  CatalogAvatar,
+  StudentPathEntry,
+  TutorPersona as CatalogTutorPersona,
+} from '../../services/onboardingService';
+import { describePathEntryReason, humanizeStandard } from '../../lib/pathReason';
+import {
+  consumeAdaptiveFlash,
+  studentPathQueryKey,
+  studentStatsQueryKey,
+  useStudentPath,
+  useStudentStats,
+  type AdaptiveFlash,
+} from '../../hooks/useStudentData';
 
 const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
   in_progress: 0,
@@ -80,6 +101,13 @@ const PATH_STATUS_STYLES: Record<LearningPathItem['status'], string> = {
   mastered: 'bg-purple-50 text-purple-700',
 };
 
+const pathEntryReasonSlug = (entry: StudentPathEntry): string => {
+  const meta = (entry.metadata ?? {}) as Record<string, unknown>;
+  if (typeof meta.reason === 'string') return meta.reason.toLowerCase();
+  if (entry.type === 'lesson' && meta.source === 'placement') return 'placement';
+  return entry.type;
+};
+
 const formatAgo = (input: Date | string): string => {
   const date = input instanceof Date ? input : new Date(input);
   const diffMs = Date.now() - date.getTime();
@@ -96,7 +124,7 @@ const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
 );
 
-const describeTutorTone = (tone?: AvatarOption['tone']): string => {
+const describeTutorTone = (tone?: string | null): string => {
   switch (tone) {
     case 'calm':
       return 'Calm coach';
@@ -111,19 +139,91 @@ const describeTutorTone = (tone?: AvatarOption['tone']): string => {
   }
 };
 
+const defaultPalette = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+
+const parsePalette = (metadata?: Record<string, unknown> | null) => {
+  const palette = (metadata?.palette as { background?: string; accent?: string; text?: string } | undefined) ?? undefined;
+  return {
+    background: palette?.background ?? defaultPalette.background,
+    accent: palette?.accent ?? defaultPalette.accent,
+    text: palette?.text ?? defaultPalette.text,
+  };
+};
+
+const toAvatarOption = (avatar: CatalogAvatar): AvatarOption => {
+  const metadata = (avatar.metadata ?? {}) as Record<string, unknown>;
+  const tags = Array.isArray(metadata.tags)
+    ? metadata.tags.filter((tag): tag is string => typeof tag === 'string')
+    : undefined;
+  const rarity = typeof metadata.rarity === 'string' ? (metadata.rarity as AvatarOption['rarity']) : undefined;
+  const minXp =
+    typeof metadata.minXp === 'number'
+      ? (metadata.minXp as number)
+      : typeof metadata.minXp === 'string'
+        ? Number.parseInt(metadata.minXp as string, 10)
+        : undefined;
+  const requiredStreak =
+    typeof metadata.requiredStreak === 'number'
+      ? (metadata.requiredStreak as number)
+      : typeof metadata.requiredStreak === 'string'
+        ? Number.parseInt(metadata.requiredStreak as string, 10)
+        : undefined;
+  const description =
+    typeof metadata.description === 'string' && metadata.description.trim().length
+      ? metadata.description
+      : avatar.category === 'tutor'
+        ? 'Tutor look'
+        : 'Starter look';
+
+  return {
+    id: avatar.id,
+    label: avatar.name,
+    description,
+    minXp: Number.isFinite(minXp) ? (minXp as number) : undefined,
+    requiredStreak: Number.isFinite(requiredStreak) ? (requiredStreak as number) : undefined,
+    palette: parsePalette(metadata),
+    icon: typeof metadata.icon === 'string' ? metadata.icon : '⭐️',
+    rarity,
+    kind: avatar.category === 'tutor' ? 'tutor' : 'student',
+    tags,
+    tone: typeof metadata.tone === 'string' ? (metadata.tone as AvatarOption['tone']) : undefined,
+  };
+};
+
+const pickDiagnosticFocus = (metadata: Record<string, unknown> | null | undefined, upNext: StudentPathEntry[]): string | null => {
+  const strandEstimatesRaw = Array.isArray(metadata?.strand_estimates) ? metadata?.strand_estimates : [];
+  const strandEstimates = strandEstimatesRaw
+    .map((entry) => ({
+      strand: (entry as Record<string, unknown>).strand as string | undefined,
+      accuracy:
+        typeof (entry as Record<string, unknown>).accuracyPct === 'number'
+          ? ((entry as Record<string, unknown>).accuracyPct as number)
+          : typeof (entry as Record<string, unknown>).accuracy_pct === 'number'
+            ? ((entry as Record<string, unknown>).accuracy_pct as number)
+            : null,
+    }))
+    .filter((entry) => entry.strand && entry.accuracy != null) as Array<{ strand: string; accuracy: number }>;
+  const weakest = strandEstimates.sort((a, b) => a.accuracy - b.accuracy)[0];
+  if (weakest?.strand) {
+    return humanizeStandard(weakest.strand);
+  }
+  const goalFocus = typeof metadata?.goal_focus === 'string' ? metadata.goal_focus : null;
+  if (goalFocus) return humanizeStandard(goalFocus);
+  const nextStandard = upNext[0]?.target_standard_codes?.[0];
+  if (nextStandard) return humanizeStandard(nextStandard);
+  return null;
+};
+
 const StudentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const student = (user as Student) ?? null;
   const { entitlements, loading: entitlementsLoading } = useEntitlements();
-  const [activeView, setActiveView] = useState<'dashboard' | 'assessment' | 'lesson'>('dashboard');
+  const [activeView, setActiveView] = useState<'dashboard' | 'onboarding' | 'lesson'>('dashboard');
   const [activeTab, setActiveTab] = useState<'today' | 'journey'>('today');
   const [subjectFilter, setSubjectFilter] = useState<Subject | 'all'>('all');
   const [missionCadence, setMissionCadence] = useState<'daily' | 'weekly'>('daily');
   const [achievementFilter, setAchievementFilter] = useState<BadgeCategory | 'all'>('all');
   const [equippedAvatarId, setEquippedAvatarId] = useState<string>('avatar-starter');
-  const [assessmentNarrative, setAssessmentNarrative] = useState<string[]>([]);
-  const [assessmentFocusAreas, setAssessmentFocusAreas] = useState<string[]>([]);
-  const [assessmentStrengths, setAssessmentStrengths] = useState<string[]>([]);
   const missingGuardian = !student?.parentId;
   const writingPrompt =
     'Write 3-4 sentences about a time you solved a problem by trying a new strategy. Explain the steps and what changed.';
@@ -146,8 +246,12 @@ const StudentDashboard: React.FC = () => {
   const [readingFeedback, setReadingFeedback] = useState<string | null>(null);
   const [autoRoutedDiagnostic, setAutoRoutedDiagnostic] = useState(false);
   const [avatarSaving, setAvatarSaving] = useState(false);
+  const [avatarCatalog, setAvatarCatalog] = useState<CatalogAvatar[]>([]);
+  const [tutorPersonas, setTutorPersonas] = useState<CatalogTutorPersona[]>([]);
+  const [tutorPersonaId, setTutorPersonaId] = useState<string | null>(null);
+  const [personalizationLoading, setPersonalizationLoading] = useState(false);
+  const [personalizationError, setPersonalizationError] = useState<string | null>(null);
   const [tutorNameInput, setTutorNameInput] = useState<string>(student?.tutorName ?? '');
-  const [tutorAvatarId, setTutorAvatarId] = useState<string>(student?.tutorAvatarId ?? TUTOR_AVATARS[0].id);
   const [tutorFeedback, setTutorFeedback] = useState<string | null>(null);
   const [tutorSaving, setTutorSaving] = useState(false);
   const [tutorFlowStartedAt, setTutorFlowStartedAt] = useState<number | null>(null);
@@ -159,6 +263,9 @@ const StudentDashboard: React.FC = () => {
     (student?.learningPreferences?.weeklyPlanFocus as Subject | 'balanced') ??
       student?.learningPreferences?.focusSubject ??
       'balanced',
+  );
+  const [weeklyIntent, setWeeklyIntent] = useState<'precision' | 'speed' | 'stretch' | 'balanced'>(
+    student?.learningPreferences?.weeklyIntent ?? 'balanced',
   );
   const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
     student?.learningPreferences?.studyMode ?? 'keep_up',
@@ -177,6 +284,22 @@ const StudentDashboard: React.FC = () => {
   const [studyModePromptLogged, setStudyModePromptLogged] = useState(false);
   const [studyModeBannerLogged, setStudyModeBannerLogged] = useState(false);
   const [reflectionTimerStarted, setReflectionTimerStarted] = useState(false);
+  const [adaptiveFlash, setAdaptiveFlash] = useState<AdaptiveFlash | null>(null);
+  const [planBannerDismissed, setPlanBannerDismissed] = useState(false);
+  const [lessonSummaryDismissed, setLessonSummaryDismissed] = useState(false);
+  const [upNextUpdatedAt, setUpNextUpdatedAt] = useState<number | null>(null);
+  const upNextChangeTracked = useRef<boolean>(false);
+  const lastUpNextEventSignature = useRef<string | null>(null);
+  const lastAdaptiveFlashTracked = useRef<number | null>(null);
+  const queryClient = useQueryClient();
+  const {
+    upNext: upNextEntries,
+    isLoading: pathIsLoading,
+    isFetching: pathIsFetching,
+    refresh: refreshStudentPath,
+    path: studentPath,
+  } = useStudentPath(student?.id);
+  const pathLoading = pathIsLoading || pathIsFetching;
 
   const {
     data: dashboard,
@@ -191,7 +314,154 @@ const StudentDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 2,
   });
 
+  const {
+    data: studentStatsData,
+    isFetching: statsFetching,
+  } = useStudentStats(student?.id);
+
+  const studentStats = useMemo(() => {
+    if (studentStatsData) return studentStatsData;
+    return {
+      xpTotal: student?.xp ?? 0,
+      streakDays: student?.streakDays ?? 0,
+      badges: student?.badges?.length ?? 0,
+      badgeDetails: student?.badges ?? [],
+      recentEvents: [],
+      masteryAvg: null,
+      pathProgress: { completed: 0, remaining: 0, percent: null },
+      avgAccuracy: null,
+      weeklyTimeMinutes: 0,
+      modulesMastered: { count: 0, items: [] },
+      focusStandards: [],
+      latestQuizScore: null,
+      struggle: false,
+    } satisfies StudentStats;
+  }, [student?.badges, student?.streakDays, student?.xp, studentStatsData]);
+
+  const pathMetadata = useMemo(
+    () => ((studentPath?.metadata ?? {}) as Record<string, unknown> | null | undefined),
+    [studentPath?.metadata],
+  );
+
+  const pathFocus = useMemo(
+    () => pickDiagnosticFocus(pathMetadata, upNextEntries),
+    [pathMetadata, upNextEntries],
+  );
+
+  const upNextSignature = useMemo(
+    () => upNextEntries.map((entry) => `${entry.id}:${entry.status}:${entry.position ?? ''}`).join('|'),
+    [upNextEntries],
+  );
+
+  const upNextRecentlyUpdated = useMemo(
+    () => (upNextUpdatedAt ? Date.now() - upNextUpdatedAt < 8000 : false),
+    [upNextUpdatedAt],
+  );
+
+  useEffect(() => {
+    if (!upNextSignature) return;
+    if (!upNextChangeTracked.current) {
+      upNextChangeTracked.current = true;
+      return;
+    }
+    setUpNextUpdatedAt(Date.now());
+    const timeout = setTimeout(() => setUpNextUpdatedAt(null), 8000);
+    return () => clearTimeout(timeout);
+  }, [upNextSignature]);
+
+  useEffect(() => {
+    if (!upNextRecentlyUpdated || !upNextEntries.length) return;
+    if (lastUpNextEventSignature.current === upNextSignature) return;
+    lastUpNextEventSignature.current = upNextSignature;
+    const reason = pathEntryReasonSlug(upNextEntries[0]);
+    trackEvent('upnext_updated', {
+      reason,
+      entry_id: upNextEntries[0].id,
+    });
+  }, [upNextEntries, upNextRecentlyUpdated, upNextSignature]);
+
+  const upNextSubtitle = useMemo(() => {
+    if (pathFocus) {
+      return `Built from your diagnostic results - starting with ${pathFocus} to strengthen that area.`;
+    }
+    return 'Built from your diagnostic - start with the first card below.';
+  }, [pathFocus]);
+
+  const adaptiveFocusLabel = useMemo(() => {
+    const flashStandard =
+      humanizeStandard(adaptiveFlash?.primaryStandard ?? null) ??
+      humanizeStandard(adaptiveFlash?.misconceptions?.[0] ?? null);
+    if (flashStandard) return flashStandard;
+    const upNextStandard = humanizeStandard(upNextEntries[0]?.target_standard_codes?.[0] ?? null);
+    return pathFocus ?? upNextStandard;
+  }, [adaptiveFlash?.misconceptions, adaptiveFlash?.primaryStandard, pathFocus, upNextEntries]);
+
+  const adaptiveBannerCopy = useMemo(() => {
+    if (!adaptiveFlash) return null;
+    const reason = (adaptiveFlash.nextReason ?? '').toLowerCase();
+    const difficulty = adaptiveFlash.targetDifficulty ?? null;
+    const focusLabel = adaptiveFocusLabel ?? 'your latest work';
+    if (reason === 'remediation' || (adaptiveFlash.misconceptions?.length ?? 0) > 0) {
+      return {
+        title: 'Plan updated for review',
+        body: `We added a short review on ${focusLabel} to help you solidify that concept.`,
+      };
+    }
+    if (reason === 'stretch' || (difficulty ?? 0) >= 4) {
+      return {
+        title: 'Plan updated for stretch',
+        body: `Nice work! We nudged your practice to a slightly harder level around ${focusLabel}.`,
+      };
+    }
+    if (difficulty && difficulty <= 2) {
+      return {
+        title: 'Plan tuned for comfort',
+        body: `We're keeping practice gentle while you build confidence on ${focusLabel}.`,
+      };
+    }
+    return {
+      title: 'Plan refreshed',
+      body: `Your path just updated based on your latest progress.`,
+    };
+  }, [adaptiveFlash, adaptiveFocusLabel]);
+
+  const lessonSummary = useMemo(() => {
+    if (!adaptiveFlash || adaptiveFlash.eventType !== 'lesson_completed') return null;
+    const practiced = adaptiveFocusLabel ?? "today's lesson";
+    const nextReason = (adaptiveFlash.nextReason ?? '').toLowerCase();
+    const nextStep =
+      nextReason === 'remediation'
+        ? `Next step: quick review on ${adaptiveFocusLabel ?? 'recent skills'}.`
+        : nextReason === 'stretch'
+          ? `Next step: stretch practice on ${adaptiveFocusLabel ?? 'the next skill'}.`
+          : adaptiveFlash.nextTitle
+            ? `Next step: ${adaptiveFlash.nextTitle}.`
+            : 'Next step: keep the streak going tomorrow.';
+    return { practiced, nextStep };
+  }, [adaptiveFlash, adaptiveFocusLabel]);
+
   const showSkeleton = isLoading && !dashboard;
+
+  useEffect(() => {
+    if (!student?.id) return;
+    const flash = consumeAdaptiveFlash(student.id);
+    if (flash) {
+      setAdaptiveFlash(flash);
+      setPlanBannerDismissed(false);
+      setLessonSummaryDismissed(false);
+    }
+  }, [student?.id]);
+
+  useEffect(() => {
+    if (!adaptiveFlash) return;
+    if (lastAdaptiveFlashTracked.current === adaptiveFlash.createdAt) return;
+    lastAdaptiveFlashTracked.current = adaptiveFlash.createdAt ?? Date.now();
+    trackEvent('adaptive_banner_ready', {
+      event_type: adaptiveFlash.eventType,
+      next_reason: adaptiveFlash.nextReason ?? null,
+      target_difficulty: adaptiveFlash.targetDifficulty ?? null,
+    });
+  }, [adaptiveFlash]);
 
   useEffect(() => {
     if (!student) return;
@@ -204,19 +474,41 @@ const StudentDashboard: React.FC = () => {
 
   useEffect(() => {
     if (!student) return;
+    setPersonalizationLoading(true);
+    setPersonalizationError(null);
+    Promise.all([fetchPreferences(), listCatalogAvatars('student'), listTutorPersonas()])
+      .then(([prefs, avatars, personas]) => {
+        setAvatarCatalog(avatars);
+        setTutorPersonas(personas);
+        const resolvedPersonaId = prefs.tutor_persona_id ?? personas[0]?.id ?? null;
+        setTutorPersonaId(resolvedPersonaId);
+        if (prefs.avatar_id) {
+          setEquippedAvatarId(prefs.avatar_id);
+        }
+      })
+      .catch((err) => {
+        console.warn('[StudentDashboard] Unable to load personalization catalogs', err);
+        setPersonalizationError('Unable to load avatar and persona options right now.');
+      })
+      .finally(() => setPersonalizationLoading(false));
+  }, [student]);
+
+  useEffect(() => {
+    if (!student) return;
     setTutorNameInput(student.tutorName ?? '');
-    setTutorAvatarId(student.tutorAvatarId ?? TUTOR_AVATARS[0].id);
     setWeeklyPlanIntensity(student.learningPreferences.weeklyPlanIntensity ?? 'normal');
     setWeeklyPlanFocus(
       (student.learningPreferences.weeklyPlanFocus as Subject | 'balanced') ??
         student.learningPreferences.focusSubject ??
         'balanced',
     );
+    setWeeklyIntent(student.learningPreferences.weeklyIntent ?? 'balanced');
     setStudyMode(student.learningPreferences.studyMode ?? 'keep_up');
-  }, [student?.tutorName, student?.tutorAvatarId]);
+  }, [student?.tutorName, student?.learningPreferences]);
 
   useEffect(() => {
-    if (!student || tutorFlowLogged) return;
+    if (!student || tutorFlowLogged || personalizationLoading) return;
+    const personaForMetrics = tutorPersonaId ?? tutorPersonas[0]?.id ?? 'persona-calm-coach';
     setTutorFlowLogged(true);
     const startedAt = Date.now();
     setTutorFlowStartedAt(startedAt);
@@ -227,11 +519,11 @@ const StudentDashboard: React.FC = () => {
     });
     trackEvent('tutor_onboarding_step_completed', {
       step: 'intro',
-      persona_id: tutorAvatarId,
-      avatar_id: tutorAvatarId,
+      persona_id: personaForMetrics,
+      avatar_id: personaForMetrics,
       provided_name: Boolean(student.tutorName?.trim()),
     });
-  }, [gradeBand, student, tutorAvatarId, tutorFlowLogged]);
+  }, [gradeBand, student, tutorFlowLogged, personalizationLoading, tutorPersonaId, tutorPersonas]);
 
   useEffect(() => {
     if (!student) return;
@@ -327,7 +619,7 @@ const StudentDashboard: React.FC = () => {
   useEffect(() => {
     if (autoRoutedDiagnostic || !student) return;
     if (!dashboard?.quickStats.assessmentCompleted && !showSkeleton) {
-      setActiveView('assessment');
+      setActiveView('onboarding');
       setAutoRoutedDiagnostic(true);
     }
   }, [autoRoutedDiagnostic, dashboard?.quickStats.assessmentCompleted, showSkeleton, student]);
@@ -415,6 +707,16 @@ const StudentDashboard: React.FC = () => {
     [badges],
   );
 
+  const studentAvatarOptions = useMemo(
+    () => avatarCatalog.filter((avatar) => avatar.category === 'student').map(toAvatarOption),
+    [avatarCatalog],
+  );
+
+  const selectedTutorPersona = useMemo(
+    () => tutorPersonas.find((persona) => persona.id === tutorPersonaId) ?? null,
+    [tutorPersonas, tutorPersonaId],
+  );
+
   const missions = dashboard?.missions ?? [];
   const visibleMissions = missions.filter((mission) => mission.cadence === missionCadence);
   const activeMission = visibleMissions[0] ?? missions[0] ?? null;
@@ -429,16 +731,13 @@ const StudentDashboard: React.FC = () => {
     return Math.min(Math.round((current / total) * 100), 120);
   };
 
-  const isAvatarUnlocked = (option: AvatarOption) =>
-    isStudentAvatarUnlocked(option, {
-      xp: dashboard?.profile?.xp ?? student?.xp ?? 0,
-      streakDays: dashboard?.profile?.streakDays ?? student?.streakDays ?? 0,
-    });
-
-  const selectedTutorAvatar = useMemo(
-    () => TUTOR_AVATARS.find((option) => option.id === tutorAvatarId) ?? TUTOR_AVATARS[0],
-    [tutorAvatarId],
-  );
+  const isAvatarUnlocked = (option: AvatarOption) => {
+    const xp = dashboard?.profile?.xp ?? student?.xp ?? 0;
+    const streak = dashboard?.profile?.streakDays ?? student?.streakDays ?? 0;
+    const meetsXp = option.minXp ? xp >= option.minXp : true;
+    const meetsStreak = option.requiredStreak ? streak >= option.requiredStreak : true;
+    return meetsXp && meetsStreak;
+  };
 
   const gradeBand = useMemo(() => {
     if (!student?.grade) return 'unknown';
@@ -460,6 +759,23 @@ const StudentDashboard: React.FC = () => {
       ? null
       : tutorNameErrorMessage(tutorNameValidation);
 
+  const selectedPersonaPalette = selectedTutorPersona
+    ? parsePalette((selectedTutorPersona.metadata ?? {}) as Record<string, unknown>)
+    : defaultPalette;
+  const selectedPersonaIcon =
+    typeof ((selectedTutorPersona?.metadata ?? {}) as Record<string, unknown>).icon === 'string'
+      ? (((selectedTutorPersona?.metadata ?? {}) as Record<string, unknown>).icon as string)
+      : '🤝';
+  const selectedPersonaAvatarId =
+    typeof ((selectedTutorPersona?.metadata ?? {}) as Record<string, unknown>).avatar_id === 'string'
+      ? (((selectedTutorPersona?.metadata ?? {}) as Record<string, unknown>).avatar_id as string)
+      : null;
+  const personaPreviewLine =
+    selectedTutorPersona?.sample_replies?.[0] ??
+    selectedTutorPersona?.prompt_snippet ??
+    selectedTutorPersona?.constraints ??
+    'Your tutor will keep responses short, safe, and on-topic.';
+
   const describeActivityType = (activityType?: string) => {
     if (!activityType) return 'Activity';
     const lookup: Record<string, string> = {
@@ -472,7 +788,6 @@ const StudentDashboard: React.FC = () => {
   };
 
   const celebrationMoments = dashboard?.celebrationMoments ?? [];
-  const avatarOptions = dashboard?.avatarOptions ?? [];
   const parentGoals = dashboard?.parentGoals ?? null;
   const parentGoalActive = Boolean(parentGoals?.weeklyLessons || parentGoals?.practiceMinutes);
   const activeCelebration = celebrationQueue[0] ?? null;
@@ -485,20 +800,22 @@ const StudentDashboard: React.FC = () => {
       ? Date.now() - studyModeSetAt.getTime() > 1000 * 60 * 60 * 24 * 7
       : false;
 
-  const handleAssessmentComplete = async (result?: AssessmentResult | null) => {
+  const handleOnboardingComplete = async (result?: { pathEntries?: StudentPathEntry[] } | null) => {
     setActiveView('dashboard');
     setActiveTab('journey');
-    if (result) {
-      setAssessmentNarrative(result.planMessages ?? []);
-      setAssessmentFocusAreas(result.weaknesses ?? []);
-      setAssessmentStrengths(result.strengths ?? []);
-    } else {
-      setAssessmentNarrative([]);
-      setAssessmentFocusAreas([]);
-      setAssessmentStrengths([]);
+    if (result?.pathEntries?.length) {
+      queryClient.setQueryData(studentPathQueryKey(student?.id), {
+        path: studentPath,
+        entries: result.pathEntries,
+        next: result.pathEntries[0] ?? null,
+      });
     }
-    trackEvent('assessment_complete_reroute', { studentId: student.id });
-    await refetch({ throwOnError: false });
+    trackEvent('onboarding_completed', { studentId: student.id });
+    await refreshUser().catch(() => undefined);
+    await Promise.all([
+      refetch({ throwOnError: false }),
+      refreshStudentPath().catch(() => undefined),
+    ]);
   };
 
   const todaysPlan = dashboard?.todaysPlan ?? [];
@@ -660,31 +977,33 @@ const StudentDashboard: React.FC = () => {
     return null;
   }
 
-  if (activeView === 'assessment') {
+  if (activeView === 'onboarding') {
     return (
       <Suspense
         fallback={
           <div className="min-h-screen flex items-center justify-center bg-gray-50 text-sm text-gray-500">
-            Loading assessment experience…
+            Loading onboarding…
           </div>
         }
       >
-        <AssessmentFlow onComplete={handleAssessmentComplete} />
+        <OnboardingFlow onComplete={handleOnboardingComplete} />
       </Suspense>
     );
   }
 
-  const journeyNarrative = assessmentNarrative.length
-    ? assessmentNarrative
-    : dashboard?.aiRecommendations ?? [];
-  const journeyFocusAreas =
-    assessmentFocusAreas.length > 0 ? assessmentFocusAreas : dashboard?.profile?.weaknesses ?? [];
-  const journeyStrengths =
-    assessmentStrengths.length > 0 ? assessmentStrengths : dashboard?.profile?.strengths ?? [];
+  const journeyNarrative = dashboard?.aiRecommendations ?? [];
+  const journeyFocusAreas = dashboard?.profile?.weaknesses ?? [];
+  const journeyStrengths = dashboard?.profile?.strengths ?? [];
 
   const handleRefresh = async () => {
     trackEvent('student_dashboard_refresh', { studentId: student.id });
-    await refetch({ throwOnError: false });
+    await Promise.all([
+      refetch({ throwOnError: false }),
+      refreshStudentPath().catch((pathError) => {
+        console.warn('[StudentDashboard] Unable to refresh adaptive path', pathError);
+      }),
+      queryClient.invalidateQueries({ queryKey: studentStatsQueryKey(student?.id) }).catch(() => undefined),
+    ]);
   };
 
   const handleStartLesson = (lesson: DashboardLesson) => {
@@ -846,6 +1165,13 @@ const StudentDashboard: React.FC = () => {
     void persistWeeklyPlanPrefs({ weeklyPlanFocus: value, focusSubject: value === 'balanced' ? 'balanced' : value });
   };
 
+  const handleWeeklyIntentChange = (value: 'precision' | 'speed' | 'stretch' | 'balanced') => {
+    if (value === weeklyIntent) return;
+    setWeeklyIntent(value);
+    trackEvent('weekly_intent_changed', { from: weeklyIntent, to: value });
+    void persistWeeklyPlanPrefs({ weeklyIntent: value });
+  };
+
   const handleStudyModeChange = (
     value: 'catch_up' | 'keep_up' | 'get_ahead',
     source: 'dashboard' | 'expired_confirm' = 'dashboard',
@@ -861,17 +1187,21 @@ const StudentDashboard: React.FC = () => {
     void persistWeeklyPlanPrefs({ studyMode: value, studyModeSetAt: new Date().toISOString() });
   };
 
-  const handleSelectTutorAvatar = (avatarId: string) => {
-    setTutorAvatarId(avatarId);
+  const handleSelectTutorPersona = (personaId: string) => {
+    setTutorPersonaId(personaId);
     trackEvent('tutor_onboarding_step_completed', {
       step: 'persona',
-      persona_id: avatarId,
-      avatar_id: avatarId,
+      persona_id: personaId,
+      avatar_id: personaId,
       provided_name: Boolean(tutorNameInput.trim()),
     });
   };
 
   const handleSaveTutorPersona = async () => {
+    if (!tutorPersonaId) {
+      setTutorFeedback('Pick a tutor persona to continue.');
+      return;
+    }
     setTutorFeedback(null);
     const trimmedName = tutorNameInput.trim();
     const validation = trimmedName.length ? validateTutorName(trimmedName) : { ok: true, value: '', normalized: '' };
@@ -881,20 +1211,21 @@ const StudentDashboard: React.FC = () => {
     }
     trackEvent('tutor_onboarding_step_completed', {
       step: 'name',
-      persona_id: tutorAvatarId,
-      avatar_id: tutorAvatarId,
+      persona_id: tutorPersonaId,
+      avatar_id: tutorPersonaId,
       provided_name: Boolean(trimmedName),
     });
     setTutorSaving(true);
     try {
+      await updateStudentPreferences({ tutorPersonaId });
       await saveTutorPersona({
         name: trimmedName.length ? validation.value : null,
-        avatarId: tutorAvatarId,
+        avatarId: selectedPersonaAvatarId ?? undefined,
       });
       const durationSec = tutorFlowStartedAt ? Math.round((Date.now() - tutorFlowStartedAt) / 1000) : null;
       trackEvent('tutor_onboarding_completed', {
-        persona_id: tutorAvatarId,
-        avatar_id: tutorAvatarId,
+        persona_id: tutorPersonaId,
+        avatar_id: tutorPersonaId,
         name_set: Boolean(trimmedName),
         duration_sec: durationSec,
       });
@@ -912,9 +1243,10 @@ const StudentDashboard: React.FC = () => {
     }
   };
 
-  const handleRandomizeTutorAvatar = () => {
-    const next = TUTOR_AVATARS[Math.floor(Math.random() * TUTOR_AVATARS.length)];
-    handleSelectTutorAvatar(next.id);
+  const handleRandomizeTutorPersona = () => {
+    if (!tutorPersonas.length) return;
+    const next = tutorPersonas[Math.floor(Math.random() * tutorPersonas.length)];
+    handleSelectTutorPersona(next.id);
   };
 
   const handleEquipAvatar = async (option: AvatarOption) => {
@@ -925,8 +1257,8 @@ const StudentDashboard: React.FC = () => {
     setAvatarSaving(true);
     setAvatarFeedback(null);
     try {
-      await saveStudentAvatar(option.id);
-      setEquippedAvatarId(option.id);
+      const prefs = await updateStudentPreferences({ avatarId: option.id });
+      setEquippedAvatarId(prefs.avatar_id ?? option.id);
       setAvatarFeedback(`Equipped ${option.label}!`);
       trackEvent('avatar_equipped', { studentId: student.id, avatarId: option.id });
       await refreshUser();
@@ -996,6 +1328,217 @@ const StudentDashboard: React.FC = () => {
             </div>
           </div>
         </motion.div>
+
+        {studentStats && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.03 }}
+            className="mb-6"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">Live stats</p>
+                  {statsFetching && <span className="text-[11px] text-slate-500">Refreshing…</span>}
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                    <Target className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Accuracy</p>
+                    <p className="text-lg font-bold text-slate-800">
+                      {studentStats.avgAccuracy != null ? `${studentStats.avgAccuracy}%` : '—'}
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      Latest quiz {studentStats.latestQuizScore != null ? `${studentStats.latestQuizScore}%` : '—'}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-700">
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
+                    <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
+                    <div className="font-semibold">{Math.round(studentStats.weeklyTimeMinutes)} min</div>
+                  </div>
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
+                    <div className="text-[11px] uppercase tracking-wide text-slate-500">Streak</div>
+                    <div className="font-semibold">{studentStats.streakDays} days</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">Progress</p>
+                  {studentStats.struggle && (
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-100 px-2 py-1 rounded-lg">
+                      <Flame className="h-3.5 w-3.5" /> Focus needed
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Path completion</p>
+                    <p className="text-lg font-bold text-slate-800">
+                      {studentStats.pathProgress.percent != null ? `${studentStats.pathProgress.percent}%` : '—'}
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      {studentStats.pathProgress.completed} done · {studentStats.pathProgress.remaining} remaining
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-700">
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
+                    <div className="text-[11px] uppercase tracking-wide text-slate-500">Modules mastered</div>
+                    <div className="font-semibold">{studentStats.modulesMastered.count}</div>
+                  </div>
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
+                    <div className="text-[11px] uppercase tracking-wide text-slate-500">Badges</div>
+                    <div className="font-semibold">{studentStats.badges}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+                <p className="text-xs uppercase tracking-wide text-slate-500 mb-2">Focus standards</p>
+                {studentStats.focusStandards.length > 0 ? (
+                  <div className="space-y-2">
+                    {studentStats.focusStandards.map((standard) => (
+                      <div
+                        key={standard.code}
+                        className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">{standard.code}</p>
+                          <p className="text-xs text-slate-600">{standard.samples} recent questions</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-slate-900">{Math.round(standard.accuracy)}%</p>
+                          <p className="text-xs text-slate-600">accuracy</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-600">Keep up the streak—no focus areas flagged.</p>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {pathLoading && (
+          <div className="mb-6 animate-pulse bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <div className="h-4 bg-slate-200 rounded w-32 mb-4" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {[0, 1, 2].map((idx) => (
+                <div key={idx} className="h-20 rounded-xl bg-slate-100" />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!pathLoading && upNextEntries.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-slate-500">Up Next</p>
+                  <h3 className="text-lg font-bold text-slate-900">Placement-powered path</h3>
+                  <p className="text-sm text-slate-600">{upNextSubtitle}</p>
+                  <p className="text-xs text-slate-500">
+                    Your plan updates as you finish lessons and practice. Watch "Up Next" change as you learn.
+                  </p>
+                  {upNextRecentlyUpdated && (
+                    <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200">
+                      Updated just now
+                    </span>
+                  )}
+                </div>
+              </div>
+              {adaptiveBannerCopy && !planBannerDismissed && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="mb-4 rounded-xl border border-brand-blue/30 bg-brand-blue/5 px-4 py-3 flex items-start gap-3"
+                >
+                  <Sparkles className="h-4 w-4 text-brand-blue mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-slate-900">{adaptiveBannerCopy.title}</p>
+                    <p className="text-xs text-slate-600">{adaptiveBannerCopy.body}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPlanBannerDismissed(true)}
+                    className="text-slate-400 hover:text-slate-600"
+                    aria-label="Dismiss plan update"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </motion.div>
+              )}
+              {lessonSummary && !lessonSummaryDismissed && (
+                <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 flex items-start gap-3">
+                  <Bot className="h-4 w-4 text-emerald-600 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-slate-900">
+                      Tutor caught today's focus: {lessonSummary.practiced}
+                    </p>
+                    <p className="text-xs text-slate-700">{lessonSummary.nextStep}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setLessonSummaryDismissed(true)}
+                    className="text-slate-400 hover:text-slate-600"
+                    aria-label="Dismiss tutor summary"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {upNextEntries.map((entry, index) => {
+                  const meta = (entry.metadata ?? {}) as Record<string, unknown>;
+                  const title =
+                    (meta.module_title as string | undefined) ??
+                    (meta.module_slug as string | undefined) ??
+                    `Module ${entry.position}`;
+                  const reasonCopy = describePathEntryReason(entry);
+                  return (
+                    <motion.div
+                      key={entry.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: index * 0.05 }}
+                      className="rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 shadow-sm flex items-start space-x-3"
+                    >
+                      <div className="h-10 w-10 rounded-full bg-sky-100 text-sky-700 font-semibold flex items-center justify-center">
+                        {entry.position}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-slate-900">{title}</p>
+                        <p className="text-xs text-slate-600 capitalize">
+                          {entry.type} · {entry.status === 'not_started' ? 'Ready' : entry.status}
+                        </p>
+                        <div className="mt-2 inline-flex items-center gap-1 text-[11px] text-slate-500">
+                          <Info className="h-3.5 w-3.5" />
+                          <span>
+                            <span className="font-semibold">Why this?</span> {reasonCopy}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {missingGuardian && (
           <motion.div
@@ -1459,6 +2002,40 @@ const StudentDashboard: React.FC = () => {
                         <p className="mt-1 text-xs text-gray-500">Focus set by your parent.</p>
                       )}
                     </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Weekly intent</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(['balanced', 'precision', 'speed', 'stretch'] as const).map((intent) => {
+                          const active = weeklyIntent === intent;
+                          const helper =
+                            intent === 'precision'
+                              ? 'Slow down, maximize accuracy'
+                              : intent === 'speed'
+                                ? 'Keep pacing brisk'
+                                : intent === 'stretch'
+                                  ? 'Lean into challenge'
+                                  : 'Balanced';
+                          return (
+                            <button
+                              key={intent}
+                              type="button"
+                              onClick={() => handleWeeklyIntentChange(intent)}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
+                                active
+                                  ? 'bg-amber-100 text-amber-800 border-amber-200 shadow-sm'
+                                  : 'border-slate-200 text-gray-700 hover:border-amber-300'
+                              }`}
+                            >
+                              <div className="font-semibold capitalize">{intent}</div>
+                              <div className="text-[11px] text-gray-500">{helper}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        Adjusts tutor tone and small XP nudges to match your goal this week.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="mt-5 flex flex-wrap gap-3">
@@ -1510,7 +2087,7 @@ const StudentDashboard: React.FC = () => {
                           Take our adaptive diagnostic to unlock a precision learning path tailored by AI.
                         </p>
                         <button
-                          onClick={() => setActiveView('assessment')}
+                          onClick={() => setActiveView('onboarding')}
                           className="bg-white text-brand-violet px-6 py-2 rounded-xl font-semibold hover:bg-gray-100 transition-colors focus-ring"
                         >
                           Start Assessment
@@ -2000,7 +2577,7 @@ const StudentDashboard: React.FC = () => {
                     {(dashboard?.upcomingAssessments?.length ?? 0) === 0 && (
                       <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center">
                         <p className="text-sm text-gray-600">
-                          No assessments scheduled yet. Complete today’s focus to unlock your next diagnostic.
+                          No assessments scheduled yet. Complete today's focus to unlock your next diagnostic.
                         </p>
                       </div>
                     )}
@@ -2384,11 +2961,17 @@ const StudentDashboard: React.FC = () => {
                   <p className="text-sm text-gray-600">
                     Meet your tutor—pick a persona and name. They are a helper, not your teacher, and won’t help you cheat.
                   </p>
+                  {personalizationError && (
+                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-2 py-1 mt-2">
+                      {personalizationError}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-600">
                   <Bot className="h-4 w-4 text-brand-blue" />
                   <span>
-                    {(tutorNameInput.trim() || student.tutorName || 'Tutor').slice(0, 22)} • {selectedTutorAvatar.label}
+                    {(tutorNameInput.trim() || student.tutorName || 'Tutor').slice(0, 22)} •{' '}
+                    {selectedTutorPersona?.name ?? 'Persona'}
                   </span>
                 </div>
               </div>
@@ -2417,64 +3000,85 @@ const StudentDashboard: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <div
                         className="w-10 h-10 rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: selectedTutorAvatar.palette.background }}
+                        style={{ backgroundColor: selectedPersonaPalette.background }}
                       >
                         <span className="text-lg" aria-hidden>
-                          {selectedTutorAvatar.icon}
+                          {selectedPersonaIcon}
                         </span>
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900">
                           {tutorNameInput.trim() || student.tutorName || 'Your tutor'}
                         </div>
-                        <div className="text-xs text-gray-500">{selectedTutorAvatar.description}</div>
+                        <div className="text-xs text-gray-500">
+                          {selectedTutorPersona?.constraints ?? 'Short, safe guidance for every answer.'}
+                        </div>
                       </div>
                     </div>
                     <p className="text-xs text-gray-600 mt-2">
-                      Your tutor will introduce with this name and keep a {describeTutorTone(selectedTutorAvatar.tone).toLowerCase()} tone.
+                      Your tutor will introduce with this name and keep a {describeTutorTone(selectedTutorPersona?.tone).toLowerCase()} tone.
                     </p>
+                    <p className="text-[11px] text-gray-500 mt-1 italic">Example: “{personaPreviewLine}”</p>
                   </div>
                 </div>
                 <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {TUTOR_AVATARS.map((avatar) => {
-                    const isSelected = tutorAvatarId === avatar.id;
-                    return (
-                      <button
-                        key={avatar.id}
-                        type="button"
-                        onClick={() => handleSelectTutorAvatar(avatar.id)}
-                        className={`flex items-start gap-3 rounded-xl border p-3 text-left transition shadow-sm ${
-                          isSelected
-                            ? 'border-brand-blue ring-2 ring-brand-blue/30 bg-brand-light-blue/30'
-                            : 'border-gray-200 hover:border-brand-blue/50 bg-white'
-                        }`}
-                      >
-                        <div
-                          className="w-10 h-10 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: avatar.palette.background }}
+                  {personalizationLoading && (
+                    <div className="col-span-2 text-sm text-gray-500">Loading personas…</div>
+                  )}
+                  {!personalizationLoading &&
+                    tutorPersonas.map((persona) => {
+                      const metadata = (persona.metadata ?? {}) as Record<string, unknown>;
+                      const palette = parsePalette(metadata);
+                      const icon = typeof metadata.icon === 'string' ? metadata.icon : '🧠';
+                      const sample =
+                        (persona.sample_replies?.find((reply) => typeof reply === 'string') as string | undefined) ??
+                        persona.prompt_snippet ??
+                        persona.constraints ??
+                        '';
+                      const isSelected = tutorPersonaId === persona.id;
+                      return (
+                        <button
+                          key={persona.id}
+                          type="button"
+                          onClick={() => handleSelectTutorPersona(persona.id)}
+                          className={`flex items-start gap-3 rounded-xl border p-3 text-left transition shadow-sm ${
+                            isSelected
+                              ? 'border-brand-blue ring-2 ring-brand-blue/30 bg-brand-light-blue/30'
+                              : 'border-gray-200 hover:border-brand-blue/50 bg-white'
+                          }`}
                         >
-                          <span aria-hidden className="text-lg">
-                            {avatar.icon}
-                          </span>
-                        </div>
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-900">{avatar.label}</span>
-                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                              {describeTutorTone(avatar.tone)}
+                          <div
+                            className="w-10 h-10 rounded-full flex items-center justify-center"
+                            style={{ backgroundColor: palette.background }}
+                          >
+                            <span aria-hidden className="text-lg">
+                              {icon}
                             </span>
                           </div>
-                          <p className="text-xs text-gray-600">{avatar.description}</p>
-                        </div>
-                      </button>
-                    );
-                  })}
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-900">{persona.name}</span>
+                              <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 capitalize">
+                                {describeTutorTone(persona.tone)}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-600">
+                              {persona.constraints ?? persona.prompt_snippet ?? 'Safe, on-task assistant.'}
+                            </p>
+                            {sample && <p className="text-[11px] text-gray-500 line-clamp-2">“{sample}”</p>}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  {!personalizationLoading && !tutorPersonas.length && (
+                    <p className="text-sm text-gray-600">No tutor personas are available right now.</p>
+                  )}
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={handleRandomizeTutorAvatar}
+                  onClick={handleRandomizeTutorPersona}
                   className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
                 >
                   <Sparkles className="h-4 w-4 text-brand-violet" />
@@ -2483,9 +3087,17 @@ const StudentDashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => void handleSaveTutorPersona()}
-                  disabled={tutorSaving || (!!tutorNameError && tutorNameInput.trim().length > 0)}
+                  disabled={
+                    tutorSaving ||
+                    personalizationLoading ||
+                    !tutorPersonaId ||
+                    (!!tutorNameError && tutorNameInput.trim().length > 0)
+                  }
                   className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${
-                    tutorSaving || (!!tutorNameError && tutorNameInput.trim().length > 0)
+                    tutorSaving ||
+                    personalizationLoading ||
+                    !tutorPersonaId ||
+                    (!!tutorNameError && tutorNameInput.trim().length > 0)
                       ? 'bg-gray-200 text-gray-500'
                       : 'bg-brand-blue text-white hover:bg-brand-blue/90'
                   }`}
@@ -2518,62 +3130,68 @@ const StudentDashboard: React.FC = () => {
                 </div>
               </div>
               <div className="flex overflow-x-auto gap-3 pb-2 -mx-1 px-1">
-                {avatarOptions.map((option) => {
-                  const unlocked = isAvatarUnlocked(option);
-                  const isEquipped = equippedAvatarId === option.id;
-                  const requirementParts: string[] = [];
-                  if (option.minXp) requirementParts.push(`${option.minXp} XP`);
-                  if (option.requiredStreak) requirementParts.push(`${option.requiredStreak}-day streak`);
-                  const requirementText = requirementParts.length ? `Requires ${requirementParts.join(' • ')}` : 'Starter look';
-                  return (
-                    <div
-                      key={option.id}
-                      className="min-w-[220px] rounded-xl border border-slate-200 bg-gradient-to-br from-white to-brand-light-blue/30 p-4 shadow-sm"
-                      style={{ borderColor: isEquipped ? '#22c55e' : undefined }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="text-2xl">{option.icon}</div>
-                        <span className="text-[11px] px-2 py-1 rounded-full bg-gray-100 text-gray-700 capitalize">
-                          {option.rarity ?? 'starter'}
-                        </span>
-                      </div>
-                      <h4 className="font-semibold text-gray-900 mt-2">{option.label}</h4>
-                      <p className="text-xs text-gray-600 line-clamp-3">{option.description}</p>
-                      <p className="text-[11px] text-gray-500 mt-2">{requirementText}</p>
-                      <div className="mt-3 flex items-center justify-between">
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: option.palette.background }}
-                        >
-                          <div
-                            className="w-4 h-4 rounded-full"
-                            style={{ backgroundColor: option.palette.accent }}
-                          />
+                {personalizationLoading && (
+                  <div className="text-sm text-gray-500 px-2 py-1">Loading avatars…</div>
+                )}
+                {!personalizationLoading &&
+                  studentAvatarOptions.map((option) => {
+                    const unlocked = isAvatarUnlocked(option);
+                    const isEquipped = equippedAvatarId === option.id;
+                    const requirementParts: string[] = [];
+                    if (option.minXp) requirementParts.push(`${option.minXp} XP`);
+                    if (option.requiredStreak) requirementParts.push(`${option.requiredStreak}-day streak`);
+                    const requirementText = requirementParts.length
+                      ? `Requires ${requirementParts.join(' • ')}`
+                      : 'Starter look';
+                    return (
+                      <div
+                        key={option.id}
+                        className="min-w-[220px] rounded-xl border border-slate-200 bg-gradient-to-br from-white to-brand-light-blue/30 p-4 shadow-sm"
+                        style={{ borderColor: isEquipped ? '#22c55e' : undefined }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="text-2xl">{option.icon}</div>
+                          <span className="text-[11px] px-2 py-1 rounded-full bg-gray-100 text-gray-700 capitalize">
+                            {option.rarity ?? 'starter'}
+                          </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => void handleEquipAvatar(option)}
-                          disabled={!unlocked || avatarSaving}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
-                            isEquipped
-                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                              : unlocked && !avatarSaving
-                              ? 'bg-brand-blue text-white'
-                              : 'bg-gray-100 text-gray-500'
-                          }`}
-                        >
-                          {isEquipped
-                            ? 'Equipped'
-                            : avatarSaving && !isEquipped
-                            ? 'Saving...'
-                            : unlocked
-                            ? 'Equip'
-                            : 'Locked'}
-                        </button>
+                        <h4 className="font-semibold text-gray-900 mt-2">{option.label}</h4>
+                        <p className="text-xs text-gray-600 line-clamp-3">{option.description}</p>
+                        <p className="text-[11px] text-gray-500 mt-2">{requirementText}</p>
+                        <div className="mt-3 flex items-center justify-between">
+                          <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center"
+                            style={{ backgroundColor: option.palette.background }}
+                          >
+                            <div
+                              className="w-4 h-4 rounded-full"
+                              style={{ backgroundColor: option.palette.accent }}
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => void handleEquipAvatar(option)}
+                            disabled={!unlocked || avatarSaving}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
+                              isEquipped
+                                ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                : unlocked && !avatarSaving
+                                  ? 'bg-brand-blue text-white'
+                                  : 'bg-gray-100 text-gray-500'
+                            }`}
+                          >
+                            {isEquipped
+                              ? 'Equipped'
+                              : avatarSaving && !isEquipped
+                                ? 'Saving...'
+                                : unlocked
+                                  ? 'Equip'
+                                  : 'Locked'}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
               {avatarFeedback && (
                 <div className="mt-3 rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
@@ -2650,7 +3268,7 @@ const StudentDashboard: React.FC = () => {
                 ))}
                 {celebrationMoments.length === 0 && (
                   <p className="text-sm text-gray-600">
-                    Complete today’s mission to unlock a celebration.
+                    Complete today's mission to unlock a celebration.
                   </p>
                 )}
               </div>

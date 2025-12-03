@@ -83,7 +83,18 @@ export const logAdminAuditEvent = async (
 
 export type OpsMetricsSnapshot = {
   windowMs: number;
-  totals: Record<'tutor_success' | 'tutor_error' | 'tutor_safety_block' | 'tutor_plan_limit' | 'api_failure' | 'api_slow', number>;
+  totals: Record<
+    | 'tutor_success'
+    | 'tutor_error'
+    | 'tutor_safety_block'
+    | 'tutor_plan_limit'
+    | 'tutor_latency'
+    | 'path_progress'
+    | 'xp_rate'
+    | 'api_failure'
+    | 'api_slow',
+    number
+  >;
   topSafetyReasons: Array<{ label: string; count: number }>;
   topPlanLimitReasons: Array<{ label: string; count: number }>;
   apiFailuresByRoute: Array<{ label: string; count: number }>;
@@ -101,4 +112,13 @@ export type OpsMetricsSnapshot = {
 export const fetchOpsMetrics = async (): Promise<OpsMetricsSnapshot> => {
   const response = await authenticatedFetch('/api/v1/admins/ops-metrics');
   return handleApiResponse<OpsMetricsSnapshot>(response);
+};
+
+export const updatePlatformConfig = async (key: string, value: unknown) => {
+  const response = await authenticatedFetch('/api/v1/admins/platform-config', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, value }),
+  });
+  return handleApiResponse<{ ok: true }>(response);
 };

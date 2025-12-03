@@ -5,9 +5,20 @@ import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
 import type { Admin, Parent, Student } from '../../types';
 import NotificationCenter from './NotificationCenter';
+import { useXP } from '../../hooks/useStudentData';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
+  const xpState = useXP(
+    user?.role === 'student' ? user.id : null,
+    user?.role === 'student'
+      ? {
+          xp: (user as Student).xp,
+          streakDays: (user as Student).streakDays,
+          badges: (user as Student).badges?.length ?? null,
+        }
+      : undefined,
+  );
 
   if (!user) return null;
 
@@ -96,13 +107,13 @@ const Header: React.FC = () => {
                   <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-brand-teal transition-all duration-300"
-                      style={{ width: `${((user as Student).xp % 100)}%` }}
+                      style={{ width: `${xpState.xp % 100}%` }}
                     />
                   </div>
                 </div>
                 <div className="flex items-center space-x-1 text-brand-violet">
                   <span className="text-lg">🔥</span>
-                  <span className="text-sm font-medium">{(user as Student).streakDays}</span>
+                  <span className="text-sm font-medium">{xpState.streakDays}</span>
                 </div>
               </div>
             )}

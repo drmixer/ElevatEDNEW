@@ -74,6 +74,7 @@ import { updateLearningPreferences } from '../../services/profileService';
 import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { computeSubjectStatuses, formatSubjectStatusTooltip, onTrackBadge, onTrackLabel } from '../../lib/onTrack';
 import { recordCoachingFeedback } from '../../services/coachingService';
+import { useParentOverview } from '../../hooks/useStudentData';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -182,6 +183,9 @@ const ParentDashboard: React.FC = () => {
   const [concernScreenshotUrl, setConcernScreenshotUrl] = useState('');
   const [concernMessage, setConcernMessage] = useState<string | null>(null);
   const [concernError, setConcernError] = useState<string | null>(null);
+  const [checkInSnippet, setCheckInSnippet] = useState<{ childId: string; message: string } | null>(null);
+  const [progressShareSnippet, setProgressShareSnippet] = useState<string | null>(null);
+  const [weeklyNudgeSnippet, setWeeklyNudgeSnippet] = useState<string | null>(null);
   const [showTour, setShowTour] = useState<boolean>(false);
   const [tourStep, setTourStep] = useState<number>(0);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
@@ -212,6 +216,11 @@ const ParentDashboard: React.FC = () => {
     enabled: Boolean(parent),
     staleTime: 1000 * 60 * 5,
   });
+
+  const {
+    data: overview,
+    isFetching: overviewFetching,
+  } = useParentOverview(parent?.id);
 
   useEffect(() => {
     if (!dashboard?.children.length) return;
@@ -409,6 +418,26 @@ const ParentDashboard: React.FC = () => {
     currentChild?.learningPreferences?.tutorDailyLimit ?? entitlements.aiTutorDailyLimit,
     'chats/day',
   );
+  const weeklyChange = currentChild?.weeklyChange ?? null;
+  const formatDelta = (value: number) => `${value >= 0 ? '+' : ''}${Math.round(value)}`;
+  const struggleFlagged = useMemo(
+    () =>
+      Boolean(
+        currentChild?.skillGaps?.some((gap) => gap.status === 'needs_attention') ||
+          (currentChild?.focusAreas ?? []).length,
+      ),
+    [currentChild?.focusAreas, currentChild?.skillGaps],
+  );
+  const struggleLabel = useMemo(() => {
+    if (currentChild?.skillGaps?.length) {
+      const primary =
+        currentChild.skillGaps.find((gap) => gap.status === 'needs_attention') ?? currentChild.skillGaps[0];
+      if (primary?.subject) return formatSubjectLabel(primary.subject);
+      if (primary?.concepts?.length) return primary.concepts[0];
+    }
+    if (currentChild?.focusAreas?.length) return currentChild.focusAreas[0];
+    return null;
+  }, [currentChild?.focusAreas, currentChild?.skillGaps]);
 
   const weeklySnapshot = useMemo(() => {
     if (!dashboard) return null;
@@ -487,6 +516,11 @@ const ParentDashboard: React.FC = () => {
       };
     });
   }, [dashboard?.children]);
+
+  const struggleCount = useMemo(
+    () => (dashboard?.children ?? []).filter((child) => child.struggle || child.alerts.length > 0).length,
+    [dashboard?.children],
+  );
 
   const showSkeleton = isLoading && !dashboard;
   const showAssignmentsSection =
@@ -1214,6 +1248,37 @@ const ParentDashboard: React.FC = () => {
     }
   };
 
+  const prefillAssignmentFromAlert = (childId: string, hint?: string | null) => {
+    setSelectedChildId(childId);
+    setModuleSearch(hint ?? 'review');
+    setAssignErrorMessage(null);
+    setAssignMessage('Loaded a review search based on the latest alert.');
+    scrollToSection('assignments');
+  };
+
+  const handleQuickCheckIn = (childId: string, childName: string, hint?: string | null) => {
+    const topic = hint ?? 'today\'s lesson';
+    setCheckInSnippet({
+      childId,
+      message: `Try a quick check-in with ${childName}: "Want to review ${topic} together for five minutes?"`,
+    });
+  };
+
+  const handleShareProgress = () => {
+    if (!currentChild || !weeklyChange) return;
+    const msg = `Quick win for ${currentChild.name}: ${weeklyChange.lessons} lesson${weeklyChange.lessons === 1 ? '' : 's'} and ${weeklyChange.xp} XP this week. Keep it up!`;
+    setProgressShareSnippet(msg);
+    trackEvent('parent_progress_share_generated', { childId: currentChild.id });
+  };
+
+  const handleSendNudge = () => {
+    if (!currentChild) return;
+    const hint = struggleFlagged ? struggleLabel ?? 'a focus area' : 'today’s plan';
+    const msg = `Hey ${currentChild.name}, proud of your work! Want to tackle a quick check on ${hint} together?`;
+    setWeeklyNudgeSnippet(msg);
+    trackEvent('parent_nudge_generated', { childId: currentChild.id, struggle: struggleFlagged });
+  };
+
   const statusBadgeStyles: Record<AssignmentStatus, string> = {
     completed: 'bg-emerald-100 text-emerald-700',
     in_progress: 'bg-amber-100 text-amber-700',
@@ -1355,6 +1420,118 @@ const ParentDashboard: React.FC = () => {
           </div>
         </motion.div>
 
+        {overview && overview.children.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.02 }}
+          className="mb-6"
+        >
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-slate-500">Live progress</p>
+                <h3 className="text-lg font-bold text-slate-900">Per-child status & alerts</h3>
+              </div>
+              {struggleCount > 0 && (
+                <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1 text-xs font-semibold">
+                  🔔 {struggleCount} learner{struggleCount === 1 ? '' : 's'} need support
+                </span>
+              )}
+              {overviewFetching && <span className="text-xs text-slate-500">Refreshing…</span>}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {overview.children.map((child) => (
+                <div
+                    key={child.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col gap-2"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">{child.name}</p>
+                        <p className="text-xs text-slate-600">
+                          Grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
+                        </p>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded-lg">
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        {child.progress_pct != null ? `${child.progress_pct}%` : '—'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
+                      <div className="rounded-lg bg-white border border-slate-200 p-2">
+                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
+                        <div className="font-semibold">{Math.round(child.weekly_time_minutes)} min</div>
+                      </div>
+                      <div className="rounded-lg bg-white border border-slate-200 p-2">
+                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Latest quiz</div>
+                        <div className="font-semibold">
+                          {child.latest_quiz_score != null ? `${child.latest_quiz_score}%` : '—'}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-slate-700">
+                      <span>XP {child.xp_total}</span>
+                      <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
+                    </div>
+                    {child.alerts.length > 0 ? (
+                      <div className="text-xs text-amber-700 bg-amber-100 border border-amber-200 rounded-lg p-2">
+                        {child.alerts[0]}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-lg p-2">
+                        On track
+                      </div>
+                    )}
+                    {child.alerts.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => prefillAssignmentFromAlert(child.id, child.alerts[0])}
+                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
+                        >
+                          Assign a review module
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickCheckIn(child.id, child.name, child.alerts[0])}
+                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring"
+                        >
+                          Encourage quick check-in
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const msg = `Progress note for ${child.name}: we saw an alert on ${child.alerts[0]}. Let me know how I can help this week.`;
+                            setCheckInSnippet({ childId: child.id, message: msg });
+                            trackEvent('parent_child_alert_share', { childId: child.id });
+                          }}
+                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-amber-700 border border-amber-200 hover:bg-amber-50 focus-ring"
+                        >
+                          Share alert
+                        </button>
+                      </div>
+                    )}
+                    {checkInSnippet?.childId === child.id && (
+                      <div className="text-[11px] text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1">
+                        {checkInSnippet.message}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedChildId(child.id)}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
+                    >
+                      Open details
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1459,6 +1636,19 @@ const ParentDashboard: React.FC = () => {
                 >
                   {guideOpen ? 'Hide' : 'Open'}
                 </button>
+              </div>
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-semibold text-amber-800">Struggle alerts</p>
+                    <p className="text-xs text-amber-700">
+                      We flag consecutive misses or low accuracy. Check child cards above and Coach View for details.
+                    </p>
+                  </div>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-amber-700 border border-amber-200">
+                    🔔 Active
+                  </span>
+                </div>
               </div>
               {guideOpen ? (
                 <div className="space-y-3">
@@ -1881,6 +2071,9 @@ const ParentDashboard: React.FC = () => {
                 <p className="text-sm text-gray-600">
                   Quick read on every learner with streaks, XP, and where to focus next.
                 </p>
+                <p className="text-xs text-gray-500">
+                  The plan adapts based on your child&apos;s quizzes and practice—alerts show when it may be time to step in.
+                </p>
               </div>
               <div className="text-xs text-gray-500">
                 Week of {weeklySnapshot?.weekStartLabel ?? '—'}
@@ -2119,6 +2312,46 @@ const ParentDashboard: React.FC = () => {
                 )}
               </div>
             </div>
+
+            {weeklyChange && (
+              <div className="rounded-xl border border-slate-200 bg-white p-3 flex flex-wrap items-center gap-3">
+                <div className="text-sm font-semibold text-slate-900">
+                  This week: {weeklyChange.lessons} lesson{weeklyChange.lessons === 1 ? '' : 's'},{' '}
+                  {weeklyChange.minutes} min practice, {weeklyChange.xp} XP
+                </div>
+                <div className="text-xs text-slate-600">
+                  vs last week ({formatDelta(weeklyChange.deltaLessons)} lessons, {formatDelta(weeklyChange.deltaMinutes)} min,{' '}
+                  {formatDelta(weeklyChange.deltaXp)} XP)
+                </div>
+                {struggleFlagged && (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-1 rounded-full">
+                    Struggle flagged{struggleLabel ? ` in ${struggleLabel}` : ''}
+                  </span>
+                )}
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={handleShareProgress}
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 font-semibold text-slate-700 hover:border-brand-blue/50 hover:text-brand-blue focus-ring"
+                  >
+                    Share progress
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSendNudge}
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 font-semibold text-slate-700 hover:border-amber-400/80 hover:text-amber-700 focus-ring"
+                  >
+                    Send nudge
+                  </button>
+                </div>
+                {(progressShareSnippet || weeklyNudgeSnippet) && (
+                  <div className="w-full text-[11px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1">
+                    {progressShareSnippet && <div className="mb-1">Share: {progressShareSnippet}</div>}
+                    {weeklyNudgeSnippet && <div>Nudge: {weeklyNudgeSnippet}</div>}
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">

@@ -4,6 +4,7 @@ import {
   Activity,
   AlertTriangle,
   BarChart3,
+  Beaker,
   ClipboardList,
   Clock,
   Loader2,
@@ -33,7 +34,7 @@ import {
   fetchAdminStudents,
 } from '../../services/assignmentService';
 import { fetchCatalogModules } from '../../services/catalogService';
-import { logAdminAuditEvent, fetchOpsMetrics, type OpsMetricsSnapshot } from '../../services/adminService';
+import { logAdminAuditEvent, fetchOpsMetrics, updatePlatformConfig, type OpsMetricsSnapshot } from '../../services/adminService';
 import {
   fetchTutorReports,
   updateTutorReportStatus,
@@ -44,6 +45,40 @@ import {
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
 );
+
+const XP_PROFILES: Record<
+  'conservative' | 'standard' | 'boosted',
+  { label: string; values: Record<'xp.multiplier' | 'xp.difficulty_bonus_multiplier' | 'xp.accuracy_bonus_multiplier' | 'xp.streak_bonus_multiplier', number> }
+> = {
+  conservative: {
+    label: 'Conservative',
+    values: {
+      'xp.multiplier': 0.9,
+      'xp.difficulty_bonus_multiplier': 0.9,
+      'xp.accuracy_bonus_multiplier': 0.9,
+      'xp.streak_bonus_multiplier': 0.85,
+    },
+  },
+  standard: {
+    label: 'Standard',
+    values: {
+      'xp.multiplier': 1,
+      'xp.difficulty_bonus_multiplier': 1,
+      'xp.accuracy_bonus_multiplier': 1,
+      'xp.streak_bonus_multiplier': 1,
+    },
+  },
+  boosted: {
+    label: 'Boosted',
+    values: {
+      'xp.multiplier': 1.2,
+      'xp.difficulty_bonus_multiplier': 1.1,
+      'xp.accuracy_bonus_multiplier': 1.1,
+      'xp.streak_bonus_multiplier': 1.15,
+    },
+  },
+};
+type XpProfileKey = keyof typeof XP_PROFILES;
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -57,6 +92,10 @@ const AdminDashboard: React.FC = () => {
   const [assignError, setAssignError] = useState<string | null>(null);
   const [auditLogged, setAuditLogged] = useState(false);
   const [reportStatusFilter, setReportStatusFilter] = useState<'all' | TutorReportStatus>('open');
+  const [configKey, setConfigKey] = useState('adaptive.target_accuracy_max');
+  const [configValue, setConfigValue] = useState('');
+  const [configSaving, setConfigSaving] = useState(false);
+  const [configMessage, setConfigMessage] = useState<string | null>(null);
 
   const {
     data: dashboard,
@@ -130,6 +169,34 @@ const AdminDashboard: React.FC = () => {
     staleTime: 15 * 1000,
   });
   const opsMetrics: OpsMetricsSnapshot | undefined = opsMetricsQuery.data;
+  const adaptiveHealth = useMemo(() => {
+    if (!opsMetrics) {
+      return { ok: false, status: 'unknown', label: 'No data', risk: 'unknown' } as const;
+    }
+    const success = opsMetrics.totals.tutor_success ?? 0;
+    const errors = opsMetrics.totals.tutor_error ?? 0;
+    const safety = opsMetrics.totals.tutor_safety_block ?? 0;
+    const pathUpdates = opsMetrics.totals.path_progress ?? 0;
+    const errorRate = success ? errors / Math.max(success, 1) : 0;
+    const safetyRate = success ? safety / Math.max(success, 1) : 0;
+    const status =
+      errorRate > 0.15 || safetyRate > 0.2
+        ? 'at risk'
+        : errorRate > 0.08 || safetyRate > 0.1
+          ? 'watch'
+          : 'healthy';
+    return {
+      ok: status === 'healthy',
+      status,
+      label: status === 'healthy' ? 'Adaptive services healthy' : status === 'watch' ? 'Watch adaptive signals' : 'At risk',
+      success,
+      errors,
+      safety,
+      pathUpdates,
+      errorRate: Math.round(errorRate * 100),
+      safetyRate: Math.round(safetyRate * 100),
+    };
+  }, [opsMetrics]);
 
   const tutorReportsQuery = useQuery({
     queryKey: ['admin-tutor-reports', reportStatusFilter],
@@ -230,6 +297,43 @@ const AdminDashboard: React.FC = () => {
       studentCount: targetStudents.length,
     });
     await refetch({ throwOnError: false });
+  };
+
+  const handleConfigSave = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setConfigMessage(null);
+    setConfigSaving(true);
+    try {
+      const parsed =
+        configValue.trim().length && !Number.isNaN(Number(configValue))
+          ? Number(configValue)
+          : configValue.trim().length
+            ? configValue
+            : null;
+      await updatePlatformConfig(configKey, parsed);
+      setConfigMessage('Config updated. Changes take effect on next fetch.');
+    } catch (error) {
+      setConfigMessage(error instanceof Error ? error.message : 'Unable to update config.');
+    } finally {
+      setConfigSaving(false);
+    }
+  };
+
+  const applyXpProfile = async (profileKey: XpProfileKey) => {
+    const profile = XP_PROFILES[profileKey];
+    setConfigSaving(true);
+    setConfigMessage(null);
+    try {
+      await Promise.all(
+        Object.entries(profile.values).map(([key, value]) => updatePlatformConfig(key, value)),
+      );
+      setConfigMessage(`${profile.label} XP profile applied.`);
+      trackEvent('admin_xp_profile_applied', { adminId: admin?.id, profile: profileKey });
+    } catch (error) {
+      setConfigMessage('Unable to apply XP profile right now.');
+    } finally {
+      setConfigSaving(false);
+    }
   };
 
   const growthData = useMemo(() => {
@@ -500,6 +604,56 @@ const AdminDashboard: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
+                  <h3 className="text-xl font-bold text-gray-900">Adaptive Health</h3>
+                  <p className="text-sm text-slate-600">Signals from tutor and path updates</p>
+                </div>
+                <span
+                  className={`text-xs px-3 py-1 rounded-full border ${
+                    adaptiveHealth.status === 'healthy'
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                      : adaptiveHealth.status === 'watch'
+                        ? 'bg-amber-50 border-amber-200 text-amber-700'
+                        : 'bg-rose-50 border-rose-200 text-rose-700'
+                  }`}
+                >
+                  {adaptiveHealth.label}
+                </span>
+              </div>
+              {opsMetrics ? (
+                <div className="grid md:grid-cols-4 gap-3">
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Tutor success</p>
+                    <p className="text-2xl font-bold text-slate-900">{adaptiveHealth.success}</p>
+                  </div>
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Tutor errors</p>
+                    <p className="text-2xl font-bold text-rose-600">{adaptiveHealth.errors}</p>
+                    <p className="text-[11px] text-rose-600">{adaptiveHealth.errorRate}% of successes</p>
+                  </div>
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Safety blocks</p>
+                    <p className="text-2xl font-bold text-amber-700">{adaptiveHealth.safety}</p>
+                    <p className="text-[11px] text-amber-700">{adaptiveHealth.safetyRate}% of successes</p>
+                  </div>
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Path updates</p>
+                    <p className="text-2xl font-bold text-slate-900">{adaptiveHealth.pathUpdates ?? 0}</p>
+                    <p className="text-[11px] text-slate-500">Up Next refreshes</p>
+                  </div>
+                </div>
+              ) : (
+                <SkeletonCard className="h-20" />
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.36 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
                   <h3 className="text-xl font-bold text-gray-900">Ops Signals</h3>
                   <p className="text-sm text-slate-600">Last {Math.round((opsMetrics?.windowMs ?? 3600000) / 60000)} min</p>
                 </div>
@@ -516,19 +670,22 @@ const AdminDashboard: React.FC = () => {
                 <SkeletonCard className="h-28" />
               ) : opsMetrics ? (
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {([
-                      { label: 'Tutor successes', value: opsMetrics.totals.tutor_success, tone: 'default' },
-                      { label: 'Tutor errors', value: opsMetrics.totals.tutor_error, tone: 'warn' },
-                      { label: 'Safety blocks', value: opsMetrics.totals.tutor_safety_block, tone: 'amber' },
-                      { label: 'Plan/limit blocks', value: opsMetrics.totals.tutor_plan_limit, tone: 'amber' },
-                      { label: 'API failures', value: opsMetrics.totals.api_failure, tone: 'warn' },
-                      { label: 'Slow APIs', value: opsMetrics.totals.api_slow, tone: 'default' },
-                    ] as const).map((stat) => {
-                      const tone =
-                        stat.tone === 'warn'
-                          ? 'bg-rose-50 border-rose-200 text-rose-700'
-                          : stat.tone === 'amber'
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {([
+                    { label: 'Tutor successes', value: opsMetrics.totals.tutor_success, tone: 'default' },
+                    { label: 'Tutor errors', value: opsMetrics.totals.tutor_error, tone: 'warn' },
+                    { label: 'Safety blocks', value: opsMetrics.totals.tutor_safety_block, tone: 'amber' },
+                    { label: 'Plan/limit blocks', value: opsMetrics.totals.tutor_plan_limit, tone: 'amber' },
+                    { label: 'Tutor latency pings', value: opsMetrics.totals.tutor_latency, tone: 'default' },
+                    { label: 'API failures', value: opsMetrics.totals.api_failure, tone: 'warn' },
+                    { label: 'Slow APIs', value: opsMetrics.totals.api_slow, tone: 'default' },
+                    { label: 'Path progression', value: opsMetrics.totals.path_progress, tone: 'default' },
+                    { label: 'XP events', value: opsMetrics.totals.xp_rate, tone: 'default' },
+                  ] as const).map((stat) => {
+                    const tone =
+                      stat.tone === 'warn'
+                        ? 'bg-rose-50 border-rose-200 text-rose-700'
+                        : stat.tone === 'amber'
                             ? 'bg-amber-50 border-amber-200 text-amber-700'
                             : 'bg-slate-50 border-slate-200 text-slate-800';
                       return (
@@ -585,6 +742,38 @@ const AdminDashboard: React.FC = () => {
                         </ul>
                       ) : (
                         <p className="text-sm text-slate-600">No failures in window.</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Path progression/drop-offs</p>
+                      {opsMetrics.pathEventsByLabel.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.pathEventsByLabel.map((item) => (
+                            <li key={item.label} className="flex justify-between">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No path signals in window.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">XP accrual events</p>
+                      {opsMetrics.xpEventsBySource.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.xpEventsBySource.map((item) => (
+                            <li key={item.label} className="flex justify-between">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No XP events in window.</p>
                       )}
                     </div>
                   </div>
@@ -749,6 +938,76 @@ const AdminDashboard: React.FC = () => {
                   {assignError}
                 </p>
               )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.42 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Beaker className="h-5 w-5 text-brand-violet" />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">Config toggles (A/B)</h3>
+                    <p className="text-sm text-slate-600">Adjust adaptive targets, XP multipliers, tutor timeout.</p>
+                  </div>
+                </div>
+              </div>
+              <form className="grid gap-3 md:grid-cols-[1.5fr_1fr_auto] items-center" onSubmit={handleConfigSave}>
+                <input
+                  type="text"
+                  value={configKey}
+                  onChange={(e) => setConfigKey(e.target.value)}
+                  className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus-ring"
+                  placeholder="adaptive.target_accuracy_max"
+                />
+                <input
+                  type="text"
+                  value={configValue}
+                  onChange={(e) => setConfigValue(e.target.value)}
+                  className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus-ring"
+                  placeholder="e.g. 0.8"
+                />
+                <button
+                  type="submit"
+                  disabled={configSaving}
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-60 focus-ring"
+                >
+                  {configSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                  Save
+                </button>
+              </form>
+              {configMessage && <p className="text-xs text-slate-600 mt-2">{configMessage}</p>}
+              <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/80 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-900">XP profiles</p>
+                  <span className="text-[11px] text-slate-500">Sets multipliers together</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(XP_PROFILES).map(([key, profile]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => applyXpProfile(key as XpProfileKey)}
+                      disabled={configSaving}
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-brand-blue/50 hover:text-brand-blue focus-ring disabled:opacity-50"
+                    >
+                      {profile.label} ({profile.values['xp.multiplier']}x)
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-slate-600">
+                  Applies xp.multiplier, xp.difficulty_bonus_multiplier, xp.accuracy_bonus_multiplier, and
+                  xp.streak_bonus_multiplier together so you can tune reward feel without code changes.
+                </p>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-3 leading-snug">
+                Keys: adaptive.target_accuracy_min/max, adaptive.max_remediation_pending, adaptive.max_practice_pending,
+                adaptive.struggle_consecutive_misses, xp.multiplier, xp.difficulty_bonus_multiplier,
+                xp.accuracy_bonus_multiplier, xp.streak_bonus_multiplier, tutor.timeout_ms
+              </p>
             </motion.div>
 
             <motion.div

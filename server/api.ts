@@ -61,6 +61,26 @@ import { NotificationScheduler, notifyAssignmentCreated } from './notifications.
 import { HttpError } from './httpError.js';
 import { listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
 import { getOpsSnapshot } from './opsMetrics.js';
+import { getRuntimeConfig } from './config.js';
+import {
+  getParentOverview,
+  getStudentPath,
+  getStudentStats,
+  ensureStudentProfileProvisioned,
+  savePlacementResponse,
+  selectNextEntry,
+  startPlacementAssessment,
+  submitPlacementAssessment,
+  applyAdaptiveEvent,
+} from './learningPaths.js';
+import {
+  buildTutorContext,
+  getStudentPreferences as fetchStudentPreferences,
+  listAvatars,
+  listTutorPersonas,
+  updateStudentPreferences as saveStudentPreferences,
+} from './personalization.js';
+import { recordLearningEvent } from './xpService.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -930,6 +950,323 @@ export const createApiHandler = (context: ApiContext) => {
       });
     }
 
+    if (method === 'GET' && path === '/avatars') {
+      return handleRoute(async () => {
+        const category =
+          typeof url.query.category === 'string' && url.query.category.trim().length
+            ? url.query.category.trim()
+            : undefined;
+        const avatars = await listAvatars(serviceSupabase ?? supabase, category ? { category } : undefined);
+        sendJson(res, 200, { avatars }, API_VERSION);
+      });
+    }
+
+    if (method === 'GET' && path === '/tutor_personas') {
+      return handleRoute(async () => {
+        const tutorPersonas = await listTutorPersonas(serviceSupabase ?? supabase);
+        sendJson(res, 200, { tutorPersonas }, API_VERSION);
+      });
+    }
+
+    if (path === '/student/preferences') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      if (method === 'GET') {
+        return handleRoute(async () => {
+          await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
+          const preferences = await fetchStudentPreferences(supabase, actor.id);
+          sendJson(res, 200, { preferences }, API_VERSION);
+        }, { actorId: actor.id });
+      }
+
+      if (method === 'PUT') {
+        return handleRoute(async () => {
+          await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
+          const body = await readValidatedJson<{
+            avatarId?: string | null;
+            tutorPersonaId?: string | null;
+            optInAi?: boolean;
+            goalFocus?: string | null;
+            theme?: string | null;
+          }>(req);
+
+          const updates: Record<string, unknown> = {};
+
+          if (typeof body.avatarId === 'string' && body.avatarId.trim().length > 0) {
+            updates.avatar_id = body.avatarId.trim();
+          }
+          if (typeof body.tutorPersonaId === 'string' && body.tutorPersonaId.trim().length > 0) {
+            updates.tutor_persona_id = body.tutorPersonaId.trim();
+          }
+          if (typeof body.optInAi === 'boolean') {
+            updates.opt_in_ai = body.optInAi;
+          }
+          if (typeof body.goalFocus === 'string') {
+            updates.goal_focus = body.goalFocus.trim();
+          }
+          if (typeof body.theme === 'string') {
+            updates.theme = body.theme.trim();
+          }
+
+          if (!Object.keys(updates).length) {
+            throw new HttpError(400, 'No preference fields provided.', 'invalid_payload');
+          }
+
+          const preferences = await saveStudentPreferences(supabase, actor.id, updates);
+          sendJson(res, 200, { preferences }, API_VERSION);
+        }, { actorId: actor.id });
+      }
+    }
+
+    if (method === 'POST' && path === '/student/assessment/start') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          gradeBand?: string | null;
+          fullName?: string | null;
+          optInAi?: boolean;
+          avatarId?: string | null;
+          tutorPersonaId?: string | null;
+        }>(req);
+        const gradeBand = typeof body.gradeBand === 'string' ? body.gradeBand.trim() : null;
+        const result = await startPlacementAssessment(supabase, actor.id, {
+          gradeBand,
+          fullName: typeof body.fullName === 'string' ? body.fullName.trim() : null,
+          optInAi: typeof body.optInAi === 'boolean' ? body.optInAi : undefined,
+          avatarId: typeof body.avatarId === 'string' ? body.avatarId.trim() : null,
+          tutorPersonaId: typeof body.tutorPersonaId === 'string' ? body.tutorPersonaId.trim() : null,
+          serviceSupabase,
+        });
+        sendJson(res, 200, result, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'POST' && path === '/student/assessment/submit') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          assessmentId?: number;
+          attemptId?: number | null;
+          responses?: Array<{ bankQuestionId?: number; optionId?: number | null; timeSpentSeconds?: number | null }>;
+          goalFocus?: string | null;
+          gradeBand?: string | null;
+          fullName?: string | null;
+          optInAi?: boolean;
+          avatarId?: string | null;
+          tutorPersonaId?: string | null;
+        }>(req);
+
+        if (!body.assessmentId || typeof body.assessmentId !== 'number' || !Number.isFinite(body.assessmentId)) {
+          throw new HttpError(400, 'assessmentId is required.', 'invalid_payload');
+        }
+
+        const responses =
+          Array.isArray(body.responses)
+            ? body.responses
+                .map((resp) => {
+                  const bankQuestionId =
+                    typeof resp.bankQuestionId === 'number' && Number.isFinite(resp.bankQuestionId)
+                      ? resp.bankQuestionId
+                      : null;
+                  if (!bankQuestionId) return null;
+                  return {
+                    bankQuestionId,
+                    optionId:
+                      typeof resp.optionId === 'number' && Number.isFinite(resp.optionId) ? resp.optionId : null,
+                    timeSpentSeconds:
+                      typeof resp.timeSpentSeconds === 'number' && Number.isFinite(resp.timeSpentSeconds)
+                        ? resp.timeSpentSeconds
+                        : null,
+                  };
+                })
+                .filter(Boolean)
+            : [];
+
+        const pathResult = await submitPlacementAssessment(
+          supabase,
+          actor.id,
+          {
+            assessmentId: body.assessmentId,
+            attemptId: typeof body.attemptId === 'number' ? body.attemptId : null,
+            responses,
+            goalFocus: typeof body.goalFocus === 'string' ? body.goalFocus : null,
+            gradeBand: typeof body.gradeBand === 'string' ? body.gradeBand : null,
+            fullName: typeof body.fullName === 'string' ? body.fullName : null,
+            optInAi: typeof body.optInAi === 'boolean' ? body.optInAi : undefined,
+            avatarId: typeof body.avatarId === 'string' ? body.avatarId : null,
+            tutorPersonaId: typeof body.tutorPersonaId === 'string' ? body.tutorPersonaId : null,
+          },
+          serviceSupabase,
+        );
+
+        sendJson(res, 200, pathResult, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'POST' && path === '/student/assessment/save') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          assessmentId?: number;
+          attemptId?: number;
+          bankQuestionId?: number;
+          optionId?: number | null;
+          timeSpentSeconds?: number | null;
+        }>(req);
+
+        if (!body.assessmentId || typeof body.assessmentId !== 'number' || !Number.isFinite(body.assessmentId)) {
+          throw new HttpError(400, 'assessmentId is required.', 'invalid_payload');
+        }
+        if (!body.attemptId || typeof body.attemptId !== 'number' || !Number.isFinite(body.attemptId)) {
+          throw new HttpError(400, 'attemptId is required.', 'invalid_payload');
+        }
+        if (!body.bankQuestionId || typeof body.bankQuestionId !== 'number' || !Number.isFinite(body.bankQuestionId)) {
+          throw new HttpError(400, 'bankQuestionId is required.', 'invalid_payload');
+        }
+
+        const result = await savePlacementResponse(
+          supabase,
+          actor.id,
+          {
+            assessmentId: body.assessmentId,
+            attemptId: body.attemptId,
+            bankQuestionId: body.bankQuestionId,
+            optionId: typeof body.optionId === 'number' ? body.optionId : null,
+            timeSpentSeconds:
+              typeof body.timeSpentSeconds === 'number' && Number.isFinite(body.timeSpentSeconds)
+                ? body.timeSpentSeconds
+                : null,
+          },
+          serviceSupabase,
+        );
+
+        sendJson(res, 200, result, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/path') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const pathResult = await getStudentPath(supabase, actor.id);
+        const next = await selectNextEntry(supabase, actor.id);
+        sendJson(res, 200, { path: pathResult, next }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'POST' && path === '/student/event') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          eventType?: string;
+          pathEntryId?: number | null;
+          status?: string | null;
+          score?: number | null;
+          timeSpentSeconds?: number | null;
+          accuracy?: number | null;
+          difficulty?: number | null;
+          basePoints?: number | null;
+          payload?: Record<string, unknown> | null;
+        }>(req);
+
+        const eventType = typeof body.eventType === 'string' ? body.eventType.trim() : '';
+        if (!eventType) {
+          throw new HttpError(400, 'eventType is required.', 'invalid_payload');
+        }
+
+        const pathEntryId =
+          typeof body.pathEntryId === 'number' && Number.isFinite(body.pathEntryId) && body.pathEntryId > 0
+            ? body.pathEntryId
+            : null;
+
+        const normalizedStatus =
+          body.status === 'completed' || body.status === 'in_progress' || body.status === 'not_started'
+            ? body.status
+            : eventType.toLowerCase().includes('complete')
+              ? 'completed'
+              : undefined;
+
+        const score = typeof body.score === 'number' && Number.isFinite(body.score) ? body.score : null;
+        const timeSpentSeconds =
+          typeof body.timeSpentSeconds === 'number' && Number.isFinite(body.timeSpentSeconds) && body.timeSpentSeconds > 0
+            ? Math.round(body.timeSpentSeconds)
+            : null;
+
+        const eventPayload =
+          body.payload && typeof body.payload === 'object'
+            ? body.payload
+            : {};
+        const enrichedPayload = {
+          ...eventPayload,
+          score,
+          time_spent_s: timeSpentSeconds,
+        };
+
+        const eventResult = await recordLearningEvent(serviceSupabase ?? supabase, {
+          studentId: actor.id,
+          eventType,
+          payload: enrichedPayload,
+          basePoints:
+            typeof body.basePoints === 'number' && Number.isFinite(body.basePoints) ? body.basePoints : undefined,
+          accuracy: typeof body.accuracy === 'number' ? body.accuracy : undefined,
+          difficulty: typeof body.difficulty === 'number' ? body.difficulty : undefined,
+          pathEntryId,
+        });
+
+        const adaptive = await applyAdaptiveEvent(supabase, actor.id, {
+          eventType,
+          pathEntryId,
+          status: normalizedStatus ?? null,
+          score,
+          timeSpentSeconds,
+          payload: enrichedPayload,
+        });
+
+        const stats = await getStudentStats(supabase, actor.id);
+        sendJson(res, 200, { event: eventResult, stats, path: adaptive.path, next: adaptive.next, adaptive: adaptive.adaptive }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/stats') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const stats = await getStudentStats(supabase, actor.id);
+        sendJson(res, 200, { stats }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/tutor-context') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const context = await buildTutorContext(supabase, actor.id);
+        sendJson(res, 200, { context }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/parent/overview') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const overview = await getParentOverview(supabase, actor.id);
+        sendJson(res, 200, overview, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
     if (method === 'GET' && path === '/recommendations') {
       return handleRoute(async () => {
         const moduleId = parseOptionalPositiveInt(url.query.moduleId, 'moduleId');
@@ -1347,6 +1684,25 @@ export const createApiHandler = (context: ApiContext) => {
               : undefined;
           const snapshot = getOpsSnapshot(windowMs);
           sendJson(res, 200, snapshot, API_VERSION);
+        });
+      }
+
+      if (method === 'POST' && path === '/admins/platform-config') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ key?: string; value?: unknown }>(req);
+          const key = typeof body.key === 'string' && body.key.trim().length ? body.key.trim() : null;
+          if (!key) {
+            throw new HttpError(400, 'key is required', 'invalid_payload');
+          }
+          try {
+            await serviceSupabase
+              .from('platform_config')
+              .upsert({ key, value: body.value ?? null, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+          } catch (error) {
+            console.warn('[admin] unable to persist platform_config', error);
+            throw new HttpError(500, 'Unable to save config', 'config_error');
+          }
+          sendJson(res, 200, { ok: true }, API_VERSION);
         });
       }
 

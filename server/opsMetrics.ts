@@ -1,4 +1,13 @@
-type OpsEventType = 'tutor_success' | 'tutor_error' | 'tutor_safety_block' | 'tutor_plan_limit' | 'api_failure' | 'api_slow';
+type OpsEventType =
+  | 'tutor_success'
+  | 'tutor_error'
+  | 'tutor_safety_block'
+  | 'tutor_plan_limit'
+  | 'tutor_latency'
+  | 'path_progress'
+  | 'xp_rate'
+  | 'api_failure'
+  | 'api_slow';
 
 export type OpsEvent = {
   type: OpsEventType;
@@ -7,6 +16,8 @@ export type OpsEvent = {
   status?: number | null;
   durationMs?: number | null;
   plan?: string | null;
+  value?: number | null;
+  label?: string | null;
   timestamp: number;
 };
 
@@ -41,6 +52,9 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     tutor_error: 0,
     tutor_safety_block: 0,
     tutor_plan_limit: 0,
+    tutor_latency: 0,
+    path_progress: 0,
+    xp_rate: 0,
     api_failure: 0,
     api_slow: 0,
   };
@@ -48,6 +62,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
   const safetyReasons = new Map<string, number>();
   const planLimitReasons = new Map<string, number>();
   const apiRoutes = new Map<string, number>();
+  const pathLabels = new Map<string, number>();
+  const xpSources = new Map<string, number>();
 
   windowEvents.forEach((event) => {
     totals[event.type] += 1;
@@ -60,6 +76,12 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     if (event.type === 'api_failure' && event.route) {
       const routeKey = `${event.route}${event.status ? ` (${event.status})` : ''}`;
       apiRoutes.set(routeKey, (apiRoutes.get(routeKey) ?? 0) + 1);
+    }
+    if (event.type === 'path_progress' && event.label) {
+      pathLabels.set(event.label, (pathLabels.get(event.label) ?? 0) + 1);
+    }
+    if (event.type === 'xp_rate' && event.label) {
+      xpSources.set(event.label, (xpSources.get(event.label) ?? 0) + 1);
     }
   });
 
@@ -75,6 +97,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     topSafetyReasons: topFromMap(safetyReasons),
     topPlanLimitReasons: topFromMap(planLimitReasons),
     apiFailuresByRoute: topFromMap(apiRoutes),
+    pathEventsByLabel: topFromMap(pathLabels),
+    xpEventsBySource: topFromMap(xpSources),
     recent: events.slice(-30).reverse(),
   };
 };
