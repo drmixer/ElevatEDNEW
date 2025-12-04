@@ -238,7 +238,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -275,7 +275,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Form */}
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto max-h-[70vh] md:max-h-[75vh]">
               <form onSubmit={handleSubmit} className="space-y-4">
                 {isSignup && (
                   <>
@@ -646,6 +646,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     >
                       Forgot password?
                     </button>
+                    <Link
+                      to="/auth/reset"
+                      className="text-sm text-brand-blue hover:text-brand-teal transition-colors focus-ring"
+                    >
+                      Open reset page
+                    </Link>
                   </div>
                 )}
                 {!isLogin && (
