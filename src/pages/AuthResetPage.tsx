@@ -13,6 +13,19 @@ const AuthResetPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    // Surface Supabase hash errors (expired/invalid links) instead of silently failing.
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : '';
+      if (hash) {
+        const params = new URLSearchParams(hash);
+        const errCode = params.get('error_code');
+        const errDescription = params.get('error_description');
+        if (errCode) {
+          setError(errDescription ?? 'This reset link is invalid or expired. Please request a new one.');
+        }
+      }
+    }
+
     // Ensure we pull any session from the URL hash when arriving from the reset email.
     supabase.auth.getSession().catch(() => undefined);
   }, []);
