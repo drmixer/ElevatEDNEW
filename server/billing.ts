@@ -5,6 +5,7 @@ const stripeSecret = process.env.STRIPE_SECRET_KEY;
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const appBaseUrl = process.env.APP_BASE_URL || 'http://localhost:5173';
 const DEFAULT_PREMIUM_PLAN = process.env.DEFAULT_PREMIUM_PLAN_SLUG || 'family-premium';
+const BILLING_REQUIRE_CONFIG_KEY = 'billing.require_subscription';
 
 const priceToPlanSlug: Record<string, string> = Object.fromEntries(
   Object.entries({
@@ -48,11 +49,31 @@ const parseBypassList = (): Set<string> => {
 
 const bypassList = parseBypassList();
 
+const isBillingDisabled = async (supabase: SupabaseClient): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('platform_config')
+    .select('value')
+    .eq('key', BILLING_REQUIRE_CONFIG_KEY)
+    .maybeSingle();
+  if (error) {
+    console.warn('[billing] unable to read billing toggle', error);
+    return false;
+  }
+  const val = data?.value;
+  if (val === null || val === undefined) return false;
+  if (typeof val === 'boolean') return val === false;
+  if (typeof val === 'string') {
+    return val.toLowerCase() === 'false' || val === '0';
+  }
+  return false;
+};
+
 export const isBillingBypassed = async (
   supabase: SupabaseClient,
   parentId: string,
 ): Promise<boolean> => {
   if (isBillingSandboxMode()) return true;
+  if (await isBillingDisabled(supabase)) return true;
   if (bypassList.has(parentId.toLowerCase())) return true;
 
   const { data, error } = await supabase.from('profiles').select('email').eq('id', parentId).maybeSingle();
@@ -65,6 +86,14 @@ export const isBillingBypassed = async (
     return true;
   }
   return false;
+};
+
+export const isBillingRequired = async (supabase: SupabaseClient, parentId?: string | null): Promise<boolean> => {
+  // If sandbox or global toggle disables billing, or parent is in bypass list, billing is not required.
+  if (isBillingSandboxMode()) return false;
+  if (await isBillingDisabled(supabase)) return false;
+  if (parentId && (await isBillingBypassed(supabase, parentId))) return false;
+  return true;
 };
 
 const normalizeStatus = (status: StripeSubscription.Status | null | undefined): string => {
@@ -128,6 +157,63 @@ const mapPriceToPlan = async (
   const planSlug = priceToPlanSlug[priceId];
   if (!planSlug) return null;
   return getPlanBySlug(serviceSupabase, planSlug);
+};
+
+export const cancelParentSubscriptionForDeletion = async (
+  serviceSupabase: SupabaseClient,
+  parentId: string,
+): Promise<{ canceled: boolean; stripeCanceled: boolean; reason?: string }> => {
+  const { data: subscription, error } = await serviceSupabase
+    .from('subscriptions')
+    .select('id, status, metadata')
+    .eq('parent_id', parentId)
+    .maybeSingle();
+
+  if (error) {
+    console.warn('[billing] unable to load subscription for deletion', error);
+    return { canceled: false, stripeCanceled: false, reason: error.message };
+  }
+
+  if (!subscription) {
+    return { canceled: false, stripeCanceled: false, reason: 'no_subscription' };
+  }
+
+  const metadata = (subscription.metadata as Record<string, unknown> | null) ?? {};
+  const stripeSubscriptionId = (metadata as { stripe_subscription_id?: string }).stripe_subscription_id ?? null;
+  const stripe = getStripeClient();
+
+  let stripeCanceled = false;
+  if (stripe && stripeSubscriptionId) {
+    try {
+      await stripe.subscriptions.cancel(stripeSubscriptionId, { prorate: false });
+      stripeCanceled = true;
+    } catch (cancelError) {
+      console.warn('[billing] failed to cancel Stripe subscription for deletion', cancelError);
+    }
+  }
+
+  const now = new Date().toISOString();
+  const updatedMetadata = { ...metadata, canceled_reason: 'account_deletion' };
+
+  const { error: updateError } = await serviceSupabase
+    .from('subscriptions')
+    .update({ status: 'canceled', cancel_at: now, canceled_at: now, metadata: updatedMetadata })
+    .eq('id', subscription.id);
+
+  if (updateError) {
+    console.warn('[billing] failed to mark subscription canceled for deletion', updateError);
+    return { canceled: false, stripeCanceled, reason: updateError.message };
+  }
+
+  await recordHistory(serviceSupabase, subscription.id, 'account_deletion', subscription.status, 'canceled', {
+    stripeCanceled,
+  });
+  await recordBillingEvent(serviceSupabase, subscription.id, 'account_deletion', {
+    stripeCanceled,
+    parentId,
+  });
+
+  return { canceled: true, stripeCanceled };
 };
 
 const findSubscriptionByStripeId = async (

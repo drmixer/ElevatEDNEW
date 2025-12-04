@@ -1,5 +1,6 @@
 import { authenticatedFetch, handleApiResponse } from '../lib/apiClient';
 import supabase from '../lib/supabaseClient';
+import type { AccountDeletionRequest } from '../types';
 
 export type AdminSummary = {
   id: string;
@@ -114,6 +115,13 @@ export const fetchOpsMetrics = async (): Promise<OpsMetricsSnapshot> => {
   return handleApiResponse<OpsMetricsSnapshot>(response);
 };
 
+export const fetchPlatformConfig = async (keys: string[]): Promise<Record<string, unknown>> => {
+  const params = new URLSearchParams({ keys: keys.join(',') });
+  const response = await authenticatedFetch(`/api/v1/admins/platform-config?${params.toString()}`);
+  const data = await handleApiResponse<{ config: Record<string, unknown> }>(response);
+  return data.config ?? {};
+};
+
 export const updatePlatformConfig = async (key: string, value: unknown) => {
   const response = await authenticatedFetch('/api/v1/admins/platform-config', {
     method: 'POST',
@@ -121,4 +129,31 @@ export const updatePlatformConfig = async (key: string, value: unknown) => {
     body: JSON.stringify({ key, value }),
   });
   return handleApiResponse<{ ok: true }>(response);
+};
+
+export const fetchAccountDeletionRequests = async (): Promise<AccountDeletionRequest[]> => {
+  const response = await authenticatedFetch('/api/v1/admins/account-deletion/requests');
+  const payload = await handleApiResponse<{ requests: AccountDeletionRequest[] }>(response);
+  return payload.requests ?? [];
+};
+
+export const resolveAccountDeletionRequest = async (
+  id: number,
+  status: 'completed' | 'canceled',
+): Promise<AccountDeletionRequest> => {
+  const response = await authenticatedFetch('/api/v1/admins/account-deletion/requests/resolve', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, status }),
+  });
+  const payload = await handleApiResponse<{ request: AccountDeletionRequest }>(response);
+  return payload.request;
+};
+
+export const processAccountDeletionQueue = async (): Promise<{ processed: number; errors: unknown[] }> => {
+  const response = await authenticatedFetch('/api/v1/admins/account-deletion/process', {
+    method: 'POST',
+  });
+  const payload = await handleApiResponse<{ result: { processed: number; errors: unknown[] } }>(response);
+  return payload.result;
 };

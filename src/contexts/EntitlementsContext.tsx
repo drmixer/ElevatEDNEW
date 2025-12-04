@@ -16,6 +16,7 @@ type EntitlementsContextValue = {
   availablePlans: BillingPlan[];
   loading: boolean;
   error: string | null;
+  billingRequired: boolean;
   refresh: () => void;
 };
 
@@ -27,6 +28,7 @@ const EntitlementsContext = createContext<EntitlementsContextValue>({
   availablePlans: [],
   loading: false,
   error: null,
+  billingRequired: true,
   refresh: () => {},
 });
 
@@ -90,6 +92,11 @@ export const EntitlementsProvider: React.FC<{ children: React.ReactNode }> = ({ 
         ? contextError.message
         : null;
 
+  const billingRequired =
+    billingSummaryQuery.data?.billingRequired ??
+    billingContextQuery.data?.billingRequired ??
+    true;
+
   const refresh = () => {
     if (isParent) {
       void billingSummaryQuery.refetch();
@@ -107,6 +114,7 @@ export const EntitlementsProvider: React.FC<{ children: React.ReactNode }> = ({ 
         availablePlans,
         loading,
         error,
+        billingRequired,
         refresh,
       }}
     >

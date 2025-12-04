@@ -10,6 +10,7 @@ import Pricing from './Pricing';
 import FAQ from './FAQ';
 import Footer from './Footer';
 import ChatBot from './ChatBot';
+import ResendVerificationCard from '../Auth/ResendVerificationCard';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -26,6 +27,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       <AboutFamilies />
       <HowItWorks />
       <Pricing onGetStarted={onGetStarted} />
+      <ResendVerificationCard />
       <FAQ />
       <Footer />
       <ChatBot />

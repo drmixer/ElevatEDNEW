@@ -75,6 +75,8 @@ import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { computeSubjectStatuses, formatSubjectStatusTooltip, onTrackBadge, onTrackLabel } from '../../lib/onTrack';
 import { recordCoachingFeedback } from '../../services/coachingService';
 import { useParentOverview } from '../../hooks/useStudentData';
+import { useEntitlements } from '../../contexts/EntitlementsContext';
+import { useEntitlements } from '../../contexts/EntitlementsContext';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -134,6 +136,7 @@ const ParentDashboard: React.FC = () => {
   const {
     entitlements,
     billingSummary,
+    billingRequired,
     availablePlans,
     loading: entitlementsLoading,
     error: entitlementsError,
@@ -535,7 +538,7 @@ const ParentDashboard: React.FC = () => {
   const seatLimit = entitlements.seatLimit ?? null;
   const seatsUsed = realChildren.length;
   const seatsRemaining = seatLimit !== null ? Math.max(seatLimit - seatsUsed, 0) : null;
-  const seatLimitReached = seatLimit !== null && seatsUsed >= seatLimit;
+  const seatLimitReached = seatLimit !== null && seatsUsed >= seatLimit && billingRequired;
   const hasRealChildren = realChildren.length > 0;
   const hasGoalsSet = realChildren.some((child) => {
     const hasWeekly = Boolean(child.goals?.weeklyLessons && child.goals.weeklyLessons > 0);
@@ -746,6 +749,12 @@ const ParentDashboard: React.FC = () => {
       setSelectedModuleId(moduleOptions[0].id);
     }
   }, [moduleOptions, selectedModuleId]);
+
+  useEffect(() => {
+    if (struggleFlagged && struggleLabel) {
+      setModuleSearch(struggleLabel);
+    }
+  }, [struggleFlagged, struggleLabel]);
 
   const guardianLinksQuery = useQuery({
     queryKey: ['guardian-links', parent?.id],
@@ -1094,6 +1103,34 @@ const ParentDashboard: React.FC = () => {
       moduleId,
       source: 'recommended',
     });
+  };
+
+  const handleAssignStruggleModule = async () => {
+    if (!parent || !selectedChildId) {
+      setAssignErrorMessage('Select a learner before assigning a module.');
+      return;
+    }
+    const label = (struggleLabel ?? '').toLowerCase();
+    const matching = moduleOptions.find((module) => {
+      const subject = (module.subject ?? '').toString().toLowerCase();
+      const title = (module.title ?? '').toString().toLowerCase();
+      return (label && (title.includes(label) || subject.includes(label))) || subject === (currentChild?.subject ?? '').toLowerCase();
+    });
+
+    const targetModule = matching ?? recommendedModules[0];
+    if (!targetModule) {
+      setAssignErrorMessage('No matching review module found. Try searching by subject in Assignments.');
+      return;
+    }
+
+    await handleQuickAssign(targetModule.id);
+    trackEvent('parent_assign_struggle_review', {
+      parentId: parent.id,
+      studentId: selectedChildId,
+      moduleId: targetModule.id,
+      struggle: struggleLabel,
+    });
+    setAssignMessage('Assigned a review module to help with the flagged area.');
   };
 
   const handleAssignModule = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -1787,15 +1824,17 @@ const ParentDashboard: React.FC = () => {
                     the one you generate here.
                   </p>
                   <p className="text-[11px] text-slate-600">
-                    {seatLimit !== null
+                  {seatLimit !== null
                       ? `Seats used: ${seatsUsed}/${seatLimit}. ${
                           seatLimitReached
                             ? 'Upgrade to add another learner.'
                             : `${seatsRemaining} seat${seatsRemaining === 1 ? '' : 's'} remaining.`
                         }`
-                      : 'Family plan seats sync to your subscription.'}
+                      : billingRequired
+                        ? 'Family plan seats sync to your subscription.'
+                        : 'Billing is off; seats are not limited right now.'}
                   </p>
-                  {seatLimitReached && (
+                  {seatLimitReached && billingRequired && (
                     <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
                       <span>You have filled your current seats. Upgrade to link another learner.</span>
                       <button
@@ -2343,6 +2382,16 @@ const ParentDashboard: React.FC = () => {
                   >
                     Send nudge
                   </button>
+                  {struggleFlagged && (
+                    <button
+                      type="button"
+                      onClick={handleAssignStruggleModule}
+                      className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 font-semibold text-emerald-700 hover:border-emerald-300 focus-ring"
+                      disabled={assignModuleMutation.isLoading}
+                    >
+                      Assign review module
+                    </button>
+                  )}
                 </div>
                 {(progressShareSnippet || weeklyNudgeSnippet) && (
                   <div className="w-full text-[11px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1">

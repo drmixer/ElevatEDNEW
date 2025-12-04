@@ -4,6 +4,8 @@ import { captureClientException, captureClientMessage, isMonitoringEnabled } fro
 type ReliabilityStage =
   | 'auth_login'
   | 'auth_register'
+  | 'auth_login_email_not_confirmed'
+  | 'auth_resend_verification'
   | 'diagnostic_load'
   | 'lesson_playback'
   | 'adaptive_path';

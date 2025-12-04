@@ -109,6 +109,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
+      const errorCode = (error as { code?: string } | null)?.code;
+      const errorMessage = error?.message ?? '';
+      const isEmailNotConfirmed =
+        errorCode === 'email_not_confirmed' || /not\s+confirmed/i.test(errorMessage || '');
+
+      if (isEmailNotConfirmed) {
+        recordReliabilityCheckpoint('auth_login_email_not_confirmed', 'error', { email });
+        const notConfirmedError = new Error('email_not_confirmed');
+        (notConfirmedError as { code?: string }).code = 'email_not_confirmed';
+        throw notConfirmedError;
+      }
+
       if (error || !data.user) {
         recordReliabilityCheckpoint('auth_login', 'error', { reason: error?.message ?? 'missing_user' });
         throw error ?? new Error('Supabase did not return a user session.');
@@ -118,6 +130,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       recordReliabilityCheckpoint('auth_login', 'success', { userId: data.user.id });
     } catch (error) {
       console.error('[Auth] Login failed', error);
+      const code = (error as { code?: string } | null)?.code;
+      if (code === 'email_not_confirmed') {
+        setUser(null);
+        throw error;
+      }
       recordReliabilityCheckpoint('auth_login', 'error', { error });
       setUser(null);
       if (error instanceof Error) {

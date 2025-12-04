@@ -722,6 +722,9 @@ export interface ParentActivityPoint {
 export type PrivacyRequestType = 'export' | 'erasure';
 export type PrivacyRequestStatus = 'pending' | 'in_review' | 'fulfilled' | 'rejected';
 
+export type AccountDeletionScope = 'parent_only' | 'parent_and_students' | 'students_only';
+export type AccountDeletionStatus = 'pending' | 'completed' | 'canceled';
+
 export interface PrivacyRequest {
   id: number;
   requesterId: string;
@@ -733,6 +736,17 @@ export interface PrivacyRequest {
   adminNotes?: string | null;
   handledBy?: string | null;
   resolvedAt?: string | null;
+  createdAt: string;
+}
+
+export interface AccountDeletionRequest {
+  id: number;
+  requesterId: string;
+  scope: AccountDeletionScope;
+  includeStudentIds: string[];
+  reason: string | null;
+  contactEmail: string | null;
+  status: AccountDeletionStatus;
   createdAt: string;
 }
 

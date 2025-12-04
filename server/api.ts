@@ -54,9 +54,12 @@ import {
   getStripeWebhookSecret,
   handleStripeEvent,
   isBillingBypassed,
+  isBillingRequired,
   isBillingSandboxMode,
   grantBypassSubscription,
+  cancelParentSubscriptionForDeletion,
 } from './billing.js';
+import { processPendingAccountDeletionRequests } from './accountDeletion.js';
 import { NotificationScheduler, notifyAssignmentCreated } from './notifications.js';
 import { HttpError } from './httpError.js';
 import { listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
@@ -1366,6 +1369,7 @@ export const createApiHandler = (context: ApiContext) => {
                 },
             limits,
             subscription,
+            billingRequired: await isBillingRequired(supabase, subscriptionOwner),
           },
           API_VERSION,
         );
@@ -1406,7 +1410,8 @@ export const createApiHandler = (context: ApiContext) => {
 
       return handleRoute(async () => {
         const summary = await fetchBillingSummary(supabase, actor.id, serviceSupabase);
-        sendJson(res, 200, summary, API_VERSION);
+        const billingRequired = await isBillingRequired(supabase, actor.id);
+        sendJson(res, 200, { ...summary, billingRequired }, API_VERSION);
       });
     }
 
@@ -1702,6 +1707,153 @@ export const createApiHandler = (context: ApiContext) => {
             throw new HttpError(500, 'Unable to save config', 'config_error');
           }
           sendJson(res, 200, { ok: true }, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/platform-config') {
+        return handleRoute(async () => {
+          const rawKeys = typeof url.query.keys === 'string' ? url.query.keys : null;
+          if (!rawKeys) {
+            throw new HttpError(400, 'keys is required (comma-separated)', 'invalid_payload');
+          }
+          const keys = rawKeys.split(',').map((entry) => entry.trim()).filter(Boolean);
+          if (!keys.length) {
+            throw new HttpError(400, 'keys is required (comma-separated)', 'invalid_payload');
+          }
+          const { data, error } = await serviceSupabase
+            .from('platform_config')
+            .select('key, value')
+            .in('key', keys);
+          if (error) {
+            throw new HttpError(500, 'Unable to load config', 'config_error');
+          }
+          const map: Record<string, unknown> = {};
+          (data ?? []).forEach((row) => {
+            map[(row.key as string) ?? ''] = row.value;
+          });
+          sendJson(res, 200, { config: map }, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/account-deletion/requests') {
+        return handleRoute(async () => {
+          const { data, error } = await serviceSupabase
+            .from('account_deletion_requests')
+            .select('id, requester_id, scope, include_student_ids, reason, contact_email, status, metadata, created_at')
+            .order('created_at', { ascending: false })
+            .limit(50);
+
+          if (error) {
+            throw new HttpError(500, 'Unable to load deletion requests', 'account_deletion_load_failed');
+          }
+
+          const requests = (data ?? []).map((row) => ({
+            id: (row as { id: number }).id,
+            requesterId: (row as { requester_id: string }).requester_id,
+            scope: (row as { scope: string }).scope,
+            includeStudentIds: (row as { include_student_ids: string[] }).include_student_ids ?? [],
+            reason: (row as { reason?: string | null }).reason ?? null,
+            contactEmail: (row as { contact_email?: string | null }).contact_email ?? null,
+            status: (row as { status: string }).status,
+            metadata: (row as { metadata?: Record<string, unknown> | null }).metadata ?? {},
+            createdAt: (row as { created_at: string }).created_at,
+          }));
+
+          sendJson(res, 200, { requests }, API_VERSION);
+        });
+      }
+
+      if (method === 'POST' && path === '/admins/account-deletion/requests/resolve') {
+        return handleRoute(async () => {
+          const body = await readValidatedJson<{ id?: number; status?: string }>(req);
+          if (!body.id || typeof body.id !== 'number') {
+            throw new HttpError(400, 'id is required.', 'invalid_payload');
+          }
+
+          const nextStatus = body.status === 'completed' ? 'completed' : body.status === 'canceled' ? 'canceled' : null;
+          if (!nextStatus) {
+            throw new HttpError(400, 'status must be completed or canceled.', 'invalid_payload');
+          }
+
+          const { data: requestRow, error: loadError } = await serviceSupabase
+            .from('account_deletion_requests')
+            .select('id, requester_id, scope, include_student_ids, reason, contact_email, status, metadata, created_at')
+            .eq('id', body.id)
+            .maybeSingle();
+
+          if (loadError) {
+            throw new HttpError(500, 'Unable to load deletion request', 'account_deletion_load_failed');
+          }
+          if (!requestRow) {
+            throw new HttpError(404, 'Deletion request not found.', 'not_found');
+          }
+          if ((requestRow as { status: string }).status === nextStatus) {
+            sendJson(res, 200, { request: requestRow }, API_VERSION);
+            return;
+          }
+
+          let stripeCanceled = false;
+          if (nextStatus === 'completed') {
+            const { data: requesterProfile, error: profileError } = await serviceSupabase
+              .from('profiles')
+              .select('role')
+              .eq('id', (requestRow as { requester_id: string }).requester_id)
+              .maybeSingle();
+
+            if (profileError) {
+              console.warn('[admin] failed to load profile for deletion', profileError);
+            }
+
+            if ((requesterProfile as { role?: string } | null)?.role === 'parent') {
+              const result = await cancelParentSubscriptionForDeletion(
+                serviceSupabase,
+                (requestRow as { requester_id: string }).requester_id,
+              );
+              stripeCanceled = result.stripeCanceled;
+            }
+          }
+
+          const { data: updated, error: updateError } = await serviceSupabase
+            .from('account_deletion_requests')
+            .update({
+              status: nextStatus,
+              metadata: {
+                ...(requestRow as { metadata?: Record<string, unknown> }).metadata ?? {},
+                resolved_by: admin.id,
+                resolved_at: new Date().toISOString(),
+                stripeCanceled,
+              },
+            })
+            .eq('id', body.id)
+            .select('id, requester_id, scope, include_student_ids, reason, contact_email, status, metadata, created_at')
+            .maybeSingle();
+
+          if (updateError || !updated) {
+            throw new HttpError(500, 'Unable to update deletion request', 'account_deletion_update_failed');
+          }
+
+          try {
+            await serviceSupabase.from('admin_audit_logs').insert({
+              admin_id: admin.id,
+              event_type: 'account_deletion_request_resolved',
+              metadata: {
+                requestId: body.id,
+                status: nextStatus,
+                stripeCanceled,
+              },
+            });
+          } catch (auditError) {
+            console.warn('[admin] failed to write audit log for deletion resolve', auditError);
+          }
+
+          sendJson(res, 200, { request: updated }, API_VERSION);
+        });
+      }
+
+      if (method === 'POST' && path === '/admins/account-deletion/process') {
+        return handleRoute(async () => {
+          const result = await processPendingAccountDeletionRequests(serviceSupabase);
+          sendJson(res, 200, { result }, API_VERSION);
         });
       }
 
