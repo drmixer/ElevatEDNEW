@@ -47,9 +47,9 @@ import type {
   Subject,
   SkillGapInsight,
   LearningPreferences,
-  defaultLearningPreferences,
   ParentOnboardingState,
 } from '../../types';
+import { defaultLearningPreferences } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import trackEvent from '../../lib/analytics';
 import { assignModuleToStudents, fetchChildAssignments } from '../../services/assignmentService';
@@ -75,8 +75,6 @@ import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { computeSubjectStatuses, formatSubjectStatusTooltip, onTrackBadge, onTrackLabel } from '../../lib/onTrack';
 import { recordCoachingFeedback } from '../../services/coachingService';
 import { useParentOverview } from '../../hooks/useStudentData';
-import { useEntitlements } from '../../contexts/EntitlementsContext';
-import { useEntitlements } from '../../contexts/EntitlementsContext';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
