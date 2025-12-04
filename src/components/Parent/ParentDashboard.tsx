@@ -392,6 +392,11 @@ const ParentDashboard: React.FC = () => {
     ? Number.parseInt(goalForm.practiceMinutes, 10)
     : currentChild?.goals?.practiceMinutes ?? null;
 
+  const computePercent = (current: number, target?: number | null) => {
+    if (!target || target <= 0) return null;
+    return Math.min(Math.round((current / target) * 100), 200);
+  };
+
   const lessonsProgressPct = computePercent(
     currentChild?.lessonsCompletedWeek ?? 0,
     weeklyLessonsTargetValue ?? null,
@@ -556,11 +561,6 @@ const ParentDashboard: React.FC = () => {
     !onboardingPrefs.dismissed && (!hasRealChildren || !hasGoalsSet || showDiagnosticEmpty);
   const learnerStepDone = hasRealChildren || onboardingPrefs.preparedLearner;
   const diagnosticStepDone = diagnosticCompleted || onboardingPrefs.diagnosticScheduled;
-
-  const computePercent = (current: number, target?: number | null) => {
-    if (!target || target <= 0) return null;
-    return Math.min(Math.round((current / target) * 100), 200);
-  };
 
   const deriveSessionLengthPreference = (
     minutesTarget?: number | null,
