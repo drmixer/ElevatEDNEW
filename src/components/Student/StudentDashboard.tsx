@@ -1585,16 +1585,16 @@ const StudentDashboard: React.FC = () => {
             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-amber-800">
-                  {entitlements.planName ?? 'Family Free'} limit
+                  {entitlements.planName ?? 'Free'} limit
                 </p>
                 <p className="text-xs text-amber-700">
                   You’ve completed {lessonsThisWeek} lesson{lessonsThisWeek === 1 ? '' : 's'} this
-                  week. Family Free includes up to {entitlements.lessonLimit} lessons each month; we’ll
-                  remind you before you run out.
+                  week. The Free plan includes up to {entitlements.lessonLimit} lessons each month; we’ll
+                  remind you before you run out. Invite your parent to upgrade for more lessons and tutor time.
                 </p>
               </div>
               <div className="text-[11px] font-semibold text-amber-800 px-2 py-1 rounded-full bg-white/70 border border-amber-200">
-                Plan: {entitlements.planSlug ?? 'family-free'}
+                Plan: {entitlements.planSlug ?? 'individual-free'}
               </div>
             </div>
           </motion.div>

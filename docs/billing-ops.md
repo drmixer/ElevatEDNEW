@@ -5,9 +5,8 @@ This environment expects Stripe to power subscriptions and to mirror state into 
 ## Configuration
 - Required env vars: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`.
 - Price IDs map to plan slugs:
-  - `STRIPE_PRICE_FAMILY_FREE` → `family-free`
-  - `STRIPE_PRICE_FAMILY_PLUS` → `family-plus`
-  - `STRIPE_PRICE_FAMILY_PREMIUM` → `family-premium`
+  - Preferred: `STRIPE_PRICE_INDIVIDUAL_FREE` → `individual-free`; `STRIPE_PRICE_INDIVIDUAL_PLUS` → `individual-plus`; `STRIPE_PRICE_INDIVIDUAL_PRO` → `individual-pro`.
+  - Legacy (still honored for existing subs): `STRIPE_PRICE_FAMILY_FREE` → `family-free`; `STRIPE_PRICE_FAMILY_PLUS` → `family-plus`; `STRIPE_PRICE_FAMILY_PREMIUM` → `family-premium`.
 - Optional: `APP_BASE_URL` for checkout/portal return URLs; `ENFORCE_PLAN_LIMITS=true` to gate AI assistant for free plans.
 - Bypass flags:
   - `BILLING_SANDBOX_MODE=true` skips Stripe entirely and auto-activates subscriptions.
@@ -19,7 +18,7 @@ This environment expects Stripe to power subscriptions and to mirror state into 
 - Each checkout/subscription includes `metadata.parent_id` so events can be reconciled to the parent profile. RLS is bypassed with the service-role client in the webhook handler.
 
 ## Plan provisioning
-1) Create/update plans in Supabase `plans` (slugs: `family-free`, `family-plus`, `family-premium`). Update `price_cents` and `metadata` (e.g., `{ "lesson_limit": 100 }`) as needed.
+1) Create/update plans in Supabase `plans` (slugs: `individual-free`, `individual-plus`, `individual-pro`; keep `family-*` active only for legacy users). Update `price_cents` and `metadata` (e.g., `{ "lesson_limit": 100 }`) as needed.
 2) Create/confirm Stripe Prices for each plan and set the corresponding env vars.
 3) Deploy with updated env and restart the API worker so `server/billing.ts` picks up the mappings.
 

@@ -31,7 +31,7 @@ test.describe('live student guardrail/report flow', () => {
           model: 'guardrail',
           remaining: 1,
           limit: 3,
-          plan: 'family-free',
+          plan: 'individual-free',
         }),
       }),
     );

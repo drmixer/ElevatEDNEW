@@ -91,7 +91,7 @@ type ApiServerOptions = {
 const API_VERSION = 'v1';
 const API_PREFIX = '/api';
 const VERSIONED_PREFIX = `${API_PREFIX}/${API_VERSION}`;
-const DEFAULT_PREMIUM_PLAN_SLUG = process.env.DEFAULT_PREMIUM_PLAN_SLUG ?? 'family-premium';
+const DEFAULT_PREMIUM_PLAN_SLUG = process.env.DEFAULT_PREMIUM_PLAN_SLUG ?? 'individual-pro';
 const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:5173';
 
 type ApiContext = {
@@ -762,7 +762,7 @@ export const createApiHandler = (context: ApiContext) => {
     const resolveTutorPlanContext = async (
       actor: AuthenticatedUser | null,
     ): Promise<{ slug: string; limits: ReturnType<typeof getPlanLimits> }> => {
-      const defaultPlan = 'family-free';
+      const defaultPlan = 'individual-free';
       if (!actor) {
         return { slug: defaultPlan, limits: getPlanLimits(defaultPlan) };
       }
@@ -1362,7 +1362,7 @@ export const createApiHandler = (context: ApiContext) => {
                 }
               : {
                   slug: planSlug,
-                  name: planSlug,
+                  name: planSlug === 'individual-free' ? 'Free' : planSlug,
                   priceCents: 0,
                   metadata: {},
                   status: 'active',
@@ -1387,18 +1387,22 @@ export const createApiHandler = (context: ApiContext) => {
           throw new HttpError(500, `Unable to load plans: ${error.message}`, 'plan_load_failed');
         }
 
+        const allPlans =
+          (data ?? []).map((plan) => ({
+            slug: plan.slug,
+            name: plan.name,
+            priceCents: plan.price_cents,
+            metadata: plan.metadata ?? {},
+            status: plan.status,
+          })) ?? [];
+
+        const individualPlans = allPlans.filter((plan) => plan.slug.startsWith('individual-'));
+        const plans = individualPlans.length > 0 ? individualPlans : allPlans;
+
         sendJson(
           res,
           200,
-          {
-            plans: (data ?? []).map((plan) => ({
-              slug: plan.slug,
-              name: plan.name,
-              priceCents: plan.price_cents,
-              metadata: plan.metadata ?? {},
-              status: plan.status,
-            })),
-          },
+          { plans },
           API_VERSION,
         );
       });

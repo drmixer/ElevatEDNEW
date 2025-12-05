@@ -97,7 +97,7 @@ const LockedFeature: React.FC<{
   description: string;
   onUpgrade?: () => void;
   ctaLabel?: string;
-}> = ({ title, description, onUpgrade, ctaLabel = 'Unlock with Family Plus' }) => (
+}> = ({ title, description, onUpgrade, ctaLabel = 'Unlock with Plus' }) => (
   <div className="rounded-2xl border border-dashed border-amber-200 bg-amber-50/60 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <div className="flex items-start gap-3">
       <div className="h-10 w-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
@@ -1395,7 +1395,9 @@ const ParentDashboard: React.FC = () => {
     () => (availablePlans ?? []).slice().sort((a, b) => a.priceCents - b.priceCents),
     [availablePlans],
   );
-  const currentPlanSlug = entitlements.planSlug ?? 'family-free';
+  const defaultPlanSlug = 'individual-free';
+  const upgradeFallbackSlug = 'individual-plus';
+  const currentPlanSlug = entitlements.planSlug ?? defaultPlanSlug;
   const currentPlanPrice = entitlements.priceCents ?? 0;
   const nextPlan =
     sortedPlans.find((plan) => plan.slug !== currentPlanSlug && plan.priceCents > currentPlanPrice) ??
@@ -1413,12 +1415,20 @@ const ParentDashboard: React.FC = () => {
     : null;
   const subscriptionMetadata = (billingSummary?.subscription?.metadata ?? {}) as Record<string, unknown>;
   const canManageBilling = Boolean((subscriptionMetadata?.stripe_customer_id as string | undefined) ?? null);
+  const planLabel =
+    entitlements.planSlug?.includes('pro') || entitlements.tier === 'pro'
+      ? 'Pro'
+      : entitlements.tier === 'premium'
+        ? 'Premium'
+        : entitlements.tier === 'plus'
+          ? 'Plus'
+          : 'Free';
 
   const handleUpgrade = (planSlug?: string) => {
     const fallbackTarget =
       nextPlan?.slug ??
       sortedPlans.find((plan) => plan.slug !== currentPlanSlug)?.slug ??
-      'family-plus';
+      upgradeFallbackSlug;
     const target = planSlug ?? fallbackTarget;
     checkoutMutation.mutate(target);
   };
@@ -1762,14 +1772,14 @@ const ParentDashboard: React.FC = () => {
               </p>
               <p className="text-xs text-amber-700">
                 Keep AI weekly summaries and extra seats by upgrading before the trial ends. If you do nothing,
-                your account will move to Family Free.
+                your account will move to the Free plan.
               </p>
             </div>
             <div className="flex items-center gap-2">
               <PlanTag label="Trial" locked />
               <button
                 type="button"
-                onClick={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                onClick={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
                 className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
               >
                 Keep my benefits
@@ -1871,7 +1881,7 @@ const ParentDashboard: React.FC = () => {
                       <span>You have filled your current seats. Upgrade to link another learner.</span>
                       <button
                         type="button"
-                        onClick={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                        onClick={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
                         className="inline-flex items-center px-2 py-1 rounded-md bg-brand-blue text-white font-semibold hover:bg-brand-blue/90"
                       >
                         Unlock seats
@@ -2017,16 +2027,16 @@ const ParentDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-gray-500 mb-1">Plan</p>
                 <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
-                  <span>{entitlements.planName ?? 'Family Free'}</span>
+                  <span>{entitlements.planName ?? 'Free'}</span>
                   <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
                     {entitlements.planStatus ?? 'trialing'}
                   </span>
-                  <PlanTag label={entitlements.tier === 'premium' ? 'Premium' : entitlements.tier === 'plus' ? 'Plus' : 'Free'} locked={currentPlanSlug === 'family-free'} />
+                  <PlanTag label={planLabel} locked={currentPlanSlug === defaultPlanSlug} />
                 </h3>
                 <p className="text-sm text-gray-600">
                   {currentPlanPrice > 0
                     ? `${formatPrice(currentPlanPrice)} / month`
-                    : 'Start your family plan to unlock more lessons and AI access.'}
+                    : 'Start your plan to unlock more lessons, AI access, and insights.'}
                 </p>
                 <div className="mt-2 text-sm text-gray-600 space-y-1">
                   {billingMessage && <p className="text-emerald-700">{billingMessage}</p>}
@@ -2069,7 +2079,7 @@ const ParentDashboard: React.FC = () => {
                   </div>
                   <p className="text-xs text-gray-600">
                     {entitlements.isTrialing && trialEndsAt
-                      ? `If you don’t upgrade, you’ll move to Family Free after ${trialEndsAt.toLocaleDateString()}.`
+                      ? `If you don’t upgrade, you’ll move to the Free plan after ${trialEndsAt.toLocaleDateString()}.`
                       : 'You can change plans anytime. Downgrades apply at the next renewal.'}
                   </p>
                 </div>
@@ -3804,8 +3814,8 @@ const ParentDashboard: React.FC = () => {
               {seatLimitReached && (
                 <LockedFeature
                   title="Learner limit reached"
-                  description="Family Free includes one learner. Upgrade to Family Plus to link more students under one plan."
-                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                  description="The Free plan includes one learner. Upgrade to Plus or Pro to link more students under one plan."
+                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
                 />
               )}
               <form onSubmit={handleLinkGuardian} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -4384,8 +4394,8 @@ const ParentDashboard: React.FC = () => {
               ) : (
                 <LockedFeature
                   title="Weekly AI summaries are a Plus feature"
-                  description="Upgrade to Family Plus to keep getting AI-generated highlights and renewal reminders."
-                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                  description="Upgrade to Plus or Pro to keep getting AI-generated highlights and renewal reminders."
+                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
                 />
               )}
             </motion.div>
@@ -4440,7 +4450,7 @@ const ParentDashboard: React.FC = () => {
                 <LockedFeature
                   title="Advanced analytics are a Plus feature"
                   description="Upgrade to see mastery by subject, cohort comparisons, and deeper insights."
-                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? 'family-plus')}
+                  onUpgrade={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
                 />
               )}
             </motion.div>

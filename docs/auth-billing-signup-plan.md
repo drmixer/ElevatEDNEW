@@ -1,6 +1,8 @@
 # ElevatED Auth, Signup, and Plans Roadmap
 
-End‑to‑end plan to make self‑serve parent and student signup reliable, integrate email verification, and wire in per‑individual plans (Free / Pro / Premium) with future multi‑student discounts.
+End‑to‑end plan to make self‑serve parent and student signup reliable, integrate email verification, and wire in per‑individual plans (Free / Plus / Pro) with future multi‑student discounts.
+
+> Audience: direct to students and their parents only; no school/org packaging.
 
 ---
 
@@ -46,16 +48,13 @@ Goal: After signup, users don’t get bounced back to “sign in”; email confi
 
 ## Phase 2 — Student Data Model for Self‑Serve Signup
 
-Goal: Make student self‑signup work cleanly with the existing schema, which currently assumes all students belong to a “parent” for billing and dashboards.
+Goal: Make student self‑signup work cleanly with the existing schema while keeping parents as the only payers.
 
-- **2.1 Decide student billing model**
-  - **Option A — Student as their own payer (recommended for minimal schema change):**
-    - Every account that can pay (including self‑serve students) has a row in `parent_profiles`.
-    - `student_profiles.parent_id` can point at either a “real” parent or the student’s own `parent_profiles` row.
-  - **Option B — Independent students without a parent:**
-    - Relax `student_profiles.parent_id` NOT NULL constraint.
-    - Update queries/views that assume a parent exists (dashboard, billing context, guardian links).
-  - Document the decision and downstream implications for billing and dashboards.
+- **2.1 Student billing model (decision)**
+  - Parents own billing; students can self‑serve only onto the Free tier and never see checkout/portal.
+  - Allow `student_profiles.parent_id` to be null until a parent is linked (invite flow or `family_link_code`).
+  - Keep `family_link_code` as the join path and add guardian invite metadata if needed (e.g., `invited_parent_email`, `guardian_invite_status`).
+  - Update queries/views to tolerate `parent_id` being null and to derive entitlements from the student’s role (Free) when unlinked.
 
 - **2.2 Extend `handle_new_auth_user` to create student_profiles**
   - Today `public.handle_new_auth_user`:
@@ -67,18 +66,17 @@ Goal: Make student self‑signup work cleanly with the existing schema, which cu
       - `first_name` from metadata or derived from email.
       - `grade_level` / `grade` from metadata when available; otherwise sensible defaults.
       - `learning_style` as empty JSON.
+      - `parent_id = null`; no `parent_profiles` row is created for students.
       - Ensure `family_link_code` defaults are respected (from migration 014).
-    - Set `parent_id` according to the chosen model:
-      - Option A: create a corresponding `parent_profiles` row for the student as payer and set `parent_id = new.id`.
-      - Option B: allow `parent_id` to be null after relaxing the constraint.
+    - Capture consent and signup origin metadata so we can message parents appropriately when they are invited later.
 
 - **2.3 Confirm profile fetching still works**
   - `fetchUserProfile` already:
     - Joins `profiles` with `student_profiles`, `parent_profiles`, and `admin_profiles`.
     - Normalizes into `Student` or `Parent` based on `profiles.role`.
   - Validate:
-    - Self‑serve students get a valid `Student` object even when there is no separate “guardian” parent.
-    - Creating a `parent_profiles` row for a student (Option A) does not change the `role` returned; role continues to come from `profiles.role`.
+    - Self‑serve students get a valid `Student` object even when there is no linked parent.
+    - Parent dashboards and billing summaries gracefully handle students whose `parent_id` is null, prompting to invite/link a guardian before any paid features are shown.
 
 **Outcome:** Every student signup results in a usable `student_profiles` row. Self‑serve students can immediately use adaptive paths and dashboards, and the billing “owner” story is clear.
 
@@ -133,9 +131,9 @@ Goal: After a new account is verified, users are guided through picking a plan (
   - Parents:
     - Subscriptions are keyed off `parent_profiles.id` (existing billing implementation).
     - Plan selection happens early in the parent experience (first login or onboarding flow in `ParentDashboard`).
-  - Self‑serve students:
-    - If we adopt Option A (student as payer), reuse the same subscription model keyed on their `parent_profiles` row.
-    - If we adopt Option B (no parent profile), we will need a dedicated path for student subscriptions or a generalized “payer profile”.
+  - Students:
+    - Students can sign up and use the Free plan; they never see checkout/portal.
+    - Student UI should surface an “Invite your parent to upgrade” CTA that issues/uses `family_link_code`, then lands the parent in the plan picker.
 
 - **4.2 Use existing billing APIs and service functions**
   - Backend routes already exist:
@@ -147,7 +145,7 @@ Goal: After a new account is verified, users are guided through picking a plan (
     - `fetchBillingPlans`, `fetchBillingSummary`, `fetchBillingContext`, `startCheckoutSession`, `openBillingPortal` are all implemented.
   - Plan:
     - For new parents with no subscription, redirect `/parent` → an onboarding step or `/parent/choose-plan` that uses `availablePlans` from `EntitlementsContext`.
-    - For self‑serve students, optionally add `/student/choose-plan` powered by `fetchBillingContext`.
+    - For students, keep `/student` on Free entitlements and replace plan cards with “Invite parent” so they never attempt checkout themselves.
 
 - **4.3 Integrate sandbox/bypass mode for testing**
   - Use `BILLING_SANDBOX_MODE` and `isBillingBypassed` to:
@@ -182,53 +180,58 @@ Goal: After a new account is verified, users are guided through picking a plan (
 
 ---
 
-## Phase 5 — Plan & Pricing Design (Free / Pro / Premium + Multi‑Student Discounts)
+## Phase 5 — Plan & Pricing Design (Free / Plus / Pro + Multi‑Student Discount)
 
-Goal: Replace current “family” plans with per‑individual Free / Pro / Premium offerings, and prepare for multi‑student discounts when a payer manages multiple students.
+Goal: Launch parent-owned per-student plans that feel generous on Free but make Plus/Pro clearly better, with a simple 20% discount for every additional student seat on paid plans.
 
-- **5.1 Define new plans in the `plans` table**
-  - Introduce three core plans:
-    - `individual-free`: basic features, limited usage, 0¢.
-    - `individual-pro`: better features and limits, e.g. 699¢ ($6.99)/month.
-    - `individual-premium`: all features and unlimited use, e.g. 999¢ ($9.99)/month.
-  - Store capabilities in `plans.metadata`, e.g.:
-    - `lesson_limit`, `ai_tutor_daily_limit`.
-    - Flags like `advanced_analytics`, `weekly_ai_summaries`, `weekly_digest`.
-    - Discount configuration, such as:
-      - `second_student_discount_pct`, `third_plus_student_discount_pct`.
-  - Decide how to treat existing `family-*` plans:
-    - Keep them for legacy users but hide from new signups, or
-    - Migrate existing subscriptions to equivalent `individual-*` plans.
+- **5.1 Plan definitions, copy, and limits**
+  - `individual-free` — “Start your smarter learning journey.” — $0/mo
+    - 1 active student seat.
+    - Up to 10 lessons/assignments per month; AI tutor up to 3 sessions/day; core path + basic progress for last 30 days.
+    - Weekly digest email optional; no advanced analytics/exports.
+    - Upgrade nudges at second-student attempt, AI cap hit, or when asking for deeper insights.
+  - `individual-plus` — “Unlock deeper insights and personalized progress.” — $6.99/mo first student; $5.59/mo each additional (20% off).
+    - Includes 1 seat; allow discounted seats up to 4 total before requiring support.
+    - Up to 100 lessons/assignments per month; AI tutor soft cap 30 sessions/day (mark as “unlimited” in UI with fair-use note).
+    - Unlock advanced analytics, weekly AI summaries + digest, parent alerts, saved practice, and basic exports/PDF reports.
+    - Standard email support (24–48h).
+  - `individual-pro` — “Full power for serious results.” — $9.99/mo first student; $7.99/mo each additional.
+    - Includes 1 seat; allow discounted seats up to 6 total (enough for larger families without serving schools).
+    - Unlimited lessons/assignments; AI tutor effectively unlimited (cap at 100/day in metadata for abuse guard).
+    - Everything in Plus plus priority support, full exports/CSV, deeper analytics/longer history, automation (weekly study plan refresh), and priority content access.
+    - Add “family performance pack” messaging: richer insights + faster support + no limits.
 
-- **5.2 Update server‑side limits and entitlements**
-  - `server/billing.ts`:
-    - Update or generalize `planLimits` to understand `individual-*` slugs and/or use plan metadata to drive limits.
-  - `src/lib/entitlements.ts`:
-    - Replace `DEFAULT_PLAN_CONFIG` keys with `individual-*` slugs.
-    - Set:
-      - `seatLimit: 1` for individual plans.
-      - Appropriate `lessonLimit`, `aiTutorDailyLimit`, and tiers (`free`, `plus`, `premium`).
-    - Let `priceCents` come from `plan.price_cents` with sane defaults.
+- **5.2 Entitlements and metadata mapping**
+  - Slugs: `individual-free`, `individual-plus`, `individual-pro`.
+  - Suggested metadata fields on `plans`:
+    - `tagline`, `included_students` (1), `seat_cap` (Free:1, Plus:4, Pro:6), `extra_student_discount_pct` (20), `lesson_limit`, `ai_tutor_daily_limit`, `ai_access`, `advanced_analytics`, `weekly_ai_summaries`, `weekly_digest`, `exports_enabled`, `priority_support`.
+    - `base_student_price_cents` (use `price_cents`), `extra_student_price_cents` (computed from discount and stored for Stripe mapping).
+  - `server/billing.ts`: drive limits from metadata (not hardcoded), update `planLimits` to read `lesson_limit`/`ai_tutor_daily_limit`, and support `seat_cap`.
+  - `src/lib/entitlements.ts`: replace `family-*` defaults with the three `individual-*` slugs and their tier (`free` | `plus` | `premium` → rename `premium` tier to `pro` in UI copy while keeping `tier: 'premium'` or update enum if desired). Respect `price_cents` from the plan row.
+  - `availablePlans` (frontend): surface tagline, included seat count, discounted seat price, and per-plan upgrade triggers.
 
-- **5.3 Represent multi‑student discounts**
-  - Data model:
-    - Use `plans.metadata` to capture discount rules (e.g., % off for second and third+ students).
-    - Optionally add a helper view or function to compute an effective per‑student price for a given parent’s child count.
-  - Stripe integration (MVP wiring):
-    - Initially, keep Stripe simple (one flat price per plan, quantity = number of students) and rely on sandbox bypass for testing.
-    - Later, introduce:
-      - Tiered Stripe pricing, or
-      - Multiple price IDs per plan (e.g., base + discounted add‑ons) mapped from metadata.
+- **5.3 Multi‑student discount (20% off every additional student)**
+  - Formula: `total = base_price + (seat_count - 1) * round(base_price * 0.8, 2)`, constrained by `seat_cap`.
+    - Plus example (3 students): `6.99 + 2 * 5.59 = $18.17`.
+    - Pro example (5 students): `9.99 + 4 * 7.99 = $41.95`.
+  - Stripe modeling:
+    - Preferred: one tiered/“graduated” price per plan with tier1 = 1 unit at base price, tier2 = 2–∞ units at discounted price (set `billing_scheme='per_unit'`, `tiers_mode='graduated'`).
+    - Alternative: two prices per plan (base seat + discounted seat) and a checkout flow that sets quantity 1 for base and `(seat_count - 1)` for discounted price.
+  - Billing UI:
+    - In plan cards, show “First student $X; each additional −20% ($Y).”
+    - Add an “estimated monthly total” calculator tied to the number of linked/target students; block checkout above `seat_cap` with a “Contact us” CTA.
 
-- **5.4 Parent dashboard plan UX**
-  - Use `availablePlans` from `EntitlementsContext` in `ParentDashboard` to:
-    - Display Free/Pro/Premium with prices and high‑level features.
-    - Show an “estimated monthly total” based on:
-      - Current or target number of linked students.
-      - Discount rules from plan metadata.
-  - Keep the UI per‑individual (no explicit “family plan” language), but surface the effect of adding more students via discounts.
+- **5.4 Parent dashboard + upgrade nudges**
+  - Free students: show “Invite your parent to unlock Plus/Pro” and surface what unlocks when they hit limits (AI cap, second student, analytics).
+  - Parents on Free: prompt upgrade when adding a second student, when hitting lesson/AI caps, or when opening analytics/exports.
+  - Parents on Plus: nudge to Pro when near lesson/AI caps, requesting priority support, or needing longer history/exports.
+  - Marketing copy for cards:
+    - Free: “Start your smarter learning journey.”
+    - Plus: “Unlock deeper insights and personalized progress.”
+    - Pro: “Full power for serious results.”
+  - Keep legacy `family-*` plans available but hidden from new signups; migrate existing subs later or keep compatibility mapping in billing/entitlements.
 
-**Outcome:** The data model and UI reflect Free / Pro / Premium per‑individual plans with coherent pricing and a path to implement real multi‑student discounts in Stripe.
+**Outcome:** The data model, copy, and UI reflect Free / Plus / Pro with clear value progression, predictable 20% discounted additional students on paid plans, and a parent-owned billing flow that keeps self-serve students on Free until a guardian upgrades.
 
 ---
 
@@ -248,7 +251,7 @@ Goal: Ship the new auth and plan flows safely, with confidence that they work ac
       - Student linked to a parent.
       - Self‑serve student without a parent (depending on the chosen model).
     - Entitlements mapping:
-      - Free / Pro / Premium produce expected limits and flags.
+      - Free / Plus / Pro produce expected limits and flags.
 
 - **6.2 Staging validation**
   - Deploy the changes to a staging environment wired to a staging Supabase project and (optionally) a test Stripe account.
@@ -351,13 +354,12 @@ Goal: Give parents a clear, compliant way to delete their own account and option
 
 ---
 
-## Open Decisions / Follow‑Ups
+## Decisions & Follow‑Ups
 
-- Final choice between student billing models (Option A vs Option B) and their implications.
-- Exact discount percentages for additional students (e.g., –20% for second, –30% for third+ vs another curve).
-- Whether students are allowed to self‑manage billing, or if only “parent/payer” profiles can own subscriptions.
-
-
-Answers for those open decisions:
-
-Students should not be able to sign up for anything other than the free plan themselves. Parents would need to be invited by student to create parent account and sign up for paid plan. For the discounts, - 20% for any additional students. Students cannot manage billing. parent accounts only handle billing related things.
+- **Locked decisions**
+  - Parents are the only payers; students self‑serve only onto Free and never see checkout/portal.
+  - Every additional student on a paid plan is 20% less than the first seat price.
+  - `student_profiles.parent_id` can be null until a guardian links via `family_link_code`; do not create `parent_profiles` rows for students.
+- **Follow‑ups to execute**
+  - Migrate/alias existing `family-*` plans to the new `individual-*` slugs without breaking legacy subscriptions.
+  - Finalize upgrade copy and calculators in the parent dashboard and wire Stripe tiered prices for Plus and Pro.

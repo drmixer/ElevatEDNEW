@@ -48,7 +48,7 @@ test.describe('live student AI tutor', () => {
           model: 'stubbed-model',
           remaining: 2,
           limit: 3,
-          plan: 'family-free',
+          plan: 'individual-free',
         }),
       }),
     );

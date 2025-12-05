@@ -34,7 +34,7 @@ export interface Student extends User {
 export interface Parent extends User {
   role: 'parent';
   children: ParentChildSnapshot[];
-  subscriptionTier: 'free' | 'plus' | 'premium';
+  subscriptionTier: 'free' | 'plus' | 'pro' | 'premium';
   notifications: NotificationPreferences;
   weeklyReport?: ParentWeeklyReport | null;
   onboardingState?: ParentOnboardingState;
