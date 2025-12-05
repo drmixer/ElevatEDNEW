@@ -14,7 +14,7 @@ export type Entitlements = EntitlementLimits & {
   planName: string;
   planStatus: string;
   priceCents: number | null;
-  tier: 'free' | 'plus' | 'premium' | 'custom';
+  tier: 'free' | 'plus' | 'pro' | 'premium' | 'custom';
   advancedAnalytics: boolean;
   weeklyAiSummaries: boolean;
   weeklyDigest: boolean;
@@ -35,6 +35,40 @@ type EntitlementInput = {
 };
 
 const DEFAULT_PLAN_CONFIG: Record<string, Partial<EntitlementLimits & { advancedAnalytics: boolean; weeklyAiSummaries: boolean; weeklyDigest: boolean; tier: Entitlements['tier']; priceCents?: number | null }>> = {
+  'individual-free': {
+    seatLimit: 1,
+    lessonLimit: 10,
+    aiTutorDailyLimit: 3,
+    aiAccess: true,
+    advancedAnalytics: false,
+    weeklyAiSummaries: false,
+    weeklyDigest: true,
+    tier: 'free',
+    priceCents: 0,
+  },
+  'individual-plus': {
+    seatLimit: 4,
+    lessonLimit: 100,
+    aiTutorDailyLimit: 30,
+    aiAccess: true,
+    advancedAnalytics: true,
+    weeklyAiSummaries: true,
+    weeklyDigest: true,
+    tier: 'plus',
+    priceCents: 699,
+  },
+  'individual-pro': {
+    seatLimit: 6,
+    lessonLimit: 'unlimited',
+    aiTutorDailyLimit: 'unlimited',
+    aiAccess: true,
+    advancedAnalytics: true,
+    weeklyAiSummaries: true,
+    weeklyDigest: true,
+    tier: 'pro',
+    priceCents: 999,
+  },
+  // Legacy plans kept for compatibility with existing subscribers.
   'family-free': {
     seatLimit: 1,
     lessonLimit: 10,
@@ -82,6 +116,7 @@ const parseLimit = (input: unknown): LimitValue => {
 };
 
 const normalizeTier = (slug: string): Entitlements['tier'] => {
+  if (slug.includes('pro')) return 'pro';
   if (slug.includes('premium')) return 'premium';
   if (slug.includes('plus')) return 'plus';
   if (slug.includes('free')) return 'free';
@@ -94,6 +129,7 @@ const extractSeatLimit = (metadata: Record<string, unknown>, fallback: number | 
     metadata['max_learners'],
     metadata['learner_limit'],
     metadata['seatLimit'],
+    metadata['seat_cap'],
   ];
   const parsed = candidates
     .map((value) => (typeof value === 'number' ? value : Number.parseInt(String(value ?? ''), 10)))
@@ -108,9 +144,9 @@ export const buildEntitlements = ({
   childCount,
   source,
 }: EntitlementInput): Entitlements => {
-  const slug = plan?.slug ?? subscription?.plan?.slug ?? 'family-free';
+  const slug = plan?.slug ?? subscription?.plan?.slug ?? 'individual-free';
   const metadata = plan?.metadata ?? subscription?.plan?.metadata ?? {};
-  const defaults = DEFAULT_PLAN_CONFIG[slug] ?? DEFAULT_PLAN_CONFIG['family-free'];
+  const defaults = DEFAULT_PLAN_CONFIG[slug] ?? DEFAULT_PLAN_CONFIG['individual-free'];
 
   const seatLimit = limits?.seatLimit ?? extractSeatLimit(metadata, defaults.seatLimit ?? null);
   const lessonLimit =
@@ -147,7 +183,7 @@ export const buildEntitlements = ({
 
   return {
     planSlug: slug,
-    planName: plan?.name ?? subscription?.plan?.name ?? 'Family Free',
+    planName: plan?.name ?? subscription?.plan?.name ?? 'Free',
     planStatus,
     priceCents,
     tier,

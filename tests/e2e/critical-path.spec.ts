@@ -290,7 +290,7 @@ test.describe('critical product journeys', () => {
             alerts: [],
             summary: { learners: 1, activeLearners: 1, assignmentsCompleted: 0 },
             assignments: [],
-            billing: { plan: { slug: 'family-free', name: 'Family Free' }, limits: { tutorDailyLimit: 3, aiAccess: true } },
+            billing: { plan: { slug: 'individual-free', name: 'Free' }, limits: { tutorDailyLimit: 3, aiAccess: true } },
             children: [
               {
                 id: 'student-123',
@@ -343,7 +343,7 @@ test.describe('critical product journeys', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({
-          plan: { slug: 'family-free', status: 'active' },
+          plan: { slug: 'individual-free', status: 'active' },
           limits: { tutorDailyLimit: 3, aiAccess: true },
         }),
       }),

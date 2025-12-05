@@ -9,75 +9,70 @@ interface PricingProps {
 const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
   const plans = [
     {
-      name: 'Family Free',
-      subtitle: 'Core Learning',
+      name: 'Free',
+      subtitle: 'Start your smarter learning journey',
       price: '$0',
       period: 'month',
-      students: '1 learner',
+      students: '1 student included',
       description: 'Everything you need to start',
       icon: BookOpen,
-      valueHook: 'Start building daily learning habits for free.',
+      valueHook: 'Try diagnostics, a personalized path, and core progress tracking.',
       features: [
-        'Access to core K-12 subjects',
-        'Guided diagnostic assessment',
-        'Up to 10 lessons per month',
-        'Mixed quizzes with instant feedback',
-        'Basic parent dashboard (recent activity & quiz score)',
-        'Basic gamification: XP, streaks, badges',
-        'AI chatbot: quick tips (limited access)'
+        'Adaptive diagnostic + personalized path',
+        'Up to 10 lessons/assignments per month',
+        'AI tutor: 3 chats per day',
+        'Basic progress view (last 30 days)',
+        'Weekly digest email (optional)',
+        'XP, streaks, badges to build habits'
       ],
-      perfectFor: 'Exploring the platform and building daily learning habits',
+      perfectFor: 'Exploring ElevatED and building daily learning habits',
       buttonText: 'Start Free',
       buttonStyle: 'bg-gray-600 hover:bg-gray-700',
       popular: false,
       gradient: 'from-gray-500 to-gray-600'
     },
     {
-      name: 'Family Plus',
-      subtitle: 'Accelerated Growth',
-      price: '$29.99',
-      period: 'month per student',
-      yearlyPrice: '$299/year (save 17%)',
-      students: 'Up to 3 learners',
-      description: 'Includes everything in Free, plus',
+      name: 'Plus',
+      subtitle: 'Unlock deeper insights and personalized progress',
+      price: '$6.99',
+      period: 'month (first student)',
+      additionalPrice: 'Each additional student $5.59 (20% off), up to 4 seats',
+      students: '1 included (up to 4 seats)',
+      description: 'Everything in Free, plus',
       icon: Brain,
-      valueHook: 'Personalized K-12 tutoring with weekly progress reports.',
+      valueHook: 'More headroom, analytics, and weekly AI summaries.',
       features: [
-        'Unlimited adaptive lessons across every subject',
-        'Always-on AI learning assistant with follow-up questions',
-        'Concept-level insights plus guided step-by-step solutions',
-        'Deep-dive parent dashboard with weekly AI progress summaries',
-        'Achievement hub with full badge, streak, and avatar customization',
-        'Smart study tips, review refreshers, and weekend boosts',
-        'Parent alerts for missed lessons or flagged concepts',
-        'Priority support and early access to new features'
+        'Up to ~100 lessons/assignments per month',
+        'AI tutor: high daily cap (fair use)',
+        'Advanced analytics + weekly AI summaries',
+        'Parent alerts and saved practice sets',
+        'Exports/PDF reports for progress reviews'
       ],
-      perfectFor: 'Families ready to commit to steady academic advancement',
-      buttonText: 'Start 7-day Free Trial',
+      perfectFor: 'Families ready for consistent progress and richer insights',
+      buttonText: 'Upgrade to Plus',
       buttonStyle: 'bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-lg transform hover:scale-105',
       popular: true,
       gradient: 'from-teal-500 to-blue-600'
     },
     {
-      name: 'Family Premium',
-      subtitle: 'Learning Together',
-      price: '$49.99',
-      period: 'month for the family',
-      additionalPrice: 'Includes up to 5 learners',
-      yearlyPrice: '$499/year (save 17%)',
-      students: 'Multiple children',
-      description: 'Everything in Pro, plus',
+      name: 'Pro',
+      subtitle: 'Full power for serious results',
+      price: '$9.99',
+      period: 'month (first student)',
+      additionalPrice: 'Each additional student $7.99 (20% off), up to 6 seats',
+      students: '1 included (up to 6 seats)',
+      description: 'Everything in Plus, plus',
       icon: Users,
-      valueHook: 'Shared family dashboard with sibling discounts built in.',
+      valueHook: 'Unlimited learning, priority support, and deepest insights.',
       features: [
-        'Unified family dashboard with side-by-side progress',
-        'Shared challenges and family learning quests',
-        'Multi-student AI performance summaries each week',
-        'Parent controls for goals, rewards, and screen time',
-        'Flexible billing with discounted add-on seats'
+        'Unlimited lessons/assignments',
+        'AI tutor: effectively unlimited (with fair-use guardrails)',
+        'Priority support and faster responses',
+        'Full exports/CSV and deeper analytics history',
+        'Automation: weekly study plan refresh and upcoming content first'
       ],
-      perfectFor: 'Households with 2+ kids who want shared learning oversight',
-      buttonText: 'Start Family Trial',
+      perfectFor: 'Households with serious goals or multiple active learners',
+      buttonText: 'Go Pro',
       buttonStyle: 'bg-gradient-to-r from-violet-500 to-pink-600 hover:shadow-lg transform hover:scale-105',
       popular: false,
       gradient: 'from-violet-500 to-pink-600'
@@ -88,32 +83,32 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
     {
       label: 'Monthly price',
       free: '$0',
-      pro: '$29.99',
-      family: '$49.99'
+      plus: '$6.99 (first student)',
+      pro: '$9.99 (first student)'
     },
     {
-      label: 'Annual price',
-      free: '$0',
-      pro: '$299',
-      family: '$499'
+      label: 'Additional students',
+      free: 'Not available',
+      plus: '$5.59 each (20% off, up to 4)',
+      pro: '$7.99 each (20% off, up to 6)'
     },
     {
-      label: 'Adaptive lessons',
-      free: 'Daily lesson plan',
-      pro: 'Unlimited',
-      family: 'Unlimited for every student'
+      label: 'Lesson/assignment limit',
+      free: '10 per month',
+      plus: '~100 per month',
+      pro: 'Unlimited'
     },
     {
-      label: 'AI assistant',
-      free: '3 questions/week',
-      pro: 'Unlimited threads',
-      family: 'Unlimited threads & shared history'
+      label: 'AI tutor',
+      free: '3 chats/day',
+      plus: 'High cap (≈30/day)',
+      pro: 'Effectively unlimited (fair use)'
     },
     {
-      label: 'Parent insights',
-      free: 'Recent activity snapshot',
-      pro: 'Full reports & alerts',
-      family: 'All Pro insights plus multi-student summaries'
+      label: 'Analytics & summaries',
+      free: 'Basic progress (30 days)',
+      plus: 'Advanced analytics + weekly AI summaries',
+      pro: 'Full analytics history + exports'
     }
   ];
 
@@ -233,8 +228,8 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
               <tr>
                 <th className="px-6 py-4">Plan Snapshot</th>
                 <th className="px-6 py-4">Free</th>
+                <th className="px-6 py-4">Plus</th>
                 <th className="px-6 py-4">Pro</th>
-                <th className="px-6 py-4">Family</th>
               </tr>
             </thead>
             <tbody>
@@ -242,8 +237,8 @@ const Pricing: React.FC<PricingProps> = ({ onGetStarted }) => {
                 <tr key={row.label} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
                   <td className="px-6 py-4 font-semibold text-gray-900">{row.label}</td>
                   <td className="px-6 py-4">{row.free}</td>
+                  <td className="px-6 py-4">{row.plus}</td>
                   <td className="px-6 py-4">{row.pro}</td>
-                  <td className="px-6 py-4">{row.family}</td>
                 </tr>
               ))}
             </tbody>

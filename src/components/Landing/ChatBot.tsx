@@ -75,7 +75,7 @@ const ChatBot: React.FC = () => {
     const message = userMessage.toLowerCase();
     
     if (message.includes('pricing') || message.includes('cost') || message.includes('price')) {
-      return "Plans: Family Free is $0/mo for 1 learner with up to 10 lessons/month and 3 tutor chats/day. Family Plus is $29.99/mo per student ($299/year) for up to 3 learners with unlimited lessons, unlimited tutor chats, and weekly AI summaries. Family Premium is $49.99/mo for the family ($499/year) for up to 5 learners with a shared dashboard and family quests.";
+      return "Plans: Free is $0/mo for 1 learner with up to 10 lessons/month and 3 tutor chats/day. Plus is $6.99/mo for the first student ($5.59/additional, up to 4) with roughly 100 lessons/month, generous tutor access, analytics, and weekly summaries. Pro is $9.99/mo for the first student ($7.99/additional, up to 6) with unlimited lessons/tutor, full analytics/exports, and priority support.";
     }
     
     if (message.includes('feature') || message.includes('what') || message.includes('how')) {

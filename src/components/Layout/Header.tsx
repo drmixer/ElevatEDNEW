@@ -122,9 +122,9 @@ const Header: React.FC = () => {
                 <div className="px-3 py-1 rounded-full bg-brand-light-teal/40 text-brand-teal font-medium">
                   {(() => {
                     const tier = (user as Parent).subscriptionTier;
-                    if (tier === 'premium') return 'Family Premium';
-                    if (tier === 'plus') return 'Family Plus';
-                    return 'Family Free';
+                    if (tier === 'pro' || tier === 'premium') return 'Pro';
+                    if (tier === 'plus') return 'Plus';
+                    return 'Free';
                   })()}
                 </div>
                 <div className="flex items-center space-x-1 text-brand-violet">

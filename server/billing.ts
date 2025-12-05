@@ -4,11 +4,14 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 const stripeSecret = process.env.STRIPE_SECRET_KEY;
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const appBaseUrl = process.env.APP_BASE_URL || 'http://localhost:5173';
-const DEFAULT_PREMIUM_PLAN = process.env.DEFAULT_PREMIUM_PLAN_SLUG || 'family-premium';
+const DEFAULT_PREMIUM_PLAN = process.env.DEFAULT_PREMIUM_PLAN_SLUG || 'individual-pro';
 const BILLING_REQUIRE_CONFIG_KEY = 'billing.require_subscription';
 
 const priceToPlanSlug: Record<string, string> = Object.fromEntries(
   Object.entries({
+    [process.env.STRIPE_PRICE_INDIVIDUAL_FREE ?? '']: 'individual-free',
+    [process.env.STRIPE_PRICE_INDIVIDUAL_PLUS ?? '']: 'individual-plus',
+    [process.env.STRIPE_PRICE_INDIVIDUAL_PRO ?? '']: 'individual-pro',
     [process.env.STRIPE_PRICE_FAMILY_FREE ?? '']: 'family-free',
     [process.env.STRIPE_PRICE_FAMILY_PLUS ?? '']: 'family-plus',
     [process.env.STRIPE_PRICE_FAMILY_PREMIUM ?? '']: 'family-premium',
@@ -16,6 +19,10 @@ const priceToPlanSlug: Record<string, string> = Object.fromEntries(
 );
 
 const planLimits: Record<string, { aiAccess: boolean; lessonLimit?: number | 'unlimited'; tutorDailyLimit?: number | 'unlimited' }> = {
+  'individual-free': { aiAccess: true, lessonLimit: 10, tutorDailyLimit: 3 },
+  'individual-plus': { aiAccess: true, lessonLimit: 100, tutorDailyLimit: 30 },
+  'individual-pro': { aiAccess: true, lessonLimit: 'unlimited', tutorDailyLimit: 'unlimited' },
+  // Legacy family plans remain for compatibility.
   'family-free': { aiAccess: true, lessonLimit: 10, tutorDailyLimit: 3 },
   'family-plus': { aiAccess: true, lessonLimit: 100, tutorDailyLimit: 'unlimited' },
   'family-premium': { aiAccess: true, lessonLimit: 'unlimited', tutorDailyLimit: 'unlimited' },
@@ -618,4 +625,4 @@ export const fetchBillingSummary = async (
   };
 };
 
-export const getPlanLimits = (planSlug: string) => planLimits[planSlug] ?? planLimits['family-free'];
+export const getPlanLimits = (planSlug: string) => planLimits[planSlug] ?? planLimits['individual-free'];
