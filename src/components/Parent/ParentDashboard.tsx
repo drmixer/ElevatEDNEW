@@ -133,6 +133,47 @@ const computePercent = (current: number, target?: number | null) => {
   return Math.min(Math.round((current / target) * 100), 200);
 };
 
+type ProgressStatusDescription = {
+  label: string;
+  badge: string;
+  tone: string;
+};
+
+const describeProgressStatus = (percent: number | null): ProgressStatusDescription => {
+  if (percent == null) {
+    return {
+      label: 'Set a target',
+      badge: 'border border-slate-200 bg-white text-slate-700',
+      tone: 'text-slate-700',
+    };
+  }
+  if (percent >= 140) {
+    return {
+      label: 'Pacing high',
+      badge: 'border border-indigo-200 bg-indigo-50 text-indigo-700',
+      tone: 'text-indigo-700',
+    };
+  }
+  if (percent >= 90) {
+    return {
+      label: 'On track',
+      badge: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
+      tone: 'text-emerald-700',
+    };
+  }
+  if (percent >= 60) {
+    return {
+      label: 'Needs focus',
+      badge: 'border border-amber-200 bg-amber-50 text-amber-700',
+      tone: 'text-amber-700',
+    };
+  }
+  return {
+    label: 'Off pace',
+    badge: 'border border-rose-200 bg-rose-50 text-rose-700',
+    tone: 'text-rose-700',
+  };
+};
 
 const deriveSessionLengthPreference = (
   minutesTarget?: number | null,
