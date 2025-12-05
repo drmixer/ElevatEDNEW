@@ -11,7 +11,6 @@ import {
   Download,
   Loader2,
   Link2,
-  CreditCard,
   ArrowUpRight,
   RefreshCw,
   ShieldCheck,
@@ -128,11 +127,6 @@ type GoalFormState = {
   focusIntensity: 'balanced' | 'focused';
 };
 
-const computePercent = (current: number, target?: number | null) => {
-  if (!target || target <= 0) return null;
-  return Math.min(Math.round((current / target) * 100), 200);
-};
-
 type ProgressStatusDescription = {
   label: string;
   badge: string;
@@ -198,8 +192,6 @@ const describeActivityType = (activityType?: string) => {
   };
   return lookup[activityType] ?? activityType.replace(/_/g, ' ');
 };
-
-const formatDelta = (value: number) => `${value >= 0 ? '+' : ''}${Math.round(value)}`;
 
 const ParentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
@@ -996,8 +988,14 @@ const ParentDashboard: React.FC = () => {
 
   const checkoutMutation = useMutation({
     mutationFn: (planSlug: string) => startCheckoutSession(planSlug),
-    onSuccess: (url, planSlug) => {
+    onSuccess: async (url, planSlug) => {
       setBillingError(null);
+      if (!billingRequired) {
+        setBillingMessage('Plan activated — billing is bypassed right now.');
+        await refreshEntitlements();
+        await refetch({ throwOnError: false });
+        return;
+      }
       setBillingMessage(`Redirecting to secure checkout for ${planSlug}...`);
       window.location.href = url;
     },
@@ -1404,6 +1402,7 @@ const ParentDashboard: React.FC = () => {
     sortedPlans.find((plan) => plan.slug !== currentPlanSlug);
   const billingLoading = entitlementsLoading;
   const billingErrored = Boolean(entitlementsError);
+  const billingBypassed = !billingRequired;
 
   const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
   const currentPeriodEnd = entitlements.renewsAt
@@ -1430,6 +1429,12 @@ const ParentDashboard: React.FC = () => {
       sortedPlans.find((plan) => plan.slug !== currentPlanSlug)?.slug ??
       upgradeFallbackSlug;
     const target = planSlug ?? fallbackTarget;
+    if (!target) {
+      setBillingError('No plans are available right now. Please try again soon.');
+      return;
+    }
+    setBillingError(null);
+    setBillingMessage(billingBypassed ? 'Activating plan...' : 'Starting checkout...');
     checkoutMutation.mutate(target);
   };
 
@@ -1460,40 +1465,411 @@ const ParentDashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <div className="bg-gradient-to-r from-brand-violet to-brand-blue rounded-2xl p-6 text-white">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-              <div>
-                <h1 className="text-2xl font-bold mb-2">Family Command Center</h1>
-                <p className="opacity-90">
-                  Track progress, celebrate wins, and keep everyone aligned in one dashboard.
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+              <div className="space-y-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                  Parent dashboard
+                </p>
+                <h1 className="text-2xl font-bold text-slate-900">Family Command Center</h1>
+                <p className="text-sm text-slate-600">
+                  A calmer view of progress, plan choices, and the next actions for your learners.
                 </p>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex flex-wrap gap-2">
                 <button
+                  type="button"
+                  onClick={() => scrollToSection('goal-planner')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
+                >
+                  <Target className="h-4 w-4 text-brand-blue" />
+                  Goals
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('family-connections')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-teal hover:text-brand-teal focus-ring"
+                >
+                  <Users className="h-4 w-4 text-brand-teal" />
+                  Family connections
+                </button>
+                <button
+                  type="button"
                   onClick={handleDownloadReport}
-                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-60"
                   disabled={!dashboard?.downloadableReport}
                 >
                   <Download className="h-4 w-4" />
-                  <span>Download Weekly Report</span>
+                  Weekly report
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     trackEvent('parent_dashboard_refresh', { parentId: parent.id });
                     refetch({ throwOnError: false });
                     refreshEntitlements();
                   }}
-                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl flex items-center space-x-2 transition-colors"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring disabled:opacity-60"
                   disabled={isFetching}
                 >
                   <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
-                  <span>{isFetching ? 'Refreshing' : 'Refresh'}</span>
+                  {isFetching ? 'Refreshing' : 'Refresh data'}
                 </button>
-                <button className="bg-white/20 hover:bg-white/30 p-2 rounded-xl transition-colors">
-                  <Bell className="h-5 w-5" />
+              </div>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-700">
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 font-semibold">
+                <Sparkles className="h-3.5 w-3.5 text-brand-violet" />
+                {entitlements.planName ?? 'Free'} plan ({planLabel})
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 font-semibold">
+                <Users className="h-3.5 w-3.5 text-brand-blue" />
+                {seatLimit !== null ? `${seatsUsed}/${seatLimit} seats used` : `${seatsUsed} learner${seatsUsed === 1 ? '' : 's'} linked`}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 font-semibold">
+                <ShieldCheck className="h-3.5 w-3.5 text-brand-teal" />
+                {billingBypassed ? 'Billing off — plans apply instantly' : 'Billing on — checkout required'}
+              </span>
+              {trialDaysRemaining !== null && entitlements.isTrialing && (
+                <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 font-semibold text-amber-800">
+                  <Clock className="h-3.5 w-3.5" />
+                  Trial: {trialDaysRemaining} day{trialDaysRemaining === 1 ? '' : 's'} left
+                </span>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.02 }}
+          className="mb-6"
+        >
+          <div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1fr] gap-4">
+            <div id="plan-picker" className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                    Plan & seats
+                  </p>
+                  <h3 className="text-xl font-bold text-slate-900">Pick the plan that fits</h3>
+                  <p className="text-sm text-slate-600">
+                    {billingBypassed
+                      ? 'Billing is turned off by admin. Choose a plan and we will activate it without checkout.'
+                      : 'Select a plan to unlock more tutor time, seats, and reporting. You can change anytime.'}
+                  </p>
+                </div>
+                <PlanTag label={planLabel} locked={currentPlanSlug === defaultPlanSlug} />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-slate-500">Current status</p>
+                  <p className="text-base font-semibold text-slate-900">{entitlements.planName ?? 'Free'}</p>
+                  <p className="text-xs text-slate-600">
+                    {currentPlanPrice > 0 ? `${formatPrice(currentPlanPrice)} / month` : 'No payment required on this plan.'}
+                  </p>
+                  {currentPeriodEnd && (
+                    <p className="text-[11px] text-slate-600">Renews on {currentPeriodEnd}</p>
+                  )}
+                  {entitlements.cancelAt && (
+                    <p className="text-[11px] text-slate-600">
+                      Scheduled to cancel on {new Date(entitlements.cancelAt).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-slate-500">Seats</p>
+                  <p className="text-base font-semibold text-slate-900">
+                    {seatLimit !== null ? `${seatsUsed}/${seatLimit} seats used` : `${seatsUsed} linked so far`}
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    {seatLimitReached && billingRequired
+                      ? 'Upgrade to add another learner.'
+                      : seatLimit !== null
+                        ? `${seatsRemaining} seat${seatsRemaining === 1 ? '' : 's'} remaining.`
+                        : billingBypassed
+                          ? 'Billing is off; seats are open right now.'
+                          : 'Seats sync to your subscription.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                    Available plans
+                  </p>
+                  {billingErrored && (
+                    <span className="text-[11px] text-rose-600">Billing data unavailable</span>
+                  )}
+                </div>
+                {sortedPlans.length ? (
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                    {sortedPlans.map((plan) => {
+                      const isCurrent = plan.slug === currentPlanSlug;
+                      const isRecommended = nextPlan?.slug === plan.slug;
+                      const priceLabel = plan.priceCents > 0 ? `${formatPrice(plan.priceCents)} / month` : 'Free';
+                      return (
+                        <div
+                          key={plan.slug}
+                          className={`rounded-xl border p-3 space-y-2 ${
+                            isCurrent ? 'border-brand-teal bg-brand-light-teal/40' : 'border-slate-200 bg-white'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="text-sm font-semibold text-slate-900">{plan.name}</p>
+                              <p className="text-xs text-slate-600">{priceLabel}</p>
+                            </div>
+                            {isCurrent ? (
+                              <span className="text-[11px] font-semibold text-brand-teal bg-white px-2 py-1 rounded-full border border-brand-teal/30">
+                                Current
+                              </span>
+                            ) : isRecommended ? (
+                              <span className="text-[11px] font-semibold text-brand-blue bg-brand-light-blue/60 px-2 py-1 rounded-full border border-brand-blue/40">
+                                Recommended
+                              </span>
+                            ) : null}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleUpgrade(plan.slug)}
+                            disabled={isCurrent || checkoutMutation.isLoading}
+                            className={`inline-flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold focus-ring ${
+                              isCurrent
+                                ? 'bg-slate-100 text-slate-600 cursor-default'
+                                : 'bg-brand-blue text-white hover:bg-brand-blue/90 disabled:opacity-60'
+                            }`}
+                          >
+                            {isCurrent
+                              ? 'Current plan'
+                              : billingBypassed
+                                ? 'Activate plan'
+                                : 'Select & checkout'}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-600">
+                    Plans are loading. Refresh if this takes longer than a moment.
+                  </p>
+                )}
+              </div>
+
+              {(billingMessage || billingError) && (
+                <div className="text-xs">
+                  {billingMessage && (
+                    <p className="text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                      {billingMessage}
+                    </p>
+                  )}
+                  {billingError && (
+                    <p className="text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                      {billingError}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {!billingBypassed && (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => portalMutation.mutate()}
+                    disabled={!canManageBilling || portalMutation.isLoading || billingLoading}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring disabled:opacity-60"
+                  >
+                    <ShieldCheck className="h-4 w-4 text-brand-blue" />
+                    {portalMutation.isLoading ? 'Opening…' : 'Manage billing'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpgrade(nextPlan?.slug ?? currentPlanSlug)}
+                    disabled={checkoutMutation.isLoading || billingLoading}
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-70"
+                  >
+                    <ArrowUpRight className="h-4 w-4" />
+                    {checkoutMutation.isLoading ? 'Starting checkout…' : 'Upgrade'}
+                  </button>
+                </div>
+              )}
+              {billingBypassed && (
+                <p className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                  Admin has billing turned off. Selecting a plan will grant access instantly for testing.
+                </p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal">
+                    Quick orientation
+                  </p>
+                  <h3 className="text-lg font-bold text-slate-900">Stay organized</h3>
+                  <p className="text-sm text-slate-600">
+                    Shortcuts to the most used sections so the dashboard feels calmer.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('family-connections')}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-teal hover:text-brand-teal focus-ring"
+                  >
+                    <Users className="h-3.5 w-3.5 text-brand-teal" />
+                    Add learner
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('goal-planner')}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
+                  >
+                    <Target className="h-3.5 w-3.5 text-brand-blue" />
+                    Goal planner
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">Guided tour</p>
+                      <p className="text-xs text-slate-600">3 quick stops with jump links.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowTour((prev) => !prev)}
+                      className="text-xs font-semibold text-brand-blue hover:underline"
+                    >
+                      {showTour ? 'Hide' : 'Open'}
+                    </button>
+                  </div>
+                  {showTour ? (
+                    <div className="space-y-2">
+                      <p className="text-sm text-slate-700">
+                        Step {tourStep + 1} of {tourSteps.length}: {tourSteps[tourStep].title}
+                      </p>
+                      <p className="text-xs text-slate-600">{tourSteps[tourStep].description}</p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => scrollToSection(tourSteps[tourStep].anchor)}
+                          className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-xs font-semibold hover:bg-brand-blue/90 focus-ring"
+                        >
+                          Jump there
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = tourStep + 1;
+                            if (next >= tourSteps.length) {
+                              handleCompleteTour();
+                            } else {
+                              setTourStep(next);
+                              persistOnboardingState({ lastViewedStep: tourSteps[next].title });
+                            }
+                          }}
+                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
+                        >
+                          {tourStep + 1 === tourSteps.length ? 'Finish' : 'Next'}
+                        </button>
+                        {tourStep > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setTourStep(Math.max(0, tourStep - 1))}
+                            className="text-xs text-slate-600 hover:underline"
+                          >
+                            Back
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-slate-600">
+                      One-minute walkthrough of progress, goals, and safety controls.
+                    </p>
+                  )}
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">Parent guide</p>
+                      <p className="text-xs text-slate-600">Safety, alerts, and quick help.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setGuideOpen((prev) => !prev)}
+                      className="text-xs font-semibold text-brand-blue hover:underline"
+                    >
+                      {guideOpen ? 'Hide' : 'Open'}
+                    </button>
+                  </div>
+                  {guideOpen ? (
+                    <ul className="space-y-1 text-sm text-slate-700">
+                      <li>• Struggle alerts light up on learner cards and Coach View.</li>
+                      <li>• Set weekly lessons & minutes so pacing labels make sense.</li>
+                      <li>• Tutor controls live in Safety & privacy; report concerns anytime.</li>
+                      <li>• Need help? Reply to digest emails or open Data rights.</li>
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-slate-600">
+                      Open for a 90-second skim on alerts, safety, and where to get help.
+                    </p>
+                  )}
+                  <div className="flex items-center gap-3 text-xs">
+                    <Link to="/privacy" className="font-semibold text-brand-blue hover:underline">
+                      Privacy & safety policy
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleOpenGuide}
+                      className="font-semibold text-brand-teal hover:underline"
+                    >
+                      Mark guide viewed
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('assignments')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
+                >
+                  <ClipboardList className="h-3.5 w-3.5 text-brand-blue" />
+                  Assignments
                 </button>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('safety-privacy')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-teal hover:text-brand-teal focus-ring"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5 text-brand-teal" />
+                  Safety & privacy
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleReplayTour()}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-violet hover:text-brand-violet focus-ring"
+                >
+                  <RefreshCw className="h-3.5 w-3.5 text-brand-violet" />
+                  Replay tour
+                </button>
+                {struggleCount > 0 && (
+                  <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1 text-[11px] font-semibold">
+                    🔔 {struggleCount} learner{struggleCount === 1 ? '' : 's'} need support
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -1610,157 +1986,6 @@ const ParentDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.04 }}
-          className="mb-6"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3 lg:col-span-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
-                    Guided tour
-                  </p>
-                  <h3 className="text-lg font-bold text-slate-900">New here? Take a 60-second tour</h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={handleReplayTour}
-                    className="text-xs font-semibold text-brand-blue hover:underline"
-                  >
-                    Replay
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowTour(false)}
-                    className="text-xs text-slate-600 hover:underline"
-                  >
-                    Hide
-                  </button>
-                </div>
-              </div>
-              {showTour && (
-                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-                  <p className="text-sm text-slate-700 mb-3">
-                    Step {tourStep + 1} of {tourSteps.length}: {tourSteps[tourStep].title}
-                  </p>
-                  <p className="text-sm text-slate-700">{tourSteps[tourStep].description}</p>
-                  <div className="flex items-center gap-2 mt-3 flex-wrap">
-                    <button
-                      type="button"
-                      onClick={() => scrollToSection(tourSteps[tourStep].anchor)}
-                      className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
-                    >
-                      Jump there
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = tourStep + 1;
-                        if (next >= tourSteps.length) {
-                          handleCompleteTour();
-                        } else {
-                          setTourStep(next);
-                          persistOnboardingState({ lastViewedStep: tourSteps[next].title });
-                        }
-                      }}
-                      className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
-                    >
-                      {tourStep + 1 === tourSteps.length ? 'Finish' : 'Next'}
-                    </button>
-                    {tourStep > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const prev = Math.max(0, tourStep - 1);
-                          setTourStep(prev);
-                        }}
-                        className="text-xs text-slate-600 hover:underline"
-                      >
-                        Back
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={handleCompleteTour}
-                      className="text-xs text-slate-600 hover:underline"
-                    >
-                      Skip
-                    </button>
-                  </div>
-                </div>
-              )}
-              {!showTour && (
-                <p className="text-sm text-slate-600">
-                  Tour completed. Replay anytime to see where to set goals, assignments, and safety controls.
-                </p>
-              )}
-            </div>
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal">
-                    Parent guide
-                  </p>
-                  <h3 className="text-lg font-bold text-slate-900">Quick starter</h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setGuideOpen((prev) => !prev)}
-                  className="text-xs font-semibold text-brand-blue hover:underline"
-                >
-                  {guideOpen ? 'Hide' : 'Open'}
-                </button>
-              </div>
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="text-sm font-semibold text-amber-800">Struggle alerts</p>
-                    <p className="text-xs text-amber-700">
-                      We flag consecutive misses or low accuracy. Check child cards above and Coach View for details.
-                    </p>
-                  </div>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-amber-700 border border-amber-200">
-                    🔔 Active
-                  </span>
-                </div>
-              </div>
-              {guideOpen ? (
-                <div className="space-y-3">
-                  <div className="aspect-video rounded-xl bg-gradient-to-br from-brand-blue/20 via-brand-violet/20 to-brand-teal/20 border border-slate-200 flex items-center justify-center text-xs text-slate-600">
-                    90-second overview video (coming soon)
-                  </div>
-                  <ul className="space-y-2 text-sm text-slate-700">
-                    <li>• Diagnostic → personalized path; weekly status labels use the same rules as digests.</li>
-                    <li>• Set weekly lessons & practice minutes in Goals; assignments sit one unit ahead of the path.</li>
-                    <li>• Tutor safety: toggle access, lesson-only mode, and daily caps; report concerns in Safety.</li>
-                    <li>• Need help? Use Data rights & Safety sections or reply to digest emails.</li>
-                  </ul>
-                  <div className="flex items-center gap-3">
-                    <Link to="/privacy" className="text-xs font-semibold text-brand-blue hover:underline">
-                      Privacy & safety policy
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={handleOpenGuide}
-                      className="text-xs font-semibold text-brand-teal hover:underline"
-                    >
-                      Mark guide viewed
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-sm text-slate-600">
-                  Skim key concepts, safety, and how to get help. Open to view the short guide.
-                </p>
-              )}
-            </div>
-          </div>
-        </motion.div>
 
         {entitlements.isTrialing && trialDaysRemaining !== null && (
           <div className="mb-6 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -2012,128 +2237,6 @@ const ParentDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="mb-8"
-        >
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="flex items-start space-x-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-brand-violet flex items-center justify-center text-white">
-                <CreditCard className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Plan</p>
-                <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
-                  <span>{entitlements.planName ?? 'Free'}</span>
-                  <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                    {entitlements.planStatus ?? 'trialing'}
-                  </span>
-                  <PlanTag label={planLabel} locked={currentPlanSlug === defaultPlanSlug} />
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {currentPlanPrice > 0
-                    ? `${formatPrice(currentPlanPrice)} / month`
-                    : 'Start your plan to unlock more lessons, AI access, and insights.'}
-                </p>
-                <div className="mt-2 text-sm text-gray-600 space-y-1">
-                  {billingMessage && <p className="text-emerald-700">{billingMessage}</p>}
-                  {billingError && <p className="text-rose-600">{billingError}</p>}
-                  {billingErrored && !billingError && (
-                    <p className="text-rose-600">
-                      Billing data is temporarily unavailable{entitlementsError ? `: ${entitlementsError}` : '.'}
-                    </p>
-                  )}
-                  {currentPeriodEnd && (
-                    <p className="text-gray-600">Renews on {currentPeriodEnd}</p>
-                  )}
-                  {trialEndsAt && (
-                    <p className="text-gray-600">
-                      Trial ends {trialEndsAt.toLocaleDateString()}
-                    </p>
-                  )}
-                  {entitlements.cancelAt && (
-                    <p className="text-gray-600">
-                      Scheduled to cancel on {new Date(entitlements.cancelAt).toLocaleDateString()}
-                    </p>
-                  )}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs mt-2">
-                    <span className="inline-flex items-center gap-2 text-gray-700">
-                      <Sparkles className="h-3 w-3 text-brand-violet" />
-                      AI tutor: {limitLabel(entitlements.aiTutorDailyLimit, 'chats/day')}
-                    </span>
-                    <span className="inline-flex items-center gap-2 text-gray-700">
-                      <Users className="h-3 w-3 text-brand-blue" />
-                      Seats: {seatLimit !== null ? `${seatsUsed}/${seatLimit}` : `${seatsUsed}+`}
-                    </span>
-                    <span className="inline-flex items-center gap-2 text-gray-700">
-                      <Target className="h-3 w-3 text-brand-teal" />
-                      {entitlements.weeklyAiSummaries ? 'Weekly AI summaries included' : 'Weekly summaries locked on Free'}
-                    </span>
-                    <span className="inline-flex items-center gap-2 text-gray-700">
-                      <TrendingUp className="h-3 w-3 text-brand-blue" />
-                      {entitlements.advancedAnalytics ? 'Advanced analytics on' : 'Advanced analytics locked'}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-600">
-                    {entitlements.isTrialing && trialEndsAt
-                      ? `If you don’t upgrade, you’ll move to the Free plan after ${trialEndsAt.toLocaleDateString()}.`
-                      : 'You can change plans anytime. Downgrades apply at the next renewal.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-3">
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => portalMutation.mutate()}
-                  disabled={!canManageBilling || portalMutation.isLoading || billingLoading}
-                  className="px-4 py-2 rounded-xl border border-gray-200 hover:border-gray-300 text-sm font-medium flex items-center space-x-2 disabled:opacity-60"
-                >
-                  <ShieldCheck className="h-4 w-4 text-brand-blue" />
-                  <span>{portalMutation.isLoading ? 'Opening...' : 'Manage billing'}</span>
-                </button>
-
-                <button
-                  onClick={() => handleUpgrade(nextPlan?.slug ?? currentPlanSlug)}
-                  disabled={checkoutMutation.isLoading || billingLoading}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-blue to-brand-violet text-white text-sm font-semibold flex items-center space-x-2 shadow-sm hover:shadow-md disabled:opacity-70"
-                >
-                  <ArrowUpRight className="h-4 w-4" />
-                  <span>
-                    {checkoutMutation.isLoading
-                      ? 'Redirecting...'
-                      : nextPlan
-                        ? `Upgrade to ${nextPlan.name}`
-                        : 'Change plan'}
-                  </span>
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs text-gray-600">
-                {sortedPlans.map((plan) => (
-                  <span
-                    key={plan.slug}
-                    className={`px-3 py-1 rounded-full border ${
-                      plan.slug === currentPlanSlug ? 'border-brand-blue text-brand-blue' : 'border-gray-200'
-                    } ${plan.slug === currentPlanSlug ? 'cursor-default' : 'cursor-pointer'}`}
-                    onClick={() => {
-                      if (plan.slug !== currentPlanSlug) {
-                        handleUpgrade(plan.slug);
-                      }
-                    }}
-                    role="button"
-                    aria-label={`Switch to ${plan.name}`}
-                  >
-                    {plan.name} · {formatPrice(plan.priceCents)}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
