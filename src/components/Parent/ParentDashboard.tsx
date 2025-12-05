@@ -704,11 +704,6 @@ const ParentDashboard: React.FC = () => {
     return map;
   }, [dashboard]);
 
-  const childPrivacyRequests = useMemo(() => {
-    if (!currentChild) return privacyRequests;
-    return privacyRequests.filter((request) => request.studentId === currentChild.id);
-  }, [privacyRequests, currentChild]);
-
   useEffect(() => {
     if (parent?.onboardingState?.tourCompleted) {
       setShowTour(false);
@@ -803,6 +798,11 @@ const ParentDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 2,
   });
   const privacyRequests = privacyRequestsQuery.data ?? [];
+
+  const childPrivacyRequests = useMemo(() => {
+    if (!currentChild) return privacyRequests;
+    return privacyRequests.filter((request) => request.studentId === currentChild.id);
+  }, [privacyRequests, currentChild]);
 
   const concernReportsQuery = useQuery({
     queryKey: ['concern-reports', parent?.id, selectedChildId],
