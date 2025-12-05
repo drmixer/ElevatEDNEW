@@ -427,6 +427,7 @@ const ParentDashboard: React.FC = () => {
     () => (currentChild?.subjectStatuses ?? []).slice(0, 3),
     [currentChild?.subjectStatuses],
   );
+  const celebrations = dashboard?.celebrations ?? [];
   const primarySuggestion = useMemo(
     () => currentChild?.coachingSuggestions?.[0] ?? null,
     [currentChild?.coachingSuggestions],
@@ -700,7 +701,6 @@ const ParentDashboard: React.FC = () => {
   const childProgress = currentChild?.progressSummary;
   const completedLessons = childProgress?.completed ?? currentChild?.lessonsCompletedWeek ?? 0;
   const inProgressLessons = childProgress?.inProgress ?? 0;
-  const celebrations = dashboard?.celebrations ?? [];
   const celebrationPrompts = dashboard?.celebrationPrompts ?? [];
   const tourSteps = useMemo(
     () => [
