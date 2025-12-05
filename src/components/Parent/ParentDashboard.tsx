@@ -128,6 +128,38 @@ type GoalFormState = {
   focusIntensity: 'balanced' | 'focused';
 };
 
+const computePercent = (current: number, target?: number | null) => {
+  if (!target || target <= 0) return null;
+  return Math.min(Math.round((current / target) * 100), 200);
+};
+
+
+const deriveSessionLengthPreference = (
+  minutesTarget?: number | null,
+  lessonsTarget?: number | null,
+  fallback: LearningPreferences['sessionLength'] = defaultLearningPreferences.sessionLength,
+): LearningPreferences['sessionLength'] => {
+  if (!minutesTarget || minutesTarget <= 0) return fallback;
+  const lessons = lessonsTarget && lessonsTarget > 0 ? lessonsTarget : 4;
+  const avgMinutes = minutesTarget / Math.max(lessons, 1);
+  if (avgMinutes < 20) return 'short';
+  if (avgMinutes > 45) return 'long';
+  return 'standard';
+};
+
+const describeActivityType = (activityType?: string) => {
+  if (!activityType) return 'Activity';
+  const lookup: Record<string, string> = {
+    teacher_led: 'Teacher-led',
+    independent: 'Independent practice',
+    reflection: 'Reflection',
+    project: 'Project',
+  };
+  return lookup[activityType] ?? activityType.replace(/_/g, ' ');
+};
+
+const formatDelta = (value: number) => `${value >= 0 ? '+' : ''}${Math.round(value)}`;
+
 const ParentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const parent = (user as Parent) ?? null;
@@ -405,22 +437,6 @@ const ParentDashboard: React.FC = () => {
     currentChild?.practiceMinutesWeek ?? 0,
     practiceMinutesTargetValue ?? null,
   );
-  const describeProgressStatus = (percent: number | null) => {
-    if (percent === null) {
-      return {
-        label: 'No target yet',
-        badge: 'bg-slate-100 text-slate-700',
-        tone: 'text-slate-600',
-      };
-    }
-    if (percent >= 110) {
-      return { label: 'Ahead', badge: 'bg-emerald-100 text-emerald-700', tone: 'text-emerald-700' };
-    }
-    if (percent >= 80) {
-      return { label: 'On track', badge: 'bg-brand-light-teal text-brand-teal', tone: 'text-brand-teal' };
-    }
-    return { label: 'Behind', badge: 'bg-rose-100 text-rose-700', tone: 'text-rose-700' };
-  };
   const lessonsStatus = describeProgressStatus(lessonsProgressPct);
   const minutesStatus = describeProgressStatus(minutesProgressPct);
   const atAGlanceStatuses = useMemo(
@@ -504,17 +520,6 @@ const ParentDashboard: React.FC = () => {
   }, [dashboard]);
 
   const homeExtensions = currentChild?.homeExtensions ?? [];
-  const describeActivityType = (activityType?: string) => {
-    if (!activityType) return 'Activity';
-    const lookup: Record<string, string> = {
-      teacher_led: 'Teacher-led',
-      independent: 'Independent practice',
-      reflection: 'Reflection',
-      project: 'Project',
-    };
-    return lookup[activityType] ?? activityType.replace(/_/g, ' ');
-  };
-
   const familyOverviewCards = useMemo(() => {
     if (!dashboard?.children?.length) return [];
     return dashboard.children.map((child) => {
@@ -579,18 +584,7 @@ const ParentDashboard: React.FC = () => {
   const learnerStepDone = hasRealChildren || onboardingPrefs.preparedLearner;
   const diagnosticStepDone = diagnosticCompleted || onboardingPrefs.diagnosticScheduled;
 
-  const deriveSessionLengthPreference = (
-    minutesTarget?: number | null,
-    lessonsTarget?: number | null,
-    fallback: LearningPreferences['sessionLength'] = defaultLearningPreferences.sessionLength,
-  ): LearningPreferences['sessionLength'] => {
-    if (!minutesTarget || minutesTarget <= 0) return fallback;
-    const lessons = lessonsTarget && lessonsTarget > 0 ? lessonsTarget : 4;
-    const avgMinutes = minutesTarget / Math.max(lessons, 1);
-    if (avgMinutes < 20) return 'short';
-    if (avgMinutes > 45) return 'long';
-    return 'standard';
-  };
+  // deriveSessionLengthPreference moved to top-level helper to avoid TDZ
 
   const masteryTargets = currentChild?.goals?.masteryTargets ?? {};
 
