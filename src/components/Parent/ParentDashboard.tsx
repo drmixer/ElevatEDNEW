@@ -127,11 +127,6 @@ type GoalFormState = {
   focusIntensity: 'balanced' | 'focused';
 };
 
-const computePercent = (current: number, target?: number | null) => {
-  if (!target || target <= 0) return null;
-  return Math.min(Math.round((current / target) * 100), 200);
-};
-
 type ProgressStatusDescription = {
   label: string;
   badge: string;
@@ -197,8 +192,6 @@ const describeActivityType = (activityType?: string) => {
   };
   return lookup[activityType] ?? activityType.replace(/_/g, ' ');
 };
-
-const formatDelta = (value: number) => `${value >= 0 ? '+' : ''}${Math.round(value)}`;
 
 const ParentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
