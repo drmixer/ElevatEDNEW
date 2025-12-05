@@ -405,6 +405,22 @@ const ParentDashboard: React.FC = () => {
     currentChild?.practiceMinutesWeek ?? 0,
     practiceMinutesTargetValue ?? null,
   );
+  const describeProgressStatus = (percent: number | null) => {
+    if (percent === null) {
+      return {
+        label: 'No target yet',
+        badge: 'bg-slate-100 text-slate-700',
+        tone: 'text-slate-600',
+      };
+    }
+    if (percent >= 110) {
+      return { label: 'Ahead', badge: 'bg-emerald-100 text-emerald-700', tone: 'text-emerald-700' };
+    }
+    if (percent >= 80) {
+      return { label: 'On track', badge: 'bg-brand-light-teal text-brand-teal', tone: 'text-brand-teal' };
+    }
+    return { label: 'Behind', badge: 'bg-rose-100 text-rose-700', tone: 'text-rose-700' };
+  };
   const lessonsStatus = describeProgressStatus(lessonsProgressPct);
   const minutesStatus = describeProgressStatus(minutesProgressPct);
   const atAGlanceStatuses = useMemo(
@@ -573,23 +589,6 @@ const ParentDashboard: React.FC = () => {
     if (avgMinutes < 20) return 'short';
     if (avgMinutes > 45) return 'long';
     return 'standard';
-  };
-
-  const describeProgressStatus = (percent: number | null) => {
-    if (percent === null) {
-      return {
-        label: 'No target yet',
-        badge: 'bg-slate-100 text-slate-700',
-        tone: 'text-slate-600',
-      };
-    }
-    if (percent >= 110) {
-      return { label: 'Ahead', badge: 'bg-emerald-100 text-emerald-700', tone: 'text-emerald-700' };
-    }
-    if (percent >= 80) {
-      return { label: 'On track', badge: 'bg-brand-light-teal text-brand-teal', tone: 'text-brand-teal' };
-    }
-    return { label: 'Behind', badge: 'bg-rose-100 text-rose-700', tone: 'text-rose-700' };
   };
 
   const masteryTargets = currentChild?.goals?.masteryTargets ?? {};
