@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangle,
   Brain,
@@ -22,6 +22,7 @@ import {
   Bot,
   Flame,
   Info,
+  Copy,
   X,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -79,6 +80,7 @@ import {
   useStudentStats,
   type AdaptiveFlash,
 } from '../../hooks/useStudentData';
+import { fetchFamilyLinkCode, rotateFamilyLinkCode } from '../../services/familyService';
 
 const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
   in_progress: 0,
@@ -224,7 +226,6 @@ const StudentDashboard: React.FC = () => {
   const [missionCadence, setMissionCadence] = useState<'daily' | 'weekly'>('daily');
   const [achievementFilter, setAchievementFilter] = useState<BadgeCategory | 'all'>('all');
   const [equippedAvatarId, setEquippedAvatarId] = useState<string>('avatar-starter');
-  const missingGuardian = !student?.parentId;
   const writingPrompt =
     'Write 3-4 sentences about a time you solved a problem by trying a new strategy. Explain the steps and what changed.';
   const [writingResponse, setWritingResponse] = useState('');
@@ -291,6 +292,8 @@ const StudentDashboard: React.FC = () => {
   const upNextChangeTracked = useRef<boolean>(false);
   const lastUpNextEventSignature = useRef<string | null>(null);
   const lastAdaptiveFlashTracked = useRef<number | null>(null);
+  const [familyCodeMessage, setFamilyCodeMessage] = useState<string | null>(null);
+  const [familyCodeError, setFamilyCodeError] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const {
     upNext: upNextEntries,
@@ -319,6 +322,37 @@ const StudentDashboard: React.FC = () => {
     isFetching: statsFetching,
   } = useStudentStats(student?.id);
 
+  const familyCodeQuery = useQuery({
+    queryKey: ['family-link-code', student?.id],
+    queryFn: fetchFamilyLinkCode,
+    enabled: Boolean(student),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const familyLinkCode = familyCodeQuery.data?.code ?? student?.familyLinkCode ?? null;
+
+  const rotateFamilyCodeMutation = useMutation({
+    mutationFn: rotateFamilyLinkCode,
+    onSuccess: (payload) => {
+      queryClient.setQueryData(['family-link-code', student?.id], payload);
+      setFamilyCodeMessage('New Family Link code generated.');
+      setFamilyCodeError(null);
+      trackEvent('student_family_code_rotated', { studentId: student?.id });
+    },
+    onError: (err) => {
+      setFamilyCodeError(err instanceof Error ? err.message : 'Unable to refresh the code right now.');
+      setFamilyCodeMessage(null);
+    },
+  });
+
+  const hasGuardianLink = useMemo(() => {
+    if (familyCodeQuery.data?.linked) return true;
+    if (student?.parentId && student.parentId !== student.id) return true;
+    return false;
+  }, [familyCodeQuery.data?.linked, student?.id, student?.parentId]);
+
+  const missingGuardian = !hasGuardianLink;
+
   const studentStats = useMemo(() => {
     if (studentStatsData) return studentStatsData;
     return {
@@ -337,6 +371,24 @@ const StudentDashboard: React.FC = () => {
       struggle: false,
     } satisfies StudentStats;
   }, [student?.badges, student?.streakDays, student?.xp, studentStatsData]);
+
+  const handleCopyFamilyCode = async () => {
+    if (!familyLinkCode || typeof navigator === 'undefined' || !navigator.clipboard) {
+      setFamilyCodeError('Copy is unavailable in this browser. Share the code manually.');
+      setFamilyCodeMessage(null);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(familyLinkCode);
+      setFamilyCodeMessage('Code copied to your clipboard.');
+      setFamilyCodeError(null);
+      trackEvent('student_family_code_copied', { studentId: student?.id });
+    } catch (copyError) {
+      console.error('[Student] Failed to copy family code', copyError);
+      setFamilyCodeError('Unable to copy the code right now.');
+      setFamilyCodeMessage(null);
+    }
+  };
 
   const pathMetadata = useMemo(
     () => ((studentPath?.metadata ?? {}) as Record<string, unknown> | null | undefined),
@@ -1559,17 +1611,63 @@ const StudentDashboard: React.FC = () => {
                 <div>
                   <p className="text-sm font-semibold text-slate-900">No parent/guardian linked yet</p>
                   <p className="text-xs text-slate-600">
-                    Ask your parent to create a parent account and link you with the family code shown on their screen.
+                    Share your Family Link code with your parent so they can connect their account and see your progress.
                     Learners under 13 should have a parent present while using ElevatED.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => trackEvent('student_request_parent_link', { studentId: student.id })}
-                  className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-light-teal text-brand-teal text-sm font-semibold hover:bg-brand-light-teal/80"
-                >
-                  I will ask my parent
-                </button>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCopyFamilyCode}
+                    disabled={!familyLinkCode}
+                    className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-light-teal text-brand-teal text-sm font-semibold hover:bg-brand-light-teal/80 disabled:opacity-60"
+                  >
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy code
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFamilyCodeMessage(null);
+                      rotateFamilyCodeMutation.mutate();
+                    }}
+                    className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue disabled:opacity-60"
+                    disabled={rotateFamilyCodeMutation.isLoading}
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-2 ${rotateFamilyCodeMutation.isLoading ? 'animate-spin' : ''}`} />
+                    {rotateFamilyCodeMutation.isLoading ? 'Refreshing…' : 'New code'}
+                  </button>
+                </div>
+              </div>
+              <div className="mt-3 rounded-lg bg-slate-50 border border-slate-200 p-3">
+                {familyLinkCode ? (
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-600">Family Link code</span>
+                      <span className="font-mono text-sm font-semibold text-slate-900 bg-white border border-slate-200 rounded px-2 py-1">
+                        {familyLinkCode}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-slate-600">
+                      Parents enter this on their dashboard under Family Connections.
+                    </span>
+                  </div>
+                ) : (
+                  <div className="text-xs text-slate-600 flex items-center gap-2">
+                    <RefreshCw className={`h-4 w-4 ${familyCodeQuery.isFetching ? 'animate-spin' : ''}`} />
+                    Fetching your Family Link code…
+                  </div>
+                )}
+                {familyCodeMessage && (
+                  <p className="mt-2 text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-2 py-1">
+                    {familyCodeMessage}
+                  </p>
+                )}
+                {familyCodeError && (
+                  <p className="mt-2 text-[11px] text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-2 py-1">
+                    {familyCodeError}
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>

@@ -15,7 +15,8 @@ export interface User {
 
 export interface Student extends User {
   role: 'student';
-  parentId?: string;
+  parentId?: string | null;
+  familyLinkCode?: string | null;
   grade: number;
   xp: number;
   level: number;

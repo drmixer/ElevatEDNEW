@@ -28,6 +28,8 @@ type StudentProfileRow = {
   tutor_name?: string | null;
   tutor_avatar_id?: string | null;
   student_avatar_id?: string | null;
+  parent_id?: string | null;
+  family_link_code?: string | null;
 };
 
 type ParentProfileRow = {
@@ -310,7 +312,9 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       learning_style,
       tutor_name,
       tutor_avatar_id,
-      student_avatar_id
+      student_avatar_id,
+      parent_id,
+      family_link_code
     ),
       parent_profiles(
         subscription_tier,
@@ -343,6 +347,8 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       email: profile.email,
       name: displayName,
       role: 'student',
+      parentId: studentDetails?.parent_id ?? null,
+      familyLinkCode: studentDetails?.family_link_code ?? null,
       grade: studentDetails?.grade ?? 1,
       xp: studentDetails?.xp ?? 0,
       level: studentDetails?.level ?? 1,
