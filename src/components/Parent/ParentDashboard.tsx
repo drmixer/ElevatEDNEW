@@ -22,6 +22,7 @@ import {
   Lock,
   Copy,
   Mail,
+  X,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
