@@ -1992,10 +1992,6 @@ export const fetchParentDashboardData = async (
   parent: Parent,
 ): Promise<ParentDashboardData> => {
   try {
-    const rollupResult = await supabase.rpc('refresh_dashboard_rollups', {});
-    if (rollupResult.error) {
-      console.warn('[Dashboard] Rollup refresh failed', rollupResult.error);
-    }
     const dashboardWeekSeed = new Date().toISOString().slice(0, 10);
 
     const { data: childRows, error: childrenError } = await supabase
@@ -2366,11 +2362,6 @@ export const fetchParentDashboardData = async (
 
 export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashboardData> => {
   try {
-    const adminRollupResult = await supabase.rpc('refresh_dashboard_rollups', {});
-    if (adminRollupResult.error) {
-      console.warn('[Dashboard] Admin rollup refresh failed', adminRollupResult.error);
-    }
-
     const [
       { data: metricsRow, error: metricsError },
       { data: growthRows, error: growthError },

@@ -4,19 +4,19 @@ import type { Subject, User, UserRole } from '../types';
 import { fetchUserProfile } from '../services/profileService';
 import recordReliabilityCheckpoint from '../lib/reliability';
 
-const runWithTimeout = async <T,>(promise: Promise<T>, label: string, timeoutMs = 8000): Promise<T> => {
+const withTimeout = async <T,>(promise: Promise<T>, timeoutMs = 6000): Promise<{ timedOut: true } | { timedOut: false; value: T }> => {
   let timer: ReturnType<typeof setTimeout> | undefined;
-  const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => reject(new Error(label)), timeoutMs);
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
+    promise
+      .then((value) => resolve({ timedOut: false, value }))
+      .catch((error) => reject(error))
+      .finally(() => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+      });
   });
-
-  try {
-    return await Promise.race([promise, timeout]);
-  } finally {
-    if (timer) {
-      clearTimeout(timer);
-    }
-  }
 };
 
 interface AuthContextType {
@@ -93,10 +93,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initialise = async () => {
       safeSetLoading(true);
       try {
-        const {
-          data: { session },
-          error,
-        } = await runWithTimeout(supabase.auth.getSession(), 'auth_session_timeout');
+        const sessionResult = await withTimeout(supabase.auth.getSession(), 4000);
+
+        if (sessionResult.timedOut) {
+          console.warn('[Auth] Session lookup timed out; continuing without cached session');
+          safeSetUser(null);
+          return;
+        }
+
+        const { session, error } = sessionResult.value.data;
 
         if (error) {
           console.error('[Auth] Failed to get session', error);
@@ -105,10 +110,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (session?.user) {
-          try {
-            await runWithTimeout(loadProfile(session.user.id), 'auth_profile_timeout');
-          } catch {
-            // loadProfile handles logging
+          const profileResult = await withTimeout(loadProfile(session.user.id), 5000);
+          if (profileResult.timedOut) {
+            console.warn('[Auth] Profile load timed out; continuing as signed out');
+            safeSetUser(null);
           }
         } else {
           safeSetUser(null);
@@ -127,7 +132,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         safeSetLoading(true);
         try {
-          await runWithTimeout(loadProfile(session.user.id), 'auth_profile_timeout');
+          const profileResult = await withTimeout(loadProfile(session.user.id), 5000);
+          if (profileResult.timedOut) {
+            console.warn('[Auth] Profile load timed out during auth state change');
+          }
         } catch {
           // handled inside loadProfile
         } finally {
