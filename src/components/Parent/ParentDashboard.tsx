@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   AlertTriangle,
   Bell,
@@ -205,6 +205,7 @@ const ParentDashboard: React.FC = () => {
     error: entitlementsError,
     refresh: refreshEntitlements,
   } = useEntitlements();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
   const [insightTab, setInsightTab] = useState<'overview' | 'skill_gaps'>('overview');
@@ -213,6 +214,9 @@ const ParentDashboard: React.FC = () => {
   const [dueDate, setDueDate] = useState('');
   const [assignMessage, setAssignMessage] = useState<string | null>(null);
   const [assignErrorMessage, setAssignErrorMessage] = useState<string | null>(null);
+  const [planDetailsOpen, setPlanDetailsOpen] = useState<boolean>(false);
+  const [advancedGoalsOpen, setAdvancedGoalsOpen] = useState<boolean>(false);
+  const [showAllFamilyCards, setShowAllFamilyCards] = useState<boolean>(false);
   const [goalForm, setGoalForm] = useState<GoalFormState>({
     weeklyLessons: '',
     practiceMinutes: '',
@@ -308,6 +312,13 @@ const ParentDashboard: React.FC = () => {
     setPrivacyContact(parent?.email ?? '');
     setConcernContact(parent?.email ?? '');
   }, [parent?.email]);
+
+  useEffect(() => {
+    if (!location.hash) return;
+    const targetId = location.hash.replace('#', '');
+    const timer = window.setTimeout(() => scrollToSection(targetId), 60);
+    return () => window.clearTimeout(timer);
+  }, [location.hash]);
 
   useEffect(() => {
     if (!parent?.id) return;
@@ -577,6 +588,9 @@ const ParentDashboard: React.FC = () => {
       };
     });
   }, [dashboard?.children]);
+  const visibleFamilyOverviewCards = showAllFamilyCards
+    ? familyOverviewCards
+    : familyOverviewCards.slice(0, 6);
 
   const struggleCount = useMemo(
     () => (dashboard?.children ?? []).filter((child) => child.struggle || child.alerts.length > 0).length,
@@ -1308,12 +1322,12 @@ const ParentDashboard: React.FC = () => {
     trackEvent('parent_tour_replay', { parentId: parent?.id });
   };
 
-  const scrollToSection = (id: string) => {
+  function scrollToSection(id: string) {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  };
+  }
 
   const prefillAssignmentFromAlert = (childId: string, hint?: string | null) => {
     setSelectedChildId(childId);
@@ -1548,29 +1562,55 @@ const ParentDashboard: React.FC = () => {
           transition={{ delay: 0.02 }}
           className="mb-6"
         >
-          <div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1fr] gap-4">
-            <div id="plan-picker" className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+          <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-4">
+            <div
+              id="plan-picker"
+              className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4"
+            >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
                     Plan & seats
                   </p>
-                  <h3 className="text-xl font-bold text-slate-900">Pick the plan that fits</h3>
+                  <h3 className="text-xl font-bold text-slate-900">Keep plans tidy</h3>
                   <p className="text-sm text-slate-600">
-                    {billingBypassed
-                      ? 'Billing is turned off by admin. Choose a plan and we will activate it without checkout.'
-                      : 'Select a plan to unlock more tutor time, seats, and reporting. You can change anytime.'}
+                    A quick snapshot of your current plan, seats, and billing. Open the drawer for full plan options.
                   </p>
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-700">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 font-semibold">
+                      <Sparkles className="h-3.5 w-3.5 text-brand-violet" />
+                      {entitlements.planName ?? 'Free'} ({planLabel})
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 font-semibold">
+                      <Users className="h-3.5 w-3.5 text-brand-blue" />
+                      {seatLimit !== null
+                        ? `${seatsUsed}/${seatLimit} seats`
+                        : `${seatsUsed} linked`}
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 font-semibold">
+                      <ShieldCheck className="h-3.5 w-3.5 text-brand-teal" />
+                      {billingBypassed ? 'Billing off' : 'Billing on'}
+                    </span>
+                  </div>
                 </div>
-                <PlanTag label={planLabel} locked={currentPlanSlug === defaultPlanSlug} />
+                <div className="flex flex-col items-end gap-2">
+                  <PlanTag label={planLabel} locked={currentPlanSlug === defaultPlanSlug} />
+                  <button
+                    type="button"
+                    onClick={() => setPlanDetailsOpen((prev) => !prev)}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
+                  >
+                    {planDetailsOpen ? 'Hide plan details' : 'Open plan details'}
+                  </button>
+                </div>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
                 <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
-                  <p className="text-[11px] uppercase tracking-wide text-slate-500">Current status</p>
+                  <p className="text-[11px] uppercase tracking-wide text-slate-500">Current plan</p>
                   <p className="text-base font-semibold text-slate-900">{entitlements.planName ?? 'Free'}</p>
                   <p className="text-xs text-slate-600">
-                    {currentPlanPrice > 0 ? `${formatPrice(currentPlanPrice)} / month` : 'No payment required on this plan.'}
+                    {currentPlanPrice > 0 ? `${formatPrice(currentPlanPrice)} / month` : 'No payment required right now.'}
                   </p>
                   {currentPeriodEnd && (
                     <p className="text-[11px] text-slate-600">Renews on {currentPeriodEnd}</p>
@@ -1592,74 +1632,33 @@ const ParentDashboard: React.FC = () => {
                       : seatLimit !== null
                         ? `${seatsRemaining} seat${seatsRemaining === 1 ? '' : 's'} remaining.`
                         : billingBypassed
-                          ? 'Billing is off; seats are open right now.'
+                          ? 'Billing is off; seats stay open.'
                           : 'Seats sync to your subscription.'}
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-                    Available plans
-                  </p>
-                  {billingErrored && (
-                    <span className="text-[11px] text-rose-600">Billing data unavailable</span>
-                  )}
-                </div>
-                {sortedPlans.length ? (
-                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                    {sortedPlans.map((plan) => {
-                      const isCurrent = plan.slug === currentPlanSlug;
-                      const isRecommended = nextPlan?.slug === plan.slug;
-                      const priceLabel = plan.priceCents > 0 ? `${formatPrice(plan.priceCents)} / month` : 'Free';
-                      return (
-                        <div
-                          key={plan.slug}
-                          className={`rounded-xl border p-3 space-y-2 ${
-                            isCurrent ? 'border-brand-teal bg-brand-light-teal/40' : 'border-slate-200 bg-white'
-                          }`}
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <p className="text-sm font-semibold text-slate-900">{plan.name}</p>
-                              <p className="text-xs text-slate-600">{priceLabel}</p>
-                            </div>
-                            {isCurrent ? (
-                              <span className="text-[11px] font-semibold text-brand-teal bg-white px-2 py-1 rounded-full border border-brand-teal/30">
-                                Current
-                              </span>
-                            ) : isRecommended ? (
-                              <span className="text-[11px] font-semibold text-brand-blue bg-brand-light-blue/60 px-2 py-1 rounded-full border border-brand-blue/40">
-                                Recommended
-                              </span>
-                            ) : null}
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleUpgrade(plan.slug)}
-                            disabled={isCurrent || checkoutMutation.isLoading}
-                            className={`inline-flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold focus-ring ${
-                              isCurrent
-                                ? 'bg-slate-100 text-slate-600 cursor-default'
-                                : 'bg-brand-blue text-white hover:bg-brand-blue/90 disabled:opacity-60'
-                            }`}
-                          >
-                            {isCurrent
-                              ? 'Current plan'
-                              : billingBypassed
-                                ? 'Activate plan'
-                                : 'Select & checkout'}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-sm text-slate-600">
-                    Plans are loading. Refresh if this takes longer than a moment.
-                  </p>
+              <div className="flex flex-wrap gap-2">
+                {!billingBypassed && (
+                  <button
+                    type="button"
+                    onClick={() => portalMutation.mutate()}
+                    disabled={!canManageBilling || portalMutation.isLoading || billingLoading}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring disabled:opacity-60"
+                  >
+                    <ShieldCheck className="h-4 w-4 text-brand-blue" />
+                    {portalMutation.isLoading ? 'Opening…' : 'Manage billing'}
+                  </button>
                 )}
+                <button
+                  type="button"
+                  onClick={() => handleUpgrade(nextPlan?.slug ?? currentPlanSlug)}
+                  disabled={checkoutMutation.isLoading || billingLoading}
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-70"
+                >
+                  <ArrowUpRight className="h-4 w-4" />
+                  {checkoutMutation.isLoading ? 'Starting checkout…' : 'Upgrade'}
+                </button>
               </div>
 
               {(billingMessage || billingError) && (
@@ -1677,32 +1676,75 @@ const ParentDashboard: React.FC = () => {
                 </div>
               )}
 
-              {!billingBypassed && (
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => portalMutation.mutate()}
-                    disabled={!canManageBilling || portalMutation.isLoading || billingLoading}
-                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring disabled:opacity-60"
-                  >
-                    <ShieldCheck className="h-4 w-4 text-brand-blue" />
-                    {portalMutation.isLoading ? 'Opening…' : 'Manage billing'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleUpgrade(nextPlan?.slug ?? currentPlanSlug)}
-                    disabled={checkoutMutation.isLoading || billingLoading}
-                    className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-70"
-                  >
-                    <ArrowUpRight className="h-4 w-4" />
-                    {checkoutMutation.isLoading ? 'Starting checkout…' : 'Upgrade'}
-                  </button>
+              {planDetailsOpen && (
+                <div className="space-y-3 pt-2 border-t border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                      Available plans
+                    </p>
+                    {billingErrored && (
+                      <span className="text-[11px] text-rose-600">Billing data unavailable</span>
+                    )}
+                  </div>
+                  {sortedPlans.length ? (
+                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                      {sortedPlans.map((plan) => {
+                        const isCurrent = plan.slug === currentPlanSlug;
+                        const isRecommended = nextPlan?.slug === plan.slug;
+                        const priceLabel = plan.priceCents > 0 ? `${formatPrice(plan.priceCents)} / month` : 'Free';
+                        return (
+                          <div
+                            key={plan.slug}
+                            className={`rounded-xl border p-3 space-y-2 ${
+                              isCurrent ? 'border-brand-teal bg-brand-light-teal/40' : 'border-slate-200 bg-white'
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div>
+                                <p className="text-sm font-semibold text-slate-900">{plan.name}</p>
+                                <p className="text-xs text-slate-600">{priceLabel}</p>
+                              </div>
+                              {isCurrent ? (
+                                <span className="text-[11px] font-semibold text-brand-teal bg-white px-2 py-1 rounded-full border border-brand-teal/30">
+                                  Current
+                                </span>
+                              ) : isRecommended ? (
+                                <span className="text-[11px] font-semibold text-brand-blue bg-brand-light-blue/60 px-2 py-1 rounded-full border border-brand-blue/40">
+                                  Recommended
+                                </span>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleUpgrade(plan.slug)}
+                              disabled={isCurrent || checkoutMutation.isLoading}
+                              className={`inline-flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold focus-ring ${
+                                isCurrent
+                                  ? 'bg-slate-100 text-slate-600 cursor-default'
+                                  : 'bg-brand-blue text-white hover:bg-brand-blue/90 disabled:opacity-60'
+                              }`}
+                            >
+                              {isCurrent
+                                ? 'Current plan'
+                                : billingBypassed
+                                  ? 'Activate plan'
+                                  : 'Select & checkout'}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-slate-600">
+                      Plans are loading. Refresh if this takes longer than a moment.
+                    </p>
+                  )}
+                  {billingBypassed && (
+                    <p className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                      Admin has billing turned off. Selecting a plan will grant access instantly for testing.
+                    </p>
+                  )}
                 </div>
-              )}
-              {billingBypassed && (
-                <p className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
-                  Admin has billing turned off. Selecting a plan will grant access instantly for testing.
-                </p>
               )}
             </div>
 
@@ -1712,135 +1754,30 @@ const ParentDashboard: React.FC = () => {
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal">
                     Quick orientation
                   </p>
-                  <h3 className="text-lg font-bold text-slate-900">Stay organized</h3>
+                  <h3 className="text-lg font-bold text-slate-900">Fast jumps</h3>
                   <p className="text-sm text-slate-600">
-                    Shortcuts to the most used sections so the dashboard feels calmer.
+                    Go straight to the actions parents use most. Keep the rest tucked away.
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => scrollToSection('family-connections')}
-                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-teal hover:text-brand-teal focus-ring"
-                  >
-                    <Users className="h-3.5 w-3.5 text-brand-teal" />
-                    Add learner
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => scrollToSection('goal-planner')}
-                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
-                  >
-                    <Target className="h-3.5 w-3.5 text-brand-blue" />
-                    Goal planner
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">Guided tour</p>
-                      <p className="text-xs text-slate-600">3 quick stops with jump links.</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowTour((prev) => !prev)}
-                      className="text-xs font-semibold text-brand-blue hover:underline"
-                    >
-                      {showTour ? 'Hide' : 'Open'}
-                    </button>
-                  </div>
-                  {showTour ? (
-                    <div className="space-y-2">
-                      <p className="text-sm text-slate-700">
-                        Step {tourStep + 1} of {tourSteps.length}: {tourSteps[tourStep].title}
-                      </p>
-                      <p className="text-xs text-slate-600">{tourSteps[tourStep].description}</p>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => scrollToSection(tourSteps[tourStep].anchor)}
-                          className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-xs font-semibold hover:bg-brand-blue/90 focus-ring"
-                        >
-                          Jump there
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const next = tourStep + 1;
-                            if (next >= tourSteps.length) {
-                              handleCompleteTour();
-                            } else {
-                              setTourStep(next);
-                              persistOnboardingState({ lastViewedStep: tourSteps[next].title });
-                            }
-                          }}
-                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
-                        >
-                          {tourStep + 1 === tourSteps.length ? 'Finish' : 'Next'}
-                        </button>
-                        {tourStep > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => setTourStep(Math.max(0, tourStep - 1))}
-                            className="text-xs text-slate-600 hover:underline"
-                          >
-                            Back
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-slate-600">
-                      One-minute walkthrough of progress, goals, and safety controls.
-                    </p>
-                  )}
-                </div>
-
-                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">Parent guide</p>
-                      <p className="text-xs text-slate-600">Safety, alerts, and quick help.</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setGuideOpen((prev) => !prev)}
-                      className="text-xs font-semibold text-brand-blue hover:underline"
-                    >
-                      {guideOpen ? 'Hide' : 'Open'}
-                    </button>
-                  </div>
-                  {guideOpen ? (
-                    <ul className="space-y-1 text-sm text-slate-700">
-                      <li>• Struggle alerts light up on learner cards and Coach View.</li>
-                      <li>• Set weekly lessons & minutes so pacing labels make sense.</li>
-                      <li>• Tutor controls live in Safety & privacy; report concerns anytime.</li>
-                      <li>• Need help? Reply to digest emails or open Data rights.</li>
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-slate-600">
-                      Open for a 90-second skim on alerts, safety, and where to get help.
-                    </p>
-                  )}
-                  <div className="flex items-center gap-3 text-xs">
-                    <Link to="/privacy" className="font-semibold text-brand-blue hover:underline">
-                      Privacy & safety policy
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={handleOpenGuide}
-                      className="font-semibold text-brand-teal hover:underline"
-                    >
-                      Mark guide viewed
-                    </button>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('goal-planner')}
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring"
+                >
+                  <Target className="h-4 w-4" />
+                  Set goals
+                </button>
               </div>
 
               <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('family-connections')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-teal hover:text-brand-teal focus-ring"
+                >
+                  <Users className="h-3.5 w-3.5 text-brand-teal" />
+                  Add learner
+                </button>
                 <button
                   type="button"
                   onClick={() => scrollToSection('assignments')}
@@ -1865,12 +1802,105 @@ const ParentDashboard: React.FC = () => {
                   <RefreshCw className="h-3.5 w-3.5 text-brand-violet" />
                   Replay tour
                 </button>
-                {struggleCount > 0 && (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1 text-[11px] font-semibold">
-                    🔔 {struggleCount} learner{struggleCount === 1 ? '' : 's'} need support
-                  </span>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Guided tour</p>
+                    <p className="text-xs text-slate-600">3 quick stops with jump links.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowTour((prev) => !prev)}
+                    className="text-xs font-semibold text-brand-blue hover:underline"
+                  >
+                    {showTour ? 'Hide' : 'Open'}
+                  </button>
+                </div>
+                {showTour ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-700">
+                      Step {tourStep + 1} of {tourSteps.length}: {tourSteps[tourStep].title}
+                    </p>
+                    <p className="text-xs text-slate-600">{tourSteps[tourStep].description}</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => scrollToSection(tourSteps[tourStep].anchor)}
+                        className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-3 py-2 text-xs font-semibold hover:bg-brand-blue/90 focus-ring"
+                      >
+                        Jump there
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = tourStep + 1;
+                          if (next >= tourSteps.length) {
+                            handleCompleteTour();
+                          } else {
+                            setTourStep(next);
+                            persistOnboardingState({ lastViewedStep: tourSteps[next].title });
+                          }
+                        }}
+                        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue focus-ring"
+                      >
+                        {tourStep + 1 === tourSteps.length ? 'Finish' : 'Next'}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-600">
+                    One-minute walkthrough of progress, goals, and safety controls.
+                  </p>
                 )}
               </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Parent guide</p>
+                    <p className="text-xs text-slate-600">Safety, alerts, and quick help.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setGuideOpen((prev) => !prev)}
+                    className="text-xs font-semibold text-brand-blue hover:underline"
+                  >
+                    {guideOpen ? 'Hide' : 'Open'}
+                  </button>
+                </div>
+                {guideOpen ? (
+                  <ul className="space-y-1 text-sm text-slate-700">
+                    <li>• Struggle alerts light up on learner cards and Coach View.</li>
+                    <li>• Set weekly lessons & minutes so pacing labels make sense.</li>
+                    <li>• Tutor controls live in Safety & privacy; report concerns anytime.</li>
+                    <li>• Need help? Reply to digest emails or open Data rights.</li>
+                  </ul>
+                ) : (
+                  <p className="text-sm text-slate-600">
+                    Skim the safety, alerts, and support notes in under two minutes.
+                  </p>
+                )}
+                <div className="flex items-center gap-3 text-xs">
+                  <Link to="/privacy" className="font-semibold text-brand-blue hover:underline">
+                    Privacy & safety policy
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleOpenGuide}
+                    className="font-semibold text-brand-teal hover:underline"
+                  >
+                    Mark guide viewed
+                  </button>
+                </div>
+              </div>
+
+              {struggleCount > 0 && (
+                <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1 text-[11px] font-semibold">
+                  🔔 {struggleCount} learner{struggleCount === 1 ? '' : 's'} need support
+                </span>
+              )}
             </div>
           </div>
         </motion.div>
@@ -2271,8 +2301,9 @@ const ParentDashboard: React.FC = () => {
                 <SkeletonCard className="h-32" />
               </div>
             ) : familyOverviewCards.length ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-                {familyOverviewCards.map((item) => {
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  {visibleFamilyOverviewCards.map((item) => {
                   const statusStyle = familyStatusStyles[item.status];
                   const lowestLabel = item.lowest
                     ? `${formatSubjectLabel(item.lowest.subject)} ${Math.round(item.lowest.mastery)}%`
@@ -2327,7 +2358,30 @@ const ParentDashboard: React.FC = () => {
                     </div>
                   );
                 })}
-              </div>
+                </div>
+                {familyOverviewCards.length > visibleFamilyOverviewCards.length && (
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllFamilyCards(true)}
+                      className="text-sm font-semibold text-brand-blue hover:underline"
+                    >
+                      View all learners
+                    </button>
+                  </div>
+                )}
+                {showAllFamilyCards && familyOverviewCards.length > 6 && (
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllFamilyCards(false)}
+                      className="text-sm font-semibold text-slate-700 hover:underline"
+                    >
+                      Show fewer
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               <p className="text-sm text-gray-600">
                 Link a learner to see a family snapshot with streaks, XP, and focus areas.
@@ -3000,7 +3054,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.48 }}
-              id="skill-gaps"
+              id="learning-insights"
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
               <div className="flex items-center justify-between mb-4">
@@ -3242,7 +3296,7 @@ const ParentDashboard: React.FC = () => {
                 <SkeletonCard className="h-40" />
               ) : (
                 <>
-                  <div className="space-y-3 mb-4">
+                  <div className="grid gap-3 xl:grid-cols-2 mb-4">
                     <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
                       <div className="flex items-center justify-between text-sm font-semibold text-gray-900">
                         <span>Weekly lessons</span>
@@ -3294,353 +3348,371 @@ const ParentDashboard: React.FC = () => {
                   </div>
 
                   <form onSubmit={handleSaveGoals} className="space-y-4">
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.allowLabel}</p>
-                          <p className="text-xs text-gray-600">
-                            Set per-learner access, context, and daily caps. Defaults follow your plan and age.
-                          </p>
-                        </div>
-                        <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
-                          Plan cap: {limitLabel(entitlements.aiTutorDailyLimit, 'chats/day')}
-                        </span>
-                      </div>
-                      <div className="mt-3 space-y-2">
-                        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
+                    <div className="grid gap-5 xl:grid-cols-[1fr_1.05fr]">
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.allowLabel}</p>
-                            <p className="text-[11px] text-gray-600">{tutorControlsCopy.allowDescription}</p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setAllowTutorChats((prev) => !prev)}
-                            aria-pressed={allowTutorChats}
-                            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-                              allowTutorChats
-                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                                : 'bg-slate-100 text-slate-700 border-slate-200'
-                            }`}
-                          >
-                            {allowTutorChats ? 'On' : 'Off'}
-                          </button>
-                        </div>
-                        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.lessonOnlyLabel}</p>
-                            <p className="text-[11px] text-gray-600">{tutorControlsCopy.lessonOnlyDescription}</p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setLessonContextOnly((prev) => !prev)}
-                            aria-pressed={lessonContextOnly}
-                            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-                              lessonContextOnly
-                                ? 'bg-brand-light-teal text-brand-teal border-brand-teal/50'
-                                : 'bg-slate-100 text-slate-700 border-slate-200'
-                            }`}
-                          >
-                            {lessonContextOnly ? 'On' : 'Off'}
-                          </button>
-                        </div>
-                        <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.capLabel}</p>
-                              <p className="text-[11px] text-gray-600">{tutorControlsCopy.capDescription}</p>
+                            <label htmlFor="goal-weekly-lessons" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                              Weekly lessons goal
+                            </label>
+                            <div className="mt-1 flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setGoalForm((prev) => {
+                                    const next = Math.max(1, (Number.parseInt(prev.weeklyLessons || '0', 10) || 0) - 1);
+                                    return { ...prev, weeklyLessons: String(next) };
+                                  })
+                                }
+                                className="h-9 w-9 rounded-lg border border-slate-200 bg-white text-lg font-semibold text-gray-700 hover:border-brand-blue/60"
+                                aria-label="Decrease weekly lessons"
+                              >
+                                –
+                              </button>
+                              <input
+                                id="goal-weekly-lessons"
+                                type="number"
+                                min={1}
+                                max={typeof entitlements.lessonLimit === 'number' ? entitlements.lessonLimit : undefined}
+                                value={goalForm.weeklyLessons}
+                                onChange={(event) =>
+                                  setGoalForm((prev) => ({ ...prev, weeklyLessons: event.target.value }))
+                                }
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                                placeholder="e.g. 6"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setGoalForm((prev) => {
+                                    const current = Number.parseInt(prev.weeklyLessons || '0', 10) || 0;
+                                    const maxCap =
+                                      typeof entitlements.lessonLimit === 'number'
+                                        ? entitlements.lessonLimit
+                                        : current + 1;
+                                    const next = Math.min(Math.max(1, current + 1), maxCap);
+                                    return { ...prev, weeklyLessons: String(next) };
+                                  })
+                                }
+                                className="h-9 w-9 rounded-lg border border-slate-200 bg-white text-lg font-semibold text-gray-700 hover:border-brand-blue/60"
+                                aria-label="Increase weekly lessons"
+                              >
+                                +
+                              </button>
                             </div>
+                            <div className="mt-2 text-[11px] text-gray-600 space-y-1">
+                              <p>Recommended: {recommendedWeeklyLessons}/week • 125% caution at {paceWarningThreshold}/week.</p>
+                              {typeof entitlements.lessonLimit === 'number' && (
+                                <p>Plan cap: {entitlements.lessonLimit} lessons/week.</p>
+                              )}
+                              {weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && (
+                                <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1">
+                                  Above recommended pace. Confirm below to proceed.
+                                </p>
+                              )}
+                              {weeklyLessonsTargetValue && typeof entitlements.lessonLimit === 'number' && weeklyLessonsTargetValue > entitlements.lessonLimit && (
+                                <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1">
+                                  We cap at your plan limit; higher values will be trimmed.
+                                </p>
+                              )}
+                            </div>
+                            {weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && (
+                              <label className="mt-2 flex items-center gap-2 text-xs text-gray-700">
+                                <input
+                                  type="checkbox"
+                                  checked={highPaceAcknowledged}
+                                  onChange={(event) => setHighPaceAcknowledged(event.target.checked)}
+                                  className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/30"
+                                />
+                                I understand this is above the recommended pace and want to set it anyway.
+                              </label>
+                            )}
                           </div>
-                          <div className="mt-2 flex items-center gap-2">
+                          <div>
+                            <label htmlFor="goal-practice-minutes" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                              Practice minutes goal
+                            </label>
                             <input
+                              id="goal-practice-minutes"
                               type="number"
                               min={0}
-                              inputMode="numeric"
-                              value={maxTutorChatsPerDay}
-                              onChange={(event) => setMaxTutorChatsPerDay(event.target.value)}
-                              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                              placeholder="Plan cap"
+                              value={goalForm.practiceMinutes}
+                              onChange={(event) =>
+                                setGoalForm((prev) => ({ ...prev, practiceMinutes: event.target.value }))
+                              }
+                              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              placeholder="e.g. 240"
                             />
-                            <span className="text-[11px] text-gray-500">
-                              {tutorControlsCopy.planCapHelper}
-                            </span>
                           </div>
                         </div>
-                      </div>
-                      <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500">
-                        <span>
-                          Students see a friendly notice when chats are off. Settings save instantly with your goal updates.
-                        </span>
-                        {tutorSettingsUpdatedAt && (
-                          <span className="text-slate-600">
-                            Last updated {new Date(tutorSettingsUpdatedAt).toLocaleString()}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Chat safety mode</p>
-                          <p className="text-xs text-gray-600">Guide younger learners with prompt cards before free chat.</p>
-                        </div>
-                        {chatModeLocked && (
-                          <span className="text-[11px] px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
-                            Locked
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {([
-                          { mode: 'guided_only', label: 'Guided only (locked)' },
-                          { mode: 'guided_preferred', label: 'Guided preferred' },
-                          { mode: 'free', label: 'Allow free chat' },
-                        ] as const).map((option) => {
-                          const active = chatModeLocked
-                            ? option.mode === 'guided_only'
-                            : chatModeSetting === option.mode;
-                          return (
-                            <button
-                              key={option.mode}
-                              type="button"
-                              onClick={() => {
-                                if (option.mode === 'guided_only') {
-                                  setChatModeLocked(true);
-                                  setChatModeSetting('guided_only');
-                                } else {
-                                  setChatModeLocked(false);
-                                  setChatModeSetting(option.mode);
-                                }
-                              }}
-                              className={`px-3 py-2 rounded-lg text-sm font-semibold border transition ${
-                                active
-                                  ? 'bg-brand-blue text-white border-brand-blue'
-                                  : 'bg-white text-gray-700 border-slate-200 hover:border-brand-blue/60'
-                              }`}
-                            >
-                              {option.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <p className="mt-2 text-[11px] text-gray-500">
-                        Guided only hides free text until a prompt card is used. You can loosen this later.
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label htmlFor="goal-weekly-lessons" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                          Weekly lessons goal
-                        </label>
-                        <div className="mt-1 flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setGoalForm((prev) => {
-                                const next = Math.max(1, (Number.parseInt(prev.weeklyLessons || '0', 10) || 0) - 1);
-                                return { ...prev, weeklyLessons: String(next) };
-                              })
-                            }
-                            className="h-9 w-9 rounded-lg border border-slate-200 bg-white text-lg font-semibold text-gray-700 hover:border-brand-blue/60"
-                            aria-label="Decrease weekly lessons"
-                          >
-                            –
-                          </button>
-                          <input
-                            id="goal-weekly-lessons"
-                            type="number"
-                            min={1}
-                            max={typeof entitlements.lessonLimit === 'number' ? entitlements.lessonLimit : undefined}
-                            value={goalForm.weeklyLessons}
-                            onChange={(event) =>
-                              setGoalForm((prev) => ({ ...prev, weeklyLessons: event.target.value }))
-                            }
-                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                            placeholder="e.g. 6"
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setGoalForm((prev) => {
-                                const current = Number.parseInt(prev.weeklyLessons || '0', 10) || 0;
-                                const maxCap =
-                                  typeof entitlements.lessonLimit === 'number'
-                                    ? entitlements.lessonLimit
-                                    : current + 1;
-                                const next = Math.min(Math.max(1, current + 1), maxCap);
-                                return { ...prev, weeklyLessons: String(next) };
-                              })
-                            }
-                            className="h-9 w-9 rounded-lg border border-slate-200 bg-white text-lg font-semibold text-gray-700 hover:border-brand-blue/60"
-                            aria-label="Increase weekly lessons"
-                          >
-                            +
-                          </button>
-                        </div>
-                        <div className="mt-2 text-[11px] text-gray-600 space-y-1">
-                          <p>Recommended: {recommendedWeeklyLessons}/week • 125% caution at {paceWarningThreshold}/week.</p>
-                          {typeof entitlements.lessonLimit === 'number' && (
-                            <p>Plan cap: {entitlements.lessonLimit} lessons/week.</p>
-                          )}
-                          {weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && (
-                            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1">
-                              Above recommended pace. Confirm below to proceed.
-                            </p>
-                          )}
-                          {weeklyLessonsTargetValue && typeof entitlements.lessonLimit === 'number' && weeklyLessonsTargetValue > entitlements.lessonLimit && (
-                            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1">
-                              We cap at your plan limit; higher values will be trimmed.
-                            </p>
-                          )}
-                        </div>
-                        {weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && (
-                          <label className="mt-2 flex items-center gap-2 text-xs text-gray-700">
-                            <input
-                              type="checkbox"
-                              checked={highPaceAcknowledged}
-                              onChange={(event) => setHighPaceAcknowledged(event.target.checked)}
-                              className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/30"
-                            />
-                            I understand this is above the recommended pace and want to set it anyway.
-                          </label>
-                        )}
-                      </div>
-                      <div>
-                        <label htmlFor="goal-practice-minutes" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                          Practice minutes goal
-                        </label>
-                        <input
-                          id="goal-practice-minutes"
-                          type="number"
-                          min={0}
-                          value={goalForm.practiceMinutes}
-                          onChange={(event) =>
-                            setGoalForm((prev) => ({ ...prev, practiceMinutes: event.target.value }))
-                          }
-                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                          placeholder="e.g. 240"
-                        />
-                      </div>
-                    </div>
 
-                    <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-sm font-semibold text-gray-900">Subject emphasis</h4>
-                        <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
-                          Shapes the daily plan
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                            Focus subject
-                          </label>
-                          <select
-                            value={goalForm.focusSubject}
-                            onChange={(event) =>
-                              setGoalForm((prev) => ({
-                                ...prev,
-                                focusSubject: (event.target.value as Subject | 'balanced') ?? 'balanced',
-                              }))
-                            }
-                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                          >
-                            <option value="balanced">Balanced across subjects</option>
-                            {(focusSubjectOptions.length ? focusSubjectOptions : (['math', 'english', 'science', 'social_studies'] as Subject[])).map(
-                              (subject) => (
-                                <option key={subject} value={subject}>
-                                  {formatSubjectLabel(subject)}
-                                </option>
-                              ),
-                            )}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                            Emphasis level
-                          </label>
-                          <select
-                            value={goalForm.focusIntensity}
-                            onChange={(event) =>
-                              setGoalForm((prev) => ({
-                                ...prev,
-                                focusIntensity: event.target.value === 'focused' ? 'focused' : 'balanced',
-                              }))
-                            }
-                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                          >
-                            <option value="balanced">Keep things balanced</option>
-                            <option value="focused">Prioritize this subject</option>
-                          </select>
-                        </div>
-                      </div>
-                      <p className="mt-2 text-xs text-gray-600">
-                        We pass this into the learning preferences so applyLearningPreferencesToPlan leads with the chosen subject.
-                      </p>
-                    </div>
-
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-sm font-semibold text-gray-900">Mastery targets</h4>
-                        <span className="text-xs text-gray-500">Tune per subject</span>
-                      </div>
-                        <div className="space-y-3">
-                          {(currentChild?.masteryBySubject ?? []).map((subject) => {
-                          const targetInput = goalForm.masteryTargets[subject.subject];
-                          const parsedTarget =
-                            targetInput && targetInput.trim().length
-                              ? Number.parseFloat(targetInput)
-                              : null;
-                          const targetNumber =
-                            typeof parsedTarget === 'number' && Number.isFinite(parsedTarget)
-                              ? parsedTarget
-                              : masteryTargets?.[subject.subject] ?? subject.goal ?? null;
-                          const percent = computePercent(subject.mastery, targetNumber ?? null) ?? 0;
-                          return (
-                            <div key={subject.subject} className="flex items-start gap-3">
-                              <div className="flex-1">
-                                <div className="flex items-center justify-between text-sm font-semibold text-gray-900">
-                                  <span className="capitalize">
-                                    {subject.subject.replace('_', ' ')}
-                                  </span>
-                                  <span className="text-xs text-gray-500">
-                                    {targetNumber ? `${Math.round(targetNumber)}% target` : 'Set target'}
-                                  </span>
-                                </div>
-                                <div className="mt-1 h-2 rounded-full bg-slate-200 overflow-hidden">
-                                  <div
-                                    className="h-2 bg-brand-violet"
-                                    style={{ width: `${Math.min(percent, 100)}%` }}
-                                  />
-                                </div>
-                                <p className="text-xs text-gray-500 mt-1">
-                                  {Math.round(subject.mastery)}% mastery
-                                  {targetNumber ? ` • ${percent}% of target` : ''}
-                                </p>
-                              </div>
-                              <input
-                                type="number"
-                                min={0}
-                                max={100}
-                                value={goalForm.masteryTargets[subject.subject] ?? ''}
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-sm font-semibold text-gray-900">Subject emphasis</h4>
+                            <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                              Shapes the daily plan
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Focus subject
+                              </label>
+                              <select
+                                value={goalForm.focusSubject}
                                 onChange={(event) =>
                                   setGoalForm((prev) => ({
                                     ...prev,
-                                    masteryTargets: {
-                                      ...prev.masteryTargets,
-                                      [subject.subject]: event.target.value,
-                                    },
+                                    focusSubject: (event.target.value as Subject | 'balanced') ?? 'balanced',
                                   }))
                                 }
-                                className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                              />
+                                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              >
+                                <option value="balanced">Balanced across subjects</option>
+                                {(focusSubjectOptions.length ? focusSubjectOptions : (['math', 'english', 'science', 'social_studies'] as Subject[])).map(
+                                  (subject) => (
+                                    <option key={subject} value={subject}>
+                                      {formatSubjectLabel(subject)}
+                                    </option>
+                                  ),
+                                )}
+                              </select>
                             </div>
-                          );
-                        })}
-                        {(currentChild?.masteryBySubject?.length ?? 0) === 0 && (
-                          <p className="text-sm text-gray-600">
-                            No mastery data yet. Complete lessons to unlock targets.
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Emphasis level
+                              </label>
+                              <select
+                                value={goalForm.focusIntensity}
+                                onChange={(event) =>
+                                  setGoalForm((prev) => ({
+                                    ...prev,
+                                    focusIntensity: event.target.value === 'focused' ? 'focused' : 'balanced',
+                                  }))
+                                }
+                                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              >
+                                <option value="balanced">Keep things balanced</option>
+                                <option value="focused">Prioritize this subject</option>
+                              </select>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-xs text-gray-600">
+                            We pass this into the learning preferences so applyLearningPreferencesToPlan leads with the chosen subject.
                           </p>
-                        )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-sm font-semibold text-gray-900">Mastery targets</h4>
+                            <span className="text-xs text-gray-500">Tune per subject</span>
+                          </div>
+                          <div className="space-y-3">
+                            {(currentChild?.masteryBySubject ?? []).map((subject) => {
+                              const targetInput = goalForm.masteryTargets[subject.subject];
+                              const parsedTarget =
+                                targetInput && targetInput.trim().length
+                                  ? Number.parseFloat(targetInput)
+                                  : null;
+                              const targetNumber =
+                                typeof parsedTarget === 'number' && Number.isFinite(parsedTarget)
+                                  ? parsedTarget
+                                  : masteryTargets?.[subject.subject] ?? subject.goal ?? null;
+                              const percent = computePercent(subject.mastery, targetNumber ?? null) ?? 0;
+                              return (
+                                <div key={subject.subject} className="flex items-start gap-3">
+                                  <div className="flex-1">
+                                    <div className="flex items-center justify-between text-sm font-semibold text-gray-900">
+                                      <span className="capitalize">
+                                        {subject.subject.replace('_', ' ')}
+                                      </span>
+                                      <span className="text-xs text-gray-500">
+                                        {targetNumber ? `${Math.round(targetNumber)}% target` : 'Set target'}
+                                      </span>
+                                    </div>
+                                    <div className="mt-1 h-2 rounded-full bg-slate-200 overflow-hidden">
+                                      <div
+                                        className="h-2 bg-brand-violet"
+                                        style={{ width: `${Math.min(percent, 100)}%` }}
+                                      />
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      {Math.round(subject.mastery)}% mastery
+                                      {targetNumber ? ` • ${percent}% of target` : ''}
+                                    </p>
+                                  </div>
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    max={100}
+                                    value={goalForm.masteryTargets[subject.subject] ?? ''}
+                                    onChange={(event) =>
+                                      setGoalForm((prev) => ({
+                                        ...prev,
+                                        masteryTargets: {
+                                          ...prev.masteryTargets,
+                                          [subject.subject]: event.target.value,
+                                        },
+                                      }))
+                                    }
+                                    className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                                  />
+                                </div>
+                              );
+                            })}
+                            {(currentChild?.masteryBySubject?.length ?? 0) === 0 && (
+                              <p className="text-sm text-gray-600">
+                                No mastery data yet. Complete lessons to unlock targets.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="border-t border-slate-100 pt-3">
+                          <button
+                            type="button"
+                            onClick={() => setAdvancedGoalsOpen((prev) => !prev)}
+                            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800 hover:text-brand-blue"
+                          >
+                            <Lock className="h-4 w-4 text-brand-blue" />
+                            {advancedGoalsOpen ? 'Hide advanced safety & tutor controls' : 'Advanced safety & tutor controls'}
+                          </button>
+                          {advancedGoalsOpen && (
+                            <div className="mt-3 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                              <div className="rounded-lg border border-slate-200 bg-white p-3 space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.allowLabel}</p>
+                                    <p className="text-[11px] text-gray-600">{tutorControlsCopy.allowDescription}</p>
+                                  </div>
+                                  <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                                    Plan cap: {limitLabel(entitlements.aiTutorDailyLimit, 'chats/day')}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.allowLabel}</p>
+                                    <p className="text-[11px] text-gray-600">{tutorControlsCopy.allowDescription}</p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => setAllowTutorChats((prev) => !prev)}
+                                    aria-pressed={allowTutorChats}
+                                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                                      allowTutorChats
+                                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                        : 'bg-slate-100 text-slate-700 border-slate-200'
+                                    }`}
+                                  >
+                                    {allowTutorChats ? 'On' : 'Off'}
+                                  </button>
+                                </div>
+                                <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.lessonOnlyLabel}</p>
+                                    <p className="text-[11px] text-gray-600">{tutorControlsCopy.lessonOnlyDescription}</p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => setLessonContextOnly((prev) => !prev)}
+                                    aria-pressed={lessonContextOnly}
+                                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                                      lessonContextOnly
+                                        ? 'bg-brand-light-teal text-brand-teal border-brand-teal/50'
+                                        : 'bg-slate-100 text-slate-700 border-slate-200'
+                                    }`}
+                                  >
+                                    {lessonContextOnly ? 'On' : 'Off'}
+                                  </button>
+                                </div>
+                                <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <p className="text-sm font-semibold text-gray-900">{tutorControlsCopy.capLabel}</p>
+                                      <p className="text-[11px] text-gray-600">{tutorControlsCopy.capDescription}</p>
+                                    </div>
+                                  </div>
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      inputMode="numeric"
+                                      value={maxTutorChatsPerDay}
+                                      onChange={(event) => setMaxTutorChatsPerDay(event.target.value)}
+                                      className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                                      placeholder="Plan cap"
+                                    />
+                                    <span className="text-[11px] text-gray-500">
+                                      {tutorControlsCopy.planCapHelper}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-[11px] text-gray-500 flex items-center justify-between">
+                                  <span>Settings save with your goal updates.</span>
+                                  {tutorSettingsUpdatedAt && (
+                                    <span className="text-slate-600">
+                                      Last updated {new Date(tutorSettingsUpdatedAt).toLocaleString()}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="rounded-lg border border-slate-200 bg-white p-3">
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-900">Chat safety mode</p>
+                                    <p className="text-xs text-gray-600">Guide younger learners with prompt cards before free chat.</p>
+                                  </div>
+                                  {chatModeLocked && (
+                                    <span className="text-[11px] px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                                      Locked
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  {(
+                                    [
+                                      { mode: 'guided_only', label: 'Guided only (locked)' },
+                                      { mode: 'guided_preferred', label: 'Guided preferred' },
+                                      { mode: 'free', label: 'Allow free chat' },
+                                    ] as const
+                                  ).map((option) => {
+                                    const active = chatModeLocked
+                                      ? option.mode === 'guided_only'
+                                      : chatModeSetting === option.mode;
+                                    return (
+                                      <button
+                                        key={option.mode}
+                                        type="button"
+                                        onClick={() => {
+                                          if (option.mode === 'guided_only') {
+                                            setChatModeLocked(true);
+                                            setChatModeSetting('guided_only');
+                                          } else {
+                                            setChatModeLocked(false);
+                                            setChatModeSetting(option.mode);
+                                          }
+                                        }}
+                                        className={`px-3 py-2 rounded-lg text-sm font-semibold border transition ${
+                                          active
+                                            ? 'bg-brand-blue text-white border-brand-blue'
+                                            : 'bg-white text-gray-700 border-slate-200 hover:border-brand-blue/60'
+                                        }`}
+                                      >
+                                        {option.label}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                                <p className="mt-2 text-[11px] text-gray-500">
+                                  Guided only hides free text until a prompt card is used. You can loosen this later.
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
 

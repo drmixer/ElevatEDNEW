@@ -33,7 +33,7 @@ const Header: React.FC = () => {
       ? [
           { label: 'Home', to: '/parent' },
           { label: 'Goals', to: '/parent#goal-planner' },
-          { label: 'Insights', to: '/parent#family-overview' },
+          { label: 'Insights', to: '/parent#learning-insights' },
           { label: 'Catalog', to: '/catalog', secondary: true },
         ]
       : [];
