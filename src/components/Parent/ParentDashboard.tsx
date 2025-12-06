@@ -1789,6 +1789,118 @@ const ParentDashboard: React.FC = () => {
           </div>
         </motion.div>
 
+        {overview && overview.children.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.02 }}
+            className="mb-6"
+          >
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-slate-500">Live progress</p>
+                  <h3 className="text-lg font-bold text-slate-900">Per-child status & alerts</h3>
+                </div>
+                {struggleCount > 0 && (
+                  <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1 text-xs font-semibold">
+                    🔔 {struggleCount} learner{struggleCount === 1 ? '' : 's'} need support
+                  </span>
+                )}
+                {overviewFetching && <span className="text-xs text-slate-500">Refreshing…</span>}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {overview.children.map((child) => (
+                  <div
+                    key={child.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col gap-2"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">{child.name}</p>
+                        <p className="text-xs text-slate-600">
+                          Grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
+                        </p>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded-lg">
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        {child.progress_pct != null ? `${child.progress_pct}%` : '—'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
+                      <div className="rounded-lg bg-white border border-slate-200 p-2">
+                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
+                        <div className="font-semibold">{Math.round(child.weekly_time_minutes)} min</div>
+                      </div>
+                      <div className="rounded-lg bg-white border border-slate-200 p-2">
+                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Latest quiz</div>
+                        <div className="font-semibold">
+                          {child.latest_quiz_score != null ? `${child.latest_quiz_score}%` : '—'}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-slate-700">
+                      <span>XP {child.xp_total}</span>
+                      <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
+                    </div>
+                    {child.alerts.length > 0 ? (
+                      <div className="text-xs text-amber-700 bg-amber-100 border border-amber-200 rounded-lg p-2">
+                        {child.alerts[0]}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-lg p-2">
+                        On track
+                      </div>
+                    )}
+                    {child.alerts.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => prefillAssignmentFromAlert(child.id, child.alerts[0])}
+                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
+                        >
+                          Assign a review module
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickCheckIn(child.id, child.name, child.alerts[0])}
+                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring"
+                        >
+                          Encourage quick check-in
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const msg = `Progress note for ${child.name}: we saw an alert on ${child.alerts[0]}. Let me know how I can help this week.`;
+                            setCheckInSnippet({ childId: child.id, message: msg });
+                            trackEvent('parent_child_alert_share', { childId: child.id });
+                          }}
+                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-amber-700 border border-amber-200 hover:bg-amber-50 focus-ring"
+                        >
+                          Share alert
+                        </button>
+                      </div>
+                    )}
+                    {checkInSnippet?.childId === child.id && (
+                      <div className="text-[11px] text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1">
+                        {checkInSnippet.message}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedChildId(child.id)}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
+                    >
+                      Open details
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -2137,118 +2249,6 @@ const ParentDashboard: React.FC = () => {
             </div>
           </div>
         </motion.div>
-
-        {overview && overview.children.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.02 }}
-          className="mb-6"
-        >
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Live progress</p>
-                <h3 className="text-lg font-bold text-slate-900">Per-child status & alerts</h3>
-              </div>
-              {struggleCount > 0 && (
-                <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1 text-xs font-semibold">
-                  🔔 {struggleCount} learner{struggleCount === 1 ? '' : 's'} need support
-                </span>
-              )}
-              {overviewFetching && <span className="text-xs text-slate-500">Refreshing…</span>}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {overview.children.map((child) => (
-                <div
-                    key={child.id}
-                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col gap-2"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">{child.name}</p>
-                        <p className="text-xs text-slate-600">
-                          Grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
-                        </p>
-                      </div>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded-lg">
-                        <TrendingUp className="h-3.5 w-3.5" />
-                        {child.progress_pct != null ? `${child.progress_pct}%` : '—'}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
-                      <div className="rounded-lg bg-white border border-slate-200 p-2">
-                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
-                        <div className="font-semibold">{Math.round(child.weekly_time_minutes)} min</div>
-                      </div>
-                      <div className="rounded-lg bg-white border border-slate-200 p-2">
-                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Latest quiz</div>
-                        <div className="font-semibold">
-                          {child.latest_quiz_score != null ? `${child.latest_quiz_score}%` : '—'}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-xs text-slate-700">
-                      <span>XP {child.xp_total}</span>
-                      <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
-                    </div>
-                    {child.alerts.length > 0 ? (
-                      <div className="text-xs text-amber-700 bg-amber-100 border border-amber-200 rounded-lg p-2">
-                        {child.alerts[0]}
-                      </div>
-                    ) : (
-                      <div className="text-xs text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-lg p-2">
-                        On track
-                      </div>
-                    )}
-                    {child.alerts.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => prefillAssignmentFromAlert(child.id, child.alerts[0])}
-                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
-                        >
-                          Assign a review module
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleQuickCheckIn(child.id, child.name, child.alerts[0])}
-                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring"
-                        >
-                          Encourage quick check-in
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const msg = `Progress note for ${child.name}: we saw an alert on ${child.alerts[0]}. Let me know how I can help this week.`;
-                            setCheckInSnippet({ childId: child.id, message: msg });
-                            trackEvent('parent_child_alert_share', { childId: child.id });
-                          }}
-                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-amber-700 border border-amber-200 hover:bg-amber-50 focus-ring"
-                        >
-                          Share alert
-                        </button>
-                      </div>
-                    )}
-                    {checkInSnippet?.childId === child.id && (
-                      <div className="text-[11px] text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1">
-                        {checkInSnippet.message}
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedChildId(child.id)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
-                    >
-                      Open details
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {entitlements.isTrialing && trialDaysRemaining !== null && (
           <div className="mb-6 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -3148,8 +3148,8 @@ const ParentDashboard: React.FC = () => {
           )}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+          <div className="xl:col-span-2 space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -3304,7 +3304,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.48 }}
               id="learning-insights"
-              className="bg-white rounded-2xl p-6 shadow-sm"
+              className="bg-white rounded-2xl p-6 shadow-sm xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -3517,13 +3517,13 @@ const ParentDashboard: React.FC = () => {
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
               id="goal-planner"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -4004,12 +4004,12 @@ const ParentDashboard: React.FC = () => {
 
             {showAssignmentsSection && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
-                id="assignments"
-                className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
-              >
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+              id="assignments"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
+            >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <ClipboardList className="h-5 w-5 text-brand-blue" />
@@ -4213,7 +4213,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               id="family-connections"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4357,7 +4357,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.52 }}
               id="safety-privacy"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-5 xl:col-span-2"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-5 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4582,7 +4582,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4727,7 +4727,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.58 }}
               id="weekly-snapshot"
-              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40 xl:col-span-2"
+              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -4828,7 +4828,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.65 }}
-              className="bg-white rounded-2xl p-6 shadow-sm xl:col-span-2"
+              className="bg-white rounded-2xl p-6 shadow-sm xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">
@@ -4883,7 +4883,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
+              className="bg-white rounded-2xl p-6 shadow-sm min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-gray-900">Home extension</h3>
@@ -4949,7 +4949,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
+              className="bg-white rounded-2xl p-6 shadow-sm min-w-0"
             >
               <h3 className="text-xl font-bold text-gray-900 mb-6">Focus Areas</h3>
               <div className="space-y-3">
@@ -4985,7 +4985,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.85 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
+              className="bg-white rounded-2xl p-6 shadow-sm min-w-0"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">Alert Center</h3>
