@@ -4108,7 +4108,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.52 }}
               id="safety-privacy"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 w-full max-w-5xl mx-auto space-y-5"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4122,7 +4122,7 @@ const ParentDashboard: React.FC = () => {
                   Response &lt; 1 business day
                 </span>
               </div>
-              <div className="grid gap-5 lg:grid-cols-2">
+              <div className="space-y-5">
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                   <p className="text-sm text-gray-700">
                     The AI tutor stays on academic help only. We screen for safety violations, keep under-13 accounts
@@ -4142,16 +4142,16 @@ const ParentDashboard: React.FC = () => {
                       <span>Students see plain-language explanations when something is blocked and are reminded to ask a grown-up.</span>
                     </li>
                   </ul>
-                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs text-gray-700">
+                  <div className="mt-3 flex flex-col lg:flex-row lg:items-center lg:gap-3 gap-3 text-xs text-gray-700">
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-[260px]">
                       <p className="font-semibold text-gray-900 text-sm">What we store</p>
                       <p className="mt-1 text-gray-600">
                         Progress, assignments, and safety-blocked chats with timestamps so families can request audits or exports.
                       </p>
                     </div>
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs text-gray-700">
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-[240px]">
                       <p className="font-semibold text-gray-900 text-sm">Policy links</p>
-                      <div className="flex flex-wrap gap-2 mt-1">
+                      <div className="flex flex-wrap gap-2 mt-1 break-words">
                         <Link to="/privacy" className="text-brand-blue font-semibold hover:underline">
                           Privacy policy
                         </Link>
@@ -4169,8 +4169,8 @@ const ParentDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 p-4">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="rounded-xl border border-slate-200 p-4 space-y-4">
+                  <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-amber-600" />
                       <h4 className="text-sm font-semibold text-gray-900">Report a concern</h4>
@@ -4272,7 +4272,7 @@ const ParentDashboard: React.FC = () => {
                     </p>
                   )}
 
-                  <div className="mt-4">
+                  <div className="pt-3 border-t border-slate-100">
                     <div className="flex items-center justify-between mb-2">
                       <h5 className="text-sm font-semibold text-gray-900">
                         Recent reports{currentChild ? ` • ${currentChild.name}` : ''}
