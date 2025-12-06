@@ -57,29 +57,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const initialise = async () => {
       setLoading(true);
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
 
-      if (error) {
-        console.error('[Auth] Failed to get session', error);
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
-      if (session?.user) {
-        try {
-          await loadProfile(session.user.id);
-        } catch {
-          // loadProfile handles logging
+        if (error) {
+          console.error('[Auth] Failed to get session', error);
+          setUser(null);
+          return;
         }
-      } else {
-        setUser(null);
-      }
 
-      setLoading(false);
+        if (session?.user) {
+          try {
+            await loadProfile(session.user.id);
+          } catch {
+            // loadProfile handles logging
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (unhandledError) {
+        console.error('[Auth] Unexpected error during session restore', unhandledError);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
     initialise();
