@@ -3517,13 +3517,13 @@ const ParentDashboard: React.FC = () => {
             </motion.div>
           </div>
 
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
               id="goal-planner"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -4008,7 +4008,7 @@ const ParentDashboard: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.45 }}
                 id="assignments"
-                className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+                className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
@@ -4213,7 +4213,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               id="family-connections"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4357,7 +4357,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.52 }}
               id="safety-privacy"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 w-full max-w-5xl mx-auto space-y-5"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-5 xl:col-span-2"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4582,7 +4582,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -4727,7 +4727,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.58 }}
               id="weekly-snapshot"
-              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40"
+              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40 xl:col-span-2"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -4828,7 +4828,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.65 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
+              className="bg-white rounded-2xl p-6 shadow-sm xl:col-span-2"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">
