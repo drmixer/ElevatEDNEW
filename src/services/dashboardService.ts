@@ -1992,10 +1992,9 @@ export const fetchParentDashboardData = async (
   parent: Parent,
 ): Promise<ParentDashboardData> => {
   try {
-    try {
-      await supabase.rpc('refresh_dashboard_rollups');
-    } catch (rollupError) {
-      console.warn('[Dashboard] Rollup refresh failed', rollupError);
+    const rollupResult = await supabase.rpc('refresh_dashboard_rollups', {});
+    if (rollupResult.error) {
+      console.warn('[Dashboard] Rollup refresh failed', rollupResult.error);
     }
     const dashboardWeekSeed = new Date().toISOString().slice(0, 10);
 
@@ -2367,10 +2366,9 @@ export const fetchParentDashboardData = async (
 
 export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashboardData> => {
   try {
-    try {
-      await supabase.rpc('refresh_dashboard_rollups');
-    } catch (rollupError) {
-      console.warn('[Dashboard] Admin rollup refresh failed', rollupError);
+    const adminRollupResult = await supabase.rpc('refresh_dashboard_rollups', {});
+    if (adminRollupResult.error) {
+      console.warn('[Dashboard] Admin rollup refresh failed', adminRollupResult.error);
     }
 
     const [

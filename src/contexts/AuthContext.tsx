@@ -1,8 +1,23 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import supabase from '../lib/supabaseClient';
 import type { Subject, User, UserRole } from '../types';
 import { fetchUserProfile } from '../services/profileService';
 import recordReliabilityCheckpoint from '../lib/reliability';
+
+const runWithTimeout = async <T,>(promise: Promise<T>, label: string, timeoutMs = 8000): Promise<T> => {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(label)), timeoutMs);
+  });
+
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    if (timer) {
+      clearTimeout(timer);
+    }
+  }
+};
 
 interface AuthContextType {
   user: User | null;
@@ -42,47 +57,67 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const isMountedRef = useRef(true);
+
+  useEffect(
+    () => () => {
+      isMountedRef.current = false;
+    },
+    [],
+  );
+
+  const safeSetUser = useCallback((next: User | null) => {
+    if (isMountedRef.current) {
+      setUser(next);
+    }
+  }, []);
+
+  const safeSetLoading = useCallback((next: boolean) => {
+    if (isMountedRef.current) {
+      setLoading(next);
+    }
+  }, []);
 
   const loadProfile = useCallback(async (userId: string) => {
     try {
       const profile = await fetchUserProfile(userId);
-      setUser(profile);
+      safeSetUser(profile);
     } catch (error) {
       console.error('[Auth] Failed to load profile', error);
-      setUser(null);
+      safeSetUser(null);
       throw error;
     }
-  }, []);
+  }, [safeSetUser]);
 
   useEffect(() => {
     const initialise = async () => {
-      setLoading(true);
+      safeSetLoading(true);
       try {
         const {
           data: { session },
           error,
-        } = await supabase.auth.getSession();
+        } = await runWithTimeout(supabase.auth.getSession(), 'auth_session_timeout');
 
         if (error) {
           console.error('[Auth] Failed to get session', error);
-          setUser(null);
+          safeSetUser(null);
           return;
         }
 
         if (session?.user) {
           try {
-            await loadProfile(session.user.id);
+            await runWithTimeout(loadProfile(session.user.id), 'auth_profile_timeout');
           } catch {
             // loadProfile handles logging
           }
         } else {
-          setUser(null);
+          safeSetUser(null);
         }
       } catch (unhandledError) {
         console.error('[Auth] Unexpected error during session restore', unhandledError);
-        setUser(null);
+        safeSetUser(null);
       } finally {
-        setLoading(false);
+        safeSetLoading(false);
       }
     };
 
@@ -90,26 +125,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        setLoading(true);
+        safeSetLoading(true);
         try {
-          await loadProfile(session.user.id);
+          await runWithTimeout(loadProfile(session.user.id), 'auth_profile_timeout');
         } catch {
           // handled inside loadProfile
         } finally {
-          setLoading(false);
+          safeSetLoading(false);
         }
       } else {
-        setUser(null);
+        safeSetUser(null);
+        safeSetLoading(false);
       }
     });
 
     return () => {
       subscription?.subscription.unsubscribe();
     };
-  }, [loadProfile]);
+  }, [loadProfile, safeSetLoading, safeSetUser]);
 
   const login = async (email: string, password: string) => {
-    setLoading(true);
+    safeSetLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -136,17 +172,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('[Auth] Login failed', error);
       const code = (error as { code?: string } | null)?.code;
       if (code === 'email_not_confirmed') {
-        setUser(null);
+        safeSetUser(null);
         throw error;
       }
       recordReliabilityCheckpoint('auth_login', 'error', { error });
-      setUser(null);
+      safeSetUser(null);
       if (error instanceof Error) {
         throw error;
       }
       throw new Error('Login failed');
     } finally {
-      setLoading(false);
+      safeSetLoading(false);
     }
   };
 
@@ -167,7 +203,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       parentEmail?: string | null;
     },
   ) => {
-    setLoading(true);
+    safeSetLoading(true);
     try {
       const studentAge = options?.studentAge;
       const isUnder13 = typeof studentAge === 'number' ? studentAge < 13 : false;
@@ -207,7 +243,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (!data.session || !data.user) {
-        setUser(null);
+        safeSetUser(null);
         recordReliabilityCheckpoint('auth_register', 'error', { reason: 'pending_email_confirmation' });
         throw new Error('Sign-up successful. Please check your email to confirm your account.');
       }
@@ -239,18 +275,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('[Auth] Registration failed', error);
       recordReliabilityCheckpoint('auth_register', 'error', { error });
-      setUser(null);
+      safeSetUser(null);
       if (error instanceof Error) {
         throw error;
       }
       throw new Error('Registration failed');
     } finally {
-      setLoading(false);
+      safeSetLoading(false);
     }
   };
 
   const logout = () => {
-    setUser(null);
+    safeSetUser(null);
     supabase.auth.signOut().catch((error) => {
       console.error('[Auth] Logout failed', error);
     });
