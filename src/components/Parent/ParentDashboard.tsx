@@ -20,6 +20,8 @@ import {
   TrendingUp,
   Users,
   Lock,
+  Copy,
+  Mail,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -55,6 +57,7 @@ import { assignModuleToStudents, fetchChildAssignments } from '../../services/as
 import { fetchCatalogModules } from '../../services/catalogService';
 import {
   fetchGuardianLinks,
+  createLearnerForParent,
   linkGuardianWithCode,
   revokeGuardianLink,
   upsertChildGoals,
@@ -259,11 +262,31 @@ const ParentDashboard: React.FC = () => {
   const [showTour, setShowTour] = useState<boolean>(false);
   const [tourStep, setTourStep] = useState<number>(0);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
-  const [newLearnerName, setNewLearnerName] = useState('');
-  const [newLearnerGrade, setNewLearnerGrade] = useState<number>(3);
-  const [generatedFamilyCode, setGeneratedFamilyCode] = useState('');
   const [onboardingMessage, setOnboardingMessage] = useState<string | null>(null);
   const [onboardingError, setOnboardingError] = useState<string | null>(null);
+  const [showAddLearnerModal, setShowAddLearnerModal] = useState(false);
+  const [createdFamilyCode, setCreatedFamilyCode] = useState<string | null>(null);
+  const [addLearnerError, setAddLearnerError] = useState<string | null>(null);
+  const [addLearnerSuccess, setAddLearnerSuccess] = useState<string | null>(null);
+  const [lastTemporaryPassword, setLastTemporaryPassword] = useState<string | null>(null);
+  const [lastInviteSent, setLastInviteSent] = useState<boolean>(false);
+  const [addLearnerForm, setAddLearnerForm] = useState<{
+    name: string;
+    email: string;
+    grade: number;
+    age: string;
+    sendInvite: boolean;
+    consentAttested: boolean;
+    focusSubject: Subject | 'balanced';
+  }>({
+    name: '',
+    email: '',
+    grade: 6,
+    age: '',
+    sendInvite: true,
+    consentAttested: false,
+    focusSubject: 'balanced',
+  });
   const [onboardingPrefs, setOnboardingPrefs] = useState<{
     diagnosticScheduled: boolean;
     dismissed: boolean;
@@ -724,6 +747,13 @@ const ParentDashboard: React.FC = () => {
     }
   }, [weeklyLessonsTargetValue, paceWarningThreshold]);
 
+  useEffect(() => {
+    const ageNumber = addLearnerForm.age.trim() ? Number.parseInt(addLearnerForm.age, 10) : null;
+    if (ageNumber !== null && ageNumber < 13 && addLearnerForm.sendInvite) {
+      setAddLearnerForm((prev) => ({ ...prev, sendInvite: false }));
+    }
+  }, [addLearnerForm.age, addLearnerForm.sendInvite]);
+
   const concernRouteCopy = useMemo(() => {
     if (concernCategory === 'safety' || concernCategory === 'content') {
       return 'Routes to Trust & Safety';
@@ -973,6 +1003,7 @@ const ParentDashboard: React.FC = () => {
       setGuardianRelationship('');
       guardianLinksQuery.refetch();
       trackEvent('guardian_link_created', { parentId: parent?.id, studentId: link?.studentId });
+      setOnboardingPrefs((prev) => ({ ...prev, preparedLearner: true }));
       await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
       await refreshUser();
     },
@@ -980,6 +1011,45 @@ const ParentDashboard: React.FC = () => {
       console.error('[ParentDashboard] guardian link failed', error);
       setGuardianMessage(null);
       setGuardianError(error instanceof Error ? error.message : 'Unable to link learner right now.');
+    },
+  });
+
+  const createLearnerMutation = useMutation({
+    mutationFn: async () => {
+      const ageNumber = addLearnerForm.age.trim() ? Number.parseInt(addLearnerForm.age, 10) : null;
+      return createLearnerForParent({
+        name: addLearnerForm.name.trim(),
+        email: addLearnerForm.email.trim(),
+        grade: addLearnerForm.grade,
+        age: ageNumber && Number.isFinite(ageNumber) ? ageNumber : null,
+        sendInvite: addLearnerForm.sendInvite && (!ageNumber || ageNumber >= 13),
+        consentAttested: ageNumber !== null && ageNumber < 13 ? addLearnerForm.consentAttested : true,
+        focusSubject: addLearnerForm.focusSubject === 'balanced' ? null : addLearnerForm.focusSubject,
+      });
+    },
+    onSuccess: async (result) => {
+      setAddLearnerError(null);
+      setAddLearnerSuccess(
+        result.inviteSent
+          ? 'Learner created, linked, and invite email sent.'
+          : 'Learner created and linked. Share the code and temporary password below.',
+      );
+      setCreatedFamilyCode(result.familyLinkCode ?? null);
+      setLastTemporaryPassword(result.temporaryPassword);
+      setLastInviteSent(result.inviteSent);
+      setGuardianMessage('Learner linked. You can set goals and assignments now.');
+      setGuardianError(null);
+      setShowAddLearnerModal(false);
+      setOnboardingPrefs((prev) => ({ ...prev, preparedLearner: true }));
+      guardianLinksQuery.refetch();
+      await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
+      await refreshUser();
+      trackEvent('parent_create_learner', { parentId: parent?.id });
+    },
+    onError: (error) => {
+      console.error('[ParentDashboard] create learner failed', error);
+      setAddLearnerSuccess(null);
+      setAddLearnerError(error instanceof Error ? error.message : 'Unable to add learner right now.');
     },
   });
 
@@ -1243,29 +1313,6 @@ const ParentDashboard: React.FC = () => {
     });
   };
 
-  const handleGenerateFamilyCode = () => {
-    if (seatLimitReached) {
-      setOnboardingError('You have reached the learner limit for your plan. Upgrade to add more seats.');
-      return;
-    }
-    if (!newLearnerName.trim()) {
-      setOnboardingError('Add your learner name to generate a family link code.');
-      return;
-    }
-    const code = `${newLearnerName.trim().slice(0, 3).toUpperCase()}-${Math.random()
-      .toString(36)
-      .slice(2, 6)
-      .toUpperCase()}`;
-    setGeneratedFamilyCode(code);
-    setOnboardingMessage('Share this code with your learner to enter on their screen.');
-    setOnboardingError(null);
-    setOnboardingPrefs((prev) => ({ ...prev, preparedLearner: true }));
-    trackEvent('parent_generated_family_code', {
-      parentId: parent?.id,
-      grade: newLearnerGrade,
-    });
-  };
-
   const handleScheduleDiagnostic = (when: 'now' | 'later') => {
     setOnboardingPrefs((prev) => ({ ...prev, diagnosticScheduled: true }));
     setOnboardingError(null);
@@ -1320,6 +1367,37 @@ const ParentDashboard: React.FC = () => {
       lastViewedStep: 'replayed',
     });
     trackEvent('parent_tour_replay', { parentId: parent?.id });
+  };
+
+  const handleSubmitAddLearner = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setAddLearnerError(null);
+    setAddLearnerSuccess(null);
+    const ageNumber = addLearnerForm.age.trim() ? Number.parseInt(addLearnerForm.age, 10) : null;
+    if (!addLearnerForm.name.trim() || !addLearnerForm.email.trim()) {
+      setAddLearnerError('Add a name and email to create this learner.');
+      return;
+    }
+    if (ageNumber !== null && ageNumber < 13 && !addLearnerForm.consentAttested) {
+      setAddLearnerError('Confirm guardian consent for learners under 13.');
+      return;
+    }
+    await createLearnerMutation.mutateAsync();
+  };
+
+  const handleCopyCreatedCode = async () => {
+    if (!createdFamilyCode) return;
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      setAddLearnerError('Copy is unavailable in this browser. Share the code manually.');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(createdFamilyCode);
+      setAddLearnerSuccess('Copied the Family Link code.');
+    } catch (copyError) {
+      console.error('[ParentDashboard] failed to copy code', copyError);
+      setAddLearnerError('Unable to copy right now. Share the code manually.');
+    }
   };
 
   function scrollToSection(id: string) {
@@ -1474,6 +1552,160 @@ const ParentDashboard: React.FC = () => {
   };
 
   return (
+    <>
+      {showAddLearnerModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl p-6 border border-slate-200">
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-blue">Add learner</p>
+                <h2 className="text-xl font-semibold text-slate-900">Create and link a learner</h2>
+                <p className="text-sm text-slate-600">
+                  We’ll create the learner account, link it to your family, and generate a Family Link code. Email invites are only sent for learners 13+.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAddLearnerModal(false);
+                  setAddLearnerError(null);
+                  setAddLearnerSuccess(null);
+                }}
+                className="text-slate-500 hover:text-slate-800"
+                aria-label="Close add learner modal"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <form onSubmit={handleSubmitAddLearner} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-slate-800">Learner name</label>
+                  <input
+                    type="text"
+                    value={addLearnerForm.name}
+                    onChange={(event) => setAddLearnerForm((prev) => ({ ...prev, name: event.target.value }))}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    placeholder="Alex Rivera"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                    Learner email <Mail className="h-4 w-4 text-slate-500" />
+                  </label>
+                  <input
+                    type="email"
+                    value={addLearnerForm.email}
+                    onChange={(event) => setAddLearnerForm((prev) => ({ ...prev, email: event.target.value }))}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    placeholder="learner@example.com"
+                    required
+                  />
+                  <p className="text-[11px] text-slate-600">We keep this private and only use it for login.</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-slate-800">Grade</label>
+                  <select
+                    value={addLearnerForm.grade}
+                    onChange={(event) => setAddLearnerForm((prev) => ({ ...prev, grade: Number(event.target.value) }))}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  >
+                    {Array.from({ length: 12 }, (_, index) => index + 1).map((grade) => (
+                      <option key={grade} value={grade}>
+                        Grade {grade}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-slate-800">Age</label>
+                  <input
+                    type="number"
+                    min={5}
+                    max={18}
+                    value={addLearnerForm.age}
+                    onChange={(event) => setAddLearnerForm((prev) => ({ ...prev, age: event.target.value }))}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                    placeholder="11"
+                  />
+                  <p className="text-[11px] text-slate-600">Required for under-13 consent; optional otherwise.</p>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-slate-800">Focus (optional)</label>
+                  <select
+                    value={addLearnerForm.focusSubject}
+                    onChange={(event) =>
+                      setAddLearnerForm((prev) => ({ ...prev, focusSubject: event.target.value as Subject | 'balanced' }))
+                    }
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                  >
+                    <option value="balanced">Balanced</option>
+                    <option value="math">Math first</option>
+                    <option value="english">Reading & Writing first</option>
+                    <option value="science">Science first</option>
+                  </select>
+                </div>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-2">
+                <label className="flex items-center gap-2 text-sm text-slate-800">
+                  <input
+                    type="checkbox"
+                    checked={addLearnerForm.sendInvite}
+                    onChange={(event) => setAddLearnerForm((prev) => ({ ...prev, sendInvite: event.target.checked }))}
+                    className="h-4 w-4 text-brand-blue focus:ring-brand-blue border-slate-300 rounded"
+                    disabled={addLearnerForm.age.trim() !== '' && Number.parseInt(addLearnerForm.age, 10) < 13}
+                  />
+                  Send a sign-in email (13+ only)
+                </label>
+                <label className="flex items-start gap-2 text-sm text-slate-800">
+                  <input
+                    type="checkbox"
+                    checked={addLearnerForm.consentAttested}
+                    onChange={(event) => setAddLearnerForm((prev) => ({ ...prev, consentAttested: event.target.checked }))}
+                    className="mt-1 h-4 w-4 text-brand-blue focus:ring-brand-blue border-slate-300 rounded"
+                  />
+                  <span>
+                    I am the parent/guardian for this learner and approve creating their account. Required if age is under 13.
+                  </span>
+                </label>
+                <p className="text-[11px] text-slate-600">
+                  Under-13: no outbound emails. You’ll share the Family Link code yourself. 13+: we can email the sign-in link.
+                </p>
+              </div>
+              {addLearnerError && (
+                <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{addLearnerError}</div>
+              )}
+              {addLearnerSuccess && (
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{addLearnerSuccess}</div>
+              )}
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddLearnerModal(false);
+                    setAddLearnerError(null);
+                    setAddLearnerSuccess(null);
+                  }}
+                  className="px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={createLearnerMutation.isLoading}
+                  className="px-4 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-60"
+                >
+                  {createLearnerMutation.isLoading ? 'Creating…' : 'Create learner'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
@@ -2112,30 +2344,47 @@ const ParentDashboard: React.FC = () => {
                       className={`text-[11px] px-2 py-1 rounded-full ${
                         learnerStepDone ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
                       }`}
-                    >
-                      {learnerStepDone ? 'Done' : 'Pending'}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-700">
-                    Enter a learner name and grade to prep their invite. Share the family link code from their screen or
-                    the one you generate here.
-                  </p>
-                  <p className="text-[11px] text-slate-600">
-                  {seatLimit !== null
-                      ? `Seats used: ${seatsUsed}/${seatLimit}. ${
-                          seatLimitReached
-                            ? 'Upgrade to add another learner.'
-                            : `${seatsRemaining} seat${seatsRemaining === 1 ? '' : 's'} remaining.`
-                        }`
-                      : billingRequired
-                        ? 'Family plan seats sync to your subscription.'
-                        : 'Billing is off; seats are not limited right now.'}
-                  </p>
-                  {seatLimitReached && billingRequired && (
-                    <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
-                      <span>You have filled your current seats. Upgrade to link another learner.</span>
-                      <button
-                        type="button"
+                  >
+                    {learnerStepDone ? 'Done' : 'Pending'}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-700">
+                  Have your learner sign in and open their Family Link code from the Student dashboard. Paste that code
+                  below to link them to your family space.
+                </p>
+                <p className="text-[11px] text-slate-600">
+                {seatLimit !== null
+                    ? `Seats used: ${seatsUsed}/${seatLimit}. ${
+                        seatLimitReached
+                          ? 'Upgrade to add another learner.'
+                          : `${seatsRemaining} seat${seatsRemaining === 1 ? '' : 's'} remaining.`
+                      }`
+                    : billingRequired
+                      ? 'Family plan seats sync to your subscription.'
+                      : 'Billing is off; seats are not limited right now.'}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddLearnerModal(true)}
+                    disabled={seatLimitReached}
+                    className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-60"
+                  >
+                    Add a learner
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('family-connections')}
+                    className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                  >
+                    Paste a Family Link code
+                  </button>
+                </div>
+                {seatLimitReached && billingRequired && (
+                  <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
+                    <span>You have filled your current seats. Upgrade to link another learner.</span>
+                    <button
+                      type="button"
                         onClick={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
                         className="inline-flex items-center px-2 py-1 rounded-md bg-brand-blue text-white font-semibold hover:bg-brand-blue/90"
                       >
@@ -2143,48 +2392,47 @@ const ParentDashboard: React.FC = () => {
                       </button>
                     </div>
                   )}
-                  <div className="grid grid-cols-1 gap-2">
-                    <input
-                      type="text"
-                      value={newLearnerName}
-                      onChange={(event) => setNewLearnerName(event.target.value)}
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                      placeholder="Learner name"
-                    />
-                    <select
-                      value={newLearnerGrade}
-                      onChange={(event) => setNewLearnerGrade(Number(event.target.value))}
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                    >
-                      {Array.from({ length: 12 }, (_, index) => index + 1).map((grade) => (
-                        <option key={grade} value={grade}>
-                          Grade {grade}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={handleGenerateFamilyCode}
-                      disabled={seatLimitReached}
-                      className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-60"
-                    >
-                      Generate family link code
-                    </button>
+                  <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs space-y-2">
+                    <p className="font-semibold text-slate-900">Quick steps</p>
+                    <ol className="list-decimal list-inside space-y-1 text-slate-700">
+                      <li>Have your learner sign in and open their Student dashboard.</li>
+                      <li>Copy the Family Link code shown in their banner.</li>
+                      <li>Paste it below in Family Connections to link the account.</li>
+                    </ol>
+                    <p className="text-[11px] text-slate-600">
+                      Under-13 learners must link with a parent/guardian. Codes rotate anytime from the student view.
+                    </p>
                     <button
                       type="button"
                       onClick={() => scrollToSection('family-connections')}
-                      className="inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                      className="inline-flex items-center px-3 py-2 rounded-lg bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue/90"
                     >
-                      Link with existing code
+                      Paste a Family Link code
                     </button>
+                    {createdFamilyCode && (
+                      <div className="mt-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-sm text-emerald-800">
+                          Latest code: <span className="font-mono font-semibold">{createdFamilyCode}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleCopyCreatedCode}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800 hover:text-emerald-900"
+                        >
+                          <Copy className="h-4 w-4" />
+                          Copy
+                        </button>
+                      </div>
+                    )}
+                    {!lastInviteSent && lastTemporaryPassword && (
+                      <div className="mt-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800">
+                        Temporary password: <span className="font-mono font-semibold">{lastTemporaryPassword}</span>
+                        <span className="block text-[11px] text-slate-600">
+                          Ask your learner to sign in with this password and their email, then reset it.
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  {generatedFamilyCode && (
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs">
-                      Share this with your learner: <span className="font-semibold">{generatedFamilyCode}</span>
-                    </div>
-                  )}
                 </div>
 
                 <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
@@ -4778,6 +5026,7 @@ const ParentDashboard: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

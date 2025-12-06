@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { parse as parseUrl } from 'node:url';
 
@@ -153,6 +154,46 @@ const ensureParentProfile = async (
       }
     }
   }
+};
+
+const splitName = (fullName: string): { first: string; last: string | null } => {
+  const trimmed = fullName.trim();
+  if (!trimmed) return { first: 'Learner', last: null };
+  const parts = trimmed.split(/\s+/);
+  if (parts.length === 1) {
+    return { first: parts[0], last: null };
+  }
+  return { first: parts[0], last: parts.slice(1).join(' ') || null };
+};
+
+const loadSeatCap = async (supabase: SupabaseClient, parentId: string): Promise<{ seatsUsed: number; seatCap: number | null; planSlug: string }> => {
+  const { count } = await supabase
+    .from('parent_dashboard_children')
+    .select('student_id', { count: 'exact', head: true })
+    .eq('parent_id', parentId);
+
+  const { data: subscription, error } = await supabase
+    .from('subscriptions')
+    .select('status, plans ( slug, metadata )')
+    .eq('parent_id', parentId)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Unable to load subscription for seat check: ${error.message}`);
+  }
+
+  const planSlug = (subscription?.plans as { slug?: string } | null)?.slug ?? 'individual-free';
+  const planMetadata = (subscription?.plans as { metadata?: Record<string, unknown> } | null)?.metadata ?? {};
+  const seatCapRaw = (planMetadata as Record<string, unknown>)?.seat_cap;
+  const seatCap =
+    seatCapRaw === 'unlimited'
+      ? null
+      : typeof seatCapRaw === 'number' && Number.isFinite(seatCapRaw)
+        ? seatCapRaw
+        : 1;
+
+  return { seatsUsed: count ?? 0, seatCap, planSlug };
 };
 
 const createModuleAssignment = async (
@@ -978,9 +1019,220 @@ export const createApiHandler = (context: ApiContext) => {
         return handleRoute(async () => {
           await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
           const preferences = await fetchStudentPreferences(supabase, actor.id);
-          sendJson(res, 200, { preferences }, API_VERSION);
-        }, { actorId: actor.id });
-      }
+        sendJson(res, 200, { preferences }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/family-code') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
+        const { data, error } = await supabase
+          .from('student_profiles')
+          .select('family_link_code')
+          .eq('id', actor.id)
+          .maybeSingle();
+        if (error) {
+          throw new HttpError(500, `Unable to load family link code: ${error.message}`, 'family_code_lookup_failed');
+        }
+        const code = (data?.family_link_code as string | null | undefined)?.trim();
+        if (!code) {
+          throw new HttpError(404, 'Family link code not found.', 'family_code_missing');
+        }
+        const { data: guardianLinks, error: guardianError } = await (serviceSupabase ?? supabase)
+          .from('guardian_child_links')
+          .select('id')
+          .eq('student_id', actor.id)
+          .eq('status', 'active')
+          .limit(1);
+        if (guardianError) {
+          throw new HttpError(500, `Unable to verify guardian link status: ${guardianError.message}`, 'family_code_guardian_lookup_failed');
+        }
+        sendJson(res, 200, { code, linked: (guardianLinks?.length ?? 0) > 0 }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'POST' && path === '/student/family-code/rotate') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const writer = serviceSupabase ?? supabase;
+        let attempts = 0;
+        let code: string | null = null;
+        while (attempts < 5) {
+          attempts += 1;
+          const candidate = randomBytes(8).toString('hex');
+          const { error } = await writer
+            .from('student_profiles')
+            .update({ family_link_code: candidate })
+            .eq('id', actor.id);
+          if (!error) {
+            code = candidate;
+            break;
+          }
+          if (!/duplicate key value/i.test(error.message)) {
+            throw new HttpError(500, `Unable to update family link code: ${error.message}`, 'family_code_update_failed');
+          }
+        }
+
+        if (!code) {
+          throw new HttpError(500, 'Unable to generate a unique family link code right now.', 'family_code_retry_failed');
+        }
+
+        sendJson(res, 200, { code }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'POST' && path === '/parent/learners') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          name?: string;
+          email?: string;
+          grade?: number;
+          age?: number;
+          sendInvite?: boolean;
+          focusSubject?: string | null;
+          consentAttested?: boolean;
+        }>(req);
+
+        const fullName = (body.name ?? '').trim();
+        const email = (body.email ?? '').trim().toLowerCase();
+        const grade = typeof body.grade === 'number' && Number.isFinite(body.grade) ? body.grade : null;
+        const age = typeof body.age === 'number' && Number.isFinite(body.age) ? body.age : null;
+        const sendInvite = body.sendInvite === true;
+        const focusSubject = typeof body.focusSubject === 'string' ? body.focusSubject.trim() : null;
+        const consentAttested = body.consentAttested === true;
+
+        if (!fullName) {
+          throw new HttpError(400, 'Learner name is required.', 'invalid_payload');
+        }
+        if (!email) {
+          throw new HttpError(400, 'Learner email is required to create their account.', 'invalid_payload');
+        }
+        if (age !== null && age < 13 && !consentAttested) {
+          throw new HttpError(400, 'Guardian consent is required for learners under 13.', 'consent_required');
+        }
+        if (sendInvite && age !== null && age < 13) {
+          throw new HttpError(400, 'Email invites are disabled for learners under 13.', 'invite_not_allowed_under_13');
+        }
+
+        const { seatsUsed, seatCap, planSlug } = await loadSeatCap(serviceSupabase ?? supabase, actor.id);
+        if (seatCap !== null && seatsUsed >= seatCap) {
+          throw new HttpError(402, 'You have reached the learner limit for your plan. Upgrade to add another learner.', 'seat_limit_reached');
+        }
+
+        const { first, last } = splitName(fullName);
+        const password = randomBytes(16).toString('hex');
+        const inviteEligible = sendInvite && (age === null || age >= 13);
+
+        const { data: created, error: createError } = await (serviceSupabase ?? supabase).auth.admin.createUser({
+          email,
+          password,
+          email_confirm: !inviteEligible,
+          user_metadata: {
+            full_name: fullName,
+            role: 'student',
+            grade,
+            student_age: age,
+            guardian_consent: consentAttested,
+            focus_subject: focusSubject,
+          },
+        });
+
+        if (createError || !created?.user) {
+          throw new HttpError(
+            400,
+            `Unable to create learner account${createError?.message ? `: ${createError.message}` : ''}`,
+            'create_learner_failed',
+          );
+        }
+
+        const studentId = created.user.id;
+
+        const updates: Record<string, unknown> = {
+          parent_id: actor.id,
+          first_name: first,
+          last_name: last,
+        };
+        if (grade) {
+          updates.grade_level = grade;
+        }
+        if (focusSubject) {
+          updates.learning_style = {
+            sessionLength: 'standard',
+            focusSubject,
+            focusIntensity: 'balanced',
+          };
+        }
+
+        const writer = serviceSupabase ?? supabase;
+        const { error: profileUpdateError } = await writer.from('student_profiles').update(updates).eq('id', studentId);
+        if (profileUpdateError) {
+          throw new HttpError(500, `Unable to finalize learner profile: ${profileUpdateError.message}`, 'learner_profile_update_failed');
+        }
+
+        const { error: guardianError } = await writer
+          .from('guardian_child_links')
+          .upsert({
+            parent_id: actor.id,
+            student_id: studentId,
+            relationship: 'parent',
+            status: 'active',
+            invited_at: new Date().toISOString(),
+            accepted_at: new Date().toISOString(),
+            metadata: { linked_via: 'parent_created', plan: planSlug },
+          });
+        if (guardianError) {
+          throw new HttpError(500, `Unable to link learner to parent: ${guardianError.message}`, 'guardian_link_failed');
+        }
+
+        const { data: profileRow, error: codeError } = await writer
+          .from('student_profiles')
+          .select('family_link_code')
+          .eq('id', studentId)
+          .maybeSingle();
+        if (codeError) {
+          throw new HttpError(500, `Unable to fetch Family Link code: ${codeError.message}`, 'family_code_lookup_failed');
+        }
+        const familyLinkCode = (profileRow?.family_link_code as string | null | undefined) ?? null;
+
+        let inviteSent = false;
+        if (inviteEligible) {
+          try {
+            const inviteResult = await (serviceSupabase ?? supabase).auth.admin.inviteUserByEmail(email, {
+              data: {
+                role: 'student',
+                full_name: fullName,
+                grade,
+                focus_subject: focusSubject,
+              },
+            });
+            inviteSent = Boolean(inviteResult?.data?.user?.email);
+          } catch (inviteError) {
+            console.warn('[parent/learners] invite failed', inviteError);
+          }
+        }
+
+        sendJson(
+          res,
+          201,
+          {
+            studentId,
+            email,
+            familyLinkCode,
+            temporaryPassword: inviteEligible ? null : password,
+            inviteSent,
+          },
+          API_VERSION,
+        );
+      }, { actorId: actor.id });
+    }
 
       if (method === 'PUT') {
         return handleRoute(async () => {

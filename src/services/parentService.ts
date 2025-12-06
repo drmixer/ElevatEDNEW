@@ -1,4 +1,5 @@
 import supabase from '../lib/supabaseClient';
+import { authenticatedFetch, handleApiResponse } from '../lib/apiClient';
 import type {
   ChildGoalTargets,
   GuardianChildLink,
@@ -124,4 +125,27 @@ export const updateParentOnboardingState = async (
     console.error('[Parent] Failed to update onboarding state', error);
     throw error;
   }
+};
+
+export const createLearnerForParent = async (payload: {
+  name: string;
+  email: string;
+  grade?: number | null;
+  age?: number | null;
+  sendInvite?: boolean;
+  consentAttested?: boolean;
+  focusSubject?: string | null;
+}): Promise<{ studentId: string; email: string; familyLinkCode: string | null; temporaryPassword: string | null; inviteSent: boolean }> => {
+  const response = await authenticatedFetch('/api/v1/parent/learners', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return handleApiResponse<{
+    studentId: string;
+    email: string;
+    familyLinkCode: string | null;
+    temporaryPassword: string | null;
+    inviteSent: boolean;
+  }>(response);
 };
