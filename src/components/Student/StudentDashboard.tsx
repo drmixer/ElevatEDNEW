@@ -334,7 +334,6 @@ const StudentDashboard: React.FC = () => {
   const rotateFamilyCodeMutation = useMutation({
     mutationFn: rotateFamilyLinkCode,
     onSuccess: (payload) => {
-      const code = payload.code;
       queryClient.setQueryData(['family-link-code', student?.id], payload);
       setFamilyCodeMessage('New Family Link code generated.');
       setFamilyCodeError(null);
