@@ -4370,8 +4370,8 @@ const ParentDashboard: React.FC = () => {
                   Response &lt; 1 business day
                 </span>
               </div>
-              <div className="space-y-5">
-                <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+                <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 lg:col-span-2">
                   <p className="text-sm text-gray-700">
                     The AI tutor stays on academic help only. We screen for safety violations, keep under-13 accounts
                     consented and read-only until approved, and block personal contact info, social/dating advice, and off-topic requests.
@@ -4391,13 +4391,13 @@ const ParentDashboard: React.FC = () => {
                     </li>
                   </ul>
                   <div className="mt-3 flex flex-col lg:flex-row lg:items-center lg:gap-3 gap-3 text-xs text-gray-700">
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-[260px]">
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-0">
                       <p className="font-semibold text-gray-900 text-sm">What we store</p>
                       <p className="mt-1 text-gray-600">
                         Progress, assignments, and safety-blocked chats with timestamps so families can request audits or exports.
                       </p>
                     </div>
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-[240px]">
+                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-0">
                       <p className="font-semibold text-gray-900 text-sm">Policy links</p>
                       <div className="flex flex-wrap gap-2 mt-1 break-words">
                         <Link to="/privacy" className="text-brand-blue font-semibold hover:underline">
@@ -4417,7 +4417,7 @@ const ParentDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 p-4 space-y-4">
+                <div className="rounded-xl border border-slate-200 p-4 space-y-4 w-full">
                   <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-amber-600" />
