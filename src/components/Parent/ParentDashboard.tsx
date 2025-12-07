@@ -236,6 +236,7 @@ const ParentDashboard: React.FC = () => {
   const [lessonContextOnly, setLessonContextOnly] = useState<boolean>(false);
   const [maxTutorChatsPerDay, setMaxTutorChatsPerDay] = useState<string>('');
   const [tutorSettingsUpdatedAt, setTutorSettingsUpdatedAt] = useState<string | null>(null);
+  const latestTutorPreferencesRef = React.useRef<LearningPreferences | null>(null);
   const [dismissedSuggestions, setDismissedSuggestions] = useState<Set<string>>(new Set());
   const [goalMessage, setGoalMessage] = useState<string | null>(null);
   const [goalError, setGoalError] = useState<string | null>(null);
@@ -260,6 +261,7 @@ const ParentDashboard: React.FC = () => {
   const [checkInSnippet, setCheckInSnippet] = useState<{ childId: string; message: string } | null>(null);
   const [progressShareSnippet, setProgressShareSnippet] = useState<string | null>(null);
   const [weeklyNudgeSnippet, setWeeklyNudgeSnippet] = useState<string | null>(null);
+  const [resolvedAlerts, setResolvedAlerts] = useState<Map<string, string>>(new Map());
   const [showTour, setShowTour] = useState<boolean>(false);
   const [tourStep, setTourStep] = useState<number>(0);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
@@ -949,6 +951,7 @@ const ParentDashboard: React.FC = () => {
         tutorSettingsUpdatedAt,
         tutorSettingsUpdatedBy: parent.id,
       };
+      latestTutorPreferencesRef.current = nextPreferences;
 
       await Promise.all([
         upsertChildGoals({
@@ -964,16 +967,17 @@ const ParentDashboard: React.FC = () => {
       ]);
     },
     onSuccess: async (_data, variables) => {
+      const savedPreferences = latestTutorPreferencesRef.current;
       setGoalMessage('Goals updated for this learner.');
       setGoalError(null);
-      setTutorSettingsUpdatedAt(nextPreferences.tutorSettingsUpdatedAt ?? null);
+      setTutorSettingsUpdatedAt(savedPreferences?.tutorSettingsUpdatedAt ?? null);
       trackEvent('parent_goals_saved', { parentId: parent?.id, childId: variables.child.id });
       trackEvent('tutor_settings_updated', {
         parentId: parent?.id,
         childId: variables.child.id,
         allowTutor: allowTutorChats,
         tutorLessonOnly: lessonContextOnly,
-        tutorDailyLimit: nextPreferences.tutorDailyLimit ?? null,
+        tutorDailyLimit: savedPreferences?.tutorDailyLimit ?? null,
       });
       trackEvent('chat_mode_set', {
         mode: chatModeLocked ? 'guided_only' : chatModeSetting,
@@ -1314,18 +1318,63 @@ const ParentDashboard: React.FC = () => {
     });
   };
 
-  const handleScheduleDiagnostic = (when: 'now' | 'later') => {
+  const handleScheduleDiagnostic = (
+    when: 'now' | 'later',
+    options?: { childId?: string; childName?: string; source?: string },
+  ) => {
+    if (options?.childId) {
+      setSelectedChildId(options.childId);
+    }
     setOnboardingPrefs((prev) => ({ ...prev, diagnosticScheduled: true }));
     setOnboardingError(null);
+    const learnerName = options?.childName ?? 'your learner';
     setOnboardingMessage(
       when === 'now'
-        ? 'Great! Start the diagnostic on your learner device to personalize their path.'
-        : 'Scheduled for later today. We will remind you in the dashboard.',
+        ? `Great! Start the diagnostic on ${learnerName}'s device to personalize their path.`
+        : `Scheduled for later today for ${learnerName}. We will remind you in the dashboard.`,
     );
     trackEvent('parent_schedule_diagnostic', {
       parentId: parent?.id,
       when,
+      childId: options?.childId,
+      source: options?.source ?? 'dashboard',
     });
+  };
+
+  const handleSaveTutorSettings = async () => {
+    if (!currentChild) {
+      setGoalError('Select a learner first.');
+      return;
+    }
+    if (weeklyLessonsTargetValue && weeklyLessonsTargetValue > paceWarningThreshold && !highPaceAcknowledged) {
+      setGoalError(
+        `This target is above 125% of the recommended pace (${recommendedWeeklyLessons}/week). Check the box to confirm you want to set it.`,
+      );
+      return;
+    }
+    setGoalMessage(null);
+    setGoalError(null);
+    await goalMutation.mutateAsync({ child: currentChild });
+  };
+
+  const handleResetTutorSettings = () => {
+    if (!currentChild) return;
+    const preferences = currentChild.learningPreferences ?? defaultLearningPreferences;
+    setChatModeLocked(preferences.chatModeLocked ?? false);
+    setChatModeSetting(preferences.chatMode ?? defaultLearningPreferences.chatMode ?? 'free');
+    setAllowTutorChats(preferences.allowTutor ?? true);
+    const prefersLessonOnly =
+      preferences.tutorLessonOnly ??
+      ((currentChild.grade ?? 0) > 0 && (currentChild.grade ?? 0) < 13 ? true : defaultLearningPreferences.tutorLessonOnly);
+    setLessonContextOnly(prefersLessonOnly);
+    setMaxTutorChatsPerDay(
+      preferences.tutorDailyLimit != null && Number.isFinite(preferences.tutorDailyLimit)
+        ? String(preferences.tutorDailyLimit)
+        : '',
+    );
+    setGoalMessage('Tutor settings reset to this learner\'s defaults. Save to apply.');
+    setGoalError(null);
+    trackEvent('tutor_settings_reset', { parentId: parent?.id, childId: currentChild.id });
   };
 
   const handleDismissOnboarding = () => {
@@ -1422,6 +1471,34 @@ const ParentDashboard: React.FC = () => {
       childId,
       message: `Try a quick check-in with ${childName}: "Want to review ${topic} together for five minutes?"`,
     });
+  };
+
+  const handleResolveChildAlert = (childId: string, alertText?: string | null) => {
+    if (!alertText) return;
+    setResolvedAlerts((prev) => {
+      const next = new Map(prev);
+      next.set(childId, alertText);
+      return next;
+    });
+    trackEvent('parent_child_alert_resolved', { parentId: parent?.id, childId });
+  };
+
+  const handleUndoResolveChildAlert = (childId: string) => {
+    setResolvedAlerts((prev) => {
+      const next = new Map(prev);
+      next.delete(childId);
+      return next;
+    });
+    trackEvent('parent_child_alert_reopened', { parentId: parent?.id, childId });
+  };
+
+  const isAlertResolved = (childId: string, alertText?: string | null) => {
+    if (!alertText) return false;
+    return resolvedAlerts.get(childId) === alertText;
+  };
+
+  const handleScheduleDiagnosticFromAlert = (childId: string, childName: string) => {
+    handleScheduleDiagnostic('now', { childId, childName, source: 'alert_card' });
   };
 
   const handleShareProgress = () => {
@@ -1810,92 +1887,112 @@ const ParentDashboard: React.FC = () => {
                 {overviewFetching && <span className="text-xs text-slate-500">Refreshing…</span>}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {overview.children.map((child) => (
-                  <div
-                    key={child.id}
-                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col gap-2"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">{child.name}</p>
-                        <p className="text-xs text-slate-600">
-                          Grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
-                        </p>
+                {overview.children.map((child) => {
+                  const alertText = child.alerts[0] ?? null;
+                  const alertResolved = isAlertResolved(child.id, alertText);
+                  return (
+                    <div
+                      key={child.id}
+                      className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col gap-2"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">{child.name}</p>
+                          <p className="text-xs text-slate-600">
+                            Grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
+                          </p>
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded-lg">
+                          <TrendingUp className="h-3.5 w-3.5" />
+                          {child.progress_pct != null ? `${child.progress_pct}%` : '—'}
+                        </span>
                       </div>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded-lg">
-                        <TrendingUp className="h-3.5 w-3.5" />
-                        {child.progress_pct != null ? `${child.progress_pct}%` : '—'}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
-                      <div className="rounded-lg bg-white border border-slate-200 p-2">
-                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
-                        <div className="font-semibold">{Math.round(child.weekly_time_minutes)} min</div>
-                      </div>
-                      <div className="rounded-lg bg-white border border-slate-200 p-2">
-                        <div className="text-[11px] uppercase tracking-wide text-slate-500">Latest quiz</div>
-                        <div className="font-semibold">
-                          {child.latest_quiz_score != null ? `${child.latest_quiz_score}%` : '—'}
+                      <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
+                        <div className="rounded-lg bg-white border border-slate-200 p-2">
+                          <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
+                          <div className="font-semibold">{Math.round(child.weekly_time_minutes)} min</div>
+                        </div>
+                        <div className="rounded-lg bg-white border border-slate-200 p-2">
+                          <div className="text-[11px] uppercase tracking-wide text-slate-500">Latest quiz</div>
+                          <div className="font-semibold">
+                            {child.latest_quiz_score != null ? `${child.latest_quiz_score}%` : '—'}
+                          </div>
                         </div>
                       </div>
+                      <div className="flex items-center justify-between text-xs text-slate-700">
+                        <span>XP {child.xp_total}</span>
+                        <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
+                      </div>
+                      {child.alerts.length > 0 ? (
+                        alertResolved ? (
+                          <div className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-2 flex items-center justify-between gap-2">
+                            <span>Marked resolved</span>
+                            <button
+                              type="button"
+                              onClick={() => handleUndoResolveChildAlert(child.id)}
+                              className="text-[11px] font-semibold text-brand-blue hover:underline focus-ring"
+                            >
+                              Undo
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-amber-700 bg-amber-100 border border-amber-200 rounded-lg p-2">
+                            {alertText}
+                          </div>
+                        )
+                      ) : (
+                        <div className="text-xs text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-lg p-2">
+                          On track
+                        </div>
+                      )}
+                      {child.alerts.length > 0 && !alertResolved && (
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => prefillAssignmentFromAlert(child.id, alertText)}
+                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
+                          >
+                            Assign a review module
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleScheduleDiagnosticFromAlert(child.id, child.name)}
+                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-brand-violet border border-brand-violet/40 hover:bg-brand-violet/10 focus-ring"
+                          >
+                            Schedule diagnostic
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickCheckIn(child.id, child.name, alertText)}
+                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring"
+                          >
+                            Send check-in
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleResolveChildAlert(child.id, alertText)}
+                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200 hover:bg-emerald-50 focus-ring"
+                          >
+                            Mark resolved
+                          </button>
+                        </div>
+                      )}
+                      {checkInSnippet?.childId === child.id && (
+                        <div className="text-[11px] text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1">
+                          {checkInSnippet.message}
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedChildId(child.id)}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
+                      >
+                        Open details
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </button>
                     </div>
-                    <div className="flex items-center justify-between text-xs text-slate-700">
-                      <span>XP {child.xp_total}</span>
-                      <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
-                    </div>
-                    {child.alerts.length > 0 ? (
-                      <div className="text-xs text-amber-700 bg-amber-100 border border-amber-200 rounded-lg p-2">
-                        {child.alerts[0]}
-                      </div>
-                    ) : (
-                      <div className="text-xs text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-lg p-2">
-                        On track
-                      </div>
-                    )}
-                    {child.alerts.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => prefillAssignmentFromAlert(child.id, child.alerts[0])}
-                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
-                        >
-                          Assign a review module
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleQuickCheckIn(child.id, child.name, child.alerts[0])}
-                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring"
-                        >
-                          Encourage quick check-in
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const msg = `Progress note for ${child.name}: we saw an alert on ${child.alerts[0]}. Let me know how I can help this week.`;
-                            setCheckInSnippet({ childId: child.id, message: msg });
-                            trackEvent('parent_child_alert_share', { childId: child.id });
-                          }}
-                          className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-amber-700 border border-amber-200 hover:bg-amber-50 focus-ring"
-                        >
-                          Share alert
-                        </button>
-                      </div>
-                    )}
-                    {checkInSnippet?.childId === child.id && (
-                      <div className="text-[11px] text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1">
-                        {checkInSnippet.message}
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedChildId(child.id)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
-                    >
-                      Open details
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </motion.div>
@@ -4372,47 +4469,187 @@ const ParentDashboard: React.FC = () => {
                 </span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-                <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 lg:col-span-2">
-                  <p className="text-sm text-gray-700">
-                    The AI tutor stays on academic help only. We screen for safety violations, keep under-13 accounts
-                    consented and read-only until approved, and block personal contact info, social/dating advice, and off-topic requests.
-                  </p>
-                  <ul className="mt-3 space-y-2 text-sm text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
-                      <span>Safety reviews on risky prompts and tutor chats; flagged items are routed to human review.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
-                      <span>Data kept minimal: learning progress, tutoring transcripts for safety, guardian consent logs, and assignment actions.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
-                      <span>Students see plain-language explanations when something is blocked and are reminded to ask a grown-up.</span>
-                    </li>
-                  </ul>
-                  <div className="mt-3 flex flex-col lg:flex-row lg:items-center lg:gap-3 gap-3 text-xs text-gray-700">
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm">What we store</p>
-                      <p className="mt-1 text-gray-600">
-                        Progress, assignments, and safety-blocked chats with timestamps so families can request audits or exports.
-                      </p>
-                    </div>
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm">Policy links</p>
-                      <div className="flex flex-wrap gap-2 mt-1 break-words">
-                        <Link to="/privacy" className="text-brand-blue font-semibold hover:underline">
-                          Privacy policy
-                        </Link>
-                        <a
-                          href="/docs/compliance.md"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-brand-blue font-semibold hover:underline"
+                <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 lg:col-span-2 space-y-4">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      The AI tutor stays on academic help only. We screen for safety violations, keep under-13 accounts
+                      consented and read-only until approved, and block personal contact info, social/dating advice, and off-topic requests.
+                    </p>
+                    <ul className="mt-3 space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
+                        <span>Safety reviews on risky prompts and tutor chats; flagged items are routed to human review.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
+                        <span>Data kept minimal: learning progress, tutoring transcripts for safety, guardian consent logs, and assignment actions.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-600 mt-[2px]" />
+                        <span>Students see plain-language explanations when something is blocked and are reminded to ask a grown-up.</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="rounded-lg border border-slate-200 bg-white p-3 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Tutor guardrails</p>
+                          <p className="text-[11px] text-gray-600">Set chat mode, lesson-only, and limits per learner.</p>
+                        </div>
+                        <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                          {currentChild ? `For ${currentChild.name}` : 'Select a learner'}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {(
+                          [
+                            { mode: 'guided_only', label: 'Guided only (lock)' },
+                            { mode: 'guided_preferred', label: 'Guided preferred' },
+                            { mode: 'free', label: 'Allow free chat' },
+                          ] as const
+                        ).map((option) => {
+                          const active = chatModeLocked
+                            ? option.mode === 'guided_only'
+                            : chatModeSetting === option.mode;
+                          return (
+                            <button
+                              key={option.mode}
+                              type="button"
+                              onClick={() => {
+                                if (option.mode === 'guided_only') {
+                                  setChatModeLocked(true);
+                                  setChatModeSetting('guided_only');
+                                } else {
+                                  setChatModeLocked(false);
+                                  setChatModeSetting(option.mode);
+                                }
+                              }}
+                              className={`px-3 py-2 rounded-lg text-sm font-semibold border transition ${
+                                active
+                                  ? 'bg-brand-blue text-white border-brand-blue'
+                                  : 'bg-white text-gray-700 border-slate-200 hover:border-brand-blue/60'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Tutor access</p>
+                          <p className="text-[11px] text-gray-600">Toggle AI tutor availability for this learner.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setAllowTutorChats((prev) => !prev)}
+                          aria-pressed={allowTutorChats}
+                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                            allowTutorChats
+                              ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                              : 'bg-slate-100 text-slate-700 border-slate-200'
+                          }`}
                         >
-                          docs/compliance.md
-                          <ArrowUpRight className="h-3 w-3" />
-                        </a>
+                          {allowTutorChats ? 'On' : 'Off'}
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Lesson-context only</p>
+                          <p className="text-[11px] text-gray-600">Keep tutor chats anchored to current lessons.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setLessonContextOnly((prev) => !prev)}
+                          aria-pressed={lessonContextOnly}
+                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                            lessonContextOnly
+                              ? 'bg-brand-light-teal text-brand-teal border-brand-teal/50'
+                              : 'bg-slate-100 text-slate-700 border-slate-200'
+                          }`}
+                        >
+                          {lessonContextOnly ? 'On' : 'Off'}
+                        </button>
+                      </div>
+                      <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">Daily chat limit</p>
+                            <p className="text-[11px] text-gray-600">Cap chats to stay within plan and age guardrails.</p>
+                          </div>
+                          <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                            Plan cap: {tutorLimitLabel}
+                          </span>
+                        </div>
+                        <div className="mt-2 flex items-center gap-2">
+                          <input
+                            type="number"
+                            min={0}
+                            inputMode="numeric"
+                            value={maxTutorChatsPerDay}
+                            onChange={(event) => setMaxTutorChatsPerDay(event.target.value)}
+                            className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                            placeholder="Plan cap"
+                          />
+                          <span className="text-[11px] text-gray-500">Leave blank to use the plan default.</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-[11px] text-slate-600">
+                        <span>Under-13 learners default to guided, lesson-only tutor mode until you loosen it.</span>
+                        <button
+                          type="button"
+                          onClick={handleResetTutorSettings}
+                          disabled={!currentChild}
+                          className="font-semibold text-brand-blue hover:underline disabled:opacity-50"
+                        >
+                          Reset tutor settings
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={handleSaveTutorSettings}
+                          disabled={goalMutation.isLoading || !currentChild}
+                          className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                        >
+                          {goalMutation.isLoading ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Saving…
+                            </>
+                          ) : (
+                            'Save tutor controls'
+                          )}
+                        </button>
+                        <span className="text-[11px] text-gray-600">
+                          Settings sync to safety filters instantly.
+                        </span>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 text-sm">What we store</p>
+                        <p className="mt-1 text-gray-600">
+                          Progress, assignments, and safety-blocked chats with timestamps so families can request audits or exports.
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-white border border-slate-200 p-3 flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 text-sm">Policy links</p>
+                        <div className="flex flex-wrap gap-2 mt-1 break-words">
+                          <Link to="/privacy" className="text-brand-blue font-semibold hover:underline">
+                            Privacy policy
+                          </Link>
+                          <a
+                            href="/docs/compliance.md"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-brand-blue font-semibold hover:underline"
+                          >
+                            docs/compliance.md
+                            <ArrowUpRight className="h-3 w-3" />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>

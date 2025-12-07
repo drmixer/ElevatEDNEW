@@ -1,18 +1,32 @@
 import supabase from './supabaseClient';
+import withTimeout from './withTimeout';
 
 export const getAccessToken = async (): Promise<string> => {
-  const { data, error } = await supabase.auth.getSession();
+  try {
+    const sessionResult = await withTimeout(supabase.auth.getSession(), 3500);
+    if (sessionResult.timedOut) {
+      throw new Error('Timed out confirming your session. Please refresh or sign in again.');
+    }
 
-  if (error) {
-    throw new Error(error.message);
+    const { data, error } = sessionResult.value;
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const token = data.session?.access_token;
+    if (!token) {
+      throw new Error('Authentication required. Please sign in again.');
+    }
+
+    return token;
+  } catch (error) {
+    console.error('[apiClient] Failed to read session token', error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('Unable to verify your session right now.');
   }
-
-  const token = data.session?.access_token;
-  if (!token) {
-    throw new Error('Authentication required. Please sign in again.');
-  }
-
-  return token;
 };
 
 export const authenticatedFetch = async (

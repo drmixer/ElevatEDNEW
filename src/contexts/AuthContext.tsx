@@ -3,21 +3,7 @@ import supabase from '../lib/supabaseClient';
 import type { Subject, User, UserRole } from '../types';
 import { fetchUserProfile } from '../services/profileService';
 import recordReliabilityCheckpoint from '../lib/reliability';
-
-const withTimeout = async <T,>(promise: Promise<T>, timeoutMs = 6000): Promise<{ timedOut: true } | { timedOut: false; value: T }> => {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  return new Promise((resolve, reject) => {
-    timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
-    promise
-      .then((value) => resolve({ timedOut: false, value }))
-      .catch((error) => reject(error))
-      .finally(() => {
-        if (timer) {
-          clearTimeout(timer);
-        }
-      });
-  });
-};
+import withTimeout from '../lib/withTimeout';
 
 interface AuthContextType {
   user: User | null;
@@ -58,10 +44,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const isMountedRef = useRef(true);
+  const refreshRetryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(
     () => () => {
       isMountedRef.current = false;
+      if (refreshRetryRef.current) {
+        clearTimeout(refreshRetryRef.current);
+      }
     },
     [],
   );
@@ -89,15 +79,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [safeSetUser]);
 
+  const scheduleSilentRefresh = useCallback(() => {
+    if (refreshRetryRef.current) return;
+    refreshRetryRef.current = setTimeout(async () => {
+      refreshRetryRef.current = null;
+      try {
+        const sessionResult = await withTimeout(supabase.auth.getSession(), 3500);
+        if (sessionResult.timedOut) {
+          console.warn('[Auth] Silent session refresh timed out; will wait for the next auth event.');
+          return;
+        }
+        const nextSession = sessionResult.value.data.session;
+        if (nextSession?.user) {
+          await loadProfile(nextSession.user.id);
+        }
+      } catch (error) {
+        console.warn('[Auth] Silent session refresh failed', error);
+      }
+    }, 800);
+  }, [loadProfile]);
+
   useEffect(() => {
     const initialise = async () => {
       safeSetLoading(true);
       try {
-        const sessionResult = await withTimeout(supabase.auth.getSession(), 4000);
+        const sessionResult = await withTimeout(supabase.auth.getSession(), 2500);
 
         if (sessionResult.timedOut) {
           console.warn('[Auth] Session lookup timed out; continuing without cached session');
           safeSetUser(null);
+          scheduleSilentRefresh();
           return;
         }
 
@@ -106,14 +117,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (error) {
           console.error('[Auth] Failed to get session', error);
           safeSetUser(null);
+          scheduleSilentRefresh();
           return;
         }
 
         if (session?.user) {
-          const profileResult = await withTimeout(loadProfile(session.user.id), 5000);
+          const profileResult = await withTimeout(loadProfile(session.user.id), 4000);
           if (profileResult.timedOut) {
             console.warn('[Auth] Profile load timed out; continuing as signed out');
             safeSetUser(null);
+            scheduleSilentRefresh();
           }
         } else {
           safeSetUser(null);
@@ -121,6 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (unhandledError) {
         console.error('[Auth] Unexpected error during session restore', unhandledError);
         safeSetUser(null);
+        scheduleSilentRefresh();
       } finally {
         safeSetLoading(false);
       }
@@ -130,27 +144,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        safeSetLoading(true);
         try {
-          const profileResult = await withTimeout(loadProfile(session.user.id), 5000);
+          const profileResult = await withTimeout(loadProfile(session.user.id), 4000);
           if (profileResult.timedOut) {
             console.warn('[Auth] Profile load timed out during auth state change');
+            scheduleSilentRefresh();
           }
         } catch {
-          // handled inside loadProfile
-        } finally {
-          safeSetLoading(false);
+          scheduleSilentRefresh();
         }
       } else {
         safeSetUser(null);
-        safeSetLoading(false);
       }
     });
 
     return () => {
       subscription?.subscription.unsubscribe();
     };
-  }, [loadProfile, safeSetLoading, safeSetUser]);
+  }, [loadProfile, safeSetLoading, safeSetUser, scheduleSilentRefresh]);
 
   const login = async (email: string, password: string) => {
     safeSetLoading(true);
@@ -301,15 +312,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const refreshUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
+    try {
+      const result = await withTimeout(supabase.auth.getUser(), 3500);
+      if (result.timedOut) {
+        console.warn('[Auth] Timed out while refreshing user; retrying in the background.');
+        scheduleSilentRefresh();
+        return;
+      }
 
-    if (error) {
+      const { data, error } = result.value;
+
+      if (error) {
+        console.error('[Auth] Failed to refresh user', error);
+        return;
+      }
+
+      if (data.user) {
+        await loadProfile(data.user.id);
+      }
+    } catch (error) {
       console.error('[Auth] Failed to refresh user', error);
-      return;
-    }
-
-    if (data.user) {
-      await loadProfile(data.user.id);
     }
   };
 
