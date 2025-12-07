@@ -452,6 +452,9 @@ export interface ParentChildSnapshot {
     inProgress: number;
     notStarted: number;
   };
+  diagnosticStatus?: 'not_started' | 'scheduled' | 'in_progress' | 'completed';
+  diagnosticCompletedAt?: string | null;
+  masteryConfidence?: number | null;
   adaptivePlanNotes?: string[];
   skillGaps?: SkillGapInsight[];
   homeExtensions?: DashboardActivity[];

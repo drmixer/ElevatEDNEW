@@ -386,14 +386,17 @@ const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => {
           english: 85,
         },
       },
-      goalProgress: 78,
-      cohortComparison: 64,
-      adaptivePlanNotes: [
-        'Dialed up Geometry practice this week based on recent misconceptions.',
-        'Keeping English steady while we rebuild Science confidence.',
-      ],
-      learningPreferences: defaultLearningPreferences,
-    },
+    goalProgress: 78,
+    cohortComparison: 64,
+    adaptivePlanNotes: [
+      'Dialed up Geometry practice this week based on recent misconceptions.',
+      'Keeping English steady while we rebuild Science confidence.',
+    ],
+    learningPreferences: defaultLearningPreferences,
+    diagnosticStatus: 'completed',
+    diagnosticCompletedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+    masteryConfidence: 0.82,
+  },
   ];
 
   return children.map((child) => ({
@@ -482,6 +485,9 @@ const mapParentDashboardChildRow = (row: ParentDashboardChildRow): ParentChildSn
     cohortComparison: undefined,
     adaptivePlanNotes: [],
     learningPreferences: defaultLearningPreferences,
+    diagnosticStatus: 'not_started',
+    diagnosticCompletedAt: null,
+    masteryConfidence: null,
   };
 };
 
@@ -2068,9 +2074,11 @@ export const fetchParentDashboardData = async (
         .from('student_assessment_attempts')
         .select('student_id, completed_at, status')
         .in('student_id', childIds)
-        .eq('status', 'completed')
         .order('completed_at', { ascending: false })
-    : Promise.resolve({ data: [] as Array<{ student_id: string; completed_at: string | null }>, error: null }),
+    : Promise.resolve({
+        data: [] as Array<{ student_id: string; completed_at: string | null; status: string | null }>,
+        error: null,
+      }),
   childIds.length
     ? supabase
         .from('parent_coaching_feedback')
@@ -2151,14 +2159,19 @@ export const fetchParentDashboardData = async (
       lessonsBySubject.set(row.student_id, map);
     });
 
-    const latestDiagnosticByStudent = new Map<string, string>();
-    (assessmentsRows as Array<{ student_id: string; completed_at: string | null }>).forEach((row) => {
-      if (!row.completed_at) return;
-      const existing = latestDiagnosticByStudent.get(row.student_id);
-      if (!existing || new Date(row.completed_at) > new Date(existing)) {
-        latestDiagnosticByStudent.set(row.student_id, row.completed_at);
-      }
-    });
+    const diagnosticByStudent = new Map<string, { status: string | null; completedAt: string | null }>();
+    (assessmentsRows as Array<{ student_id: string; completed_at: string | null; status: string | null }>).forEach(
+      (row) => {
+        const existing = diagnosticByStudent.get(row.student_id);
+        const rowDate = row.completed_at ? new Date(row.completed_at) : null;
+        const existingDate = existing?.completedAt ? new Date(existing.completedAt) : null;
+        const isNewer = rowDate && existingDate ? rowDate > existingDate : Boolean(rowDate);
+        const preferInProgress = row.status === 'in_progress' && existing?.status !== 'in_progress';
+        if (!existing || isNewer || preferInProgress) {
+          diagnosticByStudent.set(row.student_id, { status: row.status, completedAt: row.completed_at });
+        }
+      },
+    );
 
     const feedbackByStudent = new Map<string, Set<string>>();
     (feedbackRows as Array<{ student_id: string; suggestion_id: string; reason: string }>).forEach((row) => {
@@ -2235,7 +2248,16 @@ export const fetchParentDashboardData = async (
         child.learningPreferences ??
         defaultLearningPreferences;
       const perSubjectLessons = lessonsBySubject.get(child.id) ?? new Map<Subject, number>();
-      const diagnosticCompletedAt = latestDiagnosticByStudent.get(child.id) ?? null;
+      const diagnosticMeta = diagnosticByStudent.get(child.id) ?? null;
+      const diagnosticCompletedAt = diagnosticMeta?.completedAt ?? null;
+      const diagnosticStatus =
+        diagnosticMeta?.status === 'completed'
+          ? 'completed'
+          : diagnosticMeta?.status === 'in_progress'
+          ? 'in_progress'
+          : diagnosticMeta?.status === 'scheduled'
+          ? 'scheduled'
+          : undefined;
       const subjectStatuses =
         mastery.length && perSubjectLessons.size
           ? computeSubjectStatuses({
@@ -2279,6 +2301,8 @@ export const fetchParentDashboardData = async (
           deltaMinutes: weeklyChange.current.minutes - weeklyChange.prior.minutes,
           deltaXp: weeklyChange.current.xp - weeklyChange.prior.xp,
         },
+        diagnosticStatus: diagnosticStatus ?? 'not_started',
+        diagnosticCompletedAt,
       };
 
       snapshot.coachingSuggestions = buildCoachingSuggestions(snapshot, {
