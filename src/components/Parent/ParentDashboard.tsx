@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -262,6 +262,8 @@ const ParentDashboard: React.FC = () => {
   const [progressShareSnippet, setProgressShareSnippet] = useState<string | null>(null);
   const [weeklyNudgeSnippet, setWeeklyNudgeSnippet] = useState<string | null>(null);
   const [resolvedAlerts, setResolvedAlerts] = useState<Map<string, string>>(new Map());
+  const [diagnosticPlans, setDiagnosticPlans] = useState<Record<string, { scheduled: boolean; remind: boolean }>>({});
+  const [todayLaneState, setTodayLaneState] = useState<Record<string, 'done' | 'skipped'>>({});
   const [showTour, setShowTour] = useState<boolean>(false);
   const [tourStep, setTourStep] = useState<number>(0);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
@@ -371,6 +373,28 @@ const ParentDashboard: React.FC = () => {
       console.warn('[ParentDashboard] Unable to persist onboarding prefs', storageError);
     }
   }, [parent?.id, onboardingPrefs]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      const raw = localStorage.getItem(`diagnostic-plans-${parent.id}`);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Record<string, { scheduled: boolean; remind: boolean }>;
+        setDiagnosticPlans(parsed);
+      }
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to restore diagnostic plans', error);
+    }
+  }, [parent?.id]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      localStorage.setItem(`diagnostic-plans-${parent.id}`, JSON.stringify(diagnosticPlans));
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to persist diagnostic plans', error);
+    }
+  }, [diagnosticPlans, parent?.id]);
 
   const currentChild: ParentChildSnapshot | null = useMemo(() => {
     if (!dashboard?.children.length) return null;
@@ -588,6 +612,33 @@ const ParentDashboard: React.FC = () => {
       weekStartLabel,
     };
   }, [dashboard]);
+
+  const coverageSummary = useMemo(() => {
+    if (!currentChild) {
+      return { pct: null as number | null, needMoreData: true, masteryConfidence: null as number | null, diagnosticDate: null as string | null };
+    }
+    const progress = currentChild.progressSummary;
+    const totalLessons =
+      (progress?.completed ?? 0) + (progress?.inProgress ?? 0) + (progress?.notStarted ?? 0);
+    const coveredLessons = (progress?.completed ?? 0) + (progress?.inProgress ?? 0);
+    const pct =
+      totalLessons && totalLessons > 0 ? Math.round((coveredLessons / Math.max(totalLessons, 1)) * 100) : null;
+    const needMoreData =
+      !progress ||
+      !totalLessons ||
+      totalLessons < 5 ||
+      (currentChild.diagnosticStatus !== 'completed' && !currentChild.diagnosticCompletedAt);
+    const masteryConfidence =
+      typeof currentChild.masteryConfidence === 'number'
+        ? Math.round(currentChild.masteryConfidence * 100)
+        : needMoreData
+        ? 40
+        : Math.min(95, 60 + (progress?.completed ?? 0) * 5);
+    const diagnosticDate = currentChild.diagnosticCompletedAt
+      ? new Date(currentChild.diagnosticCompletedAt).toLocaleDateString()
+      : null;
+    return { pct, needMoreData, masteryConfidence, diagnosticDate };
+  }, [currentChild]);
 
   const homeExtensions = currentChild?.homeExtensions ?? [];
   const familyOverviewCards = useMemo(() => {
@@ -863,6 +914,10 @@ const ParentDashboard: React.FC = () => {
   });
 
   const assignmentsList = childAssignments ?? [];
+  const nextAssignment = useMemo(() => {
+    if (!assignmentsList.length) return null;
+    return assignmentsList.find((assignment) => assignment.status !== 'completed') ?? assignmentsList[0];
+  }, [assignmentsList]);
 
   const assignModuleMutation = useMutation({
     mutationFn: assignModuleToStudents,
@@ -1338,6 +1393,46 @@ const ParentDashboard: React.FC = () => {
       when,
       childId: options?.childId,
       source: options?.source ?? 'dashboard',
+    });
+    if (options?.childId) {
+      setDiagnosticPlans((prev) => ({
+        ...prev,
+        [options.childId as string]: { scheduled: true, remind: prev[options.childId ?? '']?.remind ?? true },
+      }));
+    }
+  };
+
+  const deriveDiagnosticStatus = useCallback(
+    (child: ParentChildSnapshot | null | undefined): 'not_started' | 'scheduled' | 'in_progress' | 'completed' => {
+      if (!child) return 'not_started';
+      if (child.diagnosticStatus === 'completed') return 'completed';
+      if (child.diagnosticStatus === 'in_progress') return 'in_progress';
+      if (child.diagnosticStatus === 'scheduled') return 'scheduled';
+      if (diagnosticPlans[child.id]?.scheduled || onboardingPrefs.diagnosticScheduled) return 'scheduled';
+      return 'not_started';
+    },
+    [diagnosticPlans, onboardingPrefs.diagnosticScheduled],
+  );
+
+  const toggleDiagnosticReminder = (childId: string) => {
+    setDiagnosticPlans((prev) => {
+      const existing = prev[childId] ?? { scheduled: false, remind: true };
+      return { ...prev, [childId]: { ...existing, remind: !existing.remind } };
+    });
+    trackEvent('parent_diagnostic_reminder_toggle', {
+      parentId: parent?.id,
+      childId,
+      enabled: !(diagnosticPlans[childId]?.remind ?? true),
+    });
+  };
+
+  const updateTodayLaneState = (key: string, state: 'done' | 'skipped') => {
+    setTodayLaneState((prev) => ({ ...prev, [key]: state }));
+    trackEvent('parent_today_lane_action', {
+      parentId: parent?.id,
+      childId: currentChild?.id,
+      key,
+      state,
     });
   };
 
@@ -1890,6 +1985,30 @@ const ParentDashboard: React.FC = () => {
                 {overview.children.map((child) => {
                   const alertText = child.alerts[0] ?? null;
                   const alertResolved = isAlertResolved(child.id, alertText);
+                  const fullChild =
+                    dashboard?.children.find((entry) => entry.id === child.id) ??
+                    ({ id: child.id, diagnosticStatus: 'not_started', diagnosticCompletedAt: null } as ParentChildSnapshot);
+                  const diagnosticStatus = deriveDiagnosticStatus(fullChild);
+                  const reminderEnabled = diagnosticPlans[child.id]?.remind ?? true;
+                  const diagnosticChipStyles =
+                    diagnosticStatus === 'completed'
+                      ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                      : diagnosticStatus === 'in_progress'
+                      ? 'bg-amber-100 text-amber-700 border-amber-200'
+                      : diagnosticStatus === 'scheduled'
+                      ? 'bg-blue-100 text-blue-700 border-blue-200'
+                      : 'bg-slate-100 text-slate-700 border-slate-200';
+                  const diagnosticLabel =
+                    diagnosticStatus === 'completed'
+                      ? 'Done'
+                      : diagnosticStatus === 'in_progress'
+                      ? 'In progress'
+                      : diagnosticStatus === 'scheduled'
+                      ? 'Scheduled'
+                      : 'Not started';
+                  const diagnosticLastRun = fullChild.diagnosticCompletedAt
+                    ? `Last run ${new Date(fullChild.diagnosticCompletedAt).toLocaleDateString()} • plan calibrated`
+                    : 'No diagnostic yet';
                   return (
                     <div
                       key={child.id}
@@ -1922,6 +2041,35 @@ const ParentDashboard: React.FC = () => {
                       <div className="flex items-center justify-between text-xs text-slate-700">
                         <span>XP {child.xp_total}</span>
                         <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-[11px] text-slate-700 gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${diagnosticChipStyles}`}>
+                            {diagnosticLabel}
+                          </span>
+                          <span className="text-slate-600 truncate">{diagnosticLastRun}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleScheduleDiagnostic('now', { childId: child.id, childName: child.name, source: 'overview_card' })}
+                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
+                          >
+                            {diagnosticStatus === 'completed' ? 'Re-run' : 'Start now'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => toggleDiagnosticReminder(child.id)}
+                            className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 font-semibold border ${
+                              reminderEnabled
+                                ? 'bg-slate-100 text-slate-700 border-slate-200'
+                                : 'bg-white text-slate-500 border-slate-200'
+                            } focus-ring`}
+                            aria-pressed={reminderEnabled}
+                          >
+                            {reminderEnabled ? 'Reminder on' : 'Reminder off'}
+                          </button>
+                        </div>
                       </div>
                       {child.alerts.length > 0 ? (
                         alertResolved ? (
@@ -2866,6 +3014,166 @@ const ParentDashboard: React.FC = () => {
           className="mb-8"
         >
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal">
+                  Today / This week
+                </p>
+                <h3 className="text-xl font-bold text-gray-900">Goals, assignments, adaptive picks</h3>
+                <p className="text-sm text-gray-600">
+                  One strip for the plan: targets, the next assignment, and the AI pick. Mark done or skip in a tap.
+                </p>
+              </div>
+              <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                {currentChild ? `For ${currentChild.name}` : 'Select a learner'}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Weekly goals</p>
+                  <span className={`text-[11px] px-2 py-1 rounded-full ${lessonsStatus.badge}`}>
+                    {lessonsStatus.label}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  {currentChild?.lessonsCompletedWeek ?? 0}/
+                  {weeklyLessonsTargetValue ?? recommendedWeeklyLessons} lessons •{' '}
+                  {currentChild?.practiceMinutesWeek ?? 0}/
+                  {practiceMinutesTargetValue ?? weeklyPlanTargets.minutes} min
+                </p>
+                <div className="h-2 rounded-full bg-white overflow-hidden border border-slate-200">
+                  <div
+                    className="h-full bg-brand-blue transition-all"
+                    style={{ width: `${Math.min(lessonsProgressPct ?? 0, 100)}%` }}
+                  />
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => updateTodayLaneState('goal', 'done')}
+                    className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 font-semibold ${
+                      todayLaneState.goal === 'done'
+                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-brand-blue/50'
+                    }`}
+                  >
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    Done today
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateTodayLaneState('goal', 'skipped')}
+                    className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 font-semibold ${
+                      todayLaneState.goal === 'skipped'
+                        ? 'bg-amber-100 text-amber-700 border-amber-200'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300/80'
+                    }`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    Skip today
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Assignments</p>
+                  <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                    {nextAssignment ? nextAssignment.status.replace('_', ' ') : 'None'}
+                  </span>
+                </div>
+                {nextAssignment ? (
+                  <>
+                    <p className="text-sm text-gray-800 line-clamp-2">{nextAssignment.title}</p>
+                    <p className="text-[11px] text-gray-600">
+                      {nextAssignment.dueAt
+                        ? `Due ${new Date(nextAssignment.dueAt).toLocaleDateString()}`
+                        : 'Flexible due date'}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => updateTodayLaneState(`assignment-${nextAssignment.id}`, 'done')}
+                        className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 font-semibold ${
+                          todayLaneState[`assignment-${nextAssignment.id}`] === 'done'
+                            ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-brand-blue/50'
+                        }`}
+                      >
+                        <CheckCircle className="h-3.5 w-3.5" />
+                        Mark done
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateTodayLaneState(`assignment-${nextAssignment.id}`, 'skipped')}
+                        className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 font-semibold ${
+                          todayLaneState[`assignment-${nextAssignment.id}`] === 'skipped'
+                            ? 'bg-amber-100 text-amber-700 border-amber-200'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300/80'
+                        }`}
+                      >
+                        <X className="h-3.5 w-3.5" />
+                        Skip today
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-600">No assignments yet. Add one below.</p>
+                )}
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Adaptive pick</p>
+                  <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                    AI suggested
+                  </span>
+                </div>
+                {recommendedModules[0] ? (
+                  <>
+                    <p className="text-sm font-semibold text-gray-900 line-clamp-2">{recommendedModules[0].title}</p>
+                    <p className="text-[11px] text-gray-600 line-clamp-2">
+                      {recommendedModules[0].summary ?? 'Ready to assign from their path.'}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAssign(recommendedModules[0].id)}
+                        className="inline-flex items-center gap-1 rounded-lg bg-brand-blue px-2 py-1 font-semibold text-white shadow-sm hover:bg-brand-blue/90"
+                        disabled={assignModuleMutation.isLoading}
+                      >
+                        Assign now
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateTodayLaneState(`adaptive-${recommendedModules[0].id}`, 'skipped')}
+                        className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 font-semibold ${
+                          todayLaneState[`adaptive-${recommendedModules[0].id}`] === 'skipped'
+                            ? 'bg-amber-100 text-amber-700 border-amber-200'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300/80'
+                        }`}
+                      >
+                        <X className="h-3.5 w-3.5" />
+                        Skip
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-600">Search or refresh to see adaptive picks.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.14 }}
+          className="mb-8"
+        >
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
@@ -2947,7 +3255,7 @@ const ParentDashboard: React.FC = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
               <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold text-gray-900">Time this week</p>
@@ -3019,6 +3327,37 @@ const ParentDashboard: React.FC = () => {
                     </p>
                   )}
                 </div>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">Coverage & confidence</p>
+                  <span
+                    className={`text-[11px] px-2 py-1 rounded-full ${
+                      coverageSummary.needMoreData
+                        ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                        : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                    }`}
+                  >
+                    {coverageSummary.needMoreData ? 'Need more data' : 'Clear signal'}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Coverage {coverageSummary.pct ?? '—'}% of grade plan • Confidence {coverageSummary.masteryConfidence ?? '—'}%
+                </p>
+                <div className="h-2 rounded-full bg-white overflow-hidden border border-slate-200">
+                  <div
+                    className="h-full bg-gradient-to-r from-brand-teal to-brand-blue transition-all"
+                    style={{ width: `${Math.min(coverageSummary.pct ?? 0, 100)}%` }}
+                  />
+                </div>
+                <p className="text-[11px] text-gray-600">
+                  {coverageSummary.needMoreData
+                    ? 'Complete a diagnostic and a few more lessons to unlock sharper insights.'
+                    : coverageSummary.diagnosticDate
+                    ? `Last diagnostic ${coverageSummary.diagnosticDate}.`
+                    : 'Recent lessons give enough signal to act.'}
+                </p>
               </div>
             </div>
           </div>

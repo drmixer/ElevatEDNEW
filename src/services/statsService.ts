@@ -29,6 +29,8 @@ export type ParentOverview = {
     weekly_time_minutes: number;
     alerts: string[];
     struggle: boolean;
+    diagnostic_status?: 'not_started' | 'scheduled' | 'in_progress' | 'completed' | null;
+    diagnostic_completed_at?: string | null;
   }>;
 };
 

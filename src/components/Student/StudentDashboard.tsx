@@ -226,6 +226,7 @@ const StudentDashboard: React.FC = () => {
   const [missionCadence, setMissionCadence] = useState<'daily' | 'weekly'>('daily');
   const [achievementFilter, setAchievementFilter] = useState<BadgeCategory | 'all'>('all');
   const [equippedAvatarId, setEquippedAvatarId] = useState<string>('avatar-starter');
+  const [todayLaneState, setTodayLaneState] = useState<Record<string, 'done' | 'skipped'>>({});
   const writingPrompt =
     'Write 3-4 sentences about a time you solved a problem by trying a new strategy. Explain the steps and what changed.';
   const [writingResponse, setWritingResponse] = useState('');
@@ -893,6 +894,19 @@ const StudentDashboard: React.FC = () => {
     const pct = total ? Math.round((completed / total) * 100) : 0;
     return { completed, total, pct };
   }, [todaysPlan]);
+  const nextAssessment = (dashboard?.upcomingAssessments ?? [])[0] ?? null;
+  const diagnosticStatus: 'not_started' | 'scheduled' | 'completed' =
+    quickStats?.assessmentCompleted
+      ? 'completed'
+      : nextAssessment
+        ? 'scheduled'
+        : 'not_started';
+  const studentCoverage = useMemo(() => {
+    const total = todaysPlanProgress.total;
+    const pct = todaysPlanProgress.total ? todaysPlanProgress.pct : null;
+    const needMoreData = total < 3 || !quickStats?.assessmentCompleted;
+    return { pct, needMoreData };
+  }, [todaysPlanProgress, quickStats?.assessmentCompleted]);
 
   const currentPlanFocus = useMemo(() => {
     if (parentGoalActive && student?.learningPreferences?.focusSubject) {
@@ -1324,6 +1338,11 @@ const StudentDashboard: React.FC = () => {
     } finally {
       setAvatarSaving(false);
     }
+  };
+
+  const updateTodayStripState = (key: string, state: 'done' | 'skipped') => {
+    setTodayLaneState((prev) => ({ ...prev, [key]: state }));
+    trackEvent('student_today_lane_action', { studentId: student.id, key, state });
   };
 
   return (
@@ -2005,6 +2024,146 @@ const StudentDashboard: React.FC = () => {
                         />
                       </div>
                       <p className="mt-1 text-[11px] text-gray-500">Minutes include practice and lessons.</p>
+                  </div>
+                </div>
+
+                  <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-gray-900">Today / This week</p>
+                      <span
+                        className={`text-[11px] px-2 py-1 rounded-full ${
+                          studentCoverage.needMoreData
+                            ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                            : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                        }`}
+                      >
+                        {studentCoverage.needMoreData ? 'Need more data' : 'Dialed in'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-gray-600">
+                      Coverage {studentCoverage.pct ?? '—'}% of this week&apos;s grade-level plan.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold text-gray-800">Weekly goals</p>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            {todaysPlanProgress.pct}% plan
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700">
+                          {lessonsThisWeek}/{weeklyPlanTargets.lessons} lessons • {minutesThisWeek}/
+                          {weeklyPlanTargets.minutes} min
+                        </p>
+                        <div className="flex items-center gap-2 text-[11px]">
+                          <button
+                            type="button"
+                            onClick={() => updateTodayStripState('goal', 'done')}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
+                              todayLaneState.goal === 'done'
+                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                : 'bg-white text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            <CheckCircle className="h-3 w-3" />
+                            Done
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateTodayStripState('goal', 'skipped')}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
+                              todayLaneState.goal === 'skipped'
+                                ? 'bg-amber-100 text-amber-700 border-amber-200'
+                                : 'bg-white text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            <X className="h-3 w-3" />
+                            Skip
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold text-gray-800">Diagnostic / milestone</p>
+                          <span
+                            className={`text-[11px] px-2 py-1 rounded-full border ${
+                              diagnosticStatus === 'completed'
+                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                : diagnosticStatus === 'scheduled'
+                                ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                : 'bg-slate-100 text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            {diagnosticStatus === 'completed' ? 'Done' : diagnosticStatus === 'scheduled' ? 'Scheduled' : 'Not started'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700">
+                          {nextAssessment
+                            ? nextAssessment.title
+                            : 'Take the diagnostic to calibrate your path.'}
+                        </p>
+                        <div className="flex items-center gap-2 text-[11px]">
+                          <button
+                            type="button"
+                            onClick={() => updateTodayStripState('assessment', 'done')}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
+                              todayLaneState.assessment === 'done'
+                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                : 'bg-white text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            <CheckCircle className="h-3 w-3" />
+                            I&apos;m on it
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateTodayStripState('assessment', 'skipped')}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
+                              todayLaneState.assessment === 'skipped'
+                                ? 'bg-amber-100 text-amber-700 border-amber-200'
+                                : 'bg-white text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            <X className="h-3 w-3" />
+                            Remind me
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold text-gray-800">Adaptive pick</p>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            {recommendedLesson ? PATH_STATUS_LABELS[recommendedLesson.status] : 'Ready soon'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 line-clamp-2">
+                          {recommendedLesson ? recommendedLesson.title : 'We’ll suggest the next lesson.'}
+                        </p>
+                        <div className="flex items-center gap-2 text-[11px]">
+                          <button
+                            type="button"
+                            onClick={() => recommendedLesson && handleStartLesson(recommendedLesson)}
+                            disabled={!recommendedLesson}
+                            className="inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold bg-brand-blue text-white border-brand-blue hover:bg-brand-blue/90 disabled:opacity-50"
+                          >
+                            Start
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateTodayStripState('adaptive', 'skipped')}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
+                              todayLaneState.adaptive === 'skipped'
+                                ? 'bg-amber-100 text-amber-700 border-amber-200'
+                                : 'bg-white text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            <X className="h-3 w-3" />
+                            Skip
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
