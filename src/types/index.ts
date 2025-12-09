@@ -740,6 +740,7 @@ export interface PrivacyRequest {
   reason?: string | null;
   adminNotes?: string | null;
   handledBy?: string | null;
+  updatedAt: string;
   resolvedAt?: string | null;
   createdAt: string;
 }

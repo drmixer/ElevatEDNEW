@@ -11,6 +11,7 @@ type PrivacyRequestRow = {
   reason?: string | null;
   admin_notes?: string | null;
   handled_by?: string | null;
+  updated_at: string;
   resolved_at?: string | null;
   created_at: string;
 };
@@ -25,6 +26,7 @@ const mapPrivacyRequest = (row: PrivacyRequestRow): PrivacyRequest => ({
   reason: row.reason ?? null,
   adminNotes: row.admin_notes ?? null,
   handledBy: row.handled_by ?? null,
+  updatedAt: row.updated_at ?? row.created_at,
   resolvedAt: row.resolved_at ?? null,
   createdAt: row.created_at,
 });
@@ -51,7 +53,7 @@ export const submitPrivacyRequest = async (payload: {
       },
     })
     .select(
-      'id, requester_id, student_id, request_type, status, contact_email, reason, admin_notes, handled_by, resolved_at, created_at',
+      'id, requester_id, student_id, request_type, status, contact_email, reason, admin_notes, handled_by, resolved_at, created_at, updated_at',
     )
     .single();
 
@@ -70,7 +72,7 @@ export const listPrivacyRequests = async (options?: {
   let query = supabase
     .from('privacy_requests')
     .select(
-      'id, requester_id, student_id, request_type, status, contact_email, reason, admin_notes, handled_by, resolved_at, created_at',
+      'id, requester_id, student_id, request_type, status, contact_email, reason, admin_notes, handled_by, resolved_at, created_at, updated_at',
     )
     .order('created_at', { ascending: false })
     .limit(20);

@@ -35,6 +35,7 @@ describe('privacyService', () => {
               reason: null,
               admin_notes: null,
               handled_by: null,
+              updated_at: '2024-01-02T00:00:00Z',
               resolved_at: null,
               created_at: '2024-01-01T00:00:00Z',
             },

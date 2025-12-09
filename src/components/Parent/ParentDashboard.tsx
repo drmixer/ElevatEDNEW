@@ -327,6 +327,7 @@ const ParentDashboard: React.FC = () => {
   const {
     data: overview,
     isFetching: overviewFetching,
+    refetch: refreshOverview,
   } = useParentOverview(parent?.id);
 
   useEffect(() => {
@@ -887,6 +888,136 @@ const ParentDashboard: React.FC = () => {
     (dashboard?.children ?? []).forEach((child) => map.set(child.id, child.name));
     return map;
   }, [dashboard]);
+
+  const privacyHistoryByChild = useMemo(() => {
+    const children = dashboard?.children ?? [];
+    const history = children.map((child) => {
+      const requests = privacyRequests.filter((request) => request.studentId === child.id);
+      const latest = requests[0] ?? null;
+      const openCount = requests.filter(
+        (request) => request.status === 'pending' || request.status === 'in_review',
+      ).length;
+      return {
+        studentId: child.id,
+        name: child.name,
+        total: requests.length,
+        pending: openCount,
+        lastStatus: latest?.status ?? null,
+        lastType: latest?.requestType ?? null,
+        lastUpdated: latest?.updatedAt ?? latest?.createdAt ?? null,
+      };
+    });
+
+    // Include any legacy requests that reference learners no longer on the dashboard.
+    privacyRequests.forEach((request) => {
+      const alreadyTracked = history.some((entry) => entry.studentId === request.studentId);
+      if (alreadyTracked) return;
+      history.push({
+        studentId: request.studentId,
+        name: childNameMap.get(request.studentId) ?? 'Learner',
+        total: 1,
+        pending: request.status === 'pending' || request.status === 'in_review' ? 1 : 0,
+        lastStatus: request.status,
+        lastType: request.requestType,
+        lastUpdated: request.updatedAt ?? request.createdAt,
+      });
+    });
+
+    return history;
+  }, [childNameMap, dashboard?.children, privacyRequests]);
+
+  const openPrivacyRequests = useMemo(
+    () =>
+      childPrivacyRequests.filter(
+        (request) => request.status === 'pending' || request.status === 'in_review',
+      ),
+    [childPrivacyRequests],
+  );
+
+  const formatDateTime = useCallback((value?: string | null) => {
+    if (!value) return '—';
+    const date = new Date(value);
+    return `${date.toLocaleDateString()} • ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+  }, []);
+
+  const safetyEvents = useMemo(() => {
+    const events: Array<{
+      id: string;
+      studentId: string | null;
+      studentName: string;
+      occurredAt: string;
+      label: string;
+      detail: string;
+      nextStep: string;
+      severity: 'info' | 'warn';
+    }> = [];
+
+    const describeEvent = (rawType?: string | null) => {
+      if (!rawType) return null;
+      const type = rawType.toLowerCase();
+      if (type.includes('safety') || type.includes('guardrail')) {
+        return {
+          label: 'Blocked prompt',
+          detail: 'Tutor stopped a prompt that looked unsafe, off-topic, or personal.',
+          nextStep: 'Ask your learner what they were trying to ask and remind them to avoid personal details.',
+          severity: 'warn' as const,
+        };
+      }
+      if (type.includes('flag')) {
+        return {
+          label: 'Flagged content',
+          detail: 'A response or prompt was flagged for review.',
+          nextStep: 'We are double-checking this transcript. You will hear from us if follow-up is needed.',
+          severity: 'warn' as const,
+        };
+      }
+      if (type.includes('refusal') || type.includes('blocked')) {
+        return {
+          label: 'Tutor refused',
+          detail: 'The AI declined to answer because the request looked risky.',
+          nextStep: 'Try rephrasing toward a school task. Safety refusals are logged automatically.',
+          severity: 'info' as const,
+        };
+      }
+      return null;
+    };
+
+    overview?.children?.forEach((child) => {
+      (child.recent_events ?? []).forEach((event, index) => {
+        const details = describeEvent(event.event_type);
+        if (!details) return;
+        events.push({
+          id: `${child.id}-${event.created_at ?? index}`,
+          studentId: child.id,
+          studentName: child.name,
+          occurredAt: event.created_at,
+          ...details,
+        });
+      });
+    });
+
+    concernReports
+      .filter((report) => report.category === 'safety' || report.category === 'content')
+      .forEach((report) => {
+        events.push({
+          id: `report-${report.id}`,
+          studentId: report.studentId ?? null,
+          studentName: report.studentId ? childNameMap.get(report.studentId) ?? 'Learner' : 'Family account',
+          occurredAt: report.updatedAt ?? report.createdAt,
+          label: 'Family report logged',
+          detail: `Case ${report.caseId} (${report.category}) is ${report.status.replace('_', ' ')}.`,
+          nextStep:
+            report.status === 'resolved' || report.status === 'closed'
+              ? 'This item has been reviewed. We will contact you if additional steps are needed.'
+              : 'We are reviewing and will email you if we need more detail.',
+          severity: report.status === 'open' || report.status === 'in_review' ? 'warn' : 'info',
+        });
+      });
+
+    return events
+      .sort((a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime())
+      .slice(0, 6);
+  }, [childNameMap, concernReports, overview?.children]);
 
   useEffect(() => {
     if (parent?.onboardingState?.tourCompleted) {
@@ -5255,161 +5386,231 @@ const ParentDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 p-4 space-y-4 w-full">
-                  <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                    <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-amber-600" />
-                      <h4 className="text-sm font-semibold text-gray-900">Report a concern</h4>
-                    </div>
-                    <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-                      {concernRouteCopy}
-                    </span>
-                  </div>
-                  <form onSubmit={handleConcernSubmit} className="space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                          Category
-                        </label>
-                        <select
-                          value={concernCategory}
-                          onChange={(event) => setConcernCategory(event.target.value as ConcernCategory)}
-                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                        >
-                          <option value="safety">Safety issue</option>
-                          <option value="content">Content quality</option>
-                          <option value="data">Data or privacy</option>
-                          <option value="account">Account or billing</option>
-                          <option value="billing">Payment issue</option>
-                          <option value="other">Other</option>
-                        </select>
+                <div className="space-y-4 w-full">
+                  <div className="rounded-xl border border-slate-200 p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4 text-brand-teal" />
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Safety log</p>
+                          <p className="text-xs text-gray-600">Blocked prompts, flags, and reports with next steps.</p>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                          Contact email
-                        </label>
-                        <input
-                          type="email"
-                          value={concernContact}
-                          onChange={(event) => setConcernContact(event.target.value)}
-                          placeholder={parent.email}
-                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                        What happened?
-                      </label>
-                      <textarea
-                        value={concernDescription}
-                        onChange={(event) => setConcernDescription(event.target.value)}
-                        rows={3}
-                        required
-                        placeholder="Tell us what felt off. Include where it happened (tutor chat, lesson, assignment) and which learner if relevant."
-                        className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                          Screenshot or link (optional)
-                        </label>
-                        <input
-                          type="url"
-                          value={concernScreenshotUrl}
-                          onChange={(event) => setConcernScreenshotUrl(event.target.value)}
-                          placeholder="Link to a screenshot or example"
-                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
-                        />
-                      </div>
-                      <div className="text-xs text-gray-600 rounded-lg bg-slate-50 border border-slate-100 p-3">
-                        We route safety/content to Trust & Safety and account/data to support. You will get a case ID and confirmation email.
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <button
-                        type="submit"
-                        disabled={concernReportMutation.isLoading || !concernDescription.trim()}
-                        className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
-                      >
-                        {concernReportMutation.isLoading ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Sending…
-                          </>
-                        ) : (
-                          'Send report'
-                        )}
-                      </button>
-                      <p className="text-xs text-gray-500">
-                        We respond within 1 business day with next steps and audit trail.
-                      </p>
-                    </div>
-                  </form>
-                  {concernMessage && (
-                    <p className="mt-3 text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
-                      {concernMessage}
-                    </p>
-                  )}
-                  {concernError && (
-                    <p className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
-                      {concernError}
-                    </p>
-                  )}
-
-                  <div className="pt-3 border-t border-slate-100">
-                    <div className="flex items-center justify-between mb-2">
-                      <h5 className="text-sm font-semibold text-gray-900">
-                        Recent reports{currentChild ? ` • ${currentChild.name}` : ''}
-                      </h5>
                       <button
                         type="button"
-                        onClick={() => concernReportsQuery.refetch()}
+                        onClick={() => {
+                          refreshOverview();
+                          concernReportsQuery.refetch();
+                        }}
                         className="p-1 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
-                        disabled={concernReportsQuery.isFetching}
+                        disabled={overviewFetching || concernReportsQuery.isFetching}
+                        aria-label="Refresh safety log"
                       >
-                        <RefreshCw className={`h-4 w-4 ${concernReportsQuery.isFetching ? 'animate-spin' : ''}`} />
+                        <RefreshCw
+                          className={`h-4 w-4 ${
+                            overviewFetching || concernReportsQuery.isFetching ? 'animate-spin' : ''
+                          }`}
+                        />
                       </button>
                     </div>
-                    {concernReportsQuery.isFetching ? (
+                    <p className="text-[11px] text-gray-600">
+                      We surface recent safety actions so you know when a prompt was blocked, content was flagged, or a
+                      family report was created.
+                    </p>
+                    {overviewFetching || concernReportsQuery.isFetching ? (
                       <SkeletonCard className="h-16" />
-                    ) : concernReports.length ? (
+                    ) : safetyEvents.length ? (
                       <ul className="space-y-2">
-                        {concernReports.map((report) => (
+                        {safetyEvents.map((event) => (
                           <li
-                            key={report.id}
-                            className="flex items-start justify-between rounded-lg border border-slate-200 px-3 py-2 gap-3"
+                            key={event.id}
+                            className="rounded-lg border border-slate-200 px-3 py-2"
                           >
-                            <div className="min-w-0">
-                              <p className="text-sm font-semibold text-gray-900">
-                                Case {report.caseId}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {new Date(report.createdAt).toLocaleDateString()} • {report.category.replace('_', ' ')}
-                              </p>
-                              <p className="text-xs text-gray-600 mt-1 break-words">
-                                {report.description}
-                              </p>
-                            </div>
-                            <div className="flex flex-col items-end gap-1">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <p className="text-sm font-semibold text-gray-900">{event.label}</p>
+                                <p className="text-xs text-gray-500">
+                                  {formatDateTime(event.occurredAt)} • {event.studentName}
+                                </p>
+                                <p className="text-xs text-gray-600 mt-1 break-words">{event.detail}</p>
+                                <p className="text-[11px] text-slate-500 mt-1">{event.nextStep}</p>
+                              </div>
                               <span
-                                className={`text-[11px] px-2 py-1 rounded-full capitalize ${concernStatusStyles[report.status]}`}
+                                className={`text-[11px] px-2 py-1 rounded-full ${
+                                  event.severity === 'warn'
+                                    ? 'bg-amber-100 text-amber-700'
+                                    : 'bg-slate-100 text-slate-700'
+                                }`}
                               >
-                                {report.status.replace('_', ' ')}
-                              </span>
-                              <span className="text-[11px] text-slate-500 capitalize">
-                                {report.route} queue
+                                {event.severity === 'warn' ? 'Action' : 'Logged'}
                               </span>
                             </div>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-sm text-gray-600">
-                        No reports yet. If anything feels off, send it our way and we will follow up with a case ID.
+                      <div className="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                        No safety blocks or flags in the last day. Guardrails stay on, and anything new will appear here with a timestamp.
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 p-4 space-y-4">
+                    <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4 text-amber-600" />
+                        <h4 className="text-sm font-semibold text-gray-900">Report a concern</h4>
+                      </div>
+                      <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                        {concernRouteCopy}
+                      </span>
+                    </div>
+                    <form onSubmit={handleConcernSubmit} className="space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Category
+                          </label>
+                          <select
+                            value={concernCategory}
+                            onChange={(event) => setConcernCategory(event.target.value as ConcernCategory)}
+                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                          >
+                            <option value="safety">Safety issue</option>
+                            <option value="content">Content quality</option>
+                            <option value="data">Data or privacy</option>
+                            <option value="account">Account or billing</option>
+                            <option value="billing">Payment issue</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Contact email
+                          </label>
+                          <input
+                            type="email"
+                            value={concernContact}
+                            onChange={(event) => setConcernContact(event.target.value)}
+                            placeholder={parent.email}
+                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                          What happened?
+                        </label>
+                        <textarea
+                          value={concernDescription}
+                          onChange={(event) => setConcernDescription(event.target.value)}
+                          rows={3}
+                          required
+                          placeholder="Tell us what felt off. Include where it happened (tutor chat, lesson, assignment) and which learner if relevant."
+                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Screenshot or link (optional)
+                          </label>
+                          <input
+                            type="url"
+                            value={concernScreenshotUrl}
+                            onChange={(event) => setConcernScreenshotUrl(event.target.value)}
+                            placeholder="Link to a screenshot or example"
+                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                          />
+                        </div>
+                        <div className="text-xs text-gray-600 rounded-lg bg-slate-50 border border-slate-100 p-3">
+                          We route safety/content to Trust & Safety and account/data to support. You will get a case ID and confirmation email.
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <button
+                          type="submit"
+                          disabled={concernReportMutation.isLoading || !concernDescription.trim()}
+                          className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-50"
+                        >
+                          {concernReportMutation.isLoading ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Sending…
+                            </>
+                          ) : (
+                            'Send report'
+                          )}
+                        </button>
+                        <p className="text-xs text-gray-500">
+                          We respond within 1 business day with next steps and audit trail.
+                        </p>
+                      </div>
+                    </form>
+                    {concernMessage && (
+                      <p className="mt-3 text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                        {concernMessage}
                       </p>
                     )}
+                    {concernError && (
+                      <p className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                        {concernError}
+                      </p>
+                    )}
+
+                    <div className="pt-3 border-t border-slate-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <h5 className="text-sm font-semibold text-gray-900">
+                          Recent reports{currentChild ? ` • ${currentChild.name}` : ''}
+                        </h5>
+                        <button
+                          type="button"
+                          onClick={() => concernReportsQuery.refetch()}
+                          className="p-1 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                          disabled={concernReportsQuery.isFetching}
+                        >
+                          <RefreshCw className={`h-4 w-4 ${concernReportsQuery.isFetching ? 'animate-spin' : ''}`} />
+                        </button>
+                      </div>
+                      {concernReportsQuery.isFetching ? (
+                        <SkeletonCard className="h-16" />
+                      ) : concernReports.length ? (
+                        <ul className="space-y-2">
+                          {concernReports.map((report) => (
+                            <li
+                              key={report.id}
+                              className="flex items-start justify-between rounded-lg border border-slate-200 px-3 py-2 gap-3"
+                            >
+                              <div className="min-w-0">
+                                <p className="text-sm font-semibold text-gray-900">
+                                  Case {report.caseId}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {new Date(report.createdAt).toLocaleDateString()} • {report.category.replace('_', ' ')}
+                                </p>
+                                <p className="text-xs text-gray-600 mt-1 break-words">
+                                  {report.description}
+                                </p>
+                              </div>
+                              <div className="flex flex-col items-end gap-1">
+                                <span
+                                  className={`text-[11px] px-2 py-1 rounded-full capitalize ${concernStatusStyles[report.status]}`}
+                                >
+                                  {report.status.replace('_', ' ')}
+                                </span>
+                                <span className="text-[11px] text-slate-500 capitalize">
+                                  {report.route} queue
+                                </span>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-600">
+                          No reports yet. If anything feels off, send it our way and we will follow up with a case ID.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -5437,6 +5638,22 @@ const ParentDashboard: React.FC = () => {
               <div className="text-xs text-slate-600 mb-4 rounded-lg bg-slate-50 border border-slate-100 p-3">
                 Under-13 accounts stay read-only until consent is captured on this parent profile. Exports and deletions
                 are fulfilled only for linked guardians, and we log the request time and contact email for audit.
+              </div>
+              <div className="flex flex-wrap gap-2 text-[11px] text-slate-700 mb-2">
+                <span
+                  className={`px-2 py-1 rounded-full border ${
+                    openPrivacyRequests.length
+                      ? 'border-amber-200 bg-amber-50 text-amber-700'
+                      : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                  }`}
+                >
+                  {openPrivacyRequests.length
+                    ? `${openPrivacyRequests.length} request${openPrivacyRequests.length === 1 ? '' : 's'} awaiting acknowledgement or fulfillment`
+                    : 'No open requests right now'}
+                </span>
+                <span className="px-2 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-700">
+                  Audit trail kept with timestamps
+                </span>
               </div>
               <form onSubmit={handlePrivacyRequest} className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -5511,51 +5728,188 @@ const ParentDashboard: React.FC = () => {
                 </p>
               )}
 
-              <div className="mt-5">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-sm font-semibold text-gray-900">
-                    Recent requests{currentChild ? ` • ${currentChild.name}` : ''}
-                  </h4>
-                  <button
-                    type="button"
-                    onClick={() => privacyRequestsQuery.refetch()}
-                    className="p-1 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
-                    disabled={privacyRequestsQuery.isFetching}
-                  >
-                    <RefreshCw className={`h-4 w-4 ${privacyRequestsQuery.isFetching ? 'animate-spin' : ''}`} />
-                  </button>
+              <div className="mt-5 grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-4">
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="text-sm font-semibold text-gray-900">
+                      Data rights timeline{currentChild ? ` • ${currentChild.name}` : ''}
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={() => privacyRequestsQuery.refetch()}
+                      className="p-1 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                      disabled={privacyRequestsQuery.isFetching}
+                    >
+                      <RefreshCw className={`h-4 w-4 ${privacyRequestsQuery.isFetching ? 'animate-spin' : ''}`} />
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mb-2">
+                    {openPrivacyRequests.length
+                      ? `${openPrivacyRequests.length} request${openPrivacyRequests.length === 1 ? '' : 's'} are waiting for acknowledgement or fulfillment. We log every step.`
+                      : 'No open requests. Submitted items stay here with timestamps for audit.'}
+                  </p>
+                  {privacyRequestsQuery.isFetching ? (
+                    <SkeletonCard className="h-14" />
+                  ) : childPrivacyRequests.length ? (
+                    <ul className="space-y-3">
+                      {childPrivacyRequests.map((request) => {
+                        const acknowledgedAt =
+                          request.status === 'pending'
+                            ? null
+                            : request.updatedAt && request.updatedAt !== request.createdAt
+                              ? request.updatedAt
+                              : request.createdAt;
+                        const resolvedAt =
+                          request.resolvedAt ??
+                          (request.status === 'fulfilled' || request.status === 'rejected'
+                            ? request.updatedAt
+                            : null);
+                        const finalState: 'done' | 'active' | 'waiting' =
+                          request.status === 'fulfilled' || request.status === 'rejected'
+                            ? 'done'
+                            : request.status === 'in_review'
+                              ? 'active'
+                              : 'waiting';
+                        const finalLabel =
+                          request.status === 'fulfilled'
+                            ? 'Fulfilled'
+                            : request.status === 'rejected'
+                              ? 'Closed'
+                              : 'Fulfillment';
+                        const finalHelper =
+                          request.status === 'fulfilled'
+                            ? 'Request fulfilled and confirmation sent'
+                            : request.status === 'rejected'
+                              ? 'Closed and logged'
+                              : request.status === 'in_review'
+                                ? 'In review by privacy team'
+                                : 'Waiting for acknowledgement before fulfillment';
+                        const renderTimelineStep = (
+                          label: string,
+                          timestamp: string | null,
+                          state: 'done' | 'active' | 'waiting',
+                          helper?: string,
+                        ) => {
+                          const dotStyles =
+                            state === 'done'
+                              ? 'bg-emerald-500'
+                              : state === 'active'
+                                ? 'bg-brand-blue'
+                                : 'bg-slate-300';
+                          const helperText = helper ?? 'Waiting for update';
+                          return (
+                            <div className="flex items-start gap-2">
+                              <div className={`mt-1 h-2.5 w-2.5 rounded-full ${dotStyles}`} />
+                              <div>
+                                <p className="text-xs font-semibold text-gray-900">{label}</p>
+                                <p className="text-[11px] text-gray-600">
+                                  {timestamp ? formatDateTime(timestamp) : helperText}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        };
+
+                        return (
+                          <li
+                            key={request.id}
+                            className="rounded-lg border border-slate-200 px-3 py-2 space-y-2"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900 capitalize">
+                                  {request.requestType === 'export' ? 'Export request' : 'Deletion request'}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {formatDateTime(request.createdAt)} • {childNameMap.get(request.studentId) ?? 'Learner'}
+                                </p>
+                              </div>
+                              <span
+                                className={`text-[11px] px-2 py-1 rounded-full capitalize ${privacyStatusStyles[request.status]}`}
+                              >
+                                {request.status.replace('_', ' ')}
+                              </span>
+                            </div>
+                            <div className="space-y-2">
+                              {renderTimelineStep('Submitted', request.createdAt, 'done')}
+                              {renderTimelineStep(
+                                'Acknowledged',
+                                acknowledgedAt,
+                                request.status === 'pending' ? 'waiting' : 'done',
+                                'Waiting for a reviewer to acknowledge',
+                              )}
+                              {renderTimelineStep(
+                                finalLabel,
+                                resolvedAt,
+                                finalState,
+                                finalHelper,
+                              )}
+                            </div>
+                            {request.adminNotes && (
+                              <p className="text-[11px] text-slate-600 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+                                Admin notes: {request.adminNotes}
+                              </p>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-600">
+                      No requests yet. Submit an export or deletion request to begin the process.
+                    </p>
+                  )}
                 </div>
-                {privacyRequestsQuery.isFetching ? (
-                  <SkeletonCard className="h-14" />
-                ) : childPrivacyRequests.length ? (
-                  <ul className="space-y-2">
-                    {childPrivacyRequests.map((request) => (
-                      <li
-                        key={request.id}
-                        className="flex items-start justify-between rounded-lg border border-slate-200 px-3 py-2"
-                      >
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900 capitalize">
-                            {request.requestType === 'export' ? 'Export request' : 'Deletion request'}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {new Date(request.createdAt).toLocaleDateString()} •{' '}
-                            {childNameMap.get(request.studentId) ?? 'Learner'}
+
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <h5 className="text-sm font-semibold text-gray-900">History by learner</h5>
+                    <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                      Logged activity
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mb-2">
+                    Track which learners have pending data rights and when we last touched their requests.
+                  </p>
+                  <div className="space-y-2">
+                    {privacyHistoryByChild.length ? (
+                      privacyHistoryByChild.map((entry) => (
+                        <div
+                          key={entry.studentId}
+                          className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-sm font-semibold text-gray-900">{entry.name}</p>
+                            <span
+                              className={`text-[11px] px-2 py-1 rounded-full ${
+                                entry.pending
+                                  ? 'bg-amber-100 text-amber-700'
+                                  : entry.total
+                                    ? 'bg-emerald-100 text-emerald-700'
+                                    : 'bg-slate-100 text-slate-700'
+                              }`}
+                            >
+                              {entry.pending
+                                ? `${entry.pending} pending`
+                                : entry.total
+                                  ? 'Clear'
+                                  : 'No requests'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-600">
+                            {entry.total
+                              ? `${entry.total} request${entry.total === 1 ? '' : 's'} • Last ${
+                                  entry.lastType === 'erasure' ? 'deletion' : 'export'
+                                } ${entry.lastStatus ?? ''}${entry.lastUpdated ? ` on ${new Date(entry.lastUpdated).toLocaleDateString()}` : ''}`
+                              : 'No requests yet.'}
                           </p>
                         </div>
-                        <span
-                          className={`text-[11px] px-2 py-1 rounded-full capitalize ${privacyStatusStyles[request.status]}`}
-                        >
-                          {request.status.replace('_', ' ')}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-gray-600">
-                    No requests yet. Submit an export or deletion request to begin the process.
-                  </p>
-                )}
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-600">Link a learner to view their request history.</p>
+                    )}
+                  </div>
+                </div>
               </div>
             </motion.div>
 
