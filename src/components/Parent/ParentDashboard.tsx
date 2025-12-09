@@ -271,6 +271,8 @@ const ParentDashboard: React.FC = () => {
   const [digestSaveMessage, setDigestSaveMessage] = useState<string | null>(null);
   const [digestSaveError, setDigestSaveError] = useState<string | null>(null);
   const [resolvedAlerts, setResolvedAlerts] = useState<Map<string, string>>(new Map());
+  const [alertSeenAt, setAlertSeenAt] = useState<Map<string, number>>(new Map());
+  const [alertResolvedAt, setAlertResolvedAt] = useState<Map<string, number>>(new Map());
   const [diagnosticPlans, setDiagnosticPlans] = useState<Record<string, { scheduled: boolean; remind: boolean }>>({});
   const [todayLaneState, setTodayLaneState] = useState<Record<string, 'done' | 'skipped'>>({});
   const [showTour, setShowTour] = useState<boolean>(false);
@@ -350,6 +352,44 @@ const ParentDashboard: React.FC = () => {
     setPrivacyContact(parent?.email ?? '');
     setConcernContact(parent?.email ?? '');
   }, [parent?.email]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      const stored = localStorage.getItem(`alert-metrics-${parent.id}`);
+      if (stored) {
+        const parsed = JSON.parse(stored) as { seen?: Record<string, number>; resolved?: Record<string, number> };
+        if (parsed.seen) {
+          setAlertSeenAt(new Map(Object.entries(parsed.seen).map(([key, value]) => [key, value])));
+        }
+        if (parsed.resolved) {
+          setAlertResolvedAt(new Map(Object.entries(parsed.resolved).map(([key, value]) => [key, value])));
+        }
+      }
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to restore alert metrics', error);
+    }
+  }, [parent?.id]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    const serialize = (map: Map<string, number>) =>
+      Array.from(map.entries()).reduce<Record<string, number>>((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+    try {
+      localStorage.setItem(
+        `alert-metrics-${parent.id}`,
+        JSON.stringify({
+          seen: serialize(alertSeenAt),
+          resolved: serialize(alertResolvedAt),
+        }),
+      );
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to persist alert metrics', error);
+    }
+  }, [alertResolvedAt, alertSeenAt, parent?.id]);
 
   useEffect(() => {
     if (!location.hash) return;
@@ -889,6 +929,44 @@ const ParentDashboard: React.FC = () => {
     return map;
   }, [dashboard]);
 
+  const sortedOverviewChildren = useMemo(() => {
+    if (!overview?.children?.length) return [];
+    const now = Date.now();
+    return [...overview.children].sort((a, b) => {
+      const severity = (child: (typeof overview.children)[number]) => {
+        let score = 0;
+        if (child.alerts.length) score += 3;
+        if (child.struggle) score += 2;
+        if ((child.latest_quiz_score ?? 100) < 70) score += 1;
+        if ((child.weekly_time_minutes ?? 0) < 45) score += 0.5;
+        return score;
+      };
+      const recency = (child: (typeof overview.children)[number]) => {
+        const timestamp = child.recent_events?.[0]?.created_at
+          ? new Date(child.recent_events[0].created_at).getTime()
+          : null;
+        return timestamp ?? now - 1000 * 60 * 60 * 24 * 7;
+      };
+      const severityDiff = severity(b) - severity(a);
+      if (severityDiff !== 0) return severityDiff;
+      return recency(b) - recency(a);
+    });
+  }, [overview?.children]);
+
+  useEffect(() => {
+    if (!overview?.children?.length) return;
+    setAlertSeenAt((prev) => {
+      const next = new Map(prev);
+      overview.children.forEach((child) => {
+        const alertText = child.alerts[0];
+        if (!alertText) return;
+        if (next.has(child.id)) return;
+        next.set(child.id, Date.now());
+      });
+      return next;
+    });
+  }, [overview?.children]);
+
   const privacyHistoryByChild = useMemo(() => {
     const children = dashboard?.children ?? [];
     const history = children.map((child) => {
@@ -1018,6 +1096,20 @@ const ParentDashboard: React.FC = () => {
       .sort((a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime())
       .slice(0, 6);
   }, [childNameMap, concernReports, overview?.children]);
+
+  const sortedDashboardAlerts = useMemo(() => {
+    if (!dashboard?.alerts?.length) return [];
+    const priority: Record<'warning' | 'success' | 'info', number> = {
+      warning: 3,
+      info: 2,
+      success: 1,
+    };
+    return [...dashboard.alerts].sort((a, b) => {
+      const weightDiff = (priority[b.type] ?? 0) - (priority[a.type] ?? 0);
+      if (weightDiff !== 0) return weightDiff;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  }, [dashboard?.alerts]);
 
   useEffect(() => {
     if (parent?.onboardingState?.tourCompleted) {
@@ -1150,6 +1242,33 @@ const ParentDashboard: React.FC = () => {
     if (!assignmentsList.length) return null;
     return assignmentsList.find((assignment) => assignment.status !== 'completed') ?? assignmentsList[0];
   }, [assignmentsList]);
+
+  const alertResolutionHours = useMemo(() => {
+    const durations: number[] = [];
+    alertResolvedAt.forEach((resolved, childId) => {
+      const seen = alertSeenAt.get(childId);
+      if (!seen || resolved < seen) return;
+      durations.push((resolved - seen) / (1000 * 60 * 60));
+    });
+    if (!durations.length) return null;
+    const avg = durations.reduce((acc, val) => acc + val, 0) / durations.length;
+    return Math.round(avg * 10) / 10;
+  }, [alertResolvedAt, alertSeenAt]);
+
+  const diagnosticCompletionRate = useMemo(() => {
+    const children = dashboard?.children ?? [];
+    if (!children.length) return null;
+    const completed = children.filter((child) => child.diagnosticStatus === 'completed').length;
+    return Math.round((completed / Math.max(children.length, 1)) * 100);
+  }, [dashboard?.children]);
+
+  const assignmentUptakeRate = useMemo(() => {
+    if (!currentChild) return null;
+    const focusCount = Math.max((currentChild.focusAreas?.length ?? 0), 1);
+    const activeAssignments = assignmentsList.filter((assignment) => assignment.status !== 'completed').length;
+    const rate = (activeAssignments / focusCount) * 100;
+    return Math.round(Math.min(rate, 150));
+  }, [assignmentsList, currentChild]);
 
   const assignModuleMutation = useMutation({
     mutationFn: assignModuleToStudents,
@@ -1842,11 +1961,21 @@ const ParentDashboard: React.FC = () => {
       next.set(childId, alertText);
       return next;
     });
+    setAlertResolvedAt((prev) => {
+      const next = new Map(prev);
+      next.set(childId, Date.now());
+      return next;
+    });
     trackEvent('parent_child_alert_resolved', { parentId: parent?.id, childId });
   };
 
   const handleUndoResolveChildAlert = (childId: string) => {
     setResolvedAlerts((prev) => {
+      const next = new Map(prev);
+      next.delete(childId);
+      return next;
+    });
+    setAlertResolvedAt((prev) => {
       const next = new Map(prev);
       next.delete(childId);
       return next;
@@ -2342,7 +2471,7 @@ const ParentDashboard: React.FC = () => {
                 {overviewFetching && <span className="text-xs text-slate-500">Refreshing…</span>}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {overview.children.map((child) => {
+                {sortedOverviewChildren.map((child) => {
                   const alertText = child.alerts[0] ?? null;
                   const alertResolved = isAlertResolved(child.id, alertText);
                   const fullChild =
@@ -2505,6 +2634,58 @@ const ParentDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.03 }}
+          className="mb-6"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 flex flex-col justify-between min-h-[136px]">
+              <div className="flex items-center justify-between">
+                <p className="text-xs uppercase tracking-wide text-slate-500">Alert response</p>
+                <AlertTriangle className="h-4 w-4 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-900">
+                  {alertResolutionHours != null ? `${alertResolutionHours}h` : '—'}
+                </p>
+                <p className="text-xs text-slate-600">
+                  Avg time to mark a child alert resolved{alertResolutionHours == null ? ' — resolve one to start tracking' : ''}.
+                </p>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 flex flex-col justify-between min-h-[136px]">
+              <div className="flex items-center justify-between">
+                <p className="text-xs uppercase tracking-wide text-slate-500">Diagnostics</p>
+                <CheckCircle className="h-4 w-4 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-900">
+                  {diagnosticCompletionRate != null ? `${diagnosticCompletionRate}%` : '—'}
+                </p>
+                <p className="text-xs text-slate-600">
+                  Completion rate across linked learners. Re-run to keep plans calibrated.
+                </p>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 flex flex-col justify-between min-h-[136px]">
+              <div className="flex items-center justify-between">
+                <p className="text-xs uppercase tracking-wide text-slate-500">Follow-through</p>
+                <ClipboardList className="h-4 w-4 text-brand-blue" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-900">
+                  {assignmentUptakeRate != null ? `${assignmentUptakeRate}%` : '—'}
+                </p>
+                <p className="text-xs text-slate-600">
+                  Assignments vs focus flags{currentChild ? ` • ${currentChild.name}` : ''}. Aim for 100% to act on alerts.
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -6301,7 +6482,7 @@ const ParentDashboard: React.FC = () => {
                     <SkeletonCard className="h-16" />
                   </>
                 ) : (
-                  (dashboard?.alerts ?? []).map((alert) => (
+                  sortedDashboardAlerts.map((alert) => (
                     <div
                       key={alert.id}
                       className={`p-4 rounded-xl border ${
@@ -6310,9 +6491,14 @@ const ParentDashboard: React.FC = () => {
                           : alert.type === 'success'
                           ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
                           : 'bg-blue-50 border-blue-200 text-blue-700'
-                      }`}
+                      } min-h-[96px]`}
                     >
-                      <p className="text-sm font-semibold">{alert.message}</p>
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-semibold leading-snug">{alert.message}</p>
+                        <span className="text-[11px] px-2 py-1 rounded-full bg-white/60 border border-current uppercase tracking-wide">
+                          {alert.type}
+                        </span>
+                      </div>
                       <p className="text-xs mt-1 opacity-80">
                         {new Date(alert.createdAt).toLocaleString()}
                       </p>
