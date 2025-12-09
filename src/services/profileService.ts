@@ -505,6 +505,7 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
       majorProgress: parentDetails?.notifications?.majorProgress ?? true,
       assignments: parentDetails?.notifications?.assignments ?? true,
       streaks: parentDetails?.notifications?.streaks ?? true,
+      weeklyReportsLearner: parentDetails?.notifications?.weeklyReportsLearner ?? false,
     },
     onboardingState: (parentDetails?.onboarding_state ?? {}) as Parent['onboardingState'],
     weeklyReport,

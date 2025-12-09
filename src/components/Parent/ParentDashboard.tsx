@@ -50,6 +50,7 @@ import type {
   SkillGapInsight,
   LearningPreferences,
   ParentOnboardingState,
+  NotificationPreferences,
 } from '../../types';
 import { defaultLearningPreferences } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
@@ -63,6 +64,7 @@ import {
   revokeGuardianLink,
   upsertChildGoals,
   updateParentOnboardingState,
+  updateParentNotifications,
 } from '../../services/parentService';
 import {
   openBillingPortal,
@@ -261,6 +263,13 @@ const ParentDashboard: React.FC = () => {
   const [checkInSnippet, setCheckInSnippet] = useState<{ childId: string; message: string } | null>(null);
   const [progressShareSnippet, setProgressShareSnippet] = useState<string | null>(null);
   const [weeklyNudgeSnippet, setWeeklyNudgeSnippet] = useState<string | null>(null);
+  const [digestSendToGuardian, setDigestSendToGuardian] = useState<boolean>(true);
+  const [digestSendToLearner, setDigestSendToLearner] = useState<boolean>(false);
+  const [digestCopyMessage, setDigestCopyMessage] = useState<string | null>(null);
+  const [homeShareMessage, setHomeShareMessage] = useState<string | null>(null);
+  const [homeShareError, setHomeShareError] = useState<string | null>(null);
+  const [digestSaveMessage, setDigestSaveMessage] = useState<string | null>(null);
+  const [digestSaveError, setDigestSaveError] = useState<string | null>(null);
   const [resolvedAlerts, setResolvedAlerts] = useState<Map<string, string>>(new Map());
   const [diagnosticPlans, setDiagnosticPlans] = useState<Record<string, { scheduled: boolean; remind: boolean }>>({});
   const [todayLaneState, setTodayLaneState] = useState<Record<string, 'done' | 'skipped'>>({});
@@ -347,6 +356,38 @@ const ParentDashboard: React.FC = () => {
     const timer = window.setTimeout(() => scrollToSection(targetId), 60);
     return () => window.clearTimeout(timer);
   }, [location.hash]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      const saved = localStorage.getItem(`weekly-digest-preferences-${parent.id}`);
+      const parsed = saved ? (JSON.parse(saved) as { guardian?: boolean; learner?: boolean }) : null;
+      const guardianPref =
+        parent.notifications?.weeklyReports ??
+        parsed?.guardian ??
+        true;
+      const learnerPref =
+        parent.notifications?.weeklyReportsLearner ??
+        parsed?.learner ??
+        false;
+      setDigestSendToGuardian(guardianPref);
+      setDigestSendToLearner(learnerPref);
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to restore digest preferences', error);
+    }
+  }, [parent?.id, parent?.notifications?.weeklyReports, parent?.notifications?.weeklyReportsLearner]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      localStorage.setItem(
+        `weekly-digest-preferences-${parent.id}`,
+        JSON.stringify({ guardian: digestSendToGuardian, learner: digestSendToLearner }),
+      );
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to persist digest preferences', error);
+    }
+  }, [digestSendToGuardian, digestSendToLearner, parent?.id]);
 
   useEffect(() => {
     if (!parent?.id) return;
@@ -613,6 +654,41 @@ const ParentDashboard: React.FC = () => {
     };
   }, [dashboard]);
 
+  const digestRecommendations = useMemo(
+    () =>
+      (dashboard?.weeklyReport?.recommendations ?? [
+        'Set one small goal for each learner to guide the next digest.',
+      ]).slice(0, 3),
+    [dashboard?.weeklyReport?.recommendations],
+  );
+
+  const digestPreviewLines = useMemo(() => {
+    const timeSpentMinutes = weeklySnapshot?.minutes ?? 0;
+    const lessonsDone = weeklySnapshot?.lessons ?? 0;
+    const streakDays = weeklySnapshot?.topStreak ?? 0;
+    const winHeadline = latestWin?.title ?? 'Call out a consistent streak.';
+    const focusList = focusLabels.slice(0, 2).join(', ') || 'Balanced practice';
+    const recommendationLine = digestRecommendations.join(' | ');
+    return [
+      `Time spent: ${timeSpentMinutes} min`,
+      `Lessons done: ${lessonsDone}`,
+      `Best streak: ${streakDays} day${streakDays === 1 ? '' : 's'}`,
+      `Win to share: ${winHeadline}`,
+      `Focus areas: ${focusList}`,
+      `Recommended next steps: ${recommendationLine}`,
+    ];
+  }, [digestRecommendations, focusLabels, latestWin?.title, weeklySnapshot]);
+
+  const digestPreviewText = useMemo(
+    () =>
+      [
+        `Weekly digest for ${parent?.name ?? 'your family'}`,
+        `Week of ${weeklySnapshot?.weekStartLabel ?? 'this week'}`,
+        ...digestPreviewLines,
+      ].join('\n'),
+    [digestPreviewLines, parent?.name, weeklySnapshot?.weekStartLabel],
+  );
+
   const coverageSummary = useMemo(() => {
     if (!currentChild) {
       return { pct: null as number | null, needMoreData: true, masteryConfidence: null as number | null, diagnosticDate: null as string | null };
@@ -724,6 +800,31 @@ const ParentDashboard: React.FC = () => {
     }
     return [];
   }, [childSkillGaps, currentChild?.focusAreas, lowestSubject]);
+
+  const focusLabels = useMemo(
+    () => (focusConcepts.length ? focusConcepts : ['Skill reinforcement']),
+    [focusConcepts],
+  );
+
+  const homeExtensionGroups = useMemo(
+    () => {
+      if (!homeExtensions.length) return [];
+      const labels = focusLabels.length ? focusLabels : ['Skill reinforcement'];
+      const buckets = new Map<string, typeof homeExtensions>();
+      homeExtensions.forEach((activity) => {
+        const normalizedTags = (activity.tags ?? []).map((tag) => tag.toLowerCase());
+        const matchLabel =
+          labels.find((label) =>
+            normalizedTags.some((tag) => tag.includes(label.toLowerCase())),
+          ) ?? labels[0];
+        const list = buckets.get(matchLabel) ?? [];
+        list.push(activity);
+        buckets.set(matchLabel, list);
+      });
+      return Array.from(buckets.entries()).map(([label, items]) => ({ label, items }));
+    },
+    [homeExtensions, focusLabels],
+  );
 
   const masteryBands = useMemo(
     () =>
@@ -941,6 +1042,41 @@ const ParentDashboard: React.FC = () => {
         setAssignErrorMessage(message);
       }
       setAssignMessage(null);
+    },
+  });
+
+  const digestPreferencesMutation = useMutation({
+    mutationFn: async ({ guardian, learner }: { guardian: boolean; learner: boolean }) => {
+      if (!parent) {
+        throw new Error('Sign in as a parent to update digest settings.');
+      }
+      const nextPrefs: NotificationPreferences = {
+        weeklyReports: guardian,
+        missedSessions: parent.notifications?.missedSessions ?? true,
+        lowScores: parent.notifications?.lowScores ?? true,
+        majorProgress: parent.notifications?.majorProgress ?? true,
+        assignments: parent.notifications?.assignments ?? true,
+        streaks: parent.notifications?.streaks ?? true,
+        weeklyReportsLearner: learner,
+      };
+      await updateParentNotifications(parent.id, nextPrefs);
+      return nextPrefs;
+    },
+    onSuccess: async (_nextPrefs, variables) => {
+      setDigestSaveMessage('Digest preferences saved.');
+      setDigestSaveError(null);
+      trackEvent('parent_digest_channel_toggle', {
+        parentId: parent?.id,
+        guardian_enabled: variables.guardian,
+        learner_enabled: variables.learner,
+      });
+      await refreshUser();
+      await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
+    },
+    onError: (error) => {
+      console.error('[ParentDashboard] failed to update digest preferences', error);
+      setDigestSaveMessage(null);
+      setDigestSaveError(error instanceof Error ? error.message : 'Unable to save digest settings right now.');
     },
   });
 
@@ -1609,6 +1745,99 @@ const ParentDashboard: React.FC = () => {
     const msg = `Hey ${currentChild.name}, proud of your work! Want to tackle a quick check on ${hint} together?`;
     setWeeklyNudgeSnippet(msg);
     trackEvent('parent_nudge_generated', { childId: currentChild.id, struggle: struggleFlagged });
+  };
+
+  const handleDigestToggle = async (target: 'guardian' | 'learner') => {
+    if (!parent) {
+      setDigestSaveError('Sign in as a parent to update digest settings.');
+      return;
+    }
+    const previousGuardian = digestSendToGuardian;
+    const previousLearner = digestSendToLearner;
+    const nextGuardian = target === 'guardian' ? !digestSendToGuardian : digestSendToGuardian;
+    const nextLearner = target === 'learner' ? !digestSendToLearner : digestSendToLearner;
+    setDigestSendToGuardian(nextGuardian);
+    setDigestSendToLearner(nextLearner);
+    setDigestSaveMessage(null);
+    setDigestSaveError(null);
+    try {
+      await digestPreferencesMutation.mutateAsync({ guardian: nextGuardian, learner: nextLearner });
+    } catch (error) {
+      console.error('[ParentDashboard] digest toggle failed', error);
+      setDigestSendToGuardian(previousGuardian);
+      setDigestSendToLearner(previousLearner);
+    }
+  };
+
+  const handleCopyDigestSummary = async () => {
+    setDigestCopyMessage(null);
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      setDigestCopyMessage('Copy unavailable in this browser. Use the preview text instead.');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(digestPreviewText);
+      setDigestCopyMessage('Digest summary copied. Paste into your email or message.');
+      trackEvent('parent_digest_copy', { parentId: parent?.id });
+    } catch (error) {
+      console.error('[ParentDashboard] failed to copy digest', error);
+      setDigestCopyMessage('Unable to copy right now. Try again.');
+    }
+  };
+
+  const handleShareHomeExtension = async (
+    activity: (typeof homeExtensions)[number],
+    focusLabel: string,
+  ) => {
+    setHomeShareMessage(null);
+    setHomeShareError(null);
+    const learnerName = currentChild?.name ?? 'your learner';
+    const shareText = `At-home focus: ${focusLabel} for ${learnerName}. Try "${activity.title}"${
+      activity.estimatedMinutes ? ` (~${activity.estimatedMinutes} min)` : ''
+    }${activity.description ? ` — ${activity.description}` : ''}${activity.url ? ` ${activity.url}` : ''}`;
+
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      setHomeShareError('Copy unavailable in this browser. Share the link manually.');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareText);
+      setHomeShareMessage('Assigned/share text copied for your learner.');
+      trackEvent('parent_home_extension_share', {
+        parentId: parent?.id,
+        studentId: currentChild?.id,
+        activityId: activity.id,
+        focus: focusLabel,
+      });
+    } catch (error) {
+      console.error('[ParentDashboard] failed to share home extension', error);
+      setHomeShareError('Unable to copy right now. Try again soon.');
+    }
+  };
+
+  const handleCopyHomeExtensionLink = async (activity: (typeof homeExtensions)[number]) => {
+    setHomeShareMessage(null);
+    setHomeShareError(null);
+    if (!activity.url) {
+      setHomeShareError('No link available for this activity.');
+      return;
+    }
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      setHomeShareError('Copy unavailable in this browser. Open the link to share manually.');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(activity.url);
+      setHomeShareMessage('Link copied. Paste into a text or email to share quickly.');
+      trackEvent('parent_home_extension_link_copy', {
+        parentId: parent?.id,
+        studentId: currentChild?.id,
+        activityId: activity.id,
+      });
+    } catch (error) {
+      console.error('[ParentDashboard] failed to copy home extension link', error);
+      setHomeShareError('Unable to copy right now. Try again.');
+    }
   };
 
   const statusBadgeStyles: Record<AssignmentStatus, string> = {
@@ -4659,6 +4888,10 @@ const ParentDashboard: React.FC = () => {
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <ShieldCheck className="h-4 w-4 text-brand-teal" />
                   <span>Guardian protected</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 border border-slate-200 text-slate-700">
+                    <Users className="h-3.5 w-3.5" />
+                    {seatLimit !== null ? `${seatsUsed}/${seatLimit} seats` : `${seatsUsed} linked`}
+                  </span>
                   <PlanTag label="Seats" locked={seatLimitReached} />
                 </div>
               </div>
@@ -4666,11 +4899,34 @@ const ParentDashboard: React.FC = () => {
                 Enter the family link code your child sees on their screen. Linking confirms you are the parent/guardian
                 and allows you to see progress. Under-13 learners should only be linked by a parent/guardian.
               </p>
-              <p className="text-[11px] text-slate-600 mb-2">
-                {seatLimit !== null
-                  ? `You are using ${seatsUsed}/${seatLimit} seats${seatLimitReached ? '. Free up a seat or upgrade to add another learner.' : ''}`
-                  : 'Seats follow your current plan.'}
-              </p>
+              <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-700 mb-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2 py-1 border border-slate-200">
+                  {seatLimit !== null
+                    ? `Using ${seatsUsed}/${seatLimit} seats`
+                    : 'Seats follow your current plan.'}
+                </span>
+                {seatLimitReached && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-1 border border-amber-200 text-amber-800">
+                    Seat cap reached
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('linked-learners')}
+                  className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 border border-slate-200 text-slate-700 hover:border-brand-blue hover:text-brand-blue"
+                >
+                  Free up a seat
+                </button>
+                {seatLimitReached && (
+                  <button
+                    type="button"
+                    onClick={() => handleUpgrade(nextPlan?.slug ?? upgradeFallbackSlug)}
+                    className="inline-flex items-center gap-1 rounded-full bg-brand-blue px-2.5 py-1 text-white border border-brand-blue hover:bg-brand-blue/90 text-[11px]"
+                  >
+                    Upgrade to add seat
+                  </button>
+                )}
+              </div>
               {seatLimitReached && (
                 <LockedFeature
                   title="Learner limit reached"
@@ -4710,6 +4966,11 @@ const ParentDashboard: React.FC = () => {
                   )}
                 </button>
               </form>
+              {seatLimitReached && (
+                <p className="mt-2 text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                  Seat full: free one up below or upgrade to keep adding learners.
+                </p>
+              )}
               <p className="mt-2 text-[11px] text-slate-600">
                 By linking, I confirm I am the parent/guardian and agree to the ElevatED privacy policy for storing
                 progress data to personalize learning.
@@ -4724,7 +4985,7 @@ const ParentDashboard: React.FC = () => {
                   {guardianError}
                 </p>
               )}
-              <div className="mt-4">
+              <div className="mt-4" id="linked-learners">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-sm font-semibold text-gray-900">Linked learners</h4>
                   <button
@@ -5390,6 +5651,76 @@ const ParentDashboard: React.FC = () => {
                       </ul>
                     </div>
                   </div>
+                  <div className="mt-4 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+                    <div className="rounded-xl border border-brand-light-violet/60 bg-white/70 p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm font-semibold text-slate-900">In-app digest preview</p>
+                        <span className="text-[11px] text-slate-600">Lives in the dashboard</span>
+                      </div>
+                      <ul className="space-y-2 text-sm text-slate-700">
+                        {digestPreviewLines.map((line, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <span className="mt-0.5 text-brand-violet">•</span>
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="rounded-xl border border-brand-blue/40 bg-white/80 p-4 flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-semibold text-slate-900">Email delivery</p>
+                        <PlanTag label="Digest" locked={!entitlements.weeklyDigest} />
+                      </div>
+                      <div className="space-y-2 text-sm text-slate-700">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={digestSendToGuardian}
+                            onChange={() => handleDigestToggle('guardian')}
+                            disabled={!entitlements.weeklyDigest || digestPreferencesMutation.isLoading}
+                            className="h-4 w-4 text-brand-blue rounded border-slate-300 focus:ring-brand-blue"
+                          />
+                          <span>Send to my inbox each week</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={digestSendToLearner}
+                            onChange={() => handleDigestToggle('learner')}
+                            disabled={!entitlements.weeklyDigest || digestPreferencesMutation.isLoading}
+                            className="h-4 w-4 text-brand-teal rounded border-slate-300 focus:ring-brand-teal"
+                          />
+                          <span>Send to learner</span>
+                        </label>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCopyDigestSummary}
+                        disabled={!entitlements.weeklyDigest}
+                        className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 disabled:opacity-60"
+                      >
+                        Copy email summary
+                      </button>
+                      {digestSaveMessage && (
+                        <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                          {digestSaveMessage}
+                        </p>
+                      )}
+                      {digestSaveError && (
+                        <p className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                          {digestSaveError}
+                        </p>
+                      )}
+                      {digestCopyMessage && (
+                        <p className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                          {digestCopyMessage}
+                        </p>
+                      )}
+                      <p className="text-[11px] text-slate-600">
+                        Includes time spent, lessons done, streak, wins, focus areas, and recommended next steps.
+                      </p>
+                    </div>
+                  </div>
                 </>
               ) : (
                 <LockedFeature
@@ -5467,50 +5798,92 @@ const ParentDashboard: React.FC = () => {
                   {currentChild?.name ?? 'Learner'}
                 </span>
               </div>
+              <p className="text-sm text-gray-600 mb-2">
+                At-home recommendations grouped by focus area. Share in one click or copy a link for quick texting.
+              </p>
+              {homeShareMessage && (
+                <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 mb-2">
+                  {homeShareMessage}
+                </p>
+              )}
+              {homeShareError && (
+                <p className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2 mb-2">
+                  {homeShareError}
+                </p>
+              )}
               {showSkeleton ? (
                 <div className="space-y-2">
                   <SkeletonCard className="h-20" />
                   <SkeletonCard className="h-20" />
                 </div>
               ) : homeExtensions.length > 0 ? (
-                <div className="space-y-3">
-                  {homeExtensions.slice(0, 3).map((activity) => (
-                    <div
-                      key={activity.id}
-                      className="p-4 rounded-xl border border-slate-200 bg-slate-50"
-                    >
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span className="font-semibold text-brand-blue">
-                          {describeActivityType(activity.activityType)}
+                <div className="space-y-4">
+                  {homeExtensionGroups.map((group) => (
+                    <div key={group.label} className="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-slate-500">Focus area</p>
+                          <p className="text-sm font-semibold text-slate-900">{group.label}</p>
+                          <p className="text-xs text-slate-600">Share as an assignment or quick at-home activity.</p>
+                        </div>
+                        <span className="text-[11px] px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+                          At-home recs
                         </span>
-                        {activity.estimatedMinutes ? (
-                          <span>~{activity.estimatedMinutes} min</span>
-                        ) : null}
                       </div>
-                      <p className="text-sm font-semibold text-gray-900 mt-1">{activity.title}</p>
-                      {activity.description && (
-                        <p className="text-xs text-gray-600 mt-1 line-clamp-2">{activity.description}</p>
-                      )}
-                      <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
-                        <span className="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">
-                          Home extension
-                        </span>
-                        {activity.standards && activity.standards[0] && (
-                          <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
-                            {activity.standards[0]}
-                          </span>
-                        )}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {group.items.map((activity) => (
+                          <div
+                            key={activity.id}
+                            className="rounded-lg border border-slate-200 bg-white p-3 space-y-2"
+                          >
+                            <div className="flex items-center justify-between text-[11px] text-gray-500">
+                              <span className="font-semibold text-brand-blue">
+                                {describeActivityType(activity.activityType)}
+                              </span>
+                              {activity.estimatedMinutes ? (
+                                <span>~{activity.estimatedMinutes} min</span>
+                              ) : null}
+                            </div>
+                            <p className="text-sm font-semibold text-gray-900">{activity.title}</p>
+                            {activity.description && (
+                              <p className="text-xs text-gray-600 line-clamp-2">{activity.description}</p>
+                            )}
+                            <div className="flex flex-wrap gap-2 text-[11px]">
+                              <span className="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">
+                                Home extension
+                              </span>
+                              {activity.standards && activity.standards[0] && (
+                                <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                                  {activity.standards[0]}
+                                </span>
+                              )}
+                              {activity.tags?.[0] && (
+                                <span className="px-2 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold">
+                                  {activity.tags[0]}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                onClick={() => handleShareHomeExtension(activity, group.label)}
+                                className="inline-flex items-center justify-center rounded-lg bg-brand-blue px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-blue/90"
+                              >
+                                Assign / share to learner
+                              </button>
+                              {activity.url && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopyHomeExtensionLink(activity)}
+                                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:border-brand-blue hover:text-brand-blue"
+                                >
+                                  Copy quick link
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      {activity.url && (
-                        <a
-                          href={activity.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center text-xs font-semibold text-brand-blue hover:underline mt-2"
-                        >
-                          Share activity ↗
-                        </a>
-                      )}
                     </div>
                   ))}
                 </div>
