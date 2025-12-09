@@ -855,6 +855,7 @@ const AccountSettingsPage: React.FC = () => {
                   {(
                     [
                       ['weeklyReports', 'Weekly progress email', 'One summary covering all linked learners.'],
+                      ['weeklyReportsLearner', 'Send weekly digest to learner', 'Copy of the summary to your learner.'],
                       ['missedSessions', 'Missed session reminders', 'If a learner skips planned study time.'],
                       ['lowScores', 'Low score alerts', 'When scores dip so you can coach early.'],
                       ['majorProgress', 'Milestones', 'Level-ups, streaks, and standout achievements.'],

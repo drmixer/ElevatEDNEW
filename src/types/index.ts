@@ -223,6 +223,7 @@ export interface NotificationPreferences {
   majorProgress: boolean;
   assignments?: boolean;
   streaks?: boolean;
+  weeklyReportsLearner?: boolean;
 }
 
 export type NotificationType =
