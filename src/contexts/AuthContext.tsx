@@ -57,15 +57,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 
   const safeSetUser = useCallback((next: User | null) => {
-    if (isMountedRef.current) {
-      setUser(next);
-    }
+    setUser(next);
   }, []);
 
   const safeSetLoading = useCallback((next: boolean) => {
-    if (isMountedRef.current) {
-      setLoading(next);
-    }
+    setLoading(next);
   }, []);
 
   const loadProfile = useCallback(async (userId: string) => {
@@ -101,9 +97,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const initialise = async () => {
+      console.log('[Auth] Initialising...');
       safeSetLoading(true);
       try {
+        console.log('[Auth] Getting session...');
         const sessionResult = await withTimeout(supabase.auth.getSession(), 2500);
+        console.log('[Auth] Session result:', sessionResult);
 
         if (sessionResult.timedOut) {
           console.warn('[Auth] Session lookup timed out; continuing without cached session');
@@ -112,7 +111,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return;
         }
 
-        const { session, error } = sessionResult.value.data;
+        const { session, error } = sessionResult.value.data || { session: null, error: null };
 
         if (error) {
           console.error('[Auth] Failed to get session', error);
@@ -122,6 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (session?.user) {
+          console.log('[Auth] Found user, loading profile...');
           const profileResult = await withTimeout(loadProfile(session.user.id), 4000);
           if (profileResult.timedOut) {
             console.warn('[Auth] Profile load timed out; continuing as signed out');
@@ -129,6 +129,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             scheduleSilentRefresh();
           }
         } else {
+          console.log('[Auth] No user found');
           safeSetUser(null);
         }
       } catch (unhandledError) {
@@ -136,10 +137,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         safeSetUser(null);
         scheduleSilentRefresh();
       } finally {
+        console.log('[Auth] Setting loading to false');
         safeSetLoading(false);
       }
     };
 
+    // initialise(); // Removed duplicate call, let the auth state change handler handle it or ensure single execution
     initialise();
 
     const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {

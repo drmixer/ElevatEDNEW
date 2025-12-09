@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 interface NavigationProps {
   onGetStarted: () => void;
@@ -8,76 +8,19 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCondensed, setIsCondensed] = useState(false);
-  const rawProgress = useMotionValue(0);
-  const smoothProgress = useSpring(rawProgress, {
-    stiffness: 220,
-    damping: 32,
-    mass: 0.9,
-  });
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  const logoHeight = useTransform(scrollY, [0, 50], ["6rem", "3rem"]); // h-24 to h-12
+  const navPadding = useTransform(scrollY, [0, 50], ["1.5rem", "1rem"]); // py-6 to py-4
 
   useEffect(() => {
-    let frame = 0;
-
-    const updateProgress = () => {
-      frame = 0;
-      const scrollY = window.scrollY;
-      const targetProgress = Math.min(scrollY / 220, 1);
-      rawProgress.set(targetProgress);
-      setIsCondensed(targetProgress > 0.15);
+    const updateScroll = () => {
+      setIsScrolled(window.scrollY > 20);
     };
-
-    const handleScroll = () => {
-      if (frame === 0) {
-        frame = window.requestAnimationFrame(updateProgress);
-      }
-    };
-
-    updateProgress();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-      }
-    };
-  }, [rawProgress]);
-
-  const containerPaddingTop = useTransform(smoothProgress, [0, 1], [18, 12]);
-  const containerPaddingBottom = useTransform(smoothProgress, [0, 1], [18, 12]);
-  const containerPaddingLeft = useTransform(smoothProgress, [0, 1], [20, 16]);
-  const containerPaddingRight = useTransform(smoothProgress, [0, 1], [20, 16]);
-  const containerGap = useTransform(smoothProgress, [0, 1], [20, 14]);
-  const containerBorderColor = useTransform(
-    smoothProgress,
-    [0, 1],
-    ['rgba(255,255,255,0.5)', 'rgba(255,255,255,0.7)']
-  );
-  const containerShadow = useTransform(
-    smoothProgress,
-    [0, 1],
-    ['0px 22px 48px rgba(137,23,237,0.18)', '0px 10px 24px rgba(10,30,60,0.12)']
-  );
-
-  const headingPaddingLeft = useTransform(smoothProgress, [0, 1], [96, 54]);
-  const headingPaddingTop = useTransform(smoothProgress, [0, 1], [20, 12]);
-  const headingPaddingBottom = useTransform(smoothProgress, [0, 1], [16, 12]);
-  const logoScale = useTransform(smoothProgress, [0, 1], [1, 0.78]);
-  const logoLeft = useTransform(smoothProgress, [0, 1], [-82, -62]);
-  const logoTop = useTransform(smoothProgress, [0, 1], ['50%', '50%']);
-  const logoOuterRadius = useTransform(smoothProgress, [0, 1], [64, 44]);
-  const logoInnerSize = useTransform(smoothProgress, [0, 1], [136, 104]);
-  const logoInnerRadius = useTransform(smoothProgress, [0, 1], [36, 28]);
-  const logoHaloRadius = useTransform(smoothProgress, [0, 1], [70, 48]);
-  const logoShadow = useTransform(
-    smoothProgress,
-    [0, 1],
-    ['0px 32px 54px rgba(137,23,237,0.24)', '0px 18px 32px rgba(137,23,237,0.18)']
-  );
-  const logoBorderRadius = useTransform(smoothProgress, [0, 1], [36, 26]);
-  const logoPadding = useTransform(smoothProgress, [0, 1], [4, 2]);
-  const logoImageScale = useTransform(smoothProgress, [0, 1], [1.2, 1.32]);
+    window.addEventListener('scroll', updateScroll);
+    return () => window.removeEventListener('scroll', updateScroll);
+  }, []);
 
   const navItems = [
     { name: 'Features', href: '#features' },
@@ -85,12 +28,6 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
     { name: 'Pricing', href: '#pricing' },
     { name: 'FAQ', href: '#faq' },
   ];
-  const legalLinks = [
-    { name: 'Privacy', href: '/legal/privacy' },
-    { name: 'Terms', href: '/legal/terms' },
-  ];
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -101,193 +38,108 @@ const Navigation: React.FC<NavigationProps> = ({ onGetStarted }) => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 px-4 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: -24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className={`mx-auto max-w-7xl ${isCondensed ? 'pt-4' : 'pt-8'}`}
-      >
-        <div className="relative">
-          <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-brand-secondary/25 via-brand-primary/20 to-brand-accent/25 blur-lg" />
-          <motion.div
-            className="flex items-center justify-between rounded-[22px] border bg-white/85 backdrop-blur-lg overflow-visible"
-            style={{
-              paddingTop: containerPaddingTop,
-              paddingBottom: containerPaddingBottom,
-              paddingLeft: containerPaddingLeft,
-              paddingRight: containerPaddingRight,
-              gap: containerGap,
-              borderColor: containerBorderColor,
-              boxShadow: containerShadow,
-            }}
+    <motion.nav
+      style={{ paddingTop: navPadding, paddingBottom: navPadding }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
+        }`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <div
+            className="flex-shrink-0 flex items-center cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <motion.a
-              href="#"
-              onClick={(event) => {
-                event.preventDefault();
-                scrollToTop();
-              }}
-              className="relative flex items-center gap-4 text-left pr-8 focus-ring rounded-xl"
-              whileHover={{ y: -2 }}
-              style={{
-                paddingLeft: headingPaddingLeft,
-                paddingTop: headingPaddingTop,
-                paddingBottom: headingPaddingBottom,
-              }}
-            >
-              <motion.div
-                className="pointer-events-none absolute z-20 flex items-center justify-center bg-white"
-                style={{
-                  width: 160,
-                  height: 160,
-                  left: logoLeft,
-                  top: logoTop,
-                  translateY: '-50%',
-                  scale: logoScale,
-                  borderRadius: logoOuterRadius,
-                  boxShadow: logoShadow,
-                }}
-              >
-                <motion.span
-                  className="absolute inset-0 bg-gradient-to-br from-brand-secondary/50 via-white/35 to-brand-accent/45 blur-xl opacity-80"
-                  style={{ borderRadius: logoHaloRadius }}
-                />
-                <motion.div
-                  className="relative z-10 flex items-center justify-center overflow-hidden bg-white shadow-sm"
-                  style={{
-                    width: logoInnerSize,
-                    height: logoInnerSize,
-                    borderRadius: logoInnerRadius,
-                    padding: logoPadding,
-                  }}
-                >
-                  <motion.img
-                    src="/elevated-logo.png"
-                    alt="ElevatED"
-                    className="h-full w-full object-contain"
-                    style={{ scale: logoImageScale, transformOrigin: '50% 50%' }}
-                  />
-                </motion.div>
-                <motion.div className="absolute inset-0 border border-brand-primary/25" style={{ borderRadius: logoBorderRadius }} />
-              </motion.div>
-              <div className="leading-tight">
-                <div className={`font-semibold text-brand-dark transition-all duration-500 ${isCondensed ? 'text-base' : 'text-xl'}`}>
-                  Home learning, family-first.
-                </div>
-                <p className={`text-brand-dark/60 transition-all duration-500 ${isCondensed ? 'text-xs' : 'text-sm'}`}>
-                  Adaptive AI tutoring with insights parents can trust.
-                </p>
-              </div>
-            </motion.a>
+            <motion.img
+              src="/elevated-logo.png"
+              alt="ElevatED"
+              style={{ height: logoHeight }}
+              className="w-auto object-contain transition-all duration-300 drop-shadow-sm hover:drop-shadow-md"
+            />
+          </div>
 
-            <div className="hidden md:flex items-center gap-6">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="group relative text-sm font-medium text-brand-dark/85 transition-colors duration-300 hover:text-brand-dark focus-ring rounded-lg px-2 py-1"
-                  initial={{ opacity: 0, y: -12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.08 + 0.1 }}
-                >
-                  <span>{item.name}</span>
-                  <span className="absolute -bottom-2 left-0 block h-0.5 w-0 rounded-full bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent transition-all duration-300 group-hover:w-full" />
-                </motion.button>
-              ))}
-              {legalLinks.map((link) => (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  className="text-sm font-medium text-brand-dark/80 hover:text-brand-blue transition-colors focus-ring rounded-lg px-2 py-1"
-                  initial={{ opacity: 0, y: -12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-            </div>
-
-            <motion.div
-              className="hidden shrink-0 md:flex items-center gap-3"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.25 }}
-            >
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
+            {navItems.map((item) => (
               <button
-                onClick={onGetStarted}
-                className="group relative overflow-hidden rounded-2xl px-6 py-3 text-sm font-semibold text-white focus-ring"
+                key={item.name}
+                onClick={() => scrollToSection(item.href)}
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-brand-primary hover:bg-brand-soft/50 rounded-lg transition-all"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent transition-transform duration-500 group-hover:scale-110" />
-                <span className="absolute inset-0 -z-10 blur-xl bg-gradient-to-r from-brand-secondary/50 via-brand-primary/45 to-brand-accent/50 opacity-80" />
-                <span className="relative flex items-center gap-2">
-                  Get Started Free
-                  <motion.span
-                    initial={{ x: 0 }}
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-white/80"
-                  />
-                </span>
+                {item.name}
               </button>
-            </motion.div>
+            ))}
+          </div>
 
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/70 text-brand-dark transition-all hover:border-brand-primary/40 hover:text-brand-primary focus-ring"
-                aria-expanded={isMenuOpen}
-                aria-controls="mobile-nav"
-                aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </motion.div>
+          {/* CTA Button */}
+          <div className="hidden md:flex items-center space-x-4">
+            <button
+              onClick={() => window.location.href = '/login'}
+              className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors px-4 py-2"
+            >
+              Log in
+            </button>
+            <button
+              onClick={onGetStarted}
+              className="px-6 py-2.5 rounded-full bg-brand-primary text-white text-sm font-semibold shadow-lg shadow-brand-primary/25 hover:bg-brand-secondary hover:shadow-brand-primary/40 transition-all transform hover:-translate-y-0.5 active:scale-95"
+            >
+              Get Started
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden"
+            className="md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden"
           >
-            <div className="mx-auto mt-4 max-w-7xl rounded-3xl border border-white/50 bg-white/90 px-6 py-6 shadow-xl backdrop-blur-xl" id="mobile-nav">
+            <div className="px-4 pt-2 pb-6 space-y-2">
               {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="block w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold text-brand-dark/85 transition-colors hover:bg-brand-soft/80 hover:text-brand-dark focus-ring"
+                  className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-primary rounded-lg transition-colors"
                 >
                   {item.name}
                 </button>
               ))}
-              <button
-                onClick={onGetStarted}
-                className="mt-4 w-full rounded-2xl bg-gradient-to-r from-brand-secondary via-brand-primary to-brand-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-primary/40 transition-transform hover:-translate-y-0.5 hover:shadow-brand-primary/60 focus-ring"
-              >
-                Get Started Free
-              </button>
-              <div className="mt-4 flex flex-wrap gap-4">
-                {legalLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="text-sm font-semibold text-brand-blue hover:text-brand-teal focus-ring rounded-lg px-1 py-0.5"
-                  >
-                    {link.name}
-                  </a>
-                ))}
+              <div className="pt-4 mt-4 border-t border-gray-100 px-4">
+                <button
+                  onClick={() => window.location.href = '/login'}
+                  className="block w-full text-center py-3 text-base font-medium text-gray-600 hover:text-brand-primary mb-2"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={onGetStarted}
+                  className="w-full py-3 rounded-xl bg-brand-primary text-white font-semibold shadow-lg shadow-brand-primary/25 active:scale-95 transition-all"
+                >
+                  Get Started
+                </button>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 };
 

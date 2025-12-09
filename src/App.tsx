@@ -65,6 +65,8 @@ const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
 
+  console.log(`[AppContent] Rendered. Loading: ${loading}, User: ${user ? user.id : 'null'}`);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50 flex items-center justify-center">
