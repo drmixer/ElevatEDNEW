@@ -486,6 +486,12 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
           highlights: castStringArray(weeklyReportRow.highlights),
           recommendations: castStringArray(weeklyReportRow.recommendations),
           aiGenerated: weeklyReportRow.ai_generated ?? undefined,
+          changes: weeklyReportRow.changes
+            ? {
+                improvements: castStringArray((weeklyReportRow.changes as { improvements?: unknown })?.improvements),
+                risks: castStringArray((weeklyReportRow.changes as { risks?: unknown })?.risks),
+              }
+            : undefined,
         }
       : null;
   }

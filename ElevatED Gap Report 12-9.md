@@ -37,6 +37,32 @@ Actionable plan to close gaps between the current app and the stated vision (K�
   - Celebration moments trigger in student UI for streaks, accuracy gains, and mastery unlocks.
   - Parent “check-in” snippets can be sent in-app (or easily copied) with confirmation of receipt by the student.
 
+### Phase 5 implementation plan
+- **Gaps:** Nudges are limited to generic banners; celebrations only fire for last badge or 7/30-day streaks; parent “Send check-in” is copy-only with no delivery or seen state.
+- **Workstreams:** (1) After-task nudges, (2) Celebration expansions, (3) Parent check-ins with delivery + receipt.
+
+#### 1) After-task nudges (recap, quick check, try again)
+- **Trigger sources:** Student event responses (`sendStudentEvent`) + `AdaptiveFlash` in `useStudentData.ts` and recent `student_progress` rows in `dashboardService.ts`.
+- **Logic:** Try again if lesson/checkpoint accuracy <70% or `adaptive.misconceptions` exists; Quick check if 70–85% accuracy or lesson stuck in progress >1 day; 1-minute recap if ≥85% accuracy or `nextReason=stretch`. Use `target_standard_codes`/`primaryStandard` to label the concept and link to the same lesson or a 3-question check-in.
+- **UX:** Add a compact `NudgeCard` near the Today lane with CTA chips (`Start recap (1 min)`, `Do quick check (3 Q)`, `Try again`) plus a dismiss link. Show a one-line reason like “Because fractions accuracy was 62%” using `humanizeStandard`.
+- **Instrumentation:** Emit `student_nudge_shown/completed/dismissed` with {type, subject, standard, source_event, accuracy_band}. Cache taken nudges per event (`nudge:{studentId}:{eventId}`) to avoid repeats.
+
+#### 2) Celebration moments (streaks, accuracy gains, mastery)
+- **New triggers:** Streak milestones at 3/7/14/30 days (today only 7/30), accuracy gain when `subjectTrends.accuracyDelta` or avg accuracy improves ≥5–10pp week-over-week, mastery unlock when `modulesMastered.items` grows or `subjectMastery.mastery` crosses 80/90%.
+- **Backend updates:** Extend `buildCelebrationMoments` in `dashboardService.ts` to emit the above with unique ids and `notifyParent=true` for streak ≥7, mastery unlocks, and >10pp accuracy gains. Keep `occurredAt` stable so the seen set works.
+- **UI polish:** Reuse `celebrationQueue`; cap to two per load; map CTAs (`Start next lesson` for streak/accuracy, `View mastered module` when module slug exists); keep 5th-grade copy and `celebration_*` events intact.
+
+#### 3) Parent check-ins with delivery + receipt
+- **Data/API:** Add `parent_check_ins` table (id, parent_id, student_id, message, topic, status enum sent|delivered|seen, delivered_at, seen_at, created_at, source). Endpoints: `POST /api/v1/parent/check-ins`, `GET /api/v1/student/check-ins`, `POST /api/v1/student/check-ins/:id/ack`.
+- **Parent UI:** Update `handleQuickCheckIn` in `ParentDashboard.tsx` to call the API (fallback to copy if it fails), show status chips Sent/Delivered/Seen with timestamps, and keep “Copy snippet” for out-of-band sharing.
+- **Student UI:** Add a “From your grown-up” card on StudentDashboard listing the latest check-in, with CTAs `I saw this` (acks) and `Reply in tutor` (prefills LearningAssistant prompt). Announce arrivals via `aria-live` and log `parent_checkin_seen`.
+- **Notifications:** On ack, show parent toast and optional email in the weekly report hook; store `seen_at` so parent dashboard stats can count confirmation rate.
+
+#### Definition of done (Phase 5)
+- After completing a task, students see one contextual nudge (recap, quick check, or try again) tied to their last result with a working CTA.
+- Celebration queue covers streaks, accuracy gains, and mastery unlocks with at least one parent-notifiable moment when applicable.
+- Parent check-in snippets are persisted, appear in the student UI, and flip to Seen once acknowledged (with copy fallback preserved).
+
 ## 6) Student Simplicity & Mobile Focus
 - **Goal:** Keep the student experience focused and low-friction, especially on mobile.
 - **Completion Criteria:**

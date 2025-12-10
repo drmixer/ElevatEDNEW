@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, ShieldCheck, Flag } from 'lucide-react';
+import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, ShieldCheck, Flag, Wand2, Layers, Repeat } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student, Subject } from '../../types';
@@ -32,6 +32,21 @@ const humanizeStandard = (code?: string | null): string | null => {
   if (!cleaned.length) return null;
   return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 };
+
+const alternateExplanationTemplate = (subject?: Subject | string | null, focus?: string | null) => {
+  const focusLabel = focus ?? 'this concept';
+  const normalized = subject ? subject.toString().toLowerCase() : '';
+  if (normalized.includes('math')) {
+    return `Offer an alternate explanation for ${focusLabel} using a concrete math example (e.g., a number line or simple fraction like 1/4 vs 1/2). Keep it under 4 sentences, include one quick self-check the learner can try, and avoid giving a full solution.`;
+  }
+  if (normalized.includes('english') || normalized.includes('ela') || normalized.includes('reading')) {
+    return `Explain ${focusLabel} another way using a short text or sentence frame. Show one model sentence, underline the key move (like citing evidence), and invite the learner to try their own in one sentence. Keep it concise.`;
+  }
+  return `Explain ${focusLabel} with a different angle or analogy in under 4 sentences. Include one quick check so the learner can test their understanding.`;
+};
+
+type HintLevel = 'hint' | 'break_down' | 'another_way';
+type MessageMetadata = { source?: 'card' | 'free' | 'scaffold'; cardId?: string; hintLevel?: HintLevel };
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
@@ -187,6 +202,49 @@ const LearningAssistant: React.FC = () => {
     }
     return [...base, ...contextual].slice(0, 6);
   }, [contextHint, lessonContext]);
+
+  const scaffoldTopic = useMemo(
+    () =>
+      lessonContext?.lessonTitle ??
+      contextHint ??
+      (adaptiveMisconceptions.length ? humanizeStandard(adaptiveMisconceptions[0]) : null) ??
+      'this problem',
+    [adaptiveMisconceptions, contextHint, lessonContext?.lessonTitle],
+  );
+
+  const scaffoldActions: Array<{
+    id: HintLevel;
+    label: string;
+    helper: string;
+    prompt: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }> =
+    useMemo(
+      () => [
+        {
+          id: 'hint',
+          label: 'Show hint',
+          helper: '1-2 sentence nudge',
+          prompt: `Give me one short hint for ${scaffoldTopic}.`,
+          icon: Wand2,
+        },
+        {
+          id: 'break_down',
+          label: 'Break it down',
+          helper: 'Step-by-step',
+          prompt: `Break ${scaffoldTopic} into 3-4 clear steps.`,
+          icon: Layers,
+        },
+        {
+          id: 'another_way',
+          label: 'Explain another way',
+          helper: 'New angle',
+          prompt: `Explain ${scaffoldTopic} another way with a quick example.`,
+          icon: Repeat,
+        },
+      ],
+      [scaffoldTopic],
+    );
 
   const quickActions = [
     { icon: Lightbulb, text: 'Get a study tip', action: 'study-tip' },
@@ -457,10 +515,7 @@ const LearningAssistant: React.FC = () => {
     }
   };
 
-  const handleSendMessage = async (
-    customMessage?: string,
-    metadata?: { source?: 'card' | 'free'; cardId?: string },
-  ) => {
+  const handleSendMessage = async (customMessage?: string, metadata?: MessageMetadata) => {
     const messageToSend = (customMessage ?? inputMessage).trim();
     if (!messageToSend.trim()) return;
 
@@ -480,6 +535,9 @@ const LearningAssistant: React.FC = () => {
     }
     if (lessonContext?.lessonId && /done|finished|complete/.test(lower)) {
       maybePromptReflection('end_of_lesson');
+    }
+    if (metadata?.hintLevel && responseMode !== 'hint') {
+      setResponseMode('hint');
     }
 
     const guardrailReason = detectGuardrail(messageToSend);
@@ -509,7 +567,20 @@ const LearningAssistant: React.FC = () => {
       responseMode === 'hint'
         ? 'Provide a scaffolded hint without giving away the full answer unless I ask for it.'
         : 'Share the full worked solution with reasoning after a short hint reminder.';
-    const decoratedMessage = `${messageToSend}\n\n${modeInstruction}`;
+    const focusLabelForTag =
+      lessonContext?.lessonTitle ??
+      contextHint ??
+      (lessonContext?.subject ? humanizeStandard(lessonContext.subject.toString()) : null) ??
+      (adaptiveMisconceptions.length ? humanizeStandard(adaptiveMisconceptions[0]) : null);
+    const hintLevelInstruction =
+      metadata?.hintLevel === 'break_down'
+        ? 'Break the solution into 3-4 clear, numbered steps with a short encouragement to try after each step.'
+        : metadata?.hintLevel === 'another_way'
+          ? alternateExplanationTemplate(lessonContext?.subject ?? lessonContext?.moduleTitle ?? null, focusLabelForTag)
+          : metadata?.hintLevel === 'hint'
+            ? 'Give one brief hint (1-2 sentences) without revealing the full answer.'
+            : '';
+    const decoratedMessage = `${messageToSend}\n\n${modeInstruction}${hintLevelInstruction ? ` ${hintLevelInstruction}` : ''}`;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -526,6 +597,14 @@ const LearningAssistant: React.FC = () => {
     if (metadata?.source === 'card') {
       setGuidedCardUsed(true);
     }
+    if (metadata?.hintLevel) {
+      trackEvent('learning_assistant_scaffold_used', {
+        studentId: student.id,
+        hint_level: metadata.hintLevel,
+        subject: lessonContext?.subject ?? null,
+        concept: focusLabelForTag ?? lessonContext?.lessonTitle ?? null,
+      });
+    }
     trackEvent(metadata?.source === 'card' ? 'chat_prompt_card_sent' : 'learning_assistant_message_sent', {
       studentId: student.id,
       length: messageToSend.length,
@@ -535,6 +614,7 @@ const LearningAssistant: React.FC = () => {
       mode: chatMode,
       subject: lessonContext?.subject ?? null,
       lesson_id: lessonContext?.lessonId ?? null,
+      hint_level: metadata?.hintLevel ?? null,
     });
     if (metadata?.source !== 'card') {
       trackEvent('chat_free_text_used', {
@@ -589,6 +669,9 @@ const LearningAssistant: React.FC = () => {
           : chatMode === 'guided_preferred'
             ? 'You are in guided-preferred mode. Start with a short answer and one clarifying question. Keep answers concise and redirect if off-topic.'
             : 'Standard chat mode. Keep answers school-safe and concise.';
+      const conceptTag = focusLabelForTag ?? lessonContext?.lessonTitle ?? 'concept';
+      const subjectTag = lessonContext?.subject ?? 'General';
+      const tagInstruction = `Start each answer with a short tag like "[${subjectTag} • ${conceptTag}]" to remind the learner of the subject and focus, then give the help. Keep tags short.`;
       const baseGuardrails = lessonContext
         ? `You are an in-lesson tutor. Stay focused on "${lessonContext.lessonTitle ?? 'this lesson'}" in ${
             lessonContext.subject ?? 'this subject'
@@ -600,13 +683,15 @@ const LearningAssistant: React.FC = () => {
       const lessonOnlyGuardrail = lessonOnlyMode
         ? 'The learner is restricted to lesson-only tutoring. If a request feels unrelated to the active lesson, decline and remind them to return to their current module.'
         : '';
-      const guardrails = `${baseGuardrails} ${personaGuardrails} ${lessonOnlyGuardrail} ${intentCoaching} ${adaptivePromptHint}`.trim();
+      const guardrails = `${baseGuardrails} ${personaGuardrails} ${lessonOnlyGuardrail} ${intentCoaching} ${adaptivePromptHint} ${tagInstruction}`.trim();
       const knowledgeContext = [
         lessonContext?.moduleTitle ? `Module: ${lessonContext.moduleTitle}` : null,
         lessonContext?.lessonTitle ? `Lesson: ${lessonContext.lessonTitle}` : null,
         lessonContext?.subject ? `Subject: ${lessonContext.subject}` : null,
         contextHint ? `Context: ${contextHint}` : null,
         focusLabel ? `Current focus: ${focusLabel}` : null,
+        conceptTag ? `Focus concept: ${conceptTag}` : null,
+        metadata?.hintLevel ? `Hint level: ${metadata.hintLevel}` : null,
         planIntent !== 'balanced' ? `Weekly intent: ${planIntent}` : null,
         recentReflections.length
           ? `Recent reflections: ${recentReflections
@@ -660,6 +745,9 @@ const LearningAssistant: React.FC = () => {
         source: 'openrouter',
         plan: response.plan ?? undefined,
         remaining: response.remaining,
+        hint_level: metadata?.hintLevel ?? null,
+        subject: lessonContext?.subject ?? null,
+        concept: conceptTag,
       });
     } catch (err) {
       console.error('[LearningAssistant] AI response failed', err);
@@ -701,6 +789,9 @@ const LearningAssistant: React.FC = () => {
       trackEvent('learning_assistant_message_received', {
         studentId: student.id,
         source: 'rules-engine',
+        hint_level: metadata?.hintLevel ?? null,
+        subject: lessonContext?.subject ?? null,
+        concept: conceptTag,
       });
     } finally {
       setIsTyping(false);
@@ -1092,6 +1183,24 @@ const LearningAssistant: React.FC = () => {
                 >
                   Show full solution
                 </button>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                <span className="text-slate-500">Need help?</span>
+                {scaffoldActions.map((action) => (
+                  <button
+                    key={action.id}
+                    type="button"
+                    onClick={() => {
+                      setResponseMode('hint');
+                      void handleSendMessage(action.prompt, { source: 'scaffold', hintLevel: action.id });
+                    }}
+                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 font-semibold text-slate-700 hover:border-brand-blue/60 hover:text-brand-blue focus-ring"
+                  >
+                    <action.icon className="h-3.5 w-3.5" />
+                    {action.label}
+                    <span className="text-[10px] text-slate-500 ml-1">{action.helper}</span>
+                  </button>
+                ))}
               </div>
               {(chatMode !== 'guided_only' || guidedCardUsed) && (
                 <div className="flex space-x-2">

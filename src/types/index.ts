@@ -41,6 +41,20 @@ export interface Parent extends User {
   onboardingState?: ParentOnboardingState;
 }
 
+export type ParentCheckInStatus = 'sent' | 'delivered' | 'seen';
+
+export interface ParentCheckIn {
+  id: string;
+  parentId: string;
+  studentId: string;
+  message: string;
+  topic?: string | null;
+  status: ParentCheckInStatus;
+  deliveredAt?: string | null;
+  seenAt?: string | null;
+  createdAt: string;
+}
+
 export type BadgeCategory =
   | 'math'
   | 'reading'
@@ -343,6 +357,15 @@ export interface SubjectMastery {
   delta?: number;
 }
 
+export interface SubjectWeeklyTrend {
+  subject: Subject;
+  mastery?: number | null;
+  accuracyDelta?: number | null;
+  timeDelta?: number | null;
+  timeMinutes?: number | null;
+  direction: 'up' | 'down' | 'steady';
+}
+
 export interface SkillGapInsight {
   subject: Subject;
   mastery: number;
@@ -444,6 +467,7 @@ export interface ParentChildSnapshot {
     deltaXp: number;
   };
   masteryBySubject: SubjectMastery[];
+  subjectTrends?: SubjectWeeklyTrend[];
   recentActivity: ParentChildActivity[];
   goals?: ChildGoalTargets;
   goalProgress?: number;
@@ -705,6 +729,10 @@ export interface ParentWeeklyReport {
   highlights: string[];
   recommendations: string[];
   aiGenerated?: boolean;
+  changes?: {
+    improvements: string[];
+    risks: string[];
+  };
 }
 
 export interface ParentDashboardData {
