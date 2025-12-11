@@ -17,6 +17,7 @@ import {
   Sparkles,
   Star,
   Target,
+  TrendingDown,
   TrendingUp,
   Users,
   Lock,
@@ -51,6 +52,7 @@ import type {
   LearningPreferences,
   ParentOnboardingState,
   NotificationPreferences,
+  ParentCheckIn,
 } from '../../types';
 import { defaultLearningPreferences } from '../../types';
 import { fetchParentDashboardData } from '../../services/dashboardService';
@@ -80,6 +82,11 @@ import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { computeSubjectStatuses, formatSubjectStatusTooltip, onTrackBadge, onTrackLabel } from '../../lib/onTrack';
 import { recordCoachingFeedback } from '../../services/coachingService';
 import { useParentOverview } from '../../hooks/useStudentData';
+import {
+  createParentCheckIn,
+  describeCheckInStatus,
+  listParentCheckIns,
+} from '../../services/checkInService';
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -125,12 +132,32 @@ const LockedFeature: React.FC<{
   </div>
 );
 
+const weeklyPlanToneStyles: Record<'info' | 'success' | 'warn', { bg: string; border: string; icon: string }> = {
+  info: {
+    bg: 'bg-slate-50',
+    border: 'border-slate-200',
+    icon: 'text-slate-600',
+  },
+  success: {
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-200',
+    icon: 'text-emerald-700',
+  },
+  warn: {
+    bg: 'bg-amber-50',
+    border: 'border-amber-200',
+    icon: 'text-amber-700',
+  },
+};
+
 type GoalFormState = {
   weeklyLessons: string;
   practiceMinutes: string;
   masteryTargets: Record<Subject, string>;
   focusSubject: Subject | 'balanced';
   focusIntensity: 'balanced' | 'focused';
+  mixInMode: 'auto' | 'core_only' | 'cross_subject';
+  electiveEmphasis: 'off' | 'light' | 'on';
 };
 
 type ProgressStatusDescription = {
@@ -188,6 +215,25 @@ const deriveSessionLengthPreference = (
   return 'standard';
 };
 
+const formatCheckInTimeAgo = (value?: string | null) => {
+  if (!value) return 'Just now';
+  const created = new Date(value);
+  const diffMs = Date.now() - created.getTime();
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+
+const checkInBadgeTone: Record<ParentCheckIn['status'], string> = {
+  sent: 'bg-amber-50 text-amber-700 border-amber-200',
+  delivered: 'bg-blue-50 text-blue-700 border-blue-200',
+  seen: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+};
+
 const describeActivityType = (activityType?: string) => {
   if (!activityType) return 'Activity';
   const lookup: Record<string, string> = {
@@ -229,6 +275,8 @@ const ParentDashboard: React.FC = () => {
     masteryTargets: {},
     focusSubject: defaultLearningPreferences.focusSubject,
     focusIntensity: defaultLearningPreferences.focusIntensity,
+    mixInMode: defaultLearningPreferences.mixInMode ?? 'auto',
+    electiveEmphasis: defaultLearningPreferences.electiveEmphasis ?? 'light',
   });
   const [chatModeSetting, setChatModeSetting] = useState<'guided_only' | 'guided_preferred' | 'free'>(
     defaultLearningPreferences.chatMode ?? 'free',
@@ -260,7 +308,13 @@ const ParentDashboard: React.FC = () => {
   const [concernScreenshotUrl, setConcernScreenshotUrl] = useState('');
   const [concernMessage, setConcernMessage] = useState<string | null>(null);
   const [concernError, setConcernError] = useState<string | null>(null);
-  const [checkInSnippet, setCheckInSnippet] = useState<{ childId: string; message: string } | null>(null);
+  const [checkInSnippet, setCheckInSnippet] = useState<{
+    childId: string;
+    message: string;
+    status?: ParentCheckIn['status'];
+    createdAt?: string | null;
+  } | null>(null);
+  const [checkInError, setCheckInError] = useState<string | null>(null);
   const [progressShareSnippet, setProgressShareSnippet] = useState<string | null>(null);
   const [weeklyNudgeSnippet, setWeeklyNudgeSnippet] = useState<string | null>(null);
   const [digestSendToGuardian, setDigestSendToGuardian] = useState<boolean>(true);
@@ -273,6 +327,8 @@ const ParentDashboard: React.FC = () => {
   const [resolvedAlerts, setResolvedAlerts] = useState<Map<string, string>>(new Map());
   const [alertSeenAt, setAlertSeenAt] = useState<Map<string, number>>(new Map());
   const [alertResolvedAt, setAlertResolvedAt] = useState<Map<string, number>>(new Map());
+  const [alertFollowUps, setAlertFollowUps] = useState<Record<string, { assignment?: boolean; diagnostic?: boolean; resolved?: boolean }>>({});
+  const alertAssignmentContext = React.useRef<string | null>(null);
   const [diagnosticPlans, setDiagnosticPlans] = useState<Record<string, { scheduled: boolean; remind: boolean }>>({});
   const [todayLaneState, setTodayLaneState] = useState<Record<string, 'done' | 'skipped'>>({});
   const [showTour, setShowTour] = useState<boolean>(false);
@@ -327,6 +383,15 @@ const ParentDashboard: React.FC = () => {
   });
 
   const {
+    data: parentCheckIns,
+  } = useQuery({
+    queryKey: ['parent-check-ins', parent?.id],
+    queryFn: () => listParentCheckIns(),
+    enabled: Boolean(parent?.id),
+    staleTime: 60 * 1000,
+  });
+
+  const {
     data: overview,
     isFetching: overviewFetching,
     refetch: refreshOverview,
@@ -373,6 +438,18 @@ const ParentDashboard: React.FC = () => {
 
   useEffect(() => {
     if (!parent?.id) return;
+    try {
+      const saved = localStorage.getItem(`alert-followups-${parent.id}`);
+      if (saved) {
+        setAlertFollowUps(JSON.parse(saved) as Record<string, { assignment?: boolean; diagnostic?: boolean; resolved?: boolean }>);
+      }
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to restore alert follow-ups', error);
+    }
+  }, [parent?.id]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
     const serialize = (map: Map<string, number>) =>
       Array.from(map.entries()).reduce<Record<string, number>>((acc, [key, value]) => {
         acc[key] = value;
@@ -390,6 +467,15 @@ const ParentDashboard: React.FC = () => {
       console.warn('[ParentDashboard] Unable to persist alert metrics', error);
     }
   }, [alertResolvedAt, alertSeenAt, parent?.id]);
+
+  useEffect(() => {
+    if (!parent?.id) return;
+    try {
+      localStorage.setItem(`alert-followups-${parent.id}`, JSON.stringify(alertFollowUps));
+    } catch (error) {
+      console.warn('[ParentDashboard] Unable to persist alert follow-ups', error);
+    }
+  }, [alertFollowUps, parent?.id]);
 
   useEffect(() => {
     if (!location.hash) return;
@@ -520,6 +606,8 @@ const ParentDashboard: React.FC = () => {
       }, {} as Record<Subject, string>),
       focusSubject: preferences.focusSubject ?? defaultLearningPreferences.focusSubject,
       focusIntensity: preferences.focusIntensity ?? defaultLearningPreferences.focusIntensity,
+      mixInMode: preferences.mixInMode ?? defaultLearningPreferences.mixInMode ?? 'auto',
+      electiveEmphasis: preferences.electiveEmphasis ?? defaultLearningPreferences.electiveEmphasis ?? 'light',
     });
   }, [currentChild]);
 
@@ -619,7 +707,10 @@ const ParentDashboard: React.FC = () => {
     () => (currentChild?.subjectStatuses ?? []).slice(0, 3),
     [currentChild?.subjectStatuses],
   );
-  const celebrations = dashboard?.celebrations ?? [];
+  const celebrations = useMemo(
+    () => dashboard?.celebrations ?? [],
+    [dashboard?.celebrations],
+  );
   const primarySuggestion = useMemo(
     () => currentChild?.coachingSuggestions?.[0] ?? null,
     [currentChild?.coachingSuggestions],
@@ -634,7 +725,82 @@ const ParentDashboard: React.FC = () => {
     'chats/day',
   );
   const weeklyChange = currentChild?.weeklyChange ?? null;
-  const formatDelta = (value: number) => `${value >= 0 ? '+' : ''}${Math.round(value)}`;
+  const formatDelta = useCallback((value: number) => `${value >= 0 ? '+' : ''}${Math.round(value)}`, []);
+  const weeklyPlanCards = useMemo(
+    () => {
+      if (!currentChild) return [];
+      const cards: Array<{ id: string; title: string; detail: string; tone: 'info' | 'success' | 'warn' }> = [];
+      const diagnosticStatus = currentChild.diagnosticStatus ?? 'not_started';
+      const diagnosticDate =
+        diagnosticStatus === 'completed' && currentChild.diagnosticCompletedAt
+          ? new Date(currentChild.diagnosticCompletedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          : null;
+      const primaryGap =
+        childSkillGaps.find((gap) => gap.status === 'needs_attention') ??
+        (childSkillGaps.length ? childSkillGaps[0] : null);
+
+      if (diagnosticStatus === 'completed') {
+        cards.push({
+          id: 'diagnostic',
+          title: 'Diagnostic calibrated',
+          detail:
+            diagnosticDate && primaryGap
+              ? `Completed ${diagnosticDate}. Starting with ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)} because accuracy is ${Math.round(primaryGap.mastery)}%.`
+              : 'Latest diagnostic synced—plan is tuned for this week.',
+          tone: 'success',
+        });
+      } else {
+        cards.push({
+          id: 'diagnostic',
+          title: 'Diagnostic needed',
+          detail: 'Run the adaptive check so the plan locks to their level.',
+          tone: 'warn',
+        });
+      }
+
+      if (primaryGap) {
+        cards.push({
+          id: 'focus',
+          title: 'Focus area',
+          detail:
+            primaryGap.summary ??
+            `Next focus: ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)}`,
+          tone: 'info',
+        });
+      } else if (currentChild.adaptivePlanNotes?.length) {
+        cards.push({
+          id: 'focus',
+          title: 'Adaptive focus',
+          detail: currentChild.adaptivePlanNotes[0],
+          tone: 'info',
+        });
+      }
+
+      if (weeklyChange) {
+        const deltaLessons = weeklyChange.deltaLessons ?? 0;
+        const deltaMinutes = weeklyChange.deltaMinutes ?? 0;
+        const positive = deltaLessons > 0 || deltaMinutes > 0;
+        cards.push({
+          id: 'pace',
+          title: 'Pace note',
+          detail: positive
+            ? `Up ${formatDelta(deltaLessons)} lessons and ${formatDelta(deltaMinutes)} min vs last week. Keep this cadence.`
+            : 'Lighter week so far—plan includes shorter practice blocks to rebuild pace.',
+          tone: positive ? 'success' : 'info',
+        });
+      } else {
+        cards.push({
+          id: 'pace',
+          title: 'Pace note',
+          detail: 'No activity logged yet this week. Aim for one short session to unlock recommendations.',
+          tone: 'info',
+        });
+      }
+
+      return cards.slice(0, 3);
+    },
+    [childSkillGaps, currentChild, formatDelta, weeklyChange],
+  );
   const struggleFlagged = useMemo(
     () =>
       Boolean(
@@ -730,6 +896,11 @@ const ParentDashboard: React.FC = () => {
     [digestPreviewLines, parent?.name, weeklySnapshot?.weekStartLabel],
   );
 
+  const weeklyChangeSummary = useMemo(
+    () => dashboard?.weeklyReport?.changes ?? { improvements: [], risks: [] },
+    [dashboard?.weeklyReport?.changes],
+  );
+
   const coverageSummary = useMemo(() => {
     if (!currentChild) {
       return { pct: null as number | null, needMoreData: true, masteryConfidence: null as number | null, diagnosticDate: null as string | null };
@@ -757,7 +928,10 @@ const ParentDashboard: React.FC = () => {
     return { pct, needMoreData, masteryConfidence, diagnosticDate };
   }, [currentChild]);
 
-  const homeExtensions = currentChild?.homeExtensions ?? [];
+  const homeExtensions = useMemo(
+    () => currentChild?.homeExtensions ?? [],
+    [currentChild?.homeExtensions],
+  );
   const familyOverviewCards = useMemo(() => {
     if (!dashboard?.children?.length) return [];
     return dashboard.children.map((child) => {
@@ -895,6 +1069,14 @@ const ParentDashboard: React.FC = () => {
     ],
   );
 
+  const subjectTrendView = useMemo(
+    () =>
+      (currentChild?.subjectTrends ?? [])
+        .slice()
+        .sort((a, b) => Math.abs((b.accuracyDelta ?? 0)) - Math.abs((a.accuracyDelta ?? 0))),
+    [currentChild?.subjectTrends],
+  );
+
   const coachingSuggestions = useMemo(() => {
     const base = currentChild?.coachingSuggestions ?? [];
     return base.filter((suggestion) => !dismissedSuggestions.has(suggestion.id)).slice(0, 2);
@@ -951,7 +1133,24 @@ const ParentDashboard: React.FC = () => {
       if (severityDiff !== 0) return severityDiff;
       return recency(b) - recency(a);
     });
-  }, [overview?.children]);
+  }, [overview]);
+
+  const latestCheckInByChild = useMemo(() => {
+    const map = new Map<string, ParentCheckIn>();
+    (parentCheckIns ?? []).forEach((entry) => {
+      const current = map.get(entry.studentId);
+      if (!current) {
+        map.set(entry.studentId, entry);
+        return;
+      }
+      const currentTime = new Date(current.createdAt).getTime();
+      const nextTime = new Date(entry.createdAt).getTime();
+      if (nextTime > currentTime) {
+        map.set(entry.studentId, entry);
+      }
+    });
+    return map;
+  }, [parentCheckIns]);
 
   useEffect(() => {
     if (!overview?.children?.length) return;
@@ -1179,7 +1378,10 @@ const ParentDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  const moduleOptions = modulesQuery.data?.data ?? [];
+  const moduleOptions = useMemo(
+    () => modulesQuery.data?.data ?? [],
+    [modulesQuery.data],
+  );
   const recommendedModules = moduleOptions.slice(0, 3);
 
   useEffect(() => {
@@ -1211,7 +1413,10 @@ const ParentDashboard: React.FC = () => {
     enabled: Boolean(parent),
     staleTime: 1000 * 60 * 2,
   });
-  const privacyRequests = privacyRequestsQuery.data ?? [];
+  const privacyRequests = useMemo(
+    () => privacyRequestsQuery.data ?? [],
+    [privacyRequestsQuery.data],
+  );
 
   const childPrivacyRequests = useMemo(() => {
     if (!currentChild) return privacyRequests;
@@ -1224,7 +1429,10 @@ const ParentDashboard: React.FC = () => {
     enabled: Boolean(parent),
     staleTime: 1000 * 60 * 2,
   });
-  const concernReports = concernReportsQuery.data ?? [];
+  const concernReports = useMemo(
+    () => concernReportsQuery.data ?? [],
+    [concernReportsQuery.data],
+  );
 
   const {
     data: childAssignments,
@@ -1237,7 +1445,10 @@ const ParentDashboard: React.FC = () => {
     staleTime: 1000 * 60,
   });
 
-  const assignmentsList = childAssignments ?? [];
+  const assignmentsList = useMemo(
+    () => childAssignments ?? [],
+    [childAssignments],
+  );
   const nextAssignment = useMemo(() => {
     if (!assignmentsList.length) return null;
     return assignmentsList.find((assignment) => assignment.status !== 'completed') ?? assignmentsList[0];
@@ -1280,6 +1491,14 @@ const ParentDashboard: React.FC = () => {
       setDueDate('');
       refetchAssignments();
       queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
+      if (alertAssignmentContext.current) {
+        const childKey = alertAssignmentContext.current;
+        setAlertFollowUps((prev) => ({
+          ...prev,
+          [childKey]: { ...(prev[childKey] ?? {}), assignment: true },
+        }));
+        alertAssignmentContext.current = null;
+      }
     },
     onError: (error) => {
       console.error('[Assignments] failed to assign module', error);
@@ -1384,6 +1603,8 @@ const ParentDashboard: React.FC = () => {
         sessionLength,
         focusSubject,
         focusIntensity,
+        mixInMode: goalForm.mixInMode,
+        electiveEmphasis: goalForm.electiveEmphasis,
         chatMode,
         chatModeLocked,
         allowTutor: allowTutorChats,
@@ -1496,6 +1717,42 @@ const ParentDashboard: React.FC = () => {
       console.error('[ParentDashboard] create learner failed', error);
       setAddLearnerSuccess(null);
       setAddLearnerError(error instanceof Error ? error.message : 'Unable to add learner right now.');
+    },
+  });
+
+  const sendCheckInMutation = useMutation({
+    mutationFn: async (payload: { studentId: string; topic: string; childName: string }) =>
+      createParentCheckIn({
+        parentId: parent?.id ?? undefined,
+        studentId: payload.studentId,
+        topic: payload.topic,
+        message: `Want to review ${payload.topic} together for five minutes?`,
+      }),
+    onSuccess: (checkIn, variables) => {
+      setCheckInError(null);
+      setCheckInSnippet({
+        childId: checkIn.studentId,
+        message: checkIn.message,
+        status: checkIn.status,
+        createdAt: checkIn.createdAt,
+      });
+      queryClient.setQueryData(['parent-check-ins', parent?.id], (prev: ParentCheckIn[] | undefined) => [
+        checkIn,
+        ...(prev ?? []),
+      ]);
+      trackEvent('parent_checkin_sent', {
+        parentId: parent?.id,
+        studentId: checkIn.studentId,
+        topic: variables.topic,
+      });
+    },
+    onError: (error, variables) => {
+      console.error('[ParentDashboard] send check-in failed', error);
+      setCheckInError(error instanceof Error ? error.message : 'Unable to send check-in right now. Copy it manually.');
+      setCheckInSnippet({
+        childId: variables.studentId,
+        message: `Try a quick check-in about ${variables.topic}: "Want to review ${variables.topic} together for five minutes?"`,
+      });
     },
   });
 
@@ -1938,20 +2195,39 @@ const ParentDashboard: React.FC = () => {
     }
   }
 
+  const alertFollowUpProgress = useCallback(
+    (
+      childId: string,
+    ): { completed: number; total: number; entry: { assignment?: boolean; diagnostic?: boolean; resolved?: boolean } } => {
+      const entry = alertFollowUps[childId] ?? {};
+      const total = 3;
+      const completed =
+        (entry.assignment ? 1 : 0) + (entry.diagnostic ? 1 : 0) + (entry.resolved ? 1 : 0);
+      return { completed, total, entry };
+    },
+    [alertFollowUps],
+  );
+
   const prefillAssignmentFromAlert = (childId: string, hint?: string | null) => {
     setSelectedChildId(childId);
     setModuleSearch(hint ?? 'review');
     setAssignErrorMessage(null);
     setAssignMessage('Loaded a review search based on the latest alert.');
+    alertAssignmentContext.current = childId;
     scrollToSection('assignments');
   };
 
   const handleQuickCheckIn = (childId: string, childName: string, hint?: string | null) => {
     const topic = hint ?? 'today\'s lesson';
+    setCheckInError(null);
     setCheckInSnippet({
       childId,
       message: `Try a quick check-in with ${childName}: "Want to review ${topic} together for five minutes?"`,
+      status: 'sent',
+      createdAt: new Date().toISOString(),
     });
+    trackEvent('parent_checkin_clicked', { parentId: parent?.id, studentId: childId, topic });
+    sendCheckInMutation.mutate({ studentId: childId, topic, childName });
   };
 
   const handleResolveChildAlert = (childId: string, alertText?: string | null) => {
@@ -1966,6 +2242,10 @@ const ParentDashboard: React.FC = () => {
       next.set(childId, Date.now());
       return next;
     });
+    setAlertFollowUps((prev) => ({
+      ...prev,
+      [childId]: { ...(prev[childId] ?? {}), resolved: true },
+    }));
     trackEvent('parent_child_alert_resolved', { parentId: parent?.id, childId });
   };
 
@@ -1980,6 +2260,13 @@ const ParentDashboard: React.FC = () => {
       next.delete(childId);
       return next;
     });
+    setAlertFollowUps((prev) => {
+      const next = { ...prev };
+      const entry = { ...(next[childId] ?? {}) };
+      entry.resolved = false;
+      next[childId] = entry;
+      return next;
+    });
     trackEvent('parent_child_alert_reopened', { parentId: parent?.id, childId });
   };
 
@@ -1990,6 +2277,10 @@ const ParentDashboard: React.FC = () => {
 
   const handleScheduleDiagnosticFromAlert = (childId: string, childName: string) => {
     handleScheduleDiagnostic('now', { childId, childName, source: 'alert_card' });
+    setAlertFollowUps((prev) => ({
+      ...prev,
+      [childId]: { ...(prev[childId] ?? {}), diagnostic: true },
+    }));
   };
 
   const handleShareProgress = () => {
@@ -2479,6 +2770,8 @@ const ParentDashboard: React.FC = () => {
                     ({ id: child.id, diagnosticStatus: 'not_started', diagnosticCompletedAt: null } as ParentChildSnapshot);
                   const diagnosticStatus = deriveDiagnosticStatus(fullChild);
                   const reminderEnabled = diagnosticPlans[child.id]?.remind ?? true;
+                  const followUp = alertFollowUpProgress(child.id);
+                  const { entry: followUpEntry } = followUp;
                   const diagnosticChipStyles =
                     diagnosticStatus === 'completed'
                       ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
@@ -2582,6 +2875,42 @@ const ParentDashboard: React.FC = () => {
                           On track
                         </div>
                       )}
+                      {child.alerts.length > 0 && (
+                        <div className="flex items-center justify-between text-[11px] text-slate-700">
+                          <span className="font-semibold">
+                            {followUp.completed} of {followUp.total} follow-ups done
+                          </span>
+                          <div className="flex gap-1">
+                            <span
+                              className={`px-2 py-1 rounded-full border ${
+                                followUpEntry.assignment
+                                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              Assign
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded-full border ${
+                                followUpEntry.diagnostic
+                                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              Diagnostic
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded-full border ${
+                                followUpEntry.resolved
+                                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              Resolved
+                            </span>
+                          </div>
+                        </div>
+                      )}
                       {child.alerts.length > 0 && !alertResolved && (
                         <div className="flex flex-wrap gap-2">
                           <button
@@ -2601,7 +2930,8 @@ const ParentDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleQuickCheckIn(child.id, child.name, alertText)}
-                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring"
+                            disabled={sendCheckInMutation.isLoading}
+                            className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 border border-slate-200 hover:border-brand-blue/40 focus-ring disabled:opacity-60"
                           >
                             Send check-in
                           </button>
@@ -2614,9 +2944,30 @@ const ParentDashboard: React.FC = () => {
                           </button>
                         </div>
                       )}
-                      {checkInSnippet?.childId === child.id && (
-                        <div className="text-[11px] text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1">
-                          {checkInSnippet.message}
+                      {(checkInSnippet?.childId === child.id || latestCheckInByChild.get(child.id)) && (
+                        <div className="text-[11px] text-slate-700 bg-white border border-slate-200 rounded-lg px-3 py-2 space-y-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <span
+                              className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-semibold ${checkInBadgeTone[(latestCheckInByChild.get(child.id)?.status ?? checkInSnippet?.status ?? 'sent') as ParentCheckIn['status']]}`}
+                            >
+                              {describeCheckInStatus(
+                                (latestCheckInByChild.get(child.id)?.status ?? checkInSnippet?.status ?? 'sent') as ParentCheckIn['status'],
+                              )}
+                            </span>
+                            <span className="text-slate-500">
+                              {formatCheckInTimeAgo(
+                                latestCheckInByChild.get(child.id)?.createdAt ?? checkInSnippet?.createdAt ?? new Date().toISOString(),
+                              )}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-700">
+                            {latestCheckInByChild.get(child.id)?.message ?? checkInSnippet?.message}
+                          </div>
+                          {checkInError && (
+                            <div className="text-[11px] text-rose-700 bg-rose-50 border border-rose-100 rounded px-2 py-1">
+                              {checkInError}
+                            </div>
+                          )}
                         </div>
                       )}
                       <button
@@ -3548,6 +3899,54 @@ const ParentDashboard: React.FC = () => {
           </div>
         </motion.div>
 
+        {currentChild && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12 }}
+            className="mb-8"
+          >
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue">
+                    This week&apos;s plan
+                  </p>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Adaptive route for {currentChild.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Pulled from the latest diagnostic and last week&apos;s activity—auto-updates after quizzes and practice.
+                  </p>
+                </div>
+                <span className="text-[11px] px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {currentChild.diagnosticStatus === 'completed'
+                    ? 'Diagnostic applied'
+                    : 'Diagnostic pending'}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {weeklyPlanCards.map((item) => {
+                  const tone = weeklyPlanToneStyles[item.tone];
+                  const Icon = item.id === 'pace' ? TrendingUp : item.id === 'diagnostic' ? ClipboardList : Target;
+                  return (
+                    <div
+                      key={item.id}
+                      className={`rounded-xl border ${tone.border} ${tone.bg} p-4 space-y-2`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className={`h-4 w-4 ${tone.icon}`} />
+                        <p className="text-sm font-semibold text-slate-900">{item.title}</p>
+                      </div>
+                      <p className="text-xs text-slate-700 leading-snug">{item.detail}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -4392,6 +4791,52 @@ const ParentDashboard: React.FC = () => {
                       </p>
                     </div>
                   </div>
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-semibold text-gray-900">Subject trendlines (7d)</h4>
+                      <span className="text-[11px] text-slate-600">Accuracy & time vs prior week</span>
+                    </div>
+                    {subjectTrendView.length ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {subjectTrendView.map((trend) => {
+                          const direction =
+                            trend.accuracyDelta != null
+                              ? trend.accuracyDelta > 0
+                                ? 'up'
+                                : trend.accuracyDelta < 0
+                                  ? 'down'
+                                  : 'steady'
+                              : trend.direction;
+                          const DirectionIcon = direction === 'down' ? TrendingDown : TrendingUp;
+                          const tone =
+                            direction === 'up'
+                              ? 'text-emerald-700'
+                              : direction === 'down'
+                                ? 'text-rose-700'
+                                : 'text-slate-600';
+                          return (
+                            <div key={trend.subject} className="rounded-xl border border-slate-200 bg-white p-3 space-y-1">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm font-semibold text-gray-900">{formatSubjectLabel(trend.subject)}</p>
+                                <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${tone}`}>
+                                  <DirectionIcon className="h-3.5 w-3.5" />
+                                  {trend.accuracyDelta != null ? `${trend.accuracyDelta > 0 ? '+' : ''}${Math.round(trend.accuracyDelta * 10) / 10} pts` : '—'}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-700">
+                                Time on task: {trend.timeMinutes != null ? `${Math.round(trend.timeMinutes)} min` : '—'}
+                                {trend.timeDelta != null
+                                  ? ` (${trend.timeDelta > 0 ? '+' : ''}${Math.round(trend.timeDelta)} vs prior)`
+                                  : ''}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-600">Complete a few lessons this and last week to see subject-level trends.</p>
+                    )}
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
                     {subjectStatuses.map((entry) => (
                       <div
@@ -4725,6 +5170,68 @@ const ParentDashboard: React.FC = () => {
                           </div>
                           <p className="mt-2 text-xs text-gray-600">
                             We pass this into the learning preferences so applyLearningPreferencesToPlan leads with the chosen subject.
+                          </p>
+                        </div>
+
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-sm font-semibold text-gray-900">Variety & electives</h4>
+                            <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                              Light mix-ins, parent-controlled
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Mix-in mode
+                              </label>
+                              <select
+                                value={goalForm.mixInMode}
+                                onChange={(event) =>
+                                  setGoalForm((prev) => ({
+                                    ...prev,
+                                    mixInMode:
+                                      event.target.value === 'core_only'
+                                        ? 'core_only'
+                                        : event.target.value === 'cross_subject'
+                                          ? 'cross_subject'
+                                          : 'auto',
+                                  }))
+                                }
+                                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              >
+                                <option value="auto">Auto (mix when load is light)</option>
+                                <option value="core_only">Core only (no mix-ins)</option>
+                                <option value="cross_subject">Cross-subject every week</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Elective emphasis
+                              </label>
+                              <select
+                                value={goalForm.electiveEmphasis}
+                                onChange={(event) =>
+                                  setGoalForm((prev) => ({
+                                    ...prev,
+                                    electiveEmphasis:
+                                      event.target.value === 'off'
+                                        ? 'off'
+                                        : event.target.value === 'on'
+                                          ? 'on'
+                                          : 'light',
+                                  }))
+                                }
+                                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              >
+                                <option value="light">Suggest when ahead</option>
+                                <option value="on">Boost electives this week</option>
+                                <option value="off">Keep electives hidden</option>
+                              </select>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-xs text-gray-600">
+                            Families can keep weeks core-only or lean into electives when the weekly plan is ahead of schedule.
                           </p>
                         </div>
                       </div>
@@ -6186,6 +6693,42 @@ const ParentDashboard: React.FC = () => {
                       </ul>
                     </div>
                   </div>
+                  <div className="mt-4 rounded-xl border border-brand-blue/30 bg-white/70 p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-sm font-semibold text-slate-900">What changed this week</p>
+                      <span className="text-[11px] text-slate-600">Top 3 improvements & risks</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-700">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Improvements</p>
+                        <ul className="mt-1 space-y-1">
+                          {(weeklyChangeSummary.improvements?.length
+                            ? weeklyChangeSummary.improvements.slice(0, 3)
+                            : ['Steady week—no clear gains yet.']
+                          ).map((item, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <CheckCircle className="h-4 w-4 text-emerald-600 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Risks</p>
+                        <ul className="mt-1 space-y-1">
+                          {(weeklyChangeSummary.risks?.length
+                            ? weeklyChangeSummary.risks.slice(0, 3)
+                            : ['No new risks flagged this week.']
+                          ).map((item, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                   <div className="mt-4 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
                     <div className="rounded-xl border border-brand-light-violet/60 bg-white/70 p-4">
                       <div className="flex items-center justify-between mb-2">
@@ -6482,28 +7025,103 @@ const ParentDashboard: React.FC = () => {
                     <SkeletonCard className="h-16" />
                   </>
                 ) : (
-                  sortedDashboardAlerts.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className={`p-4 rounded-xl border ${
-                        alert.type === 'warning'
-                          ? 'bg-amber-50 border-amber-200 text-amber-800'
-                          : alert.type === 'success'
-                          ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                          : 'bg-blue-50 border-blue-200 text-blue-700'
-                      } min-h-[96px]`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-semibold leading-snug">{alert.message}</p>
-                        <span className="text-[11px] px-2 py-1 rounded-full bg-white/60 border border-current uppercase tracking-wide">
-                          {alert.type}
-                        </span>
+                  sortedDashboardAlerts.map((alert) => {
+                    const alertChildId = alert.studentId ?? '';
+                    const { completed, total, entry: followUpEntry } = alertChildId
+                      ? alertFollowUpProgress(alertChildId)
+                      : { completed: 0, total: 3, entry: {} };
+                    const childName = alertChildId ? childNameMap.get(alertChildId) ?? 'Learner' : null;
+                    return (
+                      <div
+                        key={alert.id}
+                        className={`p-4 rounded-xl border ${
+                          alert.type === 'warning'
+                            ? 'bg-amber-50 border-amber-200 text-amber-800'
+                            : alert.type === 'success'
+                            ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                            : 'bg-blue-50 border-blue-200 text-blue-700'
+                        } min-h-[96px]`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <p className="text-sm font-semibold leading-snug">{alert.message}</p>
+                            {childName && <p className="text-[11px] opacity-80">For {childName}</p>}
+                          </div>
+                          <span className="text-[11px] px-2 py-1 rounded-full bg-white/60 border border-current uppercase tracking-wide">
+                            {alert.type}
+                          </span>
+                        </div>
+                        <p className="text-xs mt-1 opacity-80">
+                          {new Date(alert.createdAt).toLocaleString()}
+                        </p>
+                        {alert.studentId ? (
+                          <>
+                            <div className="mt-2 flex items-center justify-between text-[11px] text-slate-700">
+                              <span className="font-semibold">
+                                {completed} of {total} follow-ups done
+                              </span>
+                              <div className="flex gap-1">
+                                <span
+                                  className={`px-2 py-1 rounded-full border ${
+                                    followUpEntry.assignment
+                                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                      : 'bg-white border-slate-200 text-slate-600'
+                                  }`}
+                                >
+                                  Assign
+                                </span>
+                                <span
+                                  className={`px-2 py-1 rounded-full border ${
+                                    followUpEntry.diagnostic
+                                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                      : 'bg-white border-slate-200 text-slate-600'
+                                  }`}
+                                >
+                                  Diagnostic
+                                </span>
+                                <span
+                                  className={`px-2 py-1 rounded-full border ${
+                                    followUpEntry.resolved
+                                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                      : 'bg-white border-slate-200 text-slate-600'
+                                  }`}
+                                >
+                                  Resolved
+                                </span>
+                              </div>
+                            </div>
+                            <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                              <button
+                                type="button"
+                                onClick={() => prefillAssignmentFromAlert(alertChildId, alert.message)}
+                                className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 font-semibold text-brand-blue border border-brand-blue/40 hover:bg-brand-blue/5 focus-ring"
+                              >
+                                Assign module
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleScheduleDiagnosticFromAlert(alertChildId, childName ?? 'their learner')}
+                                className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 font-semibold text-brand-violet border border-brand-violet/40 hover:bg-brand-violet/10 focus-ring"
+                              >
+                                Schedule diagnostic
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleResolveChildAlert(alertChildId, alert.message)}
+                                className="inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1 font-semibold text-emerald-700 border border-emerald-200 hover:bg-emerald-50 focus-ring"
+                              >
+                                Mark resolved
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <p className="text-xs text-slate-700 mt-2">
+                            Link a learner to respond to this alert.
+                          </p>
+                        )}
                       </div>
-                      <p className="text-xs mt-1 opacity-80">
-                        {new Date(alert.createdAt).toLocaleString()}
-                      </p>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
                 {(dashboard?.alerts?.length ?? 0) === 0 && !showSkeleton && (
                   <p className="text-sm text-gray-600">

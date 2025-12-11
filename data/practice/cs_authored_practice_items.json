@@ -1,0 +1,3770 @@
+{
+  "3-electives-computer-science-block-based-programming": [
+    {
+      "prompt": "What is the first block that runs in a program?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.1.1"
+      ],
+      "options": [
+        {
+          "text": "The block at the very top",
+          "isCorrect": true
+        },
+        {
+          "text": "A random block",
+          "isCorrect": false
+        },
+        {
+          "text": "The block at the bottom",
+          "isCorrect": false
+        },
+        {
+          "text": "All blocks at once",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many times does a block repeat if the repeat block says '5'?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.1.1"
+      ],
+      "options": [
+        {
+          "text": "Five times",
+          "isCorrect": true
+        },
+        {
+          "text": "Once",
+          "isCorrect": false
+        },
+        {
+          "text": "Ten times",
+          "isCorrect": false
+        },
+        {
+          "text": "Until you stop it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does turning right 90 degrees do to a character's direction?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.1.1"
+      ],
+      "options": [
+        {
+          "text": "Rotates them one quarter turn to the right",
+          "isCorrect": true
+        },
+        {
+          "text": "Moves them forward",
+          "isCorrect": false
+        },
+        {
+          "text": "Changes their color",
+          "isCorrect": false
+        },
+        {
+          "text": "Does nothing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If you want a sprite to say something, what block would you use?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.1.1"
+      ],
+      "options": [
+        {
+          "text": "A 'say' or 'speak' block",
+          "isCorrect": true
+        },
+        {
+          "text": "A 'move' block",
+          "isCorrect": false
+        },
+        {
+          "text": "An 'if' block",
+          "isCorrect": false
+        },
+        {
+          "text": "A 'repeat' block",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens if you don't test your program?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.1.1"
+      ],
+      "options": [
+        {
+          "text": "You won't know if it has errors",
+          "isCorrect": true
+        },
+        {
+          "text": "It automatically works",
+          "isCorrect": false
+        },
+        {
+          "text": "Testing isn't important",
+          "isCorrect": false
+        },
+        {
+          "text": "Errors fix themselves",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a condition check in an 'if' block?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.1.1"
+      ],
+      "options": [
+        {
+          "text": "Whether something is true or false",
+          "isCorrect": true
+        },
+        {
+          "text": "If the block exists",
+          "isCorrect": false
+        },
+        {
+          "text": "The color of the background",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing important",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How would you make a character draw a triangle using a repeat block?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.1.1"
+      ],
+      "options": [
+        {
+          "text": "Move, turn 120 degrees, repeat 3 times",
+          "isCorrect": true
+        },
+        {
+          "text": "Move once",
+          "isCorrect": false
+        },
+        {
+          "text": "Just use one turn block",
+          "isCorrect": false
+        },
+        {
+          "text": "Triangles can't be drawn",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the purpose of debugging?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.1.1"
+      ],
+      "options": [
+        {
+          "text": "To find and fix errors in your program",
+          "isCorrect": true
+        },
+        {
+          "text": "To make the program prettier",
+          "isCorrect": false
+        },
+        {
+          "text": "To delete code",
+          "isCorrect": false
+        },
+        {
+          "text": "Debugging is unnecessary",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If you want your character to move 10 steps and repeat it 5 times, how many total steps will it move?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.1.1"
+      ],
+      "options": [
+        {
+          "text": "50 steps",
+          "isCorrect": true
+        },
+        {
+          "text": "10 steps",
+          "isCorrect": false
+        },
+        {
+          "text": "5 steps",
+          "isCorrect": false
+        },
+        {
+          "text": "15 steps",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does decomposition mean in programming?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.1.1"
+      ],
+      "options": [
+        {
+          "text": "Breaking a big task into smaller, manageable parts",
+          "isCorrect": true
+        },
+        {
+          "text": "Making code longer",
+          "isCorrect": false
+        },
+        {
+          "text": "Deleting code",
+          "isCorrect": false
+        },
+        {
+          "text": "Combining all code",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you know what your program will do before running it?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.1.1"
+      ],
+      "options": [
+        {
+          "text": "By reading the blocks in order and tracing the logic",
+          "isCorrect": true
+        },
+        {
+          "text": "You can't know",
+          "isCorrect": false
+        },
+        {
+          "text": "By guessing",
+          "isCorrect": false
+        },
+        {
+          "text": "By asking someone else",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an algorithm made of?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.1.1"
+      ],
+      "options": [
+        {
+          "text": "Step-by-step instructions in order",
+          "isCorrect": true
+        },
+        {
+          "text": "Random commands",
+          "isCorrect": false
+        },
+        {
+          "text": "Just loops",
+          "isCorrect": false
+        },
+        {
+          "text": "Only conditional statements",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "3-electives-computer-science-digital-citizenship": [
+    {
+      "prompt": "What is an example of personal information you should not share online?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.1.1"
+      ],
+      "options": [
+        {
+          "text": "Your home address",
+          "isCorrect": true
+        },
+        {
+          "text": "Your first name only",
+          "isCorrect": false
+        },
+        {
+          "text": "Your favorite hobby",
+          "isCorrect": false
+        },
+        {
+          "text": "Your favorite color",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If a stranger online asks you questions about yourself, what should you do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.1.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult immediately",
+          "isCorrect": true
+        },
+        {
+          "text": "Answer all their questions",
+          "isCorrect": false
+        },
+        {
+          "text": "Give them some information",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore them without telling anyone",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the main idea of digital citizenship?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.SO.1.1"
+      ],
+      "options": [
+        {
+          "text": "Using technology safely and respectfully",
+          "isCorrect": true
+        },
+        {
+          "text": "Using the internet all day",
+          "isCorrect": false
+        },
+        {
+          "text": "Never using technology",
+          "isCorrect": false
+        },
+        {
+          "text": "Computers are dangerous",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which password is stronger?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.1.1"
+      ],
+      "options": [
+        {
+          "text": "MyDog#2019!",
+          "isCorrect": true
+        },
+        {
+          "text": "password",
+          "isCorrect": false
+        },
+        {
+          "text": "123456",
+          "isCorrect": false
+        },
+        {
+          "text": "qwerty",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if someone sends you a mean message online?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.CP.1.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult and don't respond to the person",
+          "isCorrect": true
+        },
+        {
+          "text": "Send a mean message back",
+          "isCorrect": false
+        },
+        {
+          "text": "Post about it publicly",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore it forever without telling anyone",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Is it okay to copy someone's artwork and post it as your own?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.CP.1.1"
+      ],
+      "options": [
+        {
+          "text": "No, that's stealing and disrespectful",
+          "isCorrect": true
+        },
+        {
+          "text": "Yes, if they posted it online",
+          "isCorrect": false
+        },
+        {
+          "text": "Yes, if you like it",
+          "isCorrect": false
+        },
+        {
+          "text": "It depends on the color",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is cyberbullying?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.SO.1.1"
+      ],
+      "options": [
+        {
+          "text": "Sending hurtful, mean, or scary messages to someone online",
+          "isCorrect": true
+        },
+        {
+          "text": "Using the internet daily",
+          "isCorrect": false
+        },
+        {
+          "text": "Playing online games",
+          "isCorrect": false
+        },
+        {
+          "text": "Making a new account",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does your digital footprint include?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.SO.1.1"
+      ],
+      "options": [
+        {
+          "text": "Everything you post, comment, and share online",
+          "isCorrect": true
+        },
+        {
+          "text": "Your passwords only",
+          "isCorrect": false
+        },
+        {
+          "text": "Your real name only",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing; it doesn't exist",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Who should you trust with your password?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.1.1"
+      ],
+      "options": [
+        {
+          "text": "Only yourself and maybe a trusted parent",
+          "isCorrect": true
+        },
+        {
+          "text": "Everyone",
+          "isCorrect": false
+        },
+        {
+          "text": "Your friends at school",
+          "isCorrect": false
+        },
+        {
+          "text": "People online",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a good reason to respect people's privacy online?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.1.1"
+      ],
+      "options": [
+        {
+          "text": "It's kind and people deserve respect",
+          "isCorrect": true
+        },
+        {
+          "text": "Privacy doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Everyone's information is public",
+          "isCorrect": false
+        },
+        {
+          "text": "Privacy is old-fashioned",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If you accidentally download something suspicious, what should you do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.PI.1.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult immediately",
+          "isCorrect": true
+        },
+        {
+          "text": "Use it anyway",
+          "isCorrect": false
+        },
+        {
+          "text": "Share it with friends",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the best way to behave online?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.SO.1.1"
+      ],
+      "options": [
+        {
+          "text": "The same kind, respectful way you behave in person",
+          "isCorrect": true
+        },
+        {
+          "text": "Differently than in real life",
+          "isCorrect": false
+        },
+        {
+          "text": "Without any rules",
+          "isCorrect": false
+        },
+        {
+          "text": "However you feel like",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "4-electives-computer-science-block-based-programming": [
+    {
+      "prompt": "What is a loop?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.2.1"
+      ],
+      "options": [
+        {
+          "text": "Code that repeats without rewriting",
+          "isCorrect": true
+        },
+        {
+          "text": "A circle shape",
+          "isCorrect": false
+        },
+        {
+          "text": "An error",
+          "isCorrect": false
+        },
+        {
+          "text": "An ending",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an event in a program?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.2.1"
+      ],
+      "options": [
+        {
+          "text": "Something that happens that triggers a response",
+          "isCorrect": true
+        },
+        {
+          "text": "A party",
+          "isCorrect": false
+        },
+        {
+          "text": "The program starting",
+          "isCorrect": false
+        },
+        {
+          "text": "A mistake",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a variable used for?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.2.1"
+      ],
+      "options": [
+        {
+          "text": "To store and change information",
+          "isCorrect": true
+        },
+        {
+          "text": "To create loops",
+          "isCorrect": false
+        },
+        {
+          "text": "To start the program",
+          "isCorrect": false
+        },
+        {
+          "text": "To delete blocks",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does an if-then-else block do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.2.1"
+      ],
+      "options": [
+        {
+          "text": "Makes a decision and runs different code based on the answer",
+          "isCorrect": true
+        },
+        {
+          "text": "Runs all code",
+          "isCorrect": false
+        },
+        {
+          "text": "Stops the program",
+          "isCorrect": false
+        },
+        {
+          "text": "Changes the color",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you find bugs in your program?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.2.1"
+      ],
+      "options": [
+        {
+          "text": "By running it and watching for errors",
+          "isCorrect": true
+        },
+        {
+          "text": "Bugs don't exist",
+          "isCorrect": false
+        },
+        {
+          "text": "By not testing",
+          "isCorrect": false
+        },
+        {
+          "text": "By reading code only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is event-driven programming?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.2.1"
+      ],
+      "options": [
+        {
+          "text": "Code that responds to events like clicks or key presses",
+          "isCorrect": true
+        },
+        {
+          "text": "Programming without events",
+          "isCorrect": false
+        },
+        {
+          "text": "Creating social events",
+          "isCorrect": false
+        },
+        {
+          "text": "Writing code once",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When should you test your program?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.1"
+      ],
+      "options": [
+        {
+          "text": "After each step and at the end",
+          "isCorrect": true
+        },
+        {
+          "text": "Only at the very end",
+          "isCorrect": false
+        },
+        {
+          "text": "Never test",
+          "isCorrect": false
+        },
+        {
+          "text": "Testing takes too much time",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What are the three parts of a loop?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.2.1"
+      ],
+      "options": [
+        {
+          "text": "Start, condition, and update",
+          "isCorrect": true
+        },
+        {
+          "text": "Just repeating",
+          "isCorrect": false
+        },
+        {
+          "text": "No parts",
+          "isCorrect": false
+        },
+        {
+          "text": "Only a number",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do conditionals help make programs smarter?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.2.1"
+      ],
+      "options": [
+        {
+          "text": "They let programs decide and respond differently to different inputs",
+          "isCorrect": true
+        },
+        {
+          "text": "They don't help",
+          "isCorrect": false
+        },
+        {
+          "text": "They slow programs down",
+          "isCorrect": false
+        },
+        {
+          "text": "They're optional",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the purpose of a function block?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.2.1"
+      ],
+      "options": [
+        {
+          "text": "To group code and reuse it without retyping",
+          "isCorrect": true
+        },
+        {
+          "text": "To make code longer",
+          "isCorrect": false
+        },
+        {
+          "text": "To delete blocks",
+          "isCorrect": false
+        },
+        {
+          "text": "Functions aren't useful",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If you have a program that needs the same code in three places, what should you do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.1"
+      ],
+      "options": [
+        {
+          "text": "Use a loop or function to avoid repetition",
+          "isCorrect": true
+        },
+        {
+          "text": "Type it three times",
+          "isCorrect": false
+        },
+        {
+          "text": "Delete some blocks",
+          "isCorrect": false
+        },
+        {
+          "text": "Make the program shorter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does incremental testing mean?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.1"
+      ],
+      "options": [
+        {
+          "text": "Testing your program step-by-step as you build it",
+          "isCorrect": true
+        },
+        {
+          "text": "Testing once at the very end",
+          "isCorrect": false
+        },
+        {
+          "text": "Not testing at all",
+          "isCorrect": false
+        },
+        {
+          "text": "Testing someone else's code",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "4-electives-computer-science-digital-citizenship": [
+    {
+      "prompt": "What should never be shared online without permission?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.2.1"
+      ],
+      "options": [
+        {
+          "text": "Name, address, phone number, school name",
+          "isCorrect": true
+        },
+        {
+          "text": "Your favorite food",
+          "isCorrect": false
+        },
+        {
+          "text": "Your opinions",
+          "isCorrect": false
+        },
+        {
+          "text": "General interests",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a digital footprint?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.SO.2.1"
+      ],
+      "options": [
+        {
+          "text": "Information you leave online that people can see",
+          "isCorrect": true
+        },
+        {
+          "text": "Actual footprints online",
+          "isCorrect": false
+        },
+        {
+          "text": "Your password",
+          "isCorrect": false
+        },
+        {
+          "text": "Your device",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between public and private posts?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.2.1"
+      ],
+      "options": [
+        {
+          "text": "Public: everyone sees it; Private: only chosen people see it",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Public is safer",
+          "isCorrect": false
+        },
+        {
+          "text": "Private posts disappear",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is copyright?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.CP.2.1"
+      ],
+      "options": [
+        {
+          "text": "The right to creative work; using it without permission is stealing",
+          "isCorrect": true
+        },
+        {
+          "text": "A type of website",
+          "isCorrect": false
+        },
+        {
+          "text": "A password",
+          "isCorrect": false
+        },
+        {
+          "text": "Using anything online is free",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How should you treat people online?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.SO.2.1"
+      ],
+      "options": [
+        {
+          "text": "With kindness and respect, like you would in person",
+          "isCorrect": true
+        },
+        {
+          "text": "Meanly, it's just online",
+          "isCorrect": false
+        },
+        {
+          "text": "Without manners",
+          "isCorrect": false
+        },
+        {
+          "text": "You can be whoever you want",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a phishing email?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.PI.2.1"
+      ],
+      "options": [
+        {
+          "text": "A fake email trying to trick you into sharing personal information",
+          "isCorrect": true
+        },
+        {
+          "text": "Real email from a company",
+          "isCorrect": false
+        },
+        {
+          "text": "An email about fishing",
+          "isCorrect": false
+        },
+        {
+          "text": "A security email from your bank",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if a website asks for information you're unsure about?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.PI.2.1"
+      ],
+      "options": [
+        {
+          "text": "Ask an adult before entering anything",
+          "isCorrect": true
+        },
+        {
+          "text": "Give it your real information",
+          "isCorrect": false
+        },
+        {
+          "text": "Make something up",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore the request",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is cyberbullying and why is it harmful?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.SO.2.1"
+      ],
+      "options": [
+        {
+          "text": "Sending hurtful messages online; it can hurt people deeply",
+          "isCorrect": true
+        },
+        {
+          "text": "Just joking around",
+          "isCorrect": false
+        },
+        {
+          "text": "A harmless prank",
+          "isCorrect": false
+        },
+        {
+          "text": "Only happens to adults",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If someone online asks to meet you in person, what should you do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.2.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult immediately and don't go",
+          "isCorrect": true
+        },
+        {
+          "text": "Ask them more questions",
+          "isCorrect": false
+        },
+        {
+          "text": "Agree to meet",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore them without telling anyone",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What makes a strong password?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.2.1"
+      ],
+      "options": [
+        {
+          "text": "Mix of letters, numbers, symbols only you know",
+          "isCorrect": true
+        },
+        {
+          "text": "Your name",
+          "isCorrect": false
+        },
+        {
+          "text": "Your birthday",
+          "isCorrect": false
+        },
+        {
+          "text": "A simple word",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens if you post something mean about someone online?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.SO.2.1"
+      ],
+      "options": [
+        {
+          "text": "It can spread, hurt them, and stay visible for a long time",
+          "isCorrect": true
+        },
+        {
+          "text": "It disappears immediately",
+          "isCorrect": false
+        },
+        {
+          "text": "It doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "They can't see it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why should you think before posting online?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.2.1"
+      ],
+      "options": [
+        {
+          "text": "Posts spread quickly and are hard to delete; they create your digital footprint",
+          "isCorrect": true
+        },
+        {
+          "text": "Thinking isn't necessary",
+          "isCorrect": false
+        },
+        {
+          "text": "Posting is always safe",
+          "isCorrect": false
+        },
+        {
+          "text": "Your posts only affect you",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "5-electives-computer-science-block-based-programming": [
+    {
+      "prompt": "What is a function (custom block)?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.2.2"
+      ],
+      "options": [
+        {
+          "text": "Reusable code that performs a specific task",
+          "isCorrect": true
+        },
+        {
+          "text": "A loop",
+          "isCorrect": false
+        },
+        {
+          "text": "An error",
+          "isCorrect": false
+        },
+        {
+          "text": "A variable",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a for loop do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.2.2"
+      ],
+      "options": [
+        {
+          "text": "Repeats code a set number of times",
+          "isCorrect": true
+        },
+        {
+          "text": "Runs once",
+          "isCorrect": false
+        },
+        {
+          "text": "Repeats forever",
+          "isCorrect": false
+        },
+        {
+          "text": "Stops the program",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a while loop?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.2.2"
+      ],
+      "options": [
+        {
+          "text": "Repeats as long as a condition is true",
+          "isCorrect": true
+        },
+        {
+          "text": "Repeats a set number of times",
+          "isCorrect": false
+        },
+        {
+          "text": "Never repeats",
+          "isCorrect": false
+        },
+        {
+          "text": "Only repeats once",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a list (array)?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.2.2"
+      ],
+      "options": [
+        {
+          "text": "A collection of items stored together",
+          "isCorrect": true
+        },
+        {
+          "text": "A single item",
+          "isCorrect": false
+        },
+        {
+          "text": "A type of loop",
+          "isCorrect": false
+        },
+        {
+          "text": "A variable that never changes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why would you use a list in a program?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.2"
+      ],
+      "options": [
+        {
+          "text": "To store multiple related items and access them by position",
+          "isCorrect": true
+        },
+        {
+          "text": "Lists are unnecessary",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for storing one item",
+          "isCorrect": false
+        },
+        {
+          "text": "Lists can't be used in block programming",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What are comments in code?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.2.2"
+      ],
+      "options": [
+        {
+          "text": "Notes explaining what code does",
+          "isCorrect": true
+        },
+        {
+          "text": "Code that runs",
+          "isCorrect": false
+        },
+        {
+          "text": "Part of a loop",
+          "isCorrect": false
+        },
+        {
+          "text": "Error messages",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a nested loop do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.2.2"
+      ],
+      "options": [
+        {
+          "text": "One loop inside another; inner loop runs completely for each outer loop iteration",
+          "isCorrect": true
+        },
+        {
+          "text": "Two separate loops",
+          "isCorrect": false
+        },
+        {
+          "text": "A single loop",
+          "isCorrect": false
+        },
+        {
+          "text": "Loops can't be nested",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does a function make code better?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.2.2"
+      ],
+      "options": [
+        {
+          "text": "Reduces repetition, improves readability, makes code reusable",
+          "isCorrect": true
+        },
+        {
+          "text": "Functions make code longer",
+          "isCorrect": false
+        },
+        {
+          "text": "Functions aren't useful",
+          "isCorrect": false
+        },
+        {
+          "text": "Code is better without functions",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an edge case in testing?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.2"
+      ],
+      "options": [
+        {
+          "text": "Extreme or unusual inputs like empty lists, zero, or maximum values",
+          "isCorrect": true
+        },
+        {
+          "text": "Normal inputs only",
+          "isCorrect": false
+        },
+        {
+          "text": "Errors in code",
+          "isCorrect": false
+        },
+        {
+          "text": "Types of loops",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When should you test edge cases?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.2"
+      ],
+      "options": [
+        {
+          "text": "Always; they reveal bugs regular tests miss",
+          "isCorrect": true
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for big programs",
+          "isCorrect": false
+        },
+        {
+          "text": "If you remember to",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you add an item to a list?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.2.2"
+      ],
+      "options": [
+        {
+          "text": "Use an 'add item to list' block",
+          "isCorrect": true
+        },
+        {
+          "text": "Delete the list",
+          "isCorrect": false
+        },
+        {
+          "text": "Edit the list directly",
+          "isCorrect": false
+        },
+        {
+          "text": "Create a new list",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the benefit of using a variable inside a loop?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.2.2"
+      ],
+      "options": [
+        {
+          "text": "To track information that changes with each loop iteration",
+          "isCorrect": true
+        },
+        {
+          "text": "Variables don't work in loops",
+          "isCorrect": false
+        },
+        {
+          "text": "Variables slow loops down",
+          "isCorrect": false
+        },
+        {
+          "text": "Each loop needs its own variable",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "5-electives-computer-science-digital-citizenship": [
+    {
+      "prompt": "What is a phishing scam?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.3.1"
+      ],
+      "options": [
+        {
+          "text": "A fake email or website trying to steal personal information",
+          "isCorrect": true
+        },
+        {
+          "text": "A real email from a bank",
+          "isCorrect": false
+        },
+        {
+          "text": "Fishing on the internet",
+          "isCorrect": false
+        },
+        {
+          "text": "A legitimate security check",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if you accidentally download malware?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.PI.3.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult and stop using the device",
+          "isCorrect": true
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        },
+        {
+          "text": "Share it with friends",
+          "isCorrect": false
+        },
+        {
+          "text": "Keep using the device",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is balancing screen time important?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.SO.3.1"
+      ],
+      "options": [
+        {
+          "text": "Too much screen time affects health, sleep, and eyesight",
+          "isCorrect": true
+        },
+        {
+          "text": "Screen time doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "More screen time is better",
+          "isCorrect": false
+        },
+        {
+          "text": "You should always be online",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is digital literacy?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.3.1"
+      ],
+      "options": [
+        {
+          "text": "The ability to find, evaluate, and use digital information responsibly",
+          "isCorrect": true
+        },
+        {
+          "text": "Knowing how to type",
+          "isCorrect": false
+        },
+        {
+          "text": "Understanding computers only",
+          "isCorrect": false
+        },
+        {
+          "text": "Having lots of social media accounts",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you know if a website is trustworthy?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Check for https, clear contact info, professional design, and known organization",
+          "isCorrect": true
+        },
+        {
+          "text": "Any website is trustworthy",
+          "isCorrect": false
+        },
+        {
+          "text": "Websites with ads are trustworthy",
+          "isCorrect": false
+        },
+        {
+          "text": "You can't tell",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between reliable and unreliable information?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Reliable: from trusted sources; Unreliable: from unknown or biased sources",
+          "isCorrect": true
+        },
+        {
+          "text": "All information is equally reliable",
+          "isCorrect": false
+        },
+        {
+          "text": "Wikipedia is always unreliable",
+          "isCorrect": false
+        },
+        {
+          "text": "Reliability doesn't matter online",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is respecting others' privacy?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.3.1"
+      ],
+      "options": [
+        {
+          "text": "Not sharing their personal information or photos without permission",
+          "isCorrect": true
+        },
+        {
+          "text": "Sharing everything online",
+          "isCorrect": false
+        },
+        {
+          "text": "Reading private messages",
+          "isCorrect": false
+        },
+        {
+          "text": "Privacy doesn't matter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How is using copyrighted material legally different from illegally?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.CP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Legal: with permission or fair use; Illegal: copying without permission",
+          "isCorrect": true
+        },
+        {
+          "text": "All copying is legal",
+          "isCorrect": false
+        },
+        {
+          "text": "Citation makes copying legal",
+          "isCorrect": false
+        },
+        {
+          "text": "You can copy anything online",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if you see someone being cyberbullied?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.SO.3.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult and support the person being bullied",
+          "isCorrect": true
+        },
+        {
+          "text": "Join the bullying",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        },
+        {
+          "text": "Share the posts to more people",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the best password?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.IC.PI.3.1"
+      ],
+      "options": [
+        {
+          "text": "Long, with letters, numbers, symbols, and only you know it",
+          "isCorrect": true
+        },
+        {
+          "text": "Your name",
+          "isCorrect": false
+        },
+        {
+          "text": "123456",
+          "isCorrect": false
+        },
+        {
+          "text": "Something easy to remember",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens to information once you post it online?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.SO.3.1"
+      ],
+      "options": [
+        {
+          "text": "It spreads and is hard to delete; it becomes part of your digital footprint",
+          "isCorrect": true
+        },
+        {
+          "text": "It disappears immediately",
+          "isCorrect": false
+        },
+        {
+          "text": "Only your friends can see it",
+          "isCorrect": false
+        },
+        {
+          "text": "It doesn't matter what you post",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a secure connection online?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.IC.PI.3.1"
+      ],
+      "options": [
+        {
+          "text": "HTTPS connection with encryption protecting your data from hackers",
+          "isCorrect": true
+        },
+        {
+          "text": "Any website",
+          "isCorrect": false
+        },
+        {
+          "text": "HTTP instead of HTTPS",
+          "isCorrect": false
+        },
+        {
+          "text": "No encryption needed",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-computer-science-data-and-graphics": [
+    {
+      "prompt": "What is data?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.DA.1.1"
+      ],
+      "options": [
+        {
+          "text": "Information collected to understand patterns and solve problems",
+          "isCorrect": true
+        },
+        {
+          "text": "Just random numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Only used in math",
+          "isCorrect": false
+        },
+        {
+          "text": "Pictures on a computer",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a bar graph used for?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.IM.1.1"
+      ],
+      "options": [
+        {
+          "text": "Comparing quantities across different categories",
+          "isCorrect": true
+        },
+        {
+          "text": "Showing how something changes over time",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for sports",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing important",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does 'data representation' mean?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.CO.1.1"
+      ],
+      "options": [
+        {
+          "text": "Displaying data in a format like graphs or tables",
+          "isCorrect": true
+        },
+        {
+          "text": "Just numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Creating new data",
+          "isCorrect": false
+        },
+        {
+          "text": "Deleting information",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which graph shows change over time best?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.IM.1.1"
+      ],
+      "options": [
+        {
+          "text": "A line graph",
+          "isCorrect": true
+        },
+        {
+          "text": "A pie chart",
+          "isCorrect": false
+        },
+        {
+          "text": "A bar graph",
+          "isCorrect": false
+        },
+        {
+          "text": "A table",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a pie chart?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.DA.1.1"
+      ],
+      "options": [
+        {
+          "text": "A graph showing parts of a whole as slices",
+          "isCorrect": true
+        },
+        {
+          "text": "A dessert chart",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for food data",
+          "isCorrect": false
+        },
+        {
+          "text": "Graphs without slices",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why should you organize data before analyzing it?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.CO.1.1"
+      ],
+      "options": [
+        {
+          "text": "Organization reveals patterns and makes comparisons clear",
+          "isCorrect": true
+        },
+        {
+          "text": "Organization wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Data is always clear",
+          "isCorrect": false
+        },
+        {
+          "text": "Organizing doesn't matter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What kind of data does a bar graph work best for?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.1.1"
+      ],
+      "options": [
+        {
+          "text": "Comparing quantities across categories",
+          "isCorrect": true
+        },
+        {
+          "text": "Showing percentages only",
+          "isCorrect": false
+        },
+        {
+          "text": "Changes over time",
+          "isCorrect": false
+        },
+        {
+          "text": "Single measurements",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How would you display information about favorite colors in a class?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.1.1"
+      ],
+      "options": [
+        {
+          "text": "A bar graph or pie chart comparing how many choose each color",
+          "isCorrect": true
+        },
+        {
+          "text": "A line graph",
+          "isCorrect": false
+        },
+        {
+          "text": "A table with one row",
+          "isCorrect": false
+        },
+        {
+          "text": "Just a list",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is quantitative data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.1.1"
+      ],
+      "options": [
+        {
+          "text": "Data that is measured in numbers (height, age, score)",
+          "isCorrect": true
+        },
+        {
+          "text": "Only descriptions",
+          "isCorrect": false
+        },
+        {
+          "text": "Data that's never measured",
+          "isCorrect": false
+        },
+        {
+          "text": "Both numbers and descriptions",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is qualitative data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.1.1"
+      ],
+      "options": [
+        {
+          "text": "Data that is descriptive (colors, opinions, feelings)",
+          "isCorrect": true
+        },
+        {
+          "text": "Only numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Data without meaning",
+          "isCorrect": false
+        },
+        {
+          "text": "Quantitative data",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you create an honest graph from data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.CO.1.1"
+      ],
+      "options": [
+        {
+          "text": "Use appropriate scale, clear labels, truthful axis values, and proper graph type",
+          "isCorrect": true
+        },
+        {
+          "text": "Manipulate the scale to show what you want",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore outliers",
+          "isCorrect": false
+        },
+        {
+          "text": "Leave off labels",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should a graph include to be clear?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.1.1"
+      ],
+      "options": [
+        {
+          "text": "Title, labeled axes, scale, legend if needed, and source of data",
+          "isCorrect": true
+        },
+        {
+          "text": "Just colors",
+          "isCorrect": false
+        },
+        {
+          "text": "No labels needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Only the data points",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-computer-science-intro-python-js": [
+    {
+      "prompt": "What does a variable do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.3.1"
+      ],
+      "options": [
+        {
+          "text": "Stores data that you can use and change",
+          "isCorrect": true
+        },
+        {
+          "text": "Only holds one number",
+          "isCorrect": false
+        },
+        {
+          "text": "Variables aren't necessary",
+          "isCorrect": false
+        },
+        {
+          "text": "Creates loops",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does print() do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.3.1"
+      ],
+      "options": [
+        {
+          "text": "Displays information on the screen",
+          "isCorrect": true
+        },
+        {
+          "text": "Prints a document",
+          "isCorrect": false
+        },
+        {
+          "text": "Deletes code",
+          "isCorrect": false
+        },
+        {
+          "text": "Stops the program",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between = and ==?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.1"
+      ],
+      "options": [
+        {
+          "text": "= assigns value; == checks if equal",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same",
+          "isCorrect": false
+        },
+        {
+          "text": "== is used for variables",
+          "isCorrect": false
+        },
+        {
+          "text": "= compares values",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What are the three basic data types?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.3.1"
+      ],
+      "options": [
+        {
+          "text": "Strings (text), integers (whole numbers), booleans (true/false)",
+          "isCorrect": true
+        },
+        {
+          "text": "Only numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Only text",
+          "isCorrect": false
+        },
+        {
+          "text": "Just one type",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does an 'if' statement do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.3.1"
+      ],
+      "options": [
+        {
+          "text": "Checks a condition and runs code if true",
+          "isCorrect": true
+        },
+        {
+          "text": "Always runs code",
+          "isCorrect": false
+        },
+        {
+          "text": "Stops the program",
+          "isCorrect": false
+        },
+        {
+          "text": "Repeats code",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a 'for' loop do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.3.1"
+      ],
+      "options": [
+        {
+          "text": "Repeats code a specific number of times",
+          "isCorrect": true
+        },
+        {
+          "text": "Runs once",
+          "isCorrect": false
+        },
+        {
+          "text": "Repeats forever",
+          "isCorrect": false
+        },
+        {
+          "text": "Checks conditions",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you store a name in a variable in Python?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.3.1"
+      ],
+      "options": [
+        {
+          "text": "name = 'Alice'",
+          "isCorrect": true
+        },
+        {
+          "text": "name: Alice",
+          "isCorrect": false
+        },
+        {
+          "text": "'Alice' = name",
+          "isCorrect": false
+        },
+        {
+          "text": "name 'Alice'",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does input() do in Python?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.3.1"
+      ],
+      "options": [
+        {
+          "text": "Gets text from the user and stores it",
+          "isCorrect": true
+        },
+        {
+          "text": "Displays information",
+          "isCorrect": false
+        },
+        {
+          "text": "Creates loops",
+          "isCorrect": false
+        },
+        {
+          "text": "Ends the program",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is string concatenation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.1"
+      ],
+      "options": [
+        {
+          "text": "Joining strings together with +",
+          "isCorrect": true
+        },
+        {
+          "text": "Shortening strings",
+          "isCorrect": false
+        },
+        {
+          "text": "Counting letters",
+          "isCorrect": false
+        },
+        {
+          "text": "Deleting characters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you add a comment in Python?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.3.1"
+      ],
+      "options": [
+        {
+          "text": "Start a line with #",
+          "isCorrect": true
+        },
+        {
+          "text": "Use quotation marks",
+          "isCorrect": false
+        },
+        {
+          "text": "Just write explanations",
+          "isCorrect": false
+        },
+        {
+          "text": "Comments aren't allowed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What would x = x + 1 do to the variable x?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.1"
+      ],
+      "options": [
+        {
+          "text": "Increase x by 1",
+          "isCorrect": true
+        },
+        {
+          "text": "Set x to 1",
+          "isCorrect": false
+        },
+        {
+          "text": "Delete x",
+          "isCorrect": false
+        },
+        {
+          "text": "Keep x the same",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does len() do to a string?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.3.1"
+      ],
+      "options": [
+        {
+          "text": "Returns the number of characters in the string",
+          "isCorrect": true
+        },
+        {
+          "text": "Deletes the string",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes it longer",
+          "isCorrect": false
+        },
+        {
+          "text": "Changes the text",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-computer-science-data-and-graphics": [
+    {
+      "prompt": "What is categorical data?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.DA.2.1"
+      ],
+      "options": [
+        {
+          "text": "Data that falls into categories or groups",
+          "isCorrect": true
+        },
+        {
+          "text": "Always numerical",
+          "isCorrect": false
+        },
+        {
+          "text": "Only text",
+          "isCorrect": false
+        },
+        {
+          "text": "Organized by date",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is numerical data?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.IM.2.1"
+      ],
+      "options": [
+        {
+          "text": "Data that is measurable and expressed as numbers",
+          "isCorrect": true
+        },
+        {
+          "text": "Only whole numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Only descriptions",
+          "isCorrect": false
+        },
+        {
+          "text": "Text data",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is bias in data collection?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.CO.2.1"
+      ],
+      "options": [
+        {
+          "text": "Systematic error or prejudice in how data is gathered",
+          "isCorrect": true
+        },
+        {
+          "text": "Random errors only",
+          "isCorrect": false
+        },
+        {
+          "text": "No bias exists",
+          "isCorrect": false
+        },
+        {
+          "text": "Bias doesn't affect results",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can a graph be misleading?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.2.1"
+      ],
+      "options": [
+        {
+          "text": "By using broken axes, manipulated scale, or inappropriate graph type",
+          "isCorrect": true
+        },
+        {
+          "text": "Graphs are always honest",
+          "isCorrect": false
+        },
+        {
+          "text": "Labels can lie",
+          "isCorrect": false
+        },
+        {
+          "text": "Colors affect truthfulness",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an outlier?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.DA.2.1"
+      ],
+      "options": [
+        {
+          "text": "A data point significantly different from others",
+          "isCorrect": true
+        },
+        {
+          "text": "Always the highest value",
+          "isCorrect": false
+        },
+        {
+          "text": "Always the lowest value",
+          "isCorrect": false
+        },
+        {
+          "text": "Any value in the middle",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What are statistics?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.CO.2.1"
+      ],
+      "options": [
+        {
+          "text": "Numerical summaries describing data patterns",
+          "isCorrect": true
+        },
+        {
+          "text": "Just random numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Only used in sports",
+          "isCorrect": false
+        },
+        {
+          "text": "Never useful",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between mean and median?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.2.1"
+      ],
+      "options": [
+        {
+          "text": "Mean: average; Median: middle value (not affected by outliers)",
+          "isCorrect": true
+        },
+        {
+          "text": "They're always the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Mean is in the middle",
+          "isCorrect": false
+        },
+        {
+          "text": "Median is the average",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When is the median better than the mean?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.2.1"
+      ],
+      "options": [
+        {
+          "text": "When there are outliers that would skew the average",
+          "isCorrect": true
+        },
+        {
+          "text": "Mean is always better",
+          "isCorrect": false
+        },
+        {
+          "text": "Never use median",
+          "isCorrect": false
+        },
+        {
+          "text": "They're never different",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is correlation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.CO.2.1"
+      ],
+      "options": [
+        {
+          "text": "Two things happening together or related in pattern",
+          "isCorrect": true
+        },
+        {
+          "text": "One thing causing another",
+          "isCorrect": false
+        },
+        {
+          "text": "No relationship",
+          "isCorrect": false
+        },
+        {
+          "text": "Unrelated events",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is causation different from correlation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.2.1"
+      ],
+      "options": [
+        {
+          "text": "Correlation is pattern; causation is one thing causing another",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same thing",
+          "isCorrect": false
+        },
+        {
+          "text": "Causation is weaker",
+          "isCorrect": false
+        },
+        {
+          "text": "Neither is important",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the mode in a data set?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.2.1"
+      ],
+      "options": [
+        {
+          "text": "The value that appears most frequently",
+          "isCorrect": true
+        },
+        {
+          "text": "The middle value",
+          "isCorrect": false
+        },
+        {
+          "text": "The highest value",
+          "isCorrect": false
+        },
+        {
+          "text": "The lowest value",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you consider when interpreting data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.CO.2.1"
+      ],
+      "options": [
+        {
+          "text": "Source, bias, sample size, context, and whether conclusions are supported",
+          "isCorrect": true
+        },
+        {
+          "text": "Only the numbers matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Context doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore outliers always",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-computer-science-intro-python-js": [
+    {
+      "prompt": "What is a function?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.3.2"
+      ],
+      "options": [
+        {
+          "text": "Reusable code that performs a task",
+          "isCorrect": true
+        },
+        {
+          "text": "A loop",
+          "isCorrect": false
+        },
+        {
+          "text": "Only math operations",
+          "isCorrect": false
+        },
+        {
+          "text": "Variables with names",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a parameter in a function?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.3.2"
+      ],
+      "options": [
+        {
+          "text": "Information the function needs to work",
+          "isCorrect": true
+        },
+        {
+          "text": "The function's name",
+          "isCorrect": false
+        },
+        {
+          "text": "Code inside the function",
+          "isCorrect": false
+        },
+        {
+          "text": "The return value",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between while and for loops?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.2"
+      ],
+      "options": [
+        {
+          "text": "while: repeats while condition true; for: repeats set times",
+          "isCorrect": true
+        },
+        {
+          "text": "They're identical",
+          "isCorrect": false
+        },
+        {
+          "text": "for is newer",
+          "isCorrect": false
+        },
+        {
+          "text": "while can't be used",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a list in Python or JavaScript?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.3.2"
+      ],
+      "options": [
+        {
+          "text": "An ordered collection of items accessed by position",
+          "isCorrect": true
+        },
+        {
+          "text": "A single item",
+          "isCorrect": false
+        },
+        {
+          "text": "A type of string",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for numbers",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does an else clause do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.3.2"
+      ],
+      "options": [
+        {
+          "text": "Runs code if the 'if' condition is false",
+          "isCorrect": true
+        },
+        {
+          "text": "Always runs",
+          "isCorrect": false
+        },
+        {
+          "text": "Ends the program",
+          "isCorrect": false
+        },
+        {
+          "text": "Repeats code",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you get user input in Python?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.A.3.2"
+      ],
+      "options": [
+        {
+          "text": "input()",
+          "isCorrect": true
+        },
+        {
+          "text": "get()",
+          "isCorrect": false
+        },
+        {
+          "text": "read()",
+          "isCorrect": false
+        },
+        {
+          "text": "ask()",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you access the first item in a list?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.3.2"
+      ],
+      "options": [
+        {
+          "text": "list[0]",
+          "isCorrect": true
+        },
+        {
+          "text": "list[1]",
+          "isCorrect": false
+        },
+        {
+          "text": "list.first",
+          "isCorrect": false
+        },
+        {
+          "text": "list.get(0)",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a return statement do in a function?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.3.2"
+      ],
+      "options": [
+        {
+          "text": "Sends a value back to the code that called the function",
+          "isCorrect": true
+        },
+        {
+          "text": "Ends the program",
+          "isCorrect": false
+        },
+        {
+          "text": "Prints text",
+          "isCorrect": false
+        },
+        {
+          "text": "Creates a variable",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a string in programming?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.3.2"
+      ],
+      "options": [
+        {
+          "text": "Text data enclosed in quotes",
+          "isCorrect": true
+        },
+        {
+          "text": "Rope or cord",
+          "isCorrect": false
+        },
+        {
+          "text": "Numbers only",
+          "isCorrect": false
+        },
+        {
+          "text": "A list type",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you add two strings together?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.3.2"
+      ],
+      "options": [
+        {
+          "text": "Use the + operator",
+          "isCorrect": true
+        },
+        {
+          "text": "Use the * operator",
+          "isCorrect": false
+        },
+        {
+          "text": "Strings can't be added",
+          "isCorrect": false
+        },
+        {
+          "text": "Use the - operator",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an elif statement?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.2"
+      ],
+      "options": [
+        {
+          "text": "'else if': checks another condition if the first is false",
+          "isCorrect": true
+        },
+        {
+          "text": "A type of loop",
+          "isCorrect": false
+        },
+        {
+          "text": "Older Python syntax",
+          "isCorrect": false
+        },
+        {
+          "text": "Same as else",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is a function better than repeating code?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.3.2"
+      ],
+      "options": [
+        {
+          "text": "Less code, easier to fix, easier to read, easier to reuse",
+          "isCorrect": true
+        },
+        {
+          "text": "Functions are harder",
+          "isCorrect": false
+        },
+        {
+          "text": "Repeating is simpler",
+          "isCorrect": false
+        },
+        {
+          "text": "Functions aren't helpful",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-computer-science-data-and-graphics": [
+    {
+      "prompt": "What is data mining?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.3.1"
+      ],
+      "options": [
+        {
+          "text": "Finding patterns and insights in large data sets using algorithms",
+          "isCorrect": true
+        },
+        {
+          "text": "Digging for minerals",
+          "isCorrect": false
+        },
+        {
+          "text": "Creating new data",
+          "isCorrect": false
+        },
+        {
+          "text": "Deleting information",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is big data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.3.1"
+      ],
+      "options": [
+        {
+          "text": "Massive data too large for traditional databases, requires special tools",
+          "isCorrect": true
+        },
+        {
+          "text": "Just bigger numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Only used by companies",
+          "isCorrect": false
+        },
+        {
+          "text": "Not useful for science",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is data cleaning?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.3.1"
+      ],
+      "options": [
+        {
+          "text": "Removing errors, inconsistencies, and missing values from data",
+          "isCorrect": true
+        },
+        {
+          "text": "Making data shorter",
+          "isCorrect": false
+        },
+        {
+          "text": "Deleting useful information",
+          "isCorrect": false
+        },
+        {
+          "text": "Data cleaning isn't necessary",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is data privacy?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.CO.3.1"
+      ],
+      "options": [
+        {
+          "text": "The right to control personal information and protect it from misuse",
+          "isCorrect": true
+        },
+        {
+          "text": "Keeping all data secret",
+          "isCorrect": false
+        },
+        {
+          "text": "Data doesn't need protection",
+          "isCorrect": false
+        },
+        {
+          "text": "Only companies care",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can bias in data collection affect results?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.3.1"
+      ],
+      "options": [
+        {
+          "text": "Biased sampling skews results and leads to false or unfair conclusions",
+          "isCorrect": true
+        },
+        {
+          "text": "Bias doesn't affect anything",
+          "isCorrect": false
+        },
+        {
+          "text": "All data is equally reliable",
+          "isCorrect": false
+        },
+        {
+          "text": "Bias only affects surveys",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you consider when analyzing data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.3.1"
+      ],
+      "options": [
+        {
+          "text": "Source reliability, bias, sample size, context, and limitations",
+          "isCorrect": true
+        },
+        {
+          "text": "Just look at the numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Context doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore limitations",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a predictive model?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.CO.3.1"
+      ],
+      "options": [
+        {
+          "text": "An algorithm trained on data to predict future outcomes",
+          "isCorrect": true
+        },
+        {
+          "text": "A physical model",
+          "isCorrect": false
+        },
+        {
+          "text": "A graph of data",
+          "isCorrect": false
+        },
+        {
+          "text": "Something that's always right",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the relationship between AI and data?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.CO.3.1"
+      ],
+      "options": [
+        {
+          "text": "AI learns from data to recognize patterns and make decisions",
+          "isCorrect": true
+        },
+        {
+          "text": "AI doesn't use data",
+          "isCorrect": false
+        },
+        {
+          "text": "Data and AI are unrelated",
+          "isCorrect": false
+        },
+        {
+          "text": "AI only works with small data",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a dataset?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.DA.DA.3.1"
+      ],
+      "options": [
+        {
+          "text": "A collection of related data points organized together",
+          "isCorrect": true
+        },
+        {
+          "text": "Just one number",
+          "isCorrect": false
+        },
+        {
+          "text": "A list with one item",
+          "isCorrect": false
+        },
+        {
+          "text": "Data without organization",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is metadata?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.IM.3.1"
+      ],
+      "options": [
+        {
+          "text": "Data about data (when it was collected, who collected it, source)",
+          "isCorrect": true
+        },
+        {
+          "text": "Just regular data",
+          "isCorrect": false
+        },
+        {
+          "text": "Fake data",
+          "isCorrect": false
+        },
+        {
+          "text": "Extra numbers",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When is it important to report limitations of data analysis?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.DA.DA.3.1"
+      ],
+      "options": [
+        {
+          "text": "Always; it shows honesty and helps others understand what conclusions are valid",
+          "isCorrect": true
+        },
+        {
+          "text": "Never necessary",
+          "isCorrect": false
+        },
+        {
+          "text": "Only in reports",
+          "isCorrect": false
+        },
+        {
+          "text": "Limitations don't matter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does normalization of data mean?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "CS.DA.CO.3.1"
+      ],
+      "options": [
+        {
+          "text": "Scaling data to a common range so values can be compared fairly",
+          "isCorrect": true
+        },
+        {
+          "text": "Making data normal",
+          "isCorrect": false
+        },
+        {
+          "text": "Creating new data",
+          "isCorrect": false
+        },
+        {
+          "text": "Deleting outliers",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-computer-science-intro-python-js": [
+    {
+      "prompt": "What is object-oriented programming?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.3.3"
+      ],
+      "options": [
+        {
+          "text": "Organizing code into objects with properties and methods",
+          "isCorrect": true
+        },
+        {
+          "text": "Painting objects",
+          "isCorrect": false
+        },
+        {
+          "text": "Very old programming style",
+          "isCorrect": false
+        },
+        {
+          "text": "Not used anymore",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a class?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.3.3"
+      ],
+      "options": [
+        {
+          "text": "A blueprint for creating objects with properties and methods",
+          "isCorrect": true
+        },
+        {
+          "text": "A school class",
+          "isCorrect": false
+        },
+        {
+          "text": "The same as an object",
+          "isCorrect": false
+        },
+        {
+          "text": "Not used in Python",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is string manipulation?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.C.3.3"
+      ],
+      "options": [
+        {
+          "text": "Techniques to modify and analyze text strings",
+          "isCorrect": true
+        },
+        {
+          "text": "Physical rope manipulation",
+          "isCorrect": false
+        },
+        {
+          "text": "Strings can't be changed",
+          "isCorrect": false
+        },
+        {
+          "text": "Just counting characters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is error handling?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.3.3"
+      ],
+      "options": [
+        {
+          "text": "Using try-except blocks to handle errors gracefully",
+          "isCorrect": true
+        },
+        {
+          "text": "Ignoring errors",
+          "isCorrect": false
+        },
+        {
+          "text": "Programs shouldn't have errors",
+          "isCorrect": false
+        },
+        {
+          "text": "Error handling slows code",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a dictionary in Python?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.3"
+      ],
+      "options": [
+        {
+          "text": "Key-value pairs storing related data",
+          "isCorrect": true
+        },
+        {
+          "text": "Only for words",
+          "isCorrect": false
+        },
+        {
+          "text": "A list with numbers",
+          "isCorrect": false
+        },
+        {
+          "text": "Like a list but slower",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is recursion?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "CS.AP.A.3.3"
+      ],
+      "options": [
+        {
+          "text": "A function that calls itself to solve a problem",
+          "isCorrect": true
+        },
+        {
+          "text": "A loop technique",
+          "isCorrect": false
+        },
+        {
+          "text": "Recursion never happens",
+          "isCorrect": false
+        },
+        {
+          "text": "Only in newer languages",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does slicing a string do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.3"
+      ],
+      "options": [
+        {
+          "text": "Extracts a portion of the string using indices",
+          "isCorrect": true
+        },
+        {
+          "text": "Removes characters permanently",
+          "isCorrect": false
+        },
+        {
+          "text": "Splits into lists",
+          "isCorrect": false
+        },
+        {
+          "text": "Reverses the string",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you handle an exception in Python?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.V.3.3"
+      ],
+      "options": [
+        {
+          "text": "With a try-except block: try code, except to handle errors",
+          "isCorrect": true
+        },
+        {
+          "text": "Exceptions can't be handled",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignoring them",
+          "isCorrect": false
+        },
+        {
+          "text": "Restarting the program",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an object in object-oriented programming?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.A.3.3"
+      ],
+      "options": [
+        {
+          "text": "An instance of a class with properties and methods",
+          "isCorrect": true
+        },
+        {
+          "text": "Always physical",
+          "isCorrect": false
+        },
+        {
+          "text": "Just data with no behavior",
+          "isCorrect": false
+        },
+        {
+          "text": "Same as a class",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a method?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.3"
+      ],
+      "options": [
+        {
+          "text": "A function associated with an object",
+          "isCorrect": true
+        },
+        {
+          "text": "A way to solve problems",
+          "isCorrect": false
+        },
+        {
+          "text": "Not used in Python",
+          "isCorrect": false
+        },
+        {
+          "text": "Just a function",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you check if an item is in a list?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "CS.AP.V.3.3"
+      ],
+      "options": [
+        {
+          "text": "Use 'in': if item in list",
+          "isCorrect": true
+        },
+        {
+          "text": "Use 'find'",
+          "isCorrect": false
+        },
+        {
+          "text": "Always loop through",
+          "isCorrect": false
+        },
+        {
+          "text": "Can't check",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does sys.exit() do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "CS.AP.C.3.3"
+      ],
+      "options": [
+        {
+          "text": "Exits the program immediately",
+          "isCorrect": true
+        },
+        {
+          "text": "Displays a message",
+          "isCorrect": false
+        },
+        {
+          "text": "Deletes the program",
+          "isCorrect": false
+        },
+        {
+          "text": "Restarts the program",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

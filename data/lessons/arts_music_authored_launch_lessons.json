@@ -1,0 +1,404 @@
+{
+  "3-electives-arts-and-music-drawing-painting-techniques": {
+    "title": "Discovering How to Draw and Paint",
+    "summary": "Students learn foundational drawing and painting techniques, including how to use light and dark to create shapes, understanding basic colors, and building confidence with artistic tools.",
+    "objectives": [
+      "Identify and apply shading techniques to create depth",
+      "Mix and use primary colors effectively",
+      "Demonstrate control of pencils and brushes",
+      "Create artwork showing understanding of basic composition"
+    ],
+    "grade_band": "3",
+    "subject": "Arts & Music",
+    "standards": [
+      "VA.CR.1.1",
+      "VA.CR.2.1",
+      "VA.PR.5.1"
+    ],
+    "outline": {
+      "hook": "Show students a simple object (an apple, a ball) and have them notice: where is it brightest? Where is it darkest? How does that make it look round instead of flat? Discuss how artists use light and dark like magicians creating illusions.",
+      "direct_instruction": "Introduce the concept of shading: when we press a pencil harder, the area becomes darker; when we press lightly, it's lighter. Demonstrate making a simple sphere using just light and dark pencil marks. Show how warm colors (red, yellow, orange) make us feel energetic, while cool colors (blue, green) feel calm. Demonstrate mixing two primary colors to create a secondary color. Practice with students using colored pencils or markers.",
+      "guided_practice": "Students shade a simple circle using only a pencil, making one side dark and one side light. Then they paint a simple landscape using warm colors in the foreground and cool colors in the background. Teacher circulates, asking questions like: 'Where do you want the light to come from?' 'What color will you mix?'",
+      "independent_practice": "Create a still life drawing or painting of a simple object (cup, fruit, toy) using shading and color. Students choose their medium and work independently, applying techniques learned.",
+      "check_for_understanding": "Ask students to point out the lightest and darkest parts of their work. Have them explain why they chose certain colors. Observe pencil grip and brush control.",
+      "exit_ticket": "Students show their work and tell one thing they shaded and one color they mixed today.",
+      "materials": [
+        "Pencils (HB or #2)",
+        "Colored pencils or markers",
+        "White paper or sketch paper",
+        "Watercolors or tempera paint",
+        "Paint brushes (various sizes)",
+        "Water containers",
+        "Paper towels"
+      ]
+    }
+  },
+  "3-electives-arts-and-music-notation-basics": {
+    "title": "Learning to Read Music Notes",
+    "summary": "Students discover how musicians write down music using lines, notes, and symbols. They learn the staff, basic note names, and begin reading simple rhythms.",
+    "objectives": [
+      "Identify the five lines of the musical staff",
+      "Recognize note symbols and their letter names",
+      "Understand basic rhythm values (whole, half, quarter notes)",
+      "Read a simple melodic line"
+    ],
+    "grade_band": "3",
+    "subject": "Arts & Music",
+    "standards": [
+      "MU.CR.1.1",
+      "MU.PR.4.1",
+      "MU.RE.7.1"
+    ],
+    "outline": {
+      "hook": "Show students a piece of sheet music and ask: 'Do you see dots on lines? Those are letters, just like in the alphabet! Musicians read them like you read words.' Play a simple melody and have them watch the notes go up and down as they listen.",
+      "direct_instruction": "Draw a staff (five lines) on the board and label each line: E, G, B, D, F (bottom to top). Teach the spaces: F, A, C, E. Introduce the treble clef symbol and explain it spirals around the G line. Show a whole note (hollow circle with stem), half note (hollow circle with stem), and quarter note (filled circle with stem). Demonstrate that quarter notes are short, half notes are longer, and whole notes are the longest.",
+      "guided_practice": "Class reads note names together, pointing to lines and spaces. Clap the rhythm of simple note patterns. Write note names on the board and have volunteers come identify them on the staff.",
+      "independent_practice": "Students draw their own staff and write note names in order. Complete a worksheet identifying notes on lines and spaces. Clap rhythm patterns shown in notation.",
+      "check_for_understanding": "Ask students to identify specific notes. Have them clap a rhythm you show them. Ask what a quarter note is.",
+      "exit_ticket": "Students write down the names of three notes they learned today on a piece of staff paper.",
+      "materials": [
+        "Staff paper or printed staff templates",
+        "Pencils",
+        "Whiteboard and markers",
+        "Simple songs with notation",
+        "Rhythm cards",
+        "Picture of treble clef"
+      ]
+    }
+  },
+  "4-electives-arts-and-music-drawing-painting-techniques": {
+    "title": "Techniques That Make Art Come Alive",
+    "summary": "Students explore advanced techniques including color mixing, perspective basics, and how to create texture and movement in their artwork. They begin understanding composition.",
+    "objectives": [
+      "Mix secondary and tertiary colors intentionally",
+      "Apply perspective principles to show depth",
+      "Create texture using varied marks and materials",
+      "Compose artwork with attention to focal point and balance"
+    ],
+    "grade_band": "4",
+    "subject": "Arts & Music",
+    "standards": [
+      "VA.CR.1.1",
+      "VA.CR.2.2",
+      "VA.PR.5.1"
+    ],
+    "outline": {
+      "hook": "Show two paintings: one flat without perspective, one with depth. Ask: 'Which one looks like you could walk into it? How did the artist make it look far away?' Discuss how overlapping objects, size, and placement create the feeling of distance.",
+      "direct_instruction": "Teach the color wheel: primary (red, yellow, blue), secondary (orange, green, purple from mixing two primaries), and complementary colors (opposite on wheel, create vibration). Introduce basic linear perspective: things look smaller when far away, lines seem to meet at a vanishing point. Demonstrate creating texture through different mark-making: cross-hatching, stippling, directional strokes. Show how warm colors come forward; cool colors recede.",
+      "guided_practice": "Mix secondary colors together. Draw a simple scene using perspective (road, railroad tracks, or hallway). Practice texture techniques on scrap paper. Arrange paper objects to create overlapping and discuss how that creates depth.",
+      "independent_practice": "Create a landscape or still life using: perspective techniques, intentional color choices, texture variation, and a clear focal point. Students plan composition lightly before final work.",
+      "check_for_understanding": "Have students point out warm and cool colors in their work. Ask how they created depth. Discuss their focal point.",
+      "exit_ticket": "Students identify one technique they used and explain how it improved their artwork.",
+      "materials": [
+        "Drawing paper",
+        "Colored pencils, markers, pastels",
+        "Watercolors or acrylics",
+        "Various painting tools (brushes, sponges, cotton swabs)",
+        "Ruler for perspective",
+        "Textured materials (leaves, fabric samples)",
+        "Sketchbook"
+      ]
+    }
+  },
+  "4-electives-arts-and-music-notation-basics": {
+    "title": "Reading Rhythms and Melodies",
+    "summary": "Students deepen their notation skills by reading more complex rhythms, understanding time signatures, and performing simple melodies. They connect symbols to sound.",
+    "objectives": [
+      "Read and perform rhythms in 2/4, 3/4, and 4/4 time",
+      "Understand how time signatures organize music",
+      "Identify sharps and flats and their effect on pitch",
+      "Perform simple melodies accurately from notation"
+    ],
+    "grade_band": "4",
+    "subject": "Arts & Music",
+    "standards": [
+      "MU.CR.1.2",
+      "MU.PR.4.2",
+      "MU.RE.7.2"
+    ],
+    "outline": {
+      "hook": "Clap a steady beat, then clap a rhythm. Ask: 'How is the rhythm different from the beat? Rhythm is like the words of a song; the beat is the heartbeat!' Show a time signature and ask what the numbers mean.",
+      "direct_instruction": "Explain time signatures: top number = beats per measure, bottom number = which note gets the beat. 4/4 is most common; 3/4 is waltz-like; 2/4 is march-like. Introduce sharps and flats: sharp raises a note by a half-step, flat lowers it. Show a sharp symbol (#) and flat symbol (♭). Teach students to count beats while reading: 1-and-2-and-3-and-4-and for eighth notes in 4/4.",
+      "guided_practice": "Clap rhythms together while counting aloud. Read note sequences together (do-re-mi or letter names). Sing or play simple 4-beat patterns. Identify sharps and flats on the staff together.",
+      "independent_practice": "Complete rhythm reading worksheets with different time signatures. Perform a short melodic sequence for the teacher or a partner. Write out a simple rhythm in a given time signature.",
+      "check_for_understanding": "Listen to students clap and perform. Ask them to explain what a sharp does. Have them identify time signatures by ear.",
+      "exit_ticket": "Students perform a short 4-beat rhythm clapping or on an instrument.",
+      "materials": [
+        "Staff paper",
+        "Pencils",
+        "Notation examples (songs with rhythms)",
+        "Instruments (bells, xylophones, drums) for performing",
+        "Rhythm cards",
+        "Metronome (optional)"
+      ]
+    }
+  },
+  "5-electives-arts-and-music-drawing-painting-techniques": {
+    "title": "Mastering Artistic Techniques and Expression",
+    "summary": "Students refine their technical skills and begin exploring personal expression. They study master artists, experiment with advanced techniques, and develop artistic voice through intentional color, value, and composition choices.",
+    "objectives": [
+      "Apply atmospheric perspective and advanced shading",
+      "Use color theory to evoke emotion and create harmony",
+      "Demonstrate mastery of chosen medium or technique",
+      "Create artwork reflecting personal interpretation and style"
+    ],
+    "grade_band": "5",
+    "subject": "Arts & Music",
+    "standards": [
+      "VA.CR.1.2",
+      "VA.CR.2.2",
+      "VA.PR.5.2"
+    ],
+    "outline": {
+      "hook": "Compare two paintings of the same subject in different styles (realistic vs. impressionistic, or different color schemes). Ask: 'How did the artist's choices—color, detail, perspective—affect how we feel looking at it?' Discuss how technique becomes a form of expression.",
+      "direct_instruction": "Teach atmospheric perspective: distant objects are hazier, more blue-tinted, lighter, and less detailed. Introduce color harmony (monochromatic, analogous, complementary). Explain how chiaroscuro (light/dark contrast) creates drama. Show a master work and analyze artist's choices. Demonstrate advanced techniques: glazing, underpainting, scumbling, or impasto depending on medium. Introduce composition rule of thirds.",
+      "guided_practice": "Analyze a master artwork together, discussing color choices, value relationships, focal point, and technique. Create color studies exploring harmony. Practice one advanced technique together.",
+      "independent_practice": "Create a painting or drawing based on personal observation or imagination, applying learned techniques. Make intentional choices about color harmony, focal point, perspective, and technique to express a feeling or idea.",
+      "check_for_understanding": "Ask students to explain their artistic choices. Discuss how their technique supports their vision. Observe skill application.",
+      "exit_ticket": "Students share their artwork and explain one artistic choice they made and why.",
+      "materials": [
+        "Drawing and painting papers",
+        "Colored media (pencils, pastels, paints)",
+        "Brushes, palette knives, blending tools",
+        "Fixative spray (if using pastels)",
+        "Images of master artworks for study",
+        "Artist biographies",
+        "Sketchbook for planning"
+      ]
+    }
+  },
+  "5-electives-arts-and-music-notation-basics": {
+    "title": "Understanding Musical Structure and Expression",
+    "summary": "Students read and understand more complex notation including dotted notes, intervals, key signatures, and dynamic markings. They connect notation to musical interpretation.",
+    "objectives": [
+      "Read and perform rhythms with dotted notes and syncopation",
+      "Understand intervals and their relationship to pitch",
+      "Read major and minor key signatures",
+      "Interpret dynamic and tempo markings in performance"
+    ],
+    "grade_band": "5",
+    "subject": "Arts & Music",
+    "standards": [
+      "MU.CR.1.2",
+      "MU.PR.4.2",
+      "MU.RE.7.2"
+    ],
+    "outline": {
+      "hook": "Play a song first without dynamics or expression (robotic), then with dynamics and expression. Ask: 'Which sounded more alive? How did the symbols in the music tell the musician how to play expressively?'",
+      "direct_instruction": "Explain dotted notes: a dot adds half the note's value (dotted quarter = 1.5 beats). Introduce intervals by counting on the staff (2nd, 3rd, 4th, 5th, etc.). Teach key signatures: show common major keys (C, G, D, F) and their relative minors. Explain dynamics (pp, p, mp, mf, f, ff) and tempo markings (Allegro, Moderato, Adagio, Vivace). Show how these markings guide interpretation.",
+      "guided_practice": "Identify intervals together. Read key signatures aloud. Clap rhythms with dotted notes. Play or sing passages applying dynamic changes and tempo markings.",
+      "independent_practice": "Complete notation worksheets on intervals, key signatures, and rhythms. Perform a piece applying proper dynamics and expression. Create a short composition in a specified key.",
+      "check_for_understanding": "Ask students to identify intervals by counting. Have them explain what a key signature tells them. Listen to their expressive performance.",
+      "exit_ticket": "Students identify and explain one dynamic or tempo marking in a piece of music.",
+      "materials": [
+        "Staff paper",
+        "Notation examples with dynamics and tempos",
+        "Instruments for performance",
+        "Key signature guide",
+        "Interval practice sheets",
+        "Simple scores to perform"
+      ]
+    }
+  },
+  "6-electives-arts-and-music-art-history-pd-images": {
+    "title": "Discovering Artists and Artwork from History",
+    "summary": "Students explore art history from ancient civilizations through the 19th century, learning how cultural context shapes artistic style. They analyze public domain artworks and understand the evolution of artistic techniques.",
+    "objectives": [
+      "Identify characteristics of major art historical periods",
+      "Understand how historical context influences artistic style",
+      "Analyze artworks using formal and contextual approaches",
+      "Appreciate diversity of artistic traditions across cultures"
+    ],
+    "grade_band": "6",
+    "subject": "Arts & Music",
+    "standards": [
+      "VA.CN.10.1",
+      "VA.RE.8.1",
+      "VA.RE.9.1"
+    ],
+    "outline": {
+      "hook": "Show three artworks from different periods (Egyptian, Renaissance, Impressionist) side by side. Ask: 'Why do they look so different? What was happening in the world when each was made? What tools and ideas did each artist have?' Introduce the idea that art tells us stories about history.",
+      "direct_instruction": "Provide overview of major periods: Ancient (Egypt, Greece, Rome), Medieval, Renaissance, Baroque, and 19th century movements (Realism, Impressionism). Explain how each period had different goals: Ancient art honored gods and rulers; Renaissance artists studied perspective and anatomy; Impressionists captured light. Show public domain examples from each period. Discuss how materials (paint, stone, bronze), technology (printing, light), and culture (religion, trade, exploration) shaped art.",
+      "guided_practice": "Analyze a masterwork together using questions: What do you see? When/where was it made? Who made it? What was it made for? What technique did the artist use? Class discusses connections between the artwork and its historical moment.",
+      "independent_practice": "Students choose an artwork from a provided collection, research its context, and write or present analysis of how time and place influenced the artist's choices.",
+      "check_for_understanding": "Ask students to explain connections between art and history. Can they identify artistic period characteristics? Do they understand artist intent?",
+      "exit_ticket": "Students name one artwork they studied and one way history influenced it.",
+      "materials": [
+        "Public domain artwork images",
+        "Timeline of art history",
+        "Artist biographies",
+        "Historical context readings",
+        "Artwork analysis worksheets",
+        "Research resources"
+      ]
+    }
+  },
+  "6-electives-arts-and-music-music-theory-intro": {
+    "title": "Building Blocks of Musical Sound: Introduction to Theory",
+    "summary": "Students discover how notes combine into chords and chords combine into progressions that create meaning. They learn basic harmonic function and begin analyzing music's structure.",
+    "objectives": [
+      "Understand how major and minor scales are constructed",
+      "Build and identify major and minor triads",
+      "Recognize primary chord functions (tonic, dominant, subdominant)",
+      "Analyze basic chord progressions and cadences"
+    ],
+    "grade_band": "6",
+    "subject": "Arts & Music",
+    "standards": [
+      "MU.CR.2.1",
+      "MU.RE.8.1",
+      "MU.CN.11.1"
+    ],
+    "outline": {
+      "hook": "Play a chord progression (I-IV-V-I) and ask: 'Did that feel complete at the end? What if I stopped on the fifth chord?' Explain that chords have personalities and pull toward resolution, like tension and release.",
+      "direct_instruction": "Build a C major scale together: C-D-E-F-G-A-B-C (whole-half-whole-whole-whole-whole-half pattern). Show how every third note creates a chord: C-E-G (C major), D-F-A (D minor), etc. Teach that major chords sound happy; minor chords sound sad. Explain harmonic function: I (home), V (wants to go home), IV (reflective). Play examples of I-V-I cadence. Show how chord progressions create movement and emotion.",
+      "guided_practice": "Build chords together on instrument or keyboard. Identify major/minor by ear. Practice finding Roman numeral chords in a key. Analyze simple progressions in familiar songs.",
+      "independent_practice": "Complete theory worksheets building chords, identifying intervals, and analyzing progressions. Play or sing simple chord progressions. Compose a short 4-chord progression using primary chords.",
+      "check_for_understanding": "Ask students to build a triad. Have them explain major vs. minor. Can they identify which chord is the dominant?",
+      "exit_ticket": "Students play or sing a I-IV-V-I progression.",
+      "materials": [
+        "Keyboard or piano",
+        "Staff paper",
+        "Theory worksheets",
+        "Chord chart",
+        "Songs with clear chord progressions",
+        "Chord building materials (blocks, cards)",
+        "Audio examples of cadences"
+      ]
+    }
+  },
+  "7-electives-arts-and-music-art-history-pd-images": {
+    "title": "Modern and Contemporary Art: Revolution and Reflection",
+    "summary": "Students explore 20th and 21st-century art movements and how artists responded to social change, technology, and new ideas. They analyze how art challenged traditions and expressed diverse perspectives.",
+    "objectives": [
+      "Analyze major modern art movements (Cubism, Surrealism, Abstract Expressionism)",
+      "Understand how social events shaped artistic expression",
+      "Recognize diverse artistic traditions and voices",
+      "Evaluate how contemporary artists address modern issues"
+    ],
+    "grade_band": "7",
+    "subject": "Arts & Music",
+    "standards": [
+      "VA.CN.10.2",
+      "VA.RE.8.2",
+      "VA.RE.9.2"
+    ],
+    "outline": {
+      "hook": "Show a Cubist painting and ask: 'Is this broken? Why did Picasso paint this way?' Explain that artists were trying new things because the world was changing rapidly. Photography made realistic painting less necessary, so artists asked: 'What else can art do?'",
+      "direct_instruction": "Discuss major 20th-century movements: Cubism (multiple viewpoints), Surrealism (dreams and unconscious), Dada (anti-art response to war), Abstract Expressionism (gesture and emotion), and contemporary movements (identity politics, social engagement). Explain how artists responded to World War I, World War II, the Civil Rights Movement, feminism, and technology. Show diverse artists from different cultures and backgrounds. Discuss how photography, film, and digital technology expanded what could be art.",
+      "guided_practice": "Analyze artworks together, discussing: What was the artist's goal? What was happening in society? How does this artwork challenge expectations? What materials and techniques were used?",
+      "independent_practice": "Research a modern artist or movement. Create an analysis of how social/historical context influenced their work. Discuss how artists used their work to make statements.",
+      "check_for_understanding": "Can students connect art movements to historical events? Do they understand artist intent? Can they analyze contemporary art critically?",
+      "exit_ticket": "Students name one modern movement and explain what it was about.",
+      "materials": [
+        "Public domain and contemporary artwork images",
+        "Biographical information on artists",
+        "Historical timelines and events",
+        "Analysis framework/questions",
+        "Video clips of artists discussing work",
+        "Contemporary news and social issues"
+      ]
+    }
+  },
+  "7-electives-arts-and-music-music-theory-intro": {
+    "title": "Advanced Harmony: Chords in Motion",
+    "summary": "Students understand how chords move and relate to each other through voice leading and harmonic function. They analyze more complex progressions and begin composing with harmonic awareness.",
+    "objectives": [
+      "Apply voice leading principles to create smooth progressions",
+      "Understand secondary dominants and chromatic harmony",
+      "Analyze and compose cadences and harmonic progressions",
+      "Recognize harmonic function in real music"
+    ],
+    "grade_band": "7",
+    "subject": "Arts & Music",
+    "standards": [
+      "MU.CR.2.2",
+      "MU.RE.8.2",
+      "MU.CN.11.2"
+    ],
+    "outline": {
+      "hook": "Play two versions of the same progression: one with choppy, large leaps between notes; one smooth with small steps. Ask: 'Which sounds better? How did the composer move the notes smoothly?' Explain voice leading.",
+      "direct_instruction": "Teach voice leading: smooth movement between chords minimizes large leaps. Show chord inversions and how they affect bass movement. Introduce secondary dominants: V of V, V of IV, etc., create temporary harmonic excitement. Teach cadences in detail: authentic (V-I), plagal (IV-I), deceptive (V-vi), half cadence (I-V). Discuss how each creates different emotional effects. Show chromatic passing tones and approach chords that add richness without changing harmonic function.",
+      "guided_practice": "Arrange chords on keyboard to minimize voice movement. Identify cadences in hymns and songs. Play progressions with secondary dominants. Analyze how composers manipulate harmony for effect.",
+      "independent_practice": "Complete harmony worksheets on voice leading, inversions, and cadences. Compose a 16-bar progression using primary chords and at least one cadence. Analyze harmonic function in a provided score.",
+      "check_for_understanding": "Ask students to identify cadences by ear. Can they explain voice leading principles? Do they understand secondary dominants?",
+      "exit_ticket": "Students identify and play a cadence in any key.",
+      "materials": [
+        "Staff paper",
+        "Keyboard or piano",
+        "Harmonic analysis worksheets",
+        "Hymns and songs for analysis",
+        "Chord progression examples",
+        "Composition paper",
+        "Audio examples of cadences"
+      ]
+    }
+  },
+  "8-electives-arts-and-music-art-history-pd-images": {
+    "title": "Critical Perspectives: Art, Power, and Identity",
+    "summary": "Students develop critical thinking about art history, examining whose stories are told, who is excluded, and how power shapes what we see as important. They explore art as activism and reclaim marginalized voices.",
+    "objectives": [
+      "Recognize and question biases in art history canon",
+      "Understand how identity (race, gender, culture) shapes artistic practice",
+      "Analyze art as social critique and activism",
+      "Appreciate multiple perspectives and global artistic traditions"
+    ],
+    "grade_band": "8",
+    "subject": "Arts & Music",
+    "standards": [
+      "VA.CN.10.3",
+      "VA.RE.8.3",
+      "VA.RE.9.3"
+    ],
+    "outline": {
+      "hook": "Ask: 'When you think of famous artists, what names come to mind? Are they mostly men? Mostly European? Why?' Introduce the idea that art history has been incomplete and reflect whose stories have been centered vs. left out.",
+      "direct_instruction": "Discuss art historical biases: whose works were preserved, whose were destroyed, who had access to training and markets. Explain colonialism's role: Western museums have looted non-Western artworks. Introduce feminist art history: women artists long excluded or attributed to men. Discuss how racism, homophobia, and xenophobia shaped who was recognized. Show diverse artists addressing identity: race, gender, sexuality, culture, disability. Discuss art activism: using art to challenge power and advocate for change. Introduce concepts like postcolonialism, institutional critique, and social engagement art.",
+      "guided_practice": "Analyze artworks by diverse artists and discuss artist's identity and context. Compare how Western museums displayed non-Western art (othering) vs. centering artist voices. Discuss repatriation of looted artworks.",
+      "independent_practice": "Research a historically marginalized artist or movement. Analyze how their work addresses identity or power. Present on why this artist/work matters and how their work was excluded or misrepresented.",
+      "check_for_understanding": "Do students recognize bias in art canon? Can they discuss power dynamics? Do they appreciate diverse perspectives?",
+      "exit_ticket": "Students name one artist whose story is often left out and why their work matters.",
+      "materials": [
+        "Diverse artwork images",
+        "Artist biographies (women, non-Western, LGBTQ+, disabled artists, etc.)",
+        "Colonial history resources",
+        "Contemporary art addressing social issues",
+        "Repatriation case studies",
+        "Critical art history readings (age-appropriate)"
+      ]
+    }
+  },
+  "8-electives-arts-and-music-music-theory-intro": {
+    "title": "Complex Harmony and Compositional Strategies",
+    "summary": "Students understand advanced compositional techniques including counterpoint, form, orchestration, and how composers organize large works. They compose with sophisticated harmonic and structural awareness.",
+    "objectives": [
+      "Understand counterpoint and its role in composition",
+      "Analyze form (sonata, rondo, theme and variations)",
+      "Apply sophisticated harmonic techniques to composition",
+      "Understand how orchestration and arrangement serve musical meaning"
+    ],
+    "grade_band": "8",
+    "subject": "Arts & Music",
+    "standards": [
+      "MU.CR.2.3",
+      "MU.RE.8.3",
+      "MU.CN.11.3"
+    ],
+    "outline": {
+      "hook": "Play a Bach fugue: explain that multiple melodies are happening at once, each independent but fitting together perfectly. Ask: 'How did Bach write this? How do the voices balance?' Introduce counterpoint as musical conversation.",
+      "direct_instruction": "Define counterpoint: independent melodic lines that create harmony. Discuss fugue: subject, answer, exposition, development. Explain form as large-scale structure: sonata (exposition-development-recapitulation), rondo (ABA or ABACA), theme and variations (repeating theme with changes). Show how form gives coherence to long pieces. Discuss orchestration: how instrument choice affects color and meaning. Explain how composers vary themes through rhythm, transposition, instrumentation, and harmony to develop ideas. Discuss functional harmony's role in creating expectation and structure.",
+      "guided_practice": "Listen to and analyze a fugue by parts. Identify formal sections in a provided score. Discuss how orchestration changes our perception of the same melody.",
+      "independent_practice": "Analyze the form of a classical piece. Compose a theme and variation or small rondo. Orchestrate or arrange a simple melody for different instruments, discussing how choices affect the piece.",
+      "check_for_understanding": "Can students identify form? Do they understand voice independence in counterpoint? Can they discuss how orchestration matters?",
+      "exit_ticket": "Students analyze a short passage identifying formal section and explaining how the composer achieved coherence.",
+      "materials": [
+        "Musical scores (Bach fugues, Mozart sonatas, etc.)",
+        "Form analysis worksheets",
+        "Orchestration guide",
+        "Composition paper",
+        "Audio examples of form and orchestration",
+        "Recording of same piece in different arrangements",
+        "Listening analysis guide"
+      ]
+    }
+  }
+}

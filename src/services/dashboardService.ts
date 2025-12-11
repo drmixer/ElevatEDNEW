@@ -21,6 +21,7 @@ import type {
   ParentWeeklyReport,
   Mission,
   CelebrationMoment,
+  SubjectWeeklyTrend,
   AvatarOption,
   SkillGapInsight,
   Student,
@@ -30,6 +31,7 @@ import type {
   SubjectMastery,
   XPTimelinePoint,
   LearningPreferences,
+  ChildGoalTargets,
 } from '../types';
 import { defaultLearningPreferences } from '../types';
 import { castLearningPreferences } from './profileService';
@@ -45,6 +47,8 @@ const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
   typeof import.meta.env !== 'undefined' &&
   (import.meta.env.DEV || import.meta.env.VITE_ALLOW_FAKE_DASHBOARD_DATA === 'true');
+
+const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 
 type SubjectRow = {
   id: number;
@@ -197,6 +201,153 @@ const ensureLearningPreferences = (student: Student): LearningPreferences => {
     student.learningPreferences = { ...defaultLearningPreferences };
   }
   return student.learningPreferences;
+};
+
+const computeWeeklyPlanTargets = (
+  parentGoals: ChildGoalTargets | null,
+  weeklyPlanIntensity: LearningPreferences['weeklyPlanIntensity'],
+) => {
+  const lessonBase = parentGoals?.weeklyLessons ?? 5;
+  const minutesBase = parentGoals?.practiceMinutes ?? 60;
+  const factor =
+    !lessonBase
+      ? 1
+      : weeklyPlanIntensity === 'light'
+        ? 0.8
+        : weeklyPlanIntensity === 'challenge'
+          ? 1.2
+          : 1;
+  return {
+    lessons: Math.max(1, Math.round(lessonBase * factor)),
+    minutes: Math.max(15, Math.round(minutesBase * factor)),
+  };
+};
+
+const computeWeeklyProgress = (activity: StudentDailyActivity[]) => {
+  return activity.reduce(
+    (acc, entry) => {
+      acc.lessons += entry.lessonsCompleted ?? 0;
+      acc.minutes += entry.practiceMinutes ?? 0;
+      return acc;
+    },
+    { lessons: 0, minutes: 0 },
+  );
+};
+
+const CROSS_SUBJECT_PAIRS: Partial<Record<Subject, Subject[]>> = {
+  math: ['science', 'study_skills'],
+  science: ['math', 'english'],
+  english: ['social_studies', 'science'],
+  social_studies: ['english', 'study_skills'],
+  study_skills: ['english', 'math'],
+};
+
+const injectMixInsIntoPlan = (
+  lessons: DashboardLesson[],
+  preferences: LearningPreferences,
+  weeklyTargets: { lessons: number; minutes: number },
+  weeklyProgress: { lessons: number; minutes: number },
+) => {
+  const mode = preferences.mixInMode ?? 'auto';
+  if (mode === 'core_only') return lessons;
+  const lightLoad =
+    preferences.weeklyPlanIntensity === 'light' ||
+    (weeklyTargets.lessons > 0 && weeklyProgress.lessons <= Math.max(1, weeklyTargets.lessons - 2));
+  if (!lightLoad && mode !== 'cross_subject') return lessons;
+
+  const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? 'balanced';
+  const crossTargets =
+    focusSubject && focusSubject !== 'balanced' ? CROSS_SUBJECT_PAIRS[focusSubject] ?? [] : undefined;
+  const seen = new Set<string>();
+
+  const candidates = lessons
+    .filter((lesson) => {
+      if (lesson.isMixIn) return false;
+      if (lesson.status === 'completed') return false;
+      if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
+        return crossTargets.includes(lesson.subject);
+      }
+      return true;
+    })
+    .slice(0, 3);
+
+  const mixInPicks = candidates.slice(0, 2);
+  const reasonFor = (subject: Subject) => {
+    const partner =
+      focusSubject && focusSubject !== 'balanced'
+        ? `Mix-in: apply ${formatSubjectLabel(focusSubject)} with ${formatSubjectLabel(subject)}`
+        : `Mix-in: switch to ${formatSubjectLabel(subject)}`;
+    return partner;
+  };
+
+  return lessons.map((lesson) => {
+    if (mixInPicks.find((item) => item.id === lesson.id) && !seen.has(lesson.id)) {
+      seen.add(lesson.id);
+      return {
+        ...lesson,
+        isMixIn: true,
+        suggestionReason: lesson.suggestionReason ?? reasonFor(lesson.subject),
+      };
+    }
+    return lesson;
+  });
+};
+
+const selectElectiveSuggestion = (
+  lessons: DashboardLesson[],
+  preferences: LearningPreferences,
+  weeklyTargets: { lessons: number; minutes: number },
+  weeklyProgress: { lessons: number; minutes: number },
+) => {
+  if ((preferences.electiveEmphasis ?? 'light') === 'off') {
+    return { plan: lessons, elective: null };
+  }
+  const aheadOnLessons = weeklyProgress.lessons >= weeklyTargets.lessons;
+  const aheadOnMinutes = weeklyProgress.minutes >= Math.round(weeklyTargets.minutes * 0.9);
+  if (!aheadOnLessons || !aheadOnMinutes) {
+    return { plan: lessons, elective: null };
+  }
+
+  const allowed = (preferences.allowedElectiveSubjects ?? []).length
+    ? preferences.allowedElectiveSubjects ?? []
+    : ([
+        'study_skills',
+        'social_studies',
+        'science',
+        'arts_music',
+        'financial_literacy',
+        'health_pe',
+        'computer_science',
+      ] as Subject[]);
+  const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? null;
+
+  const pool = lessons.filter(
+    (lesson) =>
+      !lesson.isMixIn &&
+      !lesson.isElective &&
+      allowed.includes(lesson.subject) &&
+      (focusSubject === null || focusSubject === 'balanced' || lesson.subject !== focusSubject),
+  );
+
+  const elective = pool[0] ?? null;
+  if (!elective) return { plan: lessons, elective: null };
+
+  const withFlag = lessons.map((lesson) =>
+    lesson.id === elective.id
+      ? {
+          ...lesson,
+          isElective: true,
+          suggestionReason:
+            lesson.suggestionReason ??
+            `Elective boost: try a ${formatSubjectLabel(lesson.subject)} mini-lesson since you’re ahead`,
+        }
+      : lesson,
+  );
+
+  return {
+    plan: withFlag,
+    elective,
+  };
 };
 
 const ensureStudentQuickStats = (
@@ -1277,6 +1428,7 @@ const buildCelebrationMoments = (
   badges: Badge[],
   quickStats: StudentDashboardData['quickStats'],
   assessments: AssessmentSummary[],
+  subjectMastery: SubjectMastery[] = [],
 ): CelebrationMoment[] => {
   const moments: CelebrationMoment[] = [];
   const latestBadge = badges[0];
@@ -1293,7 +1445,10 @@ const buildCelebrationMoments = (
     });
   }
 
-  if (quickStats.streakDays && (quickStats.streakDays === 7 || quickStats.streakDays === 30)) {
+  if (
+    quickStats.streakDays &&
+    [3, 7, 14, 30].includes(quickStats.streakDays)
+  ) {
     moments.push({
       id: `streak-${quickStats.streakDays}`,
       title: `${quickStats.streakDays}-day streak!`,
@@ -1317,6 +1472,34 @@ const buildCelebrationMoments = (
       studentId: student.id,
       prompt: 'Log how you felt about it in 2 sentences.',
       notifyParent: false,
+    });
+  }
+
+  const masteryHighlight = subjectMastery.find((entry) => entry.mastery >= 80);
+  if (masteryHighlight) {
+    moments.push({
+      id: `mastery-${masteryHighlight.subject}-${Math.round(masteryHighlight.mastery)}`,
+      title: `${SUBJECT_LABELS[masteryHighlight.subject]} mastery unlocked`,
+      description: `You reached ${Math.round(masteryHighlight.mastery)}% in ${SUBJECT_LABELS[masteryHighlight.subject]}.`,
+      kind: 'mastery',
+      occurredAt: new Date().toISOString(),
+      studentId: student.id,
+      prompt: 'Pick a stretch goal or quick recap to keep it steady.',
+      notifyParent: true,
+    });
+  }
+
+  const accuracyImprovement = subjectMastery.find((entry) => entry.trend === 'up' && entry.mastery >= 60);
+  if (accuracyImprovement) {
+    moments.push({
+      id: `accuracy-${accuracyImprovement.subject}-${Math.round(accuracyImprovement.mastery)}`,
+      title: 'Accuracy trending up',
+      description: `${SUBJECT_LABELS[accuracyImprovement.subject]} is rising—keep the momentum.`,
+      kind: 'milestone',
+      occurredAt: new Date().toISOString(),
+      studentId: student.id,
+      prompt: 'Do a 3-question quick check to lock it in.',
+      notifyParent: true,
     });
   }
 
@@ -1518,6 +1701,109 @@ const calculateChildGoalProgress = (child: ParentChildSnapshot): number | undefi
   return Math.round(average * 10) / 10;
 };
 
+const deriveSubjectTrends = (
+  mastery: SubjectMastery[],
+  accuracyWindow: Map<Subject, { current: number[]; prior: number[] }> | undefined,
+  lessonWindow: { current: Map<Subject, number>; prior: Map<Subject, number> } | undefined,
+  weeklyMinutes: { current: number; prior: number },
+): SubjectWeeklyTrend[] => {
+  const average = (values: number[]) =>
+    values.length ? values.reduce((acc, value) => acc + value, 0) / values.length : null;
+
+  const currentLessons = lessonWindow?.current ?? new Map<Subject, number>();
+  const priorLessons = lessonWindow?.prior ?? new Map<Subject, number>();
+  const totalLessonsCurrent = Array.from(currentLessons.values()).reduce((acc, value) => acc + value, 0);
+  const totalLessonsPrior = Array.from(priorLessons.values()).reduce((acc, value) => acc + value, 0);
+  const minutesWindow = weeklyMinutes ?? { current: 0, prior: 0 };
+
+  return mastery.map((entry) => {
+    const accuracy = accuracyWindow?.get(entry.subject);
+    const currentAccuracy = accuracy ? average(accuracy.current) : null;
+    const priorAccuracy = accuracy ? average(accuracy.prior) : null;
+    const accuracyDelta =
+      currentAccuracy != null && priorAccuracy != null ? currentAccuracy - priorAccuracy : null;
+    const subjectLessonsCurrent = currentLessons.get(entry.subject) ?? 0;
+    const subjectLessonsPrior = priorLessons.get(entry.subject) ?? 0;
+    const estimatedTimeCurrent =
+      totalLessonsCurrent > 0
+        ? (minutesWindow.current * subjectLessonsCurrent) / Math.max(totalLessonsCurrent, 1)
+        : subjectLessonsCurrent * 12;
+    const estimatedTimePrior =
+      totalLessonsPrior > 0
+        ? (minutesWindow.prior * subjectLessonsPrior) / Math.max(totalLessonsPrior, 1)
+        : subjectLessonsPrior * 12;
+    const timeDelta = estimatedTimeCurrent - estimatedTimePrior;
+
+    const trendDirection: SubjectWeeklyTrend['direction'] =
+      accuracyDelta != null
+        ? accuracyDelta > 0.25
+          ? 'up'
+          : accuracyDelta < -0.25
+            ? 'down'
+            : 'steady'
+        : entry.trend ?? 'steady';
+
+    return {
+      subject: entry.subject,
+      mastery: entry.mastery,
+      accuracyDelta: accuracyDelta != null ? Math.round(accuracyDelta * 10) / 10 : null,
+      timeDelta: Math.round(timeDelta),
+      timeMinutes: Math.round(estimatedTimeCurrent),
+      direction: trendDirection,
+    };
+  });
+};
+
+export const summarizeWeeklyChanges = (
+  children: ParentChildSnapshot[],
+): { improvements: string[]; risks: string[] } => {
+  const improvements: Array<{ text: string; score: number }> = [];
+  const risks: Array<{ text: string; score: number }> = [];
+
+  children.forEach((child) => {
+    (child.subjectTrends ?? []).forEach((trend) => {
+      if (trend.accuracyDelta != null && Math.abs(trend.accuracyDelta) >= 0.5) {
+        const text = `${child.name}: ${formatSubjectLabel(trend.subject)} accuracy ${trend.accuracyDelta > 0 ? '+' : ''}${Math.round(trend.accuracyDelta * 10) / 10} pts vs last week.`;
+        const bucket = trend.accuracyDelta > 0 ? improvements : risks;
+        bucket.push({ text, score: Math.abs(trend.accuracyDelta) });
+      }
+      if (trend.timeDelta != null && Math.abs(trend.timeDelta) >= 8) {
+        const text = `${child.name}: ${trend.timeDelta > 0 ? '+' : ''}${Math.round(trend.timeDelta)} min on ${formatSubjectLabel(trend.subject)} this week.`;
+        const bucket = trend.timeDelta > 0 ? improvements : risks;
+        bucket.push({ text, score: Math.abs(trend.timeDelta) / 10 });
+      }
+    });
+
+    if (child.weeklyChange) {
+      const { deltaLessons, deltaMinutes } = child.weeklyChange;
+      if (Math.abs(deltaLessons) > 0) {
+        const text = `${child.name}: ${deltaLessons >= 0 ? '+' : ''}${deltaLessons} lessons vs prior week.`;
+        const bucket = deltaLessons >= 0 ? improvements : risks;
+        bucket.push({ text, score: Math.max(1, Math.abs(deltaLessons)) * 0.8 });
+      }
+      if (Math.abs(deltaMinutes) >= 10) {
+        const text = `${child.name}: ${deltaMinutes >= 0 ? '+' : ''}${Math.round(deltaMinutes)} min vs prior week.`;
+        const bucket = deltaMinutes >= 0 ? improvements : risks;
+        bucket.push({ text, score: Math.max(1, Math.abs(deltaMinutes)) / 10 });
+      }
+    }
+  });
+
+  const selectTop = (entries: Array<{ text: string; score: number }>) =>
+    entries
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((entry) => entry.text);
+
+  const pickedImprovements = selectTop(improvements);
+  const pickedRisks = selectTop(risks);
+
+  return {
+    improvements: pickedImprovements.length ? pickedImprovements : ['Steady week—no clear gains yet.'],
+    risks: pickedRisks.length ? pickedRisks : ['No new risks flagged this week.'],
+  };
+};
+
 export { calculateChildGoalProgress };
 
 export const buildParentDownloadableReport = (
@@ -1546,10 +1832,19 @@ export const buildParentDownloadableReport = (
     })
     .join('\n');
 
-  const highlights = report.highlights.map((item) => `• ${item}`).join('\n');
-  const recommendations = report.recommendations.map((item) => `• ${item}`).join('\n');
+  const highlights = (report.highlights ?? []).map((item) => `• ${item}`).join('\n') || '• No highlights yet.';
+  const recommendations =
+    (report.recommendations ?? []).map((item) => `• ${item}`).join('\n') ||
+    '• Add one small goal per learner to guide next week.';
+  const changes = report.changes ?? summarizeWeeklyChanges(children);
+  const improvements =
+    (changes.improvements ?? []).map((item) => `• ${item}`).join('\n') ||
+    '• Steady week—no clear gains yet.';
+  const risks =
+    (changes.risks ?? []).map((item) => `• ${item}`).join('\n') ||
+    '• No new risks flagged this week.';
 
-  return `ElevatED Weekly Family Report\nParent: ${parent.name}\nWeek of ${weekLabel}\n\nSummary:\n${report.summary}\n\nHighlights:\n${highlights}\n\nLearner Details:\n${childLines}\n\nRecommended Next Steps:\n${recommendations}`;
+  return `ElevatED Weekly Family Report\nParent: ${parent.name}\nWeek of ${weekLabel}\n\nSummary:\n${report.summary}\n\nHighlights:\n${highlights}\n\nLearner Details:\n${childLines}\n\nRecommended Next Steps:\n${recommendations}\n\nWhat changed this week:\nTop improvements:\n${improvements}\n\nTop risks:\n${risks}`;
 };
 
 const buildParentCelebrations = (children: ParentChildSnapshot[]): CelebrationMoment[] => {
@@ -1737,6 +2032,8 @@ export const fetchStudentDashboardData = async (
           ? 'keep_up'
           : preferences.studyMode,
     };
+    const weeklyTargets = computeWeeklyPlanTargets(parentGoals, planPreferences.weeklyPlanIntensity);
+    const weeklyProgress = computeWeeklyProgress(activity);
 
     const [
       { data: masteryRows, error: masteryError },
@@ -1855,6 +2152,7 @@ export const fetchStudentDashboardData = async (
       }
     }
 
+    let electiveSuggestion: DashboardLesson | null = null;
     const todaysPlan: DashboardLesson[] = (() => {
       const plan: DashboardLesson[] = [];
       const seen = new Set<string>();
@@ -1882,7 +2180,18 @@ export const fetchStudentDashboardData = async (
         return fallbackStudentLessons();
       }
 
-      const normalized = normalizePlanBySubject(plan, planPreferences);
+      let normalized = normalizePlanBySubject(plan, planPreferences);
+      normalized = injectMixInsIntoPlan(normalized, planPreferences, weeklyTargets, weeklyProgress);
+      const electiveResult = selectElectiveSuggestion(
+        normalized,
+        planPreferences,
+        weeklyTargets,
+        weeklyProgress,
+      );
+      normalized = electiveResult.plan;
+      electiveSuggestion = electiveResult.elective
+        ? electiveResult.plan.find((lesson) => lesson.id === electiveResult.elective?.id) ?? null
+        : null;
       return normalized.length
         ? applyLearningPreferencesToPlan(normalized, planPreferences)
         : applyLearningPreferencesToPlan(plan, planPreferences);
@@ -1930,7 +2239,7 @@ export const fetchStudentDashboardData = async (
     }
     const recentBadges = badgePool.slice(0, 3);
     const missions = buildMissions(student, todaysPlan, activity);
-    const celebrationMoments = buildCelebrationMoments(student, badgePool, quickStats, assessments);
+    const celebrationMoments = buildCelebrationMoments(student, badgePool, quickStats, assessments, subjectMastery);
     const avatarOptions = buildAvatarOptions(student);
 
     return {
@@ -1951,6 +2260,7 @@ export const fetchStudentDashboardData = async (
       avatarOptions,
       equippedAvatarId: student.avatar ?? null,
       todayActivities: activityLineup,
+      electiveSuggestion,
     };
   } catch (error) {
     console.error('[Dashboard] Student dashboard fallback engaged', error);
@@ -1985,11 +2295,18 @@ export const fetchStudentDashboardData = async (
       activeLessonId: null,
       nextLessonUrl: null,
       missions: buildMissions(student, fallbackLessons, fallbackActivity),
-      celebrationMoments: buildCelebrationMoments(student, badgePool, fallbackQuickStats, fallbackAssessments),
+      celebrationMoments: buildCelebrationMoments(
+        student,
+        badgePool,
+        fallbackQuickStats,
+        fallbackAssessments,
+        fallbackSubjectMastery,
+      ),
       avatarOptions: buildAvatarOptions(student),
       equippedAvatarId: student.avatar ?? null,
       todayActivities: buildActivityLineup(fallbackLessons, new Map(), student.grade),
       parentGoals: null,
+      electiveSuggestion: null,
     };
   }
 };
@@ -2029,7 +2346,7 @@ export const fetchParentDashboardData = async (
       childIds.length
         ? supabase
             .from('student_mastery')
-            .select('student_id, skill_id, mastery_pct')
+            .select('student_id, skill_id, mastery_pct, updated_at')
             .in('student_id', childIds)
         : Promise.resolve({ data: [] as StudentMasteryRow[], error: null }),
       childIds.length
@@ -2115,12 +2432,46 @@ export const fetchParentDashboardData = async (
 
     const skillMap = (skillRows as SkillRow[]) ?? [];
     const subjectMap = (subjectRows as SubjectRow[]) ?? [];
+    const subjectIdToName = new Map<number, Subject>();
+    subjectMap.forEach((subject) => {
+      const normalized = normalizeSubject(subject.name);
+      if (normalized) {
+        subjectIdToName.set(subject.id, normalized);
+      }
+    });
+    const skillSubjectLookup = new Map<number, Subject>();
+    skillMap.forEach((skill) => {
+      const normalized = subjectIdToName.get(skill.subject_id);
+      if (normalized) {
+        skillSubjectLookup.set(skill.id, normalized);
+      }
+    });
+
+    const now = Date.now();
+    const weekCutoff = now - ONE_DAY_MS * 7;
+    const priorWeekCutoff = now - ONE_DAY_MS * 14;
 
     const masteryByStudent = new Map<string, StudentMasteryRow[]>();
     (masteryRows as (StudentMasteryRow & { student_id: string })[]).forEach((row) => {
       const list = masteryByStudent.get(row.student_id) ?? [];
-      list.push({ skill_id: row.skill_id, mastery_pct: row.mastery_pct });
+      list.push({ skill_id: row.skill_id, mastery_pct: row.mastery_pct, updated_at: row.updated_at });
       masteryByStudent.set(row.student_id, list);
+    });
+
+    const subjectAccuracyWindow = new Map<string, Map<Subject, { current: number[]; prior: number[] }>>();
+    (masteryRows as (StudentMasteryRow & { student_id: string })[]).forEach((row) => {
+      const subject = skillSubjectLookup.get(row.skill_id);
+      if (!subject) return;
+      const updatedAt = row.updated_at ? new Date(row.updated_at).getTime() : null;
+      if (!updatedAt || updatedAt < priorWeekCutoff) return;
+      const bucket: 'current' | 'prior' = updatedAt >= weekCutoff ? 'current' : 'prior';
+      const studentMap = subjectAccuracyWindow.get(row.student_id) ?? new Map<Subject, { current: number[]; prior: number[] }>();
+      const entry = studentMap.get(subject) ?? { current: [], prior: [] };
+      if (typeof row.mastery_pct === 'number') {
+        entry[bucket].push(row.mastery_pct);
+      }
+      studentMap.set(subject, entry);
+      subjectAccuracyWindow.set(row.student_id, studentMap);
     });
 
     const childMasteryById = new Map<string, SubjectMastery[]>();
@@ -2147,16 +2498,21 @@ export const fetchParentDashboardData = async (
       },
     );
 
-    const lessonsBySubject = new Map<string, Map<Subject, number>>();
+    const lessonWindowsByStudent = new Map<string, { current: Map<Subject, number>; prior: Map<Subject, number> }>();
     (recentLessonRows as StudentProgressSubjectRow[]).forEach((row) => {
       const subject = normalizeSubject(row.lessons?.modules?.subject ?? null);
       if (!subject) return;
-      if (row.last_activity_at && new Date(row.last_activity_at).getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000) {
+      const lastActivity = row.last_activity_at ? new Date(row.last_activity_at).getTime() : null;
+      if (!lastActivity || lastActivity < priorWeekCutoff) {
         return;
       }
-      const map = lessonsBySubject.get(row.student_id) ?? new Map<Subject, number>();
-      map.set(subject, (map.get(subject) ?? 0) + 1);
-      lessonsBySubject.set(row.student_id, map);
+      const bucket: 'current' | 'prior' = lastActivity >= weekCutoff ? 'current' : 'prior';
+      const entry =
+        lessonWindowsByStudent.get(row.student_id) ??
+        { current: new Map<Subject, number>(), prior: new Map<Subject, number>() };
+      const target = bucket === 'current' ? entry.current : entry.prior;
+      target.set(subject, (target.get(subject) ?? 0) + 1);
+      lessonWindowsByStudent.set(row.student_id, entry);
     });
 
     const diagnosticByStudent = new Map<string, { status: string | null; completedAt: string | null }>();
@@ -2192,7 +2548,6 @@ export const fetchParentDashboardData = async (
       list.push(row);
       xpByChild.set(row.student_id, list);
     });
-    const weekCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const weeklyChangeByChild = new Map<
       string,
       { current: { lessons: number; minutes: number; xp: number }; prior: { lessons: number; minutes: number; xp: number } }
@@ -2247,7 +2602,9 @@ export const fetchParentDashboardData = async (
         learningPreferencesByStudent.get(child.id) ??
         child.learningPreferences ??
         defaultLearningPreferences;
-      const perSubjectLessons = lessonsBySubject.get(child.id) ?? new Map<Subject, number>();
+      const lessonWindow =
+        lessonWindowsByStudent.get(child.id) ??
+        { current: new Map<Subject, number>(), prior: new Map<Subject, number>() };
       const diagnosticMeta = diagnosticByStudent.get(child.id) ?? null;
       const diagnosticCompletedAt = diagnosticMeta?.completedAt ?? null;
       const diagnosticStatus =
@@ -2259,10 +2616,10 @@ export const fetchParentDashboardData = async (
           ? 'scheduled'
           : undefined;
       const subjectStatuses =
-        mastery.length && perSubjectLessons.size
+        mastery.length && lessonWindow.current.size
           ? computeSubjectStatuses({
               masteryBySubject: mastery,
-              lessonsBySubject: perSubjectLessons,
+              lessonsBySubject: lessonWindow.current,
               diagnosticCompletedAt,
             })
           : [];
@@ -2279,9 +2636,16 @@ export const fetchParentDashboardData = async (
         },
         prior: { lessons: 0, minutes: 0, xp: 0 },
       };
+      const subjectTrends = deriveSubjectTrends(
+        mastery,
+        subjectAccuracyWindow.get(child.id),
+        lessonWindow,
+        weeklyChange,
+      );
       const snapshot: ParentChildSnapshot = {
         ...child,
         masteryBySubject: mastery,
+        subjectTrends,
         cohortComparison: Math.round(cohortComparison * 10) / 10,
         recentActivity: recentActivity.length ? recentActivity : child.recentActivity,
         progressSummary: progressSummaryByStudent.get(child.id) ?? {
@@ -2347,22 +2711,23 @@ export const fetchParentDashboardData = async (
           }
         : parent.weeklyReport ?? fallbackParentWeeklyReport(parent.name);
 
-    const downloadableReport = buildParentDownloadableReport(
-      parent,
-      weeklyReport,
-      enrichedChildren.length ? enrichedChildren : baseChildren,
-    );
-
-    return {
-      parent,
-      children: enrichedChildren.length
+    const reportChildren =
+      enrichedChildren.length
         ? enrichedChildren
         : baseChildren.length
         ? baseChildren
-        : fallbackParentChildren(parent.name),
+        : fallbackParentChildren(parent.name);
+    const weeklyChanges = summarizeWeeklyChanges(reportChildren);
+    const weeklyReportWithChanges = { ...weeklyReport, changes: weeklyChanges };
+
+    const downloadableReport = buildParentDownloadableReport(parent, weeklyReportWithChanges, reportChildren);
+
+    return {
+      parent,
+      children: reportChildren,
       alerts,
       activitySeries: parentActivitySeries,
-      weeklyReport,
+      weeklyReport: weeklyReportWithChanges,
       downloadableReport,
       celebrations,
       celebrationPrompts,
@@ -2371,13 +2736,14 @@ export const fetchParentDashboardData = async (
     console.error('[Dashboard] Parent dashboard fallback engaged', error);
     const fallbackChildren = fallbackParentChildren(parent.name);
     const fallbackReport = fallbackParentWeeklyReport(parent.name);
+    const fallbackReportWithChanges = { ...fallbackReport, changes: summarizeWeeklyChanges(fallbackChildren) };
     return {
       parent,
       children: fallbackChildren,
       alerts: fallbackParentAlerts(),
       activitySeries: aggregateParentActivity([], []),
-      weeklyReport: fallbackReport,
-      downloadableReport: buildParentDownloadableReport(parent, fallbackReport, fallbackChildren),
+      weeklyReport: fallbackReportWithChanges,
+      downloadableReport: buildParentDownloadableReport(parent, fallbackReportWithChanges, fallbackChildren),
       celebrations: buildParentCelebrations(fallbackChildren),
       celebrationPrompts: buildCelebrationPrompts(buildParentCelebrations(fallbackChildren)),
     };

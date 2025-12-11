@@ -37,12 +37,38 @@ Actionable plan to close gaps between the current app and the stated vision (K�
   - Celebration moments trigger in student UI for streaks, accuracy gains, and mastery unlocks.
   - Parent “check-in” snippets can be sent in-app (or easily copied) with confirmation of receipt by the student.
 
+### Phase 5 implementation plan
+- **Gaps:** Nudges are limited to generic banners; celebrations only fire for last badge or 7/30-day streaks; parent “Send check-in” is copy-only with no delivery or seen state.
+- **Workstreams:** (1) After-task nudges, (2) Celebration expansions, (3) Parent check-ins with delivery + receipt.
+
+#### 1) After-task nudges (recap, quick check, try again)
+- **Trigger sources:** Student event responses (`sendStudentEvent`) + `AdaptiveFlash` in `useStudentData.ts` and recent `student_progress` rows in `dashboardService.ts`.
+- **Logic:** Try again if lesson/checkpoint accuracy <70% or `adaptive.misconceptions` exists; Quick check if 70–85% accuracy or lesson stuck in progress >1 day; 1-minute recap if ≥85% accuracy or `nextReason=stretch`. Use `target_standard_codes`/`primaryStandard` to label the concept and link to the same lesson or a 3-question check-in.
+- **UX:** Add a compact `NudgeCard` near the Today lane with CTA chips (`Start recap (1 min)`, `Do quick check (3 Q)`, `Try again`) plus a dismiss link. Show a one-line reason like “Because fractions accuracy was 62%” using `humanizeStandard`.
+- **Instrumentation:** Emit `student_nudge_shown/completed/dismissed` with {type, subject, standard, source_event, accuracy_band}. Cache taken nudges per event (`nudge:{studentId}:{eventId}`) to avoid repeats.
+
+#### 2) Celebration moments (streaks, accuracy gains, mastery)
+- **New triggers:** Streak milestones at 3/7/14/30 days (today only 7/30), accuracy gain when `subjectTrends.accuracyDelta` or avg accuracy improves ≥5–10pp week-over-week, mastery unlock when `modulesMastered.items` grows or `subjectMastery.mastery` crosses 80/90%.
+- **Backend updates:** Extend `buildCelebrationMoments` in `dashboardService.ts` to emit the above with unique ids and `notifyParent=true` for streak ≥7, mastery unlocks, and >10pp accuracy gains. Keep `occurredAt` stable so the seen set works.
+- **UI polish:** Reuse `celebrationQueue`; cap to two per load; map CTAs (`Start next lesson` for streak/accuracy, `View mastered module` when module slug exists); keep 5th-grade copy and `celebration_*` events intact.
+
+#### 3) Parent check-ins with delivery + receipt
+- **Data/API:** Add `parent_check_ins` table (id, parent_id, student_id, message, topic, status enum sent|delivered|seen, delivered_at, seen_at, created_at, source). Endpoints: `POST /api/v1/parent/check-ins`, `GET /api/v1/student/check-ins`, `POST /api/v1/student/check-ins/:id/ack`.
+- **Parent UI:** Update `handleQuickCheckIn` in `ParentDashboard.tsx` to call the API (fallback to copy if it fails), show status chips Sent/Delivered/Seen with timestamps, and keep “Copy snippet” for out-of-band sharing.
+- **Student UI:** Add a “From your grown-up” card on StudentDashboard listing the latest check-in, with CTAs `I saw this` (acks) and `Reply in tutor` (prefills LearningAssistant prompt). Announce arrivals via `aria-live` and log `parent_checkin_seen`.
+- **Notifications:** On ack, show parent toast and optional email in the weekly report hook; store `seen_at` so parent dashboard stats can count confirmation rate.
+
+#### Definition of done (Phase 5)
+- After completing a task, students see one contextual nudge (recap, quick check, or try again) tied to their last result with a working CTA.
+- Celebration queue covers streaks, accuracy gains, and mastery unlocks with at least one parent-notifiable moment when applicable.
+- Parent check-in snippets are persisted, appear in the student UI, and flip to Seen once acknowledged (with copy fallback preserved).
+
 ## 6) Student Simplicity & Mobile Focus
-- **Goal:** Keep the student experience focused and low-friction, especially on mobile.
+- **Goal:** Keep the student experience single-focus, on-task, and mobile-first with explicit guardrails.
 - **Completion Criteria:**
-  - Student home defaults to a single “Do this now” panel plus a “Need help? Ask” tutor entrypoint.
-  - Mobile layout keeps the daily plan and tutor entry above the fold; large tap targets and minimal typing.
-  - Guardrail status shown in tutor UI (e.g., “School-safe mode on”) with a quick way to return to the current lesson context.
+  - Student home shows one prioritized “Do this now” card (next task + time) and a single primary “Need help? Ask” tutor CTA; no other blocks above the fold.
+  - Mobile layout pins the daily plan and tutor entry above the fold with 44px+ tap targets; typing minimized via prompt chips/quick replies.
+  - Tutor UI surfaces an always-visible guardrail pill (e.g., “School-safe · Lesson: Fractions 3.2”) that explains constrained replies when off-topic and offers a one-tap “Return to lesson” action to re-center context without loosening safety.
 
 ## 7) Cross-Subject Variety & Electives
 - **Goal:** Maintain variety without overwhelm; leverage electives.
@@ -50,6 +76,33 @@ Actionable plan to close gaps between the current app and the stated vision (K�
   - Weekly plan auto-includes 1–2 mixed-in practice items (e.g., apply math in science) when core load is light.
   - Electives are suggested when a learner finishes core tasks early; parents can toggle elective emphasis per child.
   - Opt-out controls so families can limit mix-ins to core subjects only.
+
+### Phase 7 implementation plan
+- **Gaps:** Weekly plan focuses on single-subject paths and intensity only; no cross-subject pairings exist; electives never surface in the student loop; parents cannot enable/disable mix-ins or elective emphasis per child.
+- **Workstreams:** (1) Mixed-in practice injector, (2) Elective suggestions on early finish, (3) Parent/student controls + opt-outs.
+
+#### 1) Mixed-in practice injector (light-load weeks)
+- **Trigger:** When `weeklyPlanIntensity=light` or when `weeklyPlanTargets` minus `lessonsThisWeek` ≤2 lessons by mid-week, allow up to two mix-ins.
+- **Selection:** Extend `normalizePlanBySubject` and `applyLearningPreferencesToPlan` to insert mix-ins pulled from non-focus subjects in `learningPath`/`student_progress` with status `in_progress|not_started`, avoiding duplicates of current plan ids. Pairings: math ↔ science/data; ELA ↔ social studies; science ↔ math/ELA; allow `focusSubject=balanced` to rotate.
+- **Reason text & UX:** Add `suggestionReason` such as “Mix-in: apply fractions in science lab” and show a small “Mix-in” pill in the Today/Weekly plan cards (StudentDashboard + ParentDashboard weekly cards). Keep capped at 1–2 items and never push core lessons below 3 items.
+- **Instrumentation:** Track `mix_in_added`/`mix_in_started` with {subject_from, subject_to, weekly_plan_intensity, reason_source}. Persist exclusions per student/week (`mix_in:{studentId}:{weekStart}`) to avoid re-suggesting dismissed mix-ins.
+
+#### 2) Elective suggestions when core is finished early
+- **Detection:** When `weeklyPlanStatus=on_track` with ≥1 day remaining or `lessonsThisWeek >= weeklyPlanTargets.lessons` and `minutesThisWeek >= 0.9*weeklyPlanTargets.minutes`, flag early finish.
+- **Content:** Pull 1 elective lesson from `learningPath` or fallback catalog (`mappings/module_standards_k12.json` subjects starting with `electives-...`) respecting grade and `focusSubject`. Prefer short (≤20 min) items and diversify category (arts/cs/finance/health) week-to-week.
+- **Student UX:** Add an “Elective boost” card under the weekly status block with CTA “Start elective” linking to lesson. Copy: “You’re ahead—want to try a coding mini-project?” Allow dismiss and log `elective_suggested`/`elective_started`/`elective_dismissed`.
+- **Parent UX:** In `ParentDashboard` weekly plan panel, show “Electives ready” chip plus a toggle to “Emphasize electives this week” that boosts elective rank in the plan for that child.
+
+#### 3) Controls and opt-outs (parent + student)
+- **Preferences:** Extend `learning_style` JSON for students with `mixInMode: 'auto' | 'core_only' | 'cross_subject'`, `electiveEmphasis: 'off' | 'light' | 'on'`, and optional `allowedElectiveSubjects: Subject[]`. Default: `mixInMode='auto'`, `electiveEmphasis='light'`.
+- **Parent controls:** In `ParentDashboard` plan settings (same area as weekly intensity/focus), add toggles for mix-ins and elective emphasis per child; show helper copy “Keep electives off if you prefer core-only weeks.” Persist via `updateLearningPreferences`.
+- **Student controls:** In `StudentDashboard` settings drawer, add a simple switch “Let ElevatED mix subjects” (respects parent lock) and “Offer electives when I finish early.” Dismissed mix-ins/electives set a cooldown for that week.
+- **Safety/guardrails:** If `mixInMode='core_only'`, skip injector entirely; if `electiveEmphasis='off'`, elective suggestions are hidden even when ahead. Include RLS-aware API checks so parents can only modify their children’s prefs.
+
+#### Definition of done (Phase 7)
+- Light-load weeks automatically surface 1–2 cross-subject mix-ins with clear “Mix-in” labels without reducing core coverage.
+- Students who finish weekly core early see an elective suggestion card with a working CTA; parents can boost or mute elective emphasis per child.
+- Opt-out/allow toggles persist in learning preferences, are editable by parents (and visible to students), and prevent mix-ins/electives when set to core-only.
 
 ## 8) Academic Analytics & Trust
 - **Goal:** Add lightweight accuracy/time-on-task metrics and keep parents informed.

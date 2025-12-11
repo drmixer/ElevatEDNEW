@@ -217,6 +217,23 @@ export const castLearningPreferences = (input: unknown): LearningPreferences => 
     prefs.weeklyIntent = weeklyIntent;
   }
 
+  const mixInMode = raw.mixInMode ?? raw.mix_in_mode ?? raw.crossSubject ?? raw.cross_subject;
+  if (mixInMode === 'auto' || mixInMode === 'core_only' || mixInMode === 'cross_subject') {
+    prefs.mixInMode = mixInMode;
+  }
+
+  const electiveEmphasis = raw.electiveEmphasis ?? raw.elective_emphasis ?? raw.electives ?? raw.electives_emphasis;
+  if (electiveEmphasis === 'off' || electiveEmphasis === 'light' || electiveEmphasis === 'on') {
+    prefs.electiveEmphasis = electiveEmphasis;
+  }
+
+  const allowedElectiveSubjects = raw.allowedElectiveSubjects ?? raw.allowed_elective_subjects;
+  if (Array.isArray(allowedElectiveSubjects)) {
+    prefs.allowedElectiveSubjects = allowedElectiveSubjects
+      .map((value) => toSubjectKey(value))
+      .filter(Boolean) as Subject[];
+  }
+
   const chatMode = raw.chatMode ?? raw.chat_mode ?? raw.mode;
   if (chatMode === 'guided_only' || chatMode === 'guided_preferred' || chatMode === 'free') {
     prefs.chatMode = chatMode;
@@ -486,6 +503,12 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
           highlights: castStringArray(weeklyReportRow.highlights),
           recommendations: castStringArray(weeklyReportRow.recommendations),
           aiGenerated: weeklyReportRow.ai_generated ?? undefined,
+          changes: weeklyReportRow.changes
+            ? {
+                improvements: castStringArray((weeklyReportRow.changes as { improvements?: unknown })?.improvements),
+                risks: castStringArray((weeklyReportRow.changes as { risks?: unknown })?.risks),
+              }
+            : undefined,
         }
       : null;
   }

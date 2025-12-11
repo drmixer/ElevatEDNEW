@@ -177,7 +177,10 @@ const LessonPlayerPage: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const practiceQuestions: LessonPracticeQuestion[] = practiceQuestionQuery.data ?? [];
+  const practiceQuestions: LessonPracticeQuestion[] = useMemo(
+    () => practiceQuestionQuery.data ?? [],
+    [practiceQuestionQuery.data],
+  );
   const lessonStandards = useMemo(() => {
     if (!lessonDetail?.standards) return [];
     return lessonDetail.standards
@@ -246,7 +249,7 @@ const LessonPlayerPage: React.FC = () => {
       return [{ id: 'overview', label: 'Lesson overview' }];
     }
     return extracted;
-  }, [lessonDetail?.lesson.content]);
+  }, [lessonDetail]);
 
   const questionProgressItems = useMemo(
     () =>
@@ -316,7 +319,7 @@ const LessonPlayerPage: React.FC = () => {
     } else if (progressController.status !== 'completed') {
       lessonCompletionLogged.current = false;
     }
-  }, [lessonDetail, lessonId, lessonStandards, progressController.status, studentId]);
+  }, [adaptiveDifficulty, emitStudentEvent, lessonDetail, lessonId, lessonStandards, progressController.status, studentId]);
 
   const logContextualHelp = useCallback(
     async (payload: { prompt: string; source: string }) => {

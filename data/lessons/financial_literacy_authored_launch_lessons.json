@@ -1,0 +1,196 @@
+{
+  "6-electives-financial-literacy-elective-banking-basics": {
+    "title": "Understanding Banks and Your Money",
+    "summary": "Students discover what banks do, how they work, and why bank accounts are important. They learn the difference between checking and savings accounts, understand how interest works, and develop safe banking habits.",
+    "objectives": [
+      "Understand what banks are and their basic functions",
+      "Explain the difference between checking and savings accounts",
+      "Identify the role of debit cards and how to use them safely",
+      "Recognize the importance of protecting financial information"
+    ],
+    "grade_band": "6",
+    "subject": "Financial Literacy",
+    "standards": [
+      "FL.B.1.1",
+      "FL.B.1.2",
+      "FL.M.1.1"
+    ],
+    "outline": {
+      "hook": "Ask students: 'Where do people keep money safely?' Discuss. Introduce: banks are businesses that store money, pay interest on savings, and lend money. Ask: 'Why trust a bank instead of your mattress?' (Security, interest, insurance.)",
+      "direct_instruction": "Explain what banks do: accept deposits, pay interest, make loans, offer accounts. Show two main accounts: checking (for spending) and savings (for storing/growing money). Debit cards: connected to checking accounts, let you spend from your account. Explain interest: money the bank pays you on savings (your reward for letting them use your money). Introduce security: PINs protect accounts, never share your PIN. Discuss: checking for statements, watching for fraud.",
+      "guided_practice": "Compare checking vs. savings accounts with a chart. Calculate interest example: $1,000 at 2% earns $20/year. Practice: when would you use debit vs. cash? Discuss: what's in a bank statement?",
+      "independent_practice": "Students research a real bank's account options, compare features, calculate interest on a sample deposit, and write about which account fits their needs.",
+      "check_for_understanding": "Can they explain what banks do? Difference between account types? Why interest matters? How to protect their PIN?",
+      "exit_ticket": "Students share one thing they'll do to bank safely.",
+      "materials": [
+        "Bank account samples",
+        "Interest calculator",
+        "Debit card examples",
+        "Security tips handout",
+        "Bank statement template"
+      ]
+    }
+  },
+  "6-electives-financial-literacy-elective-saving-budgeting": {
+    "title": "Creating Your First Budget and Saving Goals",
+    "summary": "Students learn to distinguish needs from wants, create a simple budget, and set savings goals. They understand why saving matters and how to stay on track with their money.",
+    "objectives": [
+      "Distinguish between needs and wants",
+      "Create a basic personal budget",
+      "Set realistic short-term savings goals",
+      "Track spending and understand the budget-to-actual process"
+    ],
+    "grade_band": "6",
+    "subject": "Financial Literacy",
+    "standards": [
+      "FL.S.1.1",
+      "FL.S.1.2",
+      "FL.B.2.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'What do you need to survive? Food, shelter. What do you want? A new game, concert tickets.' Introduce: needs are essential; wants make life fun. Ask: 'If you earned $20, how would you split it?'",
+      "direct_instruction": "Define needs (food, shelter, medicine, school supplies) vs. wants (entertainment, snacks, toys, games). Explain budgeting: planning how much money comes in and where it goes. Show simple budget: income, list expenses (needs and wants), savings. Introduce the 50/30/20 rule: 50% needs, 30% wants, 20% savings. Teach tracking: write down spending to see patterns. Discuss goals: naming what you want to save for makes it real. Example: 'Save $50 for new bike by summer' vs. vague 'save money.'",
+      "guided_practice": "Class creates a budget together for $100 monthly allowance. Categorize sample expenses as needs/wants. Calculate 50/30/20 allocation. Track sample purchases and spot where money goes.",
+      "independent_practice": "Create personal budget with their own income (allowance, job), list all expenses honestly, categorize as needs/wants, allocate using 50/30/20, and set one savings goal.",
+      "check_for_understanding": "Can they distinguish needs from wants? Create and explain a budget? Set a realistic goal? Track spending?",
+      "exit_ticket": "Students share their budget and one savings goal they set.",
+      "materials": [
+        "Budget templates",
+        "Income and expense worksheets",
+        "50/30/20 guide",
+        "Goal-setting worksheet",
+        "Tracking spreadsheet"
+      ]
+    }
+  },
+  "7-electives-financial-literacy-elective-banking-basics": {
+    "title": "Credit, Loans, and Building Your Financial Identity",
+    "summary": "Students explore credit as a tool, understand credit scores, and learn how loans work. They discover that their financial choices today affect their future borrowing power and opportunities.",
+    "objectives": [
+      "Understand what credit is and why it matters",
+      "Explain how credit scores are calculated",
+      "Identify factors that build or damage credit",
+      "Make informed decisions about borrowing and credit"
+    ],
+    "grade_band": "7",
+    "subject": "Financial Literacy",
+    "standards": [
+      "FL.B.2.1",
+      "FL.B.2.2",
+      "FL.M.2.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'If you wanted to buy a car but didn't have all the money, what would you do?' Introduce: credit lets you borrow money and pay later. Ask: 'Would a lender trust everyone equally? Why or why not?' Introduce: credit score—your financial reputation.",
+      "direct_instruction": "Define credit: borrowed money you must repay. Introduce credit scores (300-850): higher is better. Explain what affects scores: payment history (35%, most important), amounts owed (30%), credit history length (15%), credit mix (10%), new credit inquiries (10%). Show consequences of missed payments: lower score, higher interest rates, harder to borrow. Teach APR: yearly interest cost. Example: 18% APR vs. 12% on same loan. Explain compound interest: paying interest on interest over time. Show how starting to borrow early (responsibly) builds credit.",
+      "guided_practice": "Calculate credit score impact: student makes payment on time (good), misses one (bad). Compare APRs: calculate total cost at different rates. Track: what lenders check before approving loans.",
+      "independent_practice": "Research credit requirements for real loans (car, house). Calculate interest costs at different APRs. Write about responsible credit use and how they'll build credit.",
+      "check_for_understanding": "Can they explain credit scores? Factors affecting them? APR impact? Consequences of missed payments?",
+      "exit_ticket": "Students share one strategy for building good credit.",
+      "materials": [
+        "Credit score breakdown",
+        "APR calculator",
+        "Loan comparison examples",
+        "Credit score impact chart",
+        "Responsible credit guidelines"
+      ]
+    }
+  },
+  "7-electives-financial-literacy-elective-saving-budgeting": {
+    "title": "Advanced Budgeting and Long-Term Financial Goals",
+    "summary": "Students deepen budgeting skills, set short and long-term goals, and understand how income and expenses change over life. They learn to adjust budgets and align spending with values.",
+    "objectives": [
+      "Distinguish between short and long-term financial goals",
+      "Understand gross vs. net income",
+      "Create detailed budgets with multiple expense categories",
+      "Adjust budgets for changing circumstances"
+    ],
+    "grade_band": "7",
+    "subject": "Financial Literacy",
+    "standards": [
+      "FL.S.2.1",
+      "FL.S.2.2",
+      "FL.B.3.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'What's something you want in the next month? Next year? When you're 30?' Introduce: short-term (weeks to months), long-term (years to decades). Discuss: different goals need different strategies. Show: a new phone (short-term) vs. college (long-term).",
+      "direct_instruction": "Define gross income (total earnings) vs. net income (take-home after taxes, deductions). Explain: budgets must be based on net income. Teach goal categories: short-term (achievable soon, motivates action) and long-term (requires consistent saving, careful planning). Show breaking big goals into steps: want $2,000 in 2 years = save ~$83/month. Introduce inflation: prices rise; savings lose buying power if not invested. Teach expense tracking: fixed (consistent) vs. variable (change). Show how to adjust budgets: income drops, cut wants first; income rises, increase savings ratio.",
+      "guided_practice": "Calculate net from gross income. Create goal timeline: list wants at different time horizons. Break a long-term goal into monthly savings target. Design adjusted budget for income change.",
+      "independent_practice": "Set 2-3 personal goals (short and long-term), calculate monthly savings needed, create detailed budget with fixed/variable expenses, write plan for adjusting if circumstances change.",
+      "check_for_understanding": "Can they set smart goals? Calculate monthly targets? Explain gross vs. net? Design realistic budgets?",
+      "exit_ticket": "Students present a goal and the monthly savings needed to reach it.",
+      "materials": [
+        "Goal-setting worksheet",
+        "Gross/net income calculator",
+        "Budget template with categories",
+        "Long-term goal breakdown sheet",
+        "Expense adjustment scenarios"
+      ]
+    }
+  },
+  "8-electives-financial-literacy-elective-banking-basics": {
+    "title": "Financial Systems, Smart Banking, and Protecting Your Identity",
+    "summary": "Students navigate the financial system, understand different financial institutions, and develop security practices. They learn how to protect themselves from fraud and make smart banking choices.",
+    "objectives": [
+      "Compare banking options and choose appropriate financial institutions",
+      "Understand credit reports and credit scores comprehensively",
+      "Recognize and prevent identity theft and fraud",
+      "Make informed decisions about financial products and services"
+    ],
+    "grade_band": "8",
+    "subject": "Financial Literacy",
+    "standards": [
+      "FL.B.3.1",
+      "FL.B.3.2",
+      "FL.M.3.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'When you're older and need to borrow money for a car or house, what will matter?' Introduce: credit score, financial history, and institutional reputation. Show: choosing the right bank saves hundreds in fees.",
+      "direct_instruction": "Compare financial institutions: traditional banks (for-profit, full services) vs. credit unions (non-profit, member-owned, often better rates). Explain what to check: fees (monthly, ATM, overdraft), interest rates, services. Teach credit reports: documents showing credit history, accounts, payment history, inquiries. Access free annually at annualcreditreport.com. Show: credit bureaus collect data; errors happen. Teach identity theft prevention: guard Social Security number, use strong passwords, monitor accounts monthly, freeze credit if compromised. Show warning signs: unauthorized accounts, strange charges. Explain APR, introductory rates (often promotional), and how to read fine print.",
+      "guided_practice": "Compare fee structures across banks: calculate annual cost differences. Analyze a credit report, identify potential errors, practice dispute process. Create identity protection checklist. Read sample loan agreement and identify key terms.",
+      "independent_practice": "Research actual banks/credit unions, compare features and costs, plan which to use and why. Get free credit report (with parent help if needed), review for errors. Create personal financial security plan.",
+      "check_for_understanding": "Can they compare institutions? Analyze credit reports? Prevent fraud? Understand APR and loan terms?",
+      "exit_ticket": "Students share how they'll choose a bank and protect their identity.",
+      "materials": [
+        "Bank comparison table",
+        "Credit union vs. bank guide",
+        "Credit report example",
+        "Identity theft prevention checklist",
+        "Loan agreement sample with annotations",
+        "APR calculator"
+      ]
+    }
+  },
+  "8-electives-financial-literacy-elective-saving-budgeting": {
+    "title": "Wealth Building: Investing, Planning, and Financial Independence",
+    "summary": "Students explore investing beyond savings, understand retirement planning, and develop comprehensive financial plans. They learn how early habits compound into wealth and how to build financial security.",
+    "objectives": [
+      "Understand investing, risk, and diversification",
+      "Recognize the power of compound interest over time",
+      "Explore retirement accounts and long-term wealth building",
+      "Create a comprehensive personal financial plan"
+    ],
+    "grade_band": "8",
+    "subject": "Financial Literacy",
+    "standards": [
+      "FL.S.3.1",
+      "FL.S.3.2",
+      "FL.B.4.1"
+    ],
+    "outline": {
+      "hook": "Show two scenarios: Person A saves $50/month starting at 15 for 50 years vs. Person B starting at 25 for 40 years, both earning 7%. A has ~$295,000; B has ~$137,000. Ask: 'Why such a big difference?' Introduce: compound interest and time.",
+      "direct_instruction": "Distinguish saving vs. investing: savings (bank account, safe, low growth) vs. investing (stocks, bonds, real estate—risk and growth potential). Introduce rule of 72: divide 72 by interest rate to find doubling time. Explain 401(k): employer-sponsored retirement account with tax advantages and employer matching (free money!). Teach diversification: spread investments to reduce risk. Explain financial independence: having enough wealth to live without working. Show: responsibility + compound interest + time = wealth. Discuss good vs. bad debt: college loan (investment in future) vs. high-interest credit card (just consuming).",
+      "guided_practice": "Calculate rule of 72 at different interest rates. Compare saving $50/month from age 15 vs. 25 using compound calculator. Explore 401(k) scenarios with employer matching. Discuss: what's worth going into debt for?",
+      "independent_practice": "Create 20-year financial plan: income goals, savings/investing strategy, major milestones (college, house, retirement), estimated wealth. Research real investment options and risk levels. Write personal financial philosophy and goals.",
+      "check_for_understanding": "Can they explain compound interest power? Distinguish saving/investing? Design long-term plans? Understand retirement accounts?",
+      "exit_ticket": "Students share their long-term financial vision and first step to achieve it.",
+      "materials": [
+        "Compound interest calculator",
+        "Rule of 72 guide",
+        "401(k) explanation and scenarios",
+        "Investing risk chart",
+        "Diversification examples",
+        "Long-term financial planning template"
+      ]
+    }
+  }
+}

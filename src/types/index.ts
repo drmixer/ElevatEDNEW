@@ -41,6 +41,20 @@ export interface Parent extends User {
   onboardingState?: ParentOnboardingState;
 }
 
+export type ParentCheckInStatus = 'sent' | 'delivered' | 'seen';
+
+export interface ParentCheckIn {
+  id: string;
+  parentId: string;
+  studentId: string;
+  message: string;
+  topic?: string | null;
+  status: ParentCheckInStatus;
+  deliveredAt?: string | null;
+  seenAt?: string | null;
+  createdAt: string;
+}
+
 export type BadgeCategory =
   | 'math'
   | 'reading'
@@ -139,6 +153,9 @@ export interface LearningPreferences {
   weeklyPlanIntensity?: 'light' | 'normal' | 'challenge';
   weeklyPlanFocus?: Subject | 'balanced';
   weeklyIntent?: 'precision' | 'speed' | 'stretch' | 'balanced';
+  mixInMode?: 'auto' | 'core_only' | 'cross_subject';
+  electiveEmphasis?: 'off' | 'light' | 'on';
+  allowedElectiveSubjects?: Subject[];
   chatMode?: 'guided_only' | 'guided_preferred' | 'free';
   chatModeLocked?: boolean;
   studyMode?: 'catch_up' | 'keep_up' | 'get_ahead';
@@ -158,6 +175,9 @@ export const defaultLearningPreferences: LearningPreferences = {
   weeklyPlanIntensity: 'normal',
   weeklyPlanFocus: 'balanced',
   weeklyIntent: 'balanced',
+  mixInMode: 'auto',
+  electiveEmphasis: 'light',
+  allowedElectiveSubjects: [],
   chatMode: 'free',
   chatModeLocked: false,
   studyMode: 'keep_up',
@@ -274,7 +294,16 @@ export type ParentOnboardingState = {
   lastViewedStep?: string | null;
 };
 
-export type Subject = 'math' | 'english' | 'science' | 'social_studies' | 'study_skills';
+export type Subject =
+  | 'math'
+  | 'english'
+  | 'science'
+  | 'social_studies'
+  | 'study_skills'
+  | 'arts_music'
+  | 'financial_literacy'
+  | 'health_pe'
+  | 'computer_science';
 
 export interface ChatMessage {
   id: string;
@@ -315,6 +344,8 @@ export interface DashboardLesson {
   suggestionReason?: string | null;
   suggestionConfidence?: number | null;
   activities?: DashboardActivity[];
+  isMixIn?: boolean;
+  isElective?: boolean;
 }
 
 export interface DashboardActivity {
@@ -341,6 +372,15 @@ export interface SubjectMastery {
   cohortAverage?: number;
   goal?: number;
   delta?: number;
+}
+
+export interface SubjectWeeklyTrend {
+  subject: Subject;
+  mastery?: number | null;
+  accuracyDelta?: number | null;
+  timeDelta?: number | null;
+  timeMinutes?: number | null;
+  direction: 'up' | 'down' | 'steady';
 }
 
 export interface SkillGapInsight {
@@ -412,6 +452,7 @@ export interface StudentDashboardData {
   avatarOptions?: AvatarOption[];
   equippedAvatarId?: string | null;
   todayActivities?: DashboardActivity[];
+  electiveSuggestion?: DashboardLesson | null;
 }
 
 export interface ParentCoachingSuggestion {
@@ -444,6 +485,7 @@ export interface ParentChildSnapshot {
     deltaXp: number;
   };
   masteryBySubject: SubjectMastery[];
+  subjectTrends?: SubjectWeeklyTrend[];
   recentActivity: ParentChildActivity[];
   goals?: ChildGoalTargets;
   goalProgress?: number;
@@ -705,6 +747,10 @@ export interface ParentWeeklyReport {
   highlights: string[];
   recommendations: string[];
   aiGenerated?: boolean;
+  changes?: {
+    improvements: string[];
+    risks: string[];
+  };
 }
 
 export interface ParentDashboardData {

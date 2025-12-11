@@ -1,0 +1,1094 @@
+{
+  "6-electives-financial-literacy-elective-banking-basics": {
+    "title": "Banking Basics for Grade 6",
+    "subject": "Financial Literacy",
+    "grade": 6,
+    "standards": [
+      "FL.B.1.1",
+      "FL.B.1.2",
+      "FL.M.1.1"
+    ],
+    "questions": [
+      {
+        "id": "6bb001",
+        "prompt": "What is a bank?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.1.1"
+        ],
+        "options": [
+          {
+            "text": "A business that safely holds money and provides financial services",
+            "isCorrect": true
+          },
+          {
+            "text": "A place to get free money",
+            "isCorrect": false
+          },
+          {
+            "text": "A store that sells things",
+            "isCorrect": false
+          },
+          {
+            "text": "A government office",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Banks accept deposits (money people give them), provide loans, and offer services like checking accounts and savings accounts."
+      },
+      {
+        "id": "6bb002",
+        "prompt": "What is a checking account used for?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.1.2"
+        ],
+        "options": [
+          {
+            "text": "Storing money and making frequent payments with checks or debit cards",
+            "isCorrect": true
+          },
+          {
+            "text": "Saving money for retirement",
+            "isCorrect": false
+          },
+          {
+            "text": "Borrowing money from the bank",
+            "isCorrect": false
+          },
+          {
+            "text": "Investing in stocks",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Checking accounts allow you to access your money anytime for everyday expenses. You get a debit card or checkbook."
+      },
+      {
+        "id": "6bb003",
+        "prompt": "What is a debit card?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.1.2"
+        ],
+        "explanation": "A debit card is a card linked to your checking account that lets you spend money directly from your account without writing checks."
+      },
+      {
+        "id": "6bb004",
+        "prompt": "Why might someone choose a credit card over a debit card?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.M.1.1"
+        ],
+        "options": [
+          {
+            "text": "To build credit history and earn rewards, but you must pay the bill later",
+            "isCorrect": true
+          },
+          {
+            "text": "Debit cards are never useful",
+            "isCorrect": false
+          },
+          {
+            "text": "Credit cards give you free money",
+            "isCorrect": false
+          },
+          {
+            "text": "Credit cards are only for adults over 30",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Credit cards let you borrow money and pay it back later. This can build credit history if paid responsibly, and many offer rewards."
+      },
+      {
+        "id": "6bb005",
+        "prompt": "What is interest in banking?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.1.1"
+        ],
+        "explanation": "Interest is money the bank pays you on savings, or money you pay on loans. It's a percentage of the amount."
+      },
+      {
+        "id": "6bb006",
+        "prompt": "What is a PIN (Personal Identification Number)?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.1.2"
+        ],
+        "options": [
+          {
+            "text": "A secret code that protects your bank account from unauthorized access",
+            "isCorrect": true
+          },
+          {
+            "text": "Your account number",
+            "isCorrect": false
+          },
+          {
+            "text": "Your birthday",
+            "isCorrect": false
+          },
+          {
+            "text": "A card number",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Your PIN is like a password for your debit card. Never share it with anyone, even bank employees."
+      },
+      {
+        "id": "6bb007",
+        "prompt": "Explain the difference between a savings account and a checking account.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.1.1"
+        ],
+        "explanation": "Checking accounts are for frequent transactions and payments; savings accounts earn interest and are meant for storing money long-term."
+      },
+      {
+        "id": "6bb008",
+        "prompt": "What should you do if you suspect someone fraudulently used your bank account?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.M.1.1"
+        ],
+        "options": [
+          {
+            "text": "Contact your bank immediately and report the suspicious activity",
+            "isCorrect": true
+          },
+          {
+            "text": "Ignore it and hope it goes away",
+            "isCorrect": false
+          },
+          {
+            "text": "Post about it on social media",
+            "isCorrect": false
+          },
+          {
+            "text": "Try to fix it yourself without telling anyone",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Banks have fraud protection. Contact them immediately if you see unauthorized transactions. They can investigate and protect your account."
+      }
+    ]
+  },
+  "6-electives-financial-literacy-elective-saving-budgeting": {
+    "title": "Saving and Budgeting for Grade 6",
+    "subject": "Financial Literacy",
+    "grade": 6,
+    "standards": [
+      "FL.S.1.1",
+      "FL.S.1.2",
+      "FL.B.2.1"
+    ],
+    "questions": [
+      {
+        "id": "6sb001",
+        "prompt": "What is a budget?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.2.1"
+        ],
+        "options": [
+          {
+            "text": "A plan for how much money you will earn and spend",
+            "isCorrect": true
+          },
+          {
+            "text": "Money you borrow from the bank",
+            "isCorrect": false
+          },
+          {
+            "text": "An investment strategy",
+            "isCorrect": false
+          },
+          {
+            "text": "A list of wants vs. needs",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A budget lists your income (money in) and expenses (money out) to help you manage money and meet goals."
+      },
+      {
+        "id": "6sb002",
+        "prompt": "What is the difference between needs and wants?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.S.1.1"
+        ],
+        "options": [
+          {
+            "text": "Needs are essential (food, housing); wants are things you'd like but can live without",
+            "isCorrect": true
+          },
+          {
+            "text": "They're the same thing",
+            "isCorrect": false
+          },
+          {
+            "text": "Wants are essential",
+            "isCorrect": false
+          },
+          {
+            "text": "Needs are optional",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Needs keep you alive and healthy. Wants make life enjoyable but aren't necessary. Good budgeting prioritizes needs."
+      },
+      {
+        "id": "6sb003",
+        "prompt": "Why is saving money important?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "FL.S.1.2"
+        ],
+        "explanation": "Saving builds financial security, helps you reach goals (like buying something big), and prepares you for emergencies."
+      },
+      {
+        "id": "6sb004",
+        "prompt": "What is an emergency fund?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.1.2"
+        ],
+        "options": [
+          {
+            "text": "Money saved for unexpected expenses like medical bills or car repairs",
+            "isCorrect": true
+          },
+          {
+            "text": "Money for entertainment",
+            "isCorrect": false
+          },
+          {
+            "text": "Money to invest in stocks",
+            "isCorrect": false
+          },
+          {
+            "text": "Money that the government gives you",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Emergency funds protect you when unexpected costs arise. Financial experts recommend saving 3-6 months of expenses."
+      },
+      {
+        "id": "6sb005",
+        "prompt": "What is the '50/30/20 budget rule'?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.2.1"
+        ],
+        "explanation": "A guideline suggesting 50% of income goes to needs, 30% to wants, and 20% to savings and debt repayment."
+      },
+      {
+        "id": "6sb006",
+        "prompt": "If you earn $20 doing chores, which is the wisest choice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.1.1"
+        ],
+        "options": [
+          {
+            "text": "Save some, spend some on wants, and set some aside for goals",
+            "isCorrect": true
+          },
+          {
+            "text": "Spend all $20 immediately on wants",
+            "isCorrect": false
+          },
+          {
+            "text": "Save all $20 and never spend",
+            "isCorrect": false
+          },
+          {
+            "text": "Give it all to a friend",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Balanced spending allows you to enjoy money while saving for the future. Saving everything or spending everything are both extreme."
+      },
+      {
+        "id": "6sb007",
+        "prompt": "Describe how you would create a budget for your monthly allowance.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "FL.B.2.1"
+        ],
+        "explanation": "List income (allowance), categorize expenses (needs, wants, savings), allocate amounts to each category, then track spending."
+      },
+      {
+        "id": "6sb008",
+        "prompt": "Why might someone use a goal-based savings approach?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "FL.S.1.2"
+        ],
+        "options": [
+          {
+            "text": "Having a specific target makes saving feel purposeful and motivates you to reach it",
+            "isCorrect": true
+          },
+          {
+            "text": "All savings are the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Goals don't matter in budgeting",
+            "isCorrect": false
+          },
+          {
+            "text": "You should save randomly",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Naming your goal (new bike, vacation, game) makes saving real and helps you stay disciplined to reach it."
+      }
+    ]
+  },
+  "7-electives-financial-literacy-elective-banking-basics": {
+    "title": "Banking Basics for Grade 7",
+    "subject": "Financial Literacy",
+    "grade": 7,
+    "standards": [
+      "FL.B.2.1",
+      "FL.B.2.2",
+      "FL.M.2.1"
+    ],
+    "questions": [
+      {
+        "id": "7bb001",
+        "prompt": "What is credit?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.2.2"
+        ],
+        "options": [
+          {
+            "text": "Money you borrow with the promise to pay it back, usually with interest",
+            "isCorrect": true
+          },
+          {
+            "text": "Free money from the bank",
+            "isCorrect": false
+          },
+          {
+            "text": "A type of savings account",
+            "isCorrect": false
+          },
+          {
+            "text": "Your bank balance",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Credit is borrowed money. You use it now and pay it back later, paying interest for the convenience."
+      },
+      {
+        "id": "7bb002",
+        "prompt": "What is a credit score?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.2.1"
+        ],
+        "options": [
+          {
+            "text": "A number (300-850) that shows how trustworthy you are with borrowed money",
+            "isCorrect": true
+          },
+          {
+            "text": "Your income level",
+            "isCorrect": false
+          },
+          {
+            "text": "Your bank account balance",
+            "isCorrect": false
+          },
+          {
+            "text": "A grade on your report card",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Credit scores are based on payment history, amounts owed, length of credit, and credit mix. Higher scores (750+) are better."
+      },
+      {
+        "id": "7bb003",
+        "prompt": "What is the purpose of interest rates on loans?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.2.2"
+        ],
+        "explanation": "Interest is the cost of borrowing money. Banks charge interest to make profit and compensate for risk."
+      },
+      {
+        "id": "7bb004",
+        "prompt": "How does compound interest work?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.M.2.1"
+        ],
+        "options": [
+          {
+            "text": "You earn interest on your initial amount AND on the interest that has already been earned",
+            "isCorrect": true
+          },
+          {
+            "text": "Interest only applies once",
+            "isCorrect": false
+          },
+          {
+            "text": "Interest gets subtracted from your savings",
+            "isCorrect": false
+          },
+          {
+            "text": "Interest only applies to loans",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Compound interest is 'interest on interest.' Over time, this growth accelerates, making compound interest powerful for long-term savings."
+      },
+      {
+        "id": "7bb005",
+        "prompt": "What is a loan?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.2.1"
+        ],
+        "explanation": "A loan is money borrowed from a bank or lender that you must repay with interest over a set period."
+      },
+      {
+        "id": "7bb006",
+        "prompt": "What factors affect your credit score?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.2.2"
+        ],
+        "options": [
+          {
+            "text": "Payment history, amounts owed, length of credit history, credit mix, and new credit",
+            "isCorrect": true
+          },
+          {
+            "text": "Your social media activity",
+            "isCorrect": false
+          },
+          {
+            "text": "Your grades in school",
+            "isCorrect": false
+          },
+          {
+            "text": "Your age and height",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Payment history (35%) is most important, followed by amounts owed, length of credit, types of credit, and new inquiries."
+      },
+      {
+        "id": "7bb007",
+        "prompt": "Explain the consequences of missing loan or credit card payments.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "FL.B.2.1"
+        ],
+        "explanation": "Late payments lower your credit score, result in fees and penalties, increase interest rates, and make it harder to borrow in the future."
+      },
+      {
+        "id": "7bb008",
+        "prompt": "Why is it important to read the fine print on a loan agreement?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "FL.M.2.1"
+        ],
+        "options": [
+          {
+            "text": "To understand all terms, fees, interest rates, and conditions before committing",
+            "isCorrect": true
+          },
+          {
+            "text": "Fine print doesn't matter",
+            "isCorrect": false
+          },
+          {
+            "text": "All loans are identical",
+            "isCorrect": false
+          },
+          {
+            "text": "Fine print is just marketing",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Fine print contains crucial details: interest rate, repayment period, fees, penalties, and conditions that affect your financial obligation."
+      }
+    ]
+  },
+  "7-electives-financial-literacy-elective-saving-budgeting": {
+    "title": "Saving and Budgeting for Grade 7",
+    "subject": "Financial Literacy",
+    "grade": 7,
+    "standards": [
+      "FL.S.2.1",
+      "FL.S.2.2",
+      "FL.B.3.1"
+    ],
+    "questions": [
+      {
+        "id": "7sb001",
+        "prompt": "What is the difference between gross income and net income?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.3.1"
+        ],
+        "options": [
+          {
+            "text": "Gross is total earnings; net is what you keep after taxes and deductions",
+            "isCorrect": true
+          },
+          {
+            "text": "They're the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Net income is taxes you owe",
+            "isCorrect": false
+          },
+          {
+            "text": "Gross income doesn't include taxes",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Gross: total earned. Net: take-home pay after taxes, insurance, and deductions. Budgets should be based on net income."
+      },
+      {
+        "id": "7sb002",
+        "prompt": "What is a financial goal?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "FL.S.2.1"
+        ],
+        "explanation": "A specific, measurable target for what you want to achieve with your money, like saving for college or a car."
+      },
+      {
+        "id": "7sb003",
+        "prompt": "What is the difference between short-term and long-term financial goals?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.2.2"
+        ],
+        "options": [
+          {
+            "text": "Short-term: achievable in weeks/months (bike); Long-term: years/decades (house, retirement)",
+            "isCorrect": true
+          },
+          {
+            "text": "They're the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Short-term goals are unimportant",
+            "isCorrect": false
+          },
+          {
+            "text": "Long-term goals are impossible",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Short-term goals motivate you now; long-term goals require consistent saving and planning over years."
+      },
+      {
+        "id": "7sb004",
+        "prompt": "What is tracking expenses?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.3.1"
+        ],
+        "options": [
+          {
+            "text": "Recording where your money goes to identify spending patterns and areas to cut",
+            "isCorrect": true
+          },
+          {
+            "text": "Making a list of things to buy",
+            "isCorrect": false
+          },
+          {
+            "text": "Earning more money",
+            "isCorrect": false
+          },
+          {
+            "text": "Investing in stocks",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Expense tracking reveals where money actually goes, often showing unnecessary spending you can reduce."
+      },
+      {
+        "id": "7sb005",
+        "prompt": "What is inflation and how does it affect savings?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.2.1"
+        ],
+        "explanation": "Inflation is when prices rise over time. Money saved under a mattress loses buying power; savings accounts with interest protect you."
+      },
+      {
+        "id": "7sb006",
+        "prompt": "If you want to save $500 by the end of the year, what should you do?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.2.2"
+        ],
+        "options": [
+          {
+            "text": "Divide $500 by 52 weeks to save about $9.62 per week, then track progress",
+            "isCorrect": true
+          },
+          {
+            "text": "Save it all in one month",
+            "isCorrect": false
+          },
+          {
+            "text": "Hope you'll somehow have it at year-end",
+            "isCorrect": false
+          },
+          {
+            "text": "Don't try because it's too much",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Breaking large goals into smaller weekly or monthly targets makes them achievable and keeps you motivated."
+      },
+      {
+        "id": "7sb007",
+        "prompt": "Describe how you would adjust your budget if your income decreased by 20%.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "FL.B.3.1"
+        ],
+        "explanation": "Identify essential needs first, reduce discretionary wants, maintain emergency fund contributions, find cost-cutting opportunities."
+      },
+      {
+        "id": "7sb008",
+        "prompt": "Why is it important to review and adjust your budget regularly?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "FL.S.2.1"
+        ],
+        "options": [
+          {
+            "text": "Life circumstances, income, and expenses change; review ensures your budget stays realistic and effective",
+            "isCorrect": true
+          },
+          {
+            "text": "Budgets never change",
+            "isCorrect": false
+          },
+          {
+            "text": "You should only budget once",
+            "isCorrect": false
+          },
+          {
+            "text": "Regular review wastes time",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Monthly or quarterly reviews catch overspending, adjust for income changes, and keep you accountable to goals."
+      }
+    ]
+  },
+  "8-electives-financial-literacy-elective-banking-basics": {
+    "title": "Banking Basics for Grade 8",
+    "subject": "Financial Literacy",
+    "grade": 8,
+    "standards": [
+      "FL.B.3.1",
+      "FL.B.3.2",
+      "FL.M.3.1"
+    ],
+    "questions": [
+      {
+        "id": "8bb001",
+        "prompt": "What is APR (Annual Percentage Rate) and why does it matter on credit cards?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.3.1"
+        ],
+        "options": [
+          {
+            "text": "The yearly interest rate you pay if you carry a balance; lower APR saves money",
+            "isCorrect": true
+          },
+          {
+            "text": "A one-time fee",
+            "isCorrect": false
+          },
+          {
+            "text": "The amount you must spend",
+            "isCorrect": false
+          },
+          {
+            "text": "An account type",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "APR directly determines how much interest you pay. A credit card with 18% APR costs far more than one with 12% APR."
+      },
+      {
+        "id": "8bb002",
+        "prompt": "What is a financial institution?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.3.2"
+        ],
+        "explanation": "A business (bank, credit union, online bank) that manages money, offers accounts, loans, and other financial services."
+      },
+      {
+        "id": "8bb003",
+        "prompt": "How do credit unions differ from traditional banks?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.3.2"
+        ],
+        "options": [
+          {
+            "text": "Credit unions are member-owned, non-profit; banks are for-profit; credit unions often have lower fees and better rates",
+            "isCorrect": true
+          },
+          {
+            "text": "They're identical",
+            "isCorrect": false
+          },
+          {
+            "text": "Credit unions don't offer loans",
+            "isCorrect": false
+          },
+          {
+            "text": "Banks are member-owned",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Credit unions prioritize members' interests. Banks prioritize shareholders' profits. This difference affects fees and interest rates."
+      },
+      {
+        "id": "8bb004",
+        "prompt": "What is identity theft and how can you protect yourself?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.M.3.1"
+        ],
+        "explanation": "Identity theft is when someone uses your personal info fraudulently. Protect yourself: guard social security number, use strong passwords, check credit reports, monitor accounts."
+      },
+      {
+        "id": "8bb005",
+        "prompt": "What should you do before opening a bank account?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.B.3.1"
+        ],
+        "options": [
+          {
+            "text": "Compare fees, interest rates, account features, and services across multiple banks",
+            "isCorrect": true
+          },
+          {
+            "text": "Pick the first bank you see",
+            "isCorrect": false
+          },
+          {
+            "text": "Go with where your friends bank",
+            "isCorrect": false
+          },
+          {
+            "text": "Don't research at all",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Different banks have different terms. A high-fee bank can cost $200+ annually vs. a low-fee bank that costs nothing."
+      },
+      {
+        "id": "8bb006",
+        "prompt": "What is a bank statement?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.3.2"
+        ],
+        "options": [
+          {
+            "text": "A document showing all transactions, balance, interest, and fees for a period (usually monthly)",
+            "isCorrect": true
+          },
+          {
+            "text": "A loan application",
+            "isCorrect": false
+          },
+          {
+            "text": "A credit score report",
+            "isCorrect": false
+          },
+          {
+            "text": "Your savings goal",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Statements show everything: deposits, withdrawals, fees, interest. Review them monthly to catch errors or fraud."
+      },
+      {
+        "id": "8bb007",
+        "prompt": "Analyze the pros and cons of using a debit card vs. a credit card for online shopping.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "FL.B.3.1"
+        ],
+        "explanation": "Debit: funds immediately removed, no debt or interest, less fraud protection. Credit: builds credit, rewards, stronger fraud protection, but tempts overspending."
+      },
+      {
+        "id": "8bb008",
+        "prompt": "Why should you review your credit report regularly?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "FL.M.3.1"
+        ],
+        "options": [
+          {
+            "text": "To check for errors, unauthorized accounts, and identity theft; errors can be disputed and corrected",
+            "isCorrect": true
+          },
+          {
+            "text": "Credit reports are always accurate",
+            "isCorrect": false
+          },
+          {
+            "text": "You can't fix credit report errors",
+            "isCorrect": false
+          },
+          {
+            "text": "Checking your report lowers your score",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "You're entitled to one free annual credit report. Errors can significantly harm your score. Disputes can improve it."
+      }
+    ]
+  },
+  "8-electives-financial-literacy-elective-saving-budgeting": {
+    "title": "Saving and Budgeting for Grade 8",
+    "subject": "Financial Literacy",
+    "grade": 8,
+    "standards": [
+      "FL.S.3.1",
+      "FL.S.3.2",
+      "FL.B.4.1"
+    ],
+    "questions": [
+      {
+        "id": "8sb001",
+        "prompt": "What is an investment?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.3.1"
+        ],
+        "options": [
+          {
+            "text": "Money you put into something (stocks, bonds, real estate) hoping it grows over time",
+            "isCorrect": true
+          },
+          {
+            "text": "Money you must spend",
+            "isCorrect": false
+          },
+          {
+            "text": "Money you save in a bank account",
+            "isCorrect": false
+          },
+          {
+            "text": "Debt you owe",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Investments aim to generate returns beyond savings account interest, but come with risk. Time and diversification help manage risk."
+      },
+      {
+        "id": "8sb002",
+        "prompt": "What is the difference between saving and investing?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.3.2"
+        ],
+        "explanation": "Saving: keeping money safe with little growth but low risk. Investing: putting money at risk for potential growth and returns."
+      },
+      {
+        "id": "8sb003",
+        "prompt": "What is a retirement account like a 401(k)?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.3.1"
+        ],
+        "options": [
+          {
+            "text": "An employer-sponsored account where you save pre-tax income for retirement; employers often match contributions",
+            "isCorrect": true
+          },
+          {
+            "text": "A type of checking account",
+            "isCorrect": false
+          },
+          {
+            "text": "A loan program",
+            "isCorrect": false
+          },
+          {
+            "text": "A savings goal",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "401(k)s offer tax advantages and employer matching. Free employer money is a huge benefit—take full advantage."
+      },
+      {
+        "id": "8sb004",
+        "prompt": "What is financial responsibility?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "FL.B.4.1"
+        ],
+        "explanation": "Using money wisely: budgeting, paying bills on time, saving for goals, avoiding unnecessary debt, and living within your means."
+      },
+      {
+        "id": "8sb005",
+        "prompt": "What is the rule of 72 and what does it help you calculate?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "FL.S.3.2"
+        ],
+        "options": [
+          {
+            "text": "Dividing 72 by your interest rate shows how many years it takes money to double through compound interest",
+            "isCorrect": true
+          },
+          {
+            "text": "A budgeting formula",
+            "isCorrect": false
+          },
+          {
+            "text": "A credit score calculation",
+            "isCorrect": false
+          },
+          {
+            "text": "A tax deduction",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "At 8% interest, 72÷8=9 years to double. At 6%, 72÷6=12 years. Shows why starting to save early matters immensely."
+      },
+      {
+        "id": "8sb006",
+        "prompt": "Why is starting to save early, even small amounts, important?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "FL.S.3.1"
+        ],
+        "options": [
+          {
+            "text": "Compound interest gives small early contributions decades to grow; starting at 15 vs. 25 yields dramatically different results",
+            "isCorrect": true
+          },
+          {
+            "text": "Starting age doesn't matter",
+            "isCorrect": false
+          },
+          {
+            "text": "You should only save later in life",
+            "isCorrect": false
+          },
+          {
+            "text": "Small amounts don't add up",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A 15-year-old who saves $50/month at 7% interest for 50 years has ~$295,000. A 25-year-old with same rate/amount has ~$137,000."
+      },
+      {
+        "id": "8sb007",
+        "prompt": "Design a comprehensive personal budget for your teenage years that includes income, fixed expenses, variable expenses, savings, and goals.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "FL.B.4.1"
+        ],
+        "explanation": "Show income (allowance, job), list needs (phone, food), wants (entertainment), and savings goals. Allocate percentages or amounts to each."
+      },
+      {
+        "id": "8sb008",
+        "prompt": "What is financial literacy and why is it essential in today's world?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "FL.S.3.2"
+        ],
+        "options": [
+          {
+            "text": "Understanding money, budgeting, credit, investing, and making wise financial decisions—essential because financial choices affect your entire life",
+            "isCorrect": true
+          },
+          {
+            "text": "Only necessary if you want to be rich",
+            "isCorrect": false
+          },
+          {
+            "text": "Financial literacy isn't important",
+            "isCorrect": false
+          },
+          {
+            "text": "Money management is too complicated",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Financial literacy determines whether you thrive or struggle. Poor decisions compound into decades of hardship. Good habits compound into wealth."
+      }
+    ]
+  }
+}

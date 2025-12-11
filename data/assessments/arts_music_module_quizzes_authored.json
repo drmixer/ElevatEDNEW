@@ -1,0 +1,2132 @@
+{
+  "3-electives-arts-and-music-drawing-painting-techniques": {
+    "title": "Drawing and Painting Techniques for Grade 3",
+    "subject": "Arts & Music",
+    "grade": 3,
+    "standards": [
+      "VA.CR.1.1",
+      "VA.CR.2.1",
+      "VA.PR.5.1"
+    ],
+    "questions": [
+      {
+        "id": "3dp001",
+        "prompt": "What does 'shading' mean in drawing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.1.1"
+        ],
+        "options": [
+          {
+            "text": "Using light and dark to show depth and texture",
+            "isCorrect": true
+          },
+          {
+            "text": "Coloring with only one color",
+            "isCorrect": false
+          },
+          {
+            "text": "Using a pencil to draw straight lines",
+            "isCorrect": false
+          },
+          {
+            "text": "Erasing parts of your drawing",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Shading uses different amounts of darkness to create the illusion of form and texture in artwork."
+      },
+      {
+        "id": "3dp002",
+        "prompt": "Which technique creates a rough surface feeling in a drawing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.2.1"
+        ],
+        "options": [
+          {
+            "text": "Cross-hatching",
+            "isCorrect": true
+          },
+          {
+            "text": "Smooth blending",
+            "isCorrect": false
+          },
+          {
+            "text": "Erasing carefully",
+            "isCorrect": false
+          },
+          {
+            "text": "Using only outlines",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Cross-hatching uses overlapping lines to create texture and visual interest."
+      },
+      {
+        "id": "3dp003",
+        "prompt": "What is the primary purpose of a sketch in painting?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.1.1"
+        ],
+        "explanation": "Sketches plan the composition and help artists think through their ideas before committing to paint."
+      },
+      {
+        "id": "3dp004",
+        "prompt": "Which of these is NOT a common painting technique?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.CR.2.1"
+        ],
+        "options": [
+          {
+            "text": "Dry brushing to create texture",
+            "isCorrect": true
+          },
+          {
+            "text": "Glazing with thin transparent layers",
+            "isCorrect": false
+          },
+          {
+            "text": "Using a typewriter on canvas",
+            "isCorrect": false
+          },
+          {
+            "text": "Splattering paint for dynamic effects",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Using a typewriter is not a painting technique; all other options are legitimate ways to apply paint."
+      },
+      {
+        "id": "3dp005",
+        "prompt": "Why might an artist choose to blend colors together on canvas?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.PR.5.1"
+        ],
+        "explanation": "Blending creates smooth transitions, softer edges, and a wider range of colors and tones."
+      },
+      {
+        "id": "3dp006",
+        "prompt": "What happens when you mix primary colors in painting?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.CR.2.1"
+        ],
+        "options": [
+          {
+            "text": "You create secondary colors",
+            "isCorrect": true
+          },
+          {
+            "text": "The colors disappear",
+            "isCorrect": false
+          },
+          {
+            "text": "You always make brown",
+            "isCorrect": false
+          },
+          {
+            "text": "They become lighter in value",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Mixing primary colors creates secondary colors: red + yellow = orange, yellow + blue = green, blue + red = purple."
+      },
+      {
+        "id": "3dp007",
+        "prompt": "Explain how 'perspective' helps make a flat drawing look three-dimensional.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.CR.1.1"
+        ],
+        "explanation": "Perspective uses size relationships and placement to suggest distance, making objects appear to recede into space."
+      },
+      {
+        "id": "3dp008",
+        "prompt": "A student wants to show emotion in her portrait through color choices. Which color choice would best convey happiness?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.PR.5.1"
+        ],
+        "options": [
+          {
+            "text": "Warm, bright yellows and oranges",
+            "isCorrect": true
+          },
+          {
+            "text": "Dark grays and blacks",
+            "isCorrect": false
+          },
+          {
+            "text": "Cool blues and purples",
+            "isCorrect": false
+          },
+          {
+            "text": "No color, just pencil",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Warm colors like yellow and orange are often associated with happiness and positive energy."
+      }
+    ]
+  },
+  "3-electives-arts-and-music-notation-basics": {
+    "title": "Music Notation Basics for Grade 3",
+    "subject": "Arts & Music",
+    "grade": 3,
+    "standards": [
+      "MU.CR.1.1",
+      "MU.PR.4.1",
+      "MU.RE.7.1"
+    ],
+    "questions": [
+      {
+        "id": "3mn001",
+        "prompt": "What do the five lines in music called?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.CR.1.1"
+        ],
+        "options": [
+          {
+            "text": "The staff",
+            "isCorrect": true
+          },
+          {
+            "text": "The measure",
+            "isCorrect": false
+          },
+          {
+            "text": "The scale",
+            "isCorrect": false
+          },
+          {
+            "text": "The clef",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The staff is the foundation of music notation, consisting of five horizontal lines."
+      },
+      {
+        "id": "3mn002",
+        "prompt": "Which symbol shows the beginning of a piece of music?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.PR.4.1"
+        ],
+        "options": [
+          {
+            "text": "A clef",
+            "isCorrect": true
+          },
+          {
+            "text": "A barline",
+            "isCorrect": false
+          },
+          {
+            "text": "A rest",
+            "isCorrect": false
+          },
+          {
+            "text": "A key signature",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A clef (like the treble clef) appears at the beginning of the staff to indicate pitch levels."
+      },
+      {
+        "id": "3mn003",
+        "prompt": "Name the three types of note heads and their time values.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.1.1"
+        ],
+        "explanation": "Whole notes (4 beats), half notes (2 beats), and quarter notes (1 beat) are fundamental to reading rhythm."
+      },
+      {
+        "id": "3mn004",
+        "prompt": "What does a rest symbol represent in music?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.RE.7.1"
+        ],
+        "options": [
+          {
+            "text": "A period of silence",
+            "isCorrect": true
+          },
+          {
+            "text": "A loud note",
+            "isCorrect": false
+          },
+          {
+            "text": "A high pitch",
+            "isCorrect": false
+          },
+          {
+            "text": "A repeat sign",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Rests indicate silence and have the same time values as notes."
+      },
+      {
+        "id": "3mn005",
+        "prompt": "How does a musician know how fast to play a song?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.PR.4.1"
+        ],
+        "explanation": "The tempo marking at the beginning of the piece, often in Italian terms like 'Allegro' or with beats per minute."
+      },
+      {
+        "id": "3mn006",
+        "prompt": "What is the purpose of bar lines in sheet music?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.1.1"
+        ],
+        "options": [
+          {
+            "text": "To divide music into equal measures",
+            "isCorrect": true
+          },
+          {
+            "text": "To make the page look organized",
+            "isCorrect": false
+          },
+          {
+            "text": "To show where to breathe",
+            "isCorrect": false
+          },
+          {
+            "text": "To indicate louder sections",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Bar lines create measures that help organize rhythm and keep musicians together."
+      },
+      {
+        "id": "3mn007",
+        "prompt": "Describe how the treble clef symbol helps musicians read higher notes.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.RE.7.1"
+        ],
+        "explanation": "The treble clef spirals around the second line (G), establishing a reference point for all note positions."
+      },
+      {
+        "id": "3mn008",
+        "prompt": "If a time signature is 4/4, what does this tell you about the measure?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "MU.PR.4.1"
+        ],
+        "options": [
+          {
+            "text": "There are four quarter notes per measure",
+            "isCorrect": true
+          },
+          {
+            "text": "The piece has four sections",
+            "isCorrect": false
+          },
+          {
+            "text": "There are four instruments",
+            "isCorrect": false
+          },
+          {
+            "text": "The song lasts four minutes",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "4/4 means four beats per measure, with the quarter note receiving one beat."
+      }
+    ]
+  },
+  "4-electives-arts-and-music-drawing-painting-techniques": {
+    "title": "Drawing and Painting Techniques for Grade 4",
+    "subject": "Arts & Music",
+    "grade": 4,
+    "standards": [
+      "VA.CR.1.1",
+      "VA.CR.2.2",
+      "VA.PR.5.1"
+    ],
+    "questions": [
+      {
+        "id": "4dp001",
+        "prompt": "What is the difference between warm and cool colors in painting?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.2.2"
+        ],
+        "options": [
+          {
+            "text": "Warm colors have more red/orange; cool colors have more blue/green",
+            "isCorrect": true
+          },
+          {
+            "text": "Warm colors are used in summer paintings",
+            "isCorrect": false
+          },
+          {
+            "text": "Cool colors are lighter in value",
+            "isCorrect": false
+          },
+          {
+            "text": "Warm colors are always dark",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Color temperature affects mood: warm colors feel energetic, cool colors feel calm and distant."
+      },
+      {
+        "id": "4dp002",
+        "prompt": "Which technique involves layering transparent paint to create depth?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.1.1"
+        ],
+        "options": [
+          {
+            "text": "Glazing",
+            "isCorrect": true
+          },
+          {
+            "text": "Impasto",
+            "isCorrect": false
+          },
+          {
+            "text": "Splattering",
+            "isCorrect": false
+          },
+          {
+            "text": "Underpainting",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Glazing uses thin, transparent layers of paint to build color and luminosity gradually."
+      },
+      {
+        "id": "4dp003",
+        "prompt": "Explain how an artist uses negative space to define the main subject of a drawing.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.PR.5.1"
+        ],
+        "explanation": "Negative space is the empty area around a subject; defining it clearly helps the subject stand out."
+      },
+      {
+        "id": "4dp004",
+        "prompt": "What is the most important reason to understand value in painting?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.CR.2.2"
+        ],
+        "options": [
+          {
+            "text": "To create contrast and make objects appear three-dimensional",
+            "isCorrect": true
+          },
+          {
+            "text": "To make colors brighter",
+            "isCorrect": false
+          },
+          {
+            "text": "To fill more space on the canvas",
+            "isCorrect": false
+          },
+          {
+            "text": "To use less paint",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Value (light and dark) creates the illusion of form and is essential for creating visual interest."
+      },
+      {
+        "id": "4dp005",
+        "prompt": "Why would an artist use a limited color palette instead of all available colors?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.CR.1.1"
+        ],
+        "explanation": "Limited palettes create harmony, focus attention, and help convey a specific mood or atmosphere."
+      },
+      {
+        "id": "4dp006",
+        "prompt": "Which texture technique creates thick, visible brushstrokes?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.2.2"
+        ],
+        "options": [
+          {
+            "text": "Impasto",
+            "isCorrect": true
+          },
+          {
+            "text": "Glazing",
+            "isCorrect": false
+          },
+          {
+            "text": "Blending",
+            "isCorrect": false
+          },
+          {
+            "text": "Stippling",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Impasto involves applying paint thickly so the brushstrokes and palette knife marks are visible and tactile."
+      },
+      {
+        "id": "4dp007",
+        "prompt": "Analyze how an artist might use line direction to guide the viewer's eye through a composition.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.PR.5.1"
+        ],
+        "explanation": "Diagonal lines create movement, horizontal lines suggest calm, and curved lines feel organic and flowing."
+      },
+      {
+        "id": "4dp008",
+        "prompt": "A student wants to paint a calm forest scene. What color strategy would be most effective?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.CR.1.1"
+        ],
+        "options": [
+          {
+            "text": "Use predominantly cool greens, blues, and earth tones",
+            "isCorrect": true
+          },
+          {
+            "text": "Use bright reds and yellows",
+            "isCorrect": false
+          },
+          {
+            "text": "Use high contrast between light and dark",
+            "isCorrect": false
+          },
+          {
+            "text": "Use only one color throughout",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Cool, muted colors create a peaceful, tranquil mood suited to a forest setting."
+      }
+    ]
+  },
+  "4-electives-arts-and-music-notation-basics": {
+    "title": "Music Notation Basics for Grade 4",
+    "subject": "Arts & Music",
+    "grade": 4,
+    "standards": [
+      "MU.CR.1.2",
+      "MU.PR.4.2",
+      "MU.RE.7.2"
+    ],
+    "questions": [
+      {
+        "id": "4mn001",
+        "prompt": "What is the relationship between note heads and note stems?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.CR.1.2"
+        ],
+        "options": [
+          {
+            "text": "The stem indicates note duration along with the head shape",
+            "isCorrect": true
+          },
+          {
+            "text": "Stems are just decorative",
+            "isCorrect": false
+          },
+          {
+            "text": "Stems show the pitch only",
+            "isCorrect": false
+          },
+          {
+            "text": "The head shows pitch; the stem shows nothing",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Note heads and stems work together: the head indicates pitch, and the shape (filled/hollow) shows duration."
+      },
+      {
+        "id": "4mn002",
+        "prompt": "Which musical element does a sharp symbol (#) affect?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.PR.4.2"
+        ],
+        "options": [
+          {
+            "text": "It raises the pitch of a note by a half step",
+            "isCorrect": true
+          },
+          {
+            "text": "It makes the note louder",
+            "isCorrect": false
+          },
+          {
+            "text": "It makes the note shorter",
+            "isCorrect": false
+          },
+          {
+            "text": "It changes the tempo",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A sharp raises a note's pitch, while a flat lowers it by a half step."
+      },
+      {
+        "id": "4mn003",
+        "prompt": "Describe the difference between a key signature and a time signature.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.1.2"
+        ],
+        "explanation": "Key signature shows which notes are sharp/flat; time signature shows beats per measure and note values."
+      },
+      {
+        "id": "4mn004",
+        "prompt": "What does a dynamic marking like 'forte' (f) tell a musician?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.RE.7.2"
+        ],
+        "options": [
+          {
+            "text": "How loud to play",
+            "isCorrect": true
+          },
+          {
+            "text": "How fast to play",
+            "isCorrect": false
+          },
+          {
+            "text": "What instrument to use",
+            "isCorrect": false
+          },
+          {
+            "text": "Which note to emphasize",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Dynamic markings control volume: forte (f) is loud, piano (p) is soft."
+      },
+      {
+        "id": "4mn005",
+        "prompt": "How do you count eighth notes in a 4/4 time signature?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.PR.4.2"
+        ],
+        "explanation": "Eighth notes are half the duration of quarter notes, so there are eight per measure: 1-and, 2-and, 3-and, 4-and."
+      },
+      {
+        "id": "4mn006",
+        "prompt": "What is the function of a repeat sign in sheet music?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.RE.7.2"
+        ],
+        "options": [
+          {
+            "text": "To indicate a section should be played again",
+            "isCorrect": true
+          },
+          {
+            "text": "To show where the song ends",
+            "isCorrect": false
+          },
+          {
+            "text": "To mark the beginning",
+            "isCorrect": false
+          },
+          {
+            "text": "To indicate a rest",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Repeat signs (: :) tell performers to go back and play that section a second time."
+      },
+      {
+        "id": "4mn007",
+        "prompt": "Explain how accidentals alter the written key signature of a piece.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.CR.1.2"
+        ],
+        "explanation": "Accidentals (sharp, flat, natural) modify specific notes within a measure, overriding the key signature temporarily."
+      },
+      {
+        "id": "4mn008",
+        "prompt": "If a song is marked 'Allegro,' what should the performer understand?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "MU.PR.4.2"
+        ],
+        "options": [
+          {
+            "text": "The piece should be played at a moderately fast, upbeat tempo",
+            "isCorrect": true
+          },
+          {
+            "text": "The piece is sad and slow",
+            "isCorrect": false
+          },
+          {
+            "text": "The piece should be played very softly",
+            "isCorrect": false
+          },
+          {
+            "text": "The piece uses only high notes",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Allegro is a tempo marking meaning moderately fast and cheerful—faster than Moderato, slower than Vivace."
+      }
+    ]
+  },
+  "5-electives-arts-and-music-drawing-painting-techniques": {
+    "title": "Drawing and Painting Techniques for Grade 5",
+    "subject": "Arts & Music",
+    "grade": 5,
+    "standards": [
+      "VA.CR.1.2",
+      "VA.CR.2.2",
+      "VA.PR.5.2"
+    ],
+    "questions": [
+      {
+        "id": "5dp001",
+        "prompt": "What is atmospheric perspective and how does it work in painting?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.CR.1.2"
+        ],
+        "explanation": "Atmospheric perspective makes distant objects appear hazier, bluer, and lighter in value to simulate depth."
+      },
+      {
+        "id": "5dp002",
+        "prompt": "Which of these is the correct color mixing sequence for creating a balanced secondary color?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CR.2.2"
+        ],
+        "options": [
+          {
+            "text": "Equal parts of two primary colors",
+            "isCorrect": true
+          },
+          {
+            "text": "One primary color with lots of white",
+            "isCorrect": false
+          },
+          {
+            "text": "All three primary colors together",
+            "isCorrect": false
+          },
+          {
+            "text": "A primary color mixed with black",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Secondary colors are made by mixing equal amounts of two primary colors."
+      },
+      {
+        "id": "5dp003",
+        "prompt": "Explain how an artist might use the rule of thirds to compose a painting.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.PR.5.2"
+        ],
+        "explanation": "The rule of thirds divides the canvas into nine sections; placing focal points at intersections creates balance."
+      },
+      {
+        "id": "5dp004",
+        "prompt": "What technique involves building up paint gradually in layers to achieve depth?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.CR.1.2"
+        ],
+        "options": [
+          {
+            "text": "Underpainting and glazing",
+            "isCorrect": true
+          },
+          {
+            "text": "Splattering all at once",
+            "isCorrect": false
+          },
+          {
+            "text": "Using only water",
+            "isCorrect": false
+          },
+          {
+            "text": "Dry brushing on the surface",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Underpainting establishes values; subsequent glazes add color and luminosity."
+      },
+      {
+        "id": "5dp005",
+        "prompt": "How can an artist create the illusion of texture without actual texture on the canvas?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.CR.2.2"
+        ],
+        "explanation": "Using varied line marks, stippling, cross-hatching, and value changes convinces the eye of texture."
+      },
+      {
+        "id": "5dp006",
+        "prompt": "Which color scheme creates the most dramatic, high-contrast appearance?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.PR.5.2"
+        ],
+        "options": [
+          {
+            "text": "Complementary colors opposite on the color wheel",
+            "isCorrect": true
+          },
+          {
+            "text": "Analogous colors next to each other",
+            "isCorrect": false
+          },
+          {
+            "text": "Monochromatic colors in one hue",
+            "isCorrect": false
+          },
+          {
+            "text": "Neutral colors with no saturation",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Complementary colors (opposite on the wheel) create visual vibration and maximum contrast."
+      },
+      {
+        "id": "5dp007",
+        "prompt": "Analyze why Renaissance artists used linear perspective in their paintings.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.CR.1.2"
+        ],
+        "explanation": "Linear perspective with vanishing points revolutionized realism, allowing paintings to recede naturally into space."
+      },
+      {
+        "id": "5dp008",
+        "prompt": "A student paints a portrait where the background is more vibrant than the subject's face. What problem might this create?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.PR.5.2"
+        ],
+        "options": [
+          {
+            "text": "The viewer's eye goes to the background instead of the face",
+            "isCorrect": true
+          },
+          {
+            "text": "The colors will mix together",
+            "isCorrect": false
+          },
+          {
+            "text": "The portrait will look too realistic",
+            "isCorrect": false
+          },
+          {
+            "text": "The background will appear closer",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Using less saturated colors in the background keeps focus on the intended focal point (the face)."
+      }
+    ]
+  },
+  "5-electives-arts-and-music-notation-basics": {
+    "title": "Music Notation Basics for Grade 5",
+    "subject": "Arts & Music",
+    "grade": 5,
+    "standards": [
+      "MU.CR.1.2",
+      "MU.PR.4.2",
+      "MU.RE.7.2"
+    ],
+    "questions": [
+      {
+        "id": "5mn001",
+        "prompt": "What does a dot next to a note do to its duration?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.CR.1.2"
+        ],
+        "options": [
+          {
+            "text": "It adds half the note's original value",
+            "isCorrect": true
+          },
+          {
+            "text": "It doubles the note's value",
+            "isCorrect": false
+          },
+          {
+            "text": "It makes the note silent",
+            "isCorrect": false
+          },
+          {
+            "text": "It raises the pitch",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A dotted note equals the note plus half its value (dotted quarter = quarter + eighth)."
+      },
+      {
+        "id": "5mn002",
+        "prompt": "Which time signature is the most common in popular music?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.PR.4.2"
+        ],
+        "options": [
+          {
+            "text": "4/4 (common time)",
+            "isCorrect": true
+          },
+          {
+            "text": "3/4 (waltz time)",
+            "isCorrect": false
+          },
+          {
+            "text": "2/4 (cut time)",
+            "isCorrect": false
+          },
+          {
+            "text": "6/8 (compound)",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "4/4 is called 'common time' and is used in most pop, rock, and standard songs."
+      },
+      {
+        "id": "5mn003",
+        "prompt": "Explain the relationship between scale degrees and intervals.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.1.2"
+        ],
+        "explanation": "Intervals measure distance between pitches; scale degrees are numbered steps within a scale."
+      },
+      {
+        "id": "5mn004",
+        "prompt": "What does a crescendo marking tell a musician?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.RE.7.2"
+        ],
+        "options": [
+          {
+            "text": "To gradually increase volume",
+            "isCorrect": true
+          },
+          {
+            "text": "To suddenly get louder",
+            "isCorrect": false
+          },
+          {
+            "text": "To play softly",
+            "isCorrect": false
+          },
+          {
+            "text": "To slow down the tempo",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A crescendo (< or 'cresc.') means gradually increasing volume over a passage."
+      },
+      {
+        "id": "5mn005",
+        "prompt": "How do you identify the major or minor tonality of a piece from its key signature?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.PR.4.2"
+        ],
+        "explanation": "Check which major/minor keys share the key signature; minor is typically a 6th below the relative major."
+      },
+      {
+        "id": "5mn006",
+        "prompt": "What is the purpose of ledger lines in sheet music?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.1.2"
+        ],
+        "options": [
+          {
+            "text": "To extend the staff for notes above or below",
+            "isCorrect": true
+          },
+          {
+            "text": "To show where to breathe",
+            "isCorrect": false
+          },
+          {
+            "text": "To indicate expression",
+            "isCorrect": false
+          },
+          {
+            "text": "To mark measure numbers",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Ledger lines are short lines added above or below the staff to notate very high or low notes."
+      },
+      {
+        "id": "5mn007",
+        "prompt": "Analyze how chord symbols (like 'C major' or 'G7') provide information beyond single melodic notes.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.RE.7.2"
+        ],
+        "explanation": "Chord symbols indicate harmonic structure, allowing musicians to create accompaniment and understand harmony."
+      },
+      {
+        "id": "5mn008",
+        "prompt": "In a piece with multiple sharps in the key signature, which sharp appears first?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "MU.PR.4.2"
+        ],
+        "options": [
+          {
+            "text": "F-sharp",
+            "isCorrect": true
+          },
+          {
+            "text": "C-sharp",
+            "isCorrect": false
+          },
+          {
+            "text": "G-sharp",
+            "isCorrect": false
+          },
+          {
+            "text": "D-sharp",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The order of sharps is F, C, G, D, A, E, B—F-sharp is always first."
+      }
+    ]
+  },
+  "6-electives-arts-and-music-art-history-pd-images": {
+    "title": "Art History and Public Domain Images for Grade 6",
+    "subject": "Arts & Music",
+    "grade": 6,
+    "standards": [
+      "VA.CN.10.1",
+      "VA.RE.8.1",
+      "VA.RE.9.1"
+    ],
+    "questions": [
+      {
+        "id": "6ah001",
+        "prompt": "What artistic movement emphasized capturing light and color through rapid brushstrokes?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.RE.9.1"
+        ],
+        "options": [
+          {
+            "text": "Impressionism",
+            "isCorrect": true
+          },
+          {
+            "text": "Cubism",
+            "isCorrect": false
+          },
+          {
+            "text": "Realism",
+            "isCorrect": false
+          },
+          {
+            "text": "Romanticism",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Impressionists painted outdoors (en plein air) to capture fleeting effects of natural light."
+      },
+      {
+        "id": "6ah002",
+        "prompt": "Which ancient civilization created the first known written systems and monumental architecture?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.CN.10.1"
+        ],
+        "options": [
+          {
+            "text": "Mesopotamia and Egypt",
+            "isCorrect": true
+          },
+          {
+            "text": "Greece and Rome",
+            "isCorrect": false
+          },
+          {
+            "text": "China and Japan",
+            "isCorrect": false
+          },
+          {
+            "text": "Americas and Africa",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Mesopotamian ziggurats and Egyptian pyramids were among the first major architectural achievements."
+      },
+      {
+        "id": "6ah003",
+        "prompt": "Describe how Renaissance artists' study of anatomy changed their artwork.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.8.1"
+        ],
+        "explanation": "Understanding human proportions and muscle structure allowed artists to create more realistic, dynamic figures."
+      },
+      {
+        "id": "6ah004",
+        "prompt": "What is one key feature that distinguishes Medieval art from Renaissance art?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.9.1"
+        ],
+        "options": [
+          {
+            "text": "Renaissance developed linear perspective and realism; Medieval was more symbolic",
+            "isCorrect": true
+          },
+          {
+            "text": "Medieval art was more colorful",
+            "isCorrect": false
+          },
+          {
+            "text": "Renaissance artists only painted religious subjects",
+            "isCorrect": false
+          },
+          {
+            "text": "Medieval artists invented oil paint",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The Renaissance rediscovered classical techniques and perspective that Medieval art had not emphasized."
+      },
+      {
+        "id": "6ah005",
+        "prompt": "How did the invention of the printing press influence artistic culture?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.CN.10.1"
+        ],
+        "explanation": "Printing made artworks and knowledge reproducible and accessible, spreading ideas and artistic styles widely."
+      },
+      {
+        "id": "6ah006",
+        "prompt": "Which Asian art tradition influenced European artists in the 19th century?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.8.1"
+        ],
+        "options": [
+          {
+            "text": "Japanese woodblock prints and design principles",
+            "isCorrect": true
+          },
+          {
+            "text": "Chinese calligraphy only",
+            "isCorrect": false
+          },
+          {
+            "text": "Indian sculpture exclusively",
+            "isCorrect": false
+          },
+          {
+            "text": "Korean painting styles",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Japonisme influenced Impressionists and Post-Impressionists through ukiyo-e prints' composition and perspective."
+      },
+      {
+        "id": "6ah007",
+        "prompt": "Analyze why early civilizations placed such emphasis on creating permanent structures and artworks.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.RE.9.1"
+        ],
+        "explanation": "Permanent works served religious, political, and memorial purposes, extending a culture's influence beyond generations."
+      },
+      {
+        "id": "6ah008",
+        "prompt": "How did the Industrial Revolution's technological advances impact art materials and production?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.CN.10.1"
+        ],
+        "options": [
+          {
+            "text": "New pigments, tubes, and printing techniques made materials more accessible",
+            "isCorrect": true
+          },
+          {
+            "text": "Artists stopped using paint",
+            "isCorrect": false
+          },
+          {
+            "text": "Only traditional materials were allowed",
+            "isCorrect": false
+          },
+          {
+            "text": "Technology had no impact on art",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Mass production of art supplies democratized painting, enabling more artists and styles to emerge."
+      }
+    ]
+  },
+  "6-electives-arts-and-music-music-theory-intro": {
+    "title": "Introduction to Music Theory for Grade 6",
+    "subject": "Arts & Music",
+    "grade": 6,
+    "standards": [
+      "MU.CR.2.1",
+      "MU.RE.8.1",
+      "MU.CN.11.1"
+    ],
+    "questions": [
+      {
+        "id": "6mt001",
+        "prompt": "What are the three notes that make up a major triad?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.CR.2.1"
+        ],
+        "options": [
+          {
+            "text": "Root, major third, and perfect fifth",
+            "isCorrect": true
+          },
+          {
+            "text": "Root, minor third, and perfect fourth",
+            "isCorrect": false
+          },
+          {
+            "text": "Tonic, dominant, and subdominant",
+            "isCorrect": false
+          },
+          {
+            "text": "Unison, octave, and fifth",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A major triad consists of the root, a major third (4 semitones), and a perfect fifth (7 semitones)."
+      },
+      {
+        "id": "6mt002",
+        "prompt": "Which interval is considered the 'perfect' consonance and why?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.RE.8.1"
+        ],
+        "options": [
+          {
+            "text": "The octave, because it repeats the same pitch at different registers",
+            "isCorrect": true
+          },
+          {
+            "text": "The major third, because it sounds warm",
+            "isCorrect": false
+          },
+          {
+            "text": "The tritone, because it's interesting",
+            "isCorrect": false
+          },
+          {
+            "text": "The unison, because it's identical",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The octave and unison are perfect consonances; the perfect fifth is also highly stable."
+      },
+      {
+        "id": "6mt003",
+        "prompt": "Explain how chord progressions create a sense of movement and resolution in music.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.CN.11.1"
+        ],
+        "explanation": "Progressions move from tension (dominant) to resolution (tonic), guiding the listener emotionally."
+      },
+      {
+        "id": "6mt004",
+        "prompt": "What is the Roman numeral symbol for a minor chord built on the second scale degree?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.2.1"
+        ],
+        "options": [
+          {
+            "text": "ii (lowercase Roman numerals)",
+            "isCorrect": true
+          },
+          {
+            "text": "II (uppercase)",
+            "isCorrect": false
+          },
+          {
+            "text": "2m (number with m)",
+            "isCorrect": false
+          },
+          {
+            "text": "Dm (note name with m)",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Roman numeral analysis uses lowercase for minor chords and uppercase for major chords."
+      },
+      {
+        "id": "6mt005",
+        "prompt": "How does the harmonic minor scale differ from the natural minor scale?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.RE.8.1"
+        ],
+        "explanation": "The harmonic minor raises the 7th degree, creating a leading tone and enabling a proper dominant chord."
+      },
+      {
+        "id": "6mt006",
+        "prompt": "What is the function of the dominant chord (V) in a harmonic progression?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.CN.11.1"
+        ],
+        "options": [
+          {
+            "text": "To create tension that resolves to the tonic",
+            "isCorrect": true
+          },
+          {
+            "text": "To repeat the main idea",
+            "isCorrect": false
+          },
+          {
+            "text": "To lower the volume",
+            "isCorrect": false
+          },
+          {
+            "text": "To change the key permanently",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The V chord builds expectation; resolving to I provides closure and harmonic satisfaction."
+      },
+      {
+        "id": "6mt007",
+        "prompt": "Analyze how the choice of major versus minor tonality affects the emotional quality of a melody.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.CR.2.1"
+        ],
+        "explanation": "Major tonality generally conveys brightness and optimism; minor suggests melancholy or seriousness."
+      },
+      {
+        "id": "6mt008",
+        "prompt": "In a piece in C major, which note would be the leading tone and why?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "MU.RE.8.1"
+        ],
+        "options": [
+          {
+            "text": "B, because it's a half-step below the tonic",
+            "isCorrect": true
+          },
+          {
+            "text": "G, because it's the dominant",
+            "isCorrect": false
+          },
+          {
+            "text": "F, because it's the subdominant",
+            "isCorrect": false
+          },
+          {
+            "text": "A, because it's in the middle",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The leading tone is the 7th scale degree, one semitone below the tonic, with strong pull toward it."
+      }
+    ]
+  },
+  "7-electives-arts-and-music-art-history-pd-images": {
+    "title": "Art History and Public Domain Images for Grade 7",
+    "subject": "Arts & Music",
+    "grade": 7,
+    "standards": [
+      "VA.CN.10.2",
+      "VA.RE.8.2",
+      "VA.RE.9.2"
+    ],
+    "questions": [
+      {
+        "id": "7ah001",
+        "prompt": "What revolutionary technique did Pablo Picasso help pioneer in early 20th century art?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "VA.RE.9.2"
+        ],
+        "options": [
+          {
+            "text": "Cubism—breaking objects into geometric shapes viewed from multiple angles",
+            "isCorrect": true
+          },
+          {
+            "text": "Surrealism—painting dreams and the unconscious",
+            "isCorrect": false
+          },
+          {
+            "text": "Abstractionism—removing all recognizable forms",
+            "isCorrect": false
+          },
+          {
+            "text": "Futurism—celebrating speed and violence",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Cubism fragmented traditional perspective, allowing viewers to see subjects simultaneously from multiple viewpoints."
+      },
+      {
+        "id": "7ah002",
+        "prompt": "How did Baroque art differ from Renaissance art in terms of drama and emotion?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.8.2"
+        ],
+        "options": [
+          {
+            "text": "Baroque emphasized bold drama, rich color, and emotional intensity versus Renaissance restraint",
+            "isCorrect": true
+          },
+          {
+            "text": "Baroque was less detailed",
+            "isCorrect": false
+          },
+          {
+            "text": "Renaissance used perspective; Baroque didn't",
+            "isCorrect": false
+          },
+          {
+            "text": "They were identical styles",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Baroque used chiaroscuro (light/dark contrast), dynamic composition, and theatrical emotion."
+      },
+      {
+        "id": "7ah003",
+        "prompt": "Describe how cultural contact during the Age of Exploration influenced European art.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.CN.10.2"
+        ],
+        "explanation": "New materials, subjects, and artistic traditions from Africa, Asia, and Americas inspired European artists."
+      },
+      {
+        "id": "7ah004",
+        "prompt": "What was the primary goal of the Dada movement after World War I?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.9.2"
+        ],
+        "options": [
+          {
+            "text": "To reject logic and reason through absurdist, anti-art statements",
+            "isCorrect": true
+          },
+          {
+            "text": "To create perfectly realistic portraits",
+            "isCorrect": false
+          },
+          {
+            "text": "To return to classical traditions",
+            "isCorrect": false
+          },
+          {
+            "text": "To teach academic drawing",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Dada rejected conventional aesthetics as a reaction to the horrors of war."
+      },
+      {
+        "id": "7ah005",
+        "prompt": "How did photography challenge traditional painting practices in the 19th century?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.8.2"
+        ],
+        "explanation": "Photography could reproduce realism mechanically, freeing painters to explore abstraction and non-realistic styles."
+      },
+      {
+        "id": "7ah006",
+        "prompt": "Which artistic movement emphasized the artist's gesture, emotion, and spontaneity in abstract forms?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.CN.10.2"
+        ],
+        "options": [
+          {
+            "text": "Abstract Expressionism",
+            "isCorrect": true
+          },
+          {
+            "text": "Neoclassicism",
+            "isCorrect": false
+          },
+          {
+            "text": "Art Deco",
+            "isCorrect": false
+          },
+          {
+            "text": "Op Art",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Abstract Expressionists like Jackson Pollock emphasized the physical act of creation and emotional authenticity."
+      },
+      {
+        "id": "7ah007",
+        "prompt": "Analyze how social and political events influenced artistic movements during the 20th century.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.CN.10.2"
+        ],
+        "explanation": "Wars, revolutions, and social change prompted artists to challenge conventions and express dissent."
+      },
+      {
+        "id": "7ah008",
+        "prompt": "How did the concept of perspective evolve from the Renaissance through Modernism?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.RE.9.2"
+        ],
+        "options": [
+          {
+            "text": "Renaissance perfected linear perspective; Modernism rejected fixed viewpoints for multiple perspectives",
+            "isCorrect": true
+          },
+          {
+            "text": "Perspective stayed exactly the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Modernism invented perspective",
+            "isCorrect": false
+          },
+          {
+            "text": "Renaissance painters never used perspective",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Modernists abandoned single-point perspective, reflecting Einstein's relativity and multiple viewpoints."
+      }
+    ]
+  },
+  "7-electives-arts-and-music-music-theory-intro": {
+    "title": "Introduction to Music Theory for Grade 7",
+    "subject": "Arts & Music",
+    "grade": 7,
+    "standards": [
+      "MU.CR.2.2",
+      "MU.RE.8.2",
+      "MU.CN.11.2"
+    ],
+    "questions": [
+      {
+        "id": "7mt001",
+        "prompt": "What is voice leading and why is it important in four-part harmony?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.2.2"
+        ],
+        "options": [
+          {
+            "text": "How individual voice lines move smoothly with minimal jumps",
+            "isCorrect": true
+          },
+          {
+            "text": "Making the soprano voice the loudest",
+            "isCorrect": false
+          },
+          {
+            "text": "Using only three notes per chord",
+            "isCorrect": false
+          },
+          {
+            "text": "Playing notes at random",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Good voice leading connects chords smoothly, avoiding awkward leaps and parallel fifths."
+      },
+      {
+        "id": "7mt002",
+        "prompt": "Which chord progression is most commonly used to end a musical phrase?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "MU.RE.8.2"
+        ],
+        "options": [
+          {
+            "text": "V-I (authentic cadence)",
+            "isCorrect": true
+          },
+          {
+            "text": "I-IV (subdominant movement)",
+            "isCorrect": false
+          },
+          {
+            "text": "vi-IV (plagal alternative)",
+            "isCorrect": false
+          },
+          {
+            "text": "ii-V (jazz extension)",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The authentic cadence (V-I) is the most conclusive and satisfying ending."
+      },
+      {
+        "id": "7mt003",
+        "prompt": "Explain how secondary dominants can temporarily tonicize chords other than the tonic.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.CN.11.2"
+        ],
+        "explanation": "A secondary dominant creates a V-I movement to any chord, not just the tonic, adding harmonic variety."
+      },
+      {
+        "id": "7mt004",
+        "prompt": "What is the relationship between relative major and minor keys?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.2.2"
+        ],
+        "options": [
+          {
+            "text": "They share the same key signature; relative minor is 6th below relative major",
+            "isCorrect": true
+          },
+          {
+            "text": "They have completely different notes",
+            "isCorrect": false
+          },
+          {
+            "text": "Minor keys have no sharps or flats",
+            "isCorrect": false
+          },
+          {
+            "text": "There is no relationship between them",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "C major and A minor are relatives: same key signature, but different tonics."
+      },
+      {
+        "id": "7mt005",
+        "prompt": "How does modulation create emotional impact and structure in a longer composition?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.RE.8.2"
+        ],
+        "explanation": "Modulation to new keys creates interest, contrast, and development, preventing monotony."
+      },
+      {
+        "id": "7mt006",
+        "prompt": "What harmonic function does the subdominant (IV) chord typically serve?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CN.11.2"
+        ],
+        "options": [
+          {
+            "text": "Preparation and transition toward the dominant",
+            "isCorrect": true
+          },
+          {
+            "text": "Direct resolution to the tonic",
+            "isCorrect": false
+          },
+          {
+            "text": "A complete ending",
+            "isCorrect": false
+          },
+          {
+            "text": "Introduction of dissonance",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The IV chord often precedes V, building toward the strongest cadential movement."
+      },
+      {
+        "id": "7mt007",
+        "prompt": "Analyze how the choice of chord inversion affects the smoothness of a harmonic progression.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.CR.2.2"
+        ],
+        "explanation": "Root position, first inversion, and second inversion create different bass movements and voice-leading options."
+      },
+      {
+        "id": "7mt008",
+        "prompt": "In music theory, what do we call a chord that contains a note outside the traditional diatonic scale?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "MU.RE.8.2"
+        ],
+        "options": [
+          {
+            "text": "Chromatic alteration or chromatic chord",
+            "isCorrect": true
+          },
+          {
+            "text": "A modal chord",
+            "isCorrect": false
+          },
+          {
+            "text": "A borrowed chord from another key",
+            "isCorrect": false
+          },
+          {
+            "text": "An enharmonic equivalent",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Chromatic alteration introduces notes from outside the key, creating tension and richness."
+      }
+    ]
+  },
+  "8-electives-arts-and-music-art-history-pd-images": {
+    "title": "Art History and Public Domain Images for Grade 8",
+    "subject": "Arts & Music",
+    "grade": 8,
+    "standards": [
+      "VA.CN.10.3",
+      "VA.RE.8.3",
+      "VA.RE.9.3"
+    ],
+    "questions": [
+      {
+        "id": "8ah001",
+        "prompt": "How did the Civil Rights Movement influence African American artists' subject matter and style?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "VA.CN.10.3"
+        ],
+        "explanation": "Artists addressed racial identity, justice, and cultural heritage, often using bold colors and powerful imagery."
+      },
+      {
+        "id": "8ah002",
+        "prompt": "What theoretical framework did Expressionism use to convey emotion in art?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.RE.9.3"
+        ],
+        "options": [
+          {
+            "text": "Distorted forms and intense colors to express inner emotional states",
+            "isCorrect": true
+          },
+          {
+            "text": "Perfect photographic accuracy",
+            "isCorrect": false
+          },
+          {
+            "text": "Religious symbolism only",
+            "isCorrect": false
+          },
+          {
+            "text": "Mathematical precision",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Expressionists distorted reality to convey emotional truth rather than visual appearance."
+      },
+      {
+        "id": "8ah003",
+        "prompt": "Describe the impact of industrialization and urbanization on Late 19th and Early 20th century art.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.RE.8.3"
+        ],
+        "explanation": "Cities, factories, speed, and technology became subjects; fragmented perspectives reflected modern life's pace."
+      },
+      {
+        "id": "8ah004",
+        "prompt": "Which non-Western artistic traditions have been most significantly reclaimed and studied by contemporary art historians?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "VA.CN.10.3"
+        ],
+        "options": [
+          {
+            "text": "African masks and sculpture, Indigenous American textiles, Asian calligraphy and ceramics",
+            "isCorrect": true
+          },
+          {
+            "text": "Only European Renaissance works",
+            "isCorrect": false
+          },
+          {
+            "text": "Medieval art from one region",
+            "isCorrect": false
+          },
+          {
+            "text": "Contemporary art from 2020-present",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Decolonizing art history has centered previously marginalized artistic traditions."
+      },
+      {
+        "id": "8ah005",
+        "prompt": "How has digital technology transformed contemporary artistic practice and the definition of art?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.RE.9.3"
+        ],
+        "explanation": "Digital art, interactive installations, and multimedia challenge traditional notions of artistic medium and authorship."
+      },
+      {
+        "id": "8ah006",
+        "prompt": "What was the theoretical position of conceptual artists regarding the importance of the final artwork versus the idea?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.RE.8.3"
+        ],
+        "options": [
+          {
+            "text": "The idea is primary; the physical object is secondary or unnecessary",
+            "isCorrect": true
+          },
+          {
+            "text": "The finished artwork is most important",
+            "isCorrect": false
+          },
+          {
+            "text": "Artists must use traditional materials",
+            "isCorrect": false
+          },
+          {
+            "text": "Only paintings and sculptures count as art",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Conceptual artists like Joseph Kosuth prioritized the intellectual concept over craftsmanship."
+      },
+      {
+        "id": "8ah007",
+        "prompt": "Analyze how feminist artists challenged male-dominated art historical narratives and canons.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "VA.CN.10.3"
+        ],
+        "explanation": "Feminist artists highlighted exclusion of women, reclaimed domestic media, and addressed gender representation."
+      },
+      {
+        "id": "8ah008",
+        "prompt": "How does postcolonial art criticism change our understanding of cultural exchange and artistic influence?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "VA.RE.9.3"
+        ],
+        "options": [
+          {
+            "text": "It acknowledges power imbalances, theft, and appropriation rather than neutral 'exchange'",
+            "isCorrect": true
+          },
+          {
+            "text": "It ignores cultural differences",
+            "isCorrect": false
+          },
+          {
+            "text": "It supports one-way influence",
+            "isCorrect": false
+          },
+          {
+            "text": "It has no impact on art history",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Postcolonial critique exposes how Western institutions appropriated non-Western art without credit or compensation."
+      }
+    ]
+  },
+  "8-electives-arts-and-music-music-theory-intro": {
+    "title": "Introduction to Music Theory for Grade 8",
+    "subject": "Arts & Music",
+    "grade": 8,
+    "standards": [
+      "MU.CR.2.3",
+      "MU.RE.8.3",
+      "MU.CN.11.3"
+    ],
+    "questions": [
+      {
+        "id": "8mt001",
+        "prompt": "What is the difference between diatonic and chromatic harmony?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CR.2.3"
+        ],
+        "options": [
+          {
+            "text": "Diatonic uses only notes in the key; chromatic includes notes outside the key",
+            "isCorrect": true
+          },
+          {
+            "text": "They are the same thing",
+            "isCorrect": false
+          },
+          {
+            "text": "Chromatic is slower",
+            "isCorrect": false
+          },
+          {
+            "text": "Diatonic requires sharps; chromatic doesn't",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Diatonic harmony stays within a key's scale; chromatic introduces alterations for color and emotion."
+      },
+      {
+        "id": "8mt002",
+        "prompt": "How does sonata form structure a piece of music with exposition, development, and recapitulation?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.RE.8.3"
+        ],
+        "explanation": "Sonata form presents contrasting themes in the exposition, develops them, then recapitulates with resolution."
+      },
+      {
+        "id": "8mt003",
+        "prompt": "What is the function of a deceptive cadence (V-vi) in harmonic analysis?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.CN.11.3"
+        ],
+        "options": [
+          {
+            "text": "To postpone resolution and create surprise or extension",
+            "isCorrect": true
+          },
+          {
+            "text": "To firmly end a phrase",
+            "isCorrect": false
+          },
+          {
+            "text": "To begin a new section",
+            "isCorrect": false
+          },
+          {
+            "text": "To change keys permanently",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A deceptive cadence avoids the expected tonic, extending tension and creating unpredictability."
+      },
+      {
+        "id": "8mt004",
+        "prompt": "Explain how counterpoint differs from homophony in texture and compositional approach.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.CR.2.3"
+        ],
+        "explanation": "Counterpoint has multiple independent melodic lines; homophony has one melody with harmonic accompaniment."
+      },
+      {
+        "id": "8mt005",
+        "prompt": "What is functional harmony and how does it organize musical structure?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "MU.RE.8.3"
+        ],
+        "options": [
+          {
+            "text": "Assigning harmonic function (tonic, dominant, subdominant) to create structure and meaning",
+            "isCorrect": true
+          },
+          {
+            "text": "Using random chords with no logic",
+            "isCorrect": false
+          },
+          {
+            "text": "Playing all chords equally",
+            "isCorrect": false
+          },
+          {
+            "text": "Avoiding chord progressions",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Functional harmony uses chord relationships to create coherence, expectation, and resolution."
+      },
+      {
+        "id": "8mt006",
+        "prompt": "How do composers use orchestration and arrangement to vary theme and texture?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "MU.CN.11.3"
+        ],
+        "explanation": "Different instruments, doublings, and textures present the same musical material with fresh impact."
+      },
+      {
+        "id": "8mt007",
+        "prompt": "Analyze how suspended chords create tension and how they typically resolve.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "MU.CR.2.3"
+        ],
+        "explanation": "Sus chords delay the expected third; they resolve by moving to the target chord's normal form."
+      },
+      {
+        "id": "8mt008",
+        "prompt": "In a fugal composition, what is the answer in relation to the subject?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "MU.RE.8.3"
+        ],
+        "options": [
+          {
+            "text": "A transposed restatement of the subject in a different voice",
+            "isCorrect": true
+          },
+          {
+            "text": "A completely different melody",
+            "isCorrect": false
+          },
+          {
+            "text": "A harmonization of the subject",
+            "isCorrect": false
+          },
+          {
+            "text": "A reversal of the subject's pitches",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The answer is typically a fourth or fifth above/below the original subject."
+      }
+    ]
+  }
+}

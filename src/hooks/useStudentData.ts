@@ -144,9 +144,9 @@ export const useStudentPath = (studentId?: string | null) => {
     const nextEntry = query.data?.next ?? null;
     if (nextEntry) {
       const deduped = entries.filter((entry) => entry.id !== nextEntry.id);
-      return [nextEntry, ...deduped].slice(0, 3);
+      return [nextEntry, ...deduped].slice(0, 5);
     }
-    return entries.slice(0, 3);
+    return entries.slice(0, 5);
   }, [query.data?.entries, query.data?.next]);
 
   return {

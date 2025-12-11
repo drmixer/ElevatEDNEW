@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -24,6 +24,8 @@ import {
   Info,
   Copy,
   X,
+  Mail,
+  Send,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -48,6 +50,7 @@ import type {
   StudentReflection,
   Subject,
   CelebrationMoment,
+  ParentCheckIn,
 } from '../../types';
 const OnboardingFlow = lazy(() => import('./OnboardingFlow'));
 const LearningAssistant = lazy(() => import('./LearningAssistant'));
@@ -75,12 +78,19 @@ import { describePathEntryReason, humanizeStandard } from '../../lib/pathReason'
 import {
   consumeAdaptiveFlash,
   studentPathQueryKey,
+  studentDashboardQueryKey,
   studentStatsQueryKey,
   useStudentPath,
   useStudentStats,
   type AdaptiveFlash,
 } from '../../hooks/useStudentData';
 import { fetchFamilyLinkCode, rotateFamilyLinkCode } from '../../services/familyService';
+import {
+  acknowledgeCheckIn,
+  describeCheckInStatus,
+  listStudentCheckIns,
+  markCheckInsDelivered,
+} from '../../services/checkInService';
 
 const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
   in_progress: 0,
@@ -101,6 +111,34 @@ const PATH_STATUS_STYLES: Record<LearningPathItem['status'], string> = {
   in_progress: 'bg-amber-50 text-amber-700',
   completed: 'bg-emerald-50 text-emerald-700',
   mastered: 'bg-purple-50 text-purple-700',
+};
+
+const CHECK_IN_BADGES: Record<ParentCheckIn['status'], string> = {
+  sent: 'bg-amber-50 text-amber-700 border-amber-200',
+  delivered: 'bg-blue-50 text-blue-700 border-blue-200',
+  seen: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+};
+
+type MicroTaskStatus = 'pending' | 'done' | 'skipped';
+
+type MicroTask = {
+  id: string;
+  label: string;
+  helper: string;
+  minutes: number;
+  type: 'new' | 'review' | 'spaced';
+  subject?: Subject;
+  lessonId?: string | null;
+  hint?: string;
+};
+
+type StudentNudge = {
+  id: string;
+  type: 'recap' | 'quick_check' | 'try_again';
+  title: string;
+  body: string;
+  targetUrl: string | null;
+  detail?: string | null;
 };
 
 const pathEntryReasonSlug = (entry: StudentPathEntry): string => {
@@ -227,6 +265,8 @@ const StudentDashboard: React.FC = () => {
   const [achievementFilter, setAchievementFilter] = useState<BadgeCategory | 'all'>('all');
   const [equippedAvatarId, setEquippedAvatarId] = useState<string>('avatar-starter');
   const [todayLaneState, setTodayLaneState] = useState<Record<string, 'done' | 'skipped'>>({});
+  const [microPlanState, setMicroPlanState] = useState<Record<string, MicroTaskStatus>>({});
+  const [microPlanHistory, setMicroPlanHistory] = useState<Array<{ date: string; completed: boolean }>>([]);
   const writingPrompt =
     'Write 3-4 sentences about a time you solved a problem by trying a new strategy. Explain the steps and what changed.';
   const [writingResponse, setWritingResponse] = useState('');
@@ -269,6 +309,12 @@ const StudentDashboard: React.FC = () => {
   const [weeklyIntent, setWeeklyIntent] = useState<'precision' | 'speed' | 'stretch' | 'balanced'>(
     student?.learningPreferences?.weeklyIntent ?? 'balanced',
   );
+  const [mixInMode, setMixInMode] = useState<'auto' | 'core_only' | 'cross_subject'>(
+    student?.learningPreferences?.mixInMode ?? 'auto',
+  );
+  const [electiveEmphasis, setElectiveEmphasis] = useState<'off' | 'light' | 'on'>(
+    student?.learningPreferences?.electiveEmphasis ?? 'light',
+  );
   const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
     student?.learningPreferences?.studyMode ?? 'keep_up',
   );
@@ -290,9 +336,14 @@ const StudentDashboard: React.FC = () => {
   const [planBannerDismissed, setPlanBannerDismissed] = useState(false);
   const [lessonSummaryDismissed, setLessonSummaryDismissed] = useState(false);
   const [upNextUpdatedAt, setUpNextUpdatedAt] = useState<number | null>(null);
+  const [dismissedNudges, setDismissedNudges] = useState<Set<string>>(new Set());
+  const [checkInError, setCheckInError] = useState<string | null>(null);
+  const [acknowledgingCheckIn, setAcknowledgingCheckIn] = useState<string | null>(null);
   const upNextChangeTracked = useRef<boolean>(false);
   const lastUpNextEventSignature = useRef<string | null>(null);
   const lastAdaptiveFlashTracked = useRef<number | null>(null);
+  const adaptiveRefreshRef = useRef<number | null>(null);
+  const lastNudgeTracked = useRef<string | null>(null);
   const [familyCodeMessage, setFamilyCodeMessage] = useState<string | null>(null);
   const [familyCodeError, setFamilyCodeError] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -323,6 +374,32 @@ const StudentDashboard: React.FC = () => {
     isFetching: statsFetching,
   } = useStudentStats(student?.id);
 
+  const [todayKey, setTodayKey] = useState(() => new Date().toISOString().slice(0, 10));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const next = new Date().toISOString().slice(0, 10);
+      setTodayKey((current) => (current === next ? current : next));
+    }, 1000 * 60 * 10);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setTodayKey(new Date().toISOString().slice(0, 10));
+  }, [student?.id]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    try {
+      const raw = localStorage.getItem(`student-nudges-dismissed-${student.id}`);
+      if (raw) {
+        setDismissedNudges(new Set(JSON.parse(raw) as string[]));
+      }
+    } catch (error) {
+      console.warn('[StudentDashboard] Failed to load dismissed nudges', error);
+    }
+  }, [student?.id]);
+
   const familyCodeQuery = useQuery({
     queryKey: ['family-link-code', student?.id],
     queryFn: fetchFamilyLinkCode,
@@ -331,6 +408,22 @@ const StudentDashboard: React.FC = () => {
   });
 
   const familyLinkCode = familyCodeQuery.data?.code ?? student?.familyLinkCode ?? null;
+
+  const { data: checkIns } = useQuery({
+    queryKey: ['student-checkins', student?.id],
+    queryFn: () => listStudentCheckIns(student!.id, 8),
+    enabled: Boolean(student?.id),
+    staleTime: 60 * 1000,
+  });
+
+  useEffect(() => {
+    if (!student?.id || !checkIns?.length) return;
+    const undeliveredIds = checkIns.filter((entry) => entry.status === 'sent').map((entry) => entry.id);
+    if (!undeliveredIds.length) return;
+    markCheckInsDelivered(undeliveredIds)
+      .then(() => queryClient.invalidateQueries({ queryKey: ['student-checkins', student.id] }).catch(() => undefined))
+      .catch((error) => console.warn('[StudentDashboard] Failed to mark check-ins delivered', error));
+  }, [checkIns, queryClient, student?.id]);
 
   const rotateFamilyCodeMutation = useMutation({
     mutationFn: rotateFamilyLinkCode,
@@ -521,6 +614,16 @@ const StudentDashboard: React.FC = () => {
   }, [adaptiveFlash]);
 
   useEffect(() => {
+    if (!adaptiveFlash || !student?.id) return;
+    const signature = adaptiveFlash.createdAt ?? Date.now();
+    if (adaptiveRefreshRef.current === signature) return;
+    adaptiveRefreshRef.current = signature;
+    void refreshStudentPath().catch(() => undefined);
+    void refetch({ throwOnError: false });
+    void queryClient.invalidateQueries({ queryKey: studentDashboardQueryKey(student.id) }).catch(() => undefined);
+  }, [adaptiveFlash, queryClient, refetch, refreshStudentPath, student?.id]);
+
+  useEffect(() => {
     if (!student) return;
     if (dashboard?.equippedAvatarId || student.studentAvatarId || student.avatar) {
       setEquippedAvatarId(
@@ -561,7 +664,9 @@ const StudentDashboard: React.FC = () => {
     );
     setWeeklyIntent(student.learningPreferences.weeklyIntent ?? 'balanced');
     setStudyMode(student.learningPreferences.studyMode ?? 'keep_up');
-  }, [student?.tutorName, student?.learningPreferences]);
+    setMixInMode(student.learningPreferences.mixInMode ?? 'auto');
+    setElectiveEmphasis(student.learningPreferences.electiveEmphasis ?? 'light');
+  }, [student]);
 
   useEffect(() => {
     if (!student || tutorFlowLogged || personalizationLoading) return;
@@ -587,7 +692,7 @@ const StudentDashboard: React.FC = () => {
     fetchReflections(10)
       .then((rows) => setReflections(rows))
       .catch((err) => console.warn('[Reflections] Unable to load', err));
-  }, [student?.id]);
+  }, [student, student?.id]);
 
   useEffect(() => {
     if (!student) return;
@@ -652,6 +757,22 @@ const StudentDashboard: React.FC = () => {
       setWeeklyPlanIntensity('normal');
     }
   }, [parentGoalActive, student?.learningPreferences?.focusSubject]);
+
+  const openReflectionModal = useCallback(
+    (questionId?: string, reason?: string) => {
+      setReflectionQuestion(questionId ?? 'what_learned');
+      setReflectionText('');
+      setReflectionError(null);
+      setReflectionShare(false);
+      setReflectionModalOpen(true);
+      trackEvent('reflection_prompt_shown', {
+        reason: reason ?? 'manual',
+        lesson_id: dashboard?.activeLessonId,
+        subject: dashboard?.todayActivities?.[0]?.subject ?? null,
+      });
+    },
+    [dashboard?.activeLessonId, dashboard?.todayActivities],
+  );
 
   useEffect(() => {
     if (!student || reflectionTimerStarted) return;
@@ -844,14 +965,18 @@ const StudentDashboard: React.FC = () => {
     return lookup[activityType] ?? activityType.replace(/_/g, ' ');
   };
 
-  const celebrationMoments = dashboard?.celebrationMoments ?? [];
+  const celebrationMoments = useMemo(() => dashboard?.celebrationMoments ?? [], [dashboard?.celebrationMoments]);
   const parentGoals = dashboard?.parentGoals ?? null;
   const parentGoalActive = Boolean(parentGoals?.weeklyLessons || parentGoals?.practiceMinutes);
   const activeCelebration = celebrationQueue[0] ?? null;
   const quickStats = dashboard?.quickStats;
-  const studyModeSetAt = student.learningPreferences.studyModeSetAt
-    ? new Date(student.learningPreferences.studyModeSetAt)
-    : null;
+  const studyModeSetAt = useMemo(
+    () =>
+      student.learningPreferences.studyModeSetAt
+        ? new Date(student.learningPreferences.studyModeSetAt)
+        : null,
+    [student.learningPreferences.studyModeSetAt],
+  );
   const studyModeExpired =
     studyModeSetAt != null
       ? Date.now() - studyModeSetAt.getTime() > 1000 * 60 * 60 * 24 * 7
@@ -875,12 +1000,49 @@ const StudentDashboard: React.FC = () => {
     ]);
   };
 
-  const todaysPlan = dashboard?.todaysPlan ?? [];
+  const persistDismissedNudges = (next: Set<string>) => {
+    if (!student?.id) return;
+    try {
+      localStorage.setItem(`student-nudges-dismissed-${student.id}`, JSON.stringify(Array.from(next)));
+    } catch (error) {
+      console.warn('[StudentDashboard] Failed to persist dismissed nudges', error);
+    }
+  };
+
+  const handleDismissNudge = (nudge: StudentNudge, reason: 'dismiss' | 'cta' = 'dismiss') => {
+    const next = new Set(dismissedNudges);
+    next.add(nudge.id);
+    setDismissedNudges(next);
+    persistDismissedNudges(next);
+    trackEvent('student_nudge_dismissed', {
+      studentId: student.id,
+      nudge_id: nudge.id,
+      type: nudge.type,
+      reason,
+    });
+  };
+
+  const handleNudgeCta = (nudge: StudentNudge) => {
+    trackEvent('student_nudge_cta', {
+      studentId: student.id,
+      nudge_id: nudge.id,
+      type: nudge.type,
+      detail: nudge.detail,
+    });
+    handleDismissNudge(nudge, 'cta');
+    if (nudge.targetUrl) {
+      window.open(nudge.targetUrl, '_blank', 'noopener');
+    } else {
+      setActiveTab('today');
+    }
+  };
+
+  const todaysPlan = useMemo(() => dashboard?.todaysPlan ?? [], [dashboard?.todaysPlan]);
+  const todayActivities = useMemo(() => dashboard?.todayActivities ?? [], [dashboard?.todayActivities]);
   const filteredPlan =
     subjectFilter === 'all'
       ? todaysPlan
       : todaysPlan.filter((lesson) => lesson.subject === subjectFilter);
-  const todayActivities = dashboard?.todayActivities ?? [];
   const extensionActivities = todayActivities.filter((activity) => activity.homeExtension);
   const activeLessonId = dashboard?.activeLessonId ?? null;
   const recommendedLesson =
@@ -888,6 +1050,21 @@ const StudentDashboard: React.FC = () => {
     todaysPlan.find((lesson) => lesson.status !== 'completed') ??
     todaysPlan[0] ??
     null;
+  const electiveSuggestion = useMemo(
+    () => dashboard?.electiveSuggestion ?? todaysPlan.find((lesson) => lesson.isElective) ?? null,
+    [dashboard?.electiveSuggestion, todaysPlan],
+  );
+  const primaryTaskMinutes = useMemo(() => {
+    const lessonEstimate = recommendedLesson?.activities?.find((activity) => activity.estimatedMinutes)?.estimatedMinutes;
+    const todayEstimate = todayActivities.find((activity) => activity.estimatedMinutes)?.estimatedMinutes;
+    const candidate = lessonEstimate ?? todayEstimate;
+    if (!candidate) return 10;
+    return Math.max(3, Math.round(candidate));
+  }, [recommendedLesson, todayActivities]);
+  const tutorPromptChips = useMemo(
+    () => ['Walk me through this lesson', 'Where do I start?', 'Give me a quick hint'],
+    [],
+  );
   const todaysPlanProgress = useMemo(() => {
     const total = todaysPlan.length;
     const completed = todaysPlan.filter((lesson) => lesson.status === 'completed').length;
@@ -908,12 +1085,57 @@ const StudentDashboard: React.FC = () => {
     return { pct, needMoreData };
   }, [todaysPlanProgress, quickStats?.assessmentCompleted]);
 
+  const nudgeTargetUrl = recommendedLesson?.launchUrl ?? dashboard?.nextLessonUrl ?? null;
+
+  const contextualNudge = useMemo<StudentNudge | null>(() => {
+    if (!adaptiveFlash || adaptiveFlash.eventType !== 'lesson_completed') return null;
+    const focusLabel = adaptiveFocusLabel ?? 'this concept';
+    const accuracy = studentStats.avgAccuracy;
+    const reason = (adaptiveFlash.nextReason ?? '').toLowerCase();
+    let type: StudentNudge['type'] = 'recap';
+    if (
+      reason === 'remediation' ||
+      (adaptiveFlash.misconceptions?.length ?? 0) > 0 ||
+      (accuracy != null && accuracy < 70)
+    ) {
+      type = 'try_again';
+    } else if (reason === 'stretch' || (accuracy != null && accuracy < 85)) {
+      type = 'quick_check';
+    }
+    const detail =
+      humanizeStandard(adaptiveFlash.misconceptions?.[0] ?? null) ??
+      adaptiveFocusLabel ??
+      focusLabel;
+    const id = `${adaptiveFlash.createdAt ?? Date.now()}-${type}-${detail}`;
+    if (dismissedNudges.has(id)) return null;
+    const bodyCopy: Record<StudentNudge['type'], string> = {
+      recap: `Do a 1-minute recap on ${detail} to lock it in.`,
+      quick_check: `Take a 3-question quick check on ${detail} while it's fresh.`,
+      try_again: `Try a short redo on ${detail} to boost confidence.`,
+    };
+    const titleCopy: Record<StudentNudge['type'], string> = {
+      recap: '1-minute recap',
+      quick_check: 'Quick check time',
+      try_again: 'Try again to boost mastery',
+    };
+    return {
+      id,
+      type,
+      title: titleCopy[type],
+      body: bodyCopy[type],
+      targetUrl: nudgeTargetUrl,
+      detail,
+    };
+  }, [adaptiveFlash, adaptiveFocusLabel, dismissedNudges, nudgeTargetUrl, studentStats.avgAccuracy]);
+
   const currentPlanFocus = useMemo(() => {
     if (parentGoalActive && student?.learningPreferences?.focusSubject) {
       return student.learningPreferences.focusSubject as Subject | 'balanced';
     }
     return weeklyPlanFocus;
   }, [parentGoalActive, student?.learningPreferences?.focusSubject, weeklyPlanFocus]);
+
+  const latestCheckIn = useMemo(() => (checkIns ?? [])[0] ?? null, [checkIns]);
 
   useEffect(() => {
     if (!student || !dashboard || !quickStats) return;
@@ -933,12 +1155,16 @@ const StudentDashboard: React.FC = () => {
     const snapshot = (() => {
       try {
         const raw = localStorage.getItem(snapshotKey);
-        return raw ? (JSON.parse(raw) as { level?: number; streakDays?: number }) : {};
+        return raw
+          ? (JSON.parse(raw) as { level?: number; streakDays?: number; avgAccuracy?: number | null; modulesMastered?: number })
+          : {};
       } catch {
         return {};
       }
     })();
 
+    const modulesMasteredCount = studentStats.modulesMastered?.count ?? 0;
+    const avgAccuracy = studentStats.avgAccuracy ?? null;
     const candidates: CelebrationMoment[] = [];
     if (quickStats.level && (!snapshot.level || quickStats.level > snapshot.level)) {
       candidates.push({
@@ -952,7 +1178,7 @@ const StudentDashboard: React.FC = () => {
       });
     }
 
-    const streakMilestones = [7, 14, 30];
+    const streakMilestones = [3, 7, 14, 30];
     const streakDays = quickStats.streakDays ?? student.streakDays;
     const reachedMilestone = streakMilestones.find(
       (milestone) => streakDays >= milestone && (!snapshot.streakDays || snapshot.streakDays < milestone),
@@ -966,6 +1192,39 @@ const StudentDashboard: React.FC = () => {
         occurredAt: new Date().toISOString(),
         prompt: 'Stay on a roll—try one more lesson today.',
         studentId: student.id,
+      });
+    }
+
+    if (
+      avgAccuracy != null &&
+      snapshot.avgAccuracy != null &&
+      avgAccuracy - snapshot.avgAccuracy >= 5
+    ) {
+      candidates.push({
+        id: `accuracy-${Math.round(avgAccuracy * 10)}`,
+        title: 'Accuracy up!',
+        description: `Your average accuracy improved to ${avgAccuracy}%.`,
+        kind: 'milestone',
+        occurredAt: new Date().toISOString(),
+        prompt: 'Keep the streak by doing a quick recap.',
+        studentId: student.id,
+        notifyParent: true,
+      });
+    }
+
+    if (modulesMasteredCount > (snapshot.modulesMastered ?? 0)) {
+      const latestMastery = studentStats.modulesMastered?.items?.[0];
+      candidates.push({
+        id: `mastery-${modulesMasteredCount}`,
+        title: 'New mastery unlocked',
+        description: latestMastery?.title
+          ? `You mastered ${latestMastery.title}.`
+          : 'You mastered a new module.',
+        kind: 'mastery',
+        occurredAt: new Date().toISOString(),
+        prompt: 'Choose your next challenge or review to lock it in.',
+        studentId: student.id,
+        notifyParent: true,
       });
     }
 
@@ -991,13 +1250,39 @@ const StudentDashboard: React.FC = () => {
     try {
       localStorage.setItem(
         snapshotKey,
-        JSON.stringify({ level: quickStats.level, streakDays }),
+        JSON.stringify({
+          level: quickStats.level,
+          streakDays,
+          avgAccuracy,
+          modulesMastered: modulesMasteredCount,
+        }),
       );
       localStorage.setItem(seenKey, JSON.stringify(Array.from(seen)));
     } catch (error) {
       console.warn('[Celebrations] Failed to persist snapshot', error);
     }
-  }, [celebrationMoments, celebrationShownIds, dashboard, quickStats, student]);
+  }, [
+    celebrationMoments,
+    celebrationShownIds,
+    dashboard,
+    quickStats,
+    student,
+    studentStats.avgAccuracy,
+    studentStats.modulesMastered?.count,
+    studentStats.modulesMastered?.items,
+  ]);
+
+  useEffect(() => {
+    if (!contextualNudge || !student?.id) return;
+    if (lastNudgeTracked.current === contextualNudge.id) return;
+    lastNudgeTracked.current = contextualNudge.id;
+    trackEvent('student_nudge_shown', {
+      studentId: student.id,
+      nudge_id: contextualNudge.id,
+      type: contextualNudge.type,
+      detail: contextualNudge.detail,
+    });
+  }, [contextualNudge, student?.id]);
 
   const weeklyPlanTargets = useMemo(() => {
     const lessonBase = parentGoals?.weeklyLessons ?? 5;
@@ -1043,6 +1328,249 @@ const StudentDashboard: React.FC = () => {
     trackEvent('celebration_dismissed', { kind: celebration.kind, id: celebration.id, reason });
   };
 
+  const journeyNarrative = dashboard?.aiRecommendations ?? [];
+  const journeyFocusAreas = useMemo(
+    () => dashboard?.profile?.weaknesses ?? [],
+    [dashboard?.profile?.weaknesses],
+  );
+  const journeyStrengths = dashboard?.profile?.strengths ?? [];
+  const microPlanStorageKey = student ? `micro-plan-v1-${student.id}` : null;
+
+  const computePlanCompleted = useCallback((state: Record<string, MicroTaskStatus>) => {
+    const statuses = Object.values(state);
+    if (!statuses.length) return false;
+    return statuses.every((status) => status === 'done');
+  }, []);
+
+  const microPlanTasks = useMemo<MicroTask[]>(() => {
+    const tasks: MicroTask[] = [];
+    const primary =
+      recommendedLesson ??
+      todaysPlan.find((lesson) => lesson.status !== 'completed') ??
+      todaysPlan[0] ??
+      null;
+    if (primary) {
+      tasks.push({
+        id: `micro-new-${primary.id}`,
+        label: primary.title,
+        helper: 'New learning pick for today.',
+        minutes: 7,
+        type: 'new',
+        subject: primary.subject,
+        lessonId: primary.id,
+        hint: primary.suggestionReason ?? undefined,
+      });
+    }
+
+    const reviewPick =
+      todaysPlan.find((lesson) => lesson.status === 'completed' && lesson.id !== primary?.id) ??
+      todaysPlan.find((lesson) => lesson.id !== primary?.id) ??
+      null;
+
+    if (reviewPick) {
+      tasks.push({
+        id: `micro-review-${reviewPick.id}`,
+        label: `Review ${reviewPick.title}`,
+        helper: 'Speed-run the tricky step you remember.',
+        minutes: 5,
+        type: 'review',
+        subject: reviewPick.subject,
+        lessonId: reviewPick.id,
+      });
+    }
+
+    const spacedLabel =
+      adaptiveFocusLabel ??
+      (journeyFocusAreas.length ? humanizeStandard(journeyFocusAreas[0]) ?? journeyFocusAreas[0] : null) ??
+      todayActivities[0]?.title ??
+      null;
+
+    if (spacedLabel) {
+      const slug = spacedLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      tasks.push({
+        id: `micro-spaced-${slug || 'focus'}`,
+        label: spacedLabel.startsWith('Spaced') ? spacedLabel : `Spaced recall: ${spacedLabel}`,
+        helper: '3-minute retrieval: explain it aloud or jot the steps.',
+        minutes: 3,
+        type: 'spaced',
+        subject: reviewPick?.subject ?? primary?.subject,
+        lessonId: reviewPick?.id ?? primary?.id ?? null,
+      });
+    }
+
+    if (tasks.length === 0) {
+      tasks.push(
+        {
+          id: 'micro-new-fallback',
+          label: 'Adaptive warm-up',
+          helper: 'Short new practice set picked for you.',
+          minutes: 7,
+          type: 'new',
+          subject: 'math',
+          lessonId: null,
+        },
+        {
+          id: 'micro-spaced-fallback',
+          label: 'Spaced recall: yesterday’s notes',
+          helper: 'Talk through the main idea for 3 minutes.',
+          minutes: 3,
+          type: 'spaced',
+          subject: 'english',
+          lessonId: null,
+        },
+        {
+          id: 'micro-review-fallback',
+          label: 'Quick review checkpoint',
+          helper: 'Re-run one mistake from yesterday and fix it.',
+          minutes: 5,
+          type: 'review',
+          subject: 'science',
+          lessonId: null,
+        },
+      );
+    }
+
+    return tasks.slice(0, 3);
+  }, [adaptiveFocusLabel, journeyFocusAreas, recommendedLesson, todayActivities, todaysPlan]);
+
+  useEffect(() => {
+    if (!microPlanTasks.length) {
+      setMicroPlanState((prev) => (Object.keys(prev).length ? {} : prev));
+      return;
+    }
+    setMicroPlanState((prev) => {
+      const next: Record<string, MicroTaskStatus> = {};
+      microPlanTasks.forEach((task) => {
+        next[task.id] = prev[task.id] ?? 'pending';
+      });
+      const changed =
+        microPlanTasks.some((task) => prev[task.id] !== next[task.id]) ||
+        Object.keys(prev).some((key) => !(key in next));
+      return changed ? next : prev;
+    });
+  }, [microPlanTasks]);
+
+  const microPlanMinutes = useMemo(
+    () => microPlanTasks.reduce((acc, task) => acc + task.minutes, 0),
+    [microPlanTasks],
+  );
+
+  const microPlanProgress = useMemo(() => {
+    const total = microPlanTasks.length;
+    const completed = microPlanTasks.filter((task) => microPlanState[task.id] === 'done').length;
+    const skipped = microPlanTasks.filter((task) => microPlanState[task.id] === 'skipped').length;
+    const pct = total ? Math.round((completed / total) * 100) : 0;
+    return { total, completed, skipped, pct };
+  }, [microPlanState, microPlanTasks]);
+
+  const microPlanCompletedToday = microPlanProgress.total > 0 && microPlanProgress.completed === microPlanProgress.total;
+
+  const microPlanStreakDays = useMemo(() => {
+    const completedDates = new Set(
+      microPlanHistory.filter((entry) => entry.completed).map((entry) => entry.date),
+    );
+    if (microPlanCompletedToday) {
+      completedDates.add(todayKey);
+    }
+    let streak = 0;
+    const cursor = new Date(`${todayKey}T00:00:00`);
+    while (true) {
+      const key = cursor.toISOString().slice(0, 10);
+      if (completedDates.has(key)) {
+        streak += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }, [microPlanCompletedToday, microPlanHistory, todayKey]);
+
+  const spacedReviewTask = microPlanTasks.find((task) => task.type === 'spaced') ?? null;
+
+  useEffect(() => {
+    if (!microPlanStorageKey) return;
+    try {
+      const raw = localStorage.getItem(microPlanStorageKey);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as {
+        date?: string;
+        tasks?: Record<string, MicroTaskStatus>;
+        history?: Array<{ date?: string; completed?: boolean }>;
+      };
+      const history = Array.isArray(parsed.history)
+        ? parsed.history
+            .filter((entry) => typeof entry?.date === 'string')
+            .map((entry) => ({
+              date: entry.date as string,
+              completed: Boolean(entry.completed),
+            }))
+        : [];
+
+      if (parsed.date && parsed.date !== todayKey) {
+        const previousCompleted = computePlanCompleted(parsed.tasks ?? {});
+        const nextHistory = [...history, { date: parsed.date, completed: previousCompleted }];
+        setMicroPlanHistory(nextHistory.slice(-30));
+        setMicroPlanState({});
+      } else {
+        setMicroPlanHistory(history.slice(-30));
+        setMicroPlanState(parsed.tasks ?? {});
+      }
+    } catch (storageError) {
+      console.warn('[StudentDashboard] Failed to load micro plan state', storageError);
+    }
+  }, [computePlanCompleted, microPlanStorageKey, todayKey]);
+
+  useEffect(() => {
+    if (!microPlanStorageKey) return;
+    try {
+      const payload = {
+        date: todayKey,
+        tasks: microPlanState,
+        history: microPlanHistory.slice(-30),
+      };
+      localStorage.setItem(microPlanStorageKey, JSON.stringify(payload));
+    } catch (storageError) {
+      console.warn('[StudentDashboard] Failed to persist micro plan state', storageError);
+    }
+  }, [microPlanHistory, microPlanState, microPlanStorageKey, todayKey]);
+
+  const openTutorFromHome = useCallback(
+    (prompt?: string, source: string = 'do_this_now') => {
+      if (typeof window === 'undefined') return;
+      const detail = {
+        prompt,
+        source,
+        lesson: recommendedLesson
+          ? {
+              lessonId: recommendedLesson.id,
+              lessonTitle: recommendedLesson.title,
+              moduleTitle: recommendedLesson.moduleSlug ?? null,
+              subject: recommendedLesson.subject,
+            }
+          : undefined,
+      };
+      window.dispatchEvent(new CustomEvent('learning-assistant:open', { detail }));
+      trackEvent('learning_assistant_context_open', {
+        studentId: student.id,
+        source,
+        hasPrompt: Boolean(prompt),
+        lessonId: recommendedLesson?.id ?? null,
+        lessonSubject: recommendedLesson?.subject ?? null,
+      });
+    },
+    [recommendedLesson, student.id],
+  );
+
+  const handleViewDailyPlan = useCallback(() => {
+    const target =
+      document.getElementById('daily-plan-mobile') ?? document.getElementById('daily-plan-desktop');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      trackEvent('daily_plan_focus_scroll', { studentId: student.id });
+    }
+  }, [student.id]);
+
   if (!student) {
     return null;
   }
@@ -1061,9 +1589,21 @@ const StudentDashboard: React.FC = () => {
     );
   }
 
-  const journeyNarrative = dashboard?.aiRecommendations ?? [];
-  const journeyFocusAreas = dashboard?.profile?.weaknesses ?? [];
-  const journeyStrengths = dashboard?.profile?.strengths ?? [];
+  const handleMicroTaskStateChange = (taskId: string, status: MicroTaskStatus) => {
+    const task = microPlanTasks.find((entry) => entry.id === taskId);
+    setMicroPlanState((prev) => {
+      const current = prev[taskId] ?? 'pending';
+      const next = current === status ? 'pending' : status;
+      return { ...prev, [taskId]: next };
+    });
+    trackEvent('student_micro_plan_action', {
+      studentId: student.id,
+      task_id: taskId,
+      task_type: task?.type ?? 'unknown',
+      status,
+      subject: task?.subject ?? 'unknown',
+    });
+  };
 
   const handleRefresh = async () => {
     trackEvent('student_dashboard_refresh', { studentId: student.id });
@@ -1094,6 +1634,180 @@ const StudentDashboard: React.FC = () => {
       window.open(lesson.launchUrl, '_blank', 'noopener');
     }
     setActiveView('lesson');
+  };
+
+  const renderDailyPlanSection = (sectionId: string, extraClasses = '') => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+      id={sectionId}
+      className={`bg-white rounded-2xl p-6 shadow-sm border border-brand-light-blue/60 ${extraClasses}`}
+    >
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
+            <Clock className="h-4 w-4" />
+            <span>15-minute plan</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-900">Daily micro tasks</h3>
+          <p className="text-sm text-gray-600">
+            2–3 quick wins mixing new + review. Finish this lane to keep your streak alive.
+          </p>
+          <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+              <Flame className="h-3.5 w-3.5" />
+              Plan streak {microPlanStreakDays}d
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+              Login streak {quickStats?.streakDays ?? student.streakDays}d
+            </span>
+          </div>
+        </div>
+        <div className="min-w-[220px] rounded-xl bg-brand-light-blue/30 border border-brand-light-blue/50 p-3 shadow-inner">
+          <div className="text-xs uppercase tracking-wide text-brand-blue font-semibold">Today&apos;s lane</div>
+          <div className="text-3xl font-bold text-brand-blue mt-1">
+            {microPlanProgress.total ? `${microPlanProgress.completed}/${microPlanProgress.total}` : '—'}
+          </div>
+          <p className="text-xs text-brand-blue/80">
+            ~{microPlanMinutes} min • {microPlanProgress.pct}% done
+          </p>
+          <div className="mt-2 h-2 rounded-full bg-white/80 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-brand-blue to-brand-violet transition-all"
+              style={{ width: `${microPlanProgress.pct}%` }}
+            />
+          </div>
+          <p className="mt-2 text-[11px] text-brand-blue/80">
+            {microPlanCompletedToday ? 'Logged for today—nice work.' : 'Complete micro tasks to extend your streak.'}
+          </p>
+        </div>
+      </div>
+      {spacedReviewTask && (
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-dashed border-brand-blue/50 bg-brand-light-blue/30 px-4 py-3">
+          <div>
+            <p className="text-[11px] uppercase tracking-wide text-brand-blue font-semibold">Spaced review prompt</p>
+            <p className="text-sm font-semibold text-brand-blue">
+              {spacedReviewTask.label}
+            </p>
+            <p className="text-[11px] text-brand-blue/80">
+              Take 3 minutes to recall and mark it done to protect today&apos;s streak.
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleMicroTaskStateChange(spacedReviewTask.id, 'done')}
+              className="inline-flex items-center gap-1 rounded-full bg-brand-blue text-white px-3 py-2 text-xs font-semibold hover:bg-brand-blue/90"
+            >
+              <CheckCircle className="h-3.5 w-3.5" />
+              Log review
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMicroTaskStateChange(spacedReviewTask.id, 'skipped')}
+              className="inline-flex items-center gap-1 rounded-full border border-brand-blue/40 text-brand-blue px-3 py-2 text-xs font-semibold hover:border-brand-blue"
+            >
+              <X className="h-3 w-3" />
+              Skip today
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="mt-5 grid gap-3 md:grid-cols-3">
+        {microPlanTasks.map((task) => {
+          const status = microPlanState[task.id] ?? 'pending';
+          const statusStyles =
+            status === 'done'
+              ? 'border-emerald-200 bg-emerald-50'
+              : status === 'skipped'
+                ? 'border-amber-200 bg-amber-50'
+                : 'border-slate-200 bg-white';
+          const pill =
+            task.type === 'new'
+              ? 'New'
+              : task.type === 'review'
+                ? 'Review'
+                : 'Spaced';
+          return (
+            <div key={task.id} className={`rounded-xl border p-4 ${statusStyles}`}>
+              <div className="flex items-start justify-between gap-2">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-gray-600">
+                    <Clock className="h-3.5 w-3.5 text-brand-blue" />
+                    <span>{pill}</span>
+                    <span className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">{task.minutes} min</span>
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-900 line-clamp-2">{task.label}</h4>
+                  <p className="text-xs text-gray-600 line-clamp-2">{task.helper}</p>
+                  {task.hint && <p className="text-[11px] text-brand-blue line-clamp-1">Why: {task.hint}</p>}
+                  {task.subject && (
+                    <p className="text-[11px] text-gray-500 capitalize">Subject: {formatSubjectLabel(task.subject)}</p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1 text-[11px]">
+                  <button
+                    type="button"
+                    onClick={() => handleMicroTaskStateChange(task.id, 'done')}
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
+                      status === 'done'
+                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
+                    }`}
+                  >
+                    <CheckCircle className="h-3 w-3" />
+                    Done
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMicroTaskStateChange(task.id, 'skipped')}
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
+                      status === 'skipped'
+                        ? 'bg-amber-100 text-amber-700 border-amber-200'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
+                    }`}
+                  >
+                    <X className="h-3 w-3" />
+                    Skip
+                  </button>
+                </div>
+              </div>
+              {spacedReviewTask && spacedReviewTask.id === task.id && (
+                <div className="mt-3 rounded-lg border border-dashed border-brand-blue/40 bg-brand-light-blue/40 px-3 py-2 text-[11px] text-brand-blue">
+                  Spaced review counts toward your streak—log it once you finish.
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {microPlanTasks.length === 0 && (
+        <div className="mt-3 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-gray-600">
+          We&apos;ll drop in today&apos;s micro tasks once your plan syncs.
+        </div>
+      )}
+    </motion.div>
+  );
+
+  const handleAcknowledgeCheckIn = async (checkIn: ParentCheckIn) => {
+    if (!checkIn?.id) return;
+    setAcknowledgingCheckIn(checkIn.id);
+    setCheckInError(null);
+    try {
+      const updated = await acknowledgeCheckIn(checkIn.id);
+      queryClient.setQueryData(['student-checkins', student.id], (prev: ParentCheckIn[] | undefined) =>
+        prev ? prev.map((entry) => (entry.id === updated.id ? updated : entry)) : [updated],
+      );
+      trackEvent('parent_checkin_seen', {
+        studentId: student.id,
+        checkin_id: checkIn.id,
+        status: 'seen',
+      });
+    } catch (error) {
+      setCheckInError(error instanceof Error ? error.message : 'Unable to confirm receipt right now.');
+    } finally {
+      setAcknowledgingCheckIn(null);
+    }
   };
 
   const handleWritingSubmit = () => {
@@ -1129,19 +1843,6 @@ const StudentDashboard: React.FC = () => {
     } else {
       setReadingFeedback('Look for the reason he organized friends. Hint: the garden was wilting and needed care.');
     }
-  };
-
-  const openReflectionModal = (questionId?: string, reason?: string) => {
-    setReflectionQuestion(questionId ?? 'what_learned');
-    setReflectionText('');
-    setReflectionError(null);
-    setReflectionShare(false);
-    setReflectionModalOpen(true);
-    trackEvent('reflection_prompt_shown', {
-      reason: reason ?? 'manual',
-      lesson_id: dashboard?.activeLessonId,
-      subject: dashboard?.todayActivities?.[0]?.subject ?? null,
-    });
   };
 
   const handleSaveReflectionEntry = async () => {
@@ -1240,6 +1941,20 @@ const StudentDashboard: React.FC = () => {
     setWeeklyIntent(value);
     trackEvent('weekly_intent_changed', { from: weeklyIntent, to: value });
     void persistWeeklyPlanPrefs({ weeklyIntent: value });
+  };
+
+  const handleMixInModeChange = (value: 'auto' | 'core_only' | 'cross_subject') => {
+    if (value === mixInMode) return;
+    setMixInMode(value);
+    trackEvent('mix_in_mode_changed', { from: mixInMode, to: value });
+    void persistWeeklyPlanPrefs({ mixInMode: value });
+  };
+
+  const handleElectiveEmphasisChange = (value: 'off' | 'light' | 'on') => {
+    if (value === electiveEmphasis) return;
+    setElectiveEmphasis(value);
+    trackEvent('elective_emphasis_changed', { from: electiveEmphasis, to: value });
+    void persistWeeklyPlanPrefs({ electiveEmphasis: value });
   };
 
   const handleStudyModeChange = (
@@ -1348,11 +2063,116 @@ const StudentDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 md:mb-8 sticky top-2 z-30 md:static"
+        >
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
+                  <Play className="h-4 w-4" />
+                  <span>Do this now</span>
+                </div>
+                <h2 className="text-xl font-bold text-slate-900">
+                  {recommendedLesson ? recommendedLesson.title : 'Adaptive warm-up'}
+                </h2>
+                <p className="text-sm text-slate-600">
+                  {recommendedLesson
+                    ? recommendedLesson.suggestionReason ?? 'Start here to stay on your path.'
+                    : 'We will slot in your next lesson as soon as your plan syncs.'}
+                </p>
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-2 py-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    ~{primaryTaskMinutes} min
+                  </span>
+                  {recommendedLesson?.subject && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1">
+                      <Target className="h-3.5 w-3.5" />
+                      {formatSubjectLabel(recommendedLesson.subject)}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {recommendedLesson ? PATH_STATUS_LABELS[recommendedLesson.status] : 'Ready soon'}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => recommendedLesson && handleStartLesson(recommendedLesson)}
+                    disabled={!recommendedLesson}
+                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-brand-blue text-white px-4 py-3 text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-50 focus-ring"
+                  >
+                    <Play className="h-4 w-4" />
+                    <span>{recommendedLesson ? 'Start now' : 'Syncing plan'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleViewDailyPlan}
+                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-gray-800 hover:border-brand-blue/60 focus-ring"
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                    <span>View daily plan</span>
+                  </button>
+                </div>
+              </div>
+              <div className="w-full md:w-[320px]">
+                <div className="rounded-xl border border-brand-violet/30 bg-brand-light-violet/40 p-4 shadow-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-slate-900">Need help? Ask</p>
+                    <span className="text-[11px] font-semibold text-brand-violet">Tutor</span>
+                  </div>
+                  <p className="text-xs text-slate-700">
+                    School-safe tutor stays on your current lesson. Quick prompts keep typing short.
+                  </p>
+                  <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openTutorFromHome()}
+                      className="min-h-[44px] w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-violet text-white px-4 py-3 text-sm font-semibold hover:bg-brand-blue focus-ring"
+                    >
+                      <Bot className="h-4 w-4" />
+                      Open tutor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openTutorFromHome('Can you guide me through this lesson?', 'do_this_now_guide')}
+                      className="min-h-[44px] w-full inline-flex items-center justify-center gap-2 rounded-xl border border-brand-violet/50 bg-white px-4 py-3 text-sm font-semibold text-brand-violet hover:border-brand-blue focus-ring"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Guide me
+                    </button>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {tutorPromptChips.map((chip) => (
+                      <button
+                        key={chip}
+                        type="button"
+                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
+                        className="min-h-[40px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {activeTab === 'today' && (
+          <div className="md:hidden mb-6">{renderDailyPlanSection('daily-plan-mobile')}</div>
+        )}
+
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-8 hidden md:block"
         >
           <div className="bg-gradient-to-r from-brand-teal to-brand-blue rounded-2xl p-6 text-white">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -1409,7 +2229,7 @@ const StudentDashboard: React.FC = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.03 }}
-            className="mb-6"
+            className="mb-6 hidden md:block"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
@@ -1437,8 +2257,11 @@ const StudentDashboard: React.FC = () => {
                     <div className="font-semibold">{Math.round(studentStats.weeklyTimeMinutes)} min</div>
                   </div>
                   <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
-                    <div className="text-[11px] uppercase tracking-wide text-slate-500">Streak</div>
-                    <div className="font-semibold">{studentStats.streakDays} days</div>
+                    <div className="text-[11px] uppercase tracking-wide text-slate-500">Plan streak</div>
+                    <div className="font-semibold">{microPlanStreakDays} days</div>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Login streak: {studentStats.streakDays}d
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1576,14 +2399,123 @@ const StudentDashboard: React.FC = () => {
                   </button>
                 </div>
               )}
+              {contextualNudge && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mb-4 rounded-xl border border-brand-violet/30 bg-brand-light-violet/40 px-4 py-3 flex items-start gap-3"
+                >
+                  <Sparkles className="h-4 w-4 text-brand-violet mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-slate-900">{contextualNudge.title}</p>
+                    <p className="text-xs text-slate-700">{contextualNudge.body}</p>
+                    {contextualNudge.detail && (
+                      <p className="text-[11px] text-slate-500 mt-1">Focus: {contextualNudge.detail}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleNudgeCta(contextualNudge)}
+                      className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-blue/90 focus-ring"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      {contextualNudge.type === 'recap'
+                        ? 'Start recap'
+                        : contextualNudge.type === 'quick_check'
+                          ? 'Do quick check'
+                          : 'Try again'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDismissNudge(contextualNudge)}
+                      className="text-[11px] text-slate-500 hover:text-slate-700 focus-ring"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+              {latestCheckIn && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mb-4 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="h-9 w-9 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center">
+                      <Mail className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">From your grown-up</p>
+                          <p className="text-[11px] text-slate-500">
+                            {formatAgo(latestCheckIn.createdAt)}
+                          </p>
+                        </div>
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[11px] font-semibold ${CHECK_IN_BADGES[latestCheckIn.status]}`}
+                        >
+                          {describeCheckInStatus(latestCheckIn.status)}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm text-slate-800 leading-snug">{latestCheckIn.message}</p>
+                      {checkInError && (
+                        <p className="mt-2 text-[11px] text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-2 py-1">
+                          {checkInError}
+                        </p>
+                      )}
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          disabled={latestCheckIn.status === 'seen' || acknowledgingCheckIn === latestCheckIn.id}
+                          onClick={() => handleAcknowledgeCheckIn(latestCheckIn)}
+                          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 focus-ring"
+                        >
+                          {acknowledgingCheckIn === latestCheckIn.id ? (
+                            <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <CheckCircle className="h-3.5 w-3.5" />
+                          )}
+                          I saw this
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            trackEvent('parent_checkin_reply_tap', { studentId: student.id, checkin_id: latestCheckIn.id });
+                            setActiveTab('journey');
+                            document.getElementById('assistant')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-brand-blue/50 focus-ring"
+                        >
+                          <Send className="h-3.5 w-3.5" />
+                          Reply in tutor
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {upNextEntries.map((entry, index) => {
+                {upNextEntries.slice(0, 5).map((entry, index) => {
                   const meta = (entry.metadata ?? {}) as Record<string, unknown>;
                   const title =
                     (meta.module_title as string | undefined) ??
                     (meta.module_slug as string | undefined) ??
                     `Module ${entry.position}`;
                   const reasonCopy = describePathEntryReason(entry);
+                  const reasonSlug = pathEntryReasonSlug(entry);
+                  const reasonLabel =
+                    reasonSlug === 'placement'
+                      ? 'Diagnostic pick'
+                      : reasonSlug === 'remediation' || reasonSlug === 'review'
+                        ? 'Review boost'
+                        : reasonSlug === 'stretch'
+                          ? 'Stretch'
+                          : 'Path pick';
                   return (
                     <motion.div
                       key={entry.id}
@@ -1600,15 +2532,16 @@ const StudentDashboard: React.FC = () => {
                         <p className="text-xs text-slate-600 capitalize">
                           {entry.type} · {entry.status === 'not_started' ? 'Ready' : entry.status}
                         </p>
-                        <div className="mt-2 inline-flex items-center gap-1 text-[11px] text-slate-500">
-                          <div className="relative group inline-flex items-center gap-1">
-                            <Info className="h-3.5 w-3.5" />
-                            <span className="font-semibold">Why this?</span>
-                            <div className="absolute left-0 mt-6 z-10 hidden min-w-[220px] rounded-lg border border-slate-200 bg-white p-3 text-[11px] text-slate-600 shadow-lg group-hover:block">
-                              {reasonCopy}
-                            </div>
-                          </div>
+                        <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+                          <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-1 font-semibold text-slate-700">
+                            <Info className="h-3 w-3 text-brand-blue" />
+                            {reasonLabel}
+                          </span>
+                          <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600 capitalize">
+                            {entry.type}
+                          </span>
                         </div>
+                        <p className="mt-2 text-xs text-slate-600 leading-snug">{reasonCopy}</p>
                       </div>
                     </motion.div>
                   );
@@ -1751,9 +2684,12 @@ const StudentDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-2xl font-bold text-brand-violet">
-                      {quickStats?.streakDays ?? student.streakDays}
+                      {microPlanStreakDays}
                     </div>
-                    <div className="text-sm text-gray-700">Day Streak</div>
+                    <div className="text-sm text-gray-700">Plan streak (15-min lane)</div>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Login streak: {quickStats?.streakDays ?? student.streakDays}d
+                    </p>
                   </div>
                   <div className="w-12 h-12 bg-brand-light-violet rounded-full flex items-center justify-center">
                     <div className="text-2xl">🔥</div>
@@ -1791,7 +2727,6 @@ const StudentDashboard: React.FC = () => {
             </>
           )}
         </motion.div>
-
         {activeMission && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1939,12 +2874,13 @@ const StudentDashboard: React.FC = () => {
           <div className="lg:col-span-2 space-y-8">
             {activeTab === 'today' ? (
               <>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.18 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
-            >
+                {renderDailyPlanSection('daily-plan-desktop', 'hidden md:block')}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18 }}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+                >
               {renderCelebration()}
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -2024,8 +2960,41 @@ const StudentDashboard: React.FC = () => {
                         />
                       </div>
                       <p className="mt-1 text-[11px] text-gray-500">Minutes include practice and lessons.</p>
+                    </div>
                   </div>
-                </div>
+
+                  {electiveSuggestion && electiveEmphasis !== 'off' && (
+                    <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/60 p-3 flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">
+                            Elective boost
+                          </p>
+                          <p className="text-sm font-semibold text-gray-900">
+                            {electiveSuggestion.title}
+                          </p>
+                          <p className="text-[11px] text-gray-600">
+                            {electiveSuggestion.suggestionReason ??
+                              'You are ahead—try an elective while you have time.'}
+                          </p>
+                        </div>
+                        <span className="px-2 py-1 rounded-full bg-white text-indigo-700 border border-indigo-200 text-[11px] font-semibold">
+                          {formatSubjectLabel(electiveSuggestion.subject)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleStartLesson(electiveSuggestion)}
+                          className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 text-white px-3 py-2 text-sm font-semibold hover:bg-indigo-700"
+                        >
+                          <Sparkles className="h-4 w-4" />
+                          Start elective
+                        </button>
+                        <p className="text-[11px] text-indigo-800">Optional, keeps variety without losing core focus.</p>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-3">
                     <div className="flex items-center justify-between">
@@ -2300,6 +3269,61 @@ const StudentDashboard: React.FC = () => {
                         Adjusts tutor tone and small XP nudges to match your goal this week.
                       </p>
                     </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Mix-ins</p>
+                      <div className="flex flex-wrap gap-2">
+                        {([
+                          { id: 'auto', label: 'Auto', helper: 'Light variety on easy weeks' },
+                          { id: 'core_only', label: 'Core only', helper: 'Stick to core subjects' },
+                          { id: 'cross_subject', label: 'Mix subjects', helper: 'Blend in practice' },
+                        ] as const).map((option) => {
+                          const active = mixInMode === option.id;
+                          return (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => handleMixInModeChange(option.id)}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
+                                active
+                                  ? 'bg-emerald-100 text-emerald-800 border-emerald-200 shadow-sm'
+                                  : 'border-slate-200 text-gray-700 hover:border-emerald-300'
+                              }`}
+                            >
+                              <div className="font-semibold">{option.label}</div>
+                              <div className="text-[11px] text-gray-500">{option.helper}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        Mixes in up to two cross-subject practices when the weekly load is light.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Electives</p>
+                      <div className="inline-flex rounded-full border border-slate-200 bg-gray-50 p-1 text-sm font-semibold">
+                        {(['light', 'on', 'off'] as const).map((value) => {
+                          const active = electiveEmphasis === value;
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => handleElectiveEmphasisChange(value)}
+                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${
+                                active
+                                  ? 'bg-indigo-600 text-white shadow'
+                                  : 'text-gray-700 hover:text-indigo-600'
+                              }`}
+                            >
+                              {value === 'light' ? 'Suggest when ahead' : value === 'on' ? 'Offer more' : 'Hide'}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        Elective ideas appear once you finish core goals early. Parents can set this too.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="mt-5 flex flex-wrap gap-3">
@@ -2453,7 +3477,9 @@ const StudentDashboard: React.FC = () => {
                         />
                       </div>
                       <div className="inline-flex items-center gap-1 text-gray-500">
-                        <span>Streak {quickStats?.streakDays ?? student.streakDays}</span>
+                        <span>Plan streak {microPlanStreakDays}d</span>
+                        <span className="text-gray-300">•</span>
+                        <span>Login {quickStats?.streakDays ?? student.streakDays}d</span>
                         <span className="text-gray-300">•</span>
                         <span>{quickStats?.totalXp ?? student.xp} XP</span>
                       </div>
@@ -2527,6 +3553,20 @@ const StudentDashboard: React.FC = () => {
                                   {lesson.difficulty}
                                 </span>
                               </div>
+                              {(lesson.isMixIn || lesson.isElective) && (
+                                <div className="mt-1 flex items-center gap-2 text-[11px] font-semibold">
+                                  {lesson.isMixIn && (
+                                    <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                      Mix-in
+                                    </span>
+                                  )}
+                                  {lesson.isElective && (
+                                    <span className="px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                      Elective
+                                    </span>
+                                  )}
+                                </div>
+                              )}
                               {lesson.suggestionReason && (
                                 <p className="text-xs text-brand-blue mt-1">{lesson.suggestionReason}</p>
                               )}
@@ -3655,6 +4695,7 @@ const StudentDashboard: React.FC = () => {
         </div>
       )}
 
+      <div id="assistant" className="sr-only" aria-hidden />
       <Suspense fallback={<div className="px-4 py-8 text-sm text-gray-500">Loading assistant…</div>}>
         <LearningAssistant />
       </Suspense>

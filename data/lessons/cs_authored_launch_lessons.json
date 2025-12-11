@@ -1,0 +1,383 @@
+{
+  "3-electives-computer-science-block-based-programming": {
+    "title": "Getting Started with Block-Based Programming",
+    "summary": "Students discover that computers follow step-by-step instructions by arranging colorful blocks in the correct order. They learn that programming is like giving directions and that testing their programs helps find mistakes.",
+    "objectives": [
+      "Understand that programs follow sequences in order",
+      "Create simple programs using blocks",
+      "Identify and fix errors in code",
+      "Recognize that computers do exactly what you tell them to do"
+    ],
+    "grade_band": "3",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.AP.A.1.1",
+      "CS.AP.C.1.1",
+      "CS.AP.V.1.1"
+    ],
+    "outline": {
+      "hook": "Have a student give you directions to walk to the door. Ask if they said 'step forward three times, turn right, walk to the door.' Without those exact steps in order, you'd get lost. That's how computers work—they need exact, ordered instructions!",
+      "direct_instruction": "Introduce block-based programming: code blocks are like LEGO pieces that snap together. Show students that blocks run top to bottom, in order. Demonstrate a simple program: move forward, turn right, move forward. Explain that changing the order changes the result. Show a repeat block: instead of 'move' four times, use one 'repeat 4 times' block with a 'move' inside. Demonstrate testing: run the program and watch what happens.",
+      "guided_practice": "Class builds a program together: move, turn right, repeat. Run it and predict what happens. Add another block and run again. Test what happens if you change the repeat number. Discuss how the order matters.",
+      "independent_practice": "Students create a simple program to move a character across the screen, turn, and come back. They test it and fix errors.",
+      "check_for_understanding": "Ask: 'Why does order matter?' 'What happens if we skip a block?' 'How do you find mistakes?' Observe if students test their work.",
+      "exit_ticket": "Students show their program and describe one instruction it follows.",
+      "materials": [
+        "Block-based coding platform (Scratch, Code.org, Blockly)",
+        "Projected computer/screen",
+        "Character sprites",
+        "Printed blocks reference sheet"
+      ]
+    }
+  },
+  "3-electives-computer-science-digital-citizenship": {
+    "title": "Being Safe and Kind Online",
+    "summary": "Students learn that the internet is a place where real people interact, and they have the power to be safe, kind, and smart. They discover what information should stay private and how to treat others online with respect.",
+    "objectives": [
+      "Identify personal information that should not be shared online",
+      "Explain why being kind online matters",
+      "Recognize what strong passwords do",
+      "Understand that online actions have real consequences"
+    ],
+    "grade_band": "3",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.IC.SO.1.1",
+      "CS.IC.PI.1.1",
+      "CS.IC.CP.1.1"
+    ],
+    "outline": {
+      "hook": "Ask students: 'If you met a stranger on the playground and they asked where you live, would you tell them? What about online?' Explain that the internet connects real people, and the same safety rules apply.",
+      "direct_instruction": "Teach the concept of personal information: your name, address, phone number, school—these can be used to hurt you. Use simple examples: a stranger might find your house. Explain that passwords are like keys to your digital house and should be strong and secret. Introduce digital citizenship: treating people online like you'd treat them in person. Show examples of kind and unkind online behavior. Discuss that digital footprints are permanent—what you post stays online forever.",
+      "guided_practice": "Practice identifying personal information: show sentences and ask if it's safe to share. Create strong passwords together. Discuss: 'What would you say to a friend if they posted something mean?' Practice kind online responses.",
+      "independent_practice": "Students create a poster about being safe or kind online. They write about one piece of personal information they'll never share and why.",
+      "check_for_understanding": "Ask students to identify personal information and explain why it's private. Can they give an example of kind online behavior?",
+      "exit_ticket": "Students share one way they'll be safe or kind online.",
+      "materials": [
+        "Images of personal info examples",
+        "Sample passwords (strong vs. weak)",
+        "Video clips of online interactions",
+        "Poster materials"
+      ]
+    }
+  },
+  "4-electives-computer-science-block-based-programming": {
+    "title": "Controlling Programs with Loops and Decisions",
+    "summary": "Students learn that programs can make decisions (if this happens, do that) and repeat actions without rewriting code. They explore loops and conditionals to create more interesting programs.",
+    "objectives": [
+      "Use loops to repeat code efficiently",
+      "Create conditional statements to make decisions",
+      "Understand how events trigger program responses",
+      "Debug programs by testing and identifying errors"
+    ],
+    "grade_band": "4",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.AP.A.2.1",
+      "CS.AP.C.2.1",
+      "CS.AP.V.2.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'What if we wanted a character to take 100 steps? Would you add 100 'move' blocks? Or use a repeat block?' Show how repeat blocks save time and make code cleaner. Introduce the idea: 'Programs can make decisions too, like a choose-your-own-adventure story.'",
+      "direct_instruction": "Explain loops: for-loop (repeat 5 times) and while-loop (repeat while something is true). Show that loops avoid repetition. Teach conditionals: if-then blocks make decisions. When a sprite touches something, when you press a key—these trigger events. Show an example: if touching red, then change color. Introduce variables: containers that store information (like a score). Show testing: run, observe, fix.",
+      "guided_practice": "Build a loop-based program together: repeat a pattern. Add a conditional: if key pressed, do something. Test and predict outcomes. Discuss what changes when you modify the loop count.",
+      "independent_practice": "Create a program with a loop and a conditional: a character repeats movement and changes color when clicked. Test and debug.",
+      "check_for_understanding": "Ask: 'What does a loop do?' 'Why use conditionals?' 'What's the first step in debugging?' Can they trace through code mentally?",
+      "exit_ticket": "Students describe their program: 'It loops ___ times, and if ___, it does ___.'",
+      "materials": [
+        "Block-based coding platform",
+        "Sprites and backgrounds",
+        "Keyboard and mouse input",
+        "Debugging worksheet"
+      ]
+    }
+  },
+  "4-electives-computer-science-digital-citizenship": {
+    "title": "Protecting Yourself Online and Respecting Others",
+    "summary": "Students go deeper into privacy, security, and digital respect. They learn about phishing, scams, passwords, and how their digital footprint follows them. They understand that respect online is as important as in person.",
+    "objectives": [
+      "Recognize phishing and scams",
+      "Create strong passwords and protect accounts",
+      "Understand their digital footprint and its permanence",
+      "Respect copyright and others' privacy"
+    ],
+    "grade_band": "4",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.IC.SO.2.1",
+      "CS.IC.PI.2.1",
+      "CS.IC.CP.2.1"
+    ],
+    "outline": {
+      "hook": "Show an example of a phishing email (not real credentials). Ask: 'Does this look real? What do you notice?' Explain that scammers try to trick people into sharing information. Discuss: 'Once you post something, it stays online forever. How does that affect what you share?'",
+      "direct_instruction": "Teach phishing: fake emails or websites that look real but steal information. Show warning signs: spelling errors, urgent requests, unknown senders. Explain password safety: never share passwords, use strong ones (letters, numbers, symbols), change them regularly. Discuss digital footprint: posts, photos, comments become permanent and can be seen. Teach copyright: using someone's work without permission is stealing. Model respectful online communication: think before posting, would you say it in person?",
+      "guided_practice": "Analyze an email together: is it phishing? Practice creating passwords and evaluating their strength. Discuss: 'Would you post this photo? Why?' Role-play: someone asks for your information—what do you do?",
+      "independent_practice": "Create a strong password. Write about one thing they won't share online and why. Describe what respect looks like in a comment or message.",
+      "check_for_understanding": "Can students identify phishing? Explain why passwords matter? Describe digital footprint? Explain copyright?",
+      "exit_ticket": "Students share one way they'll protect themselves and one way they'll respect others online.",
+      "materials": [
+        "Phishing email examples",
+        "Password strength guide",
+        "Digital footprint scenarios",
+        "Copyright image examples"
+      ]
+    }
+  },
+  "5-electives-computer-science-block-based-programming": {
+    "title": "Advanced Programming: Functions, Lists, and Patterns",
+    "summary": "Students master reusable code through functions, manage collections with lists, and create complex patterns using nested loops. They develop computational thinking by breaking problems into pieces and testing rigorously.",
+    "objectives": [
+      "Create and call custom functions to organize code",
+      "Use lists to store and manipulate multiple values",
+      "Apply nested loops to create patterns",
+      "Test edge cases to ensure robust programs"
+    ],
+    "grade_band": "5",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.AP.A.2.2",
+      "CS.AP.C.2.2",
+      "CS.AP.V.2.2"
+    ],
+    "outline": {
+      "hook": "Show a complex program with the same code repeated three times. Ask: 'How could we avoid this repetition?' Introduce functions: reusable blocks of code. Show: create a function once, use it many times. Discuss lists: 'If we wanted to track scores for 30 students, would you create 30 variables? Or use a list?'",
+      "direct_instruction": "Teach creating custom blocks (functions): name them, build them once, call them multiple times. Show parameters: functions can accept input (like a score). Teach lists: containers that hold multiple items in order. Show adding, removing, accessing items. Introduce nested loops: one loop inside another creates grids and patterns. Demonstrate: outer loop 5 times, inner loop 4 times = 20 blocks in a grid. Teach testing edge cases: empty lists, zero values, maximum numbers.",
+      "guided_practice": "Create a function together to draw a shape; call it three times in different positions. Build a list and loop through it, accessing items. Create a nested loop pattern (like a checkerboard).",
+      "independent_practice": "Create a program using a function (draw a star), lists (store colors), and nested loops to create a pattern. Test with edge cases (empty list, large numbers).",
+      "check_for_understanding": "Ask: 'Why use functions?' 'How do you access the first item in a list?' 'What does a nested loop create?' Can they explain each program component?",
+      "exit_ticket": "Students explain their program: 'My function does ___, my list stores ___, and my nested loop creates ___.'",
+      "materials": [
+        "Block-based platform",
+        "Function builder",
+        "List tools",
+        "Nested loop examples",
+        "Edge case testing worksheet"
+      ]
+    }
+  },
+  "5-electives-computer-science-digital-citizenship": {
+    "title": "Being Smart About Information Online and Staying Healthy",
+    "summary": "Students learn to evaluate information sources, recognize reliable vs. unreliable information, balance screen time, and understand that what they do online has real-world consequences.",
+    "objectives": [
+      "Evaluate website trustworthiness and information reliability",
+      "Recognize phishing, malware, and online scams",
+      "Understand screen time balance and digital health",
+      "Practice evaluating sources and citing properly"
+    ],
+    "grade_band": "5",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.IC.SO.3.1",
+      "CS.IC.PI.3.1",
+      "CS.IC.CP.3.1"
+    ],
+    "outline": {
+      "hook": "Show two websites on the same topic with different information. Ask: 'Which do you trust? Why?' Explain that not all online information is accurate. Introduce: checking author credentials, looking for evidence, checking multiple sources.",
+      "direct_instruction": "Teach evaluating sources: trustworthy sites have HTTPS (secure connection), clear author info, credentials, and citations. Introduce unreliable red flags: spelling errors, 'too good to be true' claims, unknown authors, biased language. Teach about phishing/malware: fake emails, suspicious links, unexpected attachments. Explain screen time: excessive use affects sleep, eyes, posture. Balance is important. Discuss that online actions have offline consequences: cyberbullying affects real feelings, posts affect your reputation.",
+      "guided_practice": "Analyze websites together: check HTTPS, author, sources. Evaluate a suspicious email: what makes it phishing? Discuss: 'When should you take a screen break?' Plan a balanced media diet.",
+      "independent_practice": "Evaluate a website and report on trustworthiness. Research a topic and cite sources properly. Reflect on their own screen time and plan balance.",
+      "check_for_understanding": "Can they identify trustworthy websites? Spot phishing? Explain screen time effects? Name consequences of online actions?",
+      "exit_ticket": "Students share one way they'll evaluate information and one way they'll balance their screen time.",
+      "materials": [
+        "Website examples (trustworthy and not)",
+        "Phishing email samples",
+        "HTTPS explanation",
+        "Source evaluation rubric",
+        "Screen time tracking template"
+      ]
+    }
+  },
+  "6-electives-computer-science-data-and-graphics": {
+    "title": "Understanding Data and Creating Visualizations",
+    "summary": "Students collect data, organize it, and create graphs that tell meaningful stories. They learn when different graph types work best and how to represent data honestly and clearly.",
+    "objectives": [
+      "Design surveys and collect data systematically",
+      "Organize and sort data effectively",
+      "Choose appropriate graph types for different data",
+      "Create clear, honest visualizations with proper labels"
+    ],
+    "grade_band": "6",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.DA.CO.1.1",
+      "CS.DA.IM.1.1",
+      "CS.DA.DA.1.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'What's the favorite sport in our class?' Discuss: how would you find out? Collect data, organize it in a table. Now, ask: 'What would show this best—a table or a graph? A bar graph or pie chart?' Create both. Discuss which is clearer.",
+      "direct_instruction": "Teach data types: categorical (colors, sports, categories) and numerical (heights, scores, ages). Show survey design: clear questions, consistent categories. Demonstrate organizing: sorting, tallying, tables. Introduce graph types: bar graphs compare categories, line graphs show change over time, pie charts show parts of a whole. Explain: choose the best graph for your data. Teach honest graphs: use accurate scales, label axes, include titles, don't manipulate proportions.",
+      "guided_practice": "Class surveys: favorite subject. Tally results in a table. Create a bar graph together. Discuss: what does it show? Try a pie chart: does it work as well? Why?",
+      "independent_practice": "Design and conduct a survey on a topic of interest. Organize data in a table. Create an appropriate graph. Label it completely and honestly.",
+      "check_for_understanding": "Can they design a good survey? Organize data? Choose appropriate graphs? Create honest visualizations?",
+      "exit_ticket": "Students present their graph and explain why they chose that type.",
+      "materials": [
+        "Survey templates",
+        "Data collection tools (tally sheets, spreadsheets)",
+        "Graphing software (Sheets, Excel, Desmos)",
+        "Graph type guide",
+        "Honest vs. manipulated graph examples"
+      ]
+    }
+  },
+  "6-electives-computer-science-intro-python-js": {
+    "title": "Introduction to Text-Based Programming in Python or JavaScript",
+    "summary": "Students transition from blocks to writing real code. They learn variables, data types, loops, and conditionals using text-based syntax. They discover that they control what happens through written instructions.",
+    "objectives": [
+      "Write and run simple Python or JavaScript programs",
+      "Understand variables, data types, and operators",
+      "Use loops and conditionals in text-based code",
+      "Debug errors and understand error messages"
+    ],
+    "grade_band": "6",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.AP.A.3.1",
+      "CS.AP.C.3.1",
+      "CS.AP.V.3.1"
+    ],
+    "outline": {
+      "hook": "Show a short Python program: print('Hello!'). Run it. Ask: 'That's code. You're writing instructions for the computer.' Show: name = 'Alice'; print('Hello, ' + name). Explain: variables store information, you use it.",
+      "direct_instruction": "Introduce Python/JavaScript syntax basics: print() or console.log() displays text. Variables store data: x = 5. Data types: strings ('text'), integers (5), booleans (true/false). Operators: =, ==, +, -, *, /. Loops: for i in range(5) repeats 5 times. Conditionals: if x > 5 makes decisions. Comments explain code. Show error messages: they help you fix problems.",
+      "guided_practice": "Class writes together: print('Hello'). Create variables and print them. Use input() to get user data. Loop through a range. Write an if-else statement. Read error messages and fix them.",
+      "independent_practice": "Write a program that: gets user input, stores it in a variable, uses a loop, makes a decision, and prints output. For example: ask for age, store it, loop counting down, if age > 18 print something different.",
+      "check_for_understanding": "Can they write and run code? Explain variables and data types? Write loops and conditionals? Fix errors using error messages?",
+      "exit_ticket": "Students run their program and explain what each line does.",
+      "materials": [
+        "Python/JavaScript environment (Repl.it, Python.org, JSFiddle)",
+        "Code examples for reference",
+        "Error message guide",
+        "Syntax cheat sheet",
+        "Practice problems"
+      ]
+    }
+  },
+  "7-electives-computer-science-data-and-graphics": {
+    "title": "Analyzing Data: Patterns, Bias, and Truthfulness",
+    "summary": "Students dive deeper into data analysis: finding patterns, calculating statistics, recognizing bias, and identifying misleading graphs. They learn to think critically about data and conclusions.",
+    "objectives": [
+      "Calculate mean, median, and mode",
+      "Identify outliers and understand their impact",
+      "Recognize bias in data collection and representation",
+      "Evaluate whether conclusions are supported by data"
+    ],
+    "grade_band": "7",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.DA.CO.2.1",
+      "CS.DA.IM.2.1",
+      "CS.DA.DA.2.1"
+    ],
+    "outline": {
+      "hook": "Show a graph with a broken y-axis exaggerating small differences. Ask: 'Does this graph lie?' Show the same data with an honest axis. Discuss: 'How can graphs mislead?' Introduce the idea: data can tell different stories depending on how you show it.",
+      "direct_instruction": "Teach statistics: mean (average), median (middle value), mode (most common). Show that median isn't affected by outliers (extreme values). Example: heights of students—one very tall person changes the mean but not the median. Teach bias: sample bias (surveying only friends), measurement bias, reporting bias. Show misleading graphs: broken axes, manipulated scale, poor choices. Teach: evaluate sources, check sample size, watch for bias, verify conclusions.",
+      "guided_practice": "Calculate mean, median, mode together from data. Identify outliers and discuss impact. Analyze a misleading graph: what's wrong? Fix it. Design a biased survey, then an unbiased one.",
+      "independent_practice": "Collect data, calculate statistics, identify biases, create an honest graph, write conclusions explaining what data shows and what it doesn't prove.",
+      "check_for_understanding": "Can they calculate statistics? Identify bias? Spot misleading graphs? Write supported conclusions?",
+      "exit_ticket": "Students share one way data was misleading and one way to make it honest.",
+      "materials": [
+        "Real-world datasets",
+        "Spreadsheet software",
+        "Misleading graph examples",
+        "Statistics guide (mean, median, mode)",
+        "Bias identification checklist"
+      ]
+    }
+  },
+  "7-electives-computer-science-intro-python-js": {
+    "title": "Building Programs with Functions, Lists, and Logic",
+    "summary": "Students write more sophisticated programs using functions, lists, and complex conditionals. They apply computational thinking to solve real problems and understand how programs grow in complexity.",
+    "objectives": [
+      "Write and call functions with parameters and return values",
+      "Use lists to manage collections of data",
+      "Create conditional logic to handle multiple outcomes",
+      "Design and test complete programs"
+    ],
+    "grade_band": "7",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.AP.A.3.2",
+      "CS.AP.C.3.2",
+      "CS.AP.V.3.2"
+    ],
+    "outline": {
+      "hook": "Show a long program with repeated code. Ask: 'Could we make this shorter?' Introduce functions: write once, use many times. Show: def greet(name): print('Hello, ' + name). Call it three times with different names.",
+      "direct_instruction": "Teach writing functions: def function_name(parameter): ... return value. Functions accept input and produce output. Teach lists: ['apple', 'banana', 'orange']; access by index (0 is first). Loop through lists: for item in list. Teach elif: if x == 1 ... elif x == 2 ... else. Write and test programs combining these. Introduce error handling: anticipate problems like dividing by zero.",
+      "guided_practice": "Write a function together: takes age, returns 'adult' or 'child'. Create a list of names, loop through, call the function for each. Build a grading program: input score, function returns grade based on conditional logic.",
+      "independent_practice": "Create a program: takes a list as input, uses a function to process items, uses conditionals to handle different cases, produces meaningful output. Example: list of scores, function calculates average, if-else returns 'excellent' or 'needs improvement'.",
+      "check_for_understanding": "Can they write functions with parameters? Use lists and loops? Write multi-way conditionals? Design and test programs?",
+      "exit_ticket": "Students explain their program: 'My function does ___, my list stores ___, and my conditionals handle ___.'",
+      "materials": [
+        "Python/JavaScript environment",
+        "Function examples",
+        "List and loop patterns",
+        "Conditional examples",
+        "Program design template"
+      ]
+    }
+  },
+  "8-electives-computer-science-data-and-graphics": {
+    "title": "Advanced Data Analysis: Big Data, Bias, and Decision-Making",
+    "summary": "Students explore real-world data challenges: big data, cleaning data, recognizing bias in AI, and understanding how data decisions affect people. They think critically about algorithmic fairness and responsibility.",
+    "objectives": [
+      "Understand big data and data mining concepts",
+      "Recognize and mitigate bias in data collection and algorithms",
+      "Clean and preprocess real data",
+      "Evaluate algorithmic decisions for fairness and accuracy"
+    ],
+    "grade_band": "8",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.DA.CO.3.1",
+      "CS.DA.IM.3.1",
+      "CS.DA.DA.3.1"
+    ],
+    "outline": {
+      "hook": "Ask: 'How do companies like Netflix know what shows you'll like?' Introduce algorithms and machine learning: AI learns patterns from huge amounts of data. Ask: 'Could these algorithms have bias? How?' Introduce the idea that data and algorithms have real-world power and responsibility.",
+      "direct_instruction": "Teach big data: massive datasets (millions of tweets, sensor data, transactions) analyzed using algorithms. Teach data mining: finding patterns at scale. Show data cleaning: removing errors, fixing inconsistencies, handling missing values. Explain: bad data = bad conclusions. Teach bias in algorithms: historical bias (trained on biased data perpetuates unfairness), measurement bias, sampling bias. Example: predictive policing algorithms trained on biased arrest data perpetuate racism. Teach responsible data science: transparency, fairness assessment, documenting limitations.",
+      "guided_practice": "Analyze a dataset together: identify biases, clean errors, analyze patterns. Discuss: could this algorithm be unfair? How? Research a real-world algorithm (facial recognition, hiring algorithms) and discuss bias.",
+      "independent_practice": "Find real data, analyze for bias and quality issues, clean it, discover patterns, and write a report on findings and limitations. Address: Is this conclusion fair? Who does this affect?",
+      "check_for_understanding": "Can they identify bias in data and algorithms? Clean messy data? Draw fair conclusions? Consider real-world implications?",
+      "exit_ticket": "Students describe one bias they found and one way to mitigate it.",
+      "materials": [
+        "Real-world datasets",
+        "Data cleaning tools",
+        "Bias identification framework",
+        "Case studies of algorithmic bias",
+        "Data analysis software"
+      ]
+    }
+  },
+  "8-electives-computer-science-intro-python-js": {
+    "title": "Advanced Programming: Objects, Error Handling, and Real Problems",
+    "summary": "Students write professional-grade programs using objects, error handling, and string manipulation. They solve real problems, manage complexity, and learn debugging strategies for sophisticated code.",
+    "objectives": [
+      "Apply object-oriented programming concepts",
+      "Handle errors gracefully with try-except blocks",
+      "Manipulate strings and work with complex data structures",
+      "Debug and optimize multi-function programs"
+    ],
+    "grade_band": "8",
+    "subject": "Computer Science",
+    "standards": [
+      "CS.AP.A.3.3",
+      "CS.AP.C.3.3",
+      "CS.AP.V.3.3"
+    ],
+    "outline": {
+      "hook": "Introduce object-oriented programming: organize code as objects with properties and methods. Example: a Dog object has name, age (properties) and bark(), sit() (methods). This models real-world things well. Show: class Dog: ... Then create instances.",
+      "direct_instruction": "Teach classes: blueprint for objects. Properties: data about the object. Methods: functions the object can do. Teach string manipulation: upper(), lower(), split(), replace(), slicing (name[0:3]). Teach error handling: try-except blocks catch errors. Example: try: x = 1/0; except: print('Can't divide by zero!'). Teach dictionaries: key-value pairs for structured data. Teach debugging: add print statements, use error messages, test each function separately.",
+      "guided_practice": "Create a class together: Student with name, grade (properties), study(), takTest() (methods). Create instances. Manipulate strings: get user input, convert to uppercase, split into words. Write try-except: handle user entering non-numbers.",
+      "independent_practice": "Create a program with multiple classes (Student, Course), complex data structures (lists of dictionaries), error handling for edge cases, and string manipulation. Examples: grade calculator, contact manager, game with objects.",
+      "check_for_understanding": "Can they design and code classes? Handle errors? Manipulate strings? Debug multi-function programs? Apply OOP to real problems?",
+      "exit_ticket": "Students demonstrate their program and explain the class structure and error handling.",
+      "materials": [
+        "Python/JavaScript environment",
+        "OOP tutorials and examples",
+        "Error handling patterns",
+        "String method reference",
+        "Debugging tools and practices",
+        "Problem specifications for real programs"
+      ]
+    }
+  }
+}

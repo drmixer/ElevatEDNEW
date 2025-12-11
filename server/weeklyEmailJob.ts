@@ -11,6 +11,10 @@ type ParentWeeklyReportRow = {
   summary: string | null;
   highlights: string[] | null;
   recommendations: string[] | null;
+  changes?: {
+    improvements?: string[] | null;
+    risks?: string[] | null;
+  } | null;
 };
 
 type ProfileRow = {
@@ -127,6 +131,8 @@ const buildEmailBody = (
 ): string => {
   const highlightLines = (report.highlights ?? []).map((item) => `• ${item}`).join('\n');
   const recommendationLines = (report.recommendations ?? []).map((item) => `• ${item}`).join('\n');
+  const improvements = (report.changes?.improvements ?? report.highlights ?? []).slice(0, 3);
+  const risks = (report.changes?.risks ?? report.recommendations ?? []).slice(0, 3);
   const weekLabel = new Date(report.week_start).toLocaleDateString(undefined, {
     month: 'long',
     day: 'numeric',
@@ -147,6 +153,14 @@ const buildEmailBody = (
     '',
     recommendationLines ? `Next steps:\n${recommendationLines}` : 'Next steps: add a small goal for each learner.',
     '',
+    'What changed this week:',
+    improvements.length
+      ? `Improvements:\n${improvements.map((item) => `• ${item}`).join('\n')}`
+      : 'Improvements: Steady week—no clear gains yet.',
+    risks.length
+      ? `Risks:\n${risks.map((item) => `• ${item}`).join('\n')}`
+      : 'Risks: No new risks flagged this week.',
+    '',
     coachingLines.join('\n'),
     '',
     'Open your dashboard: https://app.elevated.family/parent#weekly-snapshot',
@@ -159,7 +173,7 @@ export const runWeeklyEmailJob = async (): Promise<void> => {
 
   const { data: reports, error } = await supabase
     .from('parent_weekly_reports')
-    .select('parent_id, week_start, summary, highlights, recommendations')
+    .select('parent_id, week_start, summary, highlights, recommendations, changes')
     .gte('week_start', cutoffWeek)
     .limit(200);
 

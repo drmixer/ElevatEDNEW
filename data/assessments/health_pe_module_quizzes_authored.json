@@ -1,0 +1,1640 @@
+{
+  "3-electives-health-and-pe-nutrition-fitness-safety": {
+    "title": "Nutrition, Fitness, and Safety for Grade 3",
+    "subject": "Health & PE",
+    "grade": 3,
+    "standards": [
+      "HP.NF.1.1",
+      "HP.NF.1.2",
+      "HP.SF.1.1"
+    ],
+    "questions": [
+      {
+        "id": "3nfs001",
+        "prompt": "Which food group helps your muscles grow strong?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.NF.1.1"
+        ],
+        "options": [
+          {
+            "text": "Protein (meat, beans, eggs, nuts)",
+            "isCorrect": true
+          },
+          {
+            "text": "Candy and sweets",
+            "isCorrect": false
+          },
+          {
+            "text": "Soda and juice",
+            "isCorrect": false
+          },
+          {
+            "text": "Chips and fried foods",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Proteins build and repair muscles, bones, and tissues. Good sources include chicken, fish, beans, and nuts."
+      },
+      {
+        "id": "3nfs002",
+        "prompt": "What does physical activity do for your body?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.NF.1.2"
+        ],
+        "options": [
+          {
+            "text": "Makes your heart stronger, builds muscles, and improves mood",
+            "isCorrect": true
+          },
+          {
+            "text": "Makes you tired and sick",
+            "isCorrect": false
+          },
+          {
+            "text": "Has no real benefit",
+            "isCorrect": false
+          },
+          {
+            "text": "Only matters if you want to be an athlete",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Exercise benefits your whole body: stronger heart, healthier weight, better mood, improved focus, and better sleep."
+      },
+      {
+        "id": "3nfs003",
+        "prompt": "What should you do before crossing the street?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "HP.SF.1.1"
+        ],
+        "explanation": "Look both ways (left, right, left), wait for a walk signal, and cross quickly in a straight line."
+      },
+      {
+        "id": "3nfs004",
+        "prompt": "Which is a safe way to use playground equipment?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.SF.1.1"
+        ],
+        "options": [
+          {
+            "text": "Follow rules, take turns, and don't push others",
+            "isCorrect": true
+          },
+          {
+            "text": "Run and push to get ahead",
+            "isCorrect": false
+          },
+          {
+            "text": "Use equipment the wrong way to be cool",
+            "isCorrect": false
+          },
+          {
+            "text": "Ignore adult supervision",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Following safety rules prevents injuries. Taking turns, following directions, and respecting others keeps everyone safe."
+      },
+      {
+        "id": "3nfs005",
+        "prompt": "What are the five food groups?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.1.1"
+        ],
+        "explanation": "Fruits, vegetables, grains, protein, and dairy. A healthy diet includes foods from all five groups."
+      },
+      {
+        "id": "3nfs006",
+        "prompt": "How much physical activity should kids your age get each day?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.1.2"
+        ],
+        "options": [
+          {
+            "text": "At least 60 minutes of activity (can be broken into smaller chunks)",
+            "isCorrect": true
+          },
+          {
+            "text": "Only 15 minutes",
+            "isCorrect": false
+          },
+          {
+            "text": "30 minutes only",
+            "isCorrect": false
+          },
+          {
+            "text": "As much as possible without breaks",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Kids should aim for 60+ minutes daily of moderate activity like walking, running, playing, or sports."
+      },
+      {
+        "id": "3nfs007",
+        "prompt": "Explain why wearing a helmet while biking is important.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.SF.1.1"
+        ],
+        "explanation": "Helmets protect your head and brain from serious injury in case of falls or accidents."
+      },
+      {
+        "id": "3nfs008",
+        "prompt": "Which snack is the healthiest choice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.1.1"
+        ],
+        "options": [
+          {
+            "text": "Apple with peanut butter",
+            "isCorrect": true
+          },
+          {
+            "text": "Cookie and soda",
+            "isCorrect": false
+          },
+          {
+            "text": "Candy bar",
+            "isCorrect": false
+          },
+          {
+            "text": "Potato chips",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Apples provide fiber and vitamins; peanut butter adds protein. Together they're filling and nutritious, unlike sugary/fried snacks."
+      }
+    ]
+  },
+  "4-electives-health-and-pe-nutrition-fitness-safety": {
+    "title": "Nutrition, Fitness, and Safety for Grade 4",
+    "subject": "Health & PE",
+    "grade": 4,
+    "standards": [
+      "HP.NF.2.1",
+      "HP.NF.2.2",
+      "HP.SF.2.1"
+    ],
+    "questions": [
+      {
+        "id": "4nfs001",
+        "prompt": "What is a balanced meal?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.NF.2.1"
+        ],
+        "options": [
+          {
+            "text": "Includes foods from multiple groups: grains, protein, vegetables, fruits, and dairy",
+            "isCorrect": true
+          },
+          {
+            "text": "Just carbs and sugar",
+            "isCorrect": false
+          },
+          {
+            "text": "Protein only",
+            "isCorrect": false
+          },
+          {
+            "text": "Everything fried",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Balanced meals have variety. A plate with grilled chicken, brown rice, broccoli, and a side salad is balanced."
+      },
+      {
+        "id": "4nfs002",
+        "prompt": "What is the difference between a food's serving size and portion size?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.2.2"
+        ],
+        "explanation": "Serving size is what the label suggests; portion size is what you actually eat. They may be different."
+      },
+      {
+        "id": "4nfs003",
+        "prompt": "Why is stretching important before and after exercise?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.2.2"
+        ],
+        "options": [
+          {
+            "text": "It warms up muscles before activity and cools them down after, preventing injury",
+            "isCorrect": true
+          },
+          {
+            "text": "It has no purpose",
+            "isCorrect": false
+          },
+          {
+            "text": "Only athletes need to stretch",
+            "isCorrect": false
+          },
+          {
+            "text": "You should never stretch",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Stretching increases flexibility, reduces soreness, and helps prevent pulls and strains."
+      },
+      {
+        "id": "4nfs004",
+        "prompt": "What should you do if you see someone being hurt or in danger?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.SF.2.1"
+        ],
+        "options": [
+          {
+            "text": "Tell an adult or trusted authority immediately",
+            "isCorrect": true
+          },
+          {
+            "text": "Try to help yourself without telling anyone",
+            "isCorrect": false
+          },
+          {
+            "text": "Ignore it",
+            "isCorrect": false
+          },
+          {
+            "text": "Post about it on social media",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Adults are trained to handle emergencies safely. Telling them immediately is the safest action."
+      },
+      {
+        "id": "4nfs005",
+        "prompt": "How does water help your body?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "HP.NF.2.1"
+        ],
+        "explanation": "Water keeps you hydrated, helps digestion, keeps skin healthy, and helps your body work properly."
+      },
+      {
+        "id": "4nfs006",
+        "prompt": "What are the benefits of team sports?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.2.2"
+        ],
+        "options": [
+          {
+            "text": "Physical fitness, teamwork skills, and mental health benefits",
+            "isCorrect": true
+          },
+          {
+            "text": "Only for natural athletes",
+            "isCorrect": false
+          },
+          {
+            "text": "Wasting time",
+            "isCorrect": false
+          },
+          {
+            "text": "Causing injury",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Team sports build fitness, teach cooperation, boost confidence, and create friendships."
+      },
+      {
+        "id": "4nfs007",
+        "prompt": "Describe three ways to stay safe while playing outdoors.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.SF.2.1"
+        ],
+        "explanation": "Wear protective gear, follow safety rules, stay with friends, tell adults where you're going, and watch for traffic."
+      },
+      {
+        "id": "4nfs008",
+        "prompt": "Which habit promotes long-term health?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.2.1"
+        ],
+        "options": [
+          {
+            "text": "Regular physical activity combined with balanced eating",
+            "isCorrect": true
+          },
+          {
+            "text": "Exercising only once a month",
+            "isCorrect": false
+          },
+          {
+            "text": "Eating junk food and being inactive",
+            "isCorrect": false
+          },
+          {
+            "text": "Sporadic exercise and unhealthy food",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Consistent healthy habits—daily activity and balanced meals—build health over time more than occasional efforts."
+      }
+    ]
+  },
+  "5-electives-health-and-pe-nutrition-fitness-safety": {
+    "title": "Nutrition, Fitness, and Safety for Grade 5",
+    "subject": "Health & PE",
+    "grade": 5,
+    "standards": [
+      "HP.NF.3.1",
+      "HP.NF.3.2",
+      "HP.SF.3.1"
+    ],
+    "questions": [
+      {
+        "id": "5nfs001",
+        "prompt": "What are nutrients and why does your body need them?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.NF.3.1"
+        ],
+        "options": [
+          {
+            "text": "Substances in food that help your body function, grow, and stay healthy (carbs, proteins, fats, vitamins, minerals)",
+            "isCorrect": true
+          },
+          {
+            "text": "Only sugar and salt",
+            "isCorrect": false
+          },
+          {
+            "text": "Things to avoid completely",
+            "isCorrect": false
+          },
+          {
+            "text": "Ingredients that taste good only",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Nutrients provide energy, build tissue, and regulate body functions. Different nutrients do different jobs."
+      },
+      {
+        "id": "5nfs002",
+        "prompt": "What is the difference between aerobic and anaerobic exercise?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.3.2"
+        ],
+        "explanation": "Aerobic (with oxygen): running, cycling—builds endurance. Anaerobic (without oxygen): sprinting, weight lifting—builds strength."
+      },
+      {
+        "id": "5nfs003",
+        "prompt": "How can you make a meal healthier?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.3.1"
+        ],
+        "options": [
+          {
+            "text": "Add vegetables, choose whole grains, limit added sugar, and use cooking methods like baking",
+            "isCorrect": true
+          },
+          {
+            "text": "Add more salt and fried foods",
+            "isCorrect": false
+          },
+          {
+            "text": "Only eat salad",
+            "isCorrect": false
+          },
+          {
+            "text": "Don't change anything",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Small changes like adding veggies, choosing whole grains, and cooking healthily improve nutrition without feeling deprived."
+      },
+      {
+        "id": "5nfs004",
+        "prompt": "What should you do in case of a minor cut or scrape?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.SF.3.1"
+        ],
+        "options": [
+          {
+            "text": "Wash with soap and water, apply bandage if needed, tell an adult if it seems serious",
+            "isCorrect": true
+          },
+          {
+            "text": "Ignore it completely",
+            "isCorrect": false
+          },
+          {
+            "text": "Cover it with dirt",
+            "isCorrect": false
+          },
+          {
+            "text": "Leave it dirty",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Cleaning wounds prevents infection. Bandaging protects them. Tell an adult if bleeding won't stop or signs of infection appear."
+      },
+      {
+        "id": "5nfs005",
+        "prompt": "Why is sleep important for your health and fitness?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.3.1"
+        ],
+        "explanation": "Sleep helps your body recover, repairs muscles, improves focus, strengthens immunity, and regulates mood."
+      },
+      {
+        "id": "5nfs006",
+        "prompt": "What is flexibility and how does it help your body?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.3.2"
+        ],
+        "options": [
+          {
+            "text": "Range of motion in joints; helps prevent injury and improves movement quality",
+            "isCorrect": true
+          },
+          {
+            "text": "The same as strength",
+            "isCorrect": false
+          },
+          {
+            "text": "Only for gymnasts",
+            "isCorrect": false
+          },
+          {
+            "text": "Not important",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Flexibility reduces injury risk, improves posture, decreases soreness, and helps in daily activities."
+      },
+      {
+        "id": "5nfs007",
+        "prompt": "Explain what food poisoning is and how you can prevent it.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.SF.3.1"
+        ],
+        "explanation": "Illness from harmful bacteria in food. Prevent by: cooking meat properly, washing hands and foods, refrigerating promptly, and not eating expired food."
+      },
+      {
+        "id": "5nfs008",
+        "prompt": "How does cardio fitness help your heart?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.NF.3.2"
+        ],
+        "options": [
+          {
+            "text": "Strengthens heart muscle so it pumps blood more efficiently, lowering resting heart rate",
+            "isCorrect": true
+          },
+          {
+            "text": "Makes your heart weaker",
+            "isCorrect": false
+          },
+          {
+            "text": "Has no effect",
+            "isCorrect": false
+          },
+          {
+            "text": "Only matters for athletes",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A stronger heart works more efficiently, delivering oxygen better throughout your body."
+      }
+    ]
+  },
+  "6-electives-health-and-pe-body-systems-and-health": {
+    "title": "Body Systems and Health for Grade 6",
+    "subject": "Health & PE",
+    "grade": 6,
+    "standards": [
+      "HP.BS.1.1",
+      "HP.BS.1.2",
+      "HP.HE.1.1"
+    ],
+    "questions": [
+      {
+        "id": "6bsh001",
+        "prompt": "What are the major body systems and what do they do?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.1.1"
+        ],
+        "options": [
+          {
+            "text": "Circulatory (transport blood), respiratory (breathing), digestive (processing food), nervous (communication), skeletal (support)",
+            "isCorrect": true
+          },
+          {
+            "text": "Only the heart and lungs matter",
+            "isCorrect": false
+          },
+          {
+            "text": "Systems don't interact",
+            "isCorrect": false
+          },
+          {
+            "text": "Bodies only have one system",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Body systems work together. Circulatory delivers oxygen from respiratory to all cells; digestive provides nutrients; nervous controls everything."
+      },
+      {
+        "id": "6bsh002",
+        "prompt": "What is the role of the skeletal system?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "HP.BS.1.2"
+        ],
+        "explanation": "Supports your body, protects organs, enables movement (with muscles), and produces blood cells in bone marrow."
+      },
+      {
+        "id": "6bsh003",
+        "prompt": "How does the digestive system break down food?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.1.1"
+        ],
+        "options": [
+          {
+            "text": "Mechanically (chewing) and chemically (acids and enzymes) into nutrients your body can absorb",
+            "isCorrect": true
+          },
+          {
+            "text": "Automatically without any process",
+            "isCorrect": false
+          },
+          {
+            "text": "Only in your stomach",
+            "isCorrect": false
+          },
+          {
+            "text": "Food doesn't need breaking down",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Digestion starts in your mouth with chewing and enzymes, continues in your stomach with acid, and absorbs nutrients in the small intestine."
+      },
+      {
+        "id": "6bsh004",
+        "prompt": "What is the circulatory system and what does it do?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "HP.BS.1.2"
+        ],
+        "explanation": "The heart, blood vessels, and blood work together to transport oxygen, nutrients, and waste throughout your body."
+      },
+      {
+        "id": "6bsh005",
+        "prompt": "How do your lungs help provide oxygen to your body?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.1.1"
+        ],
+        "options": [
+          {
+            "text": "You breathe in oxygen; lungs exchange it into blood; circulatory system carries it to all cells",
+            "isCorrect": true
+          },
+          {
+            "text": "Lungs make oxygen",
+            "isCorrect": false
+          },
+          {
+            "text": "Oxygen doesn't come from air",
+            "isCorrect": false
+          },
+          {
+            "text": "Your heart does it alone",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Respiration: air in lungs exchanges oxygen for carbon dioxide in blood; blood carries oxygen to cells; cells release CO2 to breathe out."
+      },
+      {
+        "id": "6bsh006",
+        "prompt": "What is the nervous system responsible for?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.1.2"
+        ],
+        "options": [
+          {
+            "text": "Receiving information, processing it, and sending signals to control movement and body functions",
+            "isCorrect": true
+          },
+          {
+            "text": "Only thinking",
+            "isCorrect": false
+          },
+          {
+            "text": "Emotions exclusively",
+            "isCorrect": false
+          },
+          {
+            "text": "Systems don't communicate",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Brain and nerves control movement, sensations, emotions, breathing, heartbeat, and all automatic functions."
+      },
+      {
+        "id": "6bsh007",
+        "prompt": "Explain how the muscular and skeletal systems work together for movement.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.1.1"
+        ],
+        "explanation": "Muscles attach to bones via tendons. When muscles contract, they pull bones, creating movement at joints."
+      },
+      {
+        "id": "6bsh008",
+        "prompt": "What habits support healthy body systems?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.HE.1.1"
+        ],
+        "options": [
+          {
+            "text": "Regular exercise, balanced nutrition, adequate sleep, and stress management",
+            "isCorrect": true
+          },
+          {
+            "text": "Staying inactive",
+            "isCorrect": false
+          },
+          {
+            "text": "Skipping sleep",
+            "isCorrect": false
+          },
+          {
+            "text": "Ignoring your body's signals",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Healthy habits keep all systems functioning optimally. Exercise strengthens hearts, nutritious food fuels systems, sleep enables recovery."
+      }
+    ]
+  },
+  "6-electives-health-and-pe-fitness-planning": {
+    "title": "Fitness Planning for Grade 6",
+    "subject": "Health & PE",
+    "grade": 6,
+    "standards": [
+      "HP.FP.1.1",
+      "HP.FP.1.2",
+      "HP.FP.1.3"
+    ],
+    "questions": [
+      {
+        "id": "6fp001",
+        "prompt": "What is a SMART fitness goal?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.1.1"
+        ],
+        "options": [
+          {
+            "text": "Specific, Measurable, Achievable, Relevant, Time-bound",
+            "isCorrect": true
+          },
+          {
+            "text": "Vague and impossible",
+            "isCorrect": false
+          },
+          {
+            "text": "Just wishing without planning",
+            "isCorrect": false
+          },
+          {
+            "text": "Random exercise",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "SMART: 'Run a mile in 10 minutes by end of semester' is specific and measurable; 'get fit' is not."
+      },
+      {
+        "id": "6fp002",
+        "prompt": "What are the main components of fitness?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.1.2"
+        ],
+        "explanation": "Cardiovascular endurance (heart), muscular strength (power), muscular endurance (repeated effort), flexibility, and body composition."
+      },
+      {
+        "id": "6fp003",
+        "prompt": "How do you know if you're exercising at the right intensity?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.1.3"
+        ],
+        "options": [
+          {
+            "text": "You can talk but not sing; heart rate elevated; slightly breathless",
+            "isCorrect": true
+          },
+          {
+            "text": "You can't move or breathe",
+            "isCorrect": false
+          },
+          {
+            "text": "You feel nothing at all",
+            "isCorrect": false
+          },
+          {
+            "text": "You're completely exhausted",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Moderate intensity: breathing elevated but you can still talk. This builds fitness while avoiding injury."
+      },
+      {
+        "id": "6fp004",
+        "prompt": "What is cross-training and why is it helpful?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.1.2"
+        ],
+        "explanation": "Doing different activities (running, swimming, cycling) prevents boredom, prevents repetitive injuries, and works different muscles."
+      },
+      {
+        "id": "6fp005",
+        "prompt": "How often should you exercise per week?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "HP.FP.1.1"
+        ],
+        "options": [
+          {
+            "text": "At least 3-5 days of activity with rest days for recovery",
+            "isCorrect": true
+          },
+          {
+            "text": "Every single day without breaks",
+            "isCorrect": false
+          },
+          {
+            "text": "Only weekends",
+            "isCorrect": false
+          },
+          {
+            "text": "Once a week is enough",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Regular activity with rest days allows your body to recover and adapt, preventing burnout and injury."
+      },
+      {
+        "id": "6fp006",
+        "prompt": "What role does warm-up and cool-down play in fitness?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.1.3"
+        ],
+        "options": [
+          {
+            "text": "Warm-up prepares muscles; cool-down helps recovery and prevents soreness",
+            "isCorrect": true
+          },
+          {
+            "text": "They're unnecessary",
+            "isCorrect": false
+          },
+          {
+            "text": "Only for athletes",
+            "isCorrect": false
+          },
+          {
+            "text": "Can be skipped to save time",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Warm-up increases blood flow and flexibility; cool-down gradually lowers heart rate and prevents dizziness."
+      },
+      {
+        "id": "6fp007",
+        "prompt": "Design a simple weekly fitness plan that includes different activities and rest days.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.FP.1.1"
+        ],
+        "explanation": "Example: Monday run, Tuesday yoga, Wednesday bike, Thursday rest, Friday swim, Saturday strength, Sunday active recovery."
+      },
+      {
+        "id": "6fp008",
+        "prompt": "How do you progress in fitness safely?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.1.2"
+        ],
+        "options": [
+          {
+            "text": "Gradually increase duration or intensity by small amounts, listen to your body, avoid sudden big jumps",
+            "isCorrect": true
+          },
+          {
+            "text": "Do as much as possible immediately",
+            "isCorrect": false
+          },
+          {
+            "text": "Stop at the first sign of effort",
+            "isCorrect": false
+          },
+          {
+            "text": "Ignore body signals",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Progressive overload prevents injury. Small, steady increases allow adaptation and sustainable improvement."
+      }
+    ]
+  },
+  "7-electives-health-and-pe-body-systems-and-health": {
+    "title": "Body Systems and Health for Grade 7",
+    "subject": "Health & PE",
+    "grade": 7,
+    "standards": [
+      "HP.BS.2.1",
+      "HP.BS.2.2",
+      "HP.HE.2.1"
+    ],
+    "questions": [
+      {
+        "id": "7bsh001",
+        "prompt": "What is homeostasis and why is it important?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.2.1"
+        ],
+        "options": [
+          {
+            "text": "Your body maintains stable internal conditions (temperature, pH, hydration); keeps you alive and functioning",
+            "isCorrect": true
+          },
+          {
+            "text": "Your temperature changes constantly",
+            "isCorrect": false
+          },
+          {
+            "text": "Your body doesn't regulate anything",
+            "isCorrect": false
+          },
+          {
+            "text": "Only your brain maintains stability",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Homeostasis: body constantly adjusts to maintain ~98.6°F, correct pH, hydration, oxygen levels, etc. Disruptions cause illness."
+      },
+      {
+        "id": "7bsh002",
+        "prompt": "How does the immune system protect you from disease?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.2.2"
+        ],
+        "explanation": "White blood cells identify and destroy harmful bacteria, viruses, and pathogens; lymph nodes filter waste; antibodies recognize invaders."
+      },
+      {
+        "id": "7bsh003",
+        "prompt": "What is the endocrine system and how does it control your body?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.2.1"
+        ],
+        "options": [
+          {
+            "text": "Glands that produce hormones to regulate growth, metabolism, mood, and body functions",
+            "isCorrect": true
+          },
+          {
+            "text": "Only your brain controls body function",
+            "isCorrect": false
+          },
+          {
+            "text": "Hormones don't do anything",
+            "isCorrect": false
+          },
+          {
+            "text": "Your bones control everything",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Hormones (from thyroid, pancreas, adrenal glands, etc.) regulate sleep, hunger, growth, mood, and metabolism."
+      },
+      {
+        "id": "7bsh004",
+        "prompt": "What is the relationship between the nervous and endocrine systems?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.BS.2.2"
+        ],
+        "explanation": "Nervous system sends quick signals; endocrine system sends slower hormonal messages. Together they coordinate all body functions."
+      },
+      {
+        "id": "7bsh005",
+        "prompt": "How does physical activity strengthen your cardiovascular system?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.2.1"
+        ],
+        "options": [
+          {
+            "text": "Regular exercise strengthens heart muscle, improves circulation, and increases lung capacity",
+            "isCorrect": true
+          },
+          {
+            "text": "Activity doesn't affect your heart",
+            "isCorrect": false
+          },
+          {
+            "text": "Your heart gets weaker with exercise",
+            "isCorrect": false
+          },
+          {
+            "text": "Only intense athletes see benefits",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Aerobic activity builds heart strength and efficiency, lowering resting heart rate and blood pressure."
+      },
+      {
+        "id": "7bsh006",
+        "prompt": "What is inflammation and when is it helpful vs. harmful?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "HP.BS.2.2"
+        ],
+        "options": [
+          {
+            "text": "Immune response causing swelling; helpful for injury/infection response, harmful if chronic",
+            "isCorrect": true
+          },
+          {
+            "text": "Always bad",
+            "isCorrect": false
+          },
+          {
+            "text": "Always good",
+            "isCorrect": false
+          },
+          {
+            "text": "Doesn't affect your body",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Acute inflammation (after injury) aids healing. Chronic inflammation (ongoing) contributes to disease and should be managed."
+      },
+      {
+        "id": "7bsh007",
+        "prompt": "How do different nutrients support specific body functions?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.HE.2.1"
+        ],
+        "explanation": "Carbs = energy; protein = growth/repair; fats = hormone production; vitamins = immunity/function; minerals = bone strength."
+      },
+      {
+        "id": "7bsh008",
+        "prompt": "What lifestyle factors most significantly impact long-term health?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "HP.HE.2.1"
+        ],
+        "options": [
+          {
+            "text": "Regular exercise, balanced nutrition, adequate sleep, stress management, and avoiding harmful substances",
+            "isCorrect": true
+          },
+          {
+            "text": "Genetics determines everything",
+            "isCorrect": false
+          },
+          {
+            "text": "Lifestyle doesn't matter",
+            "isCorrect": false
+          },
+          {
+            "text": "Only medical treatment matters",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "While genetics matter, lifestyle choices significantly influence disease risk, longevity, and quality of life."
+      }
+    ]
+  },
+  "7-electives-health-and-pe-fitness-planning": {
+    "title": "Fitness Planning for Grade 7",
+    "subject": "Health & PE",
+    "grade": 7,
+    "standards": [
+      "HP.FP.2.1",
+      "HP.FP.2.2",
+      "HP.FP.2.3"
+    ],
+    "questions": [
+      {
+        "id": "7fp001",
+        "prompt": "What is periodization in training?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.1"
+        ],
+        "options": [
+          {
+            "text": "Varying training intensity and focus over time (macrocycles, mesocycles) to avoid plateaus and prevent injury",
+            "isCorrect": true
+          },
+          {
+            "text": "Doing the same thing every day",
+            "isCorrect": false
+          },
+          {
+            "text": "Randomly changing exercise",
+            "isCorrect": false
+          },
+          {
+            "text": "Training isn't planned",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Periodization cycles through phases: building base, increasing intensity, peaking, recovery. This prevents boredom and overtraining."
+      },
+      {
+        "id": "7fp002",
+        "prompt": "What is overtraining and how do you prevent it?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.2"
+        ],
+        "explanation": "Exercising too much without adequate recovery causing fatigue, injury risk, mood changes. Prevent: adequate rest days, varied intensity, listen to your body."
+      },
+      {
+        "id": "7fp003",
+        "prompt": "How do you assess your current fitness level?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.3"
+        ],
+        "options": [
+          {
+            "text": "Fitness tests (push-ups, mile run, flexibility test, resting heart rate) establish baseline for progress tracking",
+            "isCorrect": true
+          },
+          {
+            "text": "Just estimate without testing",
+            "isCorrect": false
+          },
+          {
+            "text": "Comparison with others only",
+            "isCorrect": false
+          },
+          {
+            "text": "Fitness can't be measured",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Baseline assessments show your starting point and motivate you by demonstrating improvement over time."
+      },
+      {
+        "id": "7fp004",
+        "prompt": "What is specificity in fitness training?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.1"
+        ],
+        "explanation": "Training specifically for your goal: want to run faster? Do sprints. Want strength? Do resistance training. General fitness? Mix all types."
+      },
+      {
+        "id": "7fp005",
+        "prompt": "How do you modify workouts for different fitness levels?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.2"
+        ],
+        "options": [
+          {
+            "text": "Beginners: lower intensity/volume; Advanced: higher intensity, complex movements, greater volume",
+            "isCorrect": true
+          },
+          {
+            "text": "Everyone does the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Only beginners need modification",
+            "isCorrect": false
+          },
+          {
+            "text": "Advanced can't be modified",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Appropriate progressions prevent injury and keep everyone challenged and motivated."
+      },
+      {
+        "id": "7fp006",
+        "prompt": "What role does recovery play in a fitness plan?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.3"
+        ],
+        "options": [
+          {
+            "text": "Essential; muscles repair during rest, building strength; prevents overtraining and injury",
+            "isCorrect": true
+          },
+          {
+            "text": "Recovery wastes time",
+            "isCorrect": false
+          },
+          {
+            "text": "You should never rest",
+            "isCorrect": false
+          },
+          {
+            "text": "Rest is for the lazy",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "During rest, muscle protein synthesis occurs and glycogen replenishes. Adequate recovery is when adaptation happens."
+      },
+      {
+        "id": "7fp007",
+        "prompt": "Create a 4-week progressive fitness plan with warm-up, main workout, cool-down, and rest days.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.FP.2.1"
+        ],
+        "explanation": "Week 1: baseline 3 workouts; Week 2: increase duration; Week 3: increase intensity; Week 4: deload/recovery. Include variety."
+      },
+      {
+        "id": "7fp008",
+        "prompt": "How do you track fitness progress and adjust your plan?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.2.2"
+        ],
+        "options": [
+          {
+            "text": "Track workouts, metrics (time, reps, distance), reassess monthly, adjust based on progress and how you feel",
+            "isCorrect": true
+          },
+          {
+            "text": "Don't track anything",
+            "isCorrect": false
+          },
+          {
+            "text": "Make changes randomly",
+            "isCorrect": false
+          },
+          {
+            "text": "No adjustments needed ever",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Tracking reveals progress and identifies what works. Regular assessment ensures your plan stays effective and matched to current level."
+      }
+    ]
+  },
+  "8-electives-health-and-pe-body-systems-and-health": {
+    "title": "Body Systems and Health for Grade 8",
+    "subject": "Health & PE",
+    "grade": 8,
+    "standards": [
+      "HP.BS.3.1",
+      "HP.BS.3.2",
+      "HP.HE.3.1"
+    ],
+    "questions": [
+      {
+        "id": "8bsh001",
+        "prompt": "What are chronic diseases and what factors increase your risk?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.3.1"
+        ],
+        "options": [
+          {
+            "text": "Long-term diseases (diabetes, heart disease, cancer); risk factors: poor diet, inactivity, smoking, stress",
+            "isCorrect": true
+          },
+          {
+            "text": "Always genetic; lifestyle doesn't matter",
+            "isCorrect": false
+          },
+          {
+            "text": "Impossible to prevent",
+            "isCorrect": false
+          },
+          {
+            "text": "Only affect older people",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Chronic diseases account for most deaths. Many risk factors are controllable: exercise, healthy eating, no smoking, stress management."
+      },
+      {
+        "id": "8bsh002",
+        "prompt": "How does the brain regulate your body's responses to stress?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.BS.3.2"
+        ],
+        "explanation": "Brain releases stress hormones (adrenaline, cortisol); increases heart rate, breathing, and alertness (fight-or-flight); chronic stress damages health."
+      },
+      {
+        "id": "8bsh003",
+        "prompt": "What is metabolism and how do age, genetics, and activity affect it?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "HP.BS.3.1"
+        ],
+        "options": [
+          {
+            "text": "Chemical processes producing energy; genetics determine baseline, but activity and muscle mass increase it significantly",
+            "isCorrect": true
+          },
+          {
+            "text": "Only genetics matter",
+            "isCorrect": false
+          },
+          {
+            "text": "Activity doesn't affect metabolism",
+            "isCorrect": false
+          },
+          {
+            "text": "Metabolism is the same for everyone",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Building muscle and exercising regularly increases metabolic rate. Age and hormones also influence it."
+      },
+      {
+        "id": "8bsh004",
+        "prompt": "How do different organ systems communicate and coordinate?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.BS.3.2"
+        ],
+        "explanation": "Nervous system (quick signals), endocrine system (hormones), and circulatory system (transport) interconnect, enabling coordinated responses."
+      },
+      {
+        "id": "8bsh005",
+        "prompt": "What is the relationship between sleep and physical health?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.HE.3.1"
+        ],
+        "options": [
+          {
+            "text": "Sleep is essential: immune function, memory consolidation, hormone regulation, muscle repair, weight management",
+            "isCorrect": true
+          },
+          {
+            "text": "Sleep is a waste of time",
+            "isCorrect": false
+          },
+          {
+            "text": "Sleep doesn't affect your body",
+            "isCorrect": false
+          },
+          {
+            "text": "Quality doesn't matter; any sleep is the same",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Sleep deprivation impairs immunity, increases disease risk, affects mood, and harms cognitive function."
+      },
+      {
+        "id": "8bsh006",
+        "prompt": "How can inflammation affect your health long-term?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.BS.3.1"
+        ],
+        "options": [
+          {
+            "text": "Chronic inflammation increases risk of heart disease, diabetes, arthritis, and cancer; managed by healthy lifestyle",
+            "isCorrect": true
+          },
+          {
+            "text": "Inflammation is always helpful",
+            "isCorrect": false
+          },
+          {
+            "text": "Lifestyle doesn't affect inflammation",
+            "isCorrect": false
+          },
+          {
+            "text": "Only affects a few people",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Anti-inflammatory diet (fruits, vegetables, fish), exercise, and stress management reduce chronic inflammation risk."
+      },
+      {
+        "id": "8bsh007",
+        "prompt": "Explain how lifestyle choices in your teenage years impact your long-term health.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.HE.3.1"
+        ],
+        "explanation": "Habits formed now (exercise, nutrition, sleep, stress management) predict adult health outcomes. Bone density peaks in teens; muscle built now helps later."
+      },
+      {
+        "id": "8bsh008",
+        "prompt": "What strategies help maintain physical and mental health?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.HE.3.1"
+        ],
+        "options": [
+          {
+            "text": "Regular exercise, balanced nutrition, adequate sleep, social connection, stress management, purposeful activities",
+            "isCorrect": true
+          },
+          {
+            "text": "Exercise alone is enough",
+            "isCorrect": false
+          },
+          {
+            "text": "Mental health doesn't matter",
+            "isCorrect": false
+          },
+          {
+            "text": "One strategy covers everything",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Holistic health requires attention to physical, mental, social, and emotional aspects of well-being."
+      }
+    ]
+  },
+  "8-electives-health-and-pe-fitness-planning": {
+    "title": "Fitness Planning for Grade 8",
+    "subject": "Health & PE",
+    "grade": 8,
+    "standards": [
+      "HP.FP.3.1",
+      "HP.FP.3.2",
+      "HP.FP.3.3"
+    ],
+    "questions": [
+      {
+        "id": "8fp001",
+        "prompt": "How do genetics and environment interact in fitness?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "HP.FP.3.1"
+        ],
+        "options": [
+          {
+            "text": "Genetics set potential; environment/training determines outcomes; both matter significantly",
+            "isCorrect": true
+          },
+          {
+            "text": "Only genetics matter",
+            "isCorrect": false
+          },
+          {
+            "text": "Environment matters completely regardless of genetics",
+            "isCorrect": false
+          },
+          {
+            "text": "They don't interact",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Genetic potential varies, but training, nutrition, sleep, and consistency determine actual fitness outcomes."
+      },
+      {
+        "id": "8fp002",
+        "prompt": "What is the difference between training for endurance vs. strength?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.3.2"
+        ],
+        "explanation": "Endurance: aerobic activities (running, cycling) with moderate intensity, high volume; Strength: resistance training with heavy load, lower reps."
+      },
+      {
+        "id": "8fp003",
+        "prompt": "How should you adjust your fitness plan as you get older?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.3.3"
+        ],
+        "options": [
+          {
+            "text": "Prioritize diverse activities, injury prevention, recovery, and adjust intensity based on goals and age",
+            "isCorrect": true
+          },
+          {
+            "text": "Do the same workout forever",
+            "isCorrect": false
+          },
+          {
+            "text": "Stop exercising as you age",
+            "isCorrect": false
+          },
+          {
+            "text": "Always increase intensity regardless of age",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Teens can tolerate more training; adults need more recovery. Older people need flexibility and fall prevention but same activity principles apply."
+      },
+      {
+        "id": "8fp004",
+        "prompt": "What role does nutrition play in a fitness plan?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.3.1"
+        ],
+        "options": [
+          {
+            "text": "Critical; provides energy, builds muscle, aids recovery; without proper nutrition, training efforts are limited",
+            "isCorrect": true
+          },
+          {
+            "text": "Nutrition doesn't matter if you exercise",
+            "isCorrect": false
+          },
+          {
+            "text": "Exercise compensates for poor diet",
+            "isCorrect": false
+          },
+          {
+            "text": "Only elite athletes need good nutrition",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Nutrients fuel workouts, rebuild muscle, and enable adaptation. Poor nutrition limits fitness gains regardless of training quality."
+      },
+      {
+        "id": "8fp005",
+        "prompt": "How do you create a sustainable long-term fitness habit?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.FP.3.2"
+        ],
+        "explanation": "Start small, find activities you enjoy, set realistic goals, track progress, vary workouts, build social support, make it routine."
+      },
+      {
+        "id": "8fp006",
+        "prompt": "What is the relationship between fitness, mental health, and resilience?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "HP.FP.3.3"
+        ],
+        "options": [
+          {
+            "text": "Regular exercise improves mood, reduces anxiety/depression, builds confidence, and develops resilience to stress",
+            "isCorrect": true
+          },
+          {
+            "text": "Fitness only affects your body",
+            "isCorrect": false
+          },
+          {
+            "text": "Mental health and exercise are unrelated",
+            "isCorrect": false
+          },
+          {
+            "text": "One has no impact on the other",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Exercise releases endorphins, provides coping mechanism for stress, builds confidence through achievement, and improves overall well-being."
+      },
+      {
+        "id": "8fp007",
+        "prompt": "Design a comprehensive year-long fitness plan with periodization, progression, recovery, and assessment checkpoints.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "HP.FP.3.1"
+        ],
+        "explanation": "Include phases (base building, strength building, peak, recovery), monthly assessments, adjustments based on progress, and variety."
+      },
+      {
+        "id": "8fp008",
+        "prompt": "How can you maintain fitness motivation over the long term?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "HP.FP.3.2"
+        ],
+        "options": [
+          {
+            "text": "Set evolving goals, track progress, vary activities, train with others, celebrate milestones, focus on how you feel",
+            "isCorrect": true
+          },
+          {
+            "text": "Motivation isn't necessary",
+            "isCorrect": false
+          },
+          {
+            "text": "Push through despite feeling bad",
+            "isCorrect": false
+          },
+          {
+            "text": "Never change your routine",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Motivation requires intrinsic rewards (feeling good), extrinsic progress (visible improvement), and environmental support (community, variety)."
+      }
+    ]
+  }
+}
