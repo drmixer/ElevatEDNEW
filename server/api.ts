@@ -84,6 +84,7 @@ import {
   updateStudentPreferences as saveStudentPreferences,
 } from './personalization.js';
 import { recordLearningEvent } from './xpService.js';
+import { upsertPlanOptOut, listPlanOptOuts as listPlanOptOutsApi } from './optOuts.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -1413,6 +1414,22 @@ export const createApiHandler = (context: ApiContext) => {
         const pathResult = await getStudentPath(supabase, actor.id);
         const next = await selectNextEntry(supabase, actor.id);
         sendJson(res, 200, { path: pathResult, next }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'POST' && path === '/plan/opt-outs') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
+      if (!actor) return true;
+      return handleRoute(async () => {
+        await upsertPlanOptOut(req, res, supabase, actor);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/plan/opt-outs') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
+      if (!actor) return true;
+      return handleRoute(async () => {
+        await listPlanOptOutsApi(req, res, supabase, actor);
       }, { actorId: actor.id });
     }
 

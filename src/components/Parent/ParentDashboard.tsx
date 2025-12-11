@@ -158,6 +158,7 @@ type GoalFormState = {
   focusIntensity: 'balanced' | 'focused';
   mixInMode: 'auto' | 'core_only' | 'cross_subject';
   electiveEmphasis: 'off' | 'light' | 'on';
+  allowedElectiveSubjects: Subject[];
 };
 
 type ProgressStatusDescription = {
@@ -277,6 +278,10 @@ const ParentDashboard: React.FC = () => {
     focusIntensity: defaultLearningPreferences.focusIntensity,
     mixInMode: defaultLearningPreferences.mixInMode ?? 'auto',
     electiveEmphasis: defaultLearningPreferences.electiveEmphasis ?? 'light',
+    allowedElectiveSubjects:
+      (defaultLearningPreferences.allowedElectiveSubjects?.length
+        ? defaultLearningPreferences.allowedElectiveSubjects
+        : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id)) ?? [],
   });
   const [chatModeSetting, setChatModeSetting] = useState<'guided_only' | 'guided_preferred' | 'free'>(
     defaultLearningPreferences.chatMode ?? 'free',
@@ -608,6 +613,12 @@ const ParentDashboard: React.FC = () => {
       focusIntensity: preferences.focusIntensity ?? defaultLearningPreferences.focusIntensity,
       mixInMode: preferences.mixInMode ?? defaultLearningPreferences.mixInMode ?? 'auto',
       electiveEmphasis: preferences.electiveEmphasis ?? defaultLearningPreferences.electiveEmphasis ?? 'light',
+      allowedElectiveSubjects:
+        (preferences.allowedElectiveSubjects?.length
+          ? preferences.allowedElectiveSubjects
+          : defaultLearningPreferences.allowedElectiveSubjects?.length
+            ? defaultLearningPreferences.allowedElectiveSubjects
+            : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id)) ?? [],
     });
   }, [currentChild]);
 
@@ -735,18 +746,30 @@ const ParentDashboard: React.FC = () => {
         diagnosticStatus === 'completed' && currentChild.diagnosticCompletedAt
           ? new Date(currentChild.diagnosticCompletedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
           : null;
+      const diagnosticConfidence =
+        typeof currentChild?.masteryConfidence === 'number'
+          ? Math.round(currentChild.masteryConfidence)
+          : null;
       const primaryGap =
         childSkillGaps.find((gap) => gap.status === 'needs_attention') ??
         (childSkillGaps.length ? childSkillGaps[0] : null);
+      const gapMastery =
+        typeof primaryGap?.mastery === 'number' ? Math.round(primaryGap.mastery) : null;
 
       if (diagnosticStatus === 'completed') {
+        const diagnosticParts: string[] = [];
+        if (diagnosticDate) {
+          diagnosticParts.push(`Completed ${diagnosticDate}${diagnosticConfidence != null ? ` · confidence ${diagnosticConfidence}%` : ''}.`);
+        }
+        if (primaryGap?.concepts?.[0]) {
+          diagnosticParts.push(`Plan opens with ${primaryGap.concepts[0]} (${gapMastery != null ? `${gapMastery}% accuracy` : 'diagnostic pick'}).`);
+        }
         cards.push({
           id: 'diagnostic',
           title: 'Diagnostic calibrated',
           detail:
-            diagnosticDate && primaryGap
-              ? `Completed ${diagnosticDate}. Starting with ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)} because accuracy is ${Math.round(primaryGap.mastery)}%.`
-              : 'Latest diagnostic synced—plan is tuned for this week.',
+            diagnosticParts.join(' ') ||
+            'Latest diagnostic synced—plan is tuned for this week.',
           tone: 'success',
         });
       } else {
@@ -764,8 +787,10 @@ const ParentDashboard: React.FC = () => {
           title: 'Focus area',
           detail:
             primaryGap.summary ??
-            `Next focus: ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)}`,
-          tone: 'info',
+            `Next focus: ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)}${
+              gapMastery != null ? ` (${gapMastery}% accuracy)` : ''
+            }`,
+          tone: gapMastery != null && gapMastery < 55 ? 'warn' : 'info',
         });
       } else if (currentChild.adaptivePlanNotes?.length) {
         cards.push({
@@ -784,8 +809,8 @@ const ParentDashboard: React.FC = () => {
           id: 'pace',
           title: 'Pace note',
           detail: positive
-            ? `Up ${formatDelta(deltaLessons)} lessons and ${formatDelta(deltaMinutes)} min vs last week. Keep this cadence.`
-            : 'Lighter week so far—plan includes shorter practice blocks to rebuild pace.',
+            ? `${currentChild.lessonsCompletedWeek ?? 0} lessons / ${currentChild.practiceMinutesWeek ?? 0} min so far. Up ${formatDelta(deltaLessons)} lessons and ${formatDelta(deltaMinutes)} min vs last week—keep this cadence.`
+            : `${currentChild.lessonsCompletedWeek ?? 0} lessons / ${currentChild.practiceMinutesWeek ?? 0} min logged. Lighter week so far—plan includes shorter practice blocks to rebuild pace.`,
           tone: positive ? 'success' : 'info',
         });
       } else {
@@ -1097,8 +1122,15 @@ const ParentDashboard: React.FC = () => {
         suggestionId: id,
         reason,
       }).catch((error) => console.warn('[Coaching] feedback failed', error));
-    }
-  };
+  }
+};
+
+const ELECTIVE_SUBJECT_OPTIONS: { id: Subject; label: string }[] = [
+  { id: 'arts_music', label: 'Arts & Music' },
+  { id: 'computer_science', label: 'Computer Science' },
+  { id: 'financial_literacy', label: 'Financial literacy' },
+  { id: 'health_pe', label: 'Health & PE' },
+];
 
   const focusSubjectOptions = useMemo(
     () => Array.from(new Set((currentChild?.masteryBySubject ?? []).map((entry) => entry.subject))),
@@ -1598,6 +1630,10 @@ const ParentDashboard: React.FC = () => {
       }
       const tutorSettingsUpdatedAt = new Date().toISOString();
       const basePreferences = child.learningPreferences ?? defaultLearningPreferences;
+      const allowedElectives =
+        goalForm.allowedElectiveSubjects.length > 0
+          ? goalForm.allowedElectiveSubjects
+          : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id);
       const nextPreferences: LearningPreferences = {
         ...basePreferences,
         sessionLength,
@@ -1605,6 +1641,7 @@ const ParentDashboard: React.FC = () => {
         focusIntensity,
         mixInMode: goalForm.mixInMode,
         electiveEmphasis: goalForm.electiveEmphasis,
+        allowedElectiveSubjects: allowedElectives,
         chatMode,
         chatModeLocked,
         allowTutor: allowTutorChats,
@@ -5228,6 +5265,44 @@ const ParentDashboard: React.FC = () => {
                                 <option value="on">Boost electives this week</option>
                                 <option value="off">Keep electives hidden</option>
                               </select>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Allowed elective subjects
+                              </label>
+                              <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {ELECTIVE_SUBJECT_OPTIONS.map((option) => {
+                                  const checked = goalForm.allowedElectiveSubjects.includes(option.id);
+                                  return (
+                                    <label
+                                      key={option.id}
+                                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm text-gray-800 hover:border-brand-blue/40"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        onChange={(event) => {
+                                          const next = new Set(goalForm.allowedElectiveSubjects);
+                                          if (event.target.checked) {
+                                            next.add(option.id);
+                                          } else {
+                                            next.delete(option.id);
+                                          }
+                                          setGoalForm((prev) => ({
+                                            ...prev,
+                                            allowedElectiveSubjects: Array.from(next),
+                                          }));
+                                        }}
+                                        className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/50"
+                                      />
+                                      <span>{option.label}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                              <p className="mt-1 text-[11px] text-gray-500">
+                                Limit electives to the categories you want this child to see.
+                              </p>
                             </div>
                           </div>
                           <p className="mt-2 text-xs text-gray-600">

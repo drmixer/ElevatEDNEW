@@ -39,6 +39,7 @@ import { formatSubjectLabel, normalizeSubject, SUBJECT_LABELS } from '../lib/sub
 import { getActivitiesForModule, getHomeExtensionActivities, activityModuleSlugs } from '../lib/activityAssets';
 import { getCanonicalSequence } from '../lib/learningPaths';
 import { applyLearningPreferencesToPlan, maxLessonsForSession } from '../lib/learningPlan';
+import { listPlanOptOuts } from './optOutService';
 import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarManifests';
 import { computeSubjectStatuses } from '../lib/onTrack';
 import { buildCoachingSuggestions } from '../lib/parentSuggestions';
@@ -247,31 +248,62 @@ const injectMixInsIntoPlan = (
   preferences: LearningPreferences,
   weeklyTargets: { lessons: number; minutes: number },
   weeklyProgress: { lessons: number; minutes: number },
+  optOuts: Set<string>,
+  crossPool: DashboardLesson[] = [],
 ) => {
   const mode = preferences.mixInMode ?? 'auto';
   if (mode === 'core_only') return lessons;
   const lightLoad =
     preferences.weeklyPlanIntensity === 'light' ||
     (weeklyTargets.lessons > 0 && weeklyProgress.lessons <= Math.max(1, weeklyTargets.lessons - 2));
-  if (!lightLoad && mode !== 'cross_subject') return lessons;
+  const today = new Date();
+  const midWeek = today.getDay() >= 3; // mid-week loosen threshold
+  const nearlyLight =
+    weeklyTargets.lessons > 0 && weeklyTargets.lessons - weeklyProgress.lessons <= 2 && midWeek;
+  if (!lightLoad && !nearlyLight && mode !== 'cross_subject') return lessons;
 
   const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? 'balanced';
   const crossTargets =
     focusSubject && focusSubject !== 'balanced' ? CROSS_SUBJECT_PAIRS[focusSubject] ?? [] : undefined;
   const seen = new Set<string>();
+  const existingIds = new Set(lessons.map((lesson) => lesson.id));
 
+  const statusRank = (status: DashboardLesson['status']) =>
+    status === 'in_progress' ? 0 : status === 'not_started' ? 1 : 2;
   const candidates = lessons
     .filter((lesson) => {
       if (lesson.isMixIn) return false;
+      if (lesson.isElective) return false;
       if (lesson.status === 'completed') return false;
       if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
         return crossTargets.includes(lesson.subject);
       }
-      return true;
+      return focusSubject === 'balanced' ? true : lesson.subject !== focusSubject;
     })
-    .slice(0, 3);
+    .sort((a, b) => statusRank(a.status) - statusRank(b.status))
+    .slice(0, 5);
 
-  const mixInPicks = candidates.slice(0, 2);
+  let mixInPicks = candidates.slice(0, 2);
+  if (mixInPicks.length < 2) {
+    const fallbackPool = crossPool.length ? crossPool : fallbackStudentLessons();
+    const seenFallback = new Set<string>();
+    const fallback = fallbackPool
+      .filter((lesson) => {
+        if (seenFallback.has(lesson.id)) return false;
+        seenFallback.add(lesson.id);
+        if (existingIds.has(lesson.id)) return false;
+        if (lesson.isElective) return false;
+        if (lesson.status === 'completed') return false;
+        if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
+          return crossTargets.includes(lesson.subject);
+        }
+        return focusSubject === 'balanced' ? true : lesson.subject !== focusSubject;
+      })
+      .sort((a, b) => statusRank(a.status) - statusRank(b.status))
+      .slice(0, 2 - mixInPicks.length);
+    mixInPicks = [...mixInPicks, ...fallback];
+  }
+
   const reasonFor = (subject: Subject) => {
     const partner =
       focusSubject && focusSubject !== 'balanced'
@@ -280,8 +312,19 @@ const injectMixInsIntoPlan = (
     return partner;
   };
 
-  return lessons.map((lesson) => {
-    if (mixInPicks.find((item) => item.id === lesson.id) && !seen.has(lesson.id)) {
+  const withInjected = lessons.slice();
+  mixInPicks.forEach((pick) => {
+    if (existingIds.has(pick.id)) return;
+    if (optOuts.has(pick.id)) return;
+    withInjected.push({
+      ...pick,
+      isMixIn: true,
+      suggestionReason: pick.suggestionReason ?? reasonFor(pick.subject),
+    });
+  });
+
+  return withInjected.map((lesson) => {
+    if (mixInPicks.find((item) => item.id === lesson.id) && !seen.has(lesson.id) && !optOuts.has(lesson.id)) {
       seen.add(lesson.id);
       return {
         ...lesson,
@@ -298,14 +341,27 @@ const selectElectiveSuggestion = (
   preferences: LearningPreferences,
   weeklyTargets: { lessons: number; minutes: number },
   weeklyProgress: { lessons: number; minutes: number },
+  student?: Student,
+  optOuts?: Set<string>,
 ) => {
   if ((preferences.electiveEmphasis ?? 'light') === 'off') {
     return { plan: lessons, elective: null };
   }
-  const aheadOnLessons = weeklyProgress.lessons >= weeklyTargets.lessons;
-  const aheadOnMinutes = weeklyProgress.minutes >= Math.round(weeklyTargets.minutes * 0.9);
+  const day = new Date().getDay();
+  const daysRemaining = Math.max(0, 6 - day);
+  const aheadOnLessons =
+    weeklyTargets.lessons === 0 || weeklyProgress.lessons >= weeklyTargets.lessons;
+  const aheadOnMinutes =
+    weeklyTargets.minutes === 0 || weeklyProgress.minutes >= Math.round(weeklyTargets.minutes * 0.9);
+  const nearlyAhead =
+    weeklyTargets.lessons > 0 &&
+    weeklyProgress.lessons >= Math.max(1, weeklyTargets.lessons - 1) &&
+    weeklyProgress.minutes >= Math.round(weeklyTargets.minutes * 0.85) &&
+    daysRemaining >= 1;
   if (!aheadOnLessons || !aheadOnMinutes) {
-    return { plan: lessons, elective: null };
+    if (!nearlyAhead) {
+      return { plan: lessons, elective: null };
+    }
   }
 
   const allowed = (preferences.allowedElectiveSubjects ?? []).length
@@ -320,8 +376,10 @@ const selectElectiveSuggestion = (
         'computer_science',
       ] as Subject[]);
   const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? null;
+  const weekSeed = new Date().toISOString().slice(0, 10);
+  const weekIndex = Math.floor(new Date(weekSeed).getTime() / (1000 * 60 * 60 * 24 * 7));
 
-  const pool = lessons.filter(
+  let pool = lessons.filter(
     (lesson) =>
       !lesson.isMixIn &&
       !lesson.isElective &&
@@ -329,20 +387,58 @@ const selectElectiveSuggestion = (
       (focusSubject === null || focusSubject === 'balanced' || lesson.subject !== focusSubject),
   );
 
-  const elective = pool[0] ?? null;
+  if (!pool.length && student) {
+    const pathLessons = buildLessonsFromLearningPath(student);
+    const existingIds = new Set(lessons.map((lesson) => lesson.id));
+    pool = pathLessons.filter(
+      (lesson) =>
+        !existingIds.has(lesson.id) &&
+        allowed.includes(lesson.subject) &&
+        lesson.status !== 'completed' &&
+        (focusSubject === null || focusSubject === 'balanced' || lesson.subject !== focusSubject),
+    );
+  }
+  if (!pool.length) {
+    pool = fallbackStudentLessons().filter(
+      (lesson) =>
+        allowed.includes(lesson.subject) &&
+        (focusSubject === null || focusSubject === 'balanced' || lesson.subject !== focusSubject),
+    );
+  }
+
+  const statusRank = (status: DashboardLesson['status']) =>
+    status === 'in_progress' ? 0 : status === 'not_started' ? 1 : 2;
+  const sortedPool = pool.sort((a, b) => statusRank(a.status) - statusRank(b.status));
+  const eligiblePool = sortedPool.filter((item) => !(optOuts?.has(item.id) ?? false));
+  const elective =
+    eligiblePool[
+      allowed.length ? weekIndex % Math.max(1, Math.min(eligiblePool.length, allowed.length)) : 0
+    ] ?? eligiblePool[0] ?? null;
   if (!elective) return { plan: lessons, elective: null };
 
-  const withFlag = lessons.map((lesson) =>
-    lesson.id === elective.id
-      ? {
-          ...lesson,
-          isElective: true,
-          suggestionReason:
-            lesson.suggestionReason ??
-            `Elective boost: try a ${formatSubjectLabel(lesson.subject)} mini-lesson since you’re ahead`,
-        }
-      : lesson,
-  );
+  const reasonText =
+    elective.suggestionReason ??
+    `Elective boost: try a ${formatSubjectLabel(elective.subject)} mini-lesson since you’re ahead`;
+
+  const withFlag = lessons
+    .map((lesson) =>
+      lesson.id === elective.id
+        ? {
+            ...lesson,
+            isElective: true,
+            suggestionReason: lesson.suggestionReason ?? reasonText,
+          }
+        : lesson,
+    )
+    .slice();
+
+  if (!withFlag.find((lesson) => lesson.id === elective.id)) {
+    withFlag.push({
+      ...elective,
+      isElective: true,
+      suggestionReason: reasonText,
+    });
+  }
 
   return {
     plan: withFlag,
@@ -2153,7 +2249,7 @@ export const fetchStudentDashboardData = async (
     }
 
     let electiveSuggestion: DashboardLesson | null = null;
-    const todaysPlan: DashboardLesson[] = (() => {
+    const todaysPlan: DashboardLesson[] = await (async () => {
       const plan: DashboardLesson[] = [];
       const seen = new Set<string>();
       const desiredCount = maxLessonsForSession[planPreferences.sessionLength] ?? 4;
@@ -2180,13 +2276,38 @@ export const fetchStudentDashboardData = async (
         return fallbackStudentLessons();
       }
 
+      const weekStart = (() => {
+        const base = new Date();
+        const day = base.getDay();
+        const diff = day === 0 ? -6 : 1 - day;
+        const start = new Date(base);
+        start.setDate(base.getDate() + diff);
+        return start.toISOString().slice(0, 10);
+      })();
+
+      const optOuts = student?.id ? await listPlanOptOuts(student.id, weekStart) : { mixIns: new Set<string>(), electives: new Set<string>() };
+
       let normalized = normalizePlanBySubject(plan, planPreferences);
-      normalized = injectMixInsIntoPlan(normalized, planPreferences, weeklyTargets, weeklyProgress);
+      const crossPool = Array.from(
+        new Map(
+          [...progressLessons, ...buildLessonsFromLearningPath(student)].map((lesson) => [lesson.id, lesson]),
+        ).values(),
+      );
+      normalized = injectMixInsIntoPlan(
+        normalized,
+        planPreferences,
+        weeklyTargets,
+        weeklyProgress,
+        optOuts.mixIns,
+        crossPool,
+      );
       const electiveResult = selectElectiveSuggestion(
         normalized,
         planPreferences,
         weeklyTargets,
         weeklyProgress,
+        student,
+        optOuts.electives,
       );
       normalized = electiveResult.plan;
       electiveSuggestion = electiveResult.elective
