@@ -1,0 +1,2186 @@
+{
+  "3-electives-computer-science-block-based-programming": {
+    "title": "Introduction to Block-Based Programming for Grade 3",
+    "subject": "Computer Science",
+    "grade": 3,
+    "standards": [
+      "CS.AP.A.1.1",
+      "CS.AP.C.1.1",
+      "CS.AP.V.1.1"
+    ],
+    "questions": [
+      {
+        "id": "3bp001",
+        "prompt": "What does a sequence of blocks in a program tell the computer to do?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.A.1.1"
+        ],
+        "options": [
+          {
+            "text": "Follow the instructions in order from top to bottom",
+            "isCorrect": true
+          },
+          {
+            "text": "Follow them in any order the computer wants",
+            "isCorrect": false
+          },
+          {
+            "text": "Skip instructions randomly",
+            "isCorrect": false
+          },
+          {
+            "text": "Do all instructions at the same time",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Computers follow sequences step-by-step; order matters. The top block runs first, then the next, and so on."
+      },
+      {
+        "id": "3bp002",
+        "prompt": "In block-based programming, what does a 'repeat' block do?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.C.1.1"
+        ],
+        "options": [
+          {
+            "text": "Runs the same instructions multiple times without retyping",
+            "isCorrect": true
+          },
+          {
+            "text": "Stops the program",
+            "isCorrect": false
+          },
+          {
+            "text": "Changes the color of other blocks",
+            "isCorrect": false
+          },
+          {
+            "text": "Deletes instructions",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Repeat (or loop) blocks save time by running the same code over and over without copying it."
+      },
+      {
+        "id": "3bp003",
+        "prompt": "What is an algorithm?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.V.1.1"
+        ],
+        "explanation": "An algorithm is a set of step-by-step instructions to solve a problem or complete a task."
+      },
+      {
+        "id": "3bp004",
+        "prompt": "If you want a character to move in a square, what blocks would you need?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.1.1"
+        ],
+        "options": [
+          {
+            "text": "Move, turn right, repeat 4 times",
+            "isCorrect": true
+          },
+          {
+            "text": "Move one time only",
+            "isCorrect": false
+          },
+          {
+            "text": "Just turn blocks, no movement",
+            "isCorrect": false
+          },
+          {
+            "text": "Random blocks in any order",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A square has four equal sides. Move forward, turn 90 degrees right, repeat 4 times creates a square."
+      },
+      {
+        "id": "3bp005",
+        "prompt": "What is the purpose of an 'if' block in programming?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.A.1.1"
+        ],
+        "explanation": "An 'if' block makes decisions: if something is true, the computer does one action; if false, it might do another."
+      },
+      {
+        "id": "3bp006",
+        "prompt": "How do you test if your program works correctly?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.1.1"
+        ],
+        "options": [
+          {
+            "text": "Run the program and watch what happens, looking for errors",
+            "isCorrect": true
+          },
+          {
+            "text": "Assume it works without testing",
+            "isCorrect": false
+          },
+          {
+            "text": "Delete the program and start over",
+            "isCorrect": false
+          },
+          {
+            "text": "Ask someone else to write it",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Testing (running) your program shows if it does what you intended. This is called debugging."
+      },
+      {
+        "id": "3bp007",
+        "prompt": "Explain how breaking a big task into smaller steps (decomposition) helps in programming.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.A.1.1"
+        ],
+        "explanation": "Smaller tasks are easier to understand and code. You can solve each piece, then put them together."
+      },
+      {
+        "id": "3bp008",
+        "prompt": "If a character repeats 'move forward, turn left' six times, what shape does it make?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.C.1.1"
+        ],
+        "options": [
+          {
+            "text": "A hexagon (six-sided shape)",
+            "isCorrect": true
+          },
+          {
+            "text": "A square",
+            "isCorrect": false
+          },
+          {
+            "text": "A triangle",
+            "isCorrect": false
+          },
+          {
+            "text": "A circle",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Six turns of 60 degrees each (360 ÷ 6) create six equal sides, forming a hexagon."
+      }
+    ]
+  },
+  "3-electives-computer-science-digital-citizenship": {
+    "title": "Digital Citizenship for Grade 3",
+    "subject": "Computer Science",
+    "grade": 3,
+    "standards": [
+      "CS.IC.SO.1.1",
+      "CS.IC.PI.1.1",
+      "CS.IC.CP.1.1"
+    ],
+    "questions": [
+      {
+        "id": "3dc001",
+        "prompt": "What is a good reason to ask an adult before sharing information online?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.PI.1.1"
+        ],
+        "options": [
+          {
+            "text": "Adults help keep your personal information safe and secure",
+            "isCorrect": true
+          },
+          {
+            "text": "Adults like to read everything you post",
+            "isCorrect": false
+          },
+          {
+            "text": "You don't need permission for anything online",
+            "isCorrect": false
+          },
+          {
+            "text": "Personal information isn't important",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Personal information (name, address, phone number) should be protected. Adults help ensure safety."
+      },
+      {
+        "id": "3dc002",
+        "prompt": "What should you do if someone online asks for personal information?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.PI.1.1"
+        ],
+        "options": [
+          {
+            "text": "Tell an adult immediately",
+            "isCorrect": true
+          },
+          {
+            "text": "Give them the information if they seem friendly",
+            "isCorrect": false
+          },
+          {
+            "text": "Ignore them but give the information anyway",
+            "isCorrect": false
+          },
+          {
+            "text": "Share information with other kids first",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Any request for personal details should alert you. Tell a trusted adult right away."
+      },
+      {
+        "id": "3dc003",
+        "prompt": "What does 'digital citizenship' mean?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.SO.1.1"
+        ],
+        "explanation": "Digital citizenship is using technology safely, respectfully, and responsibly."
+      },
+      {
+        "id": "3dc004",
+        "prompt": "Which behavior shows good digital citizenship?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.SO.1.1"
+        ],
+        "options": [
+          {
+            "text": "Being kind and respectful when interacting online",
+            "isCorrect": true
+          },
+          {
+            "text": "Sending mean messages to people",
+            "isCorrect": false
+          },
+          {
+            "text": "Using other people's accounts without permission",
+            "isCorrect": false
+          },
+          {
+            "text": "Sharing everyone's personal information",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Treating people online with kindness and respect is the foundation of digital citizenship."
+      },
+      {
+        "id": "3dc005",
+        "prompt": "What is a strong password?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.PI.1.1"
+        ],
+        "options": [
+          {
+            "text": "A mix of letters, numbers, and symbols that only you know",
+            "isCorrect": true
+          },
+          {
+            "text": "Your name or birthday",
+            "isCorrect": false
+          },
+          {
+            "text": "123456 or password",
+            "isCorrect": false
+          },
+          {
+            "text": "Something easy so you don't forget it",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Strong passwords are hard to guess and include a mix of characters. Easy passwords like 'password' are unsafe."
+      },
+      {
+        "id": "3dc006",
+        "prompt": "Why is it important to respect other people's work and ideas online?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.CP.1.1"
+        ],
+        "explanation": "Others create content and ideas; taking credit or copying without permission is theft and disrespectful."
+      },
+      {
+        "id": "3dc007",
+        "prompt": "Explain what 'cyberbullying' is and why it's harmful.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.IC.SO.1.1"
+        ],
+        "explanation": "Cyberbullying is mean, hurtful, or threatening messages sent online. It hurts people's feelings and can cause real harm."
+      },
+      {
+        "id": "3dc008",
+        "prompt": "What is the best response if you see someone being bullied online?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.IC.CP.1.1"
+        ],
+        "options": [
+          {
+            "text": "Tell an adult and support the person being bullied",
+            "isCorrect": true
+          },
+          {
+            "text": "Join in with the bullying",
+            "isCorrect": false
+          },
+          {
+            "text": "Ignore it and do nothing",
+            "isCorrect": false
+          },
+          {
+            "text": "Share it with more people online",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Being an upstander means reporting bullying and supporting the targeted person, not ignoring or participating."
+      }
+    ]
+  },
+  "4-electives-computer-science-block-based-programming": {
+    "title": "Block-Based Programming for Grade 4",
+    "subject": "Computer Science",
+    "grade": 4,
+    "standards": [
+      "CS.AP.A.2.1",
+      "CS.AP.C.2.1",
+      "CS.AP.V.2.1"
+    ],
+    "questions": [
+      {
+        "id": "4bp001",
+        "prompt": "What is a loop in programming?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.C.2.1"
+        ],
+        "options": [
+          {
+            "text": "A block that repeats code without rewriting it",
+            "isCorrect": true
+          },
+          {
+            "text": "A way to move in circles",
+            "isCorrect": false
+          },
+          {
+            "text": "An error in programming",
+            "isCorrect": false
+          },
+          {
+            "text": "The end of a program",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Loops repeat code a specified number of times, making programs more efficient and shorter."
+      },
+      {
+        "id": "4bp002",
+        "prompt": "What is an event in block-based programming?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.A.2.1"
+        ],
+        "options": [
+          {
+            "text": "Something that happens that makes the program respond (like a key press or click)",
+            "isCorrect": true
+          },
+          {
+            "text": "The program starting",
+            "isCorrect": false
+          },
+          {
+            "text": "An error message",
+            "isCorrect": false
+          },
+          {
+            "text": "The computer turning on",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Events are triggers: when a key is pressed, when clicked, when a sprite touches something, etc."
+      },
+      {
+        "id": "4bp003",
+        "prompt": "What is a variable and why is it useful in programming?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.2.1"
+        ],
+        "explanation": "A variable is a container that stores information (like a score or name). You can use and change it throughout your program."
+      },
+      {
+        "id": "4bp004",
+        "prompt": "If you create a program where a character says 'Hello' when you click it, what are you using?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.A.2.1"
+        ],
+        "options": [
+          {
+            "text": "Event (when clicked) combined with a statement block (say)",
+            "isCorrect": true
+          },
+          {
+            "text": "Only a loop",
+            "isCorrect": false
+          },
+          {
+            "text": "Only a variable",
+            "isCorrect": false
+          },
+          {
+            "text": "Conditional blocks only",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "An event (click) triggers an action (say). Event-driven programming responds to user actions."
+      },
+      {
+        "id": "4bp005",
+        "prompt": "What does a conditional (if-then-else) block allow a program to do?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.2.1"
+        ],
+        "options": [
+          {
+            "text": "Make decisions and run different code based on conditions",
+            "isCorrect": true
+          },
+          {
+            "text": "Skip all decisions and run one path",
+            "isCorrect": false
+          },
+          {
+            "text": "Stop the program",
+            "isCorrect": false
+          },
+          {
+            "text": "Change the programming language",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Conditionals let programs decide: if this is true, do this; otherwise, do that."
+      },
+      {
+        "id": "4bp006",
+        "prompt": "What is debugging?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.2.1"
+        ],
+        "explanation": "Debugging is finding and fixing errors (bugs) in your program by testing and observing what goes wrong."
+      },
+      {
+        "id": "4bp007",
+        "prompt": "Design a simple program that uses a loop and a conditional. Describe what it does.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.A.2.1"
+        ],
+        "explanation": "Example: Repeat 10 times: if a random number is higher than 5, score a point. This shows combining control structures."
+      },
+      {
+        "id": "4bp008",
+        "prompt": "How does testing your program at each step help you code better?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.2.1"
+        ],
+        "options": [
+          {
+            "text": "You catch errors early and understand how each part works",
+            "isCorrect": true
+          },
+          {
+            "text": "Testing wastes time",
+            "isCorrect": false
+          },
+          {
+            "text": "You should only test at the very end",
+            "isCorrect": false
+          },
+          {
+            "text": "Testing isn't necessary if you code carefully",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Testing frequently (incremental testing) helps you find bugs quickly and understand your code's behavior."
+      }
+    ]
+  },
+  "4-electives-computer-science-digital-citizenship": {
+    "title": "Digital Citizenship for Grade 4",
+    "subject": "Computer Science",
+    "grade": 4,
+    "standards": [
+      "CS.IC.SO.2.1",
+      "CS.IC.PI.2.1",
+      "CS.IC.CP.2.1"
+    ],
+    "questions": [
+      {
+        "id": "4dc001",
+        "prompt": "What information should you never share online without permission?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.PI.2.1"
+        ],
+        "options": [
+          {
+            "text": "Full name, address, phone number, school name, social security number",
+            "isCorrect": true
+          },
+          {
+            "text": "Your first name only",
+            "isCorrect": false
+          },
+          {
+            "text": "Your favorite color and hobby",
+            "isCorrect": false
+          },
+          {
+            "text": "Information is safe to share anytime",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Personal identifying information can be used to harm you. Always ask an adult before sharing anything private."
+      },
+      {
+        "id": "4dc002",
+        "prompt": "What is a digital footprint?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.SO.2.1"
+        ],
+        "options": [
+          {
+            "text": "The trail of information you leave online (posts, photos, accounts)",
+            "isCorrect": true
+          },
+          {
+            "text": "Actual footprints on a computer",
+            "isCorrect": false
+          },
+          {
+            "text": "Your password",
+            "isCorrect": false
+          },
+          {
+            "text": "Files on your device",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Everything you do online—posts, comments, photos—creates a digital footprint that stays around for a long time."
+      },
+      {
+        "id": "4dc003",
+        "prompt": "How should you treat people online?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.IC.SO.2.1"
+        ],
+        "explanation": "With kindness and respect. The same manners and courtesy you use in person apply online too."
+      },
+      {
+        "id": "4dc004",
+        "prompt": "What is the difference between public and private online?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.PI.2.1"
+        ],
+        "options": [
+          {
+            "text": "Public posts anyone can see; private posts only specific people can see",
+            "isCorrect": true
+          },
+          {
+            "text": "There is no difference",
+            "isCorrect": false
+          },
+          {
+            "text": "Public is less important than private",
+            "isCorrect": false
+          },
+          {
+            "text": "All posts are always private",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Public posts are visible to everyone; private posts are restricted. Always consider what you want visible."
+      },
+      {
+        "id": "4dc005",
+        "prompt": "What is copyright?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.CP.2.1"
+        ],
+        "explanation": "Copyright is the legal protection of creative work. Using someone's work without permission is stealing."
+      },
+      {
+        "id": "4dc006",
+        "prompt": "If a website or app asks for information you're unsure about, what should you do?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.PI.2.1"
+        ],
+        "options": [
+          {
+            "text": "Ask an adult or trusted authority before entering information",
+            "isCorrect": true
+          },
+          {
+            "text": "Guess what they want to know",
+            "isCorrect": false
+          },
+          {
+            "text": "Give false information as a joke",
+            "isCorrect": false
+          },
+          {
+            "text": "Skip the website",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "When in doubt about a request, ask an adult. This helps protect you from scams and data theft."
+      },
+      {
+        "id": "4dc007",
+        "prompt": "Explain why it's important to think before you post something online.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.IC.SO.2.1"
+        ],
+        "explanation": "Once posted, information spreads and is hard to delete. Rude or unkind posts can hurt people and stay visible forever."
+      },
+      {
+        "id": "4dc008",
+        "prompt": "What should you do if someone messages you asking to meet in person or share inappropriate content?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.IC.CP.2.1"
+        ],
+        "options": [
+          {
+            "text": "Tell an adult immediately and don't respond to the person",
+            "isCorrect": true
+          },
+          {
+            "text": "Agree to meet or send content",
+            "isCorrect": false
+          },
+          {
+            "text": "Block them but don't tell anyone",
+            "isCorrect": false
+          },
+          {
+            "text": "Respond with your own inappropriate message",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Any request to meet or share inappropriate content is dangerous. Tell a trusted adult right away and block the person."
+      }
+    ]
+  },
+  "5-electives-computer-science-block-based-programming": {
+    "title": "Block-Based Programming for Grade 5",
+    "subject": "Computer Science",
+    "grade": 5,
+    "standards": [
+      "CS.AP.A.2.2",
+      "CS.AP.C.2.2",
+      "CS.AP.V.2.2"
+    ],
+    "questions": [
+      {
+        "id": "5bp001",
+        "prompt": "What is a function (or custom block) and why would you create one?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.A.2.2"
+        ],
+        "options": [
+          {
+            "text": "A reusable set of blocks that performs a task, reducing repetition and making code cleaner",
+            "isCorrect": true
+          },
+          {
+            "text": "A type of error in programming",
+            "isCorrect": false
+          },
+          {
+            "text": "A loop that never ends",
+            "isCorrect": false
+          },
+          {
+            "text": "A way to delete code",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Functions group code into reusable chunks. Instead of rewriting, you call the function by name."
+      },
+      {
+        "id": "5bp002",
+        "prompt": "What is the difference between a for loop and a while loop?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.2.2"
+        ],
+        "explanation": "A for loop repeats a set number of times; a while loop repeats as long as a condition is true."
+      },
+      {
+        "id": "5bp003",
+        "prompt": "What is a list (or array) in programming?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.2.2"
+        ],
+        "options": [
+          {
+            "text": "A collection of items (numbers, words, objects) stored together and accessed by position",
+            "isCorrect": true
+          },
+          {
+            "text": "A sequence of events",
+            "isCorrect": false
+          },
+          {
+            "text": "A single piece of information",
+            "isCorrect": false
+          },
+          {
+            "text": "A type of loop only",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Lists store multiple values. You can add, remove, and access items by their position in the list."
+      },
+      {
+        "id": "5bp004",
+        "prompt": "When you want a program to track a score or count, what would you use?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.V.2.2"
+        ],
+        "options": [
+          {
+            "text": "A variable",
+            "isCorrect": true
+          },
+          {
+            "text": "Only a loop",
+            "isCorrect": false
+          },
+          {
+            "text": "Only a conditional",
+            "isCorrect": false
+          },
+          {
+            "text": "Lists exclusively",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Variables store and update values like scores, names, or counts throughout your program."
+      },
+      {
+        "id": "5bp005",
+        "prompt": "What is the purpose of comments in code?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.2.2"
+        ],
+        "explanation": "Comments explain what code does in plain English, making it easier for you and others to understand later."
+      },
+      {
+        "id": "5bp006",
+        "prompt": "How do nested loops work?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.2.2"
+        ],
+        "options": [
+          {
+            "text": "One loop inside another; the inner loop completes fully for each iteration of the outer loop",
+            "isCorrect": true
+          },
+          {
+            "text": "Two separate loops running at the same time",
+            "isCorrect": false
+          },
+          {
+            "text": "A loop that stops itself",
+            "isCorrect": false
+          },
+          {
+            "text": "Loops that are not allowed in block-based programming",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Nested loops create patterns. For each outer loop cycle, the inner loop runs completely."
+      },
+      {
+        "id": "5bp007",
+        "prompt": "Design a program using a list and a loop. What would it do?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.A.2.2"
+        ],
+        "explanation": "Example: Store names in a list, loop through them, and say each name. This shows combining data structures with control."
+      },
+      {
+        "id": "5bp008",
+        "prompt": "Why is it important to think about edge cases when testing your program?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.2.2"
+        ],
+        "options": [
+          {
+            "text": "Edge cases test extremes (empty lists, zero, negative numbers) and reveal bugs",
+            "isCorrect": true
+          },
+          {
+            "text": "Edge cases aren't important",
+            "isCorrect": false
+          },
+          {
+            "text": "You only need to test normal situations",
+            "isCorrect": false
+          },
+          {
+            "text": "Testing makes code slower",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Edge cases—like empty data, zero, or maximum values—often break programs. Testing them ensures robustness."
+      }
+    ]
+  },
+  "5-electives-computer-science-digital-citizenship": {
+    "title": "Digital Citizenship for Grade 5",
+    "subject": "Computer Science",
+    "grade": 5,
+    "standards": [
+      "CS.IC.SO.3.1",
+      "CS.IC.PI.3.1",
+      "CS.IC.CP.3.1"
+    ],
+    "questions": [
+      {
+        "id": "5dc001",
+        "prompt": "What is a phishing scam?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.PI.3.1"
+        ],
+        "options": [
+          {
+            "text": "Fake emails or websites designed to trick you into sharing personal information",
+            "isCorrect": true
+          },
+          {
+            "text": "A type of fish in the ocean",
+            "isCorrect": false
+          },
+          {
+            "text": "A fishing activity online",
+            "isCorrect": false
+          },
+          {
+            "text": "A legitimate security check",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Phishing emails look real but are scams designed to steal passwords and personal data. Be suspicious of unexpected requests."
+      },
+      {
+        "id": "5dc002",
+        "prompt": "What should you do if you accidentally download malware or a virus?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.PI.3.1"
+        ],
+        "options": [
+          {
+            "text": "Tell an adult immediately and don't use the device further until it's checked",
+            "isCorrect": true
+          },
+          {
+            "text": "Ignore it and hope it goes away",
+            "isCorrect": false
+          },
+          {
+            "text": "Share the file with your friends",
+            "isCorrect": false
+          },
+          {
+            "text": "Try to fix it yourself",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Malware damages devices. Tell an adult immediately so they can use antivirus software to clean it."
+      },
+      {
+        "id": "5dc003",
+        "prompt": "Why is screen time balance important?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.SO.3.1"
+        ],
+        "explanation": "Excessive screen time can affect sleep, vision, posture, and physical health. Balance digital time with outdoor activity."
+      },
+      {
+        "id": "5dc004",
+        "prompt": "What is the difference between reliable and unreliable information online?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.CP.3.1"
+        ],
+        "options": [
+          {
+            "text": "Reliable comes from trusted sources with credentials; unreliable is from unknown or biased sources",
+            "isCorrect": true
+          },
+          {
+            "text": "All information online is equally reliable",
+            "isCorrect": false
+          },
+          {
+            "text": "Wikipedia is always unreliable",
+            "isCorrect": false
+          },
+          {
+            "text": "Reliability doesn't matter online",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Evaluate sources: check author credentials, peer review, citations, and whether multiple trusted sources agree."
+      },
+      {
+        "id": "5dc005",
+        "prompt": "What does it mean to respect others' privacy online?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.PI.3.1"
+        ],
+        "explanation": "Don't share others' personal information, photos, or private messages without permission, even if you can access them."
+      },
+      {
+        "id": "5dc006",
+        "prompt": "How can you recognize a trustworthy website?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.IC.CP.3.1"
+        ],
+        "options": [
+          {
+            "text": "It has https://, clear contact info, and comes from a known, reputable organization",
+            "isCorrect": true
+          },
+          {
+            "text": "Any site with lots of ads is trustworthy",
+            "isCorrect": false
+          },
+          {
+            "text": "Trustworthiness doesn't matter",
+            "isCorrect": false
+          },
+          {
+            "text": "All sites are equally trustworthy",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Secure sites have https (green lock), clear identity, and professional design. Be cautious of spelling errors or poor design."
+      },
+      {
+        "id": "5dc007",
+        "prompt": "Explain what digital literacy is and why it matters.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.IC.SO.3.1"
+        ],
+        "explanation": "Digital literacy is the ability to find, evaluate, and use digital information responsibly. It's essential in the modern world."
+      },
+      {
+        "id": "5dc008",
+        "prompt": "What is the difference between using copyrighted material legally and illegally?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.IC.CP.3.1"
+        ],
+        "options": [
+          {
+            "text": "Legal: with permission or under fair use; Illegal: copying without permission or citation",
+            "isCorrect": true
+          },
+          {
+            "text": "Copyright doesn't apply online",
+            "isCorrect": false
+          },
+          {
+            "text": "Everything online is free to use",
+            "isCorrect": false
+          },
+          {
+            "text": "Citing the source makes copying legal",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Fair use (education, small portions, commentary) is legal. Otherwise, get permission. Citation alone doesn't give legal right to use."
+      }
+    ]
+  },
+  "6-electives-computer-science-data-and-graphics": {
+    "title": "Data and Graphics for Grade 6",
+    "subject": "Computer Science",
+    "grade": 6,
+    "standards": [
+      "CS.DA.CO.1.1",
+      "CS.DA.IM.1.1",
+      "CS.DA.DA.1.1"
+    ],
+    "questions": [
+      {
+        "id": "6dg001",
+        "prompt": "What is data and why is it important in computer science?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.DA.DA.1.1"
+        ],
+        "options": [
+          {
+            "text": "Information collected and used to understand patterns, make decisions, and solve problems",
+            "isCorrect": true
+          },
+          {
+            "text": "Just numbers with no meaning",
+            "isCorrect": false
+          },
+          {
+            "text": "Only used in business, not science",
+            "isCorrect": false
+          },
+          {
+            "text": "Data doesn't matter in computer science",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Data is raw information. Analysis of data reveals patterns and insights for decision-making."
+      },
+      {
+        "id": "6dg002",
+        "prompt": "What is a bar graph used for?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.DA.IM.1.1"
+        ],
+        "options": [
+          {
+            "text": "Comparing quantities across categories visually",
+            "isCorrect": true
+          },
+          {
+            "text": "Showing how something changes over time",
+            "isCorrect": false
+          },
+          {
+            "text": "Displaying percentages only",
+            "isCorrect": false
+          },
+          {
+            "text": "Organizing text",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Bar graphs display data by height, making comparisons easy. Each bar represents a different category."
+      },
+      {
+        "id": "6dg003",
+        "prompt": "What does 'data representation' mean?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.DA.CO.1.1"
+        ],
+        "explanation": "Data representation is displaying data in a format (tables, graphs, charts) that makes patterns and trends visible."
+      },
+      {
+        "id": "6dg004",
+        "prompt": "Which type of graph would best show how temperature changes throughout the day?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.IM.1.1"
+        ],
+        "options": [
+          {
+            "text": "A line graph (shows change over time)",
+            "isCorrect": true
+          },
+          {
+            "text": "A pie chart",
+            "isCorrect": false
+          },
+          {
+            "text": "A bar graph only",
+            "isCorrect": false
+          },
+          {
+            "text": "A table with no visualization",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Line graphs show trends over time clearly. Points connect to show the progression from one measurement to the next."
+      },
+      {
+        "id": "6dg005",
+        "prompt": "What is a pie chart used for?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.DA.DA.1.1"
+        ],
+        "explanation": "A pie chart shows parts of a whole. Each slice represents a percentage or portion of the total."
+      },
+      {
+        "id": "6dg006",
+        "prompt": "How does sorting and organizing data help us understand it better?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.CO.1.1"
+        ],
+        "options": [
+          {
+            "text": "Organized data reveals patterns, makes comparisons easier, and helps identify outliers",
+            "isCorrect": true
+          },
+          {
+            "text": "Organization doesn't affect understanding",
+            "isCorrect": false
+          },
+          {
+            "text": "Raw data is always easier to understand",
+            "isCorrect": false
+          },
+          {
+            "text": "Data never needs sorting",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Organized data makes patterns visible and comparisons clear. Sorting reveals highest, lowest, and trends."
+      },
+      {
+        "id": "6dg007",
+        "prompt": "Design a survey and describe how you would collect, organize, and display the data.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.DA.1.1"
+        ],
+        "explanation": "Describe topic, how you'd collect data (survey questions), organize it in a table, and display it in an appropriate graph."
+      },
+      {
+        "id": "6dg008",
+        "prompt": "What is the difference between quantitative and qualitative data?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.IM.1.1"
+        ],
+        "options": [
+          {
+            "text": "Quantitative is numbers/measurements; qualitative is descriptions and observations",
+            "isCorrect": true
+          },
+          {
+            "text": "There is no difference",
+            "isCorrect": false
+          },
+          {
+            "text": "Qualitative data is more important",
+            "isCorrect": false
+          },
+          {
+            "text": "Only quantitative data can be graphed",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Quantitative (numbers, heights, ages) uses graphs; qualitative (colors, feelings, descriptions) uses categories and themes."
+      }
+    ]
+  },
+  "6-electives-computer-science-intro-python-js": {
+    "title": "Introduction to Python/JavaScript for Grade 6",
+    "subject": "Computer Science",
+    "grade": 6,
+    "standards": [
+      "CS.AP.A.3.1",
+      "CS.AP.C.3.1",
+      "CS.AP.V.3.1"
+    ],
+    "questions": [
+      {
+        "id": "6pj001",
+        "prompt": "What is the purpose of a variable in Python or JavaScript?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.V.3.1"
+        ],
+        "options": [
+          {
+            "text": "To store and name a piece of data that can be used and changed throughout the program",
+            "isCorrect": true
+          },
+          {
+            "text": "To create loops only",
+            "isCorrect": false
+          },
+          {
+            "text": "To make the program run faster",
+            "isCorrect": false
+          },
+          {
+            "text": "Variables aren't necessary in coding",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Variables are containers for data. You name them (like 'score' or 'name') and use that name to access and change the data."
+      },
+      {
+        "id": "6pj002",
+        "prompt": "What does a print() function do?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.A.3.1"
+        ],
+        "options": [
+          {
+            "text": "Displays text or data on the screen",
+            "isCorrect": true
+          },
+          {
+            "text": "Prints a physical document",
+            "isCorrect": false
+          },
+          {
+            "text": "Creates a variable",
+            "isCorrect": false
+          },
+          {
+            "text": "Stops the program",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "print() (or console.log in JavaScript) outputs information so you can see what your program is doing."
+      },
+      {
+        "id": "6pj003",
+        "prompt": "What is the difference between = (assignment) and == (comparison) in programming?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.3.1"
+        ],
+        "explanation": "= assigns a value to a variable (x = 5); == checks if two values are equal (if x == 5)."
+      },
+      {
+        "id": "6pj004",
+        "prompt": "What are the three basic data types in programming?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.3.1"
+        ],
+        "options": [
+          {
+            "text": "Strings (text), integers (numbers), and booleans (true/false)",
+            "isCorrect": true
+          },
+          {
+            "text": "Only numbers",
+            "isCorrect": false
+          },
+          {
+            "text": "Only text",
+            "isCorrect": false
+          },
+          {
+            "text": "Lists only",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Strings ('hello'), integers (5), and booleans (true) are fundamental data types."
+      },
+      {
+        "id": "6pj005",
+        "prompt": "What does an 'if' statement do in Python or JavaScript?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.C.3.1"
+        ],
+        "explanation": "An 'if' statement checks a condition and runs code only if the condition is true."
+      },
+      {
+        "id": "6pj006",
+        "prompt": "What is the purpose of a for loop in coding?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.A.3.1"
+        ],
+        "options": [
+          {
+            "text": "To repeat code a specific number of times or iterate through a list",
+            "isCorrect": true
+          },
+          {
+            "text": "To make code shorter only",
+            "isCorrect": false
+          },
+          {
+            "text": "To stop the program",
+            "isCorrect": false
+          },
+          {
+            "text": "For loops are only in block-based coding",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "for loops automate repetition: for each item in a list or for a set number of times."
+      },
+      {
+        "id": "6pj007",
+        "prompt": "Write a simple program that stores a name in a variable and prints a greeting.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.3.1"
+        ],
+        "explanation": "name = 'Alice'; print('Hello, ' + name) or similar, showing variable assignment and string concatenation."
+      },
+      {
+        "id": "6pj008",
+        "prompt": "How do you fix an error (bug) when your Python or JavaScript code doesn't work?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.3.1"
+        ],
+        "options": [
+          {
+            "text": "Run the code, read error messages, check syntax, test changes incrementally",
+            "isCorrect": true
+          },
+          {
+            "text": "Start over from scratch every time",
+            "isCorrect": false
+          },
+          {
+            "text": "Debugging is impossible",
+            "isCorrect": false
+          },
+          {
+            "text": "Errors go away on their own",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Debugging means analyzing error messages, checking syntax (spelling and punctuation), and testing fixes step by step."
+      }
+    ]
+  },
+  "7-electives-computer-science-data-and-graphics": {
+    "title": "Data and Graphics for Grade 7",
+    "subject": "Computer Science",
+    "grade": 7,
+    "standards": [
+      "CS.DA.CO.2.1",
+      "CS.DA.IM.2.1",
+      "CS.DA.DA.2.1"
+    ],
+    "questions": [
+      {
+        "id": "7dg001",
+        "prompt": "What is the difference between categorical and numerical data?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.DA.2.1"
+        ],
+        "options": [
+          {
+            "text": "Categorical: categories/groups; Numerical: measurable quantities/numbers",
+            "isCorrect": true
+          },
+          {
+            "text": "They are the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Categorical is always numbers",
+            "isCorrect": false
+          },
+          {
+            "text": "Numerical is just colors",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Categorical data includes colors, names, or categories (groups); numerical includes heights, ages, or scores."
+      },
+      {
+        "id": "7dg002",
+        "prompt": "What is a bias in data or data collection?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.CO.2.1"
+        ],
+        "explanation": "Bias is a prejudice or systematic error in how data is collected, measured, or interpreted that skews results."
+      },
+      {
+        "id": "7dg003",
+        "prompt": "How can a misleading graph trick someone?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.IM.2.1"
+        ],
+        "options": [
+          {
+            "text": "By using broken axes, inappropriate scale, or exaggerated proportions to distort perception",
+            "isCorrect": true
+          },
+          {
+            "text": "Graphs can never be misleading",
+            "isCorrect": false
+          },
+          {
+            "text": "All graphs are equally honest",
+            "isCorrect": false
+          },
+          {
+            "text": "Misleading graphs are impossible to create",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A manipulated y-axis starting at 100 instead of 0 can make small differences look huge, intentionally misleading viewers."
+      },
+      {
+        "id": "7dg004",
+        "prompt": "What is an outlier in a data set?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.DA.2.1"
+        ],
+        "options": [
+          {
+            "text": "A data point that is significantly different from other values in the set",
+            "isCorrect": true
+          },
+          {
+            "text": "The smallest number always",
+            "isCorrect": false
+          },
+          {
+            "text": "The largest number always",
+            "isCorrect": false
+          },
+          {
+            "text": "Any value in the middle",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "An outlier is a value that doesn't fit the pattern (e.g., if most students are 12 years old, a 25-year-old would be an outlier)."
+      },
+      {
+        "id": "7dg005",
+        "prompt": "What are statistics and why do we use them?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.CO.2.1"
+        ],
+        "explanation": "Statistics are numerical summaries (mean, median, mode) that describe data and help us understand patterns and make predictions."
+      },
+      {
+        "id": "7dg006",
+        "prompt": "How does the median differ from the mean (average)?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.IM.2.1"
+        ],
+        "options": [
+          {
+            "text": "Mean: sum divided by count; Median: middle value when sorted. Median isn't affected by outliers.",
+            "isCorrect": true
+          },
+          {
+            "text": "They are always the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Mean is the middle value",
+            "isCorrect": false
+          },
+          {
+            "text": "Median and mean can't both be used",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The median (middle value) is more resistant to outliers. One extreme value doesn't change the median but drastically affects mean."
+      },
+      {
+        "id": "7dg007",
+        "prompt": "Collect real data on a topic, identify any bias, calculate statistics, and create an honest graph.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.DA.2.1"
+        ],
+        "explanation": "Show awareness of data collection bias, calculate mean/median/mode, and present data honestly without manipulation."
+      },
+      {
+        "id": "7dg008",
+        "prompt": "What does correlation mean, and why is it important not to confuse it with causation?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.CO.2.1"
+        ],
+        "options": [
+          {
+            "text": "Correlation: two things happen together. Causation: one causes the other. Correlation doesn't prove causation.",
+            "isCorrect": true
+          },
+          {
+            "text": "Correlation and causation are the same",
+            "isCorrect": false
+          },
+          {
+            "text": "If things correlate, one must cause the other",
+            "isCorrect": false
+          },
+          {
+            "text": "Correlation is meaningless",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Ice cream sales and drowning deaths correlate (both happen in summer), but neither causes the other. Summer heat is the actual cause."
+      }
+    ]
+  },
+  "7-electives-computer-science-intro-python-js": {
+    "title": "Introduction to Python/JavaScript for Grade 7",
+    "subject": "Computer Science",
+    "grade": 7,
+    "standards": [
+      "CS.AP.A.3.2",
+      "CS.AP.C.3.2",
+      "CS.AP.V.3.2"
+    ],
+    "questions": [
+      {
+        "id": "7pj001",
+        "prompt": "What is a function in Python or JavaScript?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.A.3.2"
+        ],
+        "options": [
+          {
+            "text": "A reusable block of code that performs a specific task",
+            "isCorrect": true
+          },
+          {
+            "text": "A type of loop",
+            "isCorrect": false
+          },
+          {
+            "text": "A mathematical operation only",
+            "isCorrect": false
+          },
+          {
+            "text": "Something you can't use in text-based coding",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Functions group code into reusable chunks. You name them and call them whenever needed, avoiding repetition."
+      },
+      {
+        "id": "7pj002",
+        "prompt": "What is a parameter (or argument) in a function?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.3.2"
+        ],
+        "explanation": "A parameter is information a function needs to work. For example, in print(name), 'name' is the parameter."
+      },
+      {
+        "id": "7pj003",
+        "prompt": "What is the difference between a while loop and a for loop?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.3.2"
+        ],
+        "options": [
+          {
+            "text": "while: repeats while condition is true; for: repeats a set number of times or through a list",
+            "isCorrect": true
+          },
+          {
+            "text": "They are identical",
+            "isCorrect": false
+          },
+          {
+            "text": "while is older and never used",
+            "isCorrect": false
+          },
+          {
+            "text": "for and while can't both be used in the same program",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "for loops iterate over known items; while loops continue based on a condition, which can change during execution."
+      },
+      {
+        "id": "7pj004",
+        "prompt": "What is a list (array) in Python or JavaScript?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.V.3.2"
+        ],
+        "options": [
+          {
+            "text": "An ordered collection of items (numbers, strings, objects) accessed by index/position",
+            "isCorrect": true
+          },
+          {
+            "text": "Just a single piece of data",
+            "isCorrect": false
+          },
+          {
+            "text": "A type of loop",
+            "isCorrect": false
+          },
+          {
+            "text": "A function call",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Lists store multiple values: my_list = [1, 2, 3]; my_list[0] gives 1 (first item, index starts at 0)."
+      },
+      {
+        "id": "7pj005",
+        "prompt": "What does an else clause do in an if-else statement?",
+        "type": "short_answer",
+        "difficulty": 1,
+        "standards": [
+          "CS.AP.C.3.2"
+        ],
+        "explanation": "else runs code if the 'if' condition is false. It provides an alternative action."
+      },
+      {
+        "id": "7pj006",
+        "prompt": "How do you get user input in Python or JavaScript?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.A.3.2"
+        ],
+        "options": [
+          {
+            "text": "Python: input(); JavaScript: prompt() or similar methods",
+            "isCorrect": true
+          },
+          {
+            "text": "You can't get user input in text-based coding",
+            "isCorrect": false
+          },
+          {
+            "text": "Print statements ask for input",
+            "isCorrect": false
+          },
+          {
+            "text": "Input happens automatically",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "input() and prompt() pause the program and wait for the user to type something."
+      },
+      {
+        "id": "7pj007",
+        "prompt": "Write a function that takes a number as input and returns its double.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.A.3.2"
+        ],
+        "explanation": "Python: def double(x): return x * 2; JavaScript: function double(x) { return x * 2; }"
+      },
+      {
+        "id": "7pj008",
+        "prompt": "How does testing your code with different inputs improve your confidence in the program?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.3.2"
+        ],
+        "options": [
+          {
+            "text": "Testing with various inputs, including edge cases, reveals bugs and confirms the program works reliably",
+            "isCorrect": true
+          },
+          {
+            "text": "Testing wastes time",
+            "isCorrect": false
+          },
+          {
+            "text": "One test is always enough",
+            "isCorrect": false
+          },
+          {
+            "text": "Good programmers don't need to test",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Comprehensive testing (normal values, edge cases, invalid input) ensures your program is robust and handles unexpected situations."
+      }
+    ]
+  },
+  "8-electives-computer-science-data-and-graphics": {
+    "title": "Data and Graphics for Grade 8",
+    "subject": "Computer Science",
+    "grade": 8,
+    "standards": [
+      "CS.DA.CO.3.1",
+      "CS.DA.IM.3.1",
+      "CS.DA.DA.3.1"
+    ],
+    "questions": [
+      {
+        "id": "8dg001",
+        "prompt": "What is data mining?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.DA.3.1"
+        ],
+        "options": [
+          {
+            "text": "Using algorithms to discover patterns and insights in large data sets",
+            "isCorrect": true
+          },
+          {
+            "text": "Digging up physical materials",
+            "isCorrect": false
+          },
+          {
+            "text": "Creating new data",
+            "isCorrect": false
+          },
+          {
+            "text": "Erasing data",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Data mining uses computational tools to analyze massive data sets and find hidden patterns, trends, and relationships."
+      },
+      {
+        "id": "8dg002",
+        "prompt": "What are the risks of relying on predictive models or algorithms?",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.CO.3.1"
+        ],
+        "explanation": "Models can perpetuate bias, be based on incomplete data, miss context, and make wrong predictions if fed bad data or trained on historical inequity."
+      },
+      {
+        "id": "8dg003",
+        "prompt": "What is big data and how does it differ from regular data?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.IM.3.1"
+        ],
+        "options": [
+          {
+            "text": "Big data is massive in volume, velocity, and variety; requires special tools to process and analyze",
+            "isCorrect": true
+          },
+          {
+            "text": "Big data and regular data are the same",
+            "isCorrect": false
+          },
+          {
+            "text": "Big data is just very slow",
+            "isCorrect": false
+          },
+          {
+            "text": "Big data has no practical use",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Big data (millions of tweets, sensor readings, transactions) is too large for traditional databases and needs distributed computing."
+      },
+      {
+        "id": "8dg004",
+        "prompt": "What is the purpose of data cleaning or preprocessing?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.DA.3.1"
+        ],
+        "options": [
+          {
+            "text": "Removing errors, inconsistencies, and missing values so analysis is accurate",
+            "isCorrect": true
+          },
+          {
+            "text": "Making the data smaller only",
+            "isCorrect": false
+          },
+          {
+            "text": "Deleting useful information",
+            "isCorrect": false
+          },
+          {
+            "text": "Data cleaning isn't necessary",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Bad data leads to bad conclusions. Cleaning fixes typos, duplicates, missing values, and formatting inconsistencies."
+      },
+      {
+        "id": "8dg005",
+        "prompt": "What is data privacy and why is it important?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.DA.CO.3.1"
+        ],
+        "explanation": "Data privacy is the right to control personal information. Protecting it prevents misuse, identity theft, and discrimination."
+      },
+      {
+        "id": "8dg006",
+        "prompt": "How can bias in data collection affect conclusions?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.IM.3.1"
+        ],
+        "options": [
+          {
+            "text": "Biased sampling or measurement methods skew results and lead to false or unfair conclusions",
+            "isCorrect": true
+          },
+          {
+            "text": "Bias doesn't affect data",
+            "isCorrect": false
+          },
+          {
+            "text": "All data is equally reliable",
+            "isCorrect": false
+          },
+          {
+            "text": "Bias only affects surveys",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "If you only survey wealthy people about poverty, your conclusions are skewed. Representative sampling is crucial."
+      },
+      {
+        "id": "8dg007",
+        "prompt": "Analyze a real-world data set, identify bias and limitations, create visualizations, and draw conclusions.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.DA.3.1"
+        ],
+        "explanation": "Demonstrate critical analysis: identify data source reliability, potential bias, create appropriate graphs, state conclusions with caveats."
+      },
+      {
+        "id": "8dg008",
+        "prompt": "What is the relationship between artificial intelligence and data?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.DA.CO.3.1"
+        ],
+        "options": [
+          {
+            "text": "AI systems learn from large amounts of data to recognize patterns and make predictions or decisions",
+            "isCorrect": true
+          },
+          {
+            "text": "AI doesn't use data",
+            "isCorrect": false
+          },
+          {
+            "text": "Data and AI are unrelated",
+            "isCorrect": false
+          },
+          {
+            "text": "AI only works with small data sets",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Machine learning: AI trains on data to learn patterns, then uses those patterns to make decisions on new data."
+      }
+    ]
+  },
+  "8-electives-computer-science-intro-python-js": {
+    "title": "Introduction to Python/JavaScript for Grade 8",
+    "subject": "Computer Science",
+    "grade": 8,
+    "standards": [
+      "CS.AP.A.3.3",
+      "CS.AP.C.3.3",
+      "CS.AP.V.3.3"
+    ],
+    "questions": [
+      {
+        "id": "8pj001",
+        "prompt": "What are object-oriented programming (OOP) concepts and why are they useful?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.3.3"
+        ],
+        "options": [
+          {
+            "text": "OOP organizes code into objects with properties and methods, improving reusability and structure",
+            "isCorrect": true
+          },
+          {
+            "text": "OOP is outdated and never used",
+            "isCorrect": false
+          },
+          {
+            "text": "Object-oriented programming only exists in Python",
+            "isCorrect": false
+          },
+          {
+            "text": "OOP makes code more complicated",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Objects combine data (properties) and functions (methods) into self-contained units. This models real-world entities well."
+      },
+      {
+        "id": "8pj002",
+        "prompt": "What is a class in object-oriented programming?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.A.3.3"
+        ],
+        "explanation": "A class is a blueprint for creating objects. It defines what properties and methods instances of that class will have."
+      },
+      {
+        "id": "8pj003",
+        "prompt": "What is string manipulation or string operations?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.3.3"
+        ],
+        "options": [
+          {
+            "text": "Techniques to combine, slice, modify, or analyze text strings (upper, lower, split, concatenate)",
+            "isCorrect": true
+          },
+          {
+            "text": "Creating new programming languages",
+            "isCorrect": false
+          },
+          {
+            "text": "Strings can't be changed",
+            "isCorrect": false
+          },
+          {
+            "text": "String operations are impossible",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Strings can be sliced (name[0:3]), concatenated (name + ' Smith'), and manipulated (upper(), lower(), replace())."
+      },
+      {
+        "id": "8pj004",
+        "prompt": "What is error handling and why is it important?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.V.3.3"
+        ],
+        "options": [
+          {
+            "text": "Using try-except blocks to catch and handle errors gracefully without crashing",
+            "isCorrect": true
+          },
+          {
+            "text": "Ignoring errors is fine",
+            "isCorrect": false
+          },
+          {
+            "text": "Programs shouldn't have errors",
+            "isCorrect": false
+          },
+          {
+            "text": "Error handling is optional",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "try-except lets you anticipate errors (like dividing by zero) and respond without crashing: try: x = 1/0; except: print('Error!')"
+      },
+      {
+        "id": "8pj005",
+        "prompt": "What is a dictionary (or object in JavaScript) in programming?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "CS.AP.C.3.3"
+        ],
+        "explanation": "A dictionary stores key-value pairs: student = {'name': 'Alice', 'age': 12}. Access values by key: student['name']."
+      },
+      {
+        "id": "8pj006",
+        "prompt": "What is recursion in programming?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.A.3.3"
+        ],
+        "options": [
+          {
+            "text": "A function that calls itself to solve a problem by breaking it into smaller, similar subproblems",
+            "isCorrect": true
+          },
+          {
+            "text": "A loop technique only",
+            "isCorrect": false
+          },
+          {
+            "text": "Recursion doesn't exist in Python/JavaScript",
+            "isCorrect": false
+          },
+          {
+            "text": "Recursion is never useful",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "factorial(5) = 5 * factorial(4), which calls factorial(3), etc. Recursion must have a base case (when to stop)."
+      },
+      {
+        "id": "8pj007",
+        "prompt": "Design and write a program that uses functions, data structures, and control flow to solve a real problem.",
+        "type": "short_answer",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.V.3.3"
+        ],
+        "explanation": "Example: Grade calculator that takes scores in a list, calculates average using a function, and returns a letter grade."
+      },
+      {
+        "id": "8pj008",
+        "prompt": "How do you approach debugging a complex program with multiple functions and data structures?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "standards": [
+          "CS.AP.C.3.3"
+        ],
+        "options": [
+          {
+            "text": "Isolate each component, add print statements, use debugger tools, test incrementally",
+            "isCorrect": true
+          },
+          {
+            "text": "Rewrite the entire program",
+            "isCorrect": false
+          },
+          {
+            "text": "Debugging is impossible with complex code",
+            "isCorrect": false
+          },
+          {
+            "text": "Complex programs don't have bugs",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Systematic debugging: narrow down where the error occurs, add diagnostic output, check each function independently."
+      }
+    ]
+  }
+}

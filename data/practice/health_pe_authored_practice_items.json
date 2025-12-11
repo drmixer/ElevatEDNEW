@@ -1,0 +1,2828 @@
+{
+  "3-electives-health-and-pe-nutrition-fitness-safety": [
+    {
+      "prompt": "Which food helps build strong muscles?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Chicken, beans, and eggs",
+          "isCorrect": true
+        },
+        {
+          "text": "Candy",
+          "isCorrect": false
+        },
+        {
+          "text": "Chips",
+          "isCorrect": false
+        },
+        {
+          "text": "Soda",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why do we exercise?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.2"
+      ],
+      "options": [
+        {
+          "text": "Makes our body strong and healthy",
+          "isCorrect": true
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Not important",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for athletes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you always do before crossing the street?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.SF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Look both ways",
+          "isCorrect": true
+        },
+        {
+          "text": "Run fast",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't look",
+          "isCorrect": false
+        },
+        {
+          "text": "Close your eyes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which is a healthy snack?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Apple with peanut butter",
+          "isCorrect": true
+        },
+        {
+          "text": "Candy bar",
+          "isCorrect": false
+        },
+        {
+          "text": "Soda",
+          "isCorrect": false
+        },
+        {
+          "text": "Cookies",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a helmet do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.SF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Protects your head",
+          "isCorrect": true
+        },
+        {
+          "text": "Looks cool only",
+          "isCorrect": false
+        },
+        {
+          "text": "Isn't important",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you slower",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How long should kids exercise each day?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.2"
+      ],
+      "options": [
+        {
+          "text": "About 60 minutes",
+          "isCorrect": true
+        },
+        {
+          "text": "5 minutes",
+          "isCorrect": false
+        },
+        {
+          "text": "30 minutes only",
+          "isCorrect": false
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which is safe on a playground?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.SF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Taking turns",
+          "isCorrect": true
+        },
+        {
+          "text": "Pushing others",
+          "isCorrect": false
+        },
+        {
+          "text": "Not listening to adults",
+          "isCorrect": false
+        },
+        {
+          "text": "Being mean",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's in water that's good for you?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.1"
+      ],
+      "options": [
+        {
+          "text": "H2O (keeps you hydrated)",
+          "isCorrect": true
+        },
+        {
+          "text": "Sugar",
+          "isCorrect": false
+        },
+        {
+          "text": "Calories only",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing helpful",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you wear when biking?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.SF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Helmet and protective gear",
+          "isCorrect": true
+        },
+        {
+          "text": "Just your regular clothes",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing special",
+          "isCorrect": false
+        },
+        {
+          "text": "No helmet needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which food group gives you energy?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Grains and carbs",
+          "isCorrect": true
+        },
+        {
+          "text": "Only proteins",
+          "isCorrect": false
+        },
+        {
+          "text": "Only vegetables",
+          "isCorrect": false
+        },
+        {
+          "text": "Water only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is playing with friends good for you?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.1.2"
+      ],
+      "options": [
+        {
+          "text": "Exercise, fun, and social connection",
+          "isCorrect": true
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for fun, no fitness",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you sad",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if you get hurt at school?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.SF.1.1"
+      ],
+      "options": [
+        {
+          "text": "Tell an adult right away",
+          "isCorrect": true
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        },
+        {
+          "text": "Hide it",
+          "isCorrect": false
+        },
+        {
+          "text": "Tell your friends only",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "4-electives-health-and-pe-nutrition-fitness-safety": [
+    {
+      "prompt": "What makes a meal balanced?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.2.1"
+      ],
+      "options": [
+        {
+          "text": "Different food groups together",
+          "isCorrect": true
+        },
+        {
+          "text": "Only carbs",
+          "isCorrect": false
+        },
+        {
+          "text": "Only protein",
+          "isCorrect": false
+        },
+        {
+          "text": "Only vegetables",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How much water should you drink daily?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.2.2"
+      ],
+      "options": [
+        {
+          "text": "Several glasses throughout the day",
+          "isCorrect": true
+        },
+        {
+          "text": "None needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Only when thirsty",
+          "isCorrect": false
+        },
+        {
+          "text": "As much soda as possible",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does stretching before exercise do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.2.2"
+      ],
+      "options": [
+        {
+          "text": "Prepares muscles and prevents injury",
+          "isCorrect": true
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Has no effect",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you weaker",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Who should you tell if someone is being bullied?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.SF.2.1"
+      ],
+      "options": [
+        {
+          "text": "An adult or trusted authority",
+          "isCorrect": true
+        },
+        {
+          "text": "Nobody",
+          "isCorrect": false
+        },
+        {
+          "text": "Only your friends",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which snack combination is healthiest?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.2.1"
+      ],
+      "options": [
+        {
+          "text": "Whole grain crackers and cheese",
+          "isCorrect": true
+        },
+        {
+          "text": "Candy and soda",
+          "isCorrect": false
+        },
+        {
+          "text": "Fried chips",
+          "isCorrect": false
+        },
+        {
+          "text": "Cookies",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does team sports help you?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.2.2"
+      ],
+      "options": [
+        {
+          "text": "Fitness, teamwork, and friendship",
+          "isCorrect": true
+        },
+        {
+          "text": "Only for training",
+          "isCorrect": false
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you tired only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's a safe way to prevent food poisoning?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.SF.2.1"
+      ],
+      "options": [
+        {
+          "text": "Keep food cold and cook meat properly",
+          "isCorrect": true
+        },
+        {
+          "text": "Leave food out",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't wash hands",
+          "isCorrect": false
+        },
+        {
+          "text": "Eat expired food",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What nutrients does your body need?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.2.1"
+      ],
+      "options": [
+        {
+          "text": "Carbs, protein, fats, vitamins, minerals",
+          "isCorrect": true
+        },
+        {
+          "text": "Only sugar",
+          "isCorrect": false
+        },
+        {
+          "text": "Only salt",
+          "isCorrect": false
+        },
+        {
+          "text": "Just one nutrient",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you stay safe while exercising?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.SF.2.1"
+      ],
+      "options": [
+        {
+          "text": "Warm up, stretch, use correct form, stay hydrated",
+          "isCorrect": true
+        },
+        {
+          "text": "Skip warm-up",
+          "isCorrect": false
+        },
+        {
+          "text": "Push through pain",
+          "isCorrect": false
+        },
+        {
+          "text": "Never stop",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does your heart do when you exercise?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.2.2"
+      ],
+      "options": [
+        {
+          "text": "Beats faster to pump more blood",
+          "isCorrect": true
+        },
+        {
+          "text": "Slows down",
+          "isCorrect": false
+        },
+        {
+          "text": "Stops working",
+          "isCorrect": false
+        },
+        {
+          "text": "Has no response",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which is a healthy breakfast?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.2.1"
+      ],
+      "options": [
+        {
+          "text": "Oatmeal with fruit and milk",
+          "isCorrect": true
+        },
+        {
+          "text": "Sugary cereal only",
+          "isCorrect": false
+        },
+        {
+          "text": "No breakfast",
+          "isCorrect": false
+        },
+        {
+          "text": "Just sweets",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is rest important after exercise?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.2.2"
+      ],
+      "options": [
+        {
+          "text": "Muscles recover and soreness decreases",
+          "isCorrect": true
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "You never need rest",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you weaker",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "5-electives-health-and-pe-nutrition-fitness-safety": [
+    {
+      "prompt": "What are nutrients and why do we need them?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Substances in food for energy and health",
+          "isCorrect": true
+        },
+        {
+          "text": "Things to avoid",
+          "isCorrect": false
+        },
+        {
+          "text": "Only taste good",
+          "isCorrect": false
+        },
+        {
+          "text": "Unnecessary",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's the difference between aerobic and anaerobic?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.3.2"
+      ],
+      "options": [
+        {
+          "text": "Aerobic uses oxygen (running); anaerobic doesn't (sprinting)",
+          "isCorrect": true
+        },
+        {
+          "text": "Same thing",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one matters",
+          "isCorrect": false
+        },
+        {
+          "text": "Both identical",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you make meals healthier?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Add veggies, whole grains, limit sugar",
+          "isCorrect": true
+        },
+        {
+          "text": "Add more salt",
+          "isCorrect": false
+        },
+        {
+          "text": "Fry everything",
+          "isCorrect": false
+        },
+        {
+          "text": "Use processed foods",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do for a small cut?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.SF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Wash and bandage it",
+          "isCorrect": true
+        },
+        {
+          "text": "Leave it dirty",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore bleeding",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't clean it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is sleep important for fitness?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Muscles recover and repair",
+          "isCorrect": true
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't help",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for lazy people",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is flexibility and why does it matter?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.3.2"
+      ],
+      "options": [
+        {
+          "text": "Range of motion; prevents injury",
+          "isCorrect": true
+        },
+        {
+          "text": "Only for dancers",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Means you're weak",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does exercise help your heart?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.3.2"
+      ],
+      "options": [
+        {
+          "text": "Makes it stronger and more efficient",
+          "isCorrect": true
+        },
+        {
+          "text": "Makes it weaker",
+          "isCorrect": false
+        },
+        {
+          "text": "Has no effect",
+          "isCorrect": false
+        },
+        {
+          "text": "Only helps athletes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's a good hydration habit?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Drink water throughout the day",
+          "isCorrect": true
+        },
+        {
+          "text": "Only when very thirsty",
+          "isCorrect": false
+        },
+        {
+          "text": "Drink soda instead",
+          "isCorrect": false
+        },
+        {
+          "text": "Avoid water",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a balanced diet include?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.3.1"
+      ],
+      "options": [
+        {
+          "text": "All five food groups",
+          "isCorrect": true
+        },
+        {
+          "text": "Only protein",
+          "isCorrect": false
+        },
+        {
+          "text": "Only carbs",
+          "isCorrect": false
+        },
+        {
+          "text": "Only fruits",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How often should you eat vegetables?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.NF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Multiple servings daily",
+          "isCorrect": true
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        },
+        {
+          "text": "Once a week",
+          "isCorrect": false
+        },
+        {
+          "text": "Only sometimes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What helps prevent sports injuries?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.SF.3.1"
+      ],
+      "options": [
+        {
+          "text": "Warm-up, proper form, protective gear",
+          "isCorrect": true
+        },
+        {
+          "text": "Skip preparation",
+          "isCorrect": false
+        },
+        {
+          "text": "Use wrong form",
+          "isCorrect": false
+        },
+        {
+          "text": "No protection needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does cardio improve your fitness?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.NF.3.2"
+      ],
+      "options": [
+        {
+          "text": "Builds heart and lung strength",
+          "isCorrect": true
+        },
+        {
+          "text": "Only tires you out",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't improve anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you weaker",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-health-and-pe-body-systems-and-health": [
+    {
+      "prompt": "What do body systems do together?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.1.1"
+      ],
+      "options": [
+        {
+          "text": "Work together to keep you alive",
+          "isCorrect": true
+        },
+        {
+          "text": "Work separately",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't interact",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one matters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the skeletal system do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.BS.1.2"
+      ],
+      "options": [
+        {
+          "text": "Supports your body and protects organs",
+          "isCorrect": true
+        },
+        {
+          "text": "Only moves",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't help",
+          "isCorrect": false
+        },
+        {
+          "text": "Just holds you up",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does digestion work?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.1.1"
+      ],
+      "options": [
+        {
+          "text": "Breaks down food mechanically and chemically",
+          "isCorrect": true
+        },
+        {
+          "text": "Food doesn't change",
+          "isCorrect": false
+        },
+        {
+          "text": "Only mechanical breaking",
+          "isCorrect": false
+        },
+        {
+          "text": "Instant process",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the circulatory system do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.BS.1.2"
+      ],
+      "options": [
+        {
+          "text": "Transports blood and oxygen throughout your body",
+          "isCorrect": true
+        },
+        {
+          "text": "Only pumps",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't move anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Removes nutrients",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do lungs provide oxygen?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.1.1"
+      ],
+      "options": [
+        {
+          "text": "Exchange oxygen into blood via gas exchange",
+          "isCorrect": true
+        },
+        {
+          "text": "Make oxygen",
+          "isCorrect": false
+        },
+        {
+          "text": "Store oxygen only",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't help breathing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the nervous system control?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.BS.1.2"
+      ],
+      "options": [
+        {
+          "text": "Movement, sensations, thinking, and body functions",
+          "isCorrect": true
+        },
+        {
+          "text": "Only thinking",
+          "isCorrect": false
+        },
+        {
+          "text": "Only movement",
+          "isCorrect": false
+        },
+        {
+          "text": "Just feelings",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do muscles and bones work together?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.1.1"
+      ],
+      "options": [
+        {
+          "text": "Muscles pull bones to create movement",
+          "isCorrect": true
+        },
+        {
+          "text": "Independently",
+          "isCorrect": false
+        },
+        {
+          "text": "Bones do everything",
+          "isCorrect": false
+        },
+        {
+          "text": "Muscles don't help",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What supports healthy body systems?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.1.1"
+      ],
+      "options": [
+        {
+          "text": "Exercise, balanced diet, sleep, and stress management",
+          "isCorrect": true
+        },
+        {
+          "text": "No support needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Only exercise matters",
+          "isCorrect": false
+        },
+        {
+          "text": "Sleep doesn't help",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the digestive system?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.BS.1.2"
+      ],
+      "options": [
+        {
+          "text": "Processes food into usable nutrients",
+          "isCorrect": true
+        },
+        {
+          "text": "Only your stomach",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't break down food",
+          "isCorrect": false
+        },
+        {
+          "text": "Stores waste",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's a major body system?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.BS.1.1"
+      ],
+      "options": [
+        {
+          "text": "Circulatory, respiratory, nervous, digestive, skeletal",
+          "isCorrect": true
+        },
+        {
+          "text": "Only heart",
+          "isCorrect": false
+        },
+        {
+          "text": "Only brain",
+          "isCorrect": false
+        },
+        {
+          "text": "Only stomach",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does the brain work with the body?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.1.2"
+      ],
+      "options": [
+        {
+          "text": "Sends signals to control all functions",
+          "isCorrect": true
+        },
+        {
+          "text": "Doesn't control anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Only thinks",
+          "isCorrect": false
+        },
+        {
+          "text": "Only stores memories",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What helps your immune system?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.1.1"
+      ],
+      "options": [
+        {
+          "text": "Good nutrition, rest, and hygiene",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing helps",
+          "isCorrect": false
+        },
+        {
+          "text": "Stress helps",
+          "isCorrect": false
+        },
+        {
+          "text": "Sleep doesn't matter",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-health-and-pe-fitness-planning": [
+    {
+      "prompt": "What makes a fitness goal SMART?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.1"
+      ],
+      "options": [
+        {
+          "text": "Specific, Measurable, Achievable, Relevant, Time-bound",
+          "isCorrect": true
+        },
+        {
+          "text": "Just a wish",
+          "isCorrect": false
+        },
+        {
+          "text": "Vague goals",
+          "isCorrect": false
+        },
+        {
+          "text": "Random exercise",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What are the main fitness components?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.2"
+      ],
+      "options": [
+        {
+          "text": "Cardio, strength, endurance, flexibility, composition",
+          "isCorrect": true
+        },
+        {
+          "text": "Only cardio",
+          "isCorrect": false
+        },
+        {
+          "text": "Only strength",
+          "isCorrect": false
+        },
+        {
+          "text": "Only flexibility",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you know if you're exercising at the right intensity?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.3"
+      ],
+      "options": [
+        {
+          "text": "Can talk but not sing; slightly breathless",
+          "isCorrect": true
+        },
+        {
+          "text": "Can't breathe",
+          "isCorrect": false
+        },
+        {
+          "text": "No breathing change",
+          "isCorrect": false
+        },
+        {
+          "text": "Completely exhausted",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is cross-training?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.2"
+      ],
+      "options": [
+        {
+          "text": "Doing different activities for fitness",
+          "isCorrect": true
+        },
+        {
+          "text": "Same activity always",
+          "isCorrect": false
+        },
+        {
+          "text": "No variety needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one exercise matters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many days per week should you exercise?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.1.1"
+      ],
+      "options": [
+        {
+          "text": "3-5 days with rest days",
+          "isCorrect": true
+        },
+        {
+          "text": "Every single day",
+          "isCorrect": false
+        },
+        {
+          "text": "Once weekly",
+          "isCorrect": false
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What do warm-up and cool-down do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.3"
+      ],
+      "options": [
+        {
+          "text": "Prepare muscles and aid recovery",
+          "isCorrect": true
+        },
+        {
+          "text": "Unnecessary",
+          "isCorrect": false
+        },
+        {
+          "text": "Waste time",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for athletes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you progress safely in fitness?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.2"
+      ],
+      "options": [
+        {
+          "text": "Gradually increase intensity or duration",
+          "isCorrect": true
+        },
+        {
+          "text": "Do too much immediately",
+          "isCorrect": false
+        },
+        {
+          "text": "Random increases",
+          "isCorrect": false
+        },
+        {
+          "text": "No progression needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's a realistic fitness timeline?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.1"
+      ],
+      "options": [
+        {
+          "text": "See changes in weeks, major changes in months",
+          "isCorrect": true
+        },
+        {
+          "text": "Instant results",
+          "isCorrect": false
+        },
+        {
+          "text": "Never improves",
+          "isCorrect": false
+        },
+        {
+          "text": "Takes years for any change",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is rest important in fitness?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.1.3"
+      ],
+      "options": [
+        {
+          "text": "Muscles repair and adapt on rest days",
+          "isCorrect": true
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "You never need rest",
+          "isCorrect": false
+        },
+        {
+          "text": "Rest makes you weaker",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should your fitness plan include?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.1.2"
+      ],
+      "options": [
+        {
+          "text": "Variety, progression, rest, and proper form",
+          "isCorrect": true
+        },
+        {
+          "text": "Only one exercise",
+          "isCorrect": false
+        },
+        {
+          "text": "No planning needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Random workouts",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you stay motivated to exercise?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.1.1"
+      ],
+      "options": [
+        {
+          "text": "Set goals, track progress, find activities you enjoy",
+          "isCorrect": true
+        },
+        {
+          "text": "No motivation needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Do what you hate",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't track anything",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does flexibility training do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.1.2"
+      ],
+      "options": [
+        {
+          "text": "Increases range of motion and prevents injury",
+          "isCorrect": true
+        },
+        {
+          "text": "Makes you weaker",
+          "isCorrect": false
+        },
+        {
+          "text": "Wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for dancers",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-health-and-pe-body-systems-and-health": [
+    {
+      "prompt": "What is homeostasis?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.1"
+      ],
+      "options": [
+        {
+          "text": "Maintaining stable internal body conditions",
+          "isCorrect": true
+        },
+        {
+          "text": "Changing all the time",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't happen",
+          "isCorrect": false
+        },
+        {
+          "text": "Temperature variation",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does the immune system work?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.2"
+      ],
+      "options": [
+        {
+          "text": "Identifies and destroys harmful pathogens",
+          "isCorrect": true
+        },
+        {
+          "text": "Does nothing",
+          "isCorrect": false
+        },
+        {
+          "text": "Causes disease",
+          "isCorrect": false
+        },
+        {
+          "text": "Weakens the body",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What do endocrine glands do?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.1"
+      ],
+      "options": [
+        {
+          "text": "Produce hormones to regulate body functions",
+          "isCorrect": true
+        },
+        {
+          "text": "Only store energy",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't regulate anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Just give emotions",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do hormones affect your body?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.2"
+      ],
+      "options": [
+        {
+          "text": "Regulate growth, metabolism, mood, and reproduction",
+          "isCorrect": true
+        },
+        {
+          "text": "Have no effect",
+          "isCorrect": false
+        },
+        {
+          "text": "Only affect emotions",
+          "isCorrect": false
+        },
+        {
+          "text": "Only control sleep",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does exercise strengthen the cardiovascular system?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.1"
+      ],
+      "options": [
+        {
+          "text": "Strengthens heart and improves circulation",
+          "isCorrect": true
+        },
+        {
+          "text": "Weakens the heart",
+          "isCorrect": false
+        },
+        {
+          "text": "No effect on heart",
+          "isCorrect": false
+        },
+        {
+          "text": "Only lungs improve",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is inflammation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.2"
+      ],
+      "options": [
+        {
+          "text": "Immune response causing swelling; helpful acute, harmful chronic",
+          "isCorrect": true
+        },
+        {
+          "text": "Always bad",
+          "isCorrect": false
+        },
+        {
+          "text": "Always good",
+          "isCorrect": false
+        },
+        {
+          "text": "Irrelevant",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do nutrients support your body?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.2.1"
+      ],
+      "options": [
+        {
+          "text": "Carbs = energy; protein = growth; vitamins = function",
+          "isCorrect": true
+        },
+        {
+          "text": "All nutrients are the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one matters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What lifestyle factors impact health most?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.HE.2.1"
+      ],
+      "options": [
+        {
+          "text": "Exercise, diet, sleep, stress management",
+          "isCorrect": true
+        },
+        {
+          "text": "Only genetics",
+          "isCorrect": false
+        },
+        {
+          "text": "Lifestyle doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Only exercise matters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do the nervous and endocrine systems interact?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.BS.2.2"
+      ],
+      "options": [
+        {
+          "text": "Work together: nervous sends quick signals, endocrine sends hormones",
+          "isCorrect": true
+        },
+        {
+          "text": "Work separately",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't interact",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one matters",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens during the stress response?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.2.1"
+      ],
+      "options": [
+        {
+          "text": "Heart rate increases, breathing speeds up, alertness rises",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing happens",
+          "isCorrect": false
+        },
+        {
+          "text": "You relax completely",
+          "isCorrect": false
+        },
+        {
+          "text": "Body shuts down",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does sleep affect your immune system?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.2.1"
+      ],
+      "options": [
+        {
+          "text": "Sleep strengthens immunity; lack of sleep weakens it",
+          "isCorrect": true
+        },
+        {
+          "text": "Sleep doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "More waking is better",
+          "isCorrect": false
+        },
+        {
+          "text": "Sleep harms immunity",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the relationship between fitness and health?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.2.1"
+      ],
+      "options": [
+        {
+          "text": "Fitness improves overall health and disease resistance",
+          "isCorrect": true
+        },
+        {
+          "text": "No relationship",
+          "isCorrect": false
+        },
+        {
+          "text": "Fitness only affects muscles",
+          "isCorrect": false
+        },
+        {
+          "text": "Health doesn't depend on fitness",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-health-and-pe-fitness-planning": [
+    {
+      "prompt": "What is periodization in training?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.1"
+      ],
+      "options": [
+        {
+          "text": "Varying intensity over time to avoid plateaus",
+          "isCorrect": true
+        },
+        {
+          "text": "Doing the same thing always",
+          "isCorrect": false
+        },
+        {
+          "text": "Random changes",
+          "isCorrect": false
+        },
+        {
+          "text": "No planning needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is overtraining?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.2"
+      ],
+      "options": [
+        {
+          "text": "Exercising too much without adequate recovery",
+          "isCorrect": true
+        },
+        {
+          "text": "Exercising too little",
+          "isCorrect": false
+        },
+        {
+          "text": "Not possible",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't hurt",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you establish your fitness baseline?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.3"
+      ],
+      "options": [
+        {
+          "text": "Take fitness tests to measure current level",
+          "isCorrect": true
+        },
+        {
+          "text": "Just guess",
+          "isCorrect": false
+        },
+        {
+          "text": "No baseline needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Copy others' results",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is specificity in training?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.1"
+      ],
+      "options": [
+        {
+          "text": "Training specifically for your goal",
+          "isCorrect": true
+        },
+        {
+          "text": "General training only",
+          "isCorrect": false
+        },
+        {
+          "text": "No goal needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Random exercises",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you modify workouts for different levels?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.2"
+      ],
+      "options": [
+        {
+          "text": "Beginners lower intensity; advanced higher intensity",
+          "isCorrect": true
+        },
+        {
+          "text": "Everyone does same",
+          "isCorrect": false
+        },
+        {
+          "text": "No modifications",
+          "isCorrect": false
+        },
+        {
+          "text": "Intensity never changes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is recovery essential?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.2.3"
+      ],
+      "options": [
+        {
+          "text": "Muscles repair and strengthen during rest",
+          "isCorrect": true
+        },
+        {
+          "text": "Recovery wastes time",
+          "isCorrect": false
+        },
+        {
+          "text": "No recovery needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Rest makes you weaker",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What's in a progressive training plan?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.1"
+      ],
+      "options": [
+        {
+          "text": "Warm-up, main workout, cool-down, rest days",
+          "isCorrect": true
+        },
+        {
+          "text": "Just main workout",
+          "isCorrect": false
+        },
+        {
+          "text": "No warm-up needed",
+          "isCorrect": false
+        },
+        {
+          "text": "No cool-down needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How often should you reassess your fitness?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.2"
+      ],
+      "options": [
+        {
+          "text": "Monthly to track progress and adjust",
+          "isCorrect": true
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        },
+        {
+          "text": "Once a year",
+          "isCorrect": false
+        },
+        {
+          "text": "Randomly",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does gradual progression prevent?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.3"
+      ],
+      "options": [
+        {
+          "text": "Injury from sudden increases",
+          "isCorrect": true
+        },
+        {
+          "text": "Any improvement",
+          "isCorrect": false
+        },
+        {
+          "text": "Boredom",
+          "isCorrect": false
+        },
+        {
+          "text": "Strength gains",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you avoid fitness plateaus?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.1"
+      ],
+      "options": [
+        {
+          "text": "Vary exercises, increase intensity, change routines",
+          "isCorrect": true
+        },
+        {
+          "text": "Do the same thing",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't change anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Quit when stuck",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you track in a fitness plan?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.2.2"
+      ],
+      "options": [
+        {
+          "text": "Workouts, times, reps, feelings, progress",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing",
+          "isCorrect": false
+        },
+        {
+          "text": "Only feelings",
+          "isCorrect": false
+        },
+        {
+          "text": "Only times",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does proper form prevent injury?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.2.3"
+      ],
+      "options": [
+        {
+          "text": "Correct alignment protects joints and muscles",
+          "isCorrect": true
+        },
+        {
+          "text": "Form doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Bad form is okay",
+          "isCorrect": false
+        },
+        {
+          "text": "Injuries are unavoidable",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-health-and-pe-body-systems-and-health": [
+    {
+      "prompt": "What are chronic diseases?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.3.1"
+      ],
+      "options": [
+        {
+          "text": "Long-term diseases often preventable by lifestyle",
+          "isCorrect": true
+        },
+        {
+          "text": "Temporary illnesses",
+          "isCorrect": false
+        },
+        {
+          "text": "Only genetic",
+          "isCorrect": false
+        },
+        {
+          "text": "Everyone gets them",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What increases risk of chronic disease?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.3.1"
+      ],
+      "options": [
+        {
+          "text": "Poor diet, inactivity, smoking, stress",
+          "isCorrect": true
+        },
+        {
+          "text": "Healthy habits",
+          "isCorrect": false
+        },
+        {
+          "text": "Exercise only",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing causes them",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does stress affect your body?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.3.2"
+      ],
+      "options": [
+        {
+          "text": "Raises hormones, increases heart rate; chronic stress damages health",
+          "isCorrect": true
+        },
+        {
+          "text": "Has no effect",
+          "isCorrect": false
+        },
+        {
+          "text": "Always helpful",
+          "isCorrect": false
+        },
+        {
+          "text": "Only emotional impact",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is metabolism?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.3.1"
+      ],
+      "options": [
+        {
+          "text": "Chemical processes that produce energy",
+          "isCorrect": true
+        },
+        {
+          "text": "Same for everyone",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't change",
+          "isCorrect": false
+        },
+        {
+          "text": "Only about digestion",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do systems communicate?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.BS.3.2"
+      ],
+      "options": [
+        {
+          "text": "Via nervous system, hormones, and circulation",
+          "isCorrect": true
+        },
+        {
+          "text": "They don't",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one system communicates",
+          "isCorrect": false
+        },
+        {
+          "text": "Systems work alone",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does sleep affect health?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.3.1"
+      ],
+      "options": [
+        {
+          "text": "Essential for immunity, recovery, focus, mood",
+          "isCorrect": true
+        },
+        {
+          "text": "Doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Waste of time",
+          "isCorrect": false
+        },
+        {
+          "text": "Unnecessary",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is chronic inflammation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.BS.3.1"
+      ],
+      "options": [
+        {
+          "text": "Ongoing inflammation increasing disease risk",
+          "isCorrect": true
+        },
+        {
+          "text": "Always helpful",
+          "isCorrect": false
+        },
+        {
+          "text": "Normal process",
+          "isCorrect": false
+        },
+        {
+          "text": "Impossible to manage",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What reduces inflammation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.3.1"
+      ],
+      "options": [
+        {
+          "text": "Healthy diet, exercise, stress management, sleep",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing helps",
+          "isCorrect": false
+        },
+        {
+          "text": "Only medication",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do lifestyle choices in teens affect adulthood?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.HE.3.1"
+      ],
+      "options": [
+        {
+          "text": "Build healthy habits and peak body potential",
+          "isCorrect": true
+        },
+        {
+          "text": "Teen choices don't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Only genetics determine health",
+          "isCorrect": false
+        },
+        {
+          "text": "Adult health is fixed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What supports mental health?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.3.1"
+      ],
+      "options": [
+        {
+          "text": "Exercise, sleep, social connection, purposeful activities",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing helps",
+          "isCorrect": false
+        },
+        {
+          "text": "Only medication",
+          "isCorrect": false
+        },
+        {
+          "text": "Isolation helps",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do different body systems work as a whole?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.BS.3.2"
+      ],
+      "options": [
+        {
+          "text": "Integrate via nervous, endocrine, and circulatory systems",
+          "isCorrect": true
+        },
+        {
+          "text": "Work independently",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one matters",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't coordinate",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What creates good overall health?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.HE.3.1"
+      ],
+      "options": [
+        {
+          "text": "Physical fitness, nutrition, mental health, social connection",
+          "isCorrect": true
+        },
+        {
+          "text": "Only exercise",
+          "isCorrect": false
+        },
+        {
+          "text": "Only nutrition",
+          "isCorrect": false
+        },
+        {
+          "text": "Mental health separate",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-health-and-pe-fitness-planning": [
+    {
+      "prompt": "How do genetics and training interact?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.FP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Genetics set potential; training determines outcomes",
+          "isCorrect": true
+        },
+        {
+          "text": "Only genetics matters",
+          "isCorrect": false
+        },
+        {
+          "text": "Only training matters",
+          "isCorrect": false
+        },
+        {
+          "text": "They don't interact",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What differs in endurance vs. strength training?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.2"
+      ],
+      "options": [
+        {
+          "text": "Endurance: aerobic, longer; Strength: heavy, fewer reps",
+          "isCorrect": true
+        },
+        {
+          "text": "Identical training",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one exists",
+          "isCorrect": false
+        },
+        {
+          "text": "No difference",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How should fitness plans change with age?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.3"
+      ],
+      "options": [
+        {
+          "text": "Adjust intensity, recovery, focus based on age and goals",
+          "isCorrect": true
+        },
+        {
+          "text": "Never change",
+          "isCorrect": false
+        },
+        {
+          "text": "More is always better",
+          "isCorrect": false
+        },
+        {
+          "text": "Less is better",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is nutrition critical to fitness?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Fuels exercise, builds muscle, enables recovery",
+          "isCorrect": true
+        },
+        {
+          "text": "Exercise only matters",
+          "isCorrect": false
+        },
+        {
+          "text": "Nutrition irrelevant",
+          "isCorrect": false
+        },
+        {
+          "text": "Any diet works",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you build a sustainable fitness habit?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.2"
+      ],
+      "options": [
+        {
+          "text": "Start small, enjoy it, set goals, find community",
+          "isCorrect": true
+        },
+        {
+          "text": "Too hard to maintain",
+          "isCorrect": false
+        },
+        {
+          "text": "No point trying",
+          "isCorrect": false
+        },
+        {
+          "text": "Must be intense",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does fitness affect mental health?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.3"
+      ],
+      "options": [
+        {
+          "text": "Improves mood, reduces anxiety, builds confidence",
+          "isCorrect": true
+        },
+        {
+          "text": "No mental benefit",
+          "isCorrect": false
+        },
+        {
+          "text": "Only physical benefits",
+          "isCorrect": false
+        },
+        {
+          "text": "Can harm mood",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What creates long-term fitness success?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.FP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Consistency, adaptation, enjoyment, realistic goals",
+          "isCorrect": true
+        },
+        {
+          "text": "Perfection required",
+          "isCorrect": false
+        },
+        {
+          "text": "Giving up when stuck",
+          "isCorrect": false
+        },
+        {
+          "text": "One-time effort",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you maintain motivation long-term?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.2"
+      ],
+      "options": [
+        {
+          "text": "Evolving goals, progress tracking, variety, community",
+          "isCorrect": true
+        },
+        {
+          "text": "Motivation isn't necessary",
+          "isCorrect": false
+        },
+        {
+          "text": "No variation",
+          "isCorrect": false
+        },
+        {
+          "text": "Push through suffering",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What prevents overtraining?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.3"
+      ],
+      "options": [
+        {
+          "text": "Adequate recovery, varied intensity, listening to body",
+          "isCorrect": true
+        },
+        {
+          "text": "More is always better",
+          "isCorrect": false
+        },
+        {
+          "text": "No rest days",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore pain",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does periodization improve fitness?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "HP.FP.3.1"
+      ],
+      "options": [
+        {
+          "text": "Cycles training to prevent plateaus and overtraining",
+          "isCorrect": true
+        },
+        {
+          "text": "Random variation",
+          "isCorrect": false
+        },
+        {
+          "text": "Same routine forever",
+          "isCorrect": false
+        },
+        {
+          "text": "No planning needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What role does flexibility play in fitness?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "HP.FP.3.2"
+      ],
+      "options": [
+        {
+          "text": "Prevents injury, improves movement, enhances performance",
+          "isCorrect": true
+        },
+        {
+          "text": "Doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for dancers",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes you weaker",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you adapt fitness as life changes?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "HP.FP.3.3"
+      ],
+      "options": [
+        {
+          "text": "Adjust goals, time, intensity based on circumstances",
+          "isCorrect": true
+        },
+        {
+          "text": "Quit when life changes",
+          "isCorrect": false
+        },
+        {
+          "text": "Never adapt",
+          "isCorrect": false
+        },
+        {
+          "text": "All-or-nothing approach",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

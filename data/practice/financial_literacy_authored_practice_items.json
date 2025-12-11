@@ -1,0 +1,1886 @@
+{
+  "6-electives-financial-literacy-elective-banking-basics": [
+    {
+      "prompt": "What is the main purpose of a bank?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.1"
+      ],
+      "options": [
+        {
+          "text": "Safely store money and provide financial services",
+          "isCorrect": true
+        },
+        {
+          "text": "Sell products",
+          "isCorrect": false
+        },
+        {
+          "text": "Give away free money",
+          "isCorrect": false
+        },
+        {
+          "text": "Trade stocks only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which account is best for everyday purchases?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.2"
+      ],
+      "options": [
+        {
+          "text": "Checking account",
+          "isCorrect": true
+        },
+        {
+          "text": "Savings account",
+          "isCorrect": false
+        },
+        {
+          "text": "Investment account",
+          "isCorrect": false
+        },
+        {
+          "text": "Loan account",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a debit card let you do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.2"
+      ],
+      "options": [
+        {
+          "text": "Spend money directly from your checking account",
+          "isCorrect": true
+        },
+        {
+          "text": "Borrow money from the bank",
+          "isCorrect": false
+        },
+        {
+          "text": "Get free money",
+          "isCorrect": false
+        },
+        {
+          "text": "Invest in stocks",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you never share with anyone?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.2"
+      ],
+      "options": [
+        {
+          "text": "Your PIN",
+          "isCorrect": true
+        },
+        {
+          "text": "Your account type",
+          "isCorrect": false
+        },
+        {
+          "text": "Your bank name",
+          "isCorrect": false
+        },
+        {
+          "text": "Your account number (usually)",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is interest in a savings account?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.1"
+      ],
+      "options": [
+        {
+          "text": "Money the bank pays you for saving with them",
+          "isCorrect": true
+        },
+        {
+          "text": "A fee you pay",
+          "isCorrect": false
+        },
+        {
+          "text": "A loan",
+          "isCorrect": false
+        },
+        {
+          "text": "A credit card reward",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which is more secure: online banking or in-person visits?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.1.2"
+      ],
+      "options": [
+        {
+          "text": "Both can be secure if you use strong passwords and avoid public WiFi",
+          "isCorrect": true
+        },
+        {
+          "text": "In-person is always better",
+          "isCorrect": false
+        },
+        {
+          "text": "Online is always better",
+          "isCorrect": false
+        },
+        {
+          "text": "Neither is secure",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a savings account best used for?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.1"
+      ],
+      "options": [
+        {
+          "text": "Storing money long-term and earning interest",
+          "isCorrect": true
+        },
+        {
+          "text": "Daily purchases",
+          "isCorrect": false
+        },
+        {
+          "text": "Paying bills",
+          "isCorrect": false
+        },
+        {
+          "text": "Getting a loan",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If your debit card is lost, what should you do immediately?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.1.2"
+      ],
+      "options": [
+        {
+          "text": "Contact your bank to cancel it and prevent fraud",
+          "isCorrect": true
+        },
+        {
+          "text": "Wait and see if someone returns it",
+          "isCorrect": false
+        },
+        {
+          "text": "Assume it's gone forever",
+          "isCorrect": false
+        },
+        {
+          "text": "Report it to police only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a credit card?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.M.1.1"
+      ],
+      "options": [
+        {
+          "text": "A card that lets you borrow money and pay it back later with interest",
+          "isCorrect": true
+        },
+        {
+          "text": "A card connected to your savings",
+          "isCorrect": false
+        },
+        {
+          "text": "Free money from the bank",
+          "isCorrect": false
+        },
+        {
+          "text": "A card only adults can use",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why do banks charge interest on loans?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.1.1"
+      ],
+      "options": [
+        {
+          "text": "They profit from lending and compensate for risk",
+          "isCorrect": true
+        },
+        {
+          "text": "To help borrowers",
+          "isCorrect": false
+        },
+        {
+          "text": "By law, they must",
+          "isCorrect": false
+        },
+        {
+          "text": "Banks don't charge interest",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the safest way to handle your PIN?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.1.2"
+      ],
+      "options": [
+        {
+          "text": "Memorize it and never share it",
+          "isCorrect": true
+        },
+        {
+          "text": "Write it on your card",
+          "isCorrect": false
+        },
+        {
+          "text": "Tell your friends",
+          "isCorrect": false
+        },
+        {
+          "text": "Post it online for reference",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if you see an unauthorized transaction?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.M.1.1"
+      ],
+      "options": [
+        {
+          "text": "Contact your bank immediately",
+          "isCorrect": true
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        },
+        {
+          "text": "Post on social media",
+          "isCorrect": false
+        },
+        {
+          "text": "Wait to see if it resolves itself",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-financial-literacy-elective-saving-budgeting": [
+    {
+      "prompt": "What is a budget?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "A plan for income and expenses",
+          "isCorrect": true
+        },
+        {
+          "text": "A list of things to buy",
+          "isCorrect": false
+        },
+        {
+          "text": "Money you borrow",
+          "isCorrect": false
+        },
+        {
+          "text": "A savings account",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which is a need vs. a want?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.S.1.1"
+      ],
+      "options": [
+        {
+          "text": "Food is a need; video games are a want",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Wants are essential",
+          "isCorrect": false
+        },
+        {
+          "text": "Needs are optional",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why save money?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.S.1.2"
+      ],
+      "options": [
+        {
+          "text": "Build security, reach goals, handle emergencies",
+          "isCorrect": true
+        },
+        {
+          "text": "You shouldn't save",
+          "isCorrect": false
+        },
+        {
+          "text": "Saving is boring",
+          "isCorrect": false
+        },
+        {
+          "text": "Only rich people save",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is an emergency fund for?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.1.2"
+      ],
+      "options": [
+        {
+          "text": "Unexpected expenses like medical bills or repairs",
+          "isCorrect": true
+        },
+        {
+          "text": "Regular spending",
+          "isCorrect": false
+        },
+        {
+          "text": "Entertainment",
+          "isCorrect": false
+        },
+        {
+          "text": "Vacation savings",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the 50/30/20 rule suggest?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "50% needs, 30% wants, 20% savings",
+          "isCorrect": true
+        },
+        {
+          "text": "50% spending on wants",
+          "isCorrect": false
+        },
+        {
+          "text": "No specific allocation",
+          "isCorrect": false
+        },
+        {
+          "text": "20% on everything",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How should you handle a $50 gift?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.1.1"
+      ],
+      "options": [
+        {
+          "text": "Split between saving and spending on wants",
+          "isCorrect": true
+        },
+        {
+          "text": "Spend it all",
+          "isCorrect": false
+        },
+        {
+          "text": "Save it all forever",
+          "isCorrect": false
+        },
+        {
+          "text": "Give it away",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a financial goal?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.S.1.2"
+      ],
+      "options": [
+        {
+          "text": "A specific money target you want to reach",
+          "isCorrect": true
+        },
+        {
+          "text": "Random spending",
+          "isCorrect": false
+        },
+        {
+          "text": "An income",
+          "isCorrect": false
+        },
+        {
+          "text": "A bank account",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you track your spending?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "Write down or record every purchase",
+          "isCorrect": true
+        },
+        {
+          "text": "Ignore it",
+          "isCorrect": false
+        },
+        {
+          "text": "Hope you remember",
+          "isCorrect": false
+        },
+        {
+          "text": "Use random guesses",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If you want to save for something, what's the first step?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.1.2"
+      ],
+      "options": [
+        {
+          "text": "Set a specific goal and target amount",
+          "isCorrect": true
+        },
+        {
+          "text": "Just hope",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't plan",
+          "isCorrect": false
+        },
+        {
+          "text": "Spend first, save later",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens if you spend more than you earn?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "You go into debt and owe money",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing happens",
+          "isCorrect": false
+        },
+        {
+          "text": "You get free money",
+          "isCorrect": false
+        },
+        {
+          "text": "Banks give you more",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which saving method is best?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.1.1"
+      ],
+      "options": [
+        {
+          "text": "Automatic deposits so you save before spending",
+          "isCorrect": true
+        },
+        {
+          "text": "Manual saving when you remember",
+          "isCorrect": false
+        },
+        {
+          "text": "Saving whatever is left",
+          "isCorrect": false
+        },
+        {
+          "text": "Not saving at all",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you cut expenses to save more?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "Review spending, eliminate unnecessary purchases, find cheaper alternatives",
+          "isCorrect": true
+        },
+        {
+          "text": "Never spend anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Give up all wants",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore expenses",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-financial-literacy-elective-banking-basics": [
+    {
+      "prompt": "What is credit?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.2.2"
+      ],
+      "options": [
+        {
+          "text": "Money you borrow and pay back later with interest",
+          "isCorrect": true
+        },
+        {
+          "text": "Free money",
+          "isCorrect": false
+        },
+        {
+          "text": "A bank account",
+          "isCorrect": false
+        },
+        {
+          "text": "Your savings",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a credit score?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "A number showing how reliable you are with borrowed money",
+          "isCorrect": true
+        },
+        {
+          "text": "Your bank balance",
+          "isCorrect": false
+        },
+        {
+          "text": "Your income",
+          "isCorrect": false
+        },
+        {
+          "text": "Your age",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What range is a good credit score?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "750 or above",
+          "isCorrect": true
+        },
+        {
+          "text": "Below 500",
+          "isCorrect": false
+        },
+        {
+          "text": "Exactly 650",
+          "isCorrect": false
+        },
+        {
+          "text": "300 or lower",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does APR mean?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.2"
+      ],
+      "options": [
+        {
+          "text": "Annual Percentage Rate—yearly interest on borrowed money",
+          "isCorrect": true
+        },
+        {
+          "text": "Account Payment Request",
+          "isCorrect": false
+        },
+        {
+          "text": "Annual Personal Rate",
+          "isCorrect": false
+        },
+        {
+          "text": "Automated Payment Routine",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why does a lower APR matter?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.2"
+      ],
+      "options": [
+        {
+          "text": "You pay less interest over time",
+          "isCorrect": true
+        },
+        {
+          "text": "Doesn't matter at all",
+          "isCorrect": false
+        },
+        {
+          "text": "All APRs are the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Higher APR is better",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What factors affect your credit score most?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "Payment history and amounts owed",
+          "isCorrect": true
+        },
+        {
+          "text": "Your social media",
+          "isCorrect": false
+        },
+        {
+          "text": "Your age",
+          "isCorrect": false
+        },
+        {
+          "text": "Your job title",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens if you miss a loan payment?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.2"
+      ],
+      "options": [
+        {
+          "text": "Your credit score drops, fees are charged, interest increases",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing bad happens",
+          "isCorrect": false
+        },
+        {
+          "text": "You get a reward",
+          "isCorrect": false
+        },
+        {
+          "text": "The bank pays you",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you check before taking a loan?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "APR, fees, repayment period, and all terms",
+          "isCorrect": true
+        },
+        {
+          "text": "Just the loan amount",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't need checking",
+          "isCorrect": false
+        },
+        {
+          "text": "Whatever your friend got",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is compound interest?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.2"
+      ],
+      "options": [
+        {
+          "text": "Earning interest on interest, accelerating growth",
+          "isCorrect": true
+        },
+        {
+          "text": "Simple, flat interest only",
+          "isCorrect": false
+        },
+        {
+          "text": "Losing money",
+          "isCorrect": false
+        },
+        {
+          "text": "A credit card fee",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you build good credit?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "Pay bills on time, keep debt low, don't apply for many accounts",
+          "isCorrect": true
+        },
+        {
+          "text": "Never use credit",
+          "isCorrect": false
+        },
+        {
+          "text": "Miss payments intentionally",
+          "isCorrect": false
+        },
+        {
+          "text": "Max out your cards",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between secured and unsecured credit?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.B.2.2"
+      ],
+      "options": [
+        {
+          "text": "Secured requires collateral; unsecured doesn't",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Secured is always better",
+          "isCorrect": false
+        },
+        {
+          "text": "Unsecured is impossible",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you do if you're denied credit?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.B.2.1"
+      ],
+      "options": [
+        {
+          "text": "Ask why, improve credit, try again later",
+          "isCorrect": true
+        },
+        {
+          "text": "Give up forever",
+          "isCorrect": false
+        },
+        {
+          "text": "Apply to more companies",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore the reason",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-financial-literacy-elective-saving-budgeting": [
+    {
+      "prompt": "What is gross income?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Total earnings before taxes and deductions",
+          "isCorrect": true
+        },
+        {
+          "text": "Money after taxes",
+          "isCorrect": false
+        },
+        {
+          "text": "Your net pay",
+          "isCorrect": false
+        },
+        {
+          "text": "Bonus only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is net income?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Take-home pay after taxes and deductions",
+          "isCorrect": true
+        },
+        {
+          "text": "Total earnings",
+          "isCorrect": false
+        },
+        {
+          "text": "Gross pay",
+          "isCorrect": false
+        },
+        {
+          "text": "Savings only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a short-term financial goal?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.S.2.1"
+      ],
+      "options": [
+        {
+          "text": "Achievable in weeks or months (new phone, shoes)",
+          "isCorrect": true
+        },
+        {
+          "text": "Takes 30 years",
+          "isCorrect": false
+        },
+        {
+          "text": "Is impossible",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't exist",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a long-term financial goal?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.S.2.2"
+      ],
+      "options": [
+        {
+          "text": "Achievable over years or decades (house, college, retirement)",
+          "isCorrect": true
+        },
+        {
+          "text": "Can't reach",
+          "isCorrect": false
+        },
+        {
+          "text": "Same as short-term",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't help",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why track your spending?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "See where money goes and find areas to cut",
+          "isCorrect": true
+        },
+        {
+          "text": "Wasting time",
+          "isCorrect": false
+        },
+        {
+          "text": "You don't need to track",
+          "isCorrect": false
+        },
+        {
+          "text": "Tracking is hard",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is inflation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.2.1"
+      ],
+      "options": [
+        {
+          "text": "When prices rise over time, reducing buying power",
+          "isCorrect": true
+        },
+        {
+          "text": "When prices fall",
+          "isCorrect": false
+        },
+        {
+          "text": "A bank feature",
+          "isCorrect": false
+        },
+        {
+          "text": "Your savings growing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How should you break down a large savings goal?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.2.2"
+      ],
+      "options": [
+        {
+          "text": "Into smaller weekly or monthly targets",
+          "isCorrect": true
+        },
+        {
+          "text": "All at once",
+          "isCorrect": false
+        },
+        {
+          "text": "Into impossible chunks",
+          "isCorrect": false
+        },
+        {
+          "text": "No planning needed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is variable vs. fixed expenses?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Fixed: consistent (rent); Variable: change (entertainment)",
+          "isCorrect": true
+        },
+        {
+          "text": "Same thing",
+          "isCorrect": false
+        },
+        {
+          "text": "Can't tell the difference",
+          "isCorrect": false
+        },
+        {
+          "text": "Doesn't matter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When should you review your budget?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.S.2.1"
+      ],
+      "options": [
+        {
+          "text": "Monthly or quarterly to adjust for changes",
+          "isCorrect": true
+        },
+        {
+          "text": "Once a year",
+          "isCorrect": false
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        },
+        {
+          "text": "Only when you remember",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How would you handle a 20% income reduction?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Cut wants, prioritize needs, maintain emergency fund savings",
+          "isCorrect": true
+        },
+        {
+          "text": "Spend the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Give up savings",
+          "isCorrect": false
+        },
+        {
+          "text": "Go into debt",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a zero-based budget?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.S.2.2"
+      ],
+      "options": [
+        {
+          "text": "Allocate every dollar so income minus expenses equals zero",
+          "isCorrect": true
+        },
+        {
+          "text": "Spend nothing",
+          "isCorrect": false
+        },
+        {
+          "text": "No tracking needed",
+          "isCorrect": false
+        },
+        {
+          "text": "Random allocation",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why might someone use automatic savings transfers?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.2.1"
+      ],
+      "options": [
+        {
+          "text": "It removes temptation to spend and builds the habit",
+          "isCorrect": true
+        },
+        {
+          "text": "Harder to save",
+          "isCorrect": false
+        },
+        {
+          "text": "Less control",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes no difference",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-financial-literacy-elective-banking-basics": [
+    {
+      "prompt": "What is APR on a credit card and why is it important?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Annual interest rate; lower rates mean paying less in interest",
+          "isCorrect": true
+        },
+        {
+          "text": "A one-time fee",
+          "isCorrect": false
+        },
+        {
+          "text": "A promotional code",
+          "isCorrect": false
+        },
+        {
+          "text": "Not important",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a financial institution?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.3.2"
+      ],
+      "options": [
+        {
+          "text": "A business offering financial services (bank, credit union, brokerage)",
+          "isCorrect": true
+        },
+        {
+          "text": "A government agency",
+          "isCorrect": false
+        },
+        {
+          "text": "A store",
+          "isCorrect": false
+        },
+        {
+          "text": "An investment scheme",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do credit unions differ from banks?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.2"
+      ],
+      "options": [
+        {
+          "text": "Member-owned, non-profit; often lower fees and better rates",
+          "isCorrect": true
+        },
+        {
+          "text": "Identical to banks",
+          "isCorrect": false
+        },
+        {
+          "text": "No differences",
+          "isCorrect": false
+        },
+        {
+          "text": "Worse than banks",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is identity theft?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.M.3.1"
+      ],
+      "options": [
+        {
+          "text": "When someone uses your personal info to commit fraud",
+          "isCorrect": true
+        },
+        {
+          "text": "A bank robbery",
+          "isCorrect": false
+        },
+        {
+          "text": "A credit score",
+          "isCorrect": false
+        },
+        {
+          "text": "A type of savings",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you protect yourself from identity theft?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.M.3.1"
+      ],
+      "options": [
+        {
+          "text": "Guard SSN, use strong passwords, monitor accounts, check credit reports",
+          "isCorrect": true
+        },
+        {
+          "text": "Nothing you can do",
+          "isCorrect": false
+        },
+        {
+          "text": "Share information freely",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignore warnings",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What should you compare before opening a bank account?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Fees, interest rates, account features, customer service",
+          "isCorrect": true
+        },
+        {
+          "text": "Just pick randomly",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't compare",
+          "isCorrect": false
+        },
+        {
+          "text": "All banks are the same",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a bank statement?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.3.2"
+      ],
+      "options": [
+        {
+          "text": "Document showing transactions, balance, fees, and interest",
+          "isCorrect": true
+        },
+        {
+          "text": "Your credit score",
+          "isCorrect": false
+        },
+        {
+          "text": "A loan agreement",
+          "isCorrect": false
+        },
+        {
+          "text": "Your savings goal",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How often should you review your bank statement?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.3.2"
+      ],
+      "options": [
+        {
+          "text": "Monthly to catch errors and fraud",
+          "isCorrect": true
+        },
+        {
+          "text": "Once a year",
+          "isCorrect": false
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        },
+        {
+          "text": "Only when problems arise",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a credit report?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.2"
+      ],
+      "options": [
+        {
+          "text": "Document showing your credit history and score",
+          "isCorrect": true
+        },
+        {
+          "text": "A bill",
+          "isCorrect": false
+        },
+        {
+          "text": "A bank statement",
+          "isCorrect": false
+        },
+        {
+          "text": "Your account balance",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How often can you get a free credit report?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.M.3.1"
+      ],
+      "options": [
+        {
+          "text": "Once per year from each major bureau",
+          "isCorrect": true
+        },
+        {
+          "text": "Never",
+          "isCorrect": false
+        },
+        {
+          "text": "Only when you request paid reports",
+          "isCorrect": false
+        },
+        {
+          "text": "Multiple times per month",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a dispute on your credit report?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.3.2"
+      ],
+      "options": [
+        {
+          "text": "Challenging errors or fraudulent items on your report; can improve your score",
+          "isCorrect": true
+        },
+        {
+          "text": "Agreeing with everything",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignoring inaccuracies",
+          "isCorrect": false
+        },
+        {
+          "text": "Accepting fraud",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is it important to understand your credit before major purchases?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.B.3.1"
+      ],
+      "options": [
+        {
+          "text": "Your credit score affects loan approval and interest rates",
+          "isCorrect": true
+        },
+        {
+          "text": "Doesn't matter at all",
+          "isCorrect": false
+        },
+        {
+          "text": "Banks approve everyone",
+          "isCorrect": false
+        },
+        {
+          "text": "Credit is irrelevant",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-financial-literacy-elective-saving-budgeting": [
+    {
+      "prompt": "What is an investment?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.3.1"
+      ],
+      "options": [
+        {
+          "text": "Money put into assets to grow over time (stocks, bonds, real estate)",
+          "isCorrect": true
+        },
+        {
+          "text": "The same as savings",
+          "isCorrect": false
+        },
+        {
+          "text": "A loan",
+          "isCorrect": false
+        },
+        {
+          "text": "Spending money",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between saving and investing?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.3.2"
+      ],
+      "options": [
+        {
+          "text": "Saving: safe, low growth; Investing: riskier, higher growth potential",
+          "isCorrect": true
+        },
+        {
+          "text": "Same thing",
+          "isCorrect": false
+        },
+        {
+          "text": "Investing is safer",
+          "isCorrect": false
+        },
+        {
+          "text": "Saving has more risk",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a 401(k)?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.3.1"
+      ],
+      "options": [
+        {
+          "text": "Employer-sponsored retirement account with tax advantages and employer matching",
+          "isCorrect": true
+        },
+        {
+          "text": "A type of loan",
+          "isCorrect": false
+        },
+        {
+          "text": "A credit card",
+          "isCorrect": false
+        },
+        {
+          "text": "A savings account",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the benefit of employer matching in a 401(k)?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.3.1"
+      ],
+      "options": [
+        {
+          "text": "Free money from your employer; not taking it is leaving money on the table",
+          "isCorrect": true
+        },
+        {
+          "text": "No benefit",
+          "isCorrect": false
+        },
+        {
+          "text": "Always decline matching",
+          "isCorrect": false
+        },
+        {
+          "text": "Matching is a scam",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the rule of 72?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.S.3.2"
+      ],
+      "options": [
+        {
+          "text": "Divide 72 by interest rate to find years to double your money",
+          "isCorrect": true
+        },
+        {
+          "text": "A budget rule",
+          "isCorrect": false
+        },
+        {
+          "text": "A credit score rule",
+          "isCorrect": false
+        },
+        {
+          "text": "A tax calculation",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is starting to save early critical?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.3.1"
+      ],
+      "options": [
+        {
+          "text": "Compound interest has decades to grow, dramatically increasing final amount",
+          "isCorrect": true
+        },
+        {
+          "text": "Starting age doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Late start is fine",
+          "isCorrect": false
+        },
+        {
+          "text": "Early start is wasteful",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is responsible spending?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "FL.B.4.1"
+      ],
+      "options": [
+        {
+          "text": "Budgeting, avoiding excess debt, prioritizing needs, saving for goals",
+          "isCorrect": true
+        },
+        {
+          "text": "Spending everything you earn",
+          "isCorrect": false
+        },
+        {
+          "text": "Never spending",
+          "isCorrect": false
+        },
+        {
+          "text": "Impulsive purchases",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a person's financial plan?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.4.1"
+      ],
+      "options": [
+        {
+          "text": "A comprehensive strategy covering earning, saving, investing, and spending",
+          "isCorrect": true
+        },
+        {
+          "text": "Random decisions",
+          "isCorrect": false
+        },
+        {
+          "text": "No planning",
+          "isCorrect": false
+        },
+        {
+          "text": "Only for wealthy people",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does debt affect your financial health?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.S.3.1"
+      ],
+      "options": [
+        {
+          "text": "Excessive debt limits options, increases stress, reduces wealth building",
+          "isCorrect": true
+        },
+        {
+          "text": "Doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "Debt is always good",
+          "isCorrect": false
+        },
+        {
+          "text": "More debt is better",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between good and bad debt?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.B.4.1"
+      ],
+      "options": [
+        {
+          "text": "Good: investment in future (education, house); Bad: consumer debt with high interest",
+          "isCorrect": true
+        },
+        {
+          "text": "All debt is bad",
+          "isCorrect": false
+        },
+        {
+          "text": "All debt is good",
+          "isCorrect": false
+        },
+        {
+          "text": "No difference",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you create a realistic budget?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "FL.B.4.1"
+      ],
+      "options": [
+        {
+          "text": "Track actual spending, be honest about income, allocate to categories, review regularly",
+          "isCorrect": true
+        },
+        {
+          "text": "Guess at expenses",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't track anything",
+          "isCorrect": false
+        },
+        {
+          "text": "Make unrealistic cuts",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is financial independence?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "FL.S.3.2"
+      ],
+      "options": [
+        {
+          "text": "Having enough income, savings, and investments to live without depending on others",
+          "isCorrect": true
+        },
+        {
+          "text": "Being rich",
+          "isCorrect": false
+        },
+        {
+          "text": "Never working",
+          "isCorrect": false
+        },
+        {
+          "text": "Rare and impossible",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

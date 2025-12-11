@@ -1,0 +1,3770 @@
+{
+  "3-electives-arts-and-music-drawing-painting-techniques": [
+    {
+      "prompt": "When you shade with pencil, what happens to the area as you press harder?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "It becomes darker and more detailed",
+          "isCorrect": true
+        },
+        {
+          "text": "It becomes lighter",
+          "isCorrect": false
+        },
+        {
+          "text": "The pencil breaks",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing changes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which color is made by mixing red and yellow together?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Orange",
+          "isCorrect": true
+        },
+        {
+          "text": "Green",
+          "isCorrect": false
+        },
+        {
+          "text": "Purple",
+          "isCorrect": false
+        },
+        {
+          "text": "Pink",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you make a color appear lighter on your paper?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "Add white paint or use lighter pressure",
+          "isCorrect": true
+        },
+        {
+          "text": "Use black paint",
+          "isCorrect": false
+        },
+        {
+          "text": "Erase completely",
+          "isCorrect": false
+        },
+        {
+          "text": "Mix all colors together",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does it mean when something in a drawing has 'texture'?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.PR.5.1"
+      ],
+      "options": [
+        {
+          "text": "It looks like it has a rough or smooth surface",
+          "isCorrect": true
+        },
+        {
+          "text": "It's very colorful",
+          "isCorrect": false
+        },
+        {
+          "text": "It's far away in the picture",
+          "isCorrect": false
+        },
+        {
+          "text": "It moves",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If you want an object to look far away in your drawing, should it be bigger or smaller?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Smaller and higher on the page",
+          "isCorrect": true
+        },
+        {
+          "text": "Bigger and brighter",
+          "isCorrect": false
+        },
+        {
+          "text": "The same size as close objects",
+          "isCorrect": false
+        },
+        {
+          "text": "It doesn't matter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is one way to show that something is wet or shiny in a drawing?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "Leave white highlights and use dark values nearby",
+          "isCorrect": true
+        },
+        {
+          "text": "Color everything white",
+          "isCorrect": false
+        },
+        {
+          "text": "Use only black lines",
+          "isCorrect": false
+        },
+        {
+          "text": "Make it blur",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When blending colors with a brush, how should the colors overlap?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.1"
+      ],
+      "options": [
+        {
+          "text": "Gradually and smoothly to create a transition",
+          "isCorrect": true
+        },
+        {
+          "text": "In sharp, separate patches",
+          "isCorrect": false
+        },
+        {
+          "text": "Never at all",
+          "isCorrect": false
+        },
+        {
+          "text": "Only at the edges",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does using short, quick brushstrokes affect the feeling of a painting?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "It makes it feel energetic and lively",
+          "isCorrect": true
+        },
+        {
+          "text": "It makes it look flat",
+          "isCorrect": false
+        },
+        {
+          "text": "It removes all color",
+          "isCorrect": false
+        },
+        {
+          "text": "It makes it darker",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which technique uses dots or small marks close together to create tone and texture?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "Pointillism or stippling",
+          "isCorrect": true
+        },
+        {
+          "text": "Glazing",
+          "isCorrect": false
+        },
+        {
+          "text": "Splattering",
+          "isCorrect": false
+        },
+        {
+          "text": "Dry brushing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If a painting uses mostly cool colors like blue and green, what mood might it create?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.1"
+      ],
+      "options": [
+        {
+          "text": "Calm and peaceful",
+          "isCorrect": true
+        },
+        {
+          "text": "Excited and energetic",
+          "isCorrect": false
+        },
+        {
+          "text": "Angry and chaotic",
+          "isCorrect": false
+        },
+        {
+          "text": "Warm and cozy",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the benefit of sketching lightly before painting with bold color?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "You can fix mistakes and plan placement before committing",
+          "isCorrect": true
+        },
+        {
+          "text": "Sketches must be erased completely",
+          "isCorrect": false
+        },
+        {
+          "text": "Light sketches disappear automatically",
+          "isCorrect": false
+        },
+        {
+          "text": "It wastes time",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can overlapping shapes help create depth in a flat drawing?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "The shape in front covers part of the shape behind it",
+          "isCorrect": true
+        },
+        {
+          "text": "All shapes must be the same size",
+          "isCorrect": false
+        },
+        {
+          "text": "Shapes should never touch",
+          "isCorrect": false
+        },
+        {
+          "text": "Overlapping removes color",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "3-electives-arts-and-music-notation-basics": [
+    {
+      "prompt": "How many lines are on a musical staff?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Five",
+          "isCorrect": true
+        },
+        {
+          "text": "Three",
+          "isCorrect": false
+        },
+        {
+          "text": "Seven",
+          "isCorrect": false
+        },
+        {
+          "text": "Four",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which symbol sits at the beginning of a staff to identify the pitch level?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.PR.4.1"
+      ],
+      "options": [
+        {
+          "text": "The treble clef (G clef)",
+          "isCorrect": true
+        },
+        {
+          "text": "A barline",
+          "isCorrect": false
+        },
+        {
+          "text": "A sharp symbol",
+          "isCorrect": false
+        },
+        {
+          "text": "A rest",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "A whole note gets how many beats in 4/4 time?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Four beats",
+          "isCorrect": true
+        },
+        {
+          "text": "One beat",
+          "isCorrect": false
+        },
+        {
+          "text": "Two beats",
+          "isCorrect": false
+        },
+        {
+          "text": "Eight beats",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a dot after a note do to its length?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.RE.7.1"
+      ],
+      "options": [
+        {
+          "text": "Adds half its value to the note",
+          "isCorrect": true
+        },
+        {
+          "text": "Doubles it",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes it shorter",
+          "isCorrect": false
+        },
+        {
+          "text": "Does nothing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which rest symbol represents the same length as a whole note?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.PR.4.1"
+      ],
+      "options": [
+        {
+          "text": "A whole rest",
+          "isCorrect": true
+        },
+        {
+          "text": "A half rest",
+          "isCorrect": false
+        },
+        {
+          "text": "A quarter rest",
+          "isCorrect": false
+        },
+        {
+          "text": "An eighth rest",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In the treble clef, what is the letter name of the line that the clef spirals around?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "G",
+          "isCorrect": true
+        },
+        {
+          "text": "C",
+          "isCorrect": false
+        },
+        {
+          "text": "F",
+          "isCorrect": false
+        },
+        {
+          "text": "A",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a repeat sign (:||:) tell a musician to do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.RE.7.1"
+      ],
+      "options": [
+        {
+          "text": "Play that section again",
+          "isCorrect": true
+        },
+        {
+          "text": "Stop playing",
+          "isCorrect": false
+        },
+        {
+          "text": "Play faster",
+          "isCorrect": false
+        },
+        {
+          "text": "Change instruments",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many quarter notes fit into one measure of 4/4 time?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.PR.4.1"
+      ],
+      "options": [
+        {
+          "text": "Four",
+          "isCorrect": true
+        },
+        {
+          "text": "Two",
+          "isCorrect": false
+        },
+        {
+          "text": "Eight",
+          "isCorrect": false
+        },
+        {
+          "text": "Six",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the time signature 3/4 mean?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Three quarter notes per measure",
+          "isCorrect": true
+        },
+        {
+          "text": "Three whole notes",
+          "isCorrect": false
+        },
+        {
+          "text": "Three eighth notes",
+          "isCorrect": false
+        },
+        {
+          "text": "Three measures",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which symbol raises a note by one half-step?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.7.1"
+      ],
+      "options": [
+        {
+          "text": "A sharp (#)",
+          "isCorrect": true
+        },
+        {
+          "text": "A flat (b)",
+          "isCorrect": false
+        },
+        {
+          "text": "A natural (♮)",
+          "isCorrect": false
+        },
+        {
+          "text": "A dot",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "On a staff, the second line from the bottom represents which note in the treble clef?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.PR.4.1"
+      ],
+      "options": [
+        {
+          "text": "G",
+          "isCorrect": true
+        },
+        {
+          "text": "E",
+          "isCorrect": false
+        },
+        {
+          "text": "C",
+          "isCorrect": false
+        },
+        {
+          "text": "B",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a flat symbol (♭) do to a note?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Lowers it by one half-step",
+          "isCorrect": true
+        },
+        {
+          "text": "Raises it",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes it longer",
+          "isCorrect": false
+        },
+        {
+          "text": "Makes it louder",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "4-electives-arts-and-music-drawing-painting-techniques": [
+    {
+      "prompt": "When mixing pigments, what do you get when you combine red and blue?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Purple",
+          "isCorrect": true
+        },
+        {
+          "text": "Orange",
+          "isCorrect": false
+        },
+        {
+          "text": "Green",
+          "isCorrect": false
+        },
+        {
+          "text": "Brown",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the primary color of the color wheel?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Red, yellow, or blue",
+          "isCorrect": true
+        },
+        {
+          "text": "All colors",
+          "isCorrect": false
+        },
+        {
+          "text": "Orange and green",
+          "isCorrect": false
+        },
+        {
+          "text": "Gray and white",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which of these techniques uses very dry paint with minimal water?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Dry brushing",
+          "isCorrect": true
+        },
+        {
+          "text": "Wet-on-wet",
+          "isCorrect": false
+        },
+        {
+          "text": "Glazing",
+          "isCorrect": false
+        },
+        {
+          "text": "Underpainting",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does value differ from hue in art?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.1"
+      ],
+      "options": [
+        {
+          "text": "Value is lightness/darkness; hue is the color name",
+          "isCorrect": true
+        },
+        {
+          "text": "They are the same thing",
+          "isCorrect": false
+        },
+        {
+          "text": "Value is temperature",
+          "isCorrect": false
+        },
+        {
+          "text": "Hue has no importance",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is negative space in a drawing?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "The empty space around the main subject",
+          "isCorrect": true
+        },
+        {
+          "text": "Bad space in art",
+          "isCorrect": false
+        },
+        {
+          "text": "A sad feeling",
+          "isCorrect": false
+        },
+        {
+          "text": "Space that must be filled",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When you use complementary colors together, what visual effect do you create?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Maximum contrast and vibrancy",
+          "isCorrect": true
+        },
+        {
+          "text": "A calm, peaceful feeling",
+          "isCorrect": false
+        },
+        {
+          "text": "Everything becomes gray",
+          "isCorrect": false
+        },
+        {
+          "text": "Colors cancel out",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which technique creates texture by applying paint very thickly?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.1"
+      ],
+      "options": [
+        {
+          "text": "Impasto",
+          "isCorrect": true
+        },
+        {
+          "text": "Glazing",
+          "isCorrect": false
+        },
+        {
+          "text": "Wet blending",
+          "isCorrect": false
+        },
+        {
+          "text": "Underpainting",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do warm colors (red, orange, yellow) affect the viewer emotionally?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "They feel energetic, happy, and warm",
+          "isCorrect": true
+        },
+        {
+          "text": "They feel cold",
+          "isCorrect": false
+        },
+        {
+          "text": "They have no emotional effect",
+          "isCorrect": false
+        },
+        {
+          "text": "They always feel sad",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a vanishing point in linear perspective?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "The point where lines converge to show distance",
+          "isCorrect": true
+        },
+        {
+          "text": "A place lines disappear forever",
+          "isCorrect": false
+        },
+        {
+          "text": "The corner of the paper",
+          "isCorrect": false
+        },
+        {
+          "text": "An error in drawing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When you shade gradually from light to dark, what technique are you using?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.PR.5.1"
+      ],
+      "options": [
+        {
+          "text": "Blending or gradation",
+          "isCorrect": true
+        },
+        {
+          "text": "Hatching",
+          "isCorrect": false
+        },
+        {
+          "text": "Splattering",
+          "isCorrect": false
+        },
+        {
+          "text": "Dry brush",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What happens visually when you use a monochromatic color scheme?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.1"
+      ],
+      "options": [
+        {
+          "text": "Everything is one color in different values",
+          "isCorrect": true
+        },
+        {
+          "text": "All colors appear together",
+          "isCorrect": false
+        },
+        {
+          "text": "It must be gray",
+          "isCorrect": false
+        },
+        {
+          "text": "It's always very bright",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can you make an object appear three-dimensional in a flat drawing?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Using shading, perspective, and overlapping",
+          "isCorrect": true
+        },
+        {
+          "text": "Using only outlines",
+          "isCorrect": false
+        },
+        {
+          "text": "Avoiding all details",
+          "isCorrect": false
+        },
+        {
+          "text": "Using one single color",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "4-electives-arts-and-music-notation-basics": [
+    {
+      "prompt": "What do the numbers in a time signature represent?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Top: beats per measure; bottom: note value that gets one beat",
+          "isCorrect": true
+        },
+        {
+          "text": "Top: tempo; bottom: key",
+          "isCorrect": false
+        },
+        {
+          "text": "The length of the song",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing important",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a natural sign (♮) do to a note?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "Cancels a sharp or flat to make it natural",
+          "isCorrect": true
+        },
+        {
+          "text": "Raises the pitch",
+          "isCorrect": false
+        },
+        {
+          "text": "Lowers the pitch",
+          "isCorrect": false
+        },
+        {
+          "text": "Extends the note",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many eighth notes equal one quarter note?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Two eighth notes",
+          "isCorrect": true
+        },
+        {
+          "text": "Four eighth notes",
+          "isCorrect": false
+        },
+        {
+          "text": "One eighth note",
+          "isCorrect": false
+        },
+        {
+          "text": "Three eighth notes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In the bass clef, which line is the reference point?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.7.2"
+      ],
+      "options": [
+        {
+          "text": "F (the second line from the top)",
+          "isCorrect": true
+        },
+        {
+          "text": "G",
+          "isCorrect": false
+        },
+        {
+          "text": "C",
+          "isCorrect": false
+        },
+        {
+          "text": "A",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a key signature with one sharp tell you?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "The key is G major or E minor",
+          "isCorrect": true
+        },
+        {
+          "text": "The key is C major",
+          "isCorrect": false
+        },
+        {
+          "text": "All notes are raised",
+          "isCorrect": false
+        },
+        {
+          "text": "There are no flats",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the purpose of ledger lines in sheet music?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "To extend the staff for very high or low notes",
+          "isCorrect": true
+        },
+        {
+          "text": "To mark measures",
+          "isCorrect": false
+        },
+        {
+          "text": "To show dynamics",
+          "isCorrect": false
+        },
+        {
+          "text": "To indicate repeats",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many beats does a half note receive in 4/4 time?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.RE.7.2"
+      ],
+      "options": [
+        {
+          "text": "Two beats",
+          "isCorrect": true
+        },
+        {
+          "text": "Four beats",
+          "isCorrect": false
+        },
+        {
+          "text": "One beat",
+          "isCorrect": false
+        },
+        {
+          "text": "Three beats",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the term 'forte' (f) mean in music notation?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "Play loudly",
+          "isCorrect": true
+        },
+        {
+          "text": "Play softly",
+          "isCorrect": false
+        },
+        {
+          "text": "Play fast",
+          "isCorrect": false
+        },
+        {
+          "text": "Play slow",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When you see a double bar line at the end of a piece, what does it mean?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "The piece has ended",
+          "isCorrect": true
+        },
+        {
+          "text": "Play the section again",
+          "isCorrect": false
+        },
+        {
+          "text": "Start a new page",
+          "isCorrect": false
+        },
+        {
+          "text": "Go back to the beginning",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What interval is created when you count from C up to G?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.7.2"
+      ],
+      "options": [
+        {
+          "text": "A perfect fifth",
+          "isCorrect": true
+        },
+        {
+          "text": "A major third",
+          "isCorrect": false
+        },
+        {
+          "text": "An octave",
+          "isCorrect": false
+        },
+        {
+          "text": "A second",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you read a note that appears above the treble clef staff on a ledger line?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "Continue the alphabet pattern from the staff",
+          "isCorrect": true
+        },
+        {
+          "text": "Start over at A",
+          "isCorrect": false
+        },
+        {
+          "text": "Skip that note",
+          "isCorrect": false
+        },
+        {
+          "text": "Play any note",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does 'accelerando' (accel.) mean in a musical score?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Gradually play faster",
+          "isCorrect": true
+        },
+        {
+          "text": "Get louder",
+          "isCorrect": false
+        },
+        {
+          "text": "Get quieter",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't change tempo",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "5-electives-arts-and-music-drawing-painting-techniques": [
+    {
+      "prompt": "In atmospheric perspective, how do distant mountains appear compared to near ones?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Hazy, lighter, and more blue",
+          "isCorrect": true
+        },
+        {
+          "text": "Darker and more detailed",
+          "isCorrect": false
+        },
+        {
+          "text": "The same color and size",
+          "isCorrect": false
+        },
+        {
+          "text": "Brighter and more saturated",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What tertiary color is made by mixing a primary and secondary color together?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Red-orange, yellow-green, blue-violet, etc.",
+          "isCorrect": true
+        },
+        {
+          "text": "Only the three primaries",
+          "isCorrect": false
+        },
+        {
+          "text": "Black and white only",
+          "isCorrect": false
+        },
+        {
+          "text": "All colors mixed together",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "According to the rule of thirds, where should the focal point of a composition be placed?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.2"
+      ],
+      "options": [
+        {
+          "text": "At one of the four intersection points of the grid lines",
+          "isCorrect": true
+        },
+        {
+          "text": "Exactly in the center",
+          "isCorrect": false
+        },
+        {
+          "text": "Always in the top left",
+          "isCorrect": false
+        },
+        {
+          "text": "In a corner",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does underpainting establish structure before adding final layers?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "It establishes basic values, composition, and forms",
+          "isCorrect": true
+        },
+        {
+          "text": "It covers the entire canvas with one color",
+          "isCorrect": false
+        },
+        {
+          "text": "It must be completely covered",
+          "isCorrect": false
+        },
+        {
+          "text": "It prevents any glazing",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What visual effect do lines in an artwork typically create?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Direction, movement, and energy",
+          "isCorrect": true
+        },
+        {
+          "text": "Only texture",
+          "isCorrect": false
+        },
+        {
+          "text": "Just color",
+          "isCorrect": false
+        },
+        {
+          "text": "No effect",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do colors change in saturation as they move away from the viewer?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.2"
+      ],
+      "options": [
+        {
+          "text": "They become less saturated and more muted",
+          "isCorrect": true
+        },
+        {
+          "text": "They become more vibrant",
+          "isCorrect": false
+        },
+        {
+          "text": "Saturation doesn't change",
+          "isCorrect": false
+        },
+        {
+          "text": "They turn gray immediately",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between an analogous and a complementary color scheme?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Analogous colors are next to each other; complementary are opposite",
+          "isCorrect": true
+        },
+        {
+          "text": "They are the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Analogous colors are opposite",
+          "isCorrect": false
+        },
+        {
+          "text": "Neither scheme is important",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "When creating a portrait, how should the proportions of the head generally be divided?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Eyes about halfway down, features equally spaced",
+          "isCorrect": true
+        },
+        {
+          "text": "Eyes very close to the top",
+          "isCorrect": false
+        },
+        {
+          "text": "Face divided into quarters",
+          "isCorrect": false
+        },
+        {
+          "text": "Proportions don't matter",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What technique uses many small dots of color placed next to each other?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.PR.5.2"
+      ],
+      "options": [
+        {
+          "text": "Pointillism",
+          "isCorrect": true
+        },
+        {
+          "text": "Impasto",
+          "isCorrect": false
+        },
+        {
+          "text": "Glazing",
+          "isCorrect": false
+        },
+        {
+          "text": "Splattering",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does chiaroscuro create drama and focus in a painting?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Using strong contrasts between light and dark",
+          "isCorrect": true
+        },
+        {
+          "text": "Using only bright colors",
+          "isCorrect": false
+        },
+        {
+          "text": "Avoiding all shadows",
+          "isCorrect": false
+        },
+        {
+          "text": "Mixing all colors together",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the 'golden ratio' or 'divine proportion' help guide in composition?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "VA.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Harmonious placement and balance of elements",
+          "isCorrect": true
+        },
+        {
+          "text": "The speed of painting",
+          "isCorrect": false
+        },
+        {
+          "text": "The order of colors",
+          "isCorrect": false
+        },
+        {
+          "text": "The size of the brush",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How can an artist use color temperature to create depth in a landscape?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.PR.5.2"
+      ],
+      "options": [
+        {
+          "text": "Warm colors in foreground, cool in background, creates recession",
+          "isCorrect": true
+        },
+        {
+          "text": "Cool colors always come forward",
+          "isCorrect": false
+        },
+        {
+          "text": "Temperature has no effect",
+          "isCorrect": false
+        },
+        {
+          "text": "All colors must be the same temperature",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "5-electives-arts-and-music-notation-basics": [
+    {
+      "prompt": "What does a dotted half note equal in beats (in 4/4 time)?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Three beats",
+          "isCorrect": true
+        },
+        {
+          "text": "Two beats",
+          "isCorrect": false
+        },
+        {
+          "text": "Four beats",
+          "isCorrect": false
+        },
+        {
+          "text": "One beat",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In a major scale, which scale degrees are naturally sharp in the harmonic minor?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "The 7th degree is raised to create a leading tone",
+          "isCorrect": true
+        },
+        {
+          "text": "The 6th degree",
+          "isCorrect": false
+        },
+        {
+          "text": "No degrees change",
+          "isCorrect": false
+        },
+        {
+          "text": "All degrees are raised",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a key signature with three sharps indicate?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "A major (or F-sharp minor)",
+          "isCorrect": true
+        },
+        {
+          "text": "D major",
+          "isCorrect": false
+        },
+        {
+          "text": "G major",
+          "isCorrect": false
+        },
+        {
+          "text": "B-flat major",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How is a sixteenth note's duration related to a quarter note?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.7.2"
+      ],
+      "options": [
+        {
+          "text": "Four sixteenth notes = one quarter note",
+          "isCorrect": true
+        },
+        {
+          "text": "Two sixteenth notes = one quarter note",
+          "isCorrect": false
+        },
+        {
+          "text": "One sixteenth note = one quarter note",
+          "isCorrect": false
+        },
+        {
+          "text": "Sixteenth notes are longer",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does a crescendo marking (cresc. or <) instruct the musician to do?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "Gradually get louder",
+          "isCorrect": true
+        },
+        {
+          "text": "Get quieter suddenly",
+          "isCorrect": false
+        },
+        {
+          "text": "Play the same volume",
+          "isCorrect": false
+        },
+        {
+          "text": "Slow down",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In the treble clef, what note appears in the spaces from bottom to top?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "F, A, C, E",
+          "isCorrect": true
+        },
+        {
+          "text": "E, G, B, D",
+          "isCorrect": false
+        },
+        {
+          "text": "C, D, E, F",
+          "isCorrect": false
+        },
+        {
+          "text": "A, B, C, D",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the abbreviation for 'diminuendo' or gradually getting softer?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.RE.7.2"
+      ],
+      "options": [
+        {
+          "text": "dim. or decrescendo (>)",
+          "isCorrect": true
+        },
+        {
+          "text": "accel.",
+          "isCorrect": false
+        },
+        {
+          "text": "cresc.",
+          "isCorrect": false
+        },
+        {
+          "text": "rit.",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many half steps are in a major third interval?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "Four half steps",
+          "isCorrect": true
+        },
+        {
+          "text": "Three half steps",
+          "isCorrect": false
+        },
+        {
+          "text": "Two half steps",
+          "isCorrect": false
+        },
+        {
+          "text": "Five half steps",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does 'ritardando' (rit.) tell a performer?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "Gradually slow down",
+          "isCorrect": true
+        },
+        {
+          "text": "Speed up",
+          "isCorrect": false
+        },
+        {
+          "text": "Don't change tempo",
+          "isCorrect": false
+        },
+        {
+          "text": "Get louder",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In what order do sharps appear in key signatures?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.7.2"
+      ],
+      "options": [
+        {
+          "text": "F#, C#, G#, D#, A#, E#, B#",
+          "isCorrect": true
+        },
+        {
+          "text": "C#, G#, D#, A#",
+          "isCorrect": false
+        },
+        {
+          "text": "All sharps at once",
+          "isCorrect": false
+        },
+        {
+          "text": "Random order",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the interval between the first and last notes of a major scale?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.PR.4.2"
+      ],
+      "options": [
+        {
+          "text": "An octave (8th)",
+          "isCorrect": true
+        },
+        {
+          "text": "A fifth",
+          "isCorrect": false
+        },
+        {
+          "text": "A fourth",
+          "isCorrect": false
+        },
+        {
+          "text": "A third",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do you indicate that a note should be held longer than its written value?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.1.2"
+      ],
+      "options": [
+        {
+          "text": "With a fermata symbol (𝄐)",
+          "isCorrect": true
+        },
+        {
+          "text": "With a dot (the only option)",
+          "isCorrect": false
+        },
+        {
+          "text": "By repeating it",
+          "isCorrect": false
+        },
+        {
+          "text": "You can't extend notes",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-arts-and-music-art-history-pd-images": [
+    {
+      "prompt": "Which period saw the development of linear perspective and humanism in art?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.1"
+      ],
+      "options": [
+        {
+          "text": "The Renaissance",
+          "isCorrect": true
+        },
+        {
+          "text": "The Middle Ages",
+          "isCorrect": false
+        },
+        {
+          "text": "Ancient Rome",
+          "isCorrect": false
+        },
+        {
+          "text": "The Baroque period",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What was the primary subject matter of most Medieval European artwork?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CN.10.1"
+      ],
+      "options": [
+        {
+          "text": "Religious themes and biblical scenes",
+          "isCorrect": true
+        },
+        {
+          "text": "Landscapes and nature",
+          "isCorrect": false
+        },
+        {
+          "text": "Everyday life",
+          "isCorrect": false
+        },
+        {
+          "text": "Scientific subjects",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which ancient Egyptian structure combines art, architecture, and engineering?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "The pyramids",
+          "isCorrect": true
+        },
+        {
+          "text": "The Colosseum",
+          "isCorrect": false
+        },
+        {
+          "text": "The Parthenon",
+          "isCorrect": false
+        },
+        {
+          "text": "The Great Wall",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What artistic technique involves carving into stone or other hard materials?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CN.10.1"
+      ],
+      "options": [
+        {
+          "text": "Sculpture",
+          "isCorrect": true
+        },
+        {
+          "text": "Painting",
+          "isCorrect": false
+        },
+        {
+          "text": "Weaving",
+          "isCorrect": false
+        },
+        {
+          "text": "Pottery",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How did the invention of oil paint influence Renaissance artists?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "It allowed for more detail, blending, and longer working time",
+          "isCorrect": true
+        },
+        {
+          "text": "It made painting easier but less detailed",
+          "isCorrect": false
+        },
+        {
+          "text": "It had no effect",
+          "isCorrect": false
+        },
+        {
+          "text": "It was never actually used",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which artistic movement focused on capturing the fleeting effects of light?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.RE.9.1"
+      ],
+      "options": [
+        {
+          "text": "Impressionism",
+          "isCorrect": true
+        },
+        {
+          "text": "Realism",
+          "isCorrect": false
+        },
+        {
+          "text": "Romanticism",
+          "isCorrect": false
+        },
+        {
+          "text": "Cubism",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the primary function of art in ancient religious cultures?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.1"
+      ],
+      "options": [
+        {
+          "text": "To honor the gods and commemorate important figures",
+          "isCorrect": true
+        },
+        {
+          "text": "To be sold for profit",
+          "isCorrect": false
+        },
+        {
+          "text": "To teach mathematics",
+          "isCorrect": false
+        },
+        {
+          "text": "To entertain without meaning",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which European art movement was influenced by Japanese woodblock prints?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "Impressionism and Post-Impressionism",
+          "isCorrect": true
+        },
+        {
+          "text": "Realism",
+          "isCorrect": false
+        },
+        {
+          "text": "Romanticism",
+          "isCorrect": false
+        },
+        {
+          "text": "Medieval art",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What materials were commonly used by ancient Chinese artists?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.1"
+      ],
+      "options": [
+        {
+          "text": "Ink on silk and paper for calligraphy and painting",
+          "isCorrect": true
+        },
+        {
+          "text": "Only stone carving",
+          "isCorrect": false
+        },
+        {
+          "text": "Oil and canvas only",
+          "isCorrect": false
+        },
+        {
+          "text": "Modern synthetic materials",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How did the Catholic Church influence the creation of Renaissance artworks?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.1"
+      ],
+      "options": [
+        {
+          "text": "It commissioned works for churches and cathedrals",
+          "isCorrect": true
+        },
+        {
+          "text": "It banned all art",
+          "isCorrect": false
+        },
+        {
+          "text": "It preferred abstract art",
+          "isCorrect": false
+        },
+        {
+          "text": "It had no influence",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the artistic significance of the Rosetta Stone?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "It helped decipher Egyptian hieroglyphics, revealing their cultural narratives",
+          "isCorrect": true
+        },
+        {
+          "text": "It's a famous painting",
+          "isCorrect": false
+        },
+        {
+          "text": "It has no artistic importance",
+          "isCorrect": false
+        },
+        {
+          "text": "It was used only for decoration",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which ancient civilization is known for creating intricate geometric mosaics and architecture?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.1"
+      ],
+      "options": [
+        {
+          "text": "Ancient Rome and Greece",
+          "isCorrect": true
+        },
+        {
+          "text": "Only China",
+          "isCorrect": false
+        },
+        {
+          "text": "Only Egypt",
+          "isCorrect": false
+        },
+        {
+          "text": "Medieval Europe only",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "6-electives-arts-and-music-music-theory-intro": [
+    {
+      "prompt": "What are the three notes in a C major triad?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "C, E, G",
+          "isCorrect": true
+        },
+        {
+          "text": "C, D, E",
+          "isCorrect": false
+        },
+        {
+          "text": "C, F, G",
+          "isCorrect": false
+        },
+        {
+          "text": "C, C, C",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What interval is created between C and G?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "A perfect fifth",
+          "isCorrect": true
+        },
+        {
+          "text": "A major third",
+          "isCorrect": false
+        },
+        {
+          "text": "A perfect fourth",
+          "isCorrect": false
+        },
+        {
+          "text": "An octave",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In a major scale, how many whole steps occur between the root and the octave?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CN.11.1"
+      ],
+      "options": [
+        {
+          "text": "Six whole steps (plus one half step)",
+          "isCorrect": true
+        },
+        {
+          "text": "Eight whole steps",
+          "isCorrect": false
+        },
+        {
+          "text": "Four whole steps",
+          "isCorrect": false
+        },
+        {
+          "text": "No steps",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What chord symbol represents a major triad built on the tonic?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "I (Roman numeral)",
+          "isCorrect": true
+        },
+        {
+          "text": "V",
+          "isCorrect": false
+        },
+        {
+          "text": "IV",
+          "isCorrect": false
+        },
+        {
+          "text": "vi",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does a minor triad differ from a major triad?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "The third is flatted (lowered by a half step)",
+          "isCorrect": true
+        },
+        {
+          "text": "The fifth is changed",
+          "isCorrect": false
+        },
+        {
+          "text": "Minor chords have no third",
+          "isCorrect": false
+        },
+        {
+          "text": "There is no difference",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which chord progression creates a strong sense of resolution?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.1"
+      ],
+      "options": [
+        {
+          "text": "V to I (dominant to tonic)",
+          "isCorrect": true
+        },
+        {
+          "text": "I to IV",
+          "isCorrect": false
+        },
+        {
+          "text": "vi to iii",
+          "isCorrect": false
+        },
+        {
+          "text": "ii to V",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the Roman numeral for the dominant chord in a major key?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "V",
+          "isCorrect": true
+        },
+        {
+          "text": "IV",
+          "isCorrect": false
+        },
+        {
+          "text": "vi",
+          "isCorrect": false
+        },
+        {
+          "text": "ii",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How many half steps are in a perfect fifth?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "Seven half steps",
+          "isCorrect": true
+        },
+        {
+          "text": "Five half steps",
+          "isCorrect": false
+        },
+        {
+          "text": "Four half steps",
+          "isCorrect": false
+        },
+        {
+          "text": "Twelve half steps",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the relative minor key to C major?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.1"
+      ],
+      "options": [
+        {
+          "text": "A minor",
+          "isCorrect": true
+        },
+        {
+          "text": "D minor",
+          "isCorrect": false
+        },
+        {
+          "text": "E minor",
+          "isCorrect": false
+        },
+        {
+          "text": "G minor",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In what order do the notes of a C major scale appear?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "C, D, E, F, G, A, B, C",
+          "isCorrect": true
+        },
+        {
+          "text": "C, D, E, F, G, A, B-flat, C",
+          "isCorrect": false
+        },
+        {
+          "text": "C, C#, D, D#, E, F, F#, G",
+          "isCorrect": false
+        },
+        {
+          "text": "A, B, C, D, E, F, G, A",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does it mean when two voices move in parallel fifths?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "They move at the same time in the same interval relationship",
+          "isCorrect": true
+        },
+        {
+          "text": "They move in opposite directions",
+          "isCorrect": false
+        },
+        {
+          "text": "One voice is silent",
+          "isCorrect": false
+        },
+        {
+          "text": "They sing the same note",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How are chord inversions labeled in harmonic analysis?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.1"
+      ],
+      "options": [
+        {
+          "text": "Root position, first inversion (6), second inversion (6/4)",
+          "isCorrect": true
+        },
+        {
+          "text": "Only root position matters",
+          "isCorrect": false
+        },
+        {
+          "text": "They have no labels",
+          "isCorrect": false
+        },
+        {
+          "text": "Using the lowest note letter only",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-arts-and-music-art-history-pd-images": [
+    {
+      "prompt": "Which artistic movement rejected rationality and embraced the unconscious and dreams?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.2"
+      ],
+      "options": [
+        {
+          "text": "Surrealism",
+          "isCorrect": true
+        },
+        {
+          "text": "Realism",
+          "isCorrect": false
+        },
+        {
+          "text": "Impressionism",
+          "isCorrect": false
+        },
+        {
+          "text": "Renaissance",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What did Cubist artists do to traditional perspective and form?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "Fragmented and analyzed objects from multiple viewpoints simultaneously",
+          "isCorrect": true
+        },
+        {
+          "text": "Perfected single-point perspective",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignored geometry entirely",
+          "isCorrect": false
+        },
+        {
+          "text": "Returned to Renaissance methods",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How did the Harlem Renaissance influence American and African American art?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.2"
+      ],
+      "options": [
+        {
+          "text": "It celebrated African American culture, identity, and artistic innovation",
+          "isCorrect": true
+        },
+        {
+          "text": "It was ignored by artists",
+          "isCorrect": false
+        },
+        {
+          "text": "It only influenced music",
+          "isCorrect": false
+        },
+        {
+          "text": "It discouraged artistic expression",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What artistic response did Dada artists have to World War I?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.2"
+      ],
+      "options": [
+        {
+          "text": "Rejection of logic, reason, and traditional aesthetics through absurdist art",
+          "isCorrect": true
+        },
+        {
+          "text": "Celebration of war",
+          "isCorrect": false
+        },
+        {
+          "text": "Creation of propaganda",
+          "isCorrect": false
+        },
+        {
+          "text": "Focus on realistic depiction",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which 19th-century technological invention most directly challenged traditional painting?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "VA.CN.10.2"
+      ],
+      "options": [
+        {
+          "text": "Photography",
+          "isCorrect": true
+        },
+        {
+          "text": "The printing press",
+          "isCorrect": false
+        },
+        {
+          "text": "The camera obscura",
+          "isCorrect": false
+        },
+        {
+          "text": "The electric light",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the primary focus of Abstract Expressionist artists?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "Gesture, emotion, and non-representational form",
+          "isCorrect": true
+        },
+        {
+          "text": "Perfect realism",
+          "isCorrect": false
+        },
+        {
+          "text": "Religious themes",
+          "isCorrect": false
+        },
+        {
+          "text": "Historical documentation",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which European nation's art was heavily influenced by its colonial relationships?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.2"
+      ],
+      "options": [
+        {
+          "text": "All major European nations incorporated colonial subjects and aesthetics",
+          "isCorrect": true
+        },
+        {
+          "text": "None were influenced",
+          "isCorrect": false
+        },
+        {
+          "text": "Only Spain",
+          "isCorrect": false
+        },
+        {
+          "text": "Only France",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How did the Arts and Crafts movement respond to industrial production?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.2"
+      ],
+      "options": [
+        {
+          "text": "By promoting handcrafted, artisanal production and design",
+          "isCorrect": true
+        },
+        {
+          "text": "By embracing mass production",
+          "isCorrect": false
+        },
+        {
+          "text": "By abandoning all art",
+          "isCorrect": false
+        },
+        {
+          "text": "By refusing any change",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the significance of 'primitive' or non-Western art in Modernist aesthetics?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "It inspired new forms and challenged Western artistic traditions",
+          "isCorrect": true
+        },
+        {
+          "text": "It was completely ignored",
+          "isCorrect": false
+        },
+        {
+          "text": "It was considered inferior",
+          "isCorrect": false
+        },
+        {
+          "text": "It had no influence on Western artists",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which period saw the rise of art movements that explicitly rejected beauty and tradition?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.2"
+      ],
+      "options": [
+        {
+          "text": "Early to mid-20th century (Dadaism, Surrealism, Modernism)",
+          "isCorrect": true
+        },
+        {
+          "text": "Ancient times",
+          "isCorrect": false
+        },
+        {
+          "text": "The Renaissance",
+          "isCorrect": false
+        },
+        {
+          "text": "Medieval period",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How did Impressionists change the social structure of the art world?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.2"
+      ],
+      "options": [
+        {
+          "text": "They bypassed official academies and held independent exhibitions",
+          "isCorrect": true
+        },
+        {
+          "text": "They strengthened academic control",
+          "isCorrect": false
+        },
+        {
+          "text": "They eliminated art schools",
+          "isCorrect": false
+        },
+        {
+          "text": "They had no social impact",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does the term 'avant-garde' mean in art history?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "Innovative, experimental, and ahead of conventional artistic practice",
+          "isCorrect": true
+        },
+        {
+          "text": "Very old and traditional",
+          "isCorrect": false
+        },
+        {
+          "text": "Commercial art only",
+          "isCorrect": false
+        },
+        {
+          "text": "Art that copies the past",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "7-electives-arts-and-music-music-theory-intro": [
+    {
+      "prompt": "What is voice leading in four-part harmony?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "The smooth, efficient movement of individual voices in harmony",
+          "isCorrect": true
+        },
+        {
+          "text": "How many voices are needed",
+          "isCorrect": false
+        },
+        {
+          "text": "The loudest voice only",
+          "isCorrect": false
+        },
+        {
+          "text": "Having all voices silent",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What chord typically appears before the tonic in a cadential progression?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "The dominant (V) or subdominant (IV)",
+          "isCorrect": true
+        },
+        {
+          "text": "The relative minor",
+          "isCorrect": false
+        },
+        {
+          "text": "The subdominant only",
+          "isCorrect": false
+        },
+        {
+          "text": "No chord precedes it",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How is a secondary dominant created?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.2"
+      ],
+      "options": [
+        {
+          "text": "By tonicizing any chord with a V-I relationship",
+          "isCorrect": true
+        },
+        {
+          "text": "By playing two dominants at once",
+          "isCorrect": false
+        },
+        {
+          "text": "By avoiding the dominant entirely",
+          "isCorrect": false
+        },
+        {
+          "text": "By always using the root position",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a plagal cadence?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "IV-I (subdominant to tonic), creating a 'Amen' effect",
+          "isCorrect": true
+        },
+        {
+          "text": "V-I only",
+          "isCorrect": false
+        },
+        {
+          "text": "I-IV",
+          "isCorrect": false
+        },
+        {
+          "text": "ii-vi",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "In what way does modulation function in larger compositions?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "It creates contrast, development, and structural interest",
+          "isCorrect": true
+        },
+        {
+          "text": "It removes all structure",
+          "isCorrect": false
+        },
+        {
+          "text": "It makes music confusing",
+          "isCorrect": false
+        },
+        {
+          "text": "It's never used",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a deceptive cadence?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.2"
+      ],
+      "options": [
+        {
+          "text": "V-vi (dominant to relative minor), avoiding the expected tonic",
+          "isCorrect": true
+        },
+        {
+          "text": "A perfect cadence",
+          "isCorrect": false
+        },
+        {
+          "text": "V-I with a trick",
+          "isCorrect": false
+        },
+        {
+          "text": "An ending that's dishonest",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do inversions of chords affect bass line movement?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "Different inversions create different bass notes and smoother voice leading",
+          "isCorrect": true
+        },
+        {
+          "text": "Inversions have no effect on bass",
+          "isCorrect": false
+        },
+        {
+          "text": "All inversions sound identical",
+          "isCorrect": false
+        },
+        {
+          "text": "Bass movement is irrelevant",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a chromatic alteration in harmony?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "A note from outside the key used to create color and tension",
+          "isCorrect": true
+        },
+        {
+          "text": "A mistake in writing",
+          "isCorrect": false
+        },
+        {
+          "text": "A scale that's out of order",
+          "isCorrect": false
+        },
+        {
+          "text": "Something that never happens",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How do diatonic progressions differ from chromatic progressions?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.2"
+      ],
+      "options": [
+        {
+          "text": "Diatonic stays within the key; chromatic introduces notes outside it",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Diatonic is newer",
+          "isCorrect": false
+        },
+        {
+          "text": "Chromatic is simpler",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the function of a diminished chord in harmonic progressions?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.2"
+      ],
+      "options": [
+        {
+          "text": "It creates instability and often leads to resolution on another chord",
+          "isCorrect": true
+        },
+        {
+          "text": "It ends phrases",
+          "isCorrect": false
+        },
+        {
+          "text": "It has no function",
+          "isCorrect": false
+        },
+        {
+          "text": "It only appears in major keys",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does tritone substitution mean in jazz and modern harmony?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "MU.RE.8.2"
+      ],
+      "options": [
+        {
+          "text": "A chord a tritone away can substitute for a dominant chord",
+          "isCorrect": true
+        },
+        {
+          "text": "Using three tones only",
+          "isCorrect": false
+        },
+        {
+          "text": "Eliminating the tritone",
+          "isCorrect": false
+        },
+        {
+          "text": "A rhythm technique",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How are seventh chords symbolized in chord notation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.2"
+      ],
+      "options": [
+        {
+          "text": "With a '7' after the chord letter (e.g., C7, Cmaj7, Cm7)",
+          "isCorrect": true
+        },
+        {
+          "text": "With no special notation",
+          "isCorrect": false
+        },
+        {
+          "text": "Only using Roman numerals",
+          "isCorrect": false
+        },
+        {
+          "text": "By writing out 'seventh'",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-arts-and-music-art-history-pd-images": [
+    {
+      "prompt": "How did postcolonial art criticism reshape the understanding of Western art history?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "VA.CN.10.3"
+      ],
+      "options": [
+        {
+          "text": "By revealing power imbalances, appropriation, and the marginalization of non-Western artists",
+          "isCorrect": true
+        },
+        {
+          "text": "It ignored all colonial issues",
+          "isCorrect": false
+        },
+        {
+          "text": "It reinforced Western superiority",
+          "isCorrect": false
+        },
+        {
+          "text": "It had no effect",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is 'Orientalism' in art and how did it misrepresent non-Western cultures?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.3"
+      ],
+      "options": [
+        {
+          "text": "Western artists' stereotypical, exoticized depictions of Eastern cultures",
+          "isCorrect": true
+        },
+        {
+          "text": "Accurate historical documentation",
+          "isCorrect": false
+        },
+        {
+          "text": "Art only from Asia",
+          "isCorrect": false
+        },
+        {
+          "text": "A modern invention",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How did feminist art historical scholarship change the art historical canon?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "It brought attention to excluded female artists and challenged male-dominated narratives",
+          "isCorrect": true
+        },
+        {
+          "text": "It removed men from art history",
+          "isCorrect": false
+        },
+        {
+          "text": "It had little impact",
+          "isCorrect": false
+        },
+        {
+          "text": "It wasn't relevant to art",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is institutional critique in contemporary art?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.3"
+      ],
+      "options": [
+        {
+          "text": "Artists questioning and challenging museums, galleries, and power structures",
+          "isCorrect": true
+        },
+        {
+          "text": "Supporting institutions without question",
+          "isCorrect": false
+        },
+        {
+          "text": "Praising museum directors",
+          "isCorrect": false
+        },
+        {
+          "text": "A 19th-century movement",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How has digital technology expanded the definition of what counts as art?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.3"
+      ],
+      "options": [
+        {
+          "text": "Digital art, NFTs, interactive installations, and net art challenged traditional categories",
+          "isCorrect": true
+        },
+        {
+          "text": "Digital technology never affected art",
+          "isCorrect": false
+        },
+        {
+          "text": "Only paintings count",
+          "isCorrect": false
+        },
+        {
+          "text": "Photography is the only modern medium",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What does 'site-specific' art mean?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "Art created for and responsive to a specific location or context",
+          "isCorrect": true
+        },
+        {
+          "text": "Art that's always in museums",
+          "isCorrect": false
+        },
+        {
+          "text": "Portable art",
+          "isCorrect": false
+        },
+        {
+          "text": "Art with no context",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How has decolonizing art education affected curriculum and museum displays?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.3"
+      ],
+      "options": [
+        {
+          "text": "Including diverse artists, centering non-Western traditions, and critical examination of bias",
+          "isCorrect": true
+        },
+        {
+          "text": "Removing all Western art",
+          "isCorrect": false
+        },
+        {
+          "text": "Ignoring non-Western artists",
+          "isCorrect": false
+        },
+        {
+          "text": "No change has occurred",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the relationship between identity politics and contemporary art?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.3"
+      ],
+      "options": [
+        {
+          "text": "Artists explore and challenge race, gender, sexuality, and cultural identity through their work",
+          "isCorrect": true
+        },
+        {
+          "text": "Art has nothing to do with identity",
+          "isCorrect": false
+        },
+        {
+          "text": "Only biographical information matters",
+          "isCorrect": false
+        },
+        {
+          "text": "Artists never address social issues",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does contemporary art challenge the idea of the autonomous artwork?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "Through relational, participatory, and socially engaged practices",
+          "isCorrect": true
+        },
+        {
+          "text": "Art is always independent",
+          "isCorrect": false
+        },
+        {
+          "text": "Viewers are irrelevant",
+          "isCorrect": false
+        },
+        {
+          "text": "Nothing has changed",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the significance of reclaiming and displaying looted cultural artifacts?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.CN.10.3"
+      ],
+      "options": [
+        {
+          "text": "It addresses historical injustice and restores cultural agency to colonized communities",
+          "isCorrect": true
+        },
+        {
+          "text": "Artifacts should remain in Western museums",
+          "isCorrect": false
+        },
+        {
+          "text": "Repatriation isn't important",
+          "isCorrect": false
+        },
+        {
+          "text": "Looted art has no value",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How has globalization affected contemporary artistic practice and circulation?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.9.3"
+      ],
+      "options": [
+        {
+          "text": "Artists draw from worldwide influences, and art circulates globally through new networks",
+          "isCorrect": true
+        },
+        {
+          "text": "Artists only work locally",
+          "isCorrect": false
+        },
+        {
+          "text": "Globalization ended artistic innovation",
+          "isCorrect": false
+        },
+        {
+          "text": "Travel is irrelevant to art",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is 'art activism' and how does it use art for social change?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "VA.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "Art created to advocate for political or social causes and challenge power structures",
+          "isCorrect": true
+        },
+        {
+          "text": "Art that ignores society",
+          "isCorrect": false
+        },
+        {
+          "text": "Decoration only",
+          "isCorrect": false
+        },
+        {
+          "text": "A 20th-century relic",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "8-electives-arts-and-music-music-theory-intro": [
+    {
+      "prompt": "What is the function of a deceptive cadence in harmonic structure?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.3"
+      ],
+      "options": [
+        {
+          "text": "To postpone resolution and create surprise or emotional impact",
+          "isCorrect": true
+        },
+        {
+          "text": "To firmly end a phrase",
+          "isCorrect": false
+        },
+        {
+          "text": "To introduce a new key",
+          "isCorrect": false
+        },
+        {
+          "text": "To eliminate tension",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does sonata form provide structure to longer instrumental works?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "With exposition, development, and recapitulation of contrasting themes",
+          "isCorrect": true
+        },
+        {
+          "text": "No structure at all",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one theme repeated",
+          "isCorrect": false
+        },
+        {
+          "text": "Random organization",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is the difference between counterpoint and homophony?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.3"
+      ],
+      "options": [
+        {
+          "text": "Counterpoint has independent melodic lines; homophony has melody with accompaniment",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same texture",
+          "isCorrect": false
+        },
+        {
+          "text": "Counterpoint has no melody",
+          "isCorrect": false
+        },
+        {
+          "text": "Homophony is older",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What role does harmonic function play in organizing musical form?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.3"
+      ],
+      "options": [
+        {
+          "text": "Functions like tonic, dominant, and subdominant create predictability and meaning",
+          "isCorrect": true
+        },
+        {
+          "text": "Harmony has no organizational role",
+          "isCorrect": false
+        },
+        {
+          "text": "Only melody matters",
+          "isCorrect": false
+        },
+        {
+          "text": "All chords have equal weight",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does a suspended chord create and resolve tension?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "Suspending a note delays resolution, which occurs when the expected tone arrives",
+          "isCorrect": true
+        },
+        {
+          "text": "Suspended chords never resolve",
+          "isCorrect": false
+        },
+        {
+          "text": "They create no tension",
+          "isCorrect": false
+        },
+        {
+          "text": "They're always final chords",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a fugal subject and answer in Baroque compositional practice?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.3"
+      ],
+      "options": [
+        {
+          "text": "The initial theme and its transposed restatement in a different voice",
+          "isCorrect": true
+        },
+        {
+          "text": "Random fragments",
+          "isCorrect": false
+        },
+        {
+          "text": "A melody that never repeats",
+          "isCorrect": false
+        },
+        {
+          "text": "The bass line only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does orchestration and arrangement vary the presentation of thematic material?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.3"
+      ],
+      "options": [
+        {
+          "text": "Different instruments, doublings, and textures present the same material with fresh character",
+          "isCorrect": true
+        },
+        {
+          "text": "Orchestration doesn't affect themes",
+          "isCorrect": false
+        },
+        {
+          "text": "Only one arrangement ever",
+          "isCorrect": false
+        },
+        {
+          "text": "Theme and orchestration are unrelated",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a chromatic harmony and when might composers use it?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "Notes outside the key used for color, emotion, and harmonic enrichment",
+          "isCorrect": true
+        },
+        {
+          "text": "Only notes in the key",
+          "isCorrect": false
+        },
+        {
+          "text": "A mistake to avoid",
+          "isCorrect": false
+        },
+        {
+          "text": "Modern invention only",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does voice leading optimization create smooth harmonic progressions?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.3"
+      ],
+      "options": [
+        {
+          "text": "By minimizing leaps between voices and connecting chords efficiently",
+          "isCorrect": true
+        },
+        {
+          "text": "By using random voice movement",
+          "isCorrect": false
+        },
+        {
+          "text": "Voice leading doesn't matter",
+          "isCorrect": false
+        },
+        {
+          "text": "All voices should leap",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a secondary dominant and how does it extend harmonic possibilities?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CR.2.3"
+      ],
+      "options": [
+        {
+          "text": "A V-I relationship to any chord (not just tonic), creating temporary emphasis",
+          "isCorrect": true
+        },
+        {
+          "text": "Another name for the main dominant",
+          "isCorrect": false
+        },
+        {
+          "text": "A technique to avoid",
+          "isCorrect": false
+        },
+        {
+          "text": "Only possible in major keys",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "How does form (like rondo, theme and variations) organize entire compositions?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.3"
+      ],
+      "options": [
+        {
+          "text": "Repeating and contrasting sections create comprehensible structure and unity",
+          "isCorrect": true
+        },
+        {
+          "text": "Form has no importance",
+          "isCorrect": false
+        },
+        {
+          "text": "All pieces use the same form",
+          "isCorrect": false
+        },
+        {
+          "text": "Structure and form are different",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is functional tonality and how does it differ from modern harmonic approaches?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "standards": [
+        "MU.CN.11.3"
+      ],
+      "options": [
+        {
+          "text": "Functional uses clear tonic/dominant hierarchy; modern approaches may blur or reject this",
+          "isCorrect": true
+        },
+        {
+          "text": "They're the same",
+          "isCorrect": false
+        },
+        {
+          "text": "Functional is newer",
+          "isCorrect": false
+        },
+        {
+          "text": "Modern uses only functional harmony",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

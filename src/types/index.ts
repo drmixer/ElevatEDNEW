@@ -294,7 +294,16 @@ export type ParentOnboardingState = {
   lastViewedStep?: string | null;
 };
 
-export type Subject = 'math' | 'english' | 'science' | 'social_studies' | 'study_skills';
+export type Subject =
+  | 'math'
+  | 'english'
+  | 'science'
+  | 'social_studies'
+  | 'study_skills'
+  | 'arts_music'
+  | 'financial_literacy'
+  | 'health_pe'
+  | 'computer_science';
 
 export interface ChatMessage {
   id: string;

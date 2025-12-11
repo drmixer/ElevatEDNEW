@@ -310,7 +310,15 @@ const selectElectiveSuggestion = (
 
   const allowed = (preferences.allowedElectiveSubjects ?? []).length
     ? preferences.allowedElectiveSubjects ?? []
-    : (['study_skills', 'social_studies', 'science'] as Subject[]);
+    : ([
+        'study_skills',
+        'social_studies',
+        'science',
+        'arts_music',
+        'financial_literacy',
+        'health_pe',
+        'computer_science',
+      ] as Subject[]);
   const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? null;
 
   const pool = lessons.filter(
