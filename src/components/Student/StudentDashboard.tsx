@@ -409,10 +409,7 @@ const StudentDashboard: React.FC = () => {
 
   const familyLinkCode = familyCodeQuery.data?.code ?? student?.familyLinkCode ?? null;
 
-  const {
-    data: checkIns,
-    isFetching: _checkInsFetching,
-  } = useQuery({
+  const { data: checkIns } = useQuery({
     queryKey: ['student-checkins', student?.id],
     queryFn: () => listStudentCheckIns(student!.id, 8),
     enabled: Boolean(student?.id),
@@ -1264,7 +1261,16 @@ const StudentDashboard: React.FC = () => {
     } catch (error) {
       console.warn('[Celebrations] Failed to persist snapshot', error);
     }
-  }, [celebrationMoments, celebrationShownIds, dashboard, quickStats, student, studentStats.avgAccuracy, studentStats.modulesMastered?.count]);
+  }, [
+    celebrationMoments,
+    celebrationShownIds,
+    dashboard,
+    quickStats,
+    student,
+    studentStats.avgAccuracy,
+    studentStats.modulesMastered?.count,
+    studentStats.modulesMastered?.items,
+  ]);
 
   useEffect(() => {
     if (!contextualNudge || !student?.id) return;
@@ -1529,6 +1535,42 @@ const StudentDashboard: React.FC = () => {
     }
   }, [microPlanHistory, microPlanState, microPlanStorageKey, todayKey]);
 
+  const openTutorFromHome = useCallback(
+    (prompt?: string, source: string = 'do_this_now') => {
+      if (typeof window === 'undefined') return;
+      const detail = {
+        prompt,
+        source,
+        lesson: recommendedLesson
+          ? {
+              lessonId: recommendedLesson.id,
+              lessonTitle: recommendedLesson.title,
+              moduleTitle: recommendedLesson.moduleSlug ?? null,
+              subject: recommendedLesson.subject,
+            }
+          : undefined,
+      };
+      window.dispatchEvent(new CustomEvent('learning-assistant:open', { detail }));
+      trackEvent('learning_assistant_context_open', {
+        studentId: student.id,
+        source,
+        hasPrompt: Boolean(prompt),
+        lessonId: recommendedLesson?.id ?? null,
+        lessonSubject: recommendedLesson?.subject ?? null,
+      });
+    },
+    [recommendedLesson, student.id],
+  );
+
+  const handleViewDailyPlan = useCallback(() => {
+    const target =
+      document.getElementById('daily-plan-mobile') ?? document.getElementById('daily-plan-desktop');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      trackEvent('daily_plan_focus_scroll', { studentId: student.id });
+    }
+  }, [student.id]);
+
   if (!student) {
     return null;
   }
@@ -1573,42 +1615,6 @@ const StudentDashboard: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: studentStatsQueryKey(student?.id) }).catch(() => undefined),
     ]);
   };
-
-  const openTutorFromHome = useCallback(
-    (prompt?: string, source: string = 'do_this_now') => {
-      if (typeof window === 'undefined') return;
-      const detail = {
-        prompt,
-        source,
-        lesson: recommendedLesson
-          ? {
-              lessonId: recommendedLesson.id,
-              lessonTitle: recommendedLesson.title,
-              moduleTitle: recommendedLesson.moduleSlug ?? null,
-              subject: recommendedLesson.subject,
-            }
-          : undefined,
-      };
-      window.dispatchEvent(new CustomEvent('learning-assistant:open', { detail }));
-      trackEvent('learning_assistant_context_open', {
-        studentId: student.id,
-        source,
-        hasPrompt: Boolean(prompt),
-        lessonId: recommendedLesson?.id ?? null,
-        lessonSubject: recommendedLesson?.subject ?? null,
-      });
-    },
-    [recommendedLesson, student.id],
-  );
-
-  const handleViewDailyPlan = useCallback(() => {
-    const target =
-      document.getElementById('daily-plan-mobile') ?? document.getElementById('daily-plan-desktop');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      trackEvent('daily_plan_focus_scroll', { studentId: student.id });
-    }
-  }, [student.id]);
 
   const handleStartLesson = (lesson: DashboardLesson) => {
     trackEvent('lesson_start_click', {

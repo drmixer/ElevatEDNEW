@@ -384,7 +384,6 @@ const ParentDashboard: React.FC = () => {
 
   const {
     data: parentCheckIns,
-    isFetching: _parentCheckInsFetching,
   } = useQuery({
     queryKey: ['parent-check-ins', parent?.id],
     queryFn: () => listParentCheckIns(),
@@ -708,7 +707,10 @@ const ParentDashboard: React.FC = () => {
     () => (currentChild?.subjectStatuses ?? []).slice(0, 3),
     [currentChild?.subjectStatuses],
   );
-  const celebrations = dashboard?.celebrations ?? [];
+  const celebrations = useMemo(
+    () => dashboard?.celebrations ?? [],
+    [dashboard?.celebrations],
+  );
   const primarySuggestion = useMemo(
     () => currentChild?.coachingSuggestions?.[0] ?? null,
     [currentChild?.coachingSuggestions],
@@ -926,7 +928,10 @@ const ParentDashboard: React.FC = () => {
     return { pct, needMoreData, masteryConfidence, diagnosticDate };
   }, [currentChild]);
 
-  const homeExtensions = currentChild?.homeExtensions ?? [];
+  const homeExtensions = useMemo(
+    () => currentChild?.homeExtensions ?? [],
+    [currentChild?.homeExtensions],
+  );
   const familyOverviewCards = useMemo(() => {
     if (!dashboard?.children?.length) return [];
     return dashboard.children.map((child) => {
@@ -1128,7 +1133,7 @@ const ParentDashboard: React.FC = () => {
       if (severityDiff !== 0) return severityDiff;
       return recency(b) - recency(a);
     });
-  }, [overview?.children]);
+  }, [overview]);
 
   const latestCheckInByChild = useMemo(() => {
     const map = new Map<string, ParentCheckIn>();
@@ -1373,7 +1378,10 @@ const ParentDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  const moduleOptions = modulesQuery.data?.data ?? [];
+  const moduleOptions = useMemo(
+    () => modulesQuery.data?.data ?? [],
+    [modulesQuery.data],
+  );
   const recommendedModules = moduleOptions.slice(0, 3);
 
   useEffect(() => {
@@ -1405,7 +1413,10 @@ const ParentDashboard: React.FC = () => {
     enabled: Boolean(parent),
     staleTime: 1000 * 60 * 2,
   });
-  const privacyRequests = privacyRequestsQuery.data ?? [];
+  const privacyRequests = useMemo(
+    () => privacyRequestsQuery.data ?? [],
+    [privacyRequestsQuery.data],
+  );
 
   const childPrivacyRequests = useMemo(() => {
     if (!currentChild) return privacyRequests;
@@ -1418,7 +1429,10 @@ const ParentDashboard: React.FC = () => {
     enabled: Boolean(parent),
     staleTime: 1000 * 60 * 2,
   });
-  const concernReports = concernReportsQuery.data ?? [];
+  const concernReports = useMemo(
+    () => concernReportsQuery.data ?? [],
+    [concernReportsQuery.data],
+  );
 
   const {
     data: childAssignments,
@@ -1431,7 +1445,10 @@ const ParentDashboard: React.FC = () => {
     staleTime: 1000 * 60,
   });
 
-  const assignmentsList = childAssignments ?? [];
+  const assignmentsList = useMemo(
+    () => childAssignments ?? [],
+    [childAssignments],
+  );
   const nextAssignment = useMemo(() => {
     if (!assignmentsList.length) return null;
     return assignmentsList.find((assignment) => assignment.status !== 'completed') ?? assignmentsList[0];

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import supabase from '../lib/supabaseClient';
 import type { Subject, User, UserRole } from '../types';

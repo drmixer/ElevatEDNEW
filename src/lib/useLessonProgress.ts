@@ -127,7 +127,7 @@ export const useLessonProgress = (
     const restoredSet = new Set(restored);
     setCompletedItems(restoredSet);
     setStatus(computeStatus(restoredSet.size, totalCount));
-  }, [persistent, lessonId, itemKey, totalCount]);
+  }, [itemIds, persistent, lessonId, itemKey, totalCount]);
 
   // Local persistence
   useEffect(() => {

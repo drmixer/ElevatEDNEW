@@ -91,13 +91,13 @@ const AccountSettingsPage: React.FC = () => {
     setSessionLength(studentUser.learningPreferences.sessionLength);
     setFocusSubject(studentUser.learningPreferences.focusSubject);
     setFocusIntensity(studentUser.learningPreferences.focusIntensity);
-  }, [studentUser?.id, studentUser?.learningPreferences]);
+  }, [studentUser]);
 
   useEffect(() => {
     if (!parentUser) return;
     setNotificationPrefs(parentUser.notifications);
     setPrivacyContact(parentUser.email ?? '');
-  }, [parentUser?.id, parentUser?.notifications, parentUser?.email]);
+  }, [parentUser]);
 
   useEffect(() => {
     if (!parentUser?.children?.length) return;

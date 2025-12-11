@@ -138,7 +138,10 @@ const AdminDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  const moduleOptions = modulesQuery.data?.data ?? [];
+  const moduleOptions = useMemo(
+    () => modulesQuery.data?.data ?? [],
+    [modulesQuery.data],
+  );
 
   useEffect(() => {
     if (!moduleOptions.length) {
@@ -156,7 +159,10 @@ const AdminDashboard: React.FC = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  const students = studentsQuery.data ?? [];
+  const students = useMemo(
+    () => studentsQuery.data ?? [],
+    [studentsQuery.data],
+  );
 
   const gradeOptions = useMemo(() => {
     const grades = new Set<number>();
