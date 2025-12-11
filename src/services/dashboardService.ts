@@ -31,6 +31,7 @@ import type {
   SubjectMastery,
   XPTimelinePoint,
   LearningPreferences,
+  ChildGoalTargets,
 } from '../types';
 import { defaultLearningPreferences } from '../types';
 import { castLearningPreferences } from './profileService';
@@ -200,6 +201,145 @@ const ensureLearningPreferences = (student: Student): LearningPreferences => {
     student.learningPreferences = { ...defaultLearningPreferences };
   }
   return student.learningPreferences;
+};
+
+const computeWeeklyPlanTargets = (
+  parentGoals: ChildGoalTargets | null,
+  weeklyPlanIntensity: LearningPreferences['weeklyPlanIntensity'],
+) => {
+  const lessonBase = parentGoals?.weeklyLessons ?? 5;
+  const minutesBase = parentGoals?.practiceMinutes ?? 60;
+  const factor =
+    !lessonBase
+      ? 1
+      : weeklyPlanIntensity === 'light'
+        ? 0.8
+        : weeklyPlanIntensity === 'challenge'
+          ? 1.2
+          : 1;
+  return {
+    lessons: Math.max(1, Math.round(lessonBase * factor)),
+    minutes: Math.max(15, Math.round(minutesBase * factor)),
+  };
+};
+
+const computeWeeklyProgress = (activity: StudentDailyActivity[]) => {
+  return activity.reduce(
+    (acc, entry) => {
+      acc.lessons += entry.lessonsCompleted ?? 0;
+      acc.minutes += entry.practiceMinutes ?? 0;
+      return acc;
+    },
+    { lessons: 0, minutes: 0 },
+  );
+};
+
+const CROSS_SUBJECT_PAIRS: Partial<Record<Subject, Subject[]>> = {
+  math: ['science', 'study_skills'],
+  science: ['math', 'english'],
+  english: ['social_studies', 'science'],
+  social_studies: ['english', 'study_skills'],
+  study_skills: ['english', 'math'],
+};
+
+const injectMixInsIntoPlan = (
+  lessons: DashboardLesson[],
+  preferences: LearningPreferences,
+  weeklyTargets: { lessons: number; minutes: number },
+  weeklyProgress: { lessons: number; minutes: number },
+) => {
+  const mode = preferences.mixInMode ?? 'auto';
+  if (mode === 'core_only') return lessons;
+  const lightLoad =
+    preferences.weeklyPlanIntensity === 'light' ||
+    (weeklyTargets.lessons > 0 && weeklyProgress.lessons <= Math.max(1, weeklyTargets.lessons - 2));
+  if (!lightLoad && mode !== 'cross_subject') return lessons;
+
+  const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? 'balanced';
+  const crossTargets =
+    focusSubject && focusSubject !== 'balanced' ? CROSS_SUBJECT_PAIRS[focusSubject] ?? [] : undefined;
+  const seen = new Set<string>();
+
+  const candidates = lessons
+    .filter((lesson) => {
+      if (lesson.isMixIn) return false;
+      if (lesson.status === 'completed') return false;
+      if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
+        return crossTargets.includes(lesson.subject);
+      }
+      return true;
+    })
+    .slice(0, 3);
+
+  const mixInPicks = candidates.slice(0, 2);
+  const reasonFor = (subject: Subject) => {
+    const partner =
+      focusSubject && focusSubject !== 'balanced'
+        ? `Mix-in: apply ${formatSubjectLabel(focusSubject)} with ${formatSubjectLabel(subject)}`
+        : `Mix-in: switch to ${formatSubjectLabel(subject)}`;
+    return partner;
+  };
+
+  return lessons.map((lesson) => {
+    if (mixInPicks.find((item) => item.id === lesson.id) && !seen.has(lesson.id)) {
+      seen.add(lesson.id);
+      return {
+        ...lesson,
+        isMixIn: true,
+        suggestionReason: lesson.suggestionReason ?? reasonFor(lesson.subject),
+      };
+    }
+    return lesson;
+  });
+};
+
+const selectElectiveSuggestion = (
+  lessons: DashboardLesson[],
+  preferences: LearningPreferences,
+  weeklyTargets: { lessons: number; minutes: number },
+  weeklyProgress: { lessons: number; minutes: number },
+) => {
+  if ((preferences.electiveEmphasis ?? 'light') === 'off') {
+    return { plan: lessons, elective: null };
+  }
+  const aheadOnLessons = weeklyProgress.lessons >= weeklyTargets.lessons;
+  const aheadOnMinutes = weeklyProgress.minutes >= Math.round(weeklyTargets.minutes * 0.9);
+  if (!aheadOnLessons || !aheadOnMinutes) {
+    return { plan: lessons, elective: null };
+  }
+
+  const allowed = (preferences.allowedElectiveSubjects ?? []).length
+    ? preferences.allowedElectiveSubjects ?? []
+    : (['study_skills', 'social_studies', 'science'] as Subject[]);
+  const focusSubject = preferences.weeklyPlanFocus ?? preferences.focusSubject ?? null;
+
+  const pool = lessons.filter(
+    (lesson) =>
+      !lesson.isMixIn &&
+      !lesson.isElective &&
+      allowed.includes(lesson.subject) &&
+      (focusSubject === null || focusSubject === 'balanced' || lesson.subject !== focusSubject),
+  );
+
+  const elective = pool[0] ?? null;
+  if (!elective) return { plan: lessons, elective: null };
+
+  const withFlag = lessons.map((lesson) =>
+    lesson.id === elective.id
+      ? {
+          ...lesson,
+          isElective: true,
+          suggestionReason:
+            lesson.suggestionReason ??
+            `Elective boost: try a ${formatSubjectLabel(lesson.subject)} mini-lesson since you’re ahead`,
+        }
+      : lesson,
+  );
+
+  return {
+    plan: withFlag,
+    elective,
+  };
 };
 
 const ensureStudentQuickStats = (
@@ -1884,6 +2024,8 @@ export const fetchStudentDashboardData = async (
           ? 'keep_up'
           : preferences.studyMode,
     };
+    const weeklyTargets = computeWeeklyPlanTargets(parentGoals, planPreferences.weeklyPlanIntensity);
+    const weeklyProgress = computeWeeklyProgress(activity);
 
     const [
       { data: masteryRows, error: masteryError },
@@ -2002,6 +2144,7 @@ export const fetchStudentDashboardData = async (
       }
     }
 
+    let electiveSuggestion: DashboardLesson | null = null;
     const todaysPlan: DashboardLesson[] = (() => {
       const plan: DashboardLesson[] = [];
       const seen = new Set<string>();
@@ -2029,7 +2172,18 @@ export const fetchStudentDashboardData = async (
         return fallbackStudentLessons();
       }
 
-      const normalized = normalizePlanBySubject(plan, planPreferences);
+      let normalized = normalizePlanBySubject(plan, planPreferences);
+      normalized = injectMixInsIntoPlan(normalized, planPreferences, weeklyTargets, weeklyProgress);
+      const electiveResult = selectElectiveSuggestion(
+        normalized,
+        planPreferences,
+        weeklyTargets,
+        weeklyProgress,
+      );
+      normalized = electiveResult.plan;
+      electiveSuggestion = electiveResult.elective
+        ? electiveResult.plan.find((lesson) => lesson.id === electiveResult.elective?.id) ?? null
+        : null;
       return normalized.length
         ? applyLearningPreferencesToPlan(normalized, planPreferences)
         : applyLearningPreferencesToPlan(plan, planPreferences);
@@ -2098,6 +2252,7 @@ export const fetchStudentDashboardData = async (
       avatarOptions,
       equippedAvatarId: student.avatar ?? null,
       todayActivities: activityLineup,
+      electiveSuggestion,
     };
   } catch (error) {
     console.error('[Dashboard] Student dashboard fallback engaged', error);
@@ -2143,6 +2298,7 @@ export const fetchStudentDashboardData = async (
       equippedAvatarId: student.avatar ?? null,
       todayActivities: buildActivityLineup(fallbackLessons, new Map(), student.grade),
       parentGoals: null,
+      electiveSuggestion: null,
     };
   }
 };

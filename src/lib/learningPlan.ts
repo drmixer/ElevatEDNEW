@@ -40,5 +40,28 @@ export const applyLearningPreferencesToPlan = (
     }
   }
 
-  return ordered.slice(0, Math.max(1, cappedLength));
+  const coreLessons = ordered.filter((lesson) => !lesson.isMixIn && !lesson.isElective);
+  const mixIns = ordered.filter((lesson) => lesson.isMixIn);
+  const electives = ordered.filter((lesson) => lesson.isElective);
+
+  const baseCore = coreLessons.slice(0, Math.max(1, Math.min(cappedLength, coreLessons.length)));
+  const remainingSlotsAfterCore = Math.max(0, cappedLength - baseCore.length);
+  const mixInSlots = Math.min(2, remainingSlotsAfterCore);
+  const mixInPicks = mixIns.slice(0, mixInSlots);
+  const remainingAfterMixIns = Math.max(0, remainingSlotsAfterCore - mixInPicks.length);
+  const electivePicks = electives.slice(0, remainingAfterMixIns);
+
+  const filler =
+    remainingAfterMixIns > electivePicks.length
+      ? ordered
+          .filter(
+            (lesson) =>
+              !baseCore.find((core) => core.id === lesson.id) &&
+              !mixInPicks.find((mix) => mix.id === lesson.id) &&
+              !electivePicks.find((elec) => elec.id === lesson.id),
+          )
+          .slice(0, Math.max(0, cappedLength - baseCore.length - mixInPicks.length - electivePicks.length))
+      : [];
+
+  return [...baseCore, ...mixInPicks, ...electivePicks, ...filler].slice(0, Math.max(1, cappedLength));
 };

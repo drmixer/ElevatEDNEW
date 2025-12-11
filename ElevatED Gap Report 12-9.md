@@ -64,11 +64,11 @@ Actionable plan to close gaps between the current app and the stated vision (K�
 - Parent check-in snippets are persisted, appear in the student UI, and flip to Seen once acknowledged (with copy fallback preserved).
 
 ## 6) Student Simplicity & Mobile Focus
-- **Goal:** Keep the student experience focused and low-friction, especially on mobile.
+- **Goal:** Keep the student experience single-focus, on-task, and mobile-first with explicit guardrails.
 - **Completion Criteria:**
-  - Student home defaults to a single “Do this now” panel plus a “Need help? Ask” tutor entrypoint.
-  - Mobile layout keeps the daily plan and tutor entry above the fold; large tap targets and minimal typing.
-  - Guardrail status shown in tutor UI (e.g., “School-safe mode on”) with a quick way to return to the current lesson context.
+  - Student home shows one prioritized “Do this now” card (next task + time) and a single primary “Need help? Ask” tutor CTA; no other blocks above the fold.
+  - Mobile layout pins the daily plan and tutor entry above the fold with 44px+ tap targets; typing minimized via prompt chips/quick replies.
+  - Tutor UI surfaces an always-visible guardrail pill (e.g., “School-safe · Lesson: Fractions 3.2”) that explains constrained replies when off-topic and offers a one-tap “Return to lesson” action to re-center context without loosening safety.
 
 ## 7) Cross-Subject Variety & Electives
 - **Goal:** Maintain variety without overwhelm; leverage electives.
@@ -76,6 +76,33 @@ Actionable plan to close gaps between the current app and the stated vision (K�
   - Weekly plan auto-includes 1–2 mixed-in practice items (e.g., apply math in science) when core load is light.
   - Electives are suggested when a learner finishes core tasks early; parents can toggle elective emphasis per child.
   - Opt-out controls so families can limit mix-ins to core subjects only.
+
+### Phase 7 implementation plan
+- **Gaps:** Weekly plan focuses on single-subject paths and intensity only; no cross-subject pairings exist; electives never surface in the student loop; parents cannot enable/disable mix-ins or elective emphasis per child.
+- **Workstreams:** (1) Mixed-in practice injector, (2) Elective suggestions on early finish, (3) Parent/student controls + opt-outs.
+
+#### 1) Mixed-in practice injector (light-load weeks)
+- **Trigger:** When `weeklyPlanIntensity=light` or when `weeklyPlanTargets` minus `lessonsThisWeek` ≤2 lessons by mid-week, allow up to two mix-ins.
+- **Selection:** Extend `normalizePlanBySubject` and `applyLearningPreferencesToPlan` to insert mix-ins pulled from non-focus subjects in `learningPath`/`student_progress` with status `in_progress|not_started`, avoiding duplicates of current plan ids. Pairings: math ↔ science/data; ELA ↔ social studies; science ↔ math/ELA; allow `focusSubject=balanced` to rotate.
+- **Reason text & UX:** Add `suggestionReason` such as “Mix-in: apply fractions in science lab” and show a small “Mix-in” pill in the Today/Weekly plan cards (StudentDashboard + ParentDashboard weekly cards). Keep capped at 1–2 items and never push core lessons below 3 items.
+- **Instrumentation:** Track `mix_in_added`/`mix_in_started` with {subject_from, subject_to, weekly_plan_intensity, reason_source}. Persist exclusions per student/week (`mix_in:{studentId}:{weekStart}`) to avoid re-suggesting dismissed mix-ins.
+
+#### 2) Elective suggestions when core is finished early
+- **Detection:** When `weeklyPlanStatus=on_track` with ≥1 day remaining or `lessonsThisWeek >= weeklyPlanTargets.lessons` and `minutesThisWeek >= 0.9*weeklyPlanTargets.minutes`, flag early finish.
+- **Content:** Pull 1 elective lesson from `learningPath` or fallback catalog (`mappings/module_standards_k12.json` subjects starting with `electives-...`) respecting grade and `focusSubject`. Prefer short (≤20 min) items and diversify category (arts/cs/finance/health) week-to-week.
+- **Student UX:** Add an “Elective boost” card under the weekly status block with CTA “Start elective” linking to lesson. Copy: “You’re ahead—want to try a coding mini-project?” Allow dismiss and log `elective_suggested`/`elective_started`/`elective_dismissed`.
+- **Parent UX:** In `ParentDashboard` weekly plan panel, show “Electives ready” chip plus a toggle to “Emphasize electives this week” that boosts elective rank in the plan for that child.
+
+#### 3) Controls and opt-outs (parent + student)
+- **Preferences:** Extend `learning_style` JSON for students with `mixInMode: 'auto' | 'core_only' | 'cross_subject'`, `electiveEmphasis: 'off' | 'light' | 'on'`, and optional `allowedElectiveSubjects: Subject[]`. Default: `mixInMode='auto'`, `electiveEmphasis='light'`.
+- **Parent controls:** In `ParentDashboard` plan settings (same area as weekly intensity/focus), add toggles for mix-ins and elective emphasis per child; show helper copy “Keep electives off if you prefer core-only weeks.” Persist via `updateLearningPreferences`.
+- **Student controls:** In `StudentDashboard` settings drawer, add a simple switch “Let ElevatED mix subjects” (respects parent lock) and “Offer electives when I finish early.” Dismissed mix-ins/electives set a cooldown for that week.
+- **Safety/guardrails:** If `mixInMode='core_only'`, skip injector entirely; if `electiveEmphasis='off'`, elective suggestions are hidden even when ahead. Include RLS-aware API checks so parents can only modify their children’s prefs.
+
+#### Definition of done (Phase 7)
+- Light-load weeks automatically surface 1–2 cross-subject mix-ins with clear “Mix-in” labels without reducing core coverage.
+- Students who finish weekly core early see an elective suggestion card with a working CTA; parents can boost or mute elective emphasis per child.
+- Opt-out/allow toggles persist in learning preferences, are editable by parents (and visible to students), and prevent mix-ins/electives when set to core-only.
 
 ## 8) Academic Analytics & Trust
 - **Goal:** Add lightweight accuracy/time-on-task metrics and keep parents informed.

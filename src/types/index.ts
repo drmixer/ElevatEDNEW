@@ -153,6 +153,9 @@ export interface LearningPreferences {
   weeklyPlanIntensity?: 'light' | 'normal' | 'challenge';
   weeklyPlanFocus?: Subject | 'balanced';
   weeklyIntent?: 'precision' | 'speed' | 'stretch' | 'balanced';
+  mixInMode?: 'auto' | 'core_only' | 'cross_subject';
+  electiveEmphasis?: 'off' | 'light' | 'on';
+  allowedElectiveSubjects?: Subject[];
   chatMode?: 'guided_only' | 'guided_preferred' | 'free';
   chatModeLocked?: boolean;
   studyMode?: 'catch_up' | 'keep_up' | 'get_ahead';
@@ -172,6 +175,9 @@ export const defaultLearningPreferences: LearningPreferences = {
   weeklyPlanIntensity: 'normal',
   weeklyPlanFocus: 'balanced',
   weeklyIntent: 'balanced',
+  mixInMode: 'auto',
+  electiveEmphasis: 'light',
+  allowedElectiveSubjects: [],
   chatMode: 'free',
   chatModeLocked: false,
   studyMode: 'keep_up',
@@ -329,6 +335,8 @@ export interface DashboardLesson {
   suggestionReason?: string | null;
   suggestionConfidence?: number | null;
   activities?: DashboardActivity[];
+  isMixIn?: boolean;
+  isElective?: boolean;
 }
 
 export interface DashboardActivity {
@@ -435,6 +443,7 @@ export interface StudentDashboardData {
   avatarOptions?: AvatarOption[];
   equippedAvatarId?: string | null;
   todayActivities?: DashboardActivity[];
+  electiveSuggestion?: DashboardLesson | null;
 }
 
 export interface ParentCoachingSuggestion {

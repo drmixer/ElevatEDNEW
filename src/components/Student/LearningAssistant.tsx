@@ -66,6 +66,24 @@ const LearningAssistant: React.FC = () => {
     () => ((pathQuery.path?.metadata ?? {}) as Record<string, unknown> | null | undefined),
     [pathQuery.path?.metadata],
   );
+  const defaultLessonContext = useMemo(() => {
+    const targetEntry = pathQuery.next ?? pathQuery.entries?.[0] ?? null;
+    if (!targetEntry) return null;
+    const meta = (targetEntry.metadata ?? {}) as Record<string, unknown>;
+    const lessonTitle =
+      typeof meta.lesson_title === 'string'
+        ? meta.lesson_title
+        : typeof meta.module_title === 'string'
+          ? meta.module_title
+          : null;
+    const subject = typeof meta.subject === 'string' ? meta.subject : null;
+    return {
+      lessonId: targetEntry.lesson_id ?? targetEntry.id ?? null,
+      lessonTitle,
+      moduleTitle: typeof meta.module_title === 'string' ? meta.module_title : null,
+      subject,
+    };
+  }, [pathQuery.entries, pathQuery.next]);
   const adaptiveMisconceptions = useMemo(() => {
     const adaptive =
       (pathMetadata?.adaptive_state as Record<string, unknown> | null | undefined) ??
@@ -160,6 +178,12 @@ const LearningAssistant: React.FC = () => {
     moduleTitle?: string | null;
     subject?: Subject | string | null;
   } | null>(null);
+  const [homeLessonContext, setHomeLessonContext] = useState<{
+    lessonId?: number | string | null;
+    lessonTitle?: string | null;
+    moduleTitle?: string | null;
+    subject?: Subject | string | null;
+  } | null>(null);
   const conversationId = useRef<string>(`conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
   const [showExplainModal, setShowExplainModal] = useState(false);
   const assistantWindowRef = useRef<HTMLDivElement>(null);
@@ -246,6 +270,13 @@ const LearningAssistant: React.FC = () => {
       [scaffoldTopic],
     );
 
+  const guardrailContextLabel = lessonContext?.lessonTitle ?? lessonContext?.moduleTitle ?? contextHint ?? 'On-task';
+  const guardrailPillText = useMemo(
+    () => `School-safe${guardrailContextLabel ? ` · Lesson: ${guardrailContextLabel}` : ''}`,
+    [guardrailContextLabel],
+  );
+  const canReturnToLesson = Boolean(homeLessonContext ?? defaultLessonContext);
+
   const quickActions = [
     { icon: Lightbulb, text: 'Get a study tip', action: 'study-tip' },
     { icon: Target, text: 'Review weak areas', action: 'review-weak' },
@@ -317,6 +348,14 @@ const LearningAssistant: React.FC = () => {
       return [{ ...first, content: intro }, ...rest];
     });
   }, [buildIntroMessage]);
+
+  useEffect(() => {
+    if (!defaultLessonContext) return;
+    setHomeLessonContext(defaultLessonContext);
+    if (!lessonContext) {
+      setLessonContext(defaultLessonContext);
+    }
+  }, [defaultLessonContext, lessonContext]);
 
   const explainerDismissKey = useMemo(() => `tutor-explainer-dismissed-${student.id}`, [student.id]);
 
@@ -462,6 +501,21 @@ const LearningAssistant: React.FC = () => {
       window.removeEventListener('learning-assistant:open', handleOpen as EventListener);
     };
   }, [student.id]);
+
+  const handleReturnToLesson = () => {
+    const targetContext = homeLessonContext ?? defaultLessonContext ?? lessonContext;
+    if (!targetContext) {
+      return;
+    }
+    setLessonContext(targetContext);
+    setContextHint(targetContext.lessonTitle ?? targetContext.moduleTitle ?? 'Current lesson');
+    setSelectedCardId(null);
+    setGuidedCardUsed(false);
+    trackEvent('learning_assistant_return_to_lesson', {
+      lesson_id: targetContext.lessonId ?? null,
+      subject: targetContext.subject ?? null,
+    });
+  };
 
   const handleChatModeChange = async (mode: 'guided_only' | 'guided_preferred' | 'free') => {
     if (chatMode === mode) return;
@@ -962,6 +1016,24 @@ const LearningAssistant: React.FC = () => {
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1">
                   <Sparkles className="h-3 w-3" /> Hints first—toggle below for full solutions
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-1 font-semibold">
+                  <ShieldCheck className="h-3 w-3" />
+                  {guardrailPillText}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleReturnToLesson}
+                  disabled={!canReturnToLesson}
+                  className="inline-flex items-center gap-1 rounded-full border border-white/40 bg-white/15 px-2 py-1 font-semibold text-gray-900 hover:bg-white/25 disabled:opacity-50 focus-ring"
+                >
+                  <Target className="h-3 w-3" />
+                  Return to lesson
+                </button>
+                <span className="text-gray-900 font-semibold">
+                  Off-topic asks get nudged back to class.
                 </span>
               </div>
               <div className="flex flex-wrap items-center gap-2 text-[11px] mt-1">

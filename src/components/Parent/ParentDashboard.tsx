@@ -156,6 +156,8 @@ type GoalFormState = {
   masteryTargets: Record<Subject, string>;
   focusSubject: Subject | 'balanced';
   focusIntensity: 'balanced' | 'focused';
+  mixInMode: 'auto' | 'core_only' | 'cross_subject';
+  electiveEmphasis: 'off' | 'light' | 'on';
 };
 
 type ProgressStatusDescription = {
@@ -273,6 +275,8 @@ const ParentDashboard: React.FC = () => {
     masteryTargets: {},
     focusSubject: defaultLearningPreferences.focusSubject,
     focusIntensity: defaultLearningPreferences.focusIntensity,
+    mixInMode: defaultLearningPreferences.mixInMode ?? 'auto',
+    electiveEmphasis: defaultLearningPreferences.electiveEmphasis ?? 'light',
   });
   const [chatModeSetting, setChatModeSetting] = useState<'guided_only' | 'guided_preferred' | 'free'>(
     defaultLearningPreferences.chatMode ?? 'free',
@@ -603,6 +607,8 @@ const ParentDashboard: React.FC = () => {
       }, {} as Record<Subject, string>),
       focusSubject: preferences.focusSubject ?? defaultLearningPreferences.focusSubject,
       focusIntensity: preferences.focusIntensity ?? defaultLearningPreferences.focusIntensity,
+      mixInMode: preferences.mixInMode ?? defaultLearningPreferences.mixInMode ?? 'auto',
+      electiveEmphasis: preferences.electiveEmphasis ?? defaultLearningPreferences.electiveEmphasis ?? 'light',
     });
   }, [currentChild]);
 
@@ -1580,6 +1586,8 @@ const ParentDashboard: React.FC = () => {
         sessionLength,
         focusSubject,
         focusIntensity,
+        mixInMode: goalForm.mixInMode,
+        electiveEmphasis: goalForm.electiveEmphasis,
         chatMode,
         chatModeLocked,
         allowTutor: allowTutorChats,
@@ -5145,6 +5153,68 @@ const ParentDashboard: React.FC = () => {
                           </div>
                           <p className="mt-2 text-xs text-gray-600">
                             We pass this into the learning preferences so applyLearningPreferencesToPlan leads with the chosen subject.
+                          </p>
+                        </div>
+
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-sm font-semibold text-gray-900">Variety & electives</h4>
+                            <span className="text-[11px] px-2 py-1 rounded-full bg-white text-slate-700 border border-slate-200">
+                              Light mix-ins, parent-controlled
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Mix-in mode
+                              </label>
+                              <select
+                                value={goalForm.mixInMode}
+                                onChange={(event) =>
+                                  setGoalForm((prev) => ({
+                                    ...prev,
+                                    mixInMode:
+                                      event.target.value === 'core_only'
+                                        ? 'core_only'
+                                        : event.target.value === 'cross_subject'
+                                          ? 'cross_subject'
+                                          : 'auto',
+                                  }))
+                                }
+                                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              >
+                                <option value="auto">Auto (mix when load is light)</option>
+                                <option value="core_only">Core only (no mix-ins)</option>
+                                <option value="cross_subject">Cross-subject every week</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Elective emphasis
+                              </label>
+                              <select
+                                value={goalForm.electiveEmphasis}
+                                onChange={(event) =>
+                                  setGoalForm((prev) => ({
+                                    ...prev,
+                                    electiveEmphasis:
+                                      event.target.value === 'off'
+                                        ? 'off'
+                                        : event.target.value === 'on'
+                                          ? 'on'
+                                          : 'light',
+                                  }))
+                                }
+                                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20"
+                              >
+                                <option value="light">Suggest when ahead</option>
+                                <option value="on">Boost electives this week</option>
+                                <option value="off">Keep electives hidden</option>
+                              </select>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-xs text-gray-600">
+                            Families can keep weeks core-only or lean into electives when the weekly plan is ahead of schedule.
                           </p>
                         </div>
                       </div>

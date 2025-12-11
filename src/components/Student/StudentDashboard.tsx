@@ -309,6 +309,12 @@ const StudentDashboard: React.FC = () => {
   const [weeklyIntent, setWeeklyIntent] = useState<'precision' | 'speed' | 'stretch' | 'balanced'>(
     student?.learningPreferences?.weeklyIntent ?? 'balanced',
   );
+  const [mixInMode, setMixInMode] = useState<'auto' | 'core_only' | 'cross_subject'>(
+    student?.learningPreferences?.mixInMode ?? 'auto',
+  );
+  const [electiveEmphasis, setElectiveEmphasis] = useState<'off' | 'light' | 'on'>(
+    student?.learningPreferences?.electiveEmphasis ?? 'light',
+  );
   const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
     student?.learningPreferences?.studyMode ?? 'keep_up',
   );
@@ -661,6 +667,8 @@ const StudentDashboard: React.FC = () => {
     );
     setWeeklyIntent(student.learningPreferences.weeklyIntent ?? 'balanced');
     setStudyMode(student.learningPreferences.studyMode ?? 'keep_up');
+    setMixInMode(student.learningPreferences.mixInMode ?? 'auto');
+    setElectiveEmphasis(student.learningPreferences.electiveEmphasis ?? 'light');
   }, [student]);
 
   useEffect(() => {
@@ -1045,6 +1053,21 @@ const StudentDashboard: React.FC = () => {
     todaysPlan.find((lesson) => lesson.status !== 'completed') ??
     todaysPlan[0] ??
     null;
+  const electiveSuggestion = useMemo(
+    () => dashboard?.electiveSuggestion ?? todaysPlan.find((lesson) => lesson.isElective) ?? null,
+    [dashboard?.electiveSuggestion, todaysPlan],
+  );
+  const primaryTaskMinutes = useMemo(() => {
+    const lessonEstimate = recommendedLesson?.activities?.find((activity) => activity.estimatedMinutes)?.estimatedMinutes;
+    const todayEstimate = todayActivities.find((activity) => activity.estimatedMinutes)?.estimatedMinutes;
+    const candidate = lessonEstimate ?? todayEstimate;
+    if (!candidate) return 10;
+    return Math.max(3, Math.round(candidate));
+  }, [recommendedLesson, todayActivities]);
+  const tutorPromptChips = useMemo(
+    () => ['Walk me through this lesson', 'Where do I start?', 'Give me a quick hint'],
+    [],
+  );
   const todaysPlanProgress = useMemo(() => {
     const total = todaysPlan.length;
     const completed = todaysPlan.filter((lesson) => lesson.status === 'completed').length;
@@ -1551,6 +1574,42 @@ const StudentDashboard: React.FC = () => {
     ]);
   };
 
+  const openTutorFromHome = useCallback(
+    (prompt?: string, source: string = 'do_this_now') => {
+      if (typeof window === 'undefined') return;
+      const detail = {
+        prompt,
+        source,
+        lesson: recommendedLesson
+          ? {
+              lessonId: recommendedLesson.id,
+              lessonTitle: recommendedLesson.title,
+              moduleTitle: recommendedLesson.moduleSlug ?? null,
+              subject: recommendedLesson.subject,
+            }
+          : undefined,
+      };
+      window.dispatchEvent(new CustomEvent('learning-assistant:open', { detail }));
+      trackEvent('learning_assistant_context_open', {
+        studentId: student.id,
+        source,
+        hasPrompt: Boolean(prompt),
+        lessonId: recommendedLesson?.id ?? null,
+        lessonSubject: recommendedLesson?.subject ?? null,
+      });
+    },
+    [recommendedLesson, student.id],
+  );
+
+  const handleViewDailyPlan = useCallback(() => {
+    const target =
+      document.getElementById('daily-plan-mobile') ?? document.getElementById('daily-plan-desktop');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      trackEvent('daily_plan_focus_scroll', { studentId: student.id });
+    }
+  }, [student.id]);
+
   const handleStartLesson = (lesson: DashboardLesson) => {
     trackEvent('lesson_start_click', {
       studentId: student.id,
@@ -1570,6 +1629,159 @@ const StudentDashboard: React.FC = () => {
     }
     setActiveView('lesson');
   };
+
+  const renderDailyPlanSection = (sectionId: string, extraClasses = '') => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+      id={sectionId}
+      className={`bg-white rounded-2xl p-6 shadow-sm border border-brand-light-blue/60 ${extraClasses}`}
+    >
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
+            <Clock className="h-4 w-4" />
+            <span>15-minute plan</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-900">Daily micro tasks</h3>
+          <p className="text-sm text-gray-600">
+            2–3 quick wins mixing new + review. Finish this lane to keep your streak alive.
+          </p>
+          <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+              <Flame className="h-3.5 w-3.5" />
+              Plan streak {microPlanStreakDays}d
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+              Login streak {quickStats?.streakDays ?? student.streakDays}d
+            </span>
+          </div>
+        </div>
+        <div className="min-w-[220px] rounded-xl bg-brand-light-blue/30 border border-brand-light-blue/50 p-3 shadow-inner">
+          <div className="text-xs uppercase tracking-wide text-brand-blue font-semibold">Today&apos;s lane</div>
+          <div className="text-3xl font-bold text-brand-blue mt-1">
+            {microPlanProgress.total ? `${microPlanProgress.completed}/${microPlanProgress.total}` : '—'}
+          </div>
+          <p className="text-xs text-brand-blue/80">
+            ~{microPlanMinutes} min • {microPlanProgress.pct}% done
+          </p>
+          <div className="mt-2 h-2 rounded-full bg-white/80 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-brand-blue to-brand-violet transition-all"
+              style={{ width: `${microPlanProgress.pct}%` }}
+            />
+          </div>
+          <p className="mt-2 text-[11px] text-brand-blue/80">
+            {microPlanCompletedToday ? 'Logged for today—nice work.' : 'Complete micro tasks to extend your streak.'}
+          </p>
+        </div>
+      </div>
+      {spacedReviewTask && (
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-dashed border-brand-blue/50 bg-brand-light-blue/30 px-4 py-3">
+          <div>
+            <p className="text-[11px] uppercase tracking-wide text-brand-blue font-semibold">Spaced review prompt</p>
+            <p className="text-sm font-semibold text-brand-blue">
+              {spacedReviewTask.label}
+            </p>
+            <p className="text-[11px] text-brand-blue/80">
+              Take 3 minutes to recall and mark it done to protect today&apos;s streak.
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleMicroTaskStateChange(spacedReviewTask.id, 'done')}
+              className="inline-flex items-center gap-1 rounded-full bg-brand-blue text-white px-3 py-2 text-xs font-semibold hover:bg-brand-blue/90"
+            >
+              <CheckCircle className="h-3.5 w-3.5" />
+              Log review
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMicroTaskStateChange(spacedReviewTask.id, 'skipped')}
+              className="inline-flex items-center gap-1 rounded-full border border-brand-blue/40 text-brand-blue px-3 py-2 text-xs font-semibold hover:border-brand-blue"
+            >
+              <X className="h-3 w-3" />
+              Skip today
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="mt-5 grid gap-3 md:grid-cols-3">
+        {microPlanTasks.map((task) => {
+          const status = microPlanState[task.id] ?? 'pending';
+          const statusStyles =
+            status === 'done'
+              ? 'border-emerald-200 bg-emerald-50'
+              : status === 'skipped'
+                ? 'border-amber-200 bg-amber-50'
+                : 'border-slate-200 bg-white';
+          const pill =
+            task.type === 'new'
+              ? 'New'
+              : task.type === 'review'
+                ? 'Review'
+                : 'Spaced';
+          return (
+            <div key={task.id} className={`rounded-xl border p-4 ${statusStyles}`}>
+              <div className="flex items-start justify-between gap-2">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-gray-600">
+                    <Clock className="h-3.5 w-3.5 text-brand-blue" />
+                    <span>{pill}</span>
+                    <span className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">{task.minutes} min</span>
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-900 line-clamp-2">{task.label}</h4>
+                  <p className="text-xs text-gray-600 line-clamp-2">{task.helper}</p>
+                  {task.hint && <p className="text-[11px] text-brand-blue line-clamp-1">Why: {task.hint}</p>}
+                  {task.subject && (
+                    <p className="text-[11px] text-gray-500 capitalize">Subject: {formatSubjectLabel(task.subject)}</p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1 text-[11px]">
+                  <button
+                    type="button"
+                    onClick={() => handleMicroTaskStateChange(task.id, 'done')}
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
+                      status === 'done'
+                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
+                    }`}
+                  >
+                    <CheckCircle className="h-3 w-3" />
+                    Done
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMicroTaskStateChange(task.id, 'skipped')}
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
+                      status === 'skipped'
+                        ? 'bg-amber-100 text-amber-700 border-amber-200'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
+                    }`}
+                  >
+                    <X className="h-3 w-3" />
+                    Skip
+                  </button>
+                </div>
+              </div>
+              {spacedReviewTask && spacedReviewTask.id === task.id && (
+                <div className="mt-3 rounded-lg border border-dashed border-brand-blue/40 bg-brand-light-blue/40 px-3 py-2 text-[11px] text-brand-blue">
+                  Spaced review counts toward your streak—log it once you finish.
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {microPlanTasks.length === 0 && (
+        <div className="mt-3 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-gray-600">
+          We&apos;ll drop in today&apos;s micro tasks once your plan syncs.
+        </div>
+      )}
+    </motion.div>
+  );
 
   const handleAcknowledgeCheckIn = async (checkIn: ParentCheckIn) => {
     if (!checkIn?.id) return;
@@ -1725,6 +1937,20 @@ const StudentDashboard: React.FC = () => {
     void persistWeeklyPlanPrefs({ weeklyIntent: value });
   };
 
+  const handleMixInModeChange = (value: 'auto' | 'core_only' | 'cross_subject') => {
+    if (value === mixInMode) return;
+    setMixInMode(value);
+    trackEvent('mix_in_mode_changed', { from: mixInMode, to: value });
+    void persistWeeklyPlanPrefs({ mixInMode: value });
+  };
+
+  const handleElectiveEmphasisChange = (value: 'off' | 'light' | 'on') => {
+    if (value === electiveEmphasis) return;
+    setElectiveEmphasis(value);
+    trackEvent('elective_emphasis_changed', { from: electiveEmphasis, to: value });
+    void persistWeeklyPlanPrefs({ electiveEmphasis: value });
+  };
+
   const handleStudyModeChange = (
     value: 'catch_up' | 'keep_up' | 'get_ahead',
     source: 'dashboard' | 'expired_confirm' = 'dashboard',
@@ -1831,11 +2057,116 @@ const StudentDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 md:mb-8 sticky top-2 z-30 md:static"
+        >
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
+                  <Play className="h-4 w-4" />
+                  <span>Do this now</span>
+                </div>
+                <h2 className="text-xl font-bold text-slate-900">
+                  {recommendedLesson ? recommendedLesson.title : 'Adaptive warm-up'}
+                </h2>
+                <p className="text-sm text-slate-600">
+                  {recommendedLesson
+                    ? recommendedLesson.suggestionReason ?? 'Start here to stay on your path.'
+                    : 'We will slot in your next lesson as soon as your plan syncs.'}
+                </p>
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-2 py-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    ~{primaryTaskMinutes} min
+                  </span>
+                  {recommendedLesson?.subject && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1">
+                      <Target className="h-3.5 w-3.5" />
+                      {formatSubjectLabel(recommendedLesson.subject)}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {recommendedLesson ? PATH_STATUS_LABELS[recommendedLesson.status] : 'Ready soon'}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => recommendedLesson && handleStartLesson(recommendedLesson)}
+                    disabled={!recommendedLesson}
+                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-brand-blue text-white px-4 py-3 text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-50 focus-ring"
+                  >
+                    <Play className="h-4 w-4" />
+                    <span>{recommendedLesson ? 'Start now' : 'Syncing plan'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleViewDailyPlan}
+                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-gray-800 hover:border-brand-blue/60 focus-ring"
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                    <span>View daily plan</span>
+                  </button>
+                </div>
+              </div>
+              <div className="w-full md:w-[320px]">
+                <div className="rounded-xl border border-brand-violet/30 bg-brand-light-violet/40 p-4 shadow-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-slate-900">Need help? Ask</p>
+                    <span className="text-[11px] font-semibold text-brand-violet">Tutor</span>
+                  </div>
+                  <p className="text-xs text-slate-700">
+                    School-safe tutor stays on your current lesson. Quick prompts keep typing short.
+                  </p>
+                  <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openTutorFromHome()}
+                      className="min-h-[44px] w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-violet text-white px-4 py-3 text-sm font-semibold hover:bg-brand-blue focus-ring"
+                    >
+                      <Bot className="h-4 w-4" />
+                      Open tutor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openTutorFromHome('Can you guide me through this lesson?', 'do_this_now_guide')}
+                      className="min-h-[44px] w-full inline-flex items-center justify-center gap-2 rounded-xl border border-brand-violet/50 bg-white px-4 py-3 text-sm font-semibold text-brand-violet hover:border-brand-blue focus-ring"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Guide me
+                    </button>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {tutorPromptChips.map((chip) => (
+                      <button
+                        key={chip}
+                        type="button"
+                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
+                        className="min-h-[40px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {activeTab === 'today' && (
+          <div className="md:hidden mb-6">{renderDailyPlanSection('daily-plan-mobile')}</div>
+        )}
+
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-8 hidden md:block"
         >
           <div className="bg-gradient-to-r from-brand-teal to-brand-blue rounded-2xl p-6 text-white">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -1892,7 +2223,7 @@ const StudentDashboard: React.FC = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.03 }}
-            className="mb-6"
+            className="mb-6 hidden md:block"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
@@ -2390,7 +2721,6 @@ const StudentDashboard: React.FC = () => {
             </>
           )}
         </motion.div>
-
         {activeMission && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -2538,155 +2868,7 @@ const StudentDashboard: React.FC = () => {
           <div className="lg:col-span-2 space-y-8">
             {activeTab === 'today' ? (
               <>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                  className="bg-white rounded-2xl p-6 shadow-sm border border-brand-light-blue/60"
-                >
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
-                        <Clock className="h-4 w-4" />
-                        <span>15-minute plan</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900">Daily micro tasks</h3>
-                      <p className="text-sm text-gray-600">
-                        2–3 quick wins mixing new + review. Finish this lane to keep your streak alive.
-                      </p>
-                      <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                          <Flame className="h-3.5 w-3.5" />
-                          Plan streak {microPlanStreakDays}d
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-                          Login streak {quickStats?.streakDays ?? student.streakDays}d
-                        </span>
-                      </div>
-                    </div>
-                    <div className="min-w-[220px] rounded-xl bg-brand-light-blue/30 border border-brand-light-blue/50 p-3 shadow-inner">
-                      <div className="text-xs uppercase tracking-wide text-brand-blue font-semibold">Today&apos;s lane</div>
-                      <div className="text-3xl font-bold text-brand-blue mt-1">
-                        {microPlanProgress.total ? `${microPlanProgress.completed}/${microPlanProgress.total}` : '—'}
-                      </div>
-                      <p className="text-xs text-brand-blue/80">
-                        ~{microPlanMinutes} min • {microPlanProgress.pct}% done
-                      </p>
-                      <div className="mt-2 h-2 rounded-full bg-white/80 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-brand-blue to-brand-violet transition-all"
-                          style={{ width: `${microPlanProgress.pct}%` }}
-                        />
-                      </div>
-                      <p className="mt-2 text-[11px] text-brand-blue/80">
-                        {microPlanCompletedToday ? 'Logged for today—nice work.' : 'Complete micro tasks to extend your streak.'}
-                      </p>
-                    </div>
-                  </div>
-                  {spacedReviewTask && (
-                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-dashed border-brand-blue/50 bg-brand-light-blue/30 px-4 py-3">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-wide text-brand-blue font-semibold">Spaced review prompt</p>
-                        <p className="text-sm font-semibold text-brand-blue">
-                          {spacedReviewTask.label}
-                        </p>
-                        <p className="text-[11px] text-brand-blue/80">
-                          Take 3 minutes to recall and mark it done to protect today&apos;s streak.
-                        </p>
-                      </div>
-                      <div className="inline-flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleMicroTaskStateChange(spacedReviewTask.id, 'done')}
-                          className="inline-flex items-center gap-1 rounded-full bg-brand-blue text-white px-3 py-2 text-xs font-semibold hover:bg-brand-blue/90"
-                        >
-                          <CheckCircle className="h-3.5 w-3.5" />
-                          Log review
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleMicroTaskStateChange(spacedReviewTask.id, 'skipped')}
-                          className="inline-flex items-center gap-1 rounded-full border border-brand-blue/40 text-brand-blue px-3 py-2 text-xs font-semibold hover:border-brand-blue"
-                        >
-                          <X className="h-3 w-3" />
-                          Skip today
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  <div className="mt-5 grid gap-3 md:grid-cols-3">
-                    {microPlanTasks.map((task) => {
-                      const status = microPlanState[task.id] ?? 'pending';
-                      const statusStyles =
-                        status === 'done'
-                          ? 'border-emerald-200 bg-emerald-50'
-                          : status === 'skipped'
-                            ? 'border-amber-200 bg-amber-50'
-                            : 'border-slate-200 bg-white';
-                      const pill =
-                        task.type === 'new'
-                          ? 'New'
-                          : task.type === 'review'
-                            ? 'Review'
-                            : 'Spaced';
-                      return (
-                        <div key={task.id} className={`rounded-xl border p-4 ${statusStyles}`}>
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="space-y-1">
-                              <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-gray-600">
-                                <Clock className="h-3.5 w-3.5 text-brand-blue" />
-                                <span>{pill}</span>
-                                <span className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">{task.minutes} min</span>
-                              </div>
-                              <h4 className="text-sm font-semibold text-gray-900 line-clamp-2">{task.label}</h4>
-                              <p className="text-xs text-gray-600 line-clamp-2">{task.helper}</p>
-                              {task.hint && <p className="text-[11px] text-brand-blue line-clamp-1">Why: {task.hint}</p>}
-                              {task.subject && (
-                                <p className="text-[11px] text-gray-500 capitalize">Subject: {formatSubjectLabel(task.subject)}</p>
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-1 text-[11px]">
-                              <button
-                                type="button"
-                                onClick={() => handleMicroTaskStateChange(task.id, 'done')}
-                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
-                                  status === 'done'
-                                    ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                                    : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
-                                }`}
-                              >
-                                <CheckCircle className="h-3 w-3" />
-                                Done
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleMicroTaskStateChange(task.id, 'skipped')}
-                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
-                                  status === 'skipped'
-                                    ? 'bg-amber-100 text-amber-700 border-amber-200'
-                                    : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
-                                }`}
-                              >
-                                <X className="h-3 w-3" />
-                                Skip
-                              </button>
-                            </div>
-                          </div>
-                          {spacedReviewTask && spacedReviewTask.id === task.id && (
-                            <div className="mt-3 rounded-lg border border-dashed border-brand-blue/40 bg-brand-light-blue/40 px-3 py-2 text-[11px] text-brand-blue">
-                              Spaced review counts toward your streak—log it once you finish.
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {microPlanTasks.length === 0 && (
-                    <div className="mt-3 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-gray-600">
-                      We&apos;ll drop in today&apos;s micro tasks once your plan syncs.
-                    </div>
-                  )}
-                </motion.div>
+                {renderDailyPlanSection('daily-plan-desktop', 'hidden md:block')}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -2772,8 +2954,41 @@ const StudentDashboard: React.FC = () => {
                         />
                       </div>
                       <p className="mt-1 text-[11px] text-gray-500">Minutes include practice and lessons.</p>
+                    </div>
                   </div>
-                </div>
+
+                  {electiveSuggestion && electiveEmphasis !== 'off' && (
+                    <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/60 p-3 flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">
+                            Elective boost
+                          </p>
+                          <p className="text-sm font-semibold text-gray-900">
+                            {electiveSuggestion.title}
+                          </p>
+                          <p className="text-[11px] text-gray-600">
+                            {electiveSuggestion.suggestionReason ??
+                              'You are ahead—try an elective while you have time.'}
+                          </p>
+                        </div>
+                        <span className="px-2 py-1 rounded-full bg-white text-indigo-700 border border-indigo-200 text-[11px] font-semibold">
+                          {formatSubjectLabel(electiveSuggestion.subject)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleStartLesson(electiveSuggestion)}
+                          className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 text-white px-3 py-2 text-sm font-semibold hover:bg-indigo-700"
+                        >
+                          <Sparkles className="h-4 w-4" />
+                          Start elective
+                        </button>
+                        <p className="text-[11px] text-indigo-800">Optional, keeps variety without losing core focus.</p>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-3">
                     <div className="flex items-center justify-between">
@@ -3048,6 +3263,61 @@ const StudentDashboard: React.FC = () => {
                         Adjusts tutor tone and small XP nudges to match your goal this week.
                       </p>
                     </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Mix-ins</p>
+                      <div className="flex flex-wrap gap-2">
+                        {([
+                          { id: 'auto', label: 'Auto', helper: 'Light variety on easy weeks' },
+                          { id: 'core_only', label: 'Core only', helper: 'Stick to core subjects' },
+                          { id: 'cross_subject', label: 'Mix subjects', helper: 'Blend in practice' },
+                        ] as const).map((option) => {
+                          const active = mixInMode === option.id;
+                          return (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => handleMixInModeChange(option.id)}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
+                                active
+                                  ? 'bg-emerald-100 text-emerald-800 border-emerald-200 shadow-sm'
+                                  : 'border-slate-200 text-gray-700 hover:border-emerald-300'
+                              }`}
+                            >
+                              <div className="font-semibold">{option.label}</div>
+                              <div className="text-[11px] text-gray-500">{option.helper}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        Mixes in up to two cross-subject practices when the weekly load is light.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800 mb-2">Electives</p>
+                      <div className="inline-flex rounded-full border border-slate-200 bg-gray-50 p-1 text-sm font-semibold">
+                        {(['light', 'on', 'off'] as const).map((value) => {
+                          const active = electiveEmphasis === value;
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => handleElectiveEmphasisChange(value)}
+                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${
+                                active
+                                  ? 'bg-indigo-600 text-white shadow'
+                                  : 'text-gray-700 hover:text-indigo-600'
+                              }`}
+                            >
+                              {value === 'light' ? 'Suggest when ahead' : value === 'on' ? 'Offer more' : 'Hide'}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-1 text-[11px] text-gray-500">
+                        Elective ideas appear once you finish core goals early. Parents can set this too.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="mt-5 flex flex-wrap gap-3">
@@ -3277,6 +3547,20 @@ const StudentDashboard: React.FC = () => {
                                   {lesson.difficulty}
                                 </span>
                               </div>
+                              {(lesson.isMixIn || lesson.isElective) && (
+                                <div className="mt-1 flex items-center gap-2 text-[11px] font-semibold">
+                                  {lesson.isMixIn && (
+                                    <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                      Mix-in
+                                    </span>
+                                  )}
+                                  {lesson.isElective && (
+                                    <span className="px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                      Elective
+                                    </span>
+                                  )}
+                                </div>
+                              )}
                               {lesson.suggestionReason && (
                                 <p className="text-xs text-brand-blue mt-1">{lesson.suggestionReason}</p>
                               )}
@@ -4405,6 +4689,7 @@ const StudentDashboard: React.FC = () => {
         </div>
       )}
 
+      <div id="assistant" className="sr-only" aria-hidden />
       <Suspense fallback={<div className="px-4 py-8 text-sm text-gray-500">Loading assistant…</div>}>
         <LearningAssistant />
       </Suspense>
