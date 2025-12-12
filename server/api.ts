@@ -84,7 +84,7 @@ import {
   updateStudentPreferences as saveStudentPreferences,
 } from './personalization.js';
 import { recordLearningEvent } from './xpService.js';
-import { upsertPlanOptOut, listPlanOptOuts as listPlanOptOutsApi } from './optOuts.js';
+import { upsertPlanOptOut, listPlanOptOutsApi } from './optOuts.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
