@@ -6,6 +6,7 @@ import { EntitlementsProvider } from './contexts/EntitlementsContext';
 import LandingPage from './components/Landing/LandingPage';
 import AuthModal from './components/Auth/AuthModal';
 import Header from './components/Layout/Header';
+import DashboardRouteSkeleton from './components/Layout/DashboardRouteSkeleton';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import AuthResetPage from './pages/AuthResetPage';
 import type { UserRole } from './types';
@@ -115,7 +116,9 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={['student']}>
                 <DashboardContainer transitionKey="student">
-                  <StudentDashboard />
+                  <Suspense fallback={<DashboardRouteSkeleton role="student" />}>
+                    <StudentDashboard />
+                  </Suspense>
                 </DashboardContainer>
               </ProtectedRoute>
             }
@@ -125,7 +128,9 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={['parent']}>
                 <DashboardContainer transitionKey="parent">
-                  <ParentDashboard />
+                  <Suspense fallback={<DashboardRouteSkeleton role="parent" />}>
+                    <ParentDashboard />
+                  </Suspense>
                 </DashboardContainer>
               </ProtectedRoute>
             }
@@ -153,7 +158,9 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <DashboardContainer transitionKey="admin-workspace">
-                  <AdminDashboard />
+                  <Suspense fallback={<DashboardRouteSkeleton role="admin" />}>
+                    <AdminDashboard />
+                  </Suspense>
                 </DashboardContainer>
               </ProtectedRoute>
             }

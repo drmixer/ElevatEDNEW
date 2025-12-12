@@ -4,6 +4,7 @@ import type { StudentPreferences } from './personalization.js';
 import { getStudentPreferences, updateStudentPreferences } from './personalization.js';
 import { getRuntimeConfig } from './config.js';
 import { recordOpsEvent } from './opsMetrics.js';
+import { captureServerException } from './monitoring.js';
 
 type PathBuildOptions = {
   gradeBand?: string | null;
@@ -105,6 +106,7 @@ const syncAdaptiveConfig = async (supabase: SupabaseClient | null) => {
     return config;
   } catch (error) {
     console.warn('[adaptive] falling back to default config', error);
+    captureServerException(error, { stage: 'adaptive_config_sync' });
     return null;
   }
 };
@@ -938,6 +940,7 @@ const fetchAdaptiveAttempts = async (
 
   if (error) {
     console.warn('[adaptive] Unable to load recent attempts', error);
+    captureServerException(error, { stage: 'adaptive_attempts_fetch', limit });
     return [];
   }
 
@@ -1031,6 +1034,7 @@ const mergePathEntryMetadata = async (
     }
   } catch (metadataError) {
     console.warn('[adaptive] Unable to update path entry metadata', metadataError);
+    captureServerException(metadataError, { stage: 'adaptive_entry_metadata_update', entryId });
   }
 };
 
@@ -1144,6 +1148,7 @@ const appendAdaptiveEntry = async (
 
   if (error) {
     console.warn('[adaptive] Unable to append adaptive entry', error);
+    captureServerException(error, { stage: 'adaptive_entry_append', pathId, type });
     return null;
   }
 
@@ -1393,6 +1398,7 @@ export const applyAdaptiveEvent = async (
     await supabase.from('student_paths').update({ metadata: nextMetadata }).eq('id', currentPath.path.id);
   } catch (metaError) {
     console.warn('[adaptive] Unable to persist adaptive state on path', metaError);
+    captureServerException(metaError, { stage: 'adaptive_state_persist', pathId: currentPath.path.id });
   }
 
   if (newlyTagged.length) {
@@ -1406,6 +1412,7 @@ export const applyAdaptiveEvent = async (
       await supabase.from('student_events').insert(payloads);
     } catch (misError) {
       console.warn('[adaptive] Unable to persist misconception events', misError);
+      captureServerException(misError, { stage: 'adaptive_misconception_events', count: newlyTagged.length });
     }
   }
 
@@ -1598,7 +1605,11 @@ const MAX_EVENT_SAMPLE = 200;
 
 export type StudentInsightSnapshot = {
   avgAccuracy: number | null;
+  avgAccuracyPriorWeek: number | null;
+  avgAccuracyDelta: number | null;
   weeklyTimeMinutes: number;
+  weeklyTimeMinutesPriorWeek: number;
+  weeklyTimeMinutesDelta: number | null;
   lessonsCompleted: number;
   modulesMastered: Array<{ moduleId: number; title: string | null; mastery: number }>;
   focusStandards: Array<{ code: string; accuracy: number; samples: number }>;
@@ -1618,7 +1629,8 @@ export const computeStudentInsights = async (
   };
   const now = new Date();
   const weekStart = new Date(now.getTime() - WEEKLY_LOOKBACK_DAYS * MS_PER_DAY);
-  const weekStartDate = weekStart.toISOString().slice(0, 10);
+  const priorWeekStart = new Date(now.getTime() - WEEKLY_LOOKBACK_DAYS * 2 * MS_PER_DAY);
+  const priorWeekStartDate = priorWeekStart.toISOString().slice(0, 10);
 
   const [eventResult, activityResult, progressResult] = await Promise.all([
     supabase
@@ -1632,7 +1644,7 @@ export const computeStudentInsights = async (
       .from('student_daily_activity')
       .select('activity_date, practice_minutes')
       .eq('student_id', studentId)
-      .gte('activity_date', weekStartDate),
+      .gte('activity_date', priorWeekStartDate),
     supabase
       .from('student_progress')
       .select('mastery_pct, lessons ( module_id, modules ( id, title ) )')
@@ -1651,7 +1663,8 @@ export const computeStudentInsights = async (
     console.warn('[insights] Unable to read module progress', progressResult.error);
   }
 
-  const accuracySamples: number[] = [];
+  const accuracySamplesCurrent: number[] = [];
+  const accuracySamplesPrior: number[] = [];
   const standardAccuracy = new Map<string, { correct: number; total: number }>();
   const recordStandardAccuracy = (code: string, accuracy: number) => {
     const entry = standardAccuracy.get(code) ?? { correct: 0, total: 0 };
@@ -1663,7 +1676,8 @@ export const computeStudentInsights = async (
   let lessonsCompleted = 0;
   let latestQuizScore: number | null = null;
   let latestQuizAt: string | null = null;
-  let eventTimeSeconds = 0;
+  let eventTimeSecondsCurrent = 0;
+  let eventTimeSecondsPrior = 0;
   let consecutiveMisses = 0;
   const struggleThreshold = runtimeConfig.adaptive.struggleConsecutiveMisses;
 
@@ -1675,8 +1689,12 @@ export const computeStudentInsights = async (
     const timeSpent = safeNumber(
       payload.time_spent_s ?? payload.time_spent ?? payload.timeSpentSeconds ?? payload.duration_seconds ?? payload.duration,
     );
-    if (timeSpent != null && createdAt >= weekStart) {
-      eventTimeSeconds += Math.max(0, timeSpent);
+    if (timeSpent != null && createdAt >= priorWeekStart) {
+      if (createdAt >= weekStart) {
+        eventTimeSecondsCurrent += Math.max(0, timeSpent);
+      } else {
+        eventTimeSecondsPrior += Math.max(0, timeSpent);
+      }
     }
 
     if (eventType === 'lesson_completed') {
@@ -1686,7 +1704,13 @@ export const computeStudentInsights = async (
 
     if (eventType === 'practice_answered') {
       const correct = Boolean(payload.correct);
-      accuracySamples.push(correct ? 1 : 0);
+      if (createdAt >= priorWeekStart) {
+        if (createdAt >= weekStart) {
+          accuracySamplesCurrent.push(correct ? 1 : 0);
+        } else {
+          accuracySamplesPrior.push(correct ? 1 : 0);
+        }
+      }
       consecutiveMisses = correct ? 0 : consecutiveMisses + 1;
       const standards = normalizeStandards(payload.standards ?? payload.standard_codes ?? []);
       standards.forEach((code) => recordStandardAccuracy(code, correct ? 1 : 0));
@@ -1697,7 +1721,14 @@ export const computeStudentInsights = async (
       const score = safeNumber(payload.score ?? payload.percentage ?? payload.result);
       const normalizedScore = score != null ? (score > 1 ? score / 100 : score) : null;
       if (normalizedScore != null) {
-        accuracySamples.push(clamp(normalizedScore, 0, 1));
+        const boundedScore = clamp(normalizedScore, 0, 1);
+        if (createdAt >= priorWeekStart) {
+          if (createdAt >= weekStart) {
+            accuracySamplesCurrent.push(boundedScore);
+          } else {
+            accuracySamplesPrior.push(boundedScore);
+          }
+        }
         if (normalizedScore < TARGET_ACCURACY_BAND.min) {
           consecutiveMisses += 1;
         } else {
@@ -1721,13 +1752,26 @@ export const computeStudentInsights = async (
     }
   }
 
-  const activityMinutes =
-    (activityResult.data ?? []).reduce((sum, row) => {
-      const minutes = safeNumber(row.practice_minutes) ?? 0;
-      return sum + Math.max(0, minutes);
-    }, 0) ?? 0;
+  let activityMinutesCurrent = 0;
+  let activityMinutesPrior = 0;
+  for (const row of (activityResult.data ?? []) as Array<{ activity_date?: string | null; practice_minutes?: number | null }>) {
+    if (!row.activity_date) continue;
+    const activityDate = new Date(row.activity_date);
+    if (activityDate < priorWeekStart) continue;
+    const minutes = safeNumber(row.practice_minutes) ?? 0;
+    if (activityDate >= weekStart) {
+      activityMinutesCurrent += Math.max(0, minutes);
+    } else {
+      activityMinutesPrior += Math.max(0, minutes);
+    }
+  }
 
-  const weeklyTimeMinutes = activityMinutes > 0 ? activityMinutes : Math.round(eventTimeSeconds / 60);
+  const weeklyTimeMinutesCurrent =
+    activityMinutesCurrent > 0 ? activityMinutesCurrent : Math.round(eventTimeSecondsCurrent / 60);
+  const weeklyTimeMinutesPrior =
+    activityMinutesPrior > 0 ? activityMinutesPrior : Math.round(eventTimeSecondsPrior / 60);
+  const hasPriorTimeSamples = activityMinutesPrior > 0 || eventTimeSecondsPrior > 0;
+  const weeklyTimeMinutesDelta = hasPriorTimeSamples ? weeklyTimeMinutesCurrent - weeklyTimeMinutesPrior : null;
 
   const progressRows = (progressResult.data ?? []) as Array<{
     mastery_pct?: number | null;
@@ -1759,10 +1803,19 @@ export const computeStudentInsights = async (
     }))
     .filter((entry) => entry.mastery >= MODULE_MASTERY_THRESHOLD);
 
-  const avgAccuracy =
-    accuracySamples.length > 0
-      ? Math.round(((accuracySamples.reduce((sum, value) => sum + value, 0) / accuracySamples.length) * 1000)) / 10
+  const averageAccuracy = (samples: number[]) =>
+    samples.length > 0
+      ? Math.round(((samples.reduce((sum, value) => sum + value, 0) / samples.length) * 1000)) / 10
       : null;
+
+  const avgAccuracyCurrentWeek = averageAccuracy(accuracySamplesCurrent);
+  const avgAccuracyPriorWeek = averageAccuracy(accuracySamplesPrior);
+  const avgAccuracyDelta =
+    avgAccuracyCurrentWeek != null && avgAccuracyPriorWeek != null
+      ? Math.round((avgAccuracyCurrentWeek - avgAccuracyPriorWeek) * 10) / 10
+      : null;
+  const accuracySamplesAll = [...accuracySamplesCurrent, ...accuracySamplesPrior];
+  const avgAccuracy = avgAccuracyCurrentWeek ?? averageAccuracy(accuracySamplesAll);
 
   const focusStandards = Array.from(standardAccuracy.entries())
     .map(([code, stats]) => ({
@@ -1780,7 +1833,11 @@ export const computeStudentInsights = async (
 
   return {
     avgAccuracy,
-    weeklyTimeMinutes: Math.max(0, weeklyTimeMinutes),
+    avgAccuracyPriorWeek,
+    avgAccuracyDelta,
+    weeklyTimeMinutes: Math.max(0, weeklyTimeMinutesCurrent),
+    weeklyTimeMinutesPriorWeek: Math.max(0, weeklyTimeMinutesPrior),
+    weeklyTimeMinutesDelta,
     lessonsCompleted,
     modulesMastered,
     focusStandards,
@@ -1802,7 +1859,11 @@ export const getStudentStats = async (
   masteryAvg: number | null;
   pathProgress: { completed: number; remaining: number; percent: number | null };
   avgAccuracy: number | null;
+  avgAccuracyPriorWeek: number | null;
+  avgAccuracyDelta: number | null;
   weeklyTimeMinutes: number;
+  weeklyTimeMinutesPriorWeek: number;
+  weeklyTimeMinutesDelta: number | null;
   modulesMastered: { count: number; items: Array<{ moduleId: number; title: string | null; mastery: number }> };
   focusStandards: Array<{ code: string; accuracy: number; samples: number }>;
   latestQuizScore: number | null;
@@ -1879,6 +1940,10 @@ export const getStudentStats = async (
     pathProgress: { completed, remaining: Math.max(remaining, 0), percent: pathPercent },
     avgAccuracy: insights.avgAccuracy,
     weeklyTimeMinutes: insights.weeklyTimeMinutes,
+    avgAccuracyPriorWeek: insights.avgAccuracyPriorWeek,
+    avgAccuracyDelta: insights.avgAccuracyDelta,
+    weeklyTimeMinutesPriorWeek: insights.weeklyTimeMinutesPriorWeek,
+    weeklyTimeMinutesDelta: insights.weeklyTimeMinutesDelta,
     modulesMastered: { count: insights.modulesMastered.length, items: insights.modulesMastered },
     focusStandards: insights.focusStandards,
     latestQuizScore: insights.latestQuizScore,

@@ -31,7 +31,11 @@ export type StudentEventResponse = {
     masteryAvg: number | null;
     pathProgress: { completed: number; remaining: number; percent: number | null };
     avgAccuracy?: number | null;
+    avgAccuracyPriorWeek?: number | null;
+    avgAccuracyDelta?: number | null;
     weeklyTimeMinutes?: number;
+    weeklyTimeMinutesPriorWeek?: number;
+    weeklyTimeMinutesDelta?: number | null;
     modulesMastered?: { count: number; items: Array<{ moduleId: number; title: string | null; mastery: number }> };
     focusStandards?: Array<{ code: string; accuracy: number; samples: number }>;
     latestQuizScore?: number | null;

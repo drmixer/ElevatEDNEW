@@ -1135,9 +1135,11 @@ export const handleTutorRequest = async (
         hashedUser,
         hashedIp,
         mode: tutorContext.mode,
-        promptPreview: tutorContext.prompt.slice(0, 120),
-        responsePreview: aiResult.message.slice(0, 200),
         model: aiResult.model,
+        promptChars: tutorContext.prompt.length,
+        responseChars: aiResult.message.length,
+        promptHash: anonymize(normalizedPrompt),
+        responseHash: anonymize(aiResult.message),
       });
     }
 

@@ -11,6 +11,7 @@ import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { fetchReflections } from '../../services/reflectionService';
 import { submitTutorAnswerReport, type TutorReportReason } from '../../services/tutorReportService';
 import { useStudentPath, useTutorPersona } from '../../hooks/useStudentData';
+import { findCuratedAlternate } from '../../data/curatedAlternates';
 
 const defaultPalette = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
 
@@ -235,6 +236,15 @@ const LearningAssistant: React.FC = () => {
       'this problem',
     [adaptiveMisconceptions, contextHint, lessonContext?.lessonTitle],
   );
+  const subjectTagLabel = lessonContext?.subject ?? 'General';
+  const conceptTagLabel = useMemo(() => {
+    const focusLabel =
+      lessonContext?.lessonTitle ??
+      contextHint ??
+      (lessonContext?.subject ? humanizeStandard(lessonContext.subject.toString()) : null) ??
+      (adaptiveMisconceptions.length ? humanizeStandard(adaptiveMisconceptions[0]) : null);
+    return focusLabel ?? 'concept';
+  }, [adaptiveMisconceptions, contextHint, lessonContext]);
 
   const scaffoldActions: Array<{
     id: HintLevel;
@@ -621,19 +631,18 @@ const LearningAssistant: React.FC = () => {
       responseMode === 'hint'
         ? 'Provide a scaffolded hint without giving away the full answer unless I ask for it.'
         : 'Share the full worked solution with reasoning after a short hint reminder.';
-    const focusLabelForTag =
-      lessonContext?.lessonTitle ??
-      contextHint ??
-      (lessonContext?.subject ? humanizeStandard(lessonContext.subject.toString()) : null) ??
-      (adaptiveMisconceptions.length ? humanizeStandard(adaptiveMisconceptions[0]) : null);
     const hintLevelInstruction =
       metadata?.hintLevel === 'break_down'
         ? 'Break the solution into 3-4 clear, numbered steps with a short encouragement to try after each step.'
         : metadata?.hintLevel === 'another_way'
-          ? alternateExplanationTemplate(lessonContext?.subject ?? lessonContext?.moduleTitle ?? null, focusLabelForTag)
+          ? alternateExplanationTemplate(lessonContext?.subject ?? lessonContext?.moduleTitle ?? null, conceptTagLabel)
           : metadata?.hintLevel === 'hint'
             ? 'Give one brief hint (1-2 sentences) without revealing the full answer.'
             : '';
+    const curatedAlternate =
+      metadata?.hintLevel === 'another_way'
+        ? findCuratedAlternate(subjectTagLabel, conceptTagLabel)
+        : null;
     const decoratedMessage = `${messageToSend}\n\n${modeInstruction}${hintLevelInstruction ? ` ${hintLevelInstruction}` : ''}`;
 
     const userMessage: ChatMessage = {
@@ -656,7 +665,8 @@ const LearningAssistant: React.FC = () => {
         studentId: student.id,
         hint_level: metadata.hintLevel,
         subject: lessonContext?.subject ?? null,
-        concept: focusLabelForTag ?? lessonContext?.lessonTitle ?? null,
+        concept: conceptTagLabel ?? lessonContext?.lessonTitle ?? null,
+        curated_alternate: Boolean(curatedAlternate),
       });
     }
     trackEvent(metadata?.source === 'card' ? 'chat_prompt_card_sent' : 'learning_assistant_message_sent', {
@@ -723,8 +733,8 @@ const LearningAssistant: React.FC = () => {
           : chatMode === 'guided_preferred'
             ? 'You are in guided-preferred mode. Start with a short answer and one clarifying question. Keep answers concise and redirect if off-topic.'
             : 'Standard chat mode. Keep answers school-safe and concise.';
-      const conceptTag = focusLabelForTag ?? lessonContext?.lessonTitle ?? 'concept';
-      const subjectTag = lessonContext?.subject ?? 'General';
+      const conceptTag = conceptTagLabel ?? 'concept';
+      const subjectTag = subjectTagLabel ?? 'General';
       const tagInstruction = `Start each answer with a short tag like "[${subjectTag} • ${conceptTag}]" to remind the learner of the subject and focus, then give the help. Keep tags short.`;
       const baseGuardrails = lessonContext
         ? `You are an in-lesson tutor. Stay focused on "${lessonContext.lessonTitle ?? 'this lesson'}" in ${
@@ -747,6 +757,7 @@ const LearningAssistant: React.FC = () => {
         conceptTag ? `Focus concept: ${conceptTag}` : null,
         metadata?.hintLevel ? `Hint level: ${metadata.hintLevel}` : null,
         planIntent !== 'balanced' ? `Weekly intent: ${planIntent}` : null,
+        curatedAlternate ? `Curated alternate: ${curatedAlternate}` : null,
         recentReflections.length
           ? `Recent reflections: ${recentReflections
               .map((entry) => entry.responseText.trim())
@@ -802,6 +813,7 @@ const LearningAssistant: React.FC = () => {
         hint_level: metadata?.hintLevel ?? null,
         subject: lessonContext?.subject ?? null,
         concept: conceptTag,
+        curated_alternate: Boolean(curatedAlternate),
       });
     } catch (err) {
       console.error('[LearningAssistant] AI response failed', err);
@@ -846,6 +858,7 @@ const LearningAssistant: React.FC = () => {
         hint_level: metadata?.hintLevel ?? null,
         subject: lessonContext?.subject ?? null,
         concept: conceptTag,
+        curated_alternate: Boolean(curatedAlternate),
       });
     } finally {
       setIsTyping(false);
@@ -1068,39 +1081,39 @@ const LearningAssistant: React.FC = () => {
             {/* Quick Actions */}
           <div className="p-3 border-b border-gray-200">
             <div className="flex flex-wrap gap-2">
-              {quickActions.map((action, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleQuickAction(action.action)}
-                  className="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-brand-light-violet rounded-lg text-xs transition-colors focus-ring"
-                  aria-label={action.text}
-                >
-                  <action.icon className="h-3 w-3" />
-                  <span>{action.text}</span>
-                </button>
+	              {quickActions.map((action, index) => (
+	                <button
+	                  key={index}
+	                  onClick={() => handleQuickAction(action.action)}
+	                  className="min-h-[44px] flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-brand-light-violet rounded-lg text-xs transition-colors focus-ring"
+	                  aria-label={action.text}
+	                >
+	                  <action.icon className="h-3 w-3" />
+	                  <span>{action.text}</span>
+	                </button>
               ))}
             </div>
             {(chatMode === 'guided_only' || chatMode === 'guided_preferred') && (
               <>
                 <div className="mt-3 grid grid-cols-2 gap-2">
-                  {guidedCards.map((card) => (
-                    <button
-                      key={card.id}
-                      onClick={() => {
+	                  {guidedCards.map((card) => (
+	                    <button
+	                      key={card.id}
+	                      onClick={() => {
                         setSelectedCardId(card.id);
                         trackEvent('chat_prompt_card_selected', {
                           card_id: card.id,
                           mode: chatMode,
                           has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
-                        });
-                        void handleSendMessage(card.prompt, { source: 'card', cardId: card.id });
-                      }}
-                      className="rounded-lg border border-gray-200 bg-gray-50 hover:border-brand-blue/60 text-left p-3 text-sm font-semibold text-gray-800 transition focus-ring"
-                    >
-                      <span className="block">{card.label}</span>
-                      <span className="text-xs text-gray-500">
-                        {lessonContext?.subject ? 'Context aware' : 'Quick start'}
-                      </span>
+	                        });
+	                        void handleSendMessage(card.prompt, { source: 'card', cardId: card.id });
+	                      }}
+	                      className="min-h-[44px] rounded-lg border border-gray-200 bg-gray-50 hover:border-brand-blue/60 text-left p-3 text-sm font-semibold text-gray-800 transition focus-ring"
+	                    >
+	                      <span className="block">{card.label}</span>
+	                      <span className="text-xs text-gray-500">
+	                        {lessonContext?.subject ? 'Context aware' : 'Quick start'}
+	                      </span>
                     </button>
                   ))}
                 </div>
@@ -1108,13 +1121,13 @@ const LearningAssistant: React.FC = () => {
                   <div className="mt-2">
                     <p className="text-xs font-semibold text-gray-700 mb-1">Quick clarifiers</p>
                     <div className="flex flex-wrap gap-2">
-                      {clarifierChips.map((chip) => (
-                        <button
-                          key={chip}
-                          className="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
-                          onClick={() => {
-                            trackEvent('chat_prompt_clarifier_selected', {
-                              card_id: selectedCardId,
+	                      {clarifierChips.map((chip) => (
+	                        <button
+	                          key={chip}
+	                          className="min-h-[44px] inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-gray-700 hover:border-brand-blue/60 focus-ring"
+	                          onClick={() => {
+	                            trackEvent('chat_prompt_clarifier_selected', {
+	                              card_id: selectedCardId,
                               mode: chatMode,
                               has_context: Boolean(lessonContext?.lessonId || lessonContext?.subject),
                               clarifier: chip,
@@ -1273,6 +1286,17 @@ const LearningAssistant: React.FC = () => {
                     <span className="text-[10px] text-slate-500 ml-1">{action.helper}</span>
                   </button>
                 ))}
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+                <span className="px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  Subject tag: {subjectTagLabel ?? 'General'}
+                </span>
+                <span className="px-2 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  Concept tag: {conceptTagLabel}
+                </span>
+                <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Scaffold actions log these tags
+                </span>
               </div>
               {(chatMode !== 'guided_only' || guidedCardUsed) && (
                 <div className="flex space-x-2">

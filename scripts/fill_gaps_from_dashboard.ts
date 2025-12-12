@@ -2,7 +2,7 @@ import process from 'node:process';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { createServiceRoleClient } from './utils/supabase.js';
+import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
 
 type CoverageCell = {
   module_id: number;
@@ -73,36 +73,38 @@ const dedupe = (values: (string | null | undefined)[]): string[] => {
 };
 
 const fetchCoverage = async (supabase: SupabaseClient, gradeBands: string[] | null): Promise<CoverageCell[]> => {
-  let query = supabase
-    .from('coverage_dashboard_cells')
-    .select(
-      [
-        'module_id',
-        'module_slug',
-        'module_title',
-        'subject',
-        'grade_band',
-        'standard_code',
-        'practice_items_aligned',
-        'practice_target',
-        'meets_practice_baseline',
-        'meets_assessment_baseline',
-        'external_resource_count',
-        'meets_external_baseline',
-      ].join(','),
-    )
-    .or('meets_practice_baseline.is.false,meets_assessment_baseline.is.false,meets_external_baseline.is.false');
+  const selectColumns = [
+    'module_id',
+    'module_slug',
+    'module_title',
+    'subject',
+    'grade_band',
+    'standard_code',
+    'practice_items_aligned',
+    'practice_target',
+    'meets_practice_baseline',
+    'meets_assessment_baseline',
+    'external_resource_count',
+    'meets_external_baseline',
+  ].join(',');
 
-  if (gradeBands && gradeBands.length > 0) {
-    query = query.in('grade_band', gradeBands);
-  }
+  const data = await fetchAllPaginated<CoverageCell>(
+    (from, to) => {
+      let query = supabase
+        .from('coverage_dashboard_cells')
+        .select(selectColumns)
+        .or('meets_practice_baseline.is.false,meets_assessment_baseline.is.false,meets_external_baseline.is.false');
 
-  const { data, error } = await query;
+      if (gradeBands && gradeBands.length > 0) {
+        query = query.in('grade_band', gradeBands);
+      }
 
-  if (error) {
-    throw new Error(`Failed to load coverage dashboard cells: ${error.message}`);
-  }
-  return (data ?? []) as CoverageCell[];
+      return query.order('module_slug', { ascending: true }).range(from, to);
+    },
+    { logLabel: 'coverage_dashboard_cells' },
+  );
+
+  return data as CoverageCell[];
 };
 
 const fetchSubjects = async (supabase: SupabaseClient): Promise<Map<string, SubjectRecord>> => {

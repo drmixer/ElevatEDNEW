@@ -158,6 +158,7 @@ type GoalFormState = {
   focusIntensity: 'balanced' | 'focused';
   mixInMode: 'auto' | 'core_only' | 'cross_subject';
   electiveEmphasis: 'off' | 'light' | 'on';
+  allowedElectiveSubjects: Subject[];
 };
 
 type ProgressStatusDescription = {
@@ -245,6 +246,13 @@ const describeActivityType = (activityType?: string) => {
   return lookup[activityType] ?? activityType.replace(/_/g, ' ');
 };
 
+const ELECTIVE_SUBJECT_OPTIONS: { id: Subject; label: string }[] = [
+  { id: 'arts_music', label: 'Arts & Music' },
+  { id: 'computer_science', label: 'Computer Science' },
+  { id: 'financial_literacy', label: 'Financial literacy' },
+  { id: 'health_pe', label: 'Health & PE' },
+];
+
 const ParentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const parent = (user as Parent) ?? null;
@@ -277,6 +285,10 @@ const ParentDashboard: React.FC = () => {
     focusIntensity: defaultLearningPreferences.focusIntensity,
     mixInMode: defaultLearningPreferences.mixInMode ?? 'auto',
     electiveEmphasis: defaultLearningPreferences.electiveEmphasis ?? 'light',
+    allowedElectiveSubjects:
+      (defaultLearningPreferences.allowedElectiveSubjects?.length
+        ? defaultLearningPreferences.allowedElectiveSubjects
+        : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id)) ?? [],
   });
   const [chatModeSetting, setChatModeSetting] = useState<'guided_only' | 'guided_preferred' | 'free'>(
     defaultLearningPreferences.chatMode ?? 'free',
@@ -520,18 +532,26 @@ const ParentDashboard: React.FC = () => {
     if (!parent?.id) return;
     try {
       const saved = localStorage.getItem(`family-onboarding-${parent.id}`);
-      if (saved) {
-        const parsed = JSON.parse(saved) as Partial<typeof onboardingPrefs>;
-        setOnboardingPrefs((prev) => ({
-          diagnosticScheduled: parsed.diagnosticScheduled ?? prev.diagnosticScheduled,
-          dismissed: parsed.dismissed ?? prev.dismissed,
-          preparedLearner: parsed.preparedLearner ?? prev.preparedLearner,
-        }));
-      }
+      const parsed = saved ? (JSON.parse(saved) as Partial<typeof onboardingPrefs>) : null;
+      const serverState = parent.onboardingState ?? {};
+      setOnboardingPrefs((prev) => ({
+        diagnosticScheduled:
+          (serverState.diagnosticScheduled as boolean | undefined) ??
+          parsed?.diagnosticScheduled ??
+          prev.diagnosticScheduled,
+        dismissed:
+          (serverState.checklistDismissed as boolean | undefined) ??
+          parsed?.dismissed ??
+          prev.dismissed,
+        preparedLearner:
+          (serverState.guardianLinked as boolean | undefined) ??
+          parsed?.preparedLearner ??
+          prev.preparedLearner,
+      }));
     } catch (storageError) {
       console.warn('[ParentDashboard] Unable to restore onboarding prefs', storageError);
     }
-  }, [parent?.id]);
+  }, [parent?.id, parent?.onboardingState]);
 
   useEffect(() => {
     if (!parent?.id) return;
@@ -608,8 +628,14 @@ const ParentDashboard: React.FC = () => {
       focusIntensity: preferences.focusIntensity ?? defaultLearningPreferences.focusIntensity,
       mixInMode: preferences.mixInMode ?? defaultLearningPreferences.mixInMode ?? 'auto',
       electiveEmphasis: preferences.electiveEmphasis ?? defaultLearningPreferences.electiveEmphasis ?? 'light',
+      allowedElectiveSubjects:
+        (preferences.allowedElectiveSubjects?.length
+          ? preferences.allowedElectiveSubjects
+          : defaultLearningPreferences.allowedElectiveSubjects?.length
+            ? defaultLearningPreferences.allowedElectiveSubjects
+            : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id)) ?? [],
     });
-  }, [currentChild]);
+  }, [currentChild, ELECTIVE_SUBJECT_OPTIONS]);
 
   useEffect(() => {
     setInsightTab('overview');
@@ -735,18 +761,30 @@ const ParentDashboard: React.FC = () => {
         diagnosticStatus === 'completed' && currentChild.diagnosticCompletedAt
           ? new Date(currentChild.diagnosticCompletedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
           : null;
+      const diagnosticConfidence =
+        typeof currentChild?.masteryConfidence === 'number'
+          ? Math.round(currentChild.masteryConfidence)
+          : null;
       const primaryGap =
         childSkillGaps.find((gap) => gap.status === 'needs_attention') ??
         (childSkillGaps.length ? childSkillGaps[0] : null);
+      const gapMastery =
+        typeof primaryGap?.mastery === 'number' ? Math.round(primaryGap.mastery) : null;
 
       if (diagnosticStatus === 'completed') {
+        const diagnosticParts: string[] = [];
+        if (diagnosticDate) {
+          diagnosticParts.push(`Completed ${diagnosticDate}${diagnosticConfidence != null ? ` · confidence ${diagnosticConfidence}%` : ''}.`);
+        }
+        if (primaryGap?.concepts?.[0]) {
+          diagnosticParts.push(`Plan opens with ${primaryGap.concepts[0]} (${gapMastery != null ? `${gapMastery}% accuracy` : 'diagnostic pick'}).`);
+        }
         cards.push({
           id: 'diagnostic',
           title: 'Diagnostic calibrated',
           detail:
-            diagnosticDate && primaryGap
-              ? `Completed ${diagnosticDate}. Starting with ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)} because accuracy is ${Math.round(primaryGap.mastery)}%.`
-              : 'Latest diagnostic synced—plan is tuned for this week.',
+            diagnosticParts.join(' ') ||
+            'Latest diagnostic synced—plan is tuned for this week.',
           tone: 'success',
         });
       } else {
@@ -764,8 +802,10 @@ const ParentDashboard: React.FC = () => {
           title: 'Focus area',
           detail:
             primaryGap.summary ??
-            `Next focus: ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)}`,
-          tone: 'info',
+            `Next focus: ${primaryGap.concepts?.[0] ?? formatSubjectLabel(primaryGap.subject)}${
+              gapMastery != null ? ` (${gapMastery}% accuracy)` : ''
+            }`,
+          tone: gapMastery != null && gapMastery < 55 ? 'warn' : 'info',
         });
       } else if (currentChild.adaptivePlanNotes?.length) {
         cards.push({
@@ -784,8 +824,8 @@ const ParentDashboard: React.FC = () => {
           id: 'pace',
           title: 'Pace note',
           detail: positive
-            ? `Up ${formatDelta(deltaLessons)} lessons and ${formatDelta(deltaMinutes)} min vs last week. Keep this cadence.`
-            : 'Lighter week so far—plan includes shorter practice blocks to rebuild pace.',
+            ? `${currentChild.lessonsCompletedWeek ?? 0} lessons / ${currentChild.practiceMinutesWeek ?? 0} min so far. Up ${formatDelta(deltaLessons)} lessons and ${formatDelta(deltaMinutes)} min vs last week—keep this cadence.`
+            : `${currentChild.lessonsCompletedWeek ?? 0} lessons / ${currentChild.practiceMinutesWeek ?? 0} min logged. Lighter week so far—plan includes shorter practice blocks to rebuild pace.`,
           tone: positive ? 'success' : 'info',
         });
       } else {
@@ -860,6 +900,55 @@ const ParentDashboard: React.FC = () => {
       weekStartLabel,
     };
   }, [dashboard]);
+
+  const familyAccuracyDelta = useMemo(() => {
+    const deltas = (dashboard?.children ?? [])
+      .map((child) => child.avgAccuracyDelta)
+      .filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
+    if (!deltas.length) return null;
+    const avg = deltas.reduce((sum, value) => sum + value, 0) / deltas.length;
+    return Math.round(avg * 10) / 10;
+  }, [dashboard?.children]);
+
+  const familyWeeklyDelta = useMemo(() => {
+    const children = dashboard?.children ?? [];
+    const deltaLessons = children.reduce((sum, child) => sum + (child.weeklyChange?.deltaLessons ?? 0), 0);
+    const deltaMinutes = children.reduce((sum, child) => sum + (child.weeklyChange?.deltaMinutes ?? 0), 0);
+    return { deltaLessons, deltaMinutes };
+  }, [dashboard?.children]);
+
+  const currentChildName = currentChild?.name ?? null;
+
+  const impactSnippet = useMemo(() => {
+    if (!dashboard) return null;
+    const parts: string[] = [];
+    if (familyAccuracyDelta != null) {
+      parts.push(`Avg accuracy ${familyAccuracyDelta > 0 ? '+' : ''}${familyAccuracyDelta} pts vs last week`);
+    }
+    if (familyWeeklyDelta.deltaLessons !== 0 || familyWeeklyDelta.deltaMinutes !== 0) {
+      parts.push(
+        `${familyWeeklyDelta.deltaLessons >= 0 ? '+' : ''}${familyWeeklyDelta.deltaLessons} lessons, ${familyWeeklyDelta.deltaMinutes >= 0 ? '+' : ''}${familyWeeklyDelta.deltaMinutes} min vs last week`,
+      );
+    }
+    if (diagnosticCompletionRate != null) {
+      parts.push(`${diagnosticCompletionRate}% diagnostics complete`);
+    }
+    if (alertResolutionHours != null) {
+      parts.push(`Alerts resolved in ${alertResolutionHours}h avg`);
+    }
+    if (currentChildName && assignmentUptakeRate != null) {
+      parts.push(`${currentChildName} follow-through ${assignmentUptakeRate}%`);
+    }
+    return parts.length ? parts.join(' • ') : null;
+  }, [
+    dashboard,
+    familyAccuracyDelta,
+    familyWeeklyDelta,
+    diagnosticCompletionRate,
+    alertResolutionHours,
+    assignmentUptakeRate,
+    currentChildName,
+  ]);
 
   const digestRecommendations = useMemo(
     () =>
@@ -987,17 +1076,29 @@ const ParentDashboard: React.FC = () => {
       child.goals?.masteryTargets && Object.keys(child.goals.masteryTargets).length > 0;
     return hasWeekly || hasMinutes || hasMastery;
   });
+  const serverOnboardingState = parent?.onboardingState ?? {};
+  const missingGradeCount = realChildren.filter((child) => !(child.grade && child.grade > 0)).length;
+  const gradeStepDone =
+    Boolean(serverOnboardingState.gradeConfirmed) ||
+    (hasRealChildren && missingGradeCount === 0);
   const diagnosticCompleted = realChildren.some((child) =>
     (child.recentActivity ?? []).some((activity) => {
       const description = activity.description?.toLowerCase() ?? '';
       return description.includes('diagnostic') || description.includes('assessment');
     }),
   );
-  const showDiagnosticEmpty = !diagnosticCompleted && !onboardingPrefs.diagnosticScheduled;
+  const learnerStepDone =
+    hasRealChildren ||
+    onboardingPrefs.preparedLearner ||
+    Boolean(serverOnboardingState.guardianLinked);
+  const diagnosticStepDone =
+    diagnosticCompleted ||
+    onboardingPrefs.diagnosticScheduled ||
+    Boolean(serverOnboardingState.diagnosticScheduled);
+  const showDiagnosticEmpty = !diagnosticCompleted && !diagnosticStepDone;
   const showOnboardingChecklist =
-    !onboardingPrefs.dismissed && (!hasRealChildren || !hasGoalsSet || showDiagnosticEmpty);
-  const learnerStepDone = hasRealChildren || onboardingPrefs.preparedLearner;
-  const diagnosticStepDone = diagnosticCompleted || onboardingPrefs.diagnosticScheduled;
+    !(onboardingPrefs.dismissed || Boolean(serverOnboardingState.checklistDismissed)) &&
+    (!hasRealChildren || !hasGoalsSet || showDiagnosticEmpty);
 
   // deriveSessionLengthPreference moved to top-level helper to avoid TDZ
 
@@ -1097,8 +1198,8 @@ const ParentDashboard: React.FC = () => {
         suggestionId: id,
         reason,
       }).catch((error) => console.warn('[Coaching] feedback failed', error));
-    }
-  };
+  }
+};
 
   const focusSubjectOptions = useMemo(
     () => Array.from(new Set((currentChild?.masteryBySubject ?? []).map((entry) => entry.subject))),
@@ -1481,9 +1582,40 @@ const ParentDashboard: React.FC = () => {
     return Math.round(Math.min(rate, 150));
   }, [assignmentsList, currentChild]);
 
+  const lastSuccessMetricsSnapshotRef = React.useRef<string | null>(null);
+  useEffect(() => {
+    if (!parent?.id || !dashboard) return;
+    const signature = [
+      dashboard.weeklyReport?.weekStart ?? '',
+      currentChild?.id ?? '',
+      alertResolutionHours ?? 'na',
+      diagnosticCompletionRate ?? 'na',
+      assignmentUptakeRate ?? 'na',
+    ].join('|');
+    if (lastSuccessMetricsSnapshotRef.current === signature) return;
+    lastSuccessMetricsSnapshotRef.current = signature;
+    trackEvent('success_metrics_parent_snapshot', {
+      parentId: parent.id,
+      weekStart: dashboard.weeklyReport?.weekStart ?? null,
+      childId: currentChild?.id ?? null,
+      alertResolutionHours,
+      diagnosticCompletionRate,
+      assignmentFollowThroughPct: assignmentUptakeRate,
+    });
+  }, [
+    parent?.id,
+    dashboard,
+    dashboard?.weeklyReport?.weekStart,
+    currentChild?.id,
+    alertResolutionHours,
+    diagnosticCompletionRate,
+    assignmentUptakeRate,
+  ]);
+
   const assignModuleMutation = useMutation({
     mutationFn: assignModuleToStudents,
     onSuccess: (result) => {
+      const fromAlert = Boolean(alertAssignmentContext.current);
       setAssignMessage(
         `Assigned ${result.assignedStudents} learner${result.assignedStudents === 1 ? '' : 's'} (${result.lessonsAttached} lessons attached).`,
       );
@@ -1491,6 +1623,14 @@ const ParentDashboard: React.FC = () => {
       setDueDate('');
       refetchAssignments();
       queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
+      trackEvent('success_assignment_assigned', {
+        parentId: parent?.id,
+        childId: selectedChildId ?? null,
+        assignmentId: result.assignmentId,
+        assignedStudents: result.assignedStudents,
+        lessonsAttached: result.lessonsAttached,
+        fromAlert,
+      });
       if (alertAssignmentContext.current) {
         const childKey = alertAssignmentContext.current;
         setAlertFollowUps((prev) => ({
@@ -1598,6 +1738,10 @@ const ParentDashboard: React.FC = () => {
       }
       const tutorSettingsUpdatedAt = new Date().toISOString();
       const basePreferences = child.learningPreferences ?? defaultLearningPreferences;
+      const allowedElectives =
+        goalForm.allowedElectiveSubjects.length > 0
+          ? goalForm.allowedElectiveSubjects
+          : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id);
       const nextPreferences: LearningPreferences = {
         ...basePreferences,
         sessionLength,
@@ -1605,6 +1749,7 @@ const ParentDashboard: React.FC = () => {
         focusIntensity,
         mixInMode: goalForm.mixInMode,
         electiveEmphasis: goalForm.electiveEmphasis,
+        allowedElectiveSubjects: allowedElectives,
         chatMode,
         chatModeLocked,
         allowTutor: allowTutorChats,
@@ -1671,6 +1816,20 @@ const ParentDashboard: React.FC = () => {
       guardianLinksQuery.refetch();
       trackEvent('guardian_link_created', { parentId: parent?.id, studentId: link?.studentId });
       setOnboardingPrefs((prev) => ({ ...prev, preparedLearner: true }));
+      if (parent?.id) {
+        const nowIso = new Date().toISOString();
+        const nextState: ParentOnboardingState = {
+          ...(parent.onboardingState ?? {}),
+          guardianLinked: true,
+          guardianLinkedAt: nowIso,
+          gradeConfirmed: true,
+          gradeConfirmedAt: nowIso,
+          lastViewedStep: 'guardian_link',
+        };
+        await updateParentOnboardingState(parent.id, nextState).catch((error) =>
+          console.warn('[ParentDashboard] Unable to persist guardian linking', error),
+        );
+      }
       await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
       await refreshUser();
     },
@@ -1708,6 +1867,20 @@ const ParentDashboard: React.FC = () => {
       setGuardianError(null);
       setShowAddLearnerModal(false);
       setOnboardingPrefs((prev) => ({ ...prev, preparedLearner: true }));
+      if (parent?.id) {
+        const nowIso = new Date().toISOString();
+        const nextState: ParentOnboardingState = {
+          ...(parent.onboardingState ?? {}),
+          guardianLinked: true,
+          guardianLinkedAt: nowIso,
+          gradeConfirmed: true,
+          gradeConfirmedAt: nowIso,
+          lastViewedStep: 'add_learner',
+        };
+        await updateParentOnboardingState(parent.id, nextState).catch((error) =>
+          console.warn('[ParentDashboard] Unable to persist learner creation onboarding', error),
+        );
+      }
       guardianLinksQuery.refetch();
       await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
       await refreshUser();
@@ -2037,6 +2210,18 @@ const ParentDashboard: React.FC = () => {
       childId: options?.childId,
       source: options?.source ?? 'dashboard',
     });
+    if (parent?.id) {
+      const nowIso = new Date().toISOString();
+      const nextState: ParentOnboardingState = {
+        ...(parent.onboardingState ?? {}),
+        diagnosticScheduled: true,
+        diagnosticScheduledAt: nowIso,
+        lastViewedStep: 'diagnostic',
+      };
+      updateParentOnboardingState(parent.id, nextState).catch((error) =>
+        console.warn('[ParentDashboard] Unable to persist diagnostic scheduling', error),
+      );
+    }
     if (options?.childId) {
       setDiagnosticPlans((prev) => ({
         ...prev,
@@ -2117,6 +2302,17 @@ const ParentDashboard: React.FC = () => {
 
   const handleDismissOnboarding = () => {
     setOnboardingPrefs((prev) => ({ ...prev, dismissed: true }));
+    if (parent?.id) {
+      const nowIso = new Date().toISOString();
+      const nextState: ParentOnboardingState = {
+        ...(parent.onboardingState ?? {}),
+        checklistDismissed: true,
+        checklistDismissedAt: nowIso,
+      };
+      updateParentOnboardingState(parent.id, nextState).catch((error) =>
+        console.warn('[ParentDashboard] Unable to persist checklist dismissal', error),
+      );
+    }
     trackEvent('parent_onboarding_dismissed', { parentId: parent?.id });
   };
 
@@ -2232,6 +2428,12 @@ const ParentDashboard: React.FC = () => {
 
   const handleResolveChildAlert = (childId: string, alertText?: string | null) => {
     if (!alertText) return;
+    const resolvedAtMs = Date.now();
+    const seenAtMs = alertSeenAt.get(childId);
+    const resolutionHours =
+      seenAtMs && resolvedAtMs >= seenAtMs
+        ? Math.round(((resolvedAtMs - seenAtMs) / (1000 * 60 * 60)) * 10) / 10
+        : null;
     setResolvedAlerts((prev) => {
       const next = new Map(prev);
       next.set(childId, alertText);
@@ -2239,14 +2441,20 @@ const ParentDashboard: React.FC = () => {
     });
     setAlertResolvedAt((prev) => {
       const next = new Map(prev);
-      next.set(childId, Date.now());
+      next.set(childId, resolvedAtMs);
       return next;
     });
     setAlertFollowUps((prev) => ({
       ...prev,
       [childId]: { ...(prev[childId] ?? {}), resolved: true },
     }));
-    trackEvent('parent_child_alert_resolved', { parentId: parent?.id, childId });
+    trackEvent('parent_child_alert_resolved', { parentId: parent?.id, childId, resolutionHours });
+    trackEvent('success_alert_resolved', {
+      parentId: parent?.id,
+      childId,
+      resolutionHours,
+      weekStart: dashboard?.weeklyReport?.weekStart ?? null,
+    });
   };
 
   const handleUndoResolveChildAlert = (childId: string) => {
@@ -2995,7 +3203,12 @@ const ParentDashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 flex flex-col justify-between min-h-[136px]">
               <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-wide text-slate-500">Alert response</p>
+                <p
+                  className="text-xs uppercase tracking-wide text-slate-500"
+                  title="Average time between first seeing an alert and marking it resolved."
+                >
+                  Alert response
+                </p>
                 <AlertTriangle className="h-4 w-4 text-amber-600" />
               </div>
               <div>
@@ -3009,7 +3222,12 @@ const ParentDashboard: React.FC = () => {
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 flex flex-col justify-between min-h-[136px]">
               <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-wide text-slate-500">Diagnostics</p>
+                <p
+                  className="text-xs uppercase tracking-wide text-slate-500"
+                  title="Percent of linked learners who have completed a diagnostic."
+                >
+                  Diagnostics
+                </p>
                 <CheckCircle className="h-4 w-4 text-emerald-600" />
               </div>
               <div>
@@ -3023,7 +3241,12 @@ const ParentDashboard: React.FC = () => {
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 flex flex-col justify-between min-h-[136px]">
               <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-wide text-slate-500">Follow-through</p>
+                <p
+                  className="text-xs uppercase tracking-wide text-slate-500"
+                  title="Active assignments compared to current focus areas for the selected learner."
+                >
+                  Follow-through
+                </p>
                 <ClipboardList className="h-4 w-4 text-brand-blue" />
               </div>
               <div>
@@ -3501,6 +3724,13 @@ const ParentDashboard: React.FC = () => {
                       ? 'Family plan seats sync to your subscription.'
                       : 'Billing is off; seats are not limited right now.'}
                 </p>
+                {hasRealChildren && (
+                  <p className="text-[11px] text-slate-600">
+                    {gradeStepDone
+                      ? 'Grades confirmed for linked learners.'
+                      : `Grade missing for ${missingGradeCount} learner${missingGradeCount === 1 ? '' : 's'} — learners can update grade band in their Student dashboard.`}
+                  </p>
+                )}
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -4680,7 +4910,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.48 }}
               id="learning-insights"
-              className="bg-white rounded-2xl p-6 shadow-sm xl:col-span-2 min-w-0"
+              className="order-4 xl:order-none bg-white rounded-2xl p-6 shadow-sm xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -4788,6 +5018,28 @@ const ParentDashboard: React.FC = () => {
                         {strongestSubject
                           ? 'Light reinforcement while gaps close elsewhere.'
                           : 'Need more lessons to compare strengths.'}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                      <p className="text-[11px] uppercase text-slate-500">Academic averages (7d)</p>
+                      <p className="text-sm font-semibold text-slate-900">
+                        Accuracy{' '}
+                        {currentChild?.avgAccuracyWeek != null
+                          ? `${Math.round(currentChild.avgAccuracyWeek)}%`
+                          : '—'}
+                      </p>
+                      <p className="text-[11px] text-slate-600">
+                        {currentChild?.avgAccuracyDelta != null && currentChild?.avgAccuracyPriorWeek != null
+                          ? `${currentChild.avgAccuracyDelta > 0 ? '+' : ''}${Math.round(currentChild.avgAccuracyDelta * 10) / 10} pts vs last week`
+                          : 'vs last week —'}
+                      </p>
+                      <p className="text-sm font-semibold text-slate-900 mt-1">
+                        Time on task {Math.round(currentChild?.practiceMinutesWeek ?? 0)} min
+                      </p>
+                      <p className="text-[11px] text-slate-600">
+                        {weeklyChange?.deltaMinutes != null
+                          ? `${formatDelta(weeklyChange.deltaMinutes)} min vs last week`
+                          : 'vs last week —'}
                       </p>
                     </div>
                   </div>
@@ -4945,7 +5197,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
               id="goal-planner"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
+              className="order-3 xl:order-none bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -5229,6 +5481,44 @@ const ParentDashboard: React.FC = () => {
                                 <option value="off">Keep electives hidden</option>
                               </select>
                             </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Allowed elective subjects
+                              </label>
+                              <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {ELECTIVE_SUBJECT_OPTIONS.map((option) => {
+                                  const checked = goalForm.allowedElectiveSubjects.includes(option.id);
+                                  return (
+                                    <label
+                                      key={option.id}
+                                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm text-gray-800 hover:border-brand-blue/40"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        onChange={(event) => {
+                                          const next = new Set(goalForm.allowedElectiveSubjects);
+                                          if (event.target.checked) {
+                                            next.add(option.id);
+                                          } else {
+                                            next.delete(option.id);
+                                          }
+                                          setGoalForm((prev) => ({
+                                            ...prev,
+                                            allowedElectiveSubjects: Array.from(next),
+                                          }));
+                                        }}
+                                        className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/50"
+                                      />
+                                      <span>{option.label}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                              <p className="mt-1 text-[11px] text-gray-500">
+                                Limit electives to the categories you want this child to see.
+                              </p>
+                            </div>
                           </div>
                           <p className="mt-2 text-xs text-gray-600">
                             Families can keep weeks core-only or lean into electives when the weekly plan is ahead of schedule.
@@ -5492,7 +5782,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
               id="assignments"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
+              className="order-10 xl:order-none bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
@@ -5697,7 +5987,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               id="family-connections"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
+              className="order-11 xl:order-none bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -5873,7 +6163,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.52 }}
               id="safety-privacy"
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-5 xl:col-span-2 min-w-0"
+              className="order-5 xl:order-none bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-5 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -6308,7 +6598,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
+              className="order-6 xl:order-none bg-white rounded-2xl p-6 shadow-sm border border-slate-200 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -6606,7 +6896,7 @@ const ParentDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.58 }}
               id="weekly-snapshot"
-              className="bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40 xl:col-span-2 min-w-0"
+              className="order-2 xl:order-none bg-gradient-to-br from-brand-light-violet to-white rounded-2xl p-6 shadow-sm border border-brand-light-violet/40 xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -6660,6 +6950,18 @@ const ParentDashboard: React.FC = () => {
                       </p>
                     </div>
                   </div>
+
+                  {impactSnippet && (
+                    <div
+                      className="mb-4 rounded-xl border border-white bg-white/80 px-3 py-2 text-sm text-slate-800"
+                      title="Impact combines accuracy change, pace change, diagnostic completion, alert response, and assignment follow-through."
+                    >
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-blue mr-2">
+                        Impact
+                      </span>
+                      {impactSnippet}
+                    </div>
+                  )}
 
                   <p className="text-sm text-gray-700 mb-4">
                     {dashboard?.weeklyReport?.summary ??
@@ -6813,7 +7115,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.65 }}
-              className="bg-white rounded-2xl p-6 shadow-sm xl:col-span-2 min-w-0"
+              className="order-12 xl:order-none bg-white rounded-2xl p-6 shadow-sm xl:col-span-2 min-w-0"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">
@@ -6868,7 +7170,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="bg-white rounded-2xl p-6 shadow-sm min-w-0"
+              className="order-13 xl:order-none bg-white rounded-2xl p-6 shadow-sm min-w-0"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-gray-900">Home extension</h3>
@@ -6976,7 +7278,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75 }}
-              className="bg-white rounded-2xl p-6 shadow-sm min-w-0"
+              className="order-14 xl:order-none bg-white rounded-2xl p-6 shadow-sm min-w-0"
             >
               <h3 className="text-xl font-bold text-gray-900 mb-6">Focus Areas</h3>
               <div className="space-y-3">
@@ -7012,7 +7314,7 @@ const ParentDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.85 }}
-              className="bg-white rounded-2xl p-6 shadow-sm min-w-0"
+              className="order-first xl:order-none bg-white rounded-2xl p-6 shadow-sm min-w-0"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">Alert Center</h3>

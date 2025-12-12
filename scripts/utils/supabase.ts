@@ -95,6 +95,77 @@ export const resolveModules = async (
   return results;
 };
 
+type PaginatedFetchOptions = {
+  pageSize?: number;
+  maxRetries?: number;
+  retryDelayMs?: number;
+  jitterMs?: number;
+  logLabel?: string;
+};
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const fetchAllPaginated = async <T>(
+  makeQuery: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
+  options: PaginatedFetchOptions = {},
+): Promise<T[]> => {
+  const {
+    pageSize = 1000,
+    maxRetries = 3,
+    retryDelayMs = 400,
+    jitterMs = 150,
+    logLabel,
+  } = options;
+
+  const rows: T[] = [];
+  let from = 0;
+
+  while (true) {
+    const to = from + pageSize - 1;
+
+    let attempt = 0;
+    let lastError: { message: string } | null = null;
+    let batch: T[] = [];
+
+    while (attempt <= maxRetries) {
+      const result = await makeQuery(from, to);
+      if (!result.error) {
+        batch = (result.data ?? []) as T[];
+        lastError = null;
+        break;
+      }
+
+      lastError = result.error;
+      attempt += 1;
+
+      if (attempt > maxRetries) {
+        break;
+      }
+
+      const backoff = retryDelayMs * Math.pow(2, attempt - 1);
+      const jitter = Math.floor(Math.random() * jitterMs);
+      if (logLabel) {
+        console.warn(`[pagination] retrying ${logLabel} after error: ${lastError.message}`);
+      }
+      await sleep(backoff + jitter);
+    }
+
+    if (lastError) {
+      throw new Error(`Failed to fetch paginated results${logLabel ? ` for ${logLabel}` : ''}: ${lastError.message}`);
+    }
+
+    rows.push(...batch);
+
+    if (batch.length < pageSize) {
+      break;
+    }
+
+    from += pageSize;
+  }
+
+  return rows;
+};
+
 type ContentSourceRecord = {
   id: number;
   name: string;

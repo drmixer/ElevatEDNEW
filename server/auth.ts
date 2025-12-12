@@ -94,3 +94,18 @@ export const resolveAdminFromToken = async (
 
   return mapAdminRow(profile as Record<string, unknown>);
 };
+
+export const requireStudentOrGuardian = async (
+  supabase: SupabaseClient,
+  actor: AuthenticatedUser,
+  studentId: string,
+): Promise<boolean> => {
+  if (actor.role === 'admin') return true;
+  if (actor.role === 'student' && actor.id === studentId) return true;
+  if (actor.role !== 'parent') return false;
+  const { data, error } = await supabase.rpc('is_guardian', { target_student: studentId });
+  if (error) {
+    throw new Error(`Unable to verify guardian status: ${error.message}`);
+  }
+  return data === true;
+};

@@ -91,6 +91,7 @@ import {
   listStudentCheckIns,
   markCheckInsDelivered,
 } from '../../services/checkInService';
+import { listPlanOptOuts, upsertPlanOptOut } from '../../services/optOutService';
 
 const PATH_STATUS_RANK: Record<LearningPathItem['status'], number> = {
   in_progress: 0,
@@ -315,6 +316,10 @@ const StudentDashboard: React.FC = () => {
   const [electiveEmphasis, setElectiveEmphasis] = useState<'off' | 'light' | 'on'>(
     student?.learningPreferences?.electiveEmphasis ?? 'light',
   );
+  const [dismissedMixIns, setDismissedMixIns] = useState<Set<string>>(new Set());
+  const [dismissedElectives, setDismissedElectives] = useState<Set<string>>(new Set());
+  const [loggedMixIns, setLoggedMixIns] = useState<Set<string>>(new Set());
+  const [loggedElectives, setLoggedElectives] = useState<Set<string>>(new Set());
   const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
     student?.learningPreferences?.studyMode ?? 'keep_up',
   );
@@ -388,6 +393,16 @@ const StudentDashboard: React.FC = () => {
     setTodayKey(new Date().toISOString().slice(0, 10));
   }, [student?.id]);
 
+  const weekStartKey = useMemo(() => {
+    const base = todayKey ?? new Date().toISOString().slice(0, 10);
+    const cursor = new Date(`${base}T00:00:00`);
+    const day = cursor.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    const start = new Date(cursor);
+    start.setDate(cursor.getDate() + diff);
+    return start.toISOString().slice(0, 10);
+  }, [todayKey]);
+
   useEffect(() => {
     if (!student?.id) return;
     try {
@@ -399,6 +414,45 @@ const StudentDashboard: React.FC = () => {
       console.warn('[StudentDashboard] Failed to load dismissed nudges', error);
     }
   }, [student?.id]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    try {
+      const mixRaw = localStorage.getItem(`mix-in-dismissed-${student.id}-${weekStartKey}`);
+      setDismissedMixIns(mixRaw ? new Set(JSON.parse(mixRaw) as string[]) : new Set());
+      const elecRaw = localStorage.getItem(`elective-dismissed-${student.id}-${weekStartKey}`);
+      setDismissedElectives(elecRaw ? new Set(JSON.parse(elecRaw) as string[]) : new Set());
+      const mixLogged = localStorage.getItem(`mix-in-logged-${student.id}-${weekStartKey}`);
+      setLoggedMixIns(mixLogged ? new Set(JSON.parse(mixLogged) as string[]) : new Set());
+      const elecLogged = localStorage.getItem(`elective-logged-${student.id}-${weekStartKey}`);
+      setLoggedElectives(elecLogged ? new Set(JSON.parse(elecLogged) as string[]) : new Set());
+    } catch (error) {
+      console.warn('[StudentDashboard] Failed to load weekly mix-in/elective state', error);
+      setDismissedMixIns(new Set());
+      setDismissedElectives(new Set());
+      setLoggedMixIns(new Set());
+      setLoggedElectives(new Set());
+    }
+  }, [student?.id, weekStartKey]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    let cancelled = false;
+    const loadOptOuts = async () => {
+      try {
+        const remote = await listPlanOptOuts(student.id, weekStartKey);
+        if (cancelled) return;
+        setDismissedMixIns((prev) => new Set([...prev, ...Array.from(remote.mixIns)]));
+        setDismissedElectives((prev) => new Set([...prev, ...Array.from(remote.electives)]));
+      } catch (error) {
+        console.warn('[StudentDashboard] Failed to load server opt-outs', error);
+      }
+    };
+    void loadOptOuts();
+    return () => {
+      cancelled = true;
+    };
+  }, [student?.id, weekStartKey]);
 
   const familyCodeQuery = useQuery({
     queryKey: ['family-link-code', student?.id],
@@ -532,6 +586,40 @@ const StudentDashboard: React.FC = () => {
     }
     return 'Built from your diagnostic - start with the first card below.';
   }, [pathFocus]);
+
+  const describeUpNextRationale = useCallback(
+    (entry: StudentPathEntry) => {
+      const meta = (entry.metadata ?? {}) as Record<string, unknown>;
+      const reasonCopy = describePathEntryReason(entry);
+      const standard =
+        humanizeStandard((meta.standard_code as string | undefined) ?? entry.target_standard_codes?.[0] ?? null) ?? null;
+      const accuracy =
+        typeof meta.accuracy_pct === 'number'
+          ? Math.round(meta.accuracy_pct)
+          : typeof meta.accuracy === 'number'
+            ? Math.round(meta.accuracy)
+            : typeof entry.score === 'number'
+              ? Math.round(entry.score)
+              : typeof meta.mastery === 'number'
+                ? Math.round(meta.mastery)
+                : null;
+      const rationale =
+        pathEntryReasonSlug(entry) === 'placement' || meta.source === 'placement'
+          ? standard && accuracy != null
+            ? `From your diagnostic on ${standard} (${accuracy}% accuracy). Starting here locks in that skill.`
+            : reasonCopy
+          : accuracy != null && standard
+            ? `${reasonCopy} Recent accuracy on ${standard} is ${accuracy}%, so we queued extra practice.`
+            : accuracy != null
+              ? `${reasonCopy} Recent performance was ${accuracy}%.`
+              : standard
+                ? `${reasonCopy} Focus: ${standard}.`
+                : reasonCopy;
+      const metric = accuracy != null && standard ? `${accuracy}% · ${standard}` : accuracy != null ? `${accuracy}% recent` : standard;
+      return { rationale, metric };
+    },
+    [],
+  );
 
   const adaptiveFocusLabel = useMemo(() => {
     const flashStandard =
@@ -1000,14 +1088,65 @@ const StudentDashboard: React.FC = () => {
     ]);
   };
 
-  const persistDismissedNudges = (next: Set<string>) => {
-    if (!student?.id) return;
-    try {
-      localStorage.setItem(`student-nudges-dismissed-${student.id}`, JSON.stringify(Array.from(next)));
-    } catch (error) {
-      console.warn('[StudentDashboard] Failed to persist dismissed nudges', error);
-    }
-  };
+  const persistDismissedNudges = useCallback(
+    (next: Set<string>) => {
+      if (!student?.id) return;
+      try {
+        localStorage.setItem(`student-nudges-dismissed-${student.id}`, JSON.stringify(Array.from(next)));
+      } catch (error) {
+        console.warn('[StudentDashboard] Failed to persist dismissed nudges', error);
+      }
+    },
+    [student?.id],
+  );
+
+  const persistDismissedMixIns = useCallback(
+    (next: Set<string>) => {
+      if (!student?.id) return;
+      try {
+        localStorage.setItem(`mix-in-dismissed-${student.id}-${weekStartKey}`, JSON.stringify(Array.from(next)));
+      } catch (error) {
+        console.warn('[StudentDashboard] Failed to persist dismissed mix-ins', error);
+      }
+    },
+    [student?.id, weekStartKey],
+  );
+
+  const persistDismissedElectives = useCallback(
+    (next: Set<string>) => {
+      if (!student?.id) return;
+      try {
+        localStorage.setItem(`elective-dismissed-${student.id}-${weekStartKey}`, JSON.stringify(Array.from(next)));
+      } catch (error) {
+        console.warn('[StudentDashboard] Failed to persist dismissed electives', error);
+      }
+    },
+    [student?.id, weekStartKey],
+  );
+
+  const persistLoggedMixIns = useCallback(
+    (next: Set<string>) => {
+      if (!student?.id) return;
+      try {
+        localStorage.setItem(`mix-in-logged-${student.id}-${weekStartKey}`, JSON.stringify(Array.from(next)));
+      } catch (error) {
+        console.warn('[StudentDashboard] Failed to persist logged mix-ins', error);
+      }
+    },
+    [student?.id, weekStartKey],
+  );
+
+  const persistLoggedElectives = useCallback(
+    (next: Set<string>) => {
+      if (!student?.id) return;
+      try {
+        localStorage.setItem(`elective-logged-${student.id}-${weekStartKey}`, JSON.stringify(Array.from(next)));
+      } catch (error) {
+        console.warn('[StudentDashboard] Failed to persist logged electives', error);
+      }
+    },
+    [student?.id, weekStartKey],
+  );
 
   const handleDismissNudge = (nudge: StudentNudge, reason: 'dismiss' | 'cta' = 'dismiss') => {
     const next = new Set(dismissedNudges);
@@ -1022,22 +1161,63 @@ const StudentDashboard: React.FC = () => {
     });
   };
 
-  const handleNudgeCta = (nudge: StudentNudge) => {
-    trackEvent('student_nudge_cta', {
-      studentId: student.id,
-      nudge_id: nudge.id,
-      type: nudge.type,
-      detail: nudge.detail,
-    });
-    handleDismissNudge(nudge, 'cta');
-    if (nudge.targetUrl) {
-      window.open(nudge.targetUrl, '_blank', 'noopener');
-    } else {
+	  const handleNudgeCta = (nudge: StudentNudge) => {
+	    trackEvent('student_nudge_cta', {
+	      studentId: student.id,
+	      nudge_id: nudge.id,
+	      type: nudge.type,
+	      detail: nudge.detail,
+	    });
+	    trackEvent('student_nudge_completed', {
+	      studentId: student.id,
+	      nudge_id: nudge.id,
+	      type: nudge.type,
+	      detail: nudge.detail,
+	    });
+	    handleDismissNudge(nudge, 'cta');
+	    if (nudge.targetUrl) {
+	      window.open(nudge.targetUrl, '_blank', 'noopener');
+	    } else {
       setActiveTab('today');
     }
   };
 
-  const todaysPlan = useMemo(() => dashboard?.todaysPlan ?? [], [dashboard?.todaysPlan]);
+  const handleDismissMixIn = (lesson: DashboardLesson) => {
+    if (!lesson.isMixIn || !student?.id) return;
+    const next = new Set(dismissedMixIns);
+    next.add(lesson.id);
+    setDismissedMixIns(next);
+    persistDismissedMixIns(next);
+    trackEvent('mix_in_dismissed', {
+      studentId: student.id,
+      lesson_id: lesson.id,
+      subject: lesson.subject,
+    });
+    void upsertPlanOptOut(student.id, lesson.id, weekStartKey, 'mix_in');
+  };
+
+  const handleDismissElective = (lesson: DashboardLesson) => {
+    if (!lesson.isElective || !student?.id) return;
+    const next = new Set(dismissedElectives);
+    next.add(lesson.id);
+    setDismissedElectives(next);
+    persistDismissedElectives(next);
+    trackEvent('elective_dismissed', {
+      studentId: student.id,
+      lesson_id: lesson.id,
+      subject: lesson.subject,
+    });
+    void upsertPlanOptOut(student.id, lesson.id, weekStartKey, 'elective');
+  };
+
+  const todaysPlan = useMemo(() => {
+    const base = dashboard?.todaysPlan ?? [];
+    return base.filter(
+      (lesson) =>
+        !(lesson.isMixIn && dismissedMixIns.has(lesson.id)) &&
+        !(lesson.isElective && dismissedElectives.has(lesson.id)),
+    );
+  }, [dashboard?.todaysPlan, dismissedElectives, dismissedMixIns]);
   const todayActivities = useMemo(() => dashboard?.todayActivities ?? [], [dashboard?.todayActivities]);
   const filteredPlan =
     subjectFilter === 'all'
@@ -1050,10 +1230,32 @@ const StudentDashboard: React.FC = () => {
     todaysPlan.find((lesson) => lesson.status !== 'completed') ??
     todaysPlan[0] ??
     null;
-  const electiveSuggestion = useMemo(
-    () => dashboard?.electiveSuggestion ?? todaysPlan.find((lesson) => lesson.isElective) ?? null,
-    [dashboard?.electiveSuggestion, todaysPlan],
-  );
+  const electiveSuggestion = useMemo(() => {
+    const suggested = dashboard?.electiveSuggestion;
+    if (suggested && !dismissedElectives.has(suggested.id)) {
+      return suggested;
+    }
+    const inPlan = todaysPlan.find((lesson) => lesson.isElective);
+    if (inPlan && !dismissedElectives.has(inPlan.id)) {
+      return inPlan;
+    }
+    return null;
+  }, [dashboard?.electiveSuggestion, dismissedElectives, todaysPlan]);
+  useEffect(() => {
+    if (!student?.id || !electiveSuggestion) return;
+    if (dismissedElectives.has(electiveSuggestion.id)) return;
+    if (loggedElectives.has(electiveSuggestion.id)) return;
+    const next = new Set(loggedElectives);
+    next.add(electiveSuggestion.id);
+    setLoggedElectives(next);
+    persistLoggedElectives(next);
+    trackEvent('elective_suggested', {
+      studentId: student.id,
+      lesson_id: electiveSuggestion.id,
+      subject: electiveSuggestion.subject,
+      weekly_plan_intensity: weeklyPlanIntensity,
+    });
+  }, [dismissedElectives, electiveSuggestion, loggedElectives, persistLoggedElectives, student?.id, weeklyPlanIntensity]);
   const primaryTaskMinutes = useMemo(() => {
     const lessonEstimate = recommendedLesson?.activities?.find((activity) => activity.estimatedMinutes)?.estimatedMinutes;
     const todayEstimate = todayActivities.find((activity) => activity.estimatedMinutes)?.estimatedMinutes;
@@ -1078,12 +1280,103 @@ const StudentDashboard: React.FC = () => {
       : nextAssessment
         ? 'scheduled'
         : 'not_started';
+  const prevDiagnosticStatus = useRef<typeof diagnosticStatus>(diagnosticStatus);
   const studentCoverage = useMemo(() => {
     const total = todaysPlanProgress.total;
     const pct = todaysPlanProgress.total ? todaysPlanProgress.pct : null;
     const needMoreData = total < 3 || !quickStats?.assessmentCompleted;
     return { pct, needMoreData };
   }, [todaysPlanProgress, quickStats?.assessmentCompleted]);
+  const prevPlanCompleted = useRef<number>(todaysPlanProgress.completed);
+  const lastDailyPlanCompletedRef = useRef<string | null>(null);
+  const lastWeeklyAccuracyLoggedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    const previous = prevDiagnosticStatus.current;
+    if (diagnosticStatus === 'completed' && previous !== 'completed') {
+      setUpNextUpdatedAt(Date.now());
+      void refreshStudentPath().catch(() => undefined);
+      trackEvent('upnext_refresh_after_diagnostic', { studentId: student.id });
+      trackEvent('success_diagnostic_completed', {
+        studentId: student.id,
+        date: todayKey,
+        weekStart: weekStartKey,
+      });
+    }
+    prevDiagnosticStatus.current = diagnosticStatus;
+  }, [diagnosticStatus, refreshStudentPath, student?.id, todayKey, weekStartKey]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    if (todaysPlanProgress.completed > prevPlanCompleted.current) {
+      setUpNextUpdatedAt(Date.now());
+      void refreshStudentPath().catch(() => undefined);
+      trackEvent('upnext_refresh_after_task_outcome', {
+        studentId: student.id,
+        completed: todaysPlanProgress.completed,
+      });
+
+      trackEvent('success_daily_plan_progress', {
+        studentId: student.id,
+        date: todayKey,
+        weekStart: weekStartKey,
+        completed: todaysPlanProgress.completed,
+        total: todaysPlanProgress.total,
+        pct: todaysPlanProgress.pct,
+      });
+
+      if (
+        todaysPlanProgress.total > 0 &&
+        todaysPlanProgress.pct >= 100 &&
+        lastDailyPlanCompletedRef.current !== todayKey
+      ) {
+        lastDailyPlanCompletedRef.current = todayKey;
+        trackEvent('success_daily_plan_completed', {
+          studentId: student.id,
+          date: todayKey,
+          weekStart: weekStartKey,
+          total: todaysPlanProgress.total,
+        });
+      }
+    }
+    prevPlanCompleted.current = todaysPlanProgress.completed;
+  }, [
+    refreshStudentPath,
+    student?.id,
+    todaysPlanProgress.completed,
+    todaysPlanProgress.total,
+    todaysPlanProgress.pct,
+    todayKey,
+    weekStartKey,
+  ]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    if (
+      studentStats.avgAccuracyDelta == null ||
+      studentStats.avgAccuracyPriorWeek == null ||
+      studentStats.avgAccuracy == null
+    ) {
+      return;
+    }
+    const signature = `${weekStartKey}:${studentStats.avgAccuracyDelta}`;
+    if (lastWeeklyAccuracyLoggedRef.current === signature) return;
+    lastWeeklyAccuracyLoggedRef.current = signature;
+    trackEvent('success_weekly_accuracy_delta', {
+      studentId: student.id,
+      weekStart: weekStartKey,
+      avgAccuracy: studentStats.avgAccuracy,
+      avgAccuracyPriorWeek: studentStats.avgAccuracyPriorWeek,
+      delta: studentStats.avgAccuracyDelta,
+    });
+  }, [
+    student?.id,
+    studentStats.avgAccuracy,
+    studentStats.avgAccuracyPriorWeek,
+    studentStats.avgAccuracyDelta,
+    weekStartKey,
+  ]);
 
   const nudgeTargetUrl = recommendedLesson?.launchUrl ?? dashboard?.nextLessonUrl ?? null;
 
@@ -1134,6 +1427,30 @@ const StudentDashboard: React.FC = () => {
     }
     return weeklyPlanFocus;
   }, [parentGoalActive, student?.learningPreferences?.focusSubject, weeklyPlanFocus]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    const newIds: string[] = [];
+    todaysPlan.forEach((lesson) => {
+      if (!lesson.isMixIn) return;
+      if (loggedMixIns.has(lesson.id)) return;
+      newIds.push(lesson.id);
+      trackEvent('mix_in_added', {
+        studentId: student.id,
+        lesson_id: lesson.id,
+        subject_to: lesson.subject,
+        subject_from: currentPlanFocus ?? 'balanced',
+        weekly_plan_intensity: weeklyPlanIntensity,
+        reason_source: lesson.suggestionReason ? 'suggestion' : 'light_load',
+      });
+    });
+    if (newIds.length) {
+      const next = new Set(loggedMixIns);
+      newIds.forEach((id) => next.add(id));
+      setLoggedMixIns(next);
+      persistLoggedMixIns(next);
+    }
+  }, [currentPlanFocus, loggedMixIns, persistLoggedMixIns, student?.id, todaysPlan, weeklyPlanIntensity]);
 
   const latestCheckIn = useMemo(() => (checkIns ?? [])[0] ?? null, [checkIns]);
 
@@ -1385,52 +1702,62 @@ const StudentDashboard: React.FC = () => {
       todayActivities[0]?.title ??
       null;
 
-    if (spacedLabel) {
-      const slug = spacedLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const ensureSpacedTask = () => {
+      if (tasks.some((task) => task.type === 'spaced')) return;
+      const label = spacedLabel || 'Spaced recall: yesterday’s notes';
+      const slug = label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       tasks.push({
         id: `micro-spaced-${slug || 'focus'}`,
-        label: spacedLabel.startsWith('Spaced') ? spacedLabel : `Spaced recall: ${spacedLabel}`,
+        label,
         helper: '3-minute retrieval: explain it aloud or jot the steps.',
         minutes: 3,
         type: 'spaced',
-        subject: reviewPick?.subject ?? primary?.subject,
+        subject: reviewPick?.subject ?? primary?.subject ?? 'english',
         lessonId: reviewPick?.id ?? primary?.id ?? null,
       });
-    }
+    };
+
+    const ensureReviewTask = () => {
+      if (tasks.some((task) => task.type === 'review')) return;
+      tasks.push({
+        id: 'micro-review-fallback',
+        label: 'Quick review checkpoint',
+        helper: 'Re-run one mistake from yesterday and fix it.',
+        minutes: 5,
+        type: 'review',
+        subject: primary?.subject ?? 'science',
+        lessonId: primary?.id ?? null,
+      });
+    };
 
     if (tasks.length === 0) {
-      tasks.push(
-        {
-          id: 'micro-new-fallback',
-          label: 'Adaptive warm-up',
-          helper: 'Short new practice set picked for you.',
-          minutes: 7,
-          type: 'new',
-          subject: 'math',
-          lessonId: null,
-        },
-        {
-          id: 'micro-spaced-fallback',
-          label: 'Spaced recall: yesterday’s notes',
-          helper: 'Talk through the main idea for 3 minutes.',
-          minutes: 3,
-          type: 'spaced',
-          subject: 'english',
-          lessonId: null,
-        },
-        {
-          id: 'micro-review-fallback',
-          label: 'Quick review checkpoint',
-          helper: 'Re-run one mistake from yesterday and fix it.',
-          minutes: 5,
-          type: 'review',
-          subject: 'science',
-          lessonId: null,
-        },
-      );
+      tasks.push({
+        id: 'micro-new-fallback',
+        label: 'Adaptive warm-up',
+        helper: 'Short new practice set picked for you.',
+        minutes: 7,
+        type: 'new',
+        subject: 'math',
+        lessonId: null,
+      });
+      ensureReviewTask();
+      ensureSpacedTask();
+    } else {
+      ensureSpacedTask();
+      if (tasks.length < 3) {
+        ensureReviewTask();
+      }
     }
 
-    return tasks.slice(0, 3);
+    const trimmed = tasks.slice(0, 3);
+    const targetMinutes = 15;
+    const totalMinutes = trimmed.reduce((acc, task) => acc + task.minutes, 0);
+    if (trimmed.length && totalMinutes < targetMinutes - 2) {
+      const padded = Math.min(4, targetMinutes - totalMinutes);
+      trimmed[0] = { ...trimmed[0], minutes: trimmed[0].minutes + padded };
+    }
+
+    return trimmed;
   }, [adaptiveFocusLabel, journeyFocusAreas, recommendedLesson, todayActivities, todaysPlan]);
 
   useEffect(() => {
@@ -1622,6 +1949,20 @@ const StudentDashboard: React.FC = () => {
       lessonId: lesson.id,
       status: lesson.status,
     });
+    if (lesson.isMixIn) {
+      trackEvent('mix_in_started', {
+        studentId: student.id,
+        lesson_id: lesson.id,
+        subject: lesson.subject,
+      });
+    }
+    if (lesson.isElective) {
+      trackEvent('elective_started', {
+        studentId: student.id,
+        lesson_id: lesson.id,
+        subject: lesson.subject,
+      });
+    }
     if (activeCelebration) {
       trackEvent('celebration_next_activity_started', {
         kind: activeCelebration.kind,
@@ -2147,16 +2488,16 @@ const StudentDashboard: React.FC = () => {
                     </button>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {tutorPromptChips.map((chip) => (
-                      <button
-                        key={chip}
-                        type="button"
-                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
-                        className="min-h-[40px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
-                      >
-                        {chip}
-                      </button>
-                    ))}
+	                    {tutorPromptChips.map((chip) => (
+	                      <button
+	                        key={chip}
+	                        type="button"
+	                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
+	                        className="min-h-[44px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
+	                      >
+	                        {chip}
+	                      </button>
+	                    ))}
                   </div>
                 </div>
               </div>
@@ -2246,6 +2587,14 @@ const StudentDashboard: React.FC = () => {
                     <p className="text-lg font-bold text-slate-800">
                       {studentStats.avgAccuracy != null ? `${studentStats.avgAccuracy}%` : '—'}
                     </p>
+                    <p
+                      className="text-xs text-slate-600"
+                      title="Change in your average accuracy compared to last week."
+                    >
+                      {studentStats.avgAccuracyDelta != null && studentStats.avgAccuracyPriorWeek != null
+                        ? `${studentStats.avgAccuracyDelta > 0 ? '+' : ''}${studentStats.avgAccuracyDelta} pts vs last week`
+                        : 'vs last week —'}
+                    </p>
                     <p className="text-xs text-slate-600">
                       Latest quiz {studentStats.latestQuizScore != null ? `${studentStats.latestQuizScore}%` : '—'}
                     </p>
@@ -2255,6 +2604,11 @@ const StudentDashboard: React.FC = () => {
                   <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
                     <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
                     <div className="font-semibold">{Math.round(studentStats.weeklyTimeMinutes)} min</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">
+                      {studentStats.weeklyTimeMinutesDelta != null && studentStats.weeklyTimeMinutesPriorWeek != null
+                        ? `${studentStats.weeklyTimeMinutesDelta > 0 ? '+' : ''}${Math.round(studentStats.weeklyTimeMinutesDelta)} min vs last week`
+                        : 'vs last week —'}
+                    </div>
                   </div>
                   <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
                     <div className="text-[11px] uppercase tracking-wide text-slate-500">Plan streak</div>
@@ -2264,6 +2618,12 @@ const StudentDashboard: React.FC = () => {
                     </p>
                   </div>
                 </div>
+                <p className="mt-3 text-[11px] text-slate-500">
+                  Guardians can request a data export or deletion in{' '}
+                  <Link to="/account/settings" className="underline hover:text-slate-700">
+                    Data rights & privacy
+                  </Link>.
+                </p>
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
@@ -2349,8 +2709,13 @@ const StudentDashboard: React.FC = () => {
                   <h3 className="text-lg font-bold text-slate-900">Placement-powered path</h3>
                   <p className="text-sm text-slate-600">{upNextSubtitle}</p>
                   <p className="text-xs text-slate-500">
-                    Your plan updates as you finish lessons and practice. Watch "Up Next" change as you learn.
+                    Next 3–5 steps with a quick rationale. Updates instantly after diagnostics and task outcomes.
                   </p>
+                  {upNextEntries.length < 3 && (
+                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 inline-flex px-2 py-1 rounded-lg mt-2">
+                      Finish the diagnostic or one activity to unlock more steps.
+                    </p>
+                  )}
                   {upNextRecentlyUpdated && (
                     <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200">
                       Updated just now
@@ -2506,7 +2871,7 @@ const StudentDashboard: React.FC = () => {
                     (meta.module_title as string | undefined) ??
                     (meta.module_slug as string | undefined) ??
                     `Module ${entry.position}`;
-                  const reasonCopy = describePathEntryReason(entry);
+                  const { rationale, metric } = describeUpNextRationale(entry);
                   const reasonSlug = pathEntryReasonSlug(entry);
                   const reasonLabel =
                     reasonSlug === 'placement'
@@ -2537,11 +2902,17 @@ const StudentDashboard: React.FC = () => {
                             <Info className="h-3 w-3 text-brand-blue" />
                             {reasonLabel}
                           </span>
+                          {metric && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 font-semibold text-emerald-700">
+                              <Sparkles className="h-3 w-3" />
+                              {metric}
+                            </span>
+                          )}
                           <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600 capitalize">
                             {entry.type}
                           </span>
                         </div>
-                        <p className="mt-2 text-xs text-slate-600 leading-snug">{reasonCopy}</p>
+                        <p className="mt-2 text-xs text-slate-600 leading-snug">Why now: {rationale}</p>
                       </div>
                     </motion.div>
                   );
@@ -3016,7 +3387,10 @@ const StudentDashboard: React.FC = () => {
                       <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">
                         <div className="flex items-center justify-between">
                           <p className="text-xs font-semibold text-gray-800">Weekly goals</p>
-                          <span className="text-[11px] font-semibold text-slate-600">
+                          <span
+                            className="text-[11px] font-semibold text-slate-600"
+                            title="Daily plan completion rate for today’s queued lessons."
+                          >
                             {todaysPlanProgress.pct}% plan
                           </span>
                         </div>
@@ -3587,14 +3961,27 @@ const StudentDashboard: React.FC = () => {
                                 </div>
                               )}
                             </div>
-                            {lesson.status !== 'completed' && (
-                              <button
-                                onClick={() => handleStartLesson(lesson)}
-                                className="bg-brand-teal text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-blue transition-colors"
-                              >
-                                Start
-                              </button>
-                            )}
+                            <div className="flex items-center gap-2">
+                              {(lesson.isMixIn || lesson.isElective) && lesson.status !== 'completed' && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    lesson.isMixIn ? handleDismissMixIn(lesson) : handleDismissElective(lesson)
+                                  }
+                                  className="px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:border-rose-200 hover:text-rose-700"
+                                >
+                                  Dismiss
+                                </button>
+                              )}
+                              {lesson.status !== 'completed' && (
+                                <button
+                                  onClick={() => handleStartLesson(lesson)}
+                                  className="bg-brand-teal text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-blue transition-colors"
+                                >
+                                  Start
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </motion.div>
                       ))}
