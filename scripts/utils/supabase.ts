@@ -145,7 +145,6 @@ export const fetchAllPaginated = async <T>(
       const backoff = retryDelayMs * Math.pow(2, attempt - 1);
       const jitter = Math.floor(Math.random() * jitterMs);
       if (logLabel) {
-        // eslint-disable-next-line no-console
         console.warn(`[pagination] retrying ${logLabel} after error: ${lastError.message}`);
       }
       await sleep(backoff + jitter);

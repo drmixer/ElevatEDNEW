@@ -15,6 +15,7 @@ import type {
   ParentChildSnapshot,
   ParentWeeklyReport,
   Student,
+  Subject,
   SubjectMastery,
 } from '../../types';
 import { defaultLearningPreferences } from '../../types';
@@ -90,29 +91,29 @@ describe('buildParentDownloadableReport', () => {
 
 describe('deriveSubjectTrends', () => {
   it('computes per-subject accuracy and time deltas with directions', () => {
-    const mastery: SubjectMastery[] = [
-      { subject: 'math', mastery: 70, trend: 'steady' },
-      { subject: 'ela', mastery: 80, trend: 'steady' },
-    ];
-    const accuracyWindow = new Map([
-      ['math', { current: [80, 90], prior: [70, 80] }],
-      ['ela', { current: [65], prior: [70] }],
-    ] as const);
-    const lessonWindow = {
-      current: new Map([
-        ['math', 4],
-        ['ela', 2],
-      ] as const),
-      prior: new Map([
-        ['math', 2],
-        ['ela', 2],
-      ] as const),
-    };
+	    const mastery: SubjectMastery[] = [
+	      { subject: 'math', mastery: 70, trend: 'steady' },
+	      { subject: 'ela', mastery: 80, trend: 'steady' },
+	    ];
+	    const accuracyWindow = new Map<Subject, { current: number[]; prior: number[] }>([
+	      ['math', { current: [80, 90], prior: [70, 80] }],
+	      ['ela', { current: [65], prior: [70] }],
+	    ]);
+	    const lessonWindow: { current: Map<Subject, number>; prior: Map<Subject, number> } = {
+	      current: new Map<Subject, number>([
+	        ['math', 4],
+	        ['ela', 2],
+	      ]),
+	      prior: new Map<Subject, number>([
+	        ['math', 2],
+	        ['ela', 2],
+	      ]),
+	    };
 
-    const trends = deriveSubjectTrends(mastery, accuracyWindow as any, lessonWindow as any, {
-      current: 120,
-      prior: 100,
-    });
+	    const trends = deriveSubjectTrends(mastery, accuracyWindow, lessonWindow, {
+	      current: 120,
+	      prior: 100,
+	    });
 
     const mathTrend = trends.find((trend) => trend.subject === 'math');
     const elaTrend = trends.find((trend) => trend.subject === 'ela');

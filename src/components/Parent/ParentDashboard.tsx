@@ -246,6 +246,13 @@ const describeActivityType = (activityType?: string) => {
   return lookup[activityType] ?? activityType.replace(/_/g, ' ');
 };
 
+const ELECTIVE_SUBJECT_OPTIONS: { id: Subject; label: string }[] = [
+  { id: 'arts_music', label: 'Arts & Music' },
+  { id: 'computer_science', label: 'Computer Science' },
+  { id: 'financial_literacy', label: 'Financial literacy' },
+  { id: 'health_pe', label: 'Health & PE' },
+];
+
 const ParentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const parent = (user as Parent) ?? null;
@@ -628,7 +635,7 @@ const ParentDashboard: React.FC = () => {
             ? defaultLearningPreferences.allowedElectiveSubjects
             : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id)) ?? [],
     });
-  }, [currentChild]);
+  }, [currentChild, ELECTIVE_SUBJECT_OPTIONS]);
 
   useEffect(() => {
     setInsightTab('overview');
@@ -910,6 +917,8 @@ const ParentDashboard: React.FC = () => {
     return { deltaLessons, deltaMinutes };
   }, [dashboard?.children]);
 
+  const currentChildName = currentChild?.name ?? null;
+
   const impactSnippet = useMemo(() => {
     if (!dashboard) return null;
     const parts: string[] = [];
@@ -927,8 +936,8 @@ const ParentDashboard: React.FC = () => {
     if (alertResolutionHours != null) {
       parts.push(`Alerts resolved in ${alertResolutionHours}h avg`);
     }
-    if (currentChild && assignmentUptakeRate != null) {
-      parts.push(`${currentChild.name} follow-through ${assignmentUptakeRate}%`);
+    if (currentChildName && assignmentUptakeRate != null) {
+      parts.push(`${currentChildName} follow-through ${assignmentUptakeRate}%`);
     }
     return parts.length ? parts.join(' • ') : null;
   }, [
@@ -938,7 +947,7 @@ const ParentDashboard: React.FC = () => {
     diagnosticCompletionRate,
     alertResolutionHours,
     assignmentUptakeRate,
-    currentChild?.name,
+    currentChildName,
   ]);
 
   const digestRecommendations = useMemo(
@@ -1191,13 +1200,6 @@ const ParentDashboard: React.FC = () => {
       }).catch((error) => console.warn('[Coaching] feedback failed', error));
   }
 };
-
-const ELECTIVE_SUBJECT_OPTIONS: { id: Subject; label: string }[] = [
-  { id: 'arts_music', label: 'Arts & Music' },
-  { id: 'computer_science', label: 'Computer Science' },
-  { id: 'financial_literacy', label: 'Financial literacy' },
-  { id: 'health_pe', label: 'Health & PE' },
-];
 
   const focusSubjectOptions = useMemo(
     () => Array.from(new Set((currentChild?.masteryBySubject ?? []).map((entry) => entry.subject))),
