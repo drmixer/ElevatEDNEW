@@ -292,6 +292,14 @@ export type ParentOnboardingState = {
   guideCompleted?: boolean;
   guideCompletedAt?: string | null;
   lastViewedStep?: string | null;
+  guardianLinked?: boolean;
+  guardianLinkedAt?: string | null;
+  gradeConfirmed?: boolean;
+  gradeConfirmedAt?: string | null;
+  diagnosticScheduled?: boolean;
+  diagnosticScheduledAt?: string | null;
+  checklistDismissed?: boolean;
+  checklistDismissedAt?: string | null;
 };
 
 export type Subject =
@@ -484,6 +492,9 @@ export interface ParentChildSnapshot {
     deltaMinutes: number;
     deltaXp: number;
   };
+  avgAccuracyWeek?: number | null;
+  avgAccuracyPriorWeek?: number | null;
+  avgAccuracyDelta?: number | null;
   masteryBySubject: SubjectMastery[];
   subjectTrends?: SubjectWeeklyTrend[];
   recentActivity: ParentChildActivity[];
@@ -846,8 +857,22 @@ export interface AdminTopStudent {
 export interface AdminDashboardData {
   admin: Admin;
   metrics: AdminDashboardMetrics;
+  successMetrics?: AdminSuccessMetrics;
   growthSeries: AdminGrowthPoint[];
   subjectPerformance: AdminSubjectPerformance[];
   alerts: AdminAlert[];
   topStudents: AdminTopStudent[];
+}
+
+export interface AdminSuccessMetrics {
+  lookbackDays: number;
+  diagnosticsCompleted: number;
+  diagnosticsTotal: number;
+  diagnosticCompletionRate: number | null;
+  assignmentsCompleted: number;
+  assignmentsTotal: number;
+  assignmentFollowThroughRate: number | null;
+  weeklyAccuracyDeltaAvg: number | null;
+  dailyPlanCompletionRateAvg: number | null;
+  alertResolutionHoursAvg: number | null;
 }

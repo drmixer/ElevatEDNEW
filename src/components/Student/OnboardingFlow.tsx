@@ -533,14 +533,40 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <CheckCircle2 className="h-7 w-7" />
         </div>
         <div>
-          <p className="text-sm text-emerald-700 font-semibold">Placement finished</p>
-          <h3 className="text-xl font-bold text-slate-900">Your personalized path is ready</h3>
+          <p className="text-sm text-emerald-700 font-semibold">Baseline ready</p>
+          <h3 className="text-xl font-bold text-slate-900">Your learning plan is set</h3>
         </div>
       </div>
       <p className="text-sm text-slate-600">
-        Great work! Here&apos;s what&apos;s next. We&apos;ve saved your preferences and built a path tuned to your answers.
+        Great work! We saved your preferences and built a baseline plan tuned to your answers.
       </p>
       <UpNextList entries={summarizePath(pathEntries)} />
+      <div className="mt-6">
+        <div className="flex items-center space-x-2 mb-3">
+          <Brain className="h-4 w-4 text-sky-500" />
+          <p className="text-sm font-semibold text-slate-800">Tutor mini-guide</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
+            <p className="text-sm font-semibold text-slate-900">Start with a hint</p>
+            <p className="text-xs text-slate-600">
+              Ask your tutor to “show a hint” or “break it down” before jumping to answers.
+            </p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
+            <p className="text-sm font-semibold text-slate-900">Explain another way</p>
+            <p className="text-xs text-slate-600">
+              If something feels confusing, try “explain another way” or “give a simpler example.”
+            </p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
+            <p className="text-sm font-semibold text-slate-900">Stay honest</p>
+            <p className="text-xs text-slate-600">
+              Your tutor won’t help you cheat — it’s here to build understanding and confidence.
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="mt-6 flex justify-end">
         <button
           onClick={() => onComplete?.({ pathEntries })}

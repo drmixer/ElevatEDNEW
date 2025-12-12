@@ -1,6 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildParentDownloadableReport, calculateChildGoalProgress, fetchStudentDashboardData } from '../dashboardService';
-import type { Parent, ParentChildSnapshot, ParentWeeklyReport, Student } from '../../types';
+import {
+  buildParentDownloadableReport,
+  calculateChildGoalProgress,
+  injectMixInsIntoPlan,
+  selectElectiveSuggestion,
+  deriveSubjectTrends,
+  summarizeWeeklyChanges,
+  fetchStudentDashboardData,
+} from '../dashboardService';
+import type {
+  DashboardLesson,
+  LearningPreferences,
+  Parent,
+  ParentChildSnapshot,
+  ParentWeeklyReport,
+  Student,
+  SubjectMastery,
+} from '../../types';
 import { defaultLearningPreferences } from '../../types';
 
 vi.mock('../../lib/supabaseClient', async () => {
@@ -69,6 +85,184 @@ describe('buildParentDownloadableReport', () => {
     expect(report).toContain('Avery');
     expect(report.toLowerCase()).toContain('lessons');
     expect(report).toContain('Recommended Next Steps');
+  });
+});
+
+describe('deriveSubjectTrends', () => {
+  it('computes per-subject accuracy and time deltas with directions', () => {
+    const mastery: SubjectMastery[] = [
+      { subject: 'math', mastery: 70, trend: 'steady' },
+      { subject: 'ela', mastery: 80, trend: 'steady' },
+    ];
+    const accuracyWindow = new Map([
+      ['math', { current: [80, 90], prior: [70, 80] }],
+      ['ela', { current: [65], prior: [70] }],
+    ] as const);
+    const lessonWindow = {
+      current: new Map([
+        ['math', 4],
+        ['ela', 2],
+      ] as const),
+      prior: new Map([
+        ['math', 2],
+        ['ela', 2],
+      ] as const),
+    };
+
+    const trends = deriveSubjectTrends(mastery, accuracyWindow as any, lessonWindow as any, {
+      current: 120,
+      prior: 100,
+    });
+
+    const mathTrend = trends.find((trend) => trend.subject === 'math');
+    const elaTrend = trends.find((trend) => trend.subject === 'ela');
+
+    expect(mathTrend?.accuracyDelta).toBeCloseTo(10, 1);
+    expect(mathTrend?.timeMinutes).toBe(80);
+    expect(mathTrend?.timeDelta).toBe(30);
+    expect(mathTrend?.direction).toBe('up');
+
+    expect(elaTrend?.accuracyDelta).toBeCloseTo(-5, 1);
+    expect(elaTrend?.timeMinutes).toBe(40);
+    expect(elaTrend?.timeDelta).toBe(-10);
+    expect(elaTrend?.direction).toBe('down');
+  });
+});
+
+describe('summarizeWeeklyChanges', () => {
+  it('returns ranked top improvements and risks', () => {
+    const child: ParentChildSnapshot = {
+      ...mockChildren[0],
+      subjectTrends: [
+        { subject: 'math', accuracyDelta: 1.2, timeDelta: null, timeMinutes: 80, direction: 'up' },
+        { subject: 'math', accuracyDelta: null, timeDelta: -12, timeMinutes: 60, direction: 'down' },
+      ],
+      weeklyChange: {
+        lessons: 4,
+        minutes: 120,
+        xp: 220,
+        deltaLessons: 3,
+        deltaMinutes: 20,
+        deltaXp: 50,
+      },
+    };
+
+    const changes = summarizeWeeklyChanges([child]);
+
+    expect(changes.improvements).toHaveLength(3);
+    expect(changes.improvements[0]).toContain('+3 lessons');
+    expect(changes.improvements[1]).toContain('+20 min vs prior week');
+    expect(changes.improvements[2]).toContain('Math accuracy +1.2 pts');
+    expect(changes.risks[0]).toContain('-12 min on Math');
+  });
+});
+
+describe('injectMixInsIntoPlan', () => {
+  const makeLesson = (partial: Partial<DashboardLesson> & Pick<DashboardLesson, 'id' | 'subject' | 'title'>): DashboardLesson => ({
+    id: partial.id,
+    subject: partial.subject,
+    title: partial.title,
+    status: partial.status ?? 'not_started',
+    difficulty: partial.difficulty ?? 'easy',
+    xpReward: partial.xpReward ?? 10,
+    moduleSlug: partial.moduleSlug ?? null,
+    suggestionReason: partial.suggestionReason ?? null,
+    isMixIn: partial.isMixIn,
+    isElective: partial.isElective,
+  });
+
+  it('uses cross-pool subjects for thin plans and avoids opted-out picks', () => {
+    const coreLessons: DashboardLesson[] = [
+      makeLesson({ id: 'core-math-1', subject: 'math', title: 'Math Core 1' }),
+      makeLesson({ id: 'core-math-2', subject: 'math', title: 'Math Core 2' }),
+    ];
+    const crossPool: DashboardLesson[] = [
+      makeLesson({ id: 'science-1', subject: 'science', title: 'Science Mix 1' }),
+      makeLesson({ id: 'study-1', subject: 'study_skills', title: 'Study Mix 1' }),
+      makeLesson({ id: 'science-2', subject: 'science', title: 'Science Mix 2' }),
+    ];
+    const prefs: LearningPreferences = {
+      ...defaultLearningPreferences,
+      mixInMode: 'auto',
+      weeklyPlanIntensity: 'light',
+      weeklyPlanFocus: 'math',
+      focusSubject: 'math',
+    };
+    const result = injectMixInsIntoPlan(
+      coreLessons,
+      prefs,
+      { lessons: 5, minutes: 60 },
+      { lessons: 0, minutes: 0 },
+      new Set(['science-1']),
+      crossPool,
+    );
+
+    const mixIns = result.filter((lesson) => lesson.isMixIn);
+    expect(mixIns.map((lesson) => lesson.id).sort()).toEqual(['science-2', 'study-1'].sort());
+  });
+});
+
+describe('selectElectiveSuggestion', () => {
+  const makeLesson = (partial: Partial<DashboardLesson> & Pick<DashboardLesson, 'id' | 'subject' | 'title'>): DashboardLesson => ({
+    id: partial.id,
+    subject: partial.subject,
+    title: partial.title,
+    status: partial.status ?? 'not_started',
+    difficulty: partial.difficulty ?? 'easy',
+    xpReward: partial.xpReward ?? 10,
+    moduleSlug: partial.moduleSlug ?? null,
+    suggestionReason: partial.suggestionReason ?? null,
+    isMixIn: partial.isMixIn,
+    isElective: partial.isElective,
+  });
+
+  const computeWeekIndex = (dateIso: string) =>
+    Math.floor(new Date(dateIso).getTime() / (1000 * 60 * 60 * 24 * 7));
+
+  it('rotates electives by allowed subjects week-to-week', () => {
+    vi.useFakeTimers();
+    const lessons: DashboardLesson[] = [
+      makeLesson({ id: 'core-math', subject: 'math', title: 'Core Math' }),
+      makeLesson({ id: 'elec-sci', subject: 'science', title: 'Elective Science' }),
+      makeLesson({ id: 'elec-arts', subject: 'arts_music', title: 'Elective Arts' }),
+    ];
+    const prefs: LearningPreferences = {
+      ...defaultLearningPreferences,
+      electiveEmphasis: 'on',
+      allowedElectiveSubjects: ['science', 'arts_music'],
+      weeklyPlanFocus: 'balanced',
+      focusSubject: 'balanced',
+    };
+
+    const date1 = '2025-01-06T12:00:00.000Z';
+    vi.setSystemTime(new Date(date1));
+    const weekSeed1 = date1.slice(0, 10);
+    const expected1 = prefs.allowedElectiveSubjects![computeWeekIndex(weekSeed1) % prefs.allowedElectiveSubjects!.length];
+    const result1 = selectElectiveSuggestion(
+      lessons,
+      prefs,
+      { lessons: 0, minutes: 0 },
+      { lessons: 0, minutes: 0 },
+      null,
+      new Set(),
+    );
+    expect(result1.elective?.subject).toBe(expected1);
+
+    const date2 = '2025-01-13T12:00:00.000Z';
+    vi.setSystemTime(new Date(date2));
+    const weekSeed2 = date2.slice(0, 10);
+    const expected2 = prefs.allowedElectiveSubjects![computeWeekIndex(weekSeed2) % prefs.allowedElectiveSubjects!.length];
+    const result2 = selectElectiveSuggestion(
+      lessons,
+      prefs,
+      { lessons: 0, minutes: 0 },
+      { lessons: 0, minutes: 0 },
+      null,
+      new Set(),
+    );
+    expect(result2.elective?.subject).toBe(expected2);
+    expect(result2.elective?.subject).not.toBe(result1.elective?.subject);
+    vi.useRealTimers();
   });
 });
 

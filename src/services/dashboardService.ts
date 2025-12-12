@@ -8,6 +8,7 @@ import type {
   AdminGrowthPoint,
   AdminSubjectPerformance,
   AdminTopStudent,
+  AdminSuccessMetrics,
   AssessmentSummary,
   DashboardLesson,
   DashboardActivity,
@@ -243,7 +244,7 @@ const CROSS_SUBJECT_PAIRS: Partial<Record<Subject, Subject[]>> = {
   study_skills: ['english', 'math'],
 };
 
-const injectMixInsIntoPlan = (
+export const injectMixInsIntoPlan = (
   lessons: DashboardLesson[],
   preferences: LearningPreferences,
   weeklyTargets: { lessons: number; minutes: number },
@@ -267,41 +268,93 @@ const injectMixInsIntoPlan = (
     focusSubject && focusSubject !== 'balanced' ? CROSS_SUBJECT_PAIRS[focusSubject] ?? [] : undefined;
   const seen = new Set<string>();
   const existingIds = new Set(lessons.map((lesson) => lesson.id));
+  const activeCore = lessons.filter(
+    (lesson) => !lesson.isMixIn && !lesson.isElective && lesson.status !== 'completed',
+  );
+  const coreSubjectCounts = new Map<Subject, number>();
+  activeCore.forEach((lesson) => {
+    coreSubjectCounts.set(lesson.subject, (coreSubjectCounts.get(lesson.subject) ?? 0) + 1);
+  });
 
   const statusRank = (status: DashboardLesson['status']) =>
     status === 'in_progress' ? 0 : status === 'not_started' ? 1 : 2;
+  const availableCrossPool = (crossPool.length ? crossPool : fallbackStudentLessons()).filter((lesson) => {
+    if (existingIds.has(lesson.id)) return false;
+    if (optOuts.has(lesson.id)) return false;
+    if (lesson.isElective) return false;
+    if (lesson.status === 'completed') return false;
+    if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
+      return crossTargets.includes(lesson.subject);
+    }
+    return focusSubject === 'balanced' ? true : lesson.subject !== focusSubject;
+  });
+  const preferredSubjects: Subject[] =
+    focusSubject && focusSubject !== 'balanced' && crossTargets?.length
+      ? crossTargets.slice()
+      : Array.from(new Set(availableCrossPool.map((lesson) => lesson.subject))).sort((a, b) => {
+          const aCount = coreSubjectCounts.get(a) ?? 0;
+          const bCount = coreSubjectCounts.get(b) ?? 0;
+          return aCount - bCount;
+        });
+  const preferredRank = new Map<Subject, number>();
+  preferredSubjects.forEach((subject, index) => preferredRank.set(subject, index));
+  const priorityRank = (subject: Subject) =>
+    preferredRank.get(subject) ?? preferredRank.size + (coreSubjectCounts.get(subject) ?? 0);
+  const sortByStatusAndPriority = (a: DashboardLesson, b: DashboardLesson) => {
+    const statusDiff = statusRank(a.status) - statusRank(b.status);
+    if (statusDiff !== 0) return statusDiff;
+    const priorityDiff = priorityRank(a.subject) - priorityRank(b.subject);
+    if (priorityDiff !== 0) return priorityDiff;
+    const titleDiff = a.title.localeCompare(b.title);
+    if (titleDiff !== 0) return titleDiff;
+    return a.id.localeCompare(b.id);
+  };
+
+  const pickLessons = (
+    pool: DashboardLesson[],
+    limit: number,
+    usedSubjects: Set<Subject>,
+  ): DashboardLesson[] => {
+    const picks: DashboardLesson[] = [];
+    const excludedIds = new Set<string>();
+    for (const lesson of pool) {
+      if (picks.length >= limit) break;
+      if (excludedIds.has(lesson.id)) continue;
+      if (usedSubjects.has(lesson.subject)) continue;
+      excludedIds.add(lesson.id);
+      usedSubjects.add(lesson.subject);
+      picks.push(lesson);
+    }
+    if (picks.length < limit) {
+      for (const lesson of pool) {
+        if (picks.length >= limit) break;
+        if (excludedIds.has(lesson.id)) continue;
+        excludedIds.add(lesson.id);
+        picks.push(lesson);
+      }
+    }
+    return picks;
+  };
+
   const candidates = lessons
     .filter((lesson) => {
       if (lesson.isMixIn) return false;
       if (lesson.isElective) return false;
       if (lesson.status === 'completed') return false;
+      if (optOuts.has(lesson.id)) return false;
       if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
         return crossTargets.includes(lesson.subject);
       }
       return focusSubject === 'balanced' ? true : lesson.subject !== focusSubject;
     })
-    .sort((a, b) => statusRank(a.status) - statusRank(b.status))
-    .slice(0, 5);
+    .sort(sortByStatusAndPriority)
+    .slice(0, 6);
 
-  let mixInPicks = candidates.slice(0, 2);
+  const usedSubjects = new Set<Subject>();
+  let mixInPicks = pickLessons(candidates, 2, usedSubjects);
   if (mixInPicks.length < 2) {
-    const fallbackPool = crossPool.length ? crossPool : fallbackStudentLessons();
-    const seenFallback = new Set<string>();
-    const fallback = fallbackPool
-      .filter((lesson) => {
-        if (seenFallback.has(lesson.id)) return false;
-        seenFallback.add(lesson.id);
-        if (existingIds.has(lesson.id)) return false;
-        if (lesson.isElective) return false;
-        if (lesson.status === 'completed') return false;
-        if (focusSubject && focusSubject !== 'balanced' && crossTargets?.length) {
-          return crossTargets.includes(lesson.subject);
-        }
-        return focusSubject === 'balanced' ? true : lesson.subject !== focusSubject;
-      })
-      .sort((a, b) => statusRank(a.status) - statusRank(b.status))
-      .slice(0, 2 - mixInPicks.length);
-    mixInPicks = [...mixInPicks, ...fallback];
+    const fallback = availableCrossPool.sort(sortByStatusAndPriority);
+    mixInPicks = [...mixInPicks, ...pickLessons(fallback, 2 - mixInPicks.length, usedSubjects)];
   }
 
   const reasonFor = (subject: Subject) => {
@@ -336,7 +389,7 @@ const injectMixInsIntoPlan = (
   });
 };
 
-const selectElectiveSuggestion = (
+export const selectElectiveSuggestion = (
   lessons: DashboardLesson[],
   preferences: LearningPreferences,
   weeklyTargets: { lessons: number; minutes: number },
@@ -408,12 +461,35 @@ const selectElectiveSuggestion = (
 
   const statusRank = (status: DashboardLesson['status']) =>
     status === 'in_progress' ? 0 : status === 'not_started' ? 1 : 2;
-  const sortedPool = pool.sort((a, b) => statusRank(a.status) - statusRank(b.status));
+  const sortedPool = pool
+    .slice()
+    .sort((a, b) => {
+      const statusDiff = statusRank(a.status) - statusRank(b.status);
+      if (statusDiff !== 0) return statusDiff;
+      const subjectDiff = String(a.subject).localeCompare(String(b.subject));
+      if (subjectDiff !== 0) return subjectDiff;
+      const titleDiff = a.title.localeCompare(b.title);
+      if (titleDiff !== 0) return titleDiff;
+      return a.id.localeCompare(b.id);
+    });
   const eligiblePool = sortedPool.filter((item) => !(optOuts?.has(item.id) ?? false));
-  const elective =
-    eligiblePool[
-      allowed.length ? weekIndex % Math.max(1, Math.min(eligiblePool.length, allowed.length)) : 0
-    ] ?? eligiblePool[0] ?? null;
+  if (!eligiblePool.length) return { plan: lessons, elective: null };
+  const rotationSubjects = allowed.length
+    ? allowed.filter((subject) => eligiblePool.some((lesson) => lesson.subject === subject))
+    : Array.from(new Set(eligiblePool.map((lesson) => lesson.subject)));
+  const subjectSeed =
+    rotationSubjects.length > 0
+      ? weekIndex % rotationSubjects.length
+      : 0;
+  let elective: DashboardLesson | null = null;
+  if (rotationSubjects.length) {
+    for (let offset = 0; offset < rotationSubjects.length; offset += 1) {
+      const subject = rotationSubjects[(subjectSeed + offset) % rotationSubjects.length];
+      elective = eligiblePool.find((lesson) => lesson.subject === subject) ?? null;
+      if (elective) break;
+    }
+  }
+  elective = elective ?? eligiblePool[0] ?? null;
   if (!elective) return { plan: lessons, elective: null };
 
   const reasonText =
@@ -771,6 +847,18 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     averageStudentXp: allowSyntheticDashboardData ? 1285 : 0,
     activeSubscriptions: allowSyntheticDashboardData ? 812 : 0,
     lessonCompletionRate: undefined,
+  },
+  successMetrics: {
+    lookbackDays: 7,
+    diagnosticsCompleted: allowSyntheticDashboardData ? 1820 : 0,
+    diagnosticsTotal: allowSyntheticDashboardData ? 2480 : 0,
+    diagnosticCompletionRate: allowSyntheticDashboardData ? 73 : null,
+    assignmentsCompleted: allowSyntheticDashboardData ? 420 : 0,
+    assignmentsTotal: allowSyntheticDashboardData ? 620 : 0,
+    assignmentFollowThroughRate: allowSyntheticDashboardData ? 68 : null,
+    weeklyAccuracyDeltaAvg: allowSyntheticDashboardData ? 1.2 : null,
+    dailyPlanCompletionRateAvg: allowSyntheticDashboardData ? 64 : null,
+    alertResolutionHoursAvg: allowSyntheticDashboardData ? 10.4 : null,
   },
   growthSeries: allowSyntheticDashboardData
     ? Array.from({ length: 8 }).map((_, index) => {
@@ -1797,7 +1885,7 @@ const calculateChildGoalProgress = (child: ParentChildSnapshot): number | undefi
   return Math.round(average * 10) / 10;
 };
 
-const deriveSubjectTrends = (
+export const deriveSubjectTrends = (
   mastery: SubjectMastery[],
   accuracyWindow: Map<Subject, { current: number[]; prior: number[] }> | undefined,
   lessonWindow: { current: Map<Subject, number>; prior: Map<Subject, number> } | undefined,
@@ -1913,6 +2001,48 @@ export const buildParentDownloadableReport = (
     year: 'numeric',
   });
 
+  const diagnosticCompletionRate =
+    children.length > 0
+      ? Math.round(
+          (children.filter((child) => child.diagnosticStatus === 'completed').length / children.length) *
+            100,
+        )
+      : null;
+
+  const accuracyDeltas = children
+    .map((child) => child.avgAccuracyDelta)
+    .filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
+  const familyAccuracyDelta =
+    accuracyDeltas.length > 0
+      ? Math.round((accuracyDeltas.reduce((sum, value) => sum + value, 0) / accuracyDeltas.length) * 10) /
+        10
+      : null;
+
+  const familyWeeklyDelta = children.reduce(
+    (acc, child) => ({
+      deltaLessons: acc.deltaLessons + (child.weeklyChange?.deltaLessons ?? 0),
+      deltaMinutes: acc.deltaMinutes + (child.weeklyChange?.deltaMinutes ?? 0),
+    }),
+    { deltaLessons: 0, deltaMinutes: 0 },
+  );
+
+  const impactParts: string[] = [];
+  if (familyAccuracyDelta != null) {
+    impactParts.push(
+      `Avg accuracy ${familyAccuracyDelta > 0 ? '+' : ''}${familyAccuracyDelta} pts vs last week`,
+    );
+  }
+  if (familyWeeklyDelta.deltaLessons !== 0 || familyWeeklyDelta.deltaMinutes !== 0) {
+    impactParts.push(
+      `${familyWeeklyDelta.deltaLessons >= 0 ? '+' : ''}${familyWeeklyDelta.deltaLessons} lessons, ${familyWeeklyDelta.deltaMinutes >= 0 ? '+' : ''}${familyWeeklyDelta.deltaMinutes} min vs last week`,
+    );
+  }
+  if (diagnosticCompletionRate != null) {
+    impactParts.push(`${diagnosticCompletionRate}% diagnostics complete`);
+  }
+  const impactText =
+    impactParts.length > 0 ? impactParts.join(' • ') : 'No impact metrics yet—complete a few lessons to start tracking.';
+
   const childLines = children
     .map((child) => {
       const masterySummary = child.masteryBySubject
@@ -1940,14 +2070,15 @@ export const buildParentDownloadableReport = (
     (changes.risks ?? []).map((item) => `• ${item}`).join('\n') ||
     '• No new risks flagged this week.';
 
-  return `ElevatED Weekly Family Report\nParent: ${parent.name}\nWeek of ${weekLabel}\n\nSummary:\n${report.summary}\n\nHighlights:\n${highlights}\n\nLearner Details:\n${childLines}\n\nRecommended Next Steps:\n${recommendations}\n\nWhat changed this week:\nTop improvements:\n${improvements}\n\nTop risks:\n${risks}`;
+  return `ElevatED Weekly Family Report\nParent: ${parent.name}\nWeek of ${weekLabel}\n\nImpact snapshot:\n${impactText}\n\nSummary:\n${report.summary}\n\nHighlights:\n${highlights}\n\nLearner Details:\n${childLines}\n\nRecommended Next Steps:\n${recommendations}\n\nWhat changed this week:\nTop improvements:\n${improvements}\n\nTop risks:\n${risks}`;
 };
 
 const buildParentCelebrations = (children: ParentChildSnapshot[]): CelebrationMoment[] => {
   const celebrations: CelebrationMoment[] = [];
+  const streakMilestones = new Set([3, 7, 14, 30]);
 
   children.forEach((child) => {
-    if (child.streakDays >= 7) {
+    if (child.streakDays && (child.streakDays >= 7 || streakMilestones.has(child.streakDays))) {
       celebrations.push({
         id: `${child.id}-streak-${child.streakDays}`,
         title: `${child.name} hit a ${child.streakDays}-day streak`,
@@ -1956,6 +2087,22 @@ const buildParentCelebrations = (children: ParentChildSnapshot[]): CelebrationMo
         occurredAt: new Date().toISOString(),
         studentId: child.id,
         prompt: 'Snap a photo of their study spot to celebrate the streak.',
+        notifyParent: true,
+      });
+    }
+
+    const accuracyGain = (child.subjectTrends ?? [])
+      .filter((trend) => typeof trend.accuracyDelta === 'number' && trend.accuracyDelta >= 0.5)
+      .sort((a, b) => (b.accuracyDelta ?? 0) - (a.accuracyDelta ?? 0))[0];
+    if (accuracyGain?.accuracyDelta != null) {
+      celebrations.push({
+        id: `${child.id}-accuracy-${accuracyGain.subject}`,
+        title: `${child.name} boosted ${formatSubjectLabel(accuracyGain.subject)} accuracy`,
+        description: `${accuracyGain.accuracyDelta > 0 ? '+' : ''}${accuracyGain.accuracyDelta} pts vs last week.`,
+        kind: 'milestone',
+        occurredAt: new Date().toISOString(),
+        studentId: child.id,
+        prompt: 'Call out the win and encourage one more short session.',
         notifyParent: true,
       });
     }
@@ -1972,6 +2119,22 @@ const buildParentCelebrations = (children: ParentChildSnapshot[]): CelebrationMo
         occurredAt: new Date().toISOString(),
         studentId: child.id,
         prompt: 'Ask them how they cracked the hardest part.',
+        notifyParent: true,
+      });
+    }
+
+    const masteryUnlocked = (child.masteryBySubject ?? [])
+      .filter((entry) => entry.mastery >= 80)
+      .sort((a, b) => b.mastery - a.mastery)[0];
+    if (masteryUnlocked && masteryUnlocked.subject !== masteryWin?.subject) {
+      celebrations.push({
+        id: `${child.id}-mastery-unlocked-${masteryUnlocked.subject}`,
+        title: `${child.name} unlocked ${formatSubjectLabel(masteryUnlocked.subject)} mastery`,
+        description: `Reached ${Math.round(masteryUnlocked.mastery)}% mastery.`,
+        kind: 'mastery',
+        occurredAt: new Date().toISOString(),
+        studentId: child.id,
+        prompt: 'Share a quick praise note and ask what felt easier.',
         notifyParent: true,
       });
     }
@@ -2757,16 +2920,52 @@ export const fetchParentDashboardData = async (
         },
         prior: { lessons: 0, minutes: 0, xp: 0 },
       };
+      const minuteWindow = {
+        current: weeklyChange.current.minutes,
+        prior: weeklyChange.prior.minutes,
+      };
       const subjectTrends = deriveSubjectTrends(
         mastery,
         subjectAccuracyWindow.get(child.id),
         lessonWindow,
-        weeklyChange,
+        minuteWindow,
       );
+      const accuracyWindow = subjectAccuracyWindow.get(child.id);
+      let avgAccuracyWeek: number | null = null;
+      let avgAccuracyPriorWeek: number | null = null;
+      let avgAccuracyDelta: number | null = null;
+      if (accuracyWindow) {
+        const currentValues: number[] = [];
+        const priorValues: number[] = [];
+        accuracyWindow.forEach((value) => {
+          currentValues.push(...value.current);
+          priorValues.push(...value.prior);
+        });
+        if (currentValues.length) {
+          avgAccuracyWeek =
+            currentValues.reduce((sum, value) => sum + value, 0) / currentValues.length;
+        }
+        if (priorValues.length) {
+          avgAccuracyPriorWeek =
+            priorValues.reduce((sum, value) => sum + value, 0) / priorValues.length;
+        }
+        if (avgAccuracyWeek != null) {
+          avgAccuracyWeek = Math.round(avgAccuracyWeek * 10) / 10;
+        }
+        if (avgAccuracyPriorWeek != null) {
+          avgAccuracyPriorWeek = Math.round(avgAccuracyPriorWeek * 10) / 10;
+        }
+        if (avgAccuracyWeek != null && avgAccuracyPriorWeek != null) {
+          avgAccuracyDelta = Math.round((avgAccuracyWeek - avgAccuracyPriorWeek) * 10) / 10;
+        }
+      }
       const snapshot: ParentChildSnapshot = {
         ...child,
         masteryBySubject: mastery,
         subjectTrends,
+        avgAccuracyWeek,
+        avgAccuracyPriorWeek,
+        avgAccuracyDelta,
         cohortComparison: Math.round(cohortComparison * 10) / 10,
         recentActivity: recentActivity.length ? recentActivity : child.recentActivity,
         progressSummary: progressSummaryByStudent.get(child.id) ?? {
@@ -2873,6 +3072,8 @@ export const fetchParentDashboardData = async (
 
 export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashboardData> => {
   try {
+    const lookbackDays = 7;
+    const lookbackIso = new Date(Date.now() - ONE_DAY_MS * lookbackDays).toISOString();
     const [
       { data: metricsRow, error: metricsError },
       { data: growthRows, error: growthError },
@@ -2883,6 +3084,11 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       completedProgressResult,
       inProgressProgressResult,
       notStartedProgressResult,
+      diagnosticsTotalResult,
+      diagnosticsCompletedResult,
+      assignmentsTotalResult,
+      assignmentsCompletedResult,
+      { data: successRollupRow, error: successRollupError },
     ] = await Promise.all([
       supabase.from('admin_dashboard_metrics').select('*').single(),
       supabase
@@ -2908,6 +3114,21 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         .from('student_progress')
         .select('status', { count: 'exact', head: true })
         .eq('status', 'not_started'),
+      supabase.from('student_profiles').select('id', { count: 'exact', head: true }),
+      supabase
+        .from('student_profiles')
+        .select('id', { count: 'exact', head: true })
+        .eq('assessment_completed', true),
+      supabase
+        .from('student_assignments')
+        .select('id', { count: 'exact', head: true })
+        .gte('updated_at', lookbackIso),
+      supabase
+        .from('student_assignments')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'completed')
+        .gte('updated_at', lookbackIso),
+      supabase.from('admin_success_metrics_rollup').select('*').single(),
     ]);
 
     if (metricsError) {
@@ -2925,6 +3146,16 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       console.error('[Dashboard] Admin in-progress count failed', inProgressProgressResult.error);
     if (notStartedProgressResult.error)
       console.error('[Dashboard] Admin not-started count failed', notStartedProgressResult.error);
+    if (diagnosticsTotalResult.error)
+      console.error('[Dashboard] Admin diagnostics total fetch failed', diagnosticsTotalResult.error);
+    if (diagnosticsCompletedResult.error)
+      console.error('[Dashboard] Admin diagnostics completion fetch failed', diagnosticsCompletedResult.error);
+    if (assignmentsTotalResult.error)
+      console.error('[Dashboard] Admin assignments total fetch failed', assignmentsTotalResult.error);
+    if (assignmentsCompletedResult.error)
+      console.error('[Dashboard] Admin assignments completion fetch failed', assignmentsCompletedResult.error);
+    if (successRollupError)
+      console.error('[Dashboard] Admin success metrics rollup fetch failed', successRollupError);
 
     const completedLessons = completedProgressResult.count ?? 0;
     const inProgressLessons = inProgressProgressResult.count ?? 0;
@@ -2945,6 +3176,44 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       averageStudentXp: metricsRow.average_student_xp ?? 0,
       activeSubscriptions: metricsRow.active_subscriptions ?? 0,
       lessonCompletionRate: lessonCompletionRate ?? undefined,
+    };
+
+    const diagnosticsTotal =
+      diagnosticsTotalResult.count ??
+      (Number.isFinite(metrics.totalStudents) ? metrics.totalStudents : 0);
+    const diagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+    const diagnosticCompletionRate =
+      diagnosticsTotal > 0 ? Math.round((diagnosticsCompleted / diagnosticsTotal) * 100) : null;
+
+    const assignmentsTotal = assignmentsTotalResult.count ?? 0;
+    const assignmentsCompleted = assignmentsCompletedResult.count ?? 0;
+    const assignmentFollowThroughRate =
+      assignmentsTotal > 0 ? Math.round((assignmentsCompleted / assignmentsTotal) * 100) : null;
+
+    const weeklyAccuracyDeltaAvg =
+      successRollupRow?.weekly_accuracy_delta_avg != null
+        ? Number(successRollupRow.weekly_accuracy_delta_avg)
+        : null;
+    const dailyPlanCompletionRateAvg =
+      successRollupRow?.daily_plan_completion_rate_avg != null
+        ? Number(successRollupRow.daily_plan_completion_rate_avg)
+        : null;
+    const alertResolutionHoursAvg =
+      successRollupRow?.alert_resolution_hours_avg != null
+        ? Number(successRollupRow.alert_resolution_hours_avg)
+        : null;
+
+    const successMetrics: AdminSuccessMetrics = {
+      lookbackDays,
+      diagnosticsCompleted,
+      diagnosticsTotal,
+      diagnosticCompletionRate,
+      assignmentsCompleted,
+      assignmentsTotal,
+      assignmentFollowThroughRate,
+      weeklyAccuracyDeltaAvg,
+      dailyPlanCompletionRateAvg,
+      alertResolutionHoursAvg,
     };
 
     const growthGrouped = new Map<string, { newStudents: number; activeStudents: number }>();
@@ -3030,6 +3299,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       subjectPerformance,
       alerts,
       topStudents: topStudents.length ? topStudents : fallbackAdminData(admin).topStudents,
+      successMetrics,
     };
   } catch (error) {
     console.error('[Dashboard] Admin dashboard fallback engaged', error);

@@ -580,30 +580,6 @@ const StudentDashboard: React.FC = () => {
     });
   }, [upNextEntries, upNextRecentlyUpdated, upNextSignature]);
 
-  useEffect(() => {
-    if (!student?.id) return;
-    const previous = prevDiagnosticStatus.current;
-    if (diagnosticStatus === 'completed' && previous !== 'completed') {
-      setUpNextUpdatedAt(Date.now());
-      void refreshStudentPath().catch(() => undefined);
-      trackEvent('upnext_refresh_after_diagnostic', { studentId: student.id });
-    }
-    prevDiagnosticStatus.current = diagnosticStatus;
-  }, [diagnosticStatus, refreshStudentPath, student?.id]);
-
-  useEffect(() => {
-    if (!student?.id) return;
-    if (todaysPlanProgress.completed > prevPlanCompleted.current) {
-      setUpNextUpdatedAt(Date.now());
-      void refreshStudentPath().catch(() => undefined);
-      trackEvent('upnext_refresh_after_task_outcome', {
-        studentId: student.id,
-        completed: todaysPlanProgress.completed,
-      });
-    }
-    prevPlanCompleted.current = todaysPlanProgress.completed;
-  }, [refreshStudentPath, student?.id, todaysPlanProgress.completed]);
-
   const upNextSubtitle = useMemo(() => {
     if (pathFocus) {
       return `Built from your diagnostic results - starting with ${pathFocus} to strengthen that area.`;
@@ -1185,17 +1161,23 @@ const StudentDashboard: React.FC = () => {
     });
   };
 
-  const handleNudgeCta = (nudge: StudentNudge) => {
-    trackEvent('student_nudge_cta', {
-      studentId: student.id,
-      nudge_id: nudge.id,
-      type: nudge.type,
-      detail: nudge.detail,
-    });
-    handleDismissNudge(nudge, 'cta');
-    if (nudge.targetUrl) {
-      window.open(nudge.targetUrl, '_blank', 'noopener');
-    } else {
+	  const handleNudgeCta = (nudge: StudentNudge) => {
+	    trackEvent('student_nudge_cta', {
+	      studentId: student.id,
+	      nudge_id: nudge.id,
+	      type: nudge.type,
+	      detail: nudge.detail,
+	    });
+	    trackEvent('student_nudge_completed', {
+	      studentId: student.id,
+	      nudge_id: nudge.id,
+	      type: nudge.type,
+	      detail: nudge.detail,
+	    });
+	    handleDismissNudge(nudge, 'cta');
+	    if (nudge.targetUrl) {
+	      window.open(nudge.targetUrl, '_blank', 'noopener');
+	    } else {
       setActiveTab('today');
     }
   };
@@ -1306,6 +1288,95 @@ const StudentDashboard: React.FC = () => {
     return { pct, needMoreData };
   }, [todaysPlanProgress, quickStats?.assessmentCompleted]);
   const prevPlanCompleted = useRef<number>(todaysPlanProgress.completed);
+  const lastDailyPlanCompletedRef = useRef<string | null>(null);
+  const lastWeeklyAccuracyLoggedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    const previous = prevDiagnosticStatus.current;
+    if (diagnosticStatus === 'completed' && previous !== 'completed') {
+      setUpNextUpdatedAt(Date.now());
+      void refreshStudentPath().catch(() => undefined);
+      trackEvent('upnext_refresh_after_diagnostic', { studentId: student.id });
+      trackEvent('success_diagnostic_completed', {
+        studentId: student.id,
+        date: todayKey,
+        weekStart: weekStartKey,
+      });
+    }
+    prevDiagnosticStatus.current = diagnosticStatus;
+  }, [diagnosticStatus, refreshStudentPath, student?.id, todayKey, weekStartKey]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    if (todaysPlanProgress.completed > prevPlanCompleted.current) {
+      setUpNextUpdatedAt(Date.now());
+      void refreshStudentPath().catch(() => undefined);
+      trackEvent('upnext_refresh_after_task_outcome', {
+        studentId: student.id,
+        completed: todaysPlanProgress.completed,
+      });
+
+      trackEvent('success_daily_plan_progress', {
+        studentId: student.id,
+        date: todayKey,
+        weekStart: weekStartKey,
+        completed: todaysPlanProgress.completed,
+        total: todaysPlanProgress.total,
+        pct: todaysPlanProgress.pct,
+      });
+
+      if (
+        todaysPlanProgress.total > 0 &&
+        todaysPlanProgress.pct >= 100 &&
+        lastDailyPlanCompletedRef.current !== todayKey
+      ) {
+        lastDailyPlanCompletedRef.current = todayKey;
+        trackEvent('success_daily_plan_completed', {
+          studentId: student.id,
+          date: todayKey,
+          weekStart: weekStartKey,
+          total: todaysPlanProgress.total,
+        });
+      }
+    }
+    prevPlanCompleted.current = todaysPlanProgress.completed;
+  }, [
+    refreshStudentPath,
+    student?.id,
+    todaysPlanProgress.completed,
+    todaysPlanProgress.total,
+    todaysPlanProgress.pct,
+    todayKey,
+    weekStartKey,
+  ]);
+
+  useEffect(() => {
+    if (!student?.id) return;
+    if (
+      studentStats.avgAccuracyDelta == null ||
+      studentStats.avgAccuracyPriorWeek == null ||
+      studentStats.avgAccuracy == null
+    ) {
+      return;
+    }
+    const signature = `${weekStartKey}:${studentStats.avgAccuracyDelta}`;
+    if (lastWeeklyAccuracyLoggedRef.current === signature) return;
+    lastWeeklyAccuracyLoggedRef.current = signature;
+    trackEvent('success_weekly_accuracy_delta', {
+      studentId: student.id,
+      weekStart: weekStartKey,
+      avgAccuracy: studentStats.avgAccuracy,
+      avgAccuracyPriorWeek: studentStats.avgAccuracyPriorWeek,
+      delta: studentStats.avgAccuracyDelta,
+    });
+  }, [
+    student?.id,
+    studentStats.avgAccuracy,
+    studentStats.avgAccuracyPriorWeek,
+    studentStats.avgAccuracyDelta,
+    weekStartKey,
+  ]);
 
   const nudgeTargetUrl = recommendedLesson?.launchUrl ?? dashboard?.nextLessonUrl ?? null;
 
@@ -2417,16 +2488,16 @@ const StudentDashboard: React.FC = () => {
                     </button>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {tutorPromptChips.map((chip) => (
-                      <button
-                        key={chip}
-                        type="button"
-                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
-                        className="min-h-[40px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
-                      >
-                        {chip}
-                      </button>
-                    ))}
+	                    {tutorPromptChips.map((chip) => (
+	                      <button
+	                        key={chip}
+	                        type="button"
+	                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
+	                        className="min-h-[44px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
+	                      >
+	                        {chip}
+	                      </button>
+	                    ))}
                   </div>
                 </div>
               </div>
@@ -2516,6 +2587,14 @@ const StudentDashboard: React.FC = () => {
                     <p className="text-lg font-bold text-slate-800">
                       {studentStats.avgAccuracy != null ? `${studentStats.avgAccuracy}%` : '—'}
                     </p>
+                    <p
+                      className="text-xs text-slate-600"
+                      title="Change in your average accuracy compared to last week."
+                    >
+                      {studentStats.avgAccuracyDelta != null && studentStats.avgAccuracyPriorWeek != null
+                        ? `${studentStats.avgAccuracyDelta > 0 ? '+' : ''}${studentStats.avgAccuracyDelta} pts vs last week`
+                        : 'vs last week —'}
+                    </p>
                     <p className="text-xs text-slate-600">
                       Latest quiz {studentStats.latestQuizScore != null ? `${studentStats.latestQuizScore}%` : '—'}
                     </p>
@@ -2525,6 +2604,11 @@ const StudentDashboard: React.FC = () => {
                   <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
                     <div className="text-[11px] uppercase tracking-wide text-slate-500">Weekly time</div>
                     <div className="font-semibold">{Math.round(studentStats.weeklyTimeMinutes)} min</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">
+                      {studentStats.weeklyTimeMinutesDelta != null && studentStats.weeklyTimeMinutesPriorWeek != null
+                        ? `${studentStats.weeklyTimeMinutesDelta > 0 ? '+' : ''}${Math.round(studentStats.weeklyTimeMinutesDelta)} min vs last week`
+                        : 'vs last week —'}
+                    </div>
                   </div>
                   <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
                     <div className="text-[11px] uppercase tracking-wide text-slate-500">Plan streak</div>
@@ -2534,6 +2618,12 @@ const StudentDashboard: React.FC = () => {
                     </p>
                   </div>
                 </div>
+                <p className="mt-3 text-[11px] text-slate-500">
+                  Guardians can request a data export or deletion in{' '}
+                  <Link to="/account/settings" className="underline hover:text-slate-700">
+                    Data rights & privacy
+                  </Link>.
+                </p>
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
@@ -3297,7 +3387,10 @@ const StudentDashboard: React.FC = () => {
                       <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">
                         <div className="flex items-center justify-between">
                           <p className="text-xs font-semibold text-gray-800">Weekly goals</p>
-                          <span className="text-[11px] font-semibold text-slate-600">
+                          <span
+                            className="text-[11px] font-semibold text-slate-600"
+                            title="Daily plan completion rate for today’s queued lessons."
+                          >
                             {todaysPlanProgress.pct}% plan
                           </span>
                         </div>

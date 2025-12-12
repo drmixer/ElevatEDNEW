@@ -427,6 +427,83 @@ const AdminDashboard: React.FC = () => {
     }));
   }, [dashboard]);
 
+  const successMetrics = dashboard?.successMetrics ?? null;
+  const successCards = useMemo(
+    () => [
+      {
+        key: 'alerts',
+        label: 'Alert response',
+        value:
+          successMetrics?.alertResolutionHoursAvg != null
+            ? `${successMetrics.alertResolutionHoursAvg}h`
+            : '—',
+        detail:
+          successMetrics?.alertResolutionHoursAvg == null
+            ? 'Needs analytics ingestion'
+            : `Avg over ${successMetrics.lookbackDays}d`,
+        tooltip: 'Average time from first seeing an alert to marking it resolved.',
+        icon: AlertTriangle,
+      },
+      {
+        key: 'diagnostics',
+        label: 'Diagnostics complete',
+        value:
+          successMetrics?.diagnosticCompletionRate != null
+            ? `${successMetrics.diagnosticCompletionRate}%`
+            : '—',
+        detail:
+          successMetrics
+            ? `${successMetrics.diagnosticsCompleted}/${successMetrics.diagnosticsTotal} students`
+            : 'Needs analytics ingestion',
+        tooltip: 'Percent of learners who have completed a diagnostic at least once.',
+        icon: CheckCircle2,
+      },
+      {
+        key: 'assignments',
+        label: 'Assignment follow-through',
+        value:
+          successMetrics?.assignmentFollowThroughRate != null
+            ? `${successMetrics.assignmentFollowThroughRate}%`
+            : '—',
+        detail:
+          successMetrics
+            ? `${successMetrics.assignmentsCompleted}/${successMetrics.assignmentsTotal} assignments ${successMetrics.lookbackDays}d`
+            : 'Needs analytics ingestion',
+        tooltip: 'Share of assigned modules completed in the last lookback window.',
+        icon: ClipboardList,
+      },
+      {
+        key: 'accuracy',
+        label: 'Weekly accuracy delta',
+        value:
+          successMetrics?.weeklyAccuracyDeltaAvg != null
+            ? `${successMetrics.weeklyAccuracyDeltaAvg > 0 ? '+' : ''}${successMetrics.weeklyAccuracyDeltaAvg} pts`
+            : '—',
+        detail:
+          successMetrics?.weeklyAccuracyDeltaAvg == null
+            ? 'Needs analytics ingestion'
+            : `Avg over ${successMetrics.lookbackDays}d`,
+        tooltip: 'Average change in accuracy vs prior week across learners.',
+        icon: BarChart3,
+      },
+      {
+        key: 'plan',
+        label: 'Daily plan completion',
+        value:
+          successMetrics?.dailyPlanCompletionRateAvg != null
+            ? `${successMetrics.dailyPlanCompletionRateAvg}%`
+            : '—',
+        detail:
+          successMetrics?.dailyPlanCompletionRateAvg == null
+            ? 'Needs analytics ingestion'
+            : `Avg over ${successMetrics.lookbackDays}d`,
+        tooltip: 'Average percent of daily plans completed by learners.',
+        icon: Clock,
+      },
+    ],
+    [successMetrics],
+  );
+
   const resolveDeletionMutation = useMutation({
     mutationFn: (payload: { id: number; status: 'completed' | 'canceled' }) =>
       resolveAccountDeletionRequest(payload.id, payload.status),
@@ -637,6 +714,52 @@ const AdminDashboard: React.FC = () => {
                   </ResponsiveContainer>
                 )}
               </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Success Metrics</h3>
+                  <p className="text-sm text-slate-600">
+                    Outcomes snapshot {successMetrics ? `• last ${successMetrics.lookbackDays} days` : ''}
+                  </p>
+                </div>
+                <Activity className="h-5 w-5 text-brand-violet" />
+              </div>
+              {showSkeleton ? (
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                  {[0, 1, 2, 3, 4].map((idx) => (
+                    <SkeletonCard key={idx} className="h-24" />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                  {successCards.map((card) => {
+                    const Icon = card.icon;
+                    return (
+                      <div
+                        key={card.key}
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-1"
+                        title={card.tooltip}
+                      >
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">
+                            {card.label}
+                          </p>
+                          <Icon className="h-4 w-4 text-slate-500" />
+                        </div>
+                        <p className="text-2xl font-bold text-slate-900">{card.value}</p>
+                        <p className="text-[11px] text-slate-600">{card.detail}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </motion.div>
 
             <motion.div

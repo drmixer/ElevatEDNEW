@@ -1,6 +1,6 @@
 import process from 'node:process';
 
-import { createServiceRoleClient } from './utils/supabase.js';
+import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
 
 type Cell = {
   grade_band: string;
@@ -40,23 +40,26 @@ const parseArgs = (): string[] | null => {
 const main = async (): Promise<void> => {
   const grades = parseArgs();
   const supabase = createServiceRoleClient();
-  const { data, error } = await supabase
-    .from('coverage_dashboard_cells')
-    .select(
-      [
-        'grade_band',
-        'subject',
-        'meets_explanation_baseline',
-        'meets_practice_baseline',
-        'meets_assessment_baseline',
-        'meets_external_baseline',
-      ].join(','),
-    )
-    .in('grade_band', grades ?? TARGET_GRADES);
+  const selectColumns = [
+    'grade_band',
+    'subject',
+    'meets_explanation_baseline',
+    'meets_practice_baseline',
+    'meets_assessment_baseline',
+    'meets_external_baseline',
+  ].join(',');
 
-  if (error) {
-    throw new Error(`Failed to load coverage dashboard cells: ${error.message}`);
-  }
+  const data = await fetchAllPaginated<Cell>(
+    (from, to) =>
+      supabase
+        .from('coverage_dashboard_cells')
+        .select(selectColumns)
+        .in('grade_band', grades ?? TARGET_GRADES)
+        .order('grade_band', { ascending: true })
+        .order('subject', { ascending: true })
+        .range(from, to),
+    { logLabel: 'coverage_dashboard_cells' },
+  );
 
   const rollup = new Map<
     string,
@@ -67,7 +70,7 @@ const main = async (): Promise<void> => {
     }
   >();
 
-  for (const cell of (data ?? []) as Cell[]) {
+  for (const cell of data as Cell[]) {
     const key = `${cell.grade_band}::${cell.subject}`;
     if (!rollup.has(key)) {
       rollup.set(key, {

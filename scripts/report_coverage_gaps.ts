@@ -2,7 +2,7 @@ import process from 'node:process';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { createServiceRoleClient } from './utils/supabase.js';
+import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
 
 type CoverageRow = {
   grade_band: string;
@@ -47,63 +47,66 @@ const TARGET_SUBJECTS = ['Mathematics', 'English Language Arts', 'Science'];
 const PRACTICE_BASELINE_FALLBACK = 20;
 
 const loadCoverageCells = async (supabase: SupabaseClient): Promise<CoverageRow[]> => {
-  const { data, error } = await supabase
-    .from('coverage_dashboard_cells')
-    .select(
-      [
-        'grade_band',
-        'subject',
-        'module_slug',
-        'module_title',
-        'standard_framework',
-        'standard_code',
-        'public_lesson_count',
-        'practice_items_total',
-        'practice_items_aligned',
-        'assessment_count',
-        'external_resource_count',
-        'practice_target',
-        'meets_explanation_baseline',
-        'meets_practice_baseline',
-        'meets_assessment_baseline',
-        'meets_external_baseline',
-      ].join(','),
-    )
-    .in('grade_band', TARGET_GRADES)
-    .in('subject', TARGET_SUBJECTS);
+  const selectColumns = [
+    'grade_band',
+    'subject',
+    'module_slug',
+    'module_title',
+    'standard_framework',
+    'standard_code',
+    'public_lesson_count',
+    'practice_items_total',
+    'practice_items_aligned',
+    'assessment_count',
+    'external_resource_count',
+    'practice_target',
+    'meets_explanation_baseline',
+    'meets_practice_baseline',
+    'meets_assessment_baseline',
+    'meets_external_baseline',
+  ].join(',');
 
-  if (error) {
-    throw new Error(`Failed to load coverage dashboard cells: ${error.message}`);
-  }
+  const data = await fetchAllPaginated<CoverageRow>(
+    (from, to) =>
+      supabase
+        .from('coverage_dashboard_cells')
+        .select(selectColumns)
+        .in('grade_band', TARGET_GRADES)
+        .in('subject', TARGET_SUBJECTS)
+        .order('module_slug', { ascending: true })
+        .range(from, to),
+    { logLabel: 'coverage_dashboard_cells' },
+  );
 
-  return (data ?? []) as CoverageRow[];
+  return data as CoverageRow[];
 };
 
 const loadRollups = async (supabase: SupabaseClient): Promise<RollupRow[]> => {
-  const { data, error } = await supabase
-    .from('coverage_dashboard_rollup')
-    .select(
-      [
-        'grade_band',
-        'subject',
-        'modules',
-        'modules_with_explanations',
-        'modules_meeting_practice_baseline',
-        'modules_with_assessments',
-        'modules_with_external_resources',
-        'modules_needing_attention',
-      ].join(','),
-    )
-    .in('grade_band', TARGET_GRADES)
-    .in('subject', TARGET_SUBJECTS)
-    .order('grade_band', { ascending: true })
-    .order('subject', { ascending: true });
+  const selectColumns = [
+    'grade_band',
+    'subject',
+    'modules',
+    'modules_with_explanations',
+    'modules_meeting_practice_baseline',
+    'modules_with_assessments',
+    'modules_with_external_resources',
+    'modules_needing_attention',
+  ].join(',');
 
-  if (error) {
-    throw new Error(`Failed to load coverage rollups: ${error.message}`);
-  }
+  const data = await fetchAllPaginated<RollupRow>(
+    (from, to) =>
+      supabase
+        .from('coverage_dashboard_rollup')
+        .select(selectColumns)
+        .in('grade_band', TARGET_GRADES)
+        .in('subject', TARGET_SUBJECTS)
+        .order('grade_band', { ascending: true })
+        .order('subject', { ascending: true })
+        .range(from, to),
+    { logLabel: 'coverage_dashboard_rollup' },
+  );
 
-  return (data ?? []) as RollupRow[];
+  return data as RollupRow[];
 };
 
 const buildGaps = (rows: CoverageRow[]): Gap[] => {
