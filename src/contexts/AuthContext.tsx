@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshRetryRef.current = setTimeout(async () => {
       refreshRetryRef.current = null;
       try {
-        const sessionResult = await withTimeout(supabase.auth.getSession(), 3500);
+        const sessionResult = await withTimeout(supabase.auth.getSession(), 6000);
         if (sessionResult.timedOut) {
           console.warn('[Auth] Silent session refresh timed out; will wait for the next auth event.');
           return;
@@ -102,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       safeSetLoading(true);
       try {
         console.log('[Auth] Getting session...');
-        const sessionResult = await withTimeout(supabase.auth.getSession(), 2500);
+        const sessionResult = await withTimeout(supabase.auth.getSession(), 6000);
         console.log('[Auth] Session result:', sessionResult);
 
         if (sessionResult.timedOut) {

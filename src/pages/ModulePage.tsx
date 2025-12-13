@@ -251,12 +251,11 @@ const ModulePage: React.FC = () => {
                       </div>
                       {expanded && (
                         <div className="mt-4 space-y-4 border-t border-slate-200 pt-4">
-                          <ReactMarkdown
-                            className="prose prose-sm max-w-none text-slate-700"
-                            remarkPlugins={MARKDOWN_PLUGINS}
-                          >
-                            {lesson.content}
-                          </ReactMarkdown>
+                          <div className="prose prose-sm max-w-none text-slate-700">
+                            <ReactMarkdown remarkPlugins={MARKDOWN_PLUGINS}>
+                              {lesson.content}
+                            </ReactMarkdown>
+                          </div>
                           {lesson.assets.length > 0 && (
                             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                               {lesson.assets.map((asset) => (
@@ -277,12 +276,11 @@ const ModulePage: React.FC = () => {
                             </div>
                           )}
                           {lesson.attributionBlock && (
-                            <ReactMarkdown
-                              className="text-xs text-slate-500 border-t border-slate-200 pt-3 [&_a]:text-brand-blue [&_a]:underline"
-                              remarkPlugins={MARKDOWN_PLUGINS}
-                            >
-                              {lesson.attributionBlock}
-                            </ReactMarkdown>
+                            <div className="text-xs text-slate-500 border-t border-slate-200 pt-3 [&_a]:text-brand-blue [&_a]:underline">
+                              <ReactMarkdown remarkPlugins={MARKDOWN_PLUGINS}>
+                                {lesson.attributionBlock}
+                              </ReactMarkdown>
+                            </div>
                           )}
                         </div>
                       )}

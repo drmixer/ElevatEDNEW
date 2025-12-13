@@ -6,15 +6,51 @@ const studentPassword = process.env.E2E_STUDENT_PASSWORD;
 
 const shouldRun = runLive && Boolean(studentEmail && studentPassword);
 
+const fillLoginForm = async (page: Parameters<typeof test>[0]['page'], email: string, password: string) => {
+  const emailInputCandidates = [
+    page.getByLabel('Email Address'),
+    page.getByPlaceholder(/enter your email/i),
+    page.locator('input[type="email"]'),
+  ];
+  const passwordInputCandidates = [
+    page.getByLabel('Password'),
+    page.getByPlaceholder(/^password$/i),
+    page.locator('input[type="password"]'),
+  ];
+
+  let emailFilled = false;
+  for (const locator of emailInputCandidates) {
+    try {
+      await locator.first().fill(email);
+      emailFilled = true;
+      break;
+    } catch {
+      // try next selector
+    }
+  }
+  if (!emailFilled) throw new Error('Could not locate email input on auth modal.');
+
+  let passwordFilled = false;
+  for (const locator of passwordInputCandidates) {
+    try {
+      await locator.first().fill(password);
+      passwordFilled = true;
+      break;
+    } catch {
+      // try next selector
+    }
+  }
+  if (!passwordFilled) throw new Error('Could not locate password input on auth modal.');
+};
+
 const login = async (
   page: Parameters<typeof test>[0]['page'],
   email: string,
   password: string,
 ) => {
   await page.goto('/');
-  await page.getByRole('button', { name: /start learning/i }).click();
-  await page.getByLabel('Email Address').fill(email);
-  await page.getByLabel('Password').fill(password);
+  await page.getByRole('button', { name: /start learning/i }).first().click();
+  await fillLoginForm(page, email, password);
   await page.getByRole('button', { name: /sign in/i }).click();
 };
 

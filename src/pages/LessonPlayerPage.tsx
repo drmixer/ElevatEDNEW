@@ -939,26 +939,26 @@ const LessonPlayerPage: React.FC = () => {
 
         <section className="space-y-8">
           <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-            <ReactMarkdown
-              className="prose prose-slate max-w-none"
-              remarkPlugins={MARKDOWN_PLUGINS}
-              components={{
-                h2: headingRenderer('h2'),
-                h3: headingRenderer('h3'),
-                a: ({ ...rest }) => (
-                  <a {...rest} target="_blank" rel="noreferrer" />
-                ),
-              }}
-            >
-              {lessonDetail.lesson.content}
-            </ReactMarkdown>
-            {lessonDetail.lesson.attributionBlock && (
+            <div className="prose prose-slate max-w-none">
               <ReactMarkdown
-                className="mt-8 border-t border-slate-200 pt-4 text-xs text-slate-500 [&_a]:text-brand-blue [&_a]:underline"
                 remarkPlugins={MARKDOWN_PLUGINS}
+                components={{
+                  h2: headingRenderer('h2'),
+                  h3: headingRenderer('h3'),
+                  a: ({ ...rest }) => (
+                    <a {...rest} target="_blank" rel="noreferrer" />
+                  ),
+                }}
               >
-                {lessonDetail.lesson.attributionBlock}
+                {lessonDetail.lesson.content}
               </ReactMarkdown>
+            </div>
+            {lessonDetail.lesson.attributionBlock && (
+              <div className="mt-8 border-t border-slate-200 pt-4 text-xs text-slate-500 [&_a]:text-brand-blue [&_a]:underline">
+                <ReactMarkdown remarkPlugins={MARKDOWN_PLUGINS}>
+                  {lessonDetail.lesson.attributionBlock}
+                </ReactMarkdown>
+              </div>
             )}
           </article>
 

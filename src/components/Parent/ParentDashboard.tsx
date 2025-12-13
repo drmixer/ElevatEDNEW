@@ -706,6 +706,12 @@ const ParentDashboard: React.FC = () => {
     return planCap ? Math.min(recommended, planCap) : recommended;
   }, [currentChild?.lessonsCompletedWeek, entitlements.lessonLimit]);
 
+  const recommendedWeeklyMinutes = useMemo(() => {
+    const baseline = Math.max(currentChild?.practiceMinutesWeek ?? 0, 45);
+    const fallback = 60;
+    return Math.max(baseline, fallback);
+  }, [currentChild?.practiceMinutesWeek]);
+
   const paceWarningThreshold = Math.ceil(recommendedWeeklyLessons * 1.25);
   const weeklyLessonsTargetValue = Number.isFinite(Number.parseInt(goalForm.weeklyLessons, 10))
     ? Number.parseInt(goalForm.weeklyLessons, 10)
@@ -917,74 +923,6 @@ const ParentDashboard: React.FC = () => {
     return { deltaLessons, deltaMinutes };
   }, [dashboard?.children]);
 
-  const currentChildName = currentChild?.name ?? null;
-
-  const impactSnippet = useMemo(() => {
-    if (!dashboard) return null;
-    const parts: string[] = [];
-    if (familyAccuracyDelta != null) {
-      parts.push(`Avg accuracy ${familyAccuracyDelta > 0 ? '+' : ''}${familyAccuracyDelta} pts vs last week`);
-    }
-    if (familyWeeklyDelta.deltaLessons !== 0 || familyWeeklyDelta.deltaMinutes !== 0) {
-      parts.push(
-        `${familyWeeklyDelta.deltaLessons >= 0 ? '+' : ''}${familyWeeklyDelta.deltaLessons} lessons, ${familyWeeklyDelta.deltaMinutes >= 0 ? '+' : ''}${familyWeeklyDelta.deltaMinutes} min vs last week`,
-      );
-    }
-    if (diagnosticCompletionRate != null) {
-      parts.push(`${diagnosticCompletionRate}% diagnostics complete`);
-    }
-    if (alertResolutionHours != null) {
-      parts.push(`Alerts resolved in ${alertResolutionHours}h avg`);
-    }
-    if (currentChildName && assignmentUptakeRate != null) {
-      parts.push(`${currentChildName} follow-through ${assignmentUptakeRate}%`);
-    }
-    return parts.length ? parts.join(' • ') : null;
-  }, [
-    dashboard,
-    familyAccuracyDelta,
-    familyWeeklyDelta,
-    diagnosticCompletionRate,
-    alertResolutionHours,
-    assignmentUptakeRate,
-    currentChildName,
-  ]);
-
-  const digestRecommendations = useMemo(
-    () =>
-      (dashboard?.weeklyReport?.recommendations ?? [
-        'Set one small goal for each learner to guide the next digest.',
-      ]).slice(0, 3),
-    [dashboard?.weeklyReport?.recommendations],
-  );
-
-  const digestPreviewLines = useMemo(() => {
-    const timeSpentMinutes = weeklySnapshot?.minutes ?? 0;
-    const lessonsDone = weeklySnapshot?.lessons ?? 0;
-    const streakDays = weeklySnapshot?.topStreak ?? 0;
-    const winHeadline = latestWin?.title ?? 'Call out a consistent streak.';
-    const focusList = focusLabels.slice(0, 2).join(', ') || 'Balanced practice';
-    const recommendationLine = digestRecommendations.join(' | ');
-    return [
-      `Time spent: ${timeSpentMinutes} min`,
-      `Lessons done: ${lessonsDone}`,
-      `Best streak: ${streakDays} day${streakDays === 1 ? '' : 's'}`,
-      `Win to share: ${winHeadline}`,
-      `Focus areas: ${focusList}`,
-      `Recommended next steps: ${recommendationLine}`,
-    ];
-  }, [digestRecommendations, focusLabels, latestWin?.title, weeklySnapshot]);
-
-  const digestPreviewText = useMemo(
-    () =>
-      [
-        `Weekly digest for ${parent?.name ?? 'your family'}`,
-        `Week of ${weeklySnapshot?.weekStartLabel ?? 'this week'}`,
-        ...digestPreviewLines,
-      ].join('\n'),
-    [digestPreviewLines, parent?.name, weeklySnapshot?.weekStartLabel],
-  );
-
   const weeklyChangeSummary = useMemo(
     () => dashboard?.weeklyReport?.changes ?? { improvements: [], risks: [] },
     [dashboard?.weeklyReport?.changes],
@@ -1120,6 +1058,41 @@ const ParentDashboard: React.FC = () => {
   const focusLabels = useMemo(
     () => (focusConcepts.length ? focusConcepts : ['Skill reinforcement']),
     [focusConcepts],
+  );
+
+  const digestRecommendations = useMemo(
+    () =>
+      (dashboard?.weeklyReport?.recommendations ?? [
+        'Set one small goal for each learner to guide the next digest.',
+      ]).slice(0, 3),
+    [dashboard?.weeklyReport?.recommendations],
+  );
+
+  const digestPreviewLines = useMemo(() => {
+    const timeSpentMinutes = weeklySnapshot?.minutes ?? 0;
+    const lessonsDone = weeklySnapshot?.lessons ?? 0;
+    const streakDays = weeklySnapshot?.topStreak ?? 0;
+    const winHeadline = latestWin?.title ?? 'Call out a consistent streak.';
+    const focusList = focusLabels.slice(0, 2).join(', ') || 'Balanced practice';
+    const recommendationLine = digestRecommendations.join(' | ');
+    return [
+      `Time spent: ${timeSpentMinutes} min`,
+      `Lessons done: ${lessonsDone}`,
+      `Best streak: ${streakDays} day${streakDays === 1 ? '' : 's'}`,
+      `Win to share: ${winHeadline}`,
+      `Focus areas: ${focusList}`,
+      `Recommended next steps: ${recommendationLine}`,
+    ];
+  }, [digestRecommendations, focusLabels, latestWin?.title, weeklySnapshot]);
+
+  const digestPreviewText = useMemo(
+    () =>
+      [
+        `Weekly digest for ${parent?.name ?? 'your family'}`,
+        `Week of ${weeklySnapshot?.weekStartLabel ?? 'this week'}`,
+        ...digestPreviewLines,
+      ].join('\n'),
+    [digestPreviewLines, parent?.name, weeklySnapshot?.weekStartLabel],
   );
 
   const homeExtensionGroups = useMemo(
@@ -1267,135 +1240,11 @@ const ParentDashboard: React.FC = () => {
     });
   }, [overview?.children]);
 
-  const privacyHistoryByChild = useMemo(() => {
-    const children = dashboard?.children ?? [];
-    const history = children.map((child) => {
-      const requests = privacyRequests.filter((request) => request.studentId === child.id);
-      const latest = requests[0] ?? null;
-      const openCount = requests.filter(
-        (request) => request.status === 'pending' || request.status === 'in_review',
-      ).length;
-      return {
-        studentId: child.id,
-        name: child.name,
-        total: requests.length,
-        pending: openCount,
-        lastStatus: latest?.status ?? null,
-        lastType: latest?.requestType ?? null,
-        lastUpdated: latest?.updatedAt ?? latest?.createdAt ?? null,
-      };
-    });
-
-    // Include any legacy requests that reference learners no longer on the dashboard.
-    privacyRequests.forEach((request) => {
-      const alreadyTracked = history.some((entry) => entry.studentId === request.studentId);
-      if (alreadyTracked) return;
-      history.push({
-        studentId: request.studentId,
-        name: childNameMap.get(request.studentId) ?? 'Learner',
-        total: 1,
-        pending: request.status === 'pending' || request.status === 'in_review' ? 1 : 0,
-        lastStatus: request.status,
-        lastType: request.requestType,
-        lastUpdated: request.updatedAt ?? request.createdAt,
-      });
-    });
-
-    return history;
-  }, [childNameMap, dashboard?.children, privacyRequests]);
-
-  const openPrivacyRequests = useMemo(
-    () =>
-      childPrivacyRequests.filter(
-        (request) => request.status === 'pending' || request.status === 'in_review',
-      ),
-    [childPrivacyRequests],
-  );
-
   const formatDateTime = useCallback((value?: string | null) => {
     if (!value) return '—';
     const date = new Date(value);
     return `${date.toLocaleDateString()} • ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
   }, []);
-
-  const safetyEvents = useMemo(() => {
-    const events: Array<{
-      id: string;
-      studentId: string | null;
-      studentName: string;
-      occurredAt: string;
-      label: string;
-      detail: string;
-      nextStep: string;
-      severity: 'info' | 'warn';
-    }> = [];
-
-    const describeEvent = (rawType?: string | null) => {
-      if (!rawType) return null;
-      const type = rawType.toLowerCase();
-      if (type.includes('safety') || type.includes('guardrail')) {
-        return {
-          label: 'Blocked prompt',
-          detail: 'Tutor stopped a prompt that looked unsafe, off-topic, or personal.',
-          nextStep: 'Ask your learner what they were trying to ask and remind them to avoid personal details.',
-          severity: 'warn' as const,
-        };
-      }
-      if (type.includes('flag')) {
-        return {
-          label: 'Flagged content',
-          detail: 'A response or prompt was flagged for review.',
-          nextStep: 'We are double-checking this transcript. You will hear from us if follow-up is needed.',
-          severity: 'warn' as const,
-        };
-      }
-      if (type.includes('refusal') || type.includes('blocked')) {
-        return {
-          label: 'Tutor refused',
-          detail: 'The AI declined to answer because the request looked risky.',
-          nextStep: 'Try rephrasing toward a school task. Safety refusals are logged automatically.',
-          severity: 'info' as const,
-        };
-      }
-      return null;
-    };
-
-    overview?.children?.forEach((child) => {
-      (child.recent_events ?? []).forEach((event, index) => {
-        const details = describeEvent(event.event_type);
-        if (!details) return;
-        events.push({
-          id: `${child.id}-${event.created_at ?? index}`,
-          studentId: child.id,
-          studentName: child.name,
-          occurredAt: event.created_at,
-          ...details,
-        });
-      });
-    });
-
-    concernReports
-      .filter((report) => report.category === 'safety' || report.category === 'content')
-      .forEach((report) => {
-        events.push({
-          id: `report-${report.id}`,
-          studentId: report.studentId ?? null,
-          studentName: report.studentId ? childNameMap.get(report.studentId) ?? 'Learner' : 'Family account',
-          occurredAt: report.updatedAt ?? report.createdAt,
-          label: 'Family report logged',
-          detail: `Case ${report.caseId} (${report.category}) is ${report.status.replace('_', ' ')}.`,
-          nextStep:
-            report.status === 'resolved' || report.status === 'closed'
-              ? 'This item has been reviewed. We will contact you if additional steps are needed.'
-              : 'We are reviewing and will email you if we need more detail.',
-          severity: report.status === 'open' || report.status === 'in_review' ? 'warn' : 'info',
-        });
-      });
-
-    return events
-      .sort((a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime())
-      .slice(0, 6);
-  }, [childNameMap, concernReports, overview?.children]);
 
   const sortedDashboardAlerts = useMemo(() => {
     if (!dashboard?.alerts?.length) return [];
@@ -1524,6 +1373,51 @@ const ParentDashboard: React.FC = () => {
     return privacyRequests.filter((request) => request.studentId === currentChild.id);
   }, [privacyRequests, currentChild]);
 
+  const privacyHistoryByChild = useMemo(() => {
+    const children = dashboard?.children ?? [];
+    const history = children.map((child) => {
+      const requests = privacyRequests.filter((request) => request.studentId === child.id);
+      const latest = requests[0] ?? null;
+      const openCount = requests.filter(
+        (request) => request.status === 'pending' || request.status === 'in_review',
+      ).length;
+      return {
+        studentId: child.id,
+        name: child.name,
+        total: requests.length,
+        pending: openCount,
+        lastStatus: latest?.status ?? null,
+        lastType: latest?.requestType ?? null,
+        lastUpdated: latest?.updatedAt ?? latest?.createdAt ?? null,
+      };
+    });
+
+    // Include any legacy requests that reference learners no longer on the dashboard.
+    privacyRequests.forEach((request) => {
+      const alreadyTracked = history.some((entry) => entry.studentId === request.studentId);
+      if (alreadyTracked) return;
+      history.push({
+        studentId: request.studentId,
+        name: childNameMap.get(request.studentId) ?? 'Learner',
+        total: 1,
+        pending: request.status === 'pending' || request.status === 'in_review' ? 1 : 0,
+        lastStatus: request.status,
+        lastType: request.requestType,
+        lastUpdated: request.updatedAt ?? request.createdAt,
+      });
+    });
+
+    return history;
+  }, [childNameMap, dashboard?.children, privacyRequests]);
+
+  const openPrivacyRequests = useMemo(
+    () =>
+      childPrivacyRequests.filter(
+        (request) => request.status === 'pending' || request.status === 'in_review',
+      ),
+    [childPrivacyRequests],
+  );
+
   const concernReportsQuery = useQuery({
     queryKey: ['concern-reports', parent?.id, selectedChildId],
     queryFn: () => listConcernReports({ requesterId: parent?.id ?? '', studentId: selectedChildId ?? null, limit: 15 }),
@@ -1534,6 +1428,85 @@ const ParentDashboard: React.FC = () => {
     () => concernReportsQuery.data ?? [],
     [concernReportsQuery.data],
   );
+
+  const safetyEvents = useMemo(() => {
+    const events: Array<{
+      id: string;
+      studentId: string | null;
+      studentName: string;
+      occurredAt: string;
+      label: string;
+      detail: string;
+      nextStep: string;
+      severity: 'info' | 'warn';
+    }> = [];
+
+    const describeEvent = (rawType?: string | null) => {
+      if (!rawType) return null;
+      const type = rawType.toLowerCase();
+      if (type.includes('safety') || type.includes('guardrail')) {
+        return {
+          label: 'Blocked prompt',
+          detail: 'Tutor stopped a prompt that looked unsafe, off-topic, or personal.',
+          nextStep: 'Ask your learner what they were trying to ask and remind them to avoid personal details.',
+          severity: 'warn' as const,
+        };
+      }
+      if (type.includes('flag')) {
+        return {
+          label: 'Flagged content',
+          detail: 'A response or prompt was flagged for review.',
+          nextStep: 'We are double-checking this transcript. You will hear from us if follow-up is needed.',
+          severity: 'warn' as const,
+        };
+      }
+      if (type.includes('refusal') || type.includes('blocked')) {
+        return {
+          label: 'Tutor refused',
+          detail: 'The AI declined to answer because the request looked risky.',
+          nextStep: 'Try rephrasing toward a school task. Safety refusals are logged automatically.',
+          severity: 'info' as const,
+        };
+      }
+      return null;
+    };
+
+    overview?.children?.forEach((child) => {
+      (child.recent_events ?? []).forEach((event, index) => {
+        const details = describeEvent(event.event_type);
+        if (!details) return;
+        events.push({
+          id: `${child.id}-${event.created_at ?? index}`,
+          studentId: child.id,
+          studentName: child.name,
+          occurredAt: event.created_at,
+          ...details,
+        });
+      });
+    });
+
+    concernReports
+      .filter((report) => report.category === 'safety' || report.category === 'content')
+      .forEach((report) => {
+        events.push({
+          id: `report-${report.id}`,
+          studentId: report.studentId ?? null,
+          studentName: report.studentId ? childNameMap.get(report.studentId) ?? 'Learner' : 'Family account',
+          occurredAt: report.updatedAt ?? report.createdAt,
+          label: 'Family report logged',
+          detail: `Case ${report.caseId} (${report.category}) is ${report.status.replace('_', ' ')}.`,
+          nextStep:
+            report.status === 'resolved' || report.status === 'closed'
+              ? 'This item has been reviewed. We will contact you if additional steps are needed.'
+              : 'We are reviewing and will email you if we need more detail.',
+          severity: report.status === 'open' || report.status === 'in_review' ? 'warn' : 'info',
+        });
+      });
+
+    return events
+      .sort((a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime())
+      .slice(0, 6);
+  }, [childNameMap, concernReports, overview?.children]);
 
   const {
     data: childAssignments,
@@ -1581,6 +1554,38 @@ const ParentDashboard: React.FC = () => {
     const rate = (activeAssignments / focusCount) * 100;
     return Math.round(Math.min(rate, 150));
   }, [assignmentsList, currentChild]);
+
+  const impactSnippet = useMemo(() => {
+    if (!dashboard) return null;
+    const parts: string[] = [];
+    const currentChildName = currentChild?.name ?? null;
+    if (familyAccuracyDelta != null) {
+      parts.push(`Avg accuracy ${familyAccuracyDelta > 0 ? '+' : ''}${familyAccuracyDelta} pts vs last week`);
+    }
+    if (familyWeeklyDelta.deltaLessons !== 0 || familyWeeklyDelta.deltaMinutes !== 0) {
+      parts.push(
+        `${familyWeeklyDelta.deltaLessons >= 0 ? '+' : ''}${familyWeeklyDelta.deltaLessons} lessons, ${familyWeeklyDelta.deltaMinutes >= 0 ? '+' : ''}${familyWeeklyDelta.deltaMinutes} min vs last week`,
+      );
+    }
+    if (diagnosticCompletionRate != null) {
+      parts.push(`${diagnosticCompletionRate}% diagnostics complete`);
+    }
+    if (alertResolutionHours != null) {
+      parts.push(`Alerts resolved in ${alertResolutionHours}h avg`);
+    }
+    if (currentChildName && assignmentUptakeRate != null) {
+      parts.push(`${currentChildName} follow-through ${assignmentUptakeRate}%`);
+    }
+    return parts.length ? parts.join(' • ') : null;
+  }, [
+    alertResolutionHours,
+    assignmentUptakeRate,
+    dashboard,
+    currentChild?.name,
+    diagnosticCompletionRate,
+    familyAccuracyDelta,
+    familyWeeklyDelta,
+  ]);
 
   const lastSuccessMetricsSnapshotRef = React.useRef<string | null>(null);
   useEffect(() => {
@@ -4210,7 +4215,7 @@ const ParentDashboard: React.FC = () => {
                   {currentChild?.lessonsCompletedWeek ?? 0}/
                   {weeklyLessonsTargetValue ?? recommendedWeeklyLessons} lessons •{' '}
                   {currentChild?.practiceMinutesWeek ?? 0}/
-                  {practiceMinutesTargetValue ?? weeklyPlanTargets.minutes} min
+                  {practiceMinutesTargetValue ?? recommendedWeeklyMinutes} min
                 </p>
                 <div className="h-2 rounded-full bg-white overflow-hidden border border-slate-200">
                   <div
