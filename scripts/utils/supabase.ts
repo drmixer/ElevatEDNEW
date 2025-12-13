@@ -10,8 +10,16 @@ export const requireEnv = (name: string): string => {
   return value;
 };
 
+export const requireSupabaseUrl = (): string => {
+  const value = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
+  if (!value) {
+    throw new Error('Missing SUPABASE_URL/VITE_SUPABASE_URL environment variable.');
+  }
+  return value;
+};
+
 export const createServiceRoleClient = (): SupabaseClient =>
-  createClient(requireEnv('SUPABASE_URL'), requireEnv('SUPABASE_SERVICE_ROLE_KEY'), {
+  createClient(requireSupabaseUrl(), requireEnv('SUPABASE_SERVICE_ROLE_KEY'), {
     auth: { persistSession: false },
   });
 
@@ -24,7 +32,7 @@ const resolveAnonKey = (): string => {
 };
 
 export const createRlsClient = (accessToken?: string | null): SupabaseClient =>
-  createClient(requireEnv('SUPABASE_URL'), resolveAnonKey(), {
+  createClient(requireSupabaseUrl(), resolveAnonKey(), {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {
       headers: accessToken
