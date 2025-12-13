@@ -3,7 +3,7 @@ import withTimeout from './withTimeout';
 
 export const getAccessToken = async (): Promise<string> => {
   try {
-    const sessionResult = await withTimeout(supabase.auth.getSession(), 3500);
+    const sessionResult = await withTimeout(supabase.auth.getSession(), 6000);
     if (sessionResult.timedOut) {
       throw new Error('Timed out confirming your session. Please refresh or sign in again.');
     }
@@ -47,6 +47,11 @@ export const handleApiResponse = async <T>(response: Response): Promise<T> => {
 
   const text = await response.text();
   let message = text;
+
+  const trimmed = text.trim();
+  if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html')) {
+    message = `API request failed (${response.status}). This deployment returned HTML instead of JSON — the /api/v1 backend may be missing or misconfigured.`;
+  }
 
   try {
     const parsed = JSON.parse(text) as Record<string, unknown>;

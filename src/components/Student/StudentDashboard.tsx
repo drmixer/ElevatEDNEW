@@ -794,6 +794,11 @@ const StudentDashboard: React.FC = () => {
       })
       .catch((err) => {
         console.warn('[StudentDashboard] Unable to load personalization catalogs', err);
+        const message = err instanceof Error ? err.message : '';
+        if (message.includes('returned HTML') || message.includes('Unexpected token')) {
+          setPersonalizationError('This deployment is missing the /api/v1 backend. Please configure the API server/proxy and retry.');
+          return;
+        }
         setPersonalizationError('Unable to load avatar and persona options right now.');
       })
       .finally(() => setPersonalizationLoading(false));

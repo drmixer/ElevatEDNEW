@@ -131,6 +131,11 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       })
       .catch((err) => {
         console.warn('[Onboarding] failed to prime data', err);
+        const message = err instanceof Error ? err.message : '';
+        if (message.includes('returned HTML') || message.includes('Unexpected token')) {
+          setError('This deployment is missing the /api/v1 backend. Please configure the API server/proxy and retry.');
+          return;
+        }
         setError('Unable to load personalization options right now.');
       });
   }, [student?.grade]);
