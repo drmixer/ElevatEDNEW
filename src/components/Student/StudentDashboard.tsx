@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangle,
@@ -7,7 +7,7 @@ import {
   CheckCircle,
   Clock,
   Flag,
-  Map,
+  Map as MapIcon,
   ArrowRight,
   Play,
   RefreshCw,
@@ -258,7 +258,15 @@ const pickDiagnosticFocus = (metadata: Record<string, unknown> | null | undefine
 const StudentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const student = (user as Student) ?? null;
+  const navigate = useNavigate();
   const { entitlements, loading: entitlementsLoading } = useEntitlements();
+
+  const gradeBand = useMemo(() => {
+    if (!student?.grade) return 'unknown';
+    if (student.grade <= 5) return 'g3-5';
+    if (student.grade <= 8) return 'g6-8';
+    return 'g9-plus';
+  }, [student?.grade]);
   const [activeView, setActiveView] = useState<'dashboard' | 'onboarding' | 'lesson'>('dashboard');
   const [activeTab, setActiveTab] = useState<'today' | 'journey'>('today');
   const [subjectFilter, setSubjectFilter] = useState<Subject | 'all'>('all');
@@ -680,6 +688,56 @@ const StudentDashboard: React.FC = () => {
 
   const showSkeleton = isLoading && !dashboard;
 
+  const parentGoals = dashboard?.parentGoals ?? null;
+  const parentGoalActive = Boolean(parentGoals?.weeklyLessons || parentGoals?.practiceMinutes);
+
+  const studyModeSetAt = useMemo(
+    () => (student?.learningPreferences.studyModeSetAt ? new Date(student.learningPreferences.studyModeSetAt) : null),
+    [student?.learningPreferences.studyModeSetAt],
+  );
+  const studyModeExpired =
+    studyModeSetAt != null ? Date.now() - studyModeSetAt.getTime() > 1000 * 60 * 60 * 24 * 7 : false;
+
+  const lessonsThisWeek = useMemo(() => {
+    if (!dashboard?.dailyActivity) return 0;
+    return dashboard.dailyActivity.reduce((acc, entry) => acc + (entry.lessonsCompleted ?? 0), 0);
+  }, [dashboard?.dailyActivity]);
+
+  const minutesThisWeek = useMemo(() => {
+    if (!dashboard?.dailyActivity) return 0;
+    return dashboard.dailyActivity.reduce((acc, entry) => acc + (entry.practiceMinutes ?? 0), 0);
+  }, [dashboard?.dailyActivity]);
+
+  const weeklyPlanTargets = useMemo(() => {
+    const lessonBase = parentGoals?.weeklyLessons ?? 5;
+    const minutesBase = parentGoals?.practiceMinutes ?? 60;
+    const factor =
+      parentGoalActive || !lessonBase
+        ? 1
+        : weeklyPlanIntensity === 'light'
+          ? 0.8
+          : weeklyPlanIntensity === 'challenge'
+            ? 1.2
+            : 1;
+    return {
+      lessons: Math.max(1, Math.round(lessonBase * factor)),
+      minutes: Math.max(15, Math.round(minutesBase * factor)),
+    };
+  }, [parentGoalActive, parentGoals?.practiceMinutes, parentGoals?.weeklyLessons, weeklyPlanIntensity]);
+
+  const weeklyPlanExpectedLessons = useMemo(() => {
+    const today = new Date();
+    const dayOfWeek = ((today.getDay() + 6) % 7) + 1; // Monday=1
+    return Math.ceil((weeklyPlanTargets.lessons * dayOfWeek) / 7);
+  }, [weeklyPlanTargets.lessons]);
+
+  const weeklyPlanStatus = useMemo(() => {
+    if (!weeklyPlanTargets.lessons) return 'on_track';
+    if (lessonsThisWeek >= weeklyPlanExpectedLessons) return 'on_track';
+    if (lessonsThisWeek >= weeklyPlanExpectedLessons - 1) return 'almost';
+    return 'behind';
+  }, [lessonsThisWeek, weeklyPlanExpectedLessons, weeklyPlanTargets.lessons]);
+
   useEffect(() => {
     if (!student?.id) return;
     const flash = consumeAdaptiveFlash(student.id);
@@ -908,16 +966,6 @@ const StudentDashboard: React.FC = () => {
     }));
   }, [dashboard]);
 
-  const lessonsThisWeek = useMemo(() => {
-    if (!dashboard?.dailyActivity) return 0;
-    return dashboard.dailyActivity.reduce((acc, entry) => acc + (entry.lessonsCompleted ?? 0), 0);
-  }, [dashboard?.dailyActivity]);
-
-  const minutesThisWeek = useMemo(() => {
-    if (!dashboard?.dailyActivity) return 0;
-    return dashboard.dailyActivity.reduce((acc, entry) => acc + (entry.practiceMinutes ?? 0), 0);
-  }, [dashboard?.dailyActivity]);
-
   const learningPath: LearningPathItem[] = useMemo(() => {
     if (dashboard?.profile?.learningPath?.length) return dashboard.profile.learningPath;
     if (student?.learningPath?.length) return student.learningPath;
@@ -1005,13 +1053,6 @@ const StudentDashboard: React.FC = () => {
     return meetsXp && meetsStreak;
   };
 
-  const gradeBand = useMemo(() => {
-    if (!student?.grade) return 'unknown';
-    if (student.grade <= 5) return 'g3-5';
-    if (student.grade <= 8) return 'g6-8';
-    return 'g9-plus';
-  }, [student?.grade]);
-
   const tutorNameValidation = useMemo(() => {
     const trimmed = tutorNameInput.trim();
     if (!trimmed.length) {
@@ -1054,21 +1095,8 @@ const StudentDashboard: React.FC = () => {
   };
 
   const celebrationMoments = useMemo(() => dashboard?.celebrationMoments ?? [], [dashboard?.celebrationMoments]);
-  const parentGoals = dashboard?.parentGoals ?? null;
-  const parentGoalActive = Boolean(parentGoals?.weeklyLessons || parentGoals?.practiceMinutes);
   const activeCelebration = celebrationQueue[0] ?? null;
   const quickStats = dashboard?.quickStats;
-  const studyModeSetAt = useMemo(
-    () =>
-      student.learningPreferences.studyModeSetAt
-        ? new Date(student.learningPreferences.studyModeSetAt)
-        : null,
-    [student.learningPreferences.studyModeSetAt],
-  );
-  const studyModeExpired =
-    studyModeSetAt != null
-      ? Date.now() - studyModeSetAt.getTime() > 1000 * 60 * 60 * 24 * 7
-      : false;
 
   const handleOnboardingComplete = async (result?: { pathEntries?: StudentPathEntry[] } | null) => {
     setActiveView('dashboard');
@@ -1161,23 +1189,23 @@ const StudentDashboard: React.FC = () => {
     });
   };
 
-	  const handleNudgeCta = (nudge: StudentNudge) => {
-	    trackEvent('student_nudge_cta', {
-	      studentId: student.id,
-	      nudge_id: nudge.id,
-	      type: nudge.type,
-	      detail: nudge.detail,
-	    });
-	    trackEvent('student_nudge_completed', {
-	      studentId: student.id,
-	      nudge_id: nudge.id,
-	      type: nudge.type,
-	      detail: nudge.detail,
-	    });
-	    handleDismissNudge(nudge, 'cta');
-	    if (nudge.targetUrl) {
-	      window.open(nudge.targetUrl, '_blank', 'noopener');
-	    } else {
+  const handleNudgeCta = (nudge: StudentNudge) => {
+    trackEvent('student_nudge_cta', {
+      studentId: student.id,
+      nudge_id: nudge.id,
+      type: nudge.type,
+      detail: nudge.detail,
+    });
+    trackEvent('student_nudge_completed', {
+      studentId: student.id,
+      nudge_id: nudge.id,
+      type: nudge.type,
+      detail: nudge.detail,
+    });
+    handleDismissNudge(nudge, 'cta');
+    if (nudge.targetUrl) {
+      window.open(nudge.targetUrl, '_blank', 'noopener');
+    } else {
       setActiveTab('today');
     }
   };
@@ -1601,36 +1629,6 @@ const StudentDashboard: React.FC = () => {
     });
   }, [contextualNudge, student?.id]);
 
-  const weeklyPlanTargets = useMemo(() => {
-    const lessonBase = parentGoals?.weeklyLessons ?? 5;
-    const minutesBase = parentGoals?.practiceMinutes ?? 60;
-    const factor =
-      parentGoalActive || !lessonBase
-        ? 1
-        : weeklyPlanIntensity === 'light'
-          ? 0.8
-          : weeklyPlanIntensity === 'challenge'
-            ? 1.2
-            : 1;
-    return {
-      lessons: Math.max(1, Math.round(lessonBase * factor)),
-      minutes: Math.max(15, Math.round(minutesBase * factor)),
-    };
-  }, [parentGoalActive, parentGoals?.practiceMinutes, parentGoals?.weeklyLessons, weeklyPlanIntensity]);
-
-  const weeklyPlanExpectedLessons = useMemo(() => {
-    const today = new Date();
-    const dayOfWeek = ((today.getDay() + 6) % 7) + 1; // Monday=1
-    return Math.ceil((weeklyPlanTargets.lessons * dayOfWeek) / 7);
-  }, [weeklyPlanTargets.lessons]);
-
-  const weeklyPlanStatus = useMemo(() => {
-    if (!weeklyPlanTargets.lessons) return 'on_track';
-    if (lessonsThisWeek >= weeklyPlanExpectedLessons) return 'on_track';
-    if (lessonsThisWeek >= weeklyPlanExpectedLessons - 1) return 'almost';
-    return 'behind';
-  }, [lessonsThisWeek, weeklyPlanExpectedLessons, weeklyPlanTargets.lessons]);
-
   const dismissCelebration = (celebration: CelebrationMoment, reason: 'auto' | 'close' | 'cta') => {
     const nextQueue = celebrationQueue.slice(1);
     setCelebrationQueue(nextQueue);
@@ -1972,9 +1970,121 @@ const StudentDashboard: React.FC = () => {
       dismissCelebration(activeCelebration, 'cta');
     }
     if (lesson.launchUrl) {
+      if (lesson.launchUrl.startsWith('/')) {
+        navigate(lesson.launchUrl);
+        return;
+      }
       window.open(lesson.launchUrl, '_blank', 'noopener');
+      return;
     }
-    setActiveView('lesson');
+    const numericId = Number.parseInt(lesson.id, 10);
+    if (!Number.isNaN(numericId)) {
+      navigate(`/lesson/${numericId}`);
+    }
+  };
+
+  const renderCelebration = () => {
+    if (!activeCelebration) return null;
+    const isMission = activeCelebration.kind === 'mission';
+    const isAvatar = activeCelebration.kind === 'avatar';
+    const isLevel = activeCelebration.kind === 'level';
+    const isStreak = activeCelebration.kind === 'streak';
+    const icon = isLevel ? (
+      <Star className="h-5 w-5 text-amber-500" />
+    ) : isStreak ? (
+      <Flame className="h-5 w-5 text-orange-500" />
+    ) : isAvatar ? (
+      <Palette className="h-5 w-5 text-brand-violet" />
+    ) : (
+      <Trophy className="h-5 w-5 text-emerald-500" />
+    );
+    const primaryLabel =
+      recommendedLesson && (isLevel || isStreak || isMission)
+        ? 'Start next lesson'
+        : isAvatar
+          ? 'Change avatar'
+          : 'View my journey';
+    const onPrimaryClick = () => {
+      trackEvent('celebration_cta_clicked', {
+        kind: activeCelebration.kind,
+        id: activeCelebration.id,
+        cta:
+          recommendedLesson && (isLevel || isStreak || isMission)
+            ? 'start_lesson'
+            : isAvatar
+              ? 'avatar'
+              : 'journey',
+      });
+      if (recommendedLesson && (isLevel || isStreak || isMission)) {
+        handleStartLesson(recommendedLesson);
+      } else if (isAvatar) {
+        document.getElementById('avatar-lab')?.scrollIntoView({ behavior: 'smooth' });
+        dismissCelebration(activeCelebration, 'cta');
+      } else {
+        setActiveTab('journey');
+        dismissCelebration(activeCelebration, 'cta');
+      }
+    };
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        className="mb-4 rounded-2xl border border-amber-100 bg-gradient-to-r from-amber-50 via-white to-emerald-50 p-4 shadow-sm"
+      >
+        <div className="flex items-start gap-3">
+          <div className="mt-1">{icon}</div>
+          <div className="flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{activeCelebration.title}</p>
+                <p className="text-sm text-gray-700">{activeCelebration.description}</p>
+                {activeCelebration.prompt && (
+                  <p className="text-xs text-gray-600 mt-1">{activeCelebration.prompt}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => dismissCelebration(activeCelebration, 'close')}
+                className="text-gray-500 hover:text-gray-700 focus-ring rounded-full p-1"
+                aria-label="Dismiss celebration"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onPrimaryClick}
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-blue/90 focus-ring"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>{primaryLabel}</span>
+              </button>
+              {isAvatar && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackEvent('celebration_cta_clicked', {
+                      kind: activeCelebration.kind,
+                      id: activeCelebration.id,
+                      cta: 'avatar',
+                    });
+                    document.getElementById('avatar-lab')?.scrollIntoView({ behavior: 'smooth' });
+                    dismissCelebration(activeCelebration, 'cta');
+                  }}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold text-gray-700 hover:border-brand-violet/60 focus-ring"
+                >
+                  <Palette className="h-4 w-4 text-brand-violet" />
+                  <span>Open Avatar Lab</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
   };
 
   const renderDailyPlanSection = (sectionId: string, extraClasses = '') => (
@@ -2488,16 +2598,16 @@ const StudentDashboard: React.FC = () => {
                     </button>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
-	                    {tutorPromptChips.map((chip) => (
-	                      <button
-	                        key={chip}
-	                        type="button"
-	                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
-	                        className="min-h-[44px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
-	                      >
-	                        {chip}
-	                      </button>
-	                    ))}
+                    {tutorPromptChips.map((chip) => (
+                      <button
+                        key={chip}
+                        type="button"
+                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
+                        className="min-h-[44px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
+                      >
+                        {chip}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -2540,7 +2650,7 @@ const StudentDashboard: React.FC = () => {
                     onClick={() => setActiveTab('journey')}
                     className="inline-flex items-center space-x-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl font-semibold transition-colors focus-ring"
                   >
-                    <Map className="h-4 w-4" />
+                    <MapIcon className="h-4 w-4" />
                     <span>View My Journey</span>
                   </button>
                 </div>
@@ -3108,7 +3218,7 @@ const StudentDashboard: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                  <Map className="h-4 w-4" />
+                  <MapIcon className="h-4 w-4" />
                   <span>Missions</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -5091,89 +5201,3 @@ const StudentDashboard: React.FC = () => {
 };
 
 export default StudentDashboard;
-  const renderCelebration = () => {
-    if (!activeCelebration) return null;
-    const isMission = activeCelebration.kind === 'mission';
-    const isAvatar = activeCelebration.kind === 'avatar';
-    const isLevel = activeCelebration.kind === 'level';
-    const isStreak = activeCelebration.kind === 'streak';
-    const icon = isLevel ? <Star className="h-5 w-5 text-amber-500" /> : isStreak ? <Flame className="h-5 w-5 text-orange-500" /> : isAvatar ? <Palette className="h-5 w-5 text-brand-violet" /> : <Trophy className="h-5 w-5 text-emerald-500" />;
-    const primaryLabel =
-      recommendedLesson && (isLevel || isStreak || isMission)
-        ? 'Start next lesson'
-        : isAvatar
-          ? 'Change avatar'
-          : 'View my journey';
-    const onPrimaryClick = () => {
-      trackEvent('celebration_cta_clicked', {
-        kind: activeCelebration.kind,
-        id: activeCelebration.id,
-        cta: recommendedLesson && (isLevel || isStreak || isMission) ? 'start_lesson' : isAvatar ? 'avatar' : 'journey',
-      });
-      if (recommendedLesson && (isLevel || isStreak || isMission)) {
-        handleStartLesson(recommendedLesson);
-      } else if (isAvatar) {
-        document.getElementById('avatar-lab')?.scrollIntoView({ behavior: 'smooth' });
-        dismissCelebration(activeCelebration, 'cta');
-      } else {
-        setActiveTab('journey');
-        dismissCelebration(activeCelebration, 'cta');
-      }
-    };
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        className="mb-4 rounded-2xl border border-amber-100 bg-gradient-to-r from-amber-50 via-white to-emerald-50 p-4 shadow-sm"
-      >
-        <div className="flex items-start gap-3">
-          <div className="mt-1">{icon}</div>
-          <div className="flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="text-sm font-semibold text-gray-900">{activeCelebration.title}</p>
-                <p className="text-sm text-gray-700">{activeCelebration.description}</p>
-                {activeCelebration.prompt && (
-                  <p className="text-xs text-gray-600 mt-1">{activeCelebration.prompt}</p>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => dismissCelebration(activeCelebration, 'close')}
-                className="text-gray-500 hover:text-gray-700 focus-ring rounded-full p-1"
-                aria-label="Dismiss celebration"
-              >
-                X
-              </button>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={onPrimaryClick}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-blue/90 focus-ring"
-              >
-                <Sparkles className="h-4 w-4" />
-                <span>{primaryLabel}</span>
-              </button>
-              {isAvatar && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    trackEvent('celebration_cta_clicked', { kind: activeCelebration.kind, id: activeCelebration.id, cta: 'avatar' });
-                    document.getElementById('avatar-lab')?.scrollIntoView({ behavior: 'smooth' });
-                    dismissCelebration(activeCelebration, 'cta');
-                  }}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold text-gray-700 hover:border-brand-violet/60 focus-ring"
-                >
-                  <Palette className="h-4 w-4 text-brand-violet" />
-                  <span>Open Avatar Lab</span>
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };

@@ -6,7 +6,7 @@ test.describe('core product journeys', () => {
   test.skip(!shouldRun, 'E2E disabled unless RUN_E2E or E2E_BASE_URL is set');
   test('signup/login entry point is reachable', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('button', { name: /start learning/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /start learning/i }).first()).toBeVisible();
   });
 
   test('student experience routes respond', async ({ page }) => {
@@ -22,7 +22,7 @@ test.describe('core product journeys', () => {
     const parentResponse = await page.goto('/parent');
     expect(parentResponse?.status()).toBeLessThan(500);
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByText(/start learning/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /start learning/i }).first()).toBeVisible();
   });
 
   test('admin import console route is protected', async ({ page }) => {
