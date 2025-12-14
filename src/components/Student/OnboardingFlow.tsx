@@ -129,9 +129,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               ? 'K-2'
               : student.grade <= 5
                 ? '3-5'
-              : student.grade <= 8
-                ? '6-8'
-                : '9-12'
+                : student.grade <= 8
+                  ? '6-8'
+                  : '9-12'
             : '6-8';
         setGradeBand(bandFromStudent);
         setAvatars(
@@ -280,7 +280,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       });
     } catch (respError) {
       console.error('[Onboarding] save response failed', respError);
-      setError('Saving your answer failed. Please try again.');
+      setError("We couldn't save that one. Let's try again!");
     } finally {
       setSaving(false);
     }
@@ -331,9 +331,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         {[1, 2, 3].map((value) => (
           <div
             key={value}
-            className={`h-2 w-16 rounded-full ${
-              step >= value ? 'bg-gradient-to-r from-sky-500 to-emerald-500' : 'bg-slate-200'
-            }`}
+            className={`h-2 w-16 rounded-full ${step >= value ? 'bg-gradient-to-r from-sky-500 to-emerald-500' : 'bg-slate-200'
+              }`}
           />
         ))}
       </div>
@@ -366,11 +365,10 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               <button
                 key={band}
                 onClick={() => setGradeBand(band)}
-                className={`rounded-xl px-3 py-2 border ${
-                  gradeBand === band
+                className={`rounded-xl px-3 py-2 border ${gradeBand === band
                     ? 'border-sky-500 bg-sky-50 text-sky-800 font-semibold'
                     : 'border-slate-200 text-slate-700 hover:border-slate-300'
-                }`}
+                  }`}
               >
                 {band}
               </button>
@@ -386,9 +384,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         </div>
         <button
           onClick={() => setOptInAi((prev) => !prev)}
-          className={`w-14 h-8 rounded-full p-1 transition ${
-            optInAi ? 'bg-emerald-500' : 'bg-slate-300'
-          }`}
+          className={`w-14 h-8 rounded-full p-1 transition ${optInAi ? 'bg-emerald-500' : 'bg-slate-300'
+            }`}
         >
           <div
             className={`h-6 w-6 bg-white rounded-full shadow-sm transform transition ${optInAi ? 'translate-x-6' : ''}`}
@@ -429,11 +426,10 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
                   key={avatar.id}
                   onClick={() => setSelectedAvatar(avatar.id)}
                   aria-pressed={isSelected}
-                  className={`rounded-xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-sky-400 ${
-                    isSelected
+                  className={`rounded-xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-sky-400 ${isSelected
                       ? 'border-sky-500 bg-sky-50 shadow-sm'
                       : 'border-slate-200 hover:border-slate-300'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start justify-between">
                     <div
@@ -469,11 +465,10 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               <button
                 key={persona.id}
                 onClick={() => setSelectedPersona(persona.id)}
-                className={`rounded-xl border px-3 py-3 text-left ${
-                  selectedPersona === persona.id
+                className={`rounded-xl border px-3 py-3 text-left ${selectedPersona === persona.id
                     ? 'border-emerald-500 bg-emerald-50 shadow-sm'
                     : 'border-slate-200 hover:border-slate-300'
-                }`}
+                  }`}
               >
                 <p className="font-semibold text-slate-900">{persona.name}</p>
                 <p className="text-xs text-slate-500 capitalize">{persona.tone ?? 'Supportive'} tone</p>
