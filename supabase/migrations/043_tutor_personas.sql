@@ -1,4 +1,4 @@
--- 011_tutor_personas.sql
+-- 043_tutor_personas.sql
 -- Add columns for tutor personalization and distinct student avatar choices.
 
 begin;

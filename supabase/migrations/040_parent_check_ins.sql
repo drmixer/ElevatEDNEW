@@ -28,35 +28,71 @@ create index if not exists parent_check_ins_created_at_idx on public.parent_chec
 
 alter table public.parent_check_ins enable row level security;
 
--- Parents can read their own check-ins
-create policy "parents_read_own_check_ins"
-on public.parent_check_ins
-for select
-using (parent_id = auth.uid());
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'parent_check_ins'
+      and policyname = 'parents_read_own_check_ins'
+  ) then
+    execute 'create policy "parents_read_own_check_ins" on public.parent_check_ins for select using (parent_id = auth.uid())';
+  end if;
+end
+$$;
 
--- Students can read their own incoming check-ins
-create policy "students_read_own_check_ins"
-on public.parent_check_ins
-for select
-using (student_id = auth.uid());
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'parent_check_ins'
+      and policyname = 'students_read_own_check_ins'
+  ) then
+    execute 'create policy "students_read_own_check_ins" on public.parent_check_ins for select using (student_id = auth.uid())';
+  end if;
+end
+$$;
 
--- Parents can create check-ins for their linked students
-create policy "parents_create_check_ins_for_child"
-on public.parent_check_ins
-for insert
-with check (
-  parent_id = auth.uid()
-  and exists (
-    select 1 from public.student_profiles sp
-    where sp.id = student_id and sp.parent_id = auth.uid()
-  )
-);
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'parent_check_ins'
+      and policyname = 'parents_create_check_ins_for_child'
+  ) then
+    execute $policy$
+      create policy "parents_create_check_ins_for_child"
+      on public.parent_check_ins
+      for insert
+      with check (
+        parent_id = auth.uid()
+        and exists (
+          select 1 from public.student_profiles sp
+          where sp.id = student_id and sp.parent_id = auth.uid()
+        )
+      )
+    $policy$;
+  end if;
+end
+$$;
 
--- Students can update status fields when they receive/acknowledge
-create policy "students_update_check_ins"
-on public.parent_check_ins
-for update
-using (student_id = auth.uid())
-with check (student_id = auth.uid());
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'parent_check_ins'
+      and policyname = 'students_update_check_ins'
+  ) then
+    execute 'create policy "students_update_check_ins" on public.parent_check_ins for update using (student_id = auth.uid()) with check (student_id = auth.uid())';
+  end if;
+end
+$$;
 
 grant select, insert, update on public.parent_check_ins to authenticated;

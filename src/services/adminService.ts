@@ -93,12 +93,18 @@ export type OpsMetricsSnapshot = {
     | 'path_progress'
     | 'xp_rate'
     | 'api_failure'
-    | 'api_slow',
+    | 'api_slow'
+    | 'placement_selected'
+    | 'placement_content_invalid',
     number
   >;
   topSafetyReasons: Array<{ label: string; count: number }>;
   topPlanLimitReasons: Array<{ label: string; count: number }>;
   apiFailuresByRoute: Array<{ label: string; count: number }>;
+  pathEventsByLabel: Array<{ label: string; count: number }>;
+  xpEventsBySource: Array<{ label: string; count: number }>;
+  placementSelectionsByAssessment: Array<{ label: string; count: number }>;
+  placementInvalidByReason: Array<{ label: string; count: number }>;
   recent: Array<{
     type: string;
     reason?: string | null;
@@ -106,6 +112,9 @@ export type OpsMetricsSnapshot = {
     status?: number | null;
     durationMs?: number | null;
     plan?: string | null;
+    value?: number | null;
+    label?: string | null;
+    metadata?: Record<string, unknown> | null;
     timestamp: number;
   }>;
 };

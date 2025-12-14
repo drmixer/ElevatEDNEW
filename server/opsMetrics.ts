@@ -7,7 +7,9 @@ type OpsEventType =
   | 'path_progress'
   | 'xp_rate'
   | 'api_failure'
-  | 'api_slow';
+  | 'api_slow'
+  | 'placement_selected'
+  | 'placement_content_invalid';
 
 export type OpsEvent = {
   type: OpsEventType;
@@ -18,6 +20,7 @@ export type OpsEvent = {
   plan?: string | null;
   value?: number | null;
   label?: string | null;
+  metadata?: Record<string, unknown> | null;
   timestamp: number;
 };
 
@@ -57,6 +60,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     xp_rate: 0,
     api_failure: 0,
     api_slow: 0,
+    placement_selected: 0,
+    placement_content_invalid: 0,
   };
 
   const safetyReasons = new Map<string, number>();
@@ -64,6 +69,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
   const apiRoutes = new Map<string, number>();
   const pathLabels = new Map<string, number>();
   const xpSources = new Map<string, number>();
+  const placementAssessments = new Map<string, number>();
+  const placementInvalidReasons = new Map<string, number>();
 
   windowEvents.forEach((event) => {
     totals[event.type] += 1;
@@ -83,6 +90,13 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     if (event.type === 'xp_rate' && event.label) {
       xpSources.set(event.label, (xpSources.get(event.label) ?? 0) + 1);
     }
+    if (event.type === 'placement_selected' && event.label) {
+      placementAssessments.set(event.label, (placementAssessments.get(event.label) ?? 0) + 1);
+    }
+    if (event.type === 'placement_content_invalid') {
+      const reason = event.reason ?? 'unknown';
+      placementInvalidReasons.set(reason, (placementInvalidReasons.get(reason) ?? 0) + 1);
+    }
   });
 
   const topFromMap = (map: Map<string, number>) =>
@@ -99,6 +113,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     apiFailuresByRoute: topFromMap(apiRoutes),
     pathEventsByLabel: topFromMap(pathLabels),
     xpEventsBySource: topFromMap(xpSources),
+    placementSelectionsByAssessment: topFromMap(placementAssessments),
+    placementInvalidByReason: topFromMap(placementInvalidReasons),
     recent: events.slice(-30).reverse(),
   };
 };

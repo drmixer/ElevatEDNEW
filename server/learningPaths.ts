@@ -4,7 +4,10 @@ import type { StudentPreferences } from './personalization.js';
 import { getStudentPreferences, updateStudentPreferences } from './personalization.js';
 import { getRuntimeConfig } from './config.js';
 import { recordOpsEvent } from './opsMetrics.js';
-import { captureServerException } from './monitoring.js';
+import { captureServerException, raiseAlert } from './monitoring.js';
+import { HttpError } from './httpError.js';
+import { selectPlacementAssessmentId } from './placementSelection.js';
+import { validatePlacementQuestions } from './placementValidation.js';
 
 type PathBuildOptions = {
   gradeBand?: string | null;
@@ -270,43 +273,31 @@ export const ensureStudentProfileProvisioned = async (
 const findPlacementAssessmentId = async (
   supabase: SupabaseClient,
   targetGradeBand: string,
+  goalFocus?: string | null,
 ): Promise<number | null> => {
   const { data, error } = await supabase
     .from('assessments')
-    .select('id, metadata')
+    .select('id, module_id, metadata, created_at')
+    .is('module_id', null)
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .limit(200);
 
   if (error) {
     throw new Error(`Unable to read assessments: ${error.message}`);
   }
 
-  const candidates = (data ?? []).filter((row) => {
-    const metadata = (row as Record<string, unknown>).metadata as Record<string, unknown> | null;
-    if (!metadata) return false;
-    const purpose = (metadata.purpose ?? metadata.type ?? metadata.kind ?? '') as string;
-    const normalized = purpose.toLowerCase();
-    if (['baseline', 'diagnostic', 'placement'].includes(normalized)) {
-      const band = (metadata.grade_band ?? metadata.gradeBand ?? metadata.grade ?? '') as string;
-      return !band || band.toLowerCase() === targetGradeBand.toLowerCase();
-    }
-    return false;
+  const id = selectPlacementAssessmentId((data ?? []) as Array<{ id: number; module_id: number | null; created_at?: string | null; metadata: Record<string, unknown> | null }>, {
+    targetGradeBand,
+    goalFocus,
   });
-
-  if (candidates.length > 0) {
-    return (candidates[0] as Record<string, unknown>).id as number;
-  }
-
-  if ((data ?? []).length > 0) {
-    return (data?.[0] as Record<string, unknown>).id as number;
-  }
-
-  return null;
+  return id;
 };
 
 const loadPlacementQuestions = async (
   supabase: SupabaseClient,
   assessmentId: number,
-): Promise<PlacementQuestion[]> => {
+): Promise<{ questions: PlacementQuestion[]; validation: { invalidReasons: Array<{ bankQuestionId: number; reason: string }>; filteredOutCount: number } }> => {
   const { data: sectionRows, error: sectionError } = await supabase
     .from('assessment_sections')
     .select('id, section_order')
@@ -317,9 +308,14 @@ const loadPlacementQuestions = async (
     throw new Error(`Unable to load assessment sections: ${sectionError.message}`);
   }
 
+  const sectionOrderById = new Map<number, number>();
+  (sectionRows ?? []).forEach((row) => {
+    sectionOrderById.set(row.id as number, (row.section_order as number | null | undefined) ?? 0);
+  });
+
   const sectionIds = (sectionRows ?? []).map((section) => section.id as number);
   if (!sectionIds.length) {
-    throw new Error('Assessment is missing sections.');
+    throw new HttpError(409, 'Placement assessment is missing sections.', 'placement_content_missing');
   }
 
   const { data: links, error: linkError } = await supabase
@@ -342,7 +338,7 @@ const loadPlacementQuestions = async (
 
   const questionIds = Array.from(new Set(questionLinks.map((link) => link.question_id)));
   if (!questionIds.length) {
-    throw new Error('Assessment does not have any questions configured.');
+    throw new HttpError(409, 'Placement assessment has no questions configured.', 'placement_content_missing');
   }
 
   const [questionBankResult, optionsResult, skillsResult] = await Promise.all([
@@ -429,10 +425,17 @@ const loadPlacementQuestions = async (
     .sort((a, b) => {
       const aLink = questionLinks.find((link) => link.question_id === a.bankQuestionId);
       const bLink = questionLinks.find((link) => link.question_id === b.bankQuestionId);
+      const aSectionOrder = aLink ? (sectionOrderById.get(aLink.section_id) ?? 0) : 0;
+      const bSectionOrder = bLink ? (sectionOrderById.get(bLink.section_id) ?? 0) : 0;
+      if (aSectionOrder !== bSectionOrder) return aSectionOrder - bSectionOrder;
       return (aLink?.question_order ?? 0) - (bLink?.question_order ?? 0);
     });
 
-  return questions;
+  const validation = validatePlacementQuestions(questions, { assessmentId });
+  return {
+    questions: validation.questions as PlacementQuestion[],
+    validation: { invalidReasons: validation.invalidReasons, filteredOutCount: validation.filteredOutCount },
+  };
 };
 
 export const startPlacementAssessment = async (
@@ -459,9 +462,28 @@ export const startPlacementAssessment = async (
   const resolvedGradeBand = deriveGradeBand(profile.grade_level, options?.gradeBand ?? profile.grade_band);
 
   const contentClient = options?.serviceSupabase ?? supabase;
-  const assessmentId = await findPlacementAssessmentId(contentClient, resolvedGradeBand);
+  const assessmentId = await findPlacementAssessmentId(
+    contentClient,
+    resolvedGradeBand,
+    profile.preferences.goal_focus ?? null,
+  );
   if (!assessmentId) {
-    throw new Error('No diagnostic assessment available.');
+    throw new HttpError(
+      404,
+      'No placement assessment is available for your grade band yet.',
+      'placement_assessment_missing',
+      { gradeBand: resolvedGradeBand },
+    );
+  }
+
+  const { data: assessmentSnapshot, error: assessmentSnapshotError } = await contentClient
+    .from('assessments')
+    .select('id, module_id, metadata')
+    .eq('id', assessmentId)
+    .maybeSingle();
+
+  if (assessmentSnapshotError) {
+    console.warn('[placement] Unable to load assessment metadata snapshot', assessmentSnapshotError);
   }
 
   const { data: lastAttempt, error: lastAttemptError } = await supabase
@@ -503,7 +525,50 @@ export const startPlacementAssessment = async (
     attemptId = attempt.id as number;
   }
 
-  const questions = await loadPlacementQuestions(contentClient, assessmentId);
+  let questions: PlacementQuestion[] = [];
+  let validationSnapshot: { invalidReasons: Array<{ bankQuestionId: number; reason: string }>; filteredOutCount: number } | null =
+    null;
+  try {
+    const loaded = await loadPlacementQuestions(contentClient, assessmentId);
+    questions = loaded.questions;
+    validationSnapshot = loaded.validation;
+  } catch (error) {
+    if (error instanceof HttpError && error.code === 'placement_content_invalid') {
+      recordOpsEvent({
+        type: 'placement_content_invalid',
+        label: String(assessmentId),
+        reason: error.code,
+        metadata: {
+          assessmentId,
+          gradeBand: resolvedGradeBand,
+          moduleId: (assessmentSnapshot?.module_id as number | null | undefined) ?? null,
+          purpose: ((assessmentSnapshot?.metadata as Record<string, unknown> | null | undefined)?.purpose as string | undefined) ?? null,
+          details: error.details ?? null,
+        },
+      });
+      raiseAlert('placement_zero_valid_questions', {
+        assessmentId,
+        gradeBand: resolvedGradeBand,
+        moduleId: (assessmentSnapshot?.module_id as number | null | undefined) ?? null,
+        purpose: ((assessmentSnapshot?.metadata as Record<string, unknown> | null | undefined)?.purpose as string | undefined) ?? null,
+      });
+    }
+    throw error;
+  }
+
+  recordOpsEvent({
+    type: 'placement_selected',
+    label: String(assessmentId),
+    metadata: {
+      assessmentId,
+      gradeBand: resolvedGradeBand,
+      moduleId: (assessmentSnapshot?.module_id as number | null | undefined) ?? null,
+      purpose: ((assessmentSnapshot?.metadata as Record<string, unknown> | null | undefined)?.purpose as string | undefined) ?? null,
+      totalQuestions: questions.length,
+      skippedCount: validationSnapshot?.filteredOutCount ?? null,
+      invalidCount: validationSnapshot?.invalidReasons.length ?? null,
+    },
+  });
 
   const { data: responseRows, error: responseError } = await supabase
     .from('student_assessment_responses')
@@ -721,7 +786,7 @@ export const submitPlacementAssessment = async (
   const resolvedGradeBand = deriveGradeBand(profile.grade_level, payload.gradeBand ?? profile.grade_band);
 
   const contentClient = serviceSupabase ?? supabase;
-  const questions = await loadPlacementQuestions(contentClient, payload.assessmentId);
+  const { questions } = await loadPlacementQuestions(contentClient, payload.assessmentId);
   const questionMap = new Map<number, PlacementQuestion>();
   questions.forEach((question) => questionMap.set(question.bankQuestionId, question));
 
@@ -1488,7 +1553,7 @@ export const savePlacementResponse = async (
   serviceSupabase?: SupabaseClient | null,
 ): Promise<{ isCorrect: boolean }> => {
   const contentClient = serviceSupabase ?? supabase;
-  const questions = await loadPlacementQuestions(contentClient, payload.assessmentId);
+  const { questions } = await loadPlacementQuestions(contentClient, payload.assessmentId);
   const question = questions.find((q) => q.bankQuestionId === payload.bankQuestionId);
   if (!question) {
     throw new Error('Question not found for placement assessment.');
