@@ -366,8 +366,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
                 key={band}
                 onClick={() => setGradeBand(band)}
                 className={`rounded-xl px-3 py-2 border ${gradeBand === band
-                    ? 'border-sky-500 bg-sky-50 text-sky-800 font-semibold'
-                    : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                  ? 'border-sky-500 bg-sky-50 text-sky-800 font-semibold'
+                  : 'border-slate-200 text-slate-700 hover:border-slate-300'
                   }`}
               >
                 {band}
@@ -427,8 +427,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
                   onClick={() => setSelectedAvatar(avatar.id)}
                   aria-pressed={isSelected}
                   className={`rounded-xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-sky-400 ${isSelected
-                      ? 'border-sky-500 bg-sky-50 shadow-sm'
-                      : 'border-slate-200 hover:border-slate-300'
+                    ? 'border-sky-500 bg-sky-50 shadow-sm'
+                    : 'border-slate-200 hover:border-slate-300'
                     }`}
                 >
                   <div className="flex items-start justify-between">
@@ -466,8 +466,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
                 key={persona.id}
                 onClick={() => setSelectedPersona(persona.id)}
                 className={`rounded-xl border px-3 py-3 text-left ${selectedPersona === persona.id
-                    ? 'border-emerald-500 bg-emerald-50 shadow-sm'
-                    : 'border-slate-200 hover:border-slate-300'
+                  ? 'border-emerald-500 bg-emerald-50 shadow-sm'
+                  : 'border-slate-200 hover:border-slate-300'
                   }`}
               >
                 <p className="font-semibold text-slate-900">{persona.name}</p>
@@ -497,7 +497,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
             </>
           ) : (
             <>
-              Continue to placement
+              Continue to check-in
               <ArrowRight className="h-4 w-4 ml-2" />
             </>
           )}
@@ -511,8 +511,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       {renderStepHeader()}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-sm text-slate-600">Placement assessment</p>
-          <p className="text-xs text-slate-500">You can pause anytime — we save your progress.</p>
+          <p className="text-sm text-slate-600">Quick learning check-in</p>
+          <p className="text-xs text-slate-500">No pressure — just a few questions to see where you are.</p>
         </div>
         <div className="flex items-center space-x-2 text-sm text-slate-700">
           <Brain className="h-4 w-4 text-sky-600" />
@@ -521,8 +521,8 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       </div>
       {!placementItems.length ? (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-          <p className="text-slate-700 font-semibold mb-2">Ready to launch your placement?</p>
-          <p className="text-sm text-slate-500 mb-4">We&apos;ll tailor questions to {gradeBand} and build your path.</p>
+          <p className="text-slate-700 font-semibold mb-2">Ready to see where you are?</p>
+          <p className="text-sm text-slate-500 mb-4">We&apos;ll ask a few questions to help us build your learning path. Take your time!</p>
           <button
             onClick={handleStartPlacement}
             disabled={loading}
@@ -535,7 +535,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               </>
             ) : (
               <>
-                Start assessment
+                Let's go!
                 <Play className="h-4 w-4 ml-2" />
               </>
             )}
@@ -545,7 +545,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         <div className="bg-gradient-to-br from-slate-50 to-white border border-slate-100 rounded-2xl p-5">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs uppercase tracking-wide text-slate-500">Question {currentIndex + 1}</p>
+              <p className="text-xs uppercase tracking-wide text-slate-500">Let's see... ({currentIndex + 1} of {placementItems.length})</p>
               <h3 className="text-lg font-semibold text-slate-900 mt-1">{currentQuestion?.prompt}</h3>
             </div>
             <div className="text-xs text-slate-500">{placementProgressPct}% complete</div>
@@ -562,9 +562,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               </button>
             ))}
           </div>
-          <div className="mt-3 text-xs text-slate-500">
-            Strand: {currentQuestion?.strand ?? 'General'} · Difficulty {currentQuestion?.difficulty ?? 3}/10
-          </div>
+          {/* Strand/difficulty hidden from students - they don't need to see this */}
         </div>
       )}
       <div className="mt-6 flex justify-between items-center">
@@ -587,36 +585,37 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <CheckCircle2 className="h-7 w-7" />
         </div>
         <div>
-          <p className="text-sm text-emerald-700 font-semibold">Baseline ready</p>
-          <h3 className="text-xl font-bold text-slate-900">Your learning plan is set</h3>
+          <p className="text-sm text-emerald-700 font-semibold">You did it! 🎉</p>
+          <h3 className="text-xl font-bold text-slate-900">You&apos;re all set to start learning</h3>
         </div>
       </div>
       <p className="text-sm text-slate-600">
-        Great work! We saved your preferences and built a baseline plan tuned to your answers.
+        Nice work, {fullName || 'learner'}! We&apos;ve created a path just for you based on your answers.
+        Remember: there&apos;s no rush — learn at your own pace, and your tutor is always here to help.
       </p>
       <UpNextList entries={summarizePath(pathEntries)} />
       <div className="mt-6">
         <div className="flex items-center space-x-2 mb-3">
           <Brain className="h-4 w-4 text-sky-500" />
-          <p className="text-sm font-semibold text-slate-800">Tutor mini-guide</p>
+          <p className="text-sm font-semibold text-slate-800">Quick tips for your tutor</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
-            <p className="text-sm font-semibold text-slate-900">Start with a hint</p>
+            <p className="text-sm font-semibold text-slate-900">Ask for hints first</p>
             <p className="text-xs text-slate-600">
-              Ask your tutor to “show a hint” or “break it down” before jumping to answers.
+              Try &quot;give me a hint&quot; or &quot;break it down&quot; — your tutor will guide you step by step.
             </p>
           </div>
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
-            <p className="text-sm font-semibold text-slate-900">Explain another way</p>
+            <p className="text-sm font-semibold text-slate-900">Try a different way</p>
             <p className="text-xs text-slate-600">
-              If something feels confusing, try “explain another way” or “give a simpler example.”
+              Stuck? Ask &quot;explain it differently&quot; or &quot;show me an example&quot; — there&apos;s always another approach.
             </p>
           </div>
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
-            <p className="text-sm font-semibold text-slate-900">Stay honest</p>
+            <p className="text-sm font-semibold text-slate-900">Take breaks</p>
             <p className="text-xs text-slate-600">
-              Your tutor won’t help you cheat — it’s here to build understanding and confidence.
+              Learning works best in short bursts. It&apos;s okay to pause and come back later!
             </p>
           </div>
         </div>
@@ -626,7 +625,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           onClick={() => onComplete?.({ pathEntries })}
           className="inline-flex items-center bg-gradient-to-r from-sky-500 to-emerald-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:shadow-md transition"
         >
-          Go to dashboard
+          Let&apos;s start learning!
           <ArrowRight className="h-4 w-4 ml-2" />
         </button>
       </div>
@@ -645,7 +644,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       <div className="max-w-5xl w-full">
         <div className="mb-4 flex items-center space-x-2 text-slate-600 text-sm">
           <Sparkles className="h-4 w-4 text-amber-500" />
-          <span>Placement onboarding</span>
+          <span>Getting to know you</span>
         </div>
         <AnimatePresence mode="wait">
           {renderContent()}
