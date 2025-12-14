@@ -1,4 +1,4 @@
--- 017_student_parent_goals.sql
+-- 044_student_parent_goals.sql
 -- Expose parent-set weekly goals to students via a security definer helper.
 
 begin;

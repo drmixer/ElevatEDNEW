@@ -40,6 +40,17 @@ const gradeBands = ['K-2', '3-5', '6-8', '9-12'];
 
 const summarizePath = (entries: StudentPathEntry[]): StudentPathEntry[] => entries.slice(0, 4);
 
+const defaultAvatarPalette = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+
+const parseAvatarPalette = (metadata?: Record<string, unknown> | null) => {
+  const palette = (metadata?.palette as { background?: string; accent?: string; text?: string } | undefined) ?? undefined;
+  return {
+    background: palette?.background ?? defaultAvatarPalette.background,
+    accent: palette?.accent ?? defaultAvatarPalette.accent,
+    text: palette?.text ?? defaultAvatarPalette.text,
+  };
+};
+
 const UpNextList: React.FC<{ entries: StudentPathEntry[] }> = ({ entries }) => {
   if (!entries.length) return null;
   return (
@@ -90,9 +101,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const [gradeBand, setGradeBand] = useState<string>('6-8');
   const [optInAi, setOptInAi] = useState<boolean>(true);
 
-  const [avatars, setAvatars] = useState<Array<{ id: string; name: string; metadata?: Record<string, unknown> | null }>>(
-    [],
-  );
+  const [avatars, setAvatars] = useState<
+    Array<{ id: string; name: string; image_url: string | null; metadata?: Record<string, unknown> | null }>
+  >([]);
   const [personas, setPersonas] = useState<Array<{ id: string; name: string; tone?: string | null }>>([]);
   const [selectedAvatar, setSelectedAvatar] = useState<string>('avatar-starter');
   const [selectedPersona, setSelectedPersona] = useState<string | null>(null);
@@ -123,7 +134,14 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
                 : '9-12'
             : '6-8';
         setGradeBand(bandFromStudent);
-        setAvatars(avatarList.map((avatar) => ({ id: avatar.id, name: avatar.name, metadata: avatar.metadata })));
+        setAvatars(
+          avatarList.map((avatar) => ({
+            id: avatar.id,
+            name: avatar.name,
+            image_url: avatar.image_url,
+            metadata: avatar.metadata,
+          })),
+        );
         setPersonas(personaList.map((persona) => ({ id: persona.id, name: persona.name, tone: persona.tone })));
         if (path?.entries?.length) {
           setPathEntries(path.entries as StudentPathEntry[]);
@@ -212,7 +230,17 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       });
     } catch (err) {
       console.error('[Onboarding] placement start failed', err);
-      setError('We could not start your placement assessment. Please try again.');
+      const message = err instanceof Error ? err.message : '';
+      const normalized = message.toLowerCase();
+      if (normalized.includes('missing sections') || normalized.includes('no questions')) {
+        setError('We’re updating the placement assessment content right now. Please try again soon.');
+      } else if (normalized.includes('content is incomplete') || normalized.includes('content is invalid')) {
+        setError('We’re updating the placement assessment content right now. Please try again soon.');
+      } else if (normalized.includes('no placement assessment')) {
+        setError('We don’t have a placement assessment available for your grade band yet. Please try again soon.');
+      } else {
+        setError('We could not start your placement assessment. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -388,21 +416,47 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <p className="text-sm font-semibold text-slate-800 mb-2">Choose an avatar</p>
           <div className="grid grid-cols-2 gap-2">
             {avatars.map((avatar) => {
-              const accent = ((avatar.metadata ?? {}) as Record<string, unknown>).palette as
-                | { background?: string; accent?: string }
-                | undefined;
+              const metadata = (avatar.metadata ?? {}) as Record<string, unknown>;
+              const palette = parseAvatarPalette(metadata);
+              const icon = typeof metadata.icon === 'string' ? metadata.icon : '⭐️';
+              const description =
+                typeof metadata.description === 'string' && metadata.description.trim().length
+                  ? metadata.description
+                  : 'Starter look';
+              const isSelected = selectedAvatar === avatar.id;
               return (
                 <button
                   key={avatar.id}
                   onClick={() => setSelectedAvatar(avatar.id)}
-                  className={`rounded-xl border px-3 py-3 text-left ${
-                    selectedAvatar === avatar.id
+                  aria-pressed={isSelected}
+                  className={`rounded-xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-sky-400 ${
+                    isSelected
                       ? 'border-sky-500 bg-sky-50 shadow-sm'
                       : 'border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  <p className="font-semibold text-slate-900">{avatar.name}</p>
-                  {accent?.accent && <p className="text-xs text-slate-500">Accent {accent.accent}</p>}
+                  <div className="flex items-start justify-between">
+                    <div
+                      className="h-12 w-12 rounded-full overflow-hidden flex items-center justify-center border"
+                      style={{ backgroundColor: palette.background, borderColor: palette.accent }}
+                    >
+                      {avatar.image_url ? (
+                        <img
+                          src={avatar.image_url}
+                          alt={`${avatar.name} avatar`}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className="text-2xl" style={{ color: palette.text }} aria-hidden>
+                          {icon}
+                        </span>
+                      )}
+                    </div>
+                    {isSelected && <CheckCircle2 className="h-5 w-5 text-sky-600" aria-hidden />}
+                  </div>
+                  <p className="mt-2 font-semibold text-slate-900">{avatar.name}</p>
+                  <p className="text-xs text-slate-500 line-clamp-2">{description}</p>
                 </button>
               );
             })}

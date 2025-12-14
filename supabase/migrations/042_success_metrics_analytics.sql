@@ -21,16 +21,33 @@ create index if not exists analytics_events_parent_time_idx
 
 alter table public.analytics_events enable row level security;
 
-create policy "analytics_events_admin_read"
-  on public.analytics_events
-  for select
-  using (public.is_platform_admin());
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'analytics_events'
+      and policyname = 'analytics_events_admin_read'
+  ) then
+    execute 'create policy "analytics_events_admin_read" on public.analytics_events for select using (public.is_platform_admin())';
+  end if;
+end
+$$;
 
-create policy "analytics_events_service_manage"
-  on public.analytics_events
-  for all
-  using (auth.role() = 'service_role')
-  with check (auth.role() = 'service_role');
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'analytics_events'
+      and policyname = 'analytics_events_service_manage'
+  ) then
+    execute 'create policy "analytics_events_service_manage" on public.analytics_events for all using (auth.role() = ''service_role'') with check (auth.role() = ''service_role'')';
+  end if;
+end
+$$;
 
 grant select on public.analytics_events to authenticated;
 
@@ -77,4 +94,3 @@ cross join daily_plan
 cross join alert_response;
 
 grant select on public.admin_success_metrics_rollup to authenticated;
-

@@ -30,6 +30,7 @@
     "seed:lesson-metadata": "tsx scripts/seed_lesson_metadata.ts",
     "seed:lesson-exit-tickets": "tsx scripts/seed_lesson_exit_tickets.ts",
     "seed:fallback-assets": "tsx scripts/seed_fallback_assets.ts",
+    "seed:placement-assessment": "tsx scripts/seed_placement_assessment.ts",
     "audit:licenses": "tsx scripts/audit_licenses.ts",
     "audit:completeness": "tsx scripts/audit_completeness.ts",
     "audit:coverage-rollup": "tsx scripts/coverage_quick_rollup.ts --grades 3,4,5,6,7,8",
