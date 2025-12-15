@@ -601,10 +601,45 @@ export const startPlacementAssessment = async (
   };
 };
 
+/**
+ * Expand a grade band like '3-5' into individual grade strings ['3', '4', '5']
+ * Also handles single grades like '4' -> ['4']
+ */
+const expandGradeBand = (gradeBand: string): string[] => {
+  const normalized = gradeBand.trim();
+
+  // Handle K-2 format
+  if (normalized.toLowerCase() === 'k-2' || normalized.toLowerCase() === 'k') {
+    return ['K', '1', '2'];
+  }
+
+  // Handle range format like '3-5', '6-8', '9-12'
+  const rangeMatch = normalized.match(/^(\d+)-(\d+)$/);
+  if (rangeMatch) {
+    const start = Number.parseInt(rangeMatch[1]!, 10);
+    const end = Number.parseInt(rangeMatch[2]!, 10);
+    const grades: string[] = [];
+    for (let i = start; i <= end; i++) {
+      grades.push(String(i));
+    }
+    return grades;
+  }
+
+  // Handle single grade number
+  const numericGrade = Number.parseInt(normalized, 10);
+  if (Number.isFinite(numericGrade) && numericGrade >= 1 && numericGrade <= 12) {
+    return [String(numericGrade)];
+  }
+
+  // Fallback: return as-is
+  return [normalized];
+};
+
 const fetchCanonicalSequence = async (
   supabase: SupabaseClient,
   gradeBand: string,
   limit: number,
+  gradeLevel?: number | null,
 ): Promise<
   Array<{
     position: number;
@@ -614,6 +649,7 @@ const fetchCanonicalSequence = async (
     standard_codes: string[] | null;
   }>
 > => {
+  // First, try learning_sequences with the exact grade band (for backwards compatibility)
   const { data, error } = await supabase
     .from('learning_sequences')
     .select('position, module_id, module_slug, module_title, standard_codes')
@@ -635,18 +671,58 @@ const fetchCanonicalSequence = async (
     }));
   }
 
+  // Expand the grade band to individual grades (e.g., '3-5' -> ['3', '4', '5'])
+  const expandedGrades = expandGradeBand(gradeBand);
+
+  // Prioritize the student's exact grade level if available
+  let orderedGrades = [...expandedGrades];
+  if (gradeLevel != null && gradeLevel >= 1 && gradeLevel <= 12) {
+    const exactGrade = String(gradeLevel);
+    // Put exact grade first, then others
+    orderedGrades = [exactGrade, ...expandedGrades.filter(g => g !== exactGrade)];
+  }
+
+  // Try to find modules matching any of the expanded grades
   const { data: modules, error: modulesError } = await supabase
     .from('modules')
-    .select('id, slug, title')
-    .eq('grade_band', gradeBand)
+    .select('id, slug, title, grade_band, subject')
+    .in('grade_band', orderedGrades)
     .order('id', { ascending: true })
-    .limit(limit);
+    .limit(limit * 2); // Get extra to allow sorting
 
   if (modulesError) {
     throw new Error(`Unable to read fallback modules: ${modulesError.message}`);
   }
 
-  return (modules ?? []).map((module, index) => ({
+  if (modules && modules.length > 0) {
+    // Sort to prioritize exact grade level, then by grade closeness
+    const targetGrade = gradeLevel ?? gradeBandToLevel(gradeBand) ?? 5;
+    const sorted = [...modules].sort((a, b) => {
+      const aGrade = Number.parseInt(a.grade_band ?? '0', 10) || 0;
+      const bGrade = Number.parseInt(b.grade_band ?? '0', 10) || 0;
+      const aDist = Math.abs(aGrade - targetGrade);
+      const bDist = Math.abs(bGrade - targetGrade);
+      return aDist - bDist;
+    });
+
+    return sorted.slice(0, limit).map((module, index) => ({
+      position: index + 1,
+      module_id: module.id as number,
+      module_slug: (module.slug as string | null | undefined) ?? null,
+      module_title: (module.title as string | null | undefined) ?? null,
+      standard_codes: [],
+    }));
+  }
+
+  // Ultimate fallback: try any modules if none found for the grade band
+  console.warn(`[learningPaths] No modules found for grade band ${gradeBand}, expanding search`);
+  const { data: fallbackModules } = await supabase
+    .from('modules')
+    .select('id, slug, title, grade_band')
+    .order('id', { ascending: true })
+    .limit(limit);
+
+  return (fallbackModules ?? []).map((module, index) => ({
     position: index + 1,
     module_id: module.id as number,
     module_slug: (module.slug as string | null | undefined) ?? null,
@@ -654,6 +730,7 @@ const fetchCanonicalSequence = async (
     standard_codes: [],
   }));
 };
+
 
 export const buildStudentPath = async (
   supabase: SupabaseClient,
@@ -692,7 +769,7 @@ export const buildStudentPath = async (
     throw new Error(`Unable to create learning path: ${pathError?.message ?? 'unknown error'}`);
   }
 
-  const sequence = await fetchCanonicalSequence(supabase, gradeBand, options?.limit ?? 12);
+  const sequence = await fetchCanonicalSequence(supabase, gradeBand, options?.limit ?? 12, profile.grade_level);
 
   const entries = sequence.map((item, index) => ({
     path_id: pathRow.id as number,
