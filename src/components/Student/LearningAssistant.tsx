@@ -940,7 +940,7 @@ const LearningAssistant: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="fixed bottom-24 left-6 w-80 h-96 bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+            className="fixed bottom-24 left-6 right-6 sm:right-auto sm:w-96 md:w-[28rem] h-[32rem] md:h-[36rem] bg-white rounded-2xl shadow-2xl z-[60] flex flex-col overflow-hidden"
             role="dialog"
             aria-modal="true"
             aria-labelledby="learning-assistant-title"
@@ -949,134 +949,80 @@ const LearningAssistant: React.FC = () => {
             tabIndex={-1}
             ref={assistantWindowRef}
           >
-            {/* Header */}
+            {/* Header - Simplified for clarity */}
             <div
-              className="p-4 space-y-3"
+              className="p-3 flex items-center justify-between"
               style={{
                 background: `linear-gradient(135deg, ${tutorPalette.accent}, ${tutorPalette.background})`,
                 color: tutorPalette.text,
               }}
             >
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center space-x-2">
-                  <div
-                    className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center border border-white/30"
-                    style={{ color: tutorPalette.text }}
-                  >
-                    <span aria-hidden className="text-lg">
-                      {tutorIcon}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold" id="learning-assistant-title">
-                      {tutorDisplayName}
-                    </h3>
-                    <p className="text-xs opacity-90" id="learning-assistant-description">
-                      {tutorLabel} • {tutorToneDescriptor}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="hidden md:flex items-center gap-1 text-[11px] font-semibold">
-                    <span className="px-2 py-1 rounded-full border border-white/40 bg-white/30 text-gray-900">
-                      {chatMode === 'guided_only'
-                        ? 'Guided only'
-                        : chatMode === 'guided_preferred'
-                          ? 'Guided'
-                          : 'Free'}
-                    </span>
-                    {chatModeLocked && (
-                      <span className="px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
-                        Parent locked
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => openExplainer('header')}
-                    className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1 text-[11px] font-semibold hover:bg-white/25 focus-ring"
-                    aria-label="How ElevatED explains things"
-                  >
-                    <Info className="h-3 w-3" />
-                    How we answer
-                  </button>
-                  <button
-                    onClick={() => openExplainer('header')}
-                    className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1 text-[11px] font-semibold hover:bg-white/25 focus-ring"
-                    aria-label="Safety and privacy"
-                  >
-                    <ShieldCheck className="h-3 w-3" />
-                    Safety & privacy
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      setLessonContext(null);
-                      setContextHint(null);
-                    }}
-                    className="p-2 bg-white/30 hover:bg-white/50 rounded-full transition-colors focus-ring shrink-0"
-                    aria-label="Close learning assistant"
-                    title="Close"
-                  >
-                    <X className="h-5 w-5 text-gray-900" />
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-2 py-1 font-semibold">
-                  {planUsage.limit === 'unlimited'
-                    ? 'Unlimited tutor chats (fair use applies)'
-                    : planUsage.limit
-                      ? `${planUsage.remaining ?? planUsage.limit} of ${planUsage.limit} chats left today`
-                      : 'Free includes 3 tutor chats/day; paid plans are unlimited (fair use). Remaining will update after your first question.'}
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1">
-                  <Sparkles className="h-3 w-3" /> Hints first—toggle below for full solutions
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-1 font-semibold">
-                  <ShieldCheck className="h-3 w-3" />
-                  {guardrailPillText}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleReturnToLesson}
-                  disabled={!canReturnToLesson}
-                  className="inline-flex items-center gap-1 rounded-full border border-white/40 bg-white/15 px-2 py-1 font-semibold text-gray-900 hover:bg-white/25 disabled:opacity-50 focus-ring"
+              {/* Left: Tutor identity */}
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 text-xl"
+                  style={{ color: tutorPalette.text }}
                 >
-                  <Target className="h-3 w-3" />
-                  Return to lesson
-                </button>
-                <span className="text-gray-900 font-semibold">
-                  Off-topic asks get nudged back to class.
-                </span>
+                  {tutorIcon}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm" id="learning-assistant-title">
+                    {tutorDisplayName}
+                  </h3>
+                  <p className="text-xs opacity-80" id="learning-assistant-description">
+                    {tutorLabel}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-wrap items-center gap-2 text-[11px] mt-1">
-                <span className="text-gray-900 font-semibold">Mode:</span>
-                {(['guided_only', 'guided_preferred', 'free'] as const).map((mode) => {
-                  const label = mode === 'guided_only' ? 'Guided only' : mode === 'guided_preferred' ? 'Guided' : 'Free';
-                  const active = chatMode === mode;
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => void handleChatModeChange(mode)}
-                      className={`px-2 py-1 rounded-full border font-semibold transition-colors ${active
-                        ? 'bg-white text-gray-900 border-white'
-                        : 'bg-white/20 text-gray-800 border-white/40 hover:bg-white/30'
-                        }`}
-                      disabled={chatModeSaving || (chatModeLocked && mode !== 'guided_only')}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-                {chatModeLocked && (
-                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
-                    Parent locked
+
+              {/* Right: Info and Close buttons */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => openExplainer('header')}
+                  className="p-2 bg-white/15 hover:bg-white/25 rounded-full transition-colors focus-ring"
+                  aria-label="How ElevatED explains things"
+                  title="Info"
+                >
+                  <Info className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setLessonContext(null);
+                    setContextHint(null);
+                  }}
+                  className="p-2 bg-white/30 hover:bg-red-500 hover:text-white rounded-full transition-colors focus-ring"
+                  aria-label="Close learning assistant"
+                  title="Close"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Sub-header: Quick status (collapsible info) */}
+            <div className="px-3 py-2 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 text-slate-700 font-medium">
+                  <Sparkles className="h-3 w-3 text-amber-500" />
+                  {chatMode === 'guided_only' ? 'Hints only' : chatMode === 'guided_preferred' ? 'Hints first' : 'Free mode'}
+                </span>
+                {planUsage.limit !== 'unlimited' && planUsage.remaining != null && (
+                  <span className="text-slate-500">
+                    {planUsage.remaining} chats left
                   </span>
                 )}
               </div>
+              {canReturnToLesson && (
+                <button
+                  type="button"
+                  onClick={handleReturnToLesson}
+                  className="inline-flex items-center gap-1 text-brand-blue hover:text-brand-violet font-medium"
+                >
+                  <Target className="h-3 w-3" />
+                  Back to lesson
+                </button>
+              )}
             </div>
 
             {/* Quick Actions */}

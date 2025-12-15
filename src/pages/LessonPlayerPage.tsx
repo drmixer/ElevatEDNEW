@@ -922,71 +922,74 @@ const LessonPlayerPage: React.FC = () => {
                 )}
               </section>
             )}
-            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">Progress tracker</h2>
-                <span className="text-sm font-semibold text-brand-blue">
-                  {progressController.progress}%
-                </span>
-              </div>
-              <p className="text-sm text-slate-500 mt-1">
-                Check off sections as you facilitate the lesson to keep your session pacing on track.
-              </p>
-              <div className="mt-4 h-2 rounded-full bg-slate-100">
-                <div
-                  className="h-full rounded-full bg-brand-blue transition-all"
-                  style={{ width: `${progressController.progress}%` }}
-                />
-              </div>
-              {(progressController.isLoading || progressController.isSaving) && (
-                <p className="mt-2 text-xs text-slate-400">
-                  {progressController.isLoading ? 'Loading saved progress…' : 'Syncing progress…'}
+            {/* Progress tracker - Only show for non-students (teachers/facilitators) */}
+            {!studentId && (
+              <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-slate-900">Progress tracker</h2>
+                  <span className="text-sm font-semibold text-brand-blue">
+                    {progressController.progress}%
+                  </span>
+                </div>
+                <p className="text-sm text-slate-500 mt-1">
+                  Check off sections as you facilitate the lesson to keep your session pacing on track.
                 </p>
-              )}
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  disabled={progressDisabled}
-                  onClick={progressController.markComplete}
-                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90 focus-ring"
-                >
-                  Mark all complete
-                </button>
-                <button
-                  type="button"
-                  onClick={progressController.reset}
-                  disabled={progressDisabled || progressController.progress === 0}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 focus-ring"
-                >
-                  Reset
-                </button>
-              </div>
-              <ul className="mt-5 space-y-2">
-                {progressItems.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      disabled={progressDisabled}
-                      onClick={() => progressController.toggleItem(item.id)}
-                      aria-pressed={progressController.isComplete(item.id)}
-                      className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors focus-ring ${progressController.isComplete(item.id)
-                        ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-brand-blue/40 hover:text-brand-blue'
-                        }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        {progressController.isComplete(item.id) ? (
-                          <CheckCircle2 className="h-4 w-4" />
-                        ) : (
-                          <Circle className="h-4 w-4" />
-                        )}
-                        <span>{item.label}</span>
-                      </div>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </section>
+                <div className="mt-4 h-2 rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-brand-blue transition-all"
+                    style={{ width: `${progressController.progress}%` }}
+                  />
+                </div>
+                {(progressController.isLoading || progressController.isSaving) && (
+                  <p className="mt-2 text-xs text-slate-400">
+                    {progressController.isLoading ? 'Loading saved progress…' : 'Syncing progress…'}
+                  </p>
+                )}
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    disabled={progressDisabled}
+                    onClick={progressController.markComplete}
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90 focus-ring"
+                  >
+                    Mark all complete
+                  </button>
+                  <button
+                    type="button"
+                    onClick={progressController.reset}
+                    disabled={progressDisabled || progressController.progress === 0}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 focus-ring"
+                  >
+                    Reset
+                  </button>
+                </div>
+                <ul className="mt-5 space-y-2">
+                  {progressItems.map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        disabled={progressDisabled}
+                        onClick={() => progressController.toggleItem(item.id)}
+                        aria-pressed={progressController.isComplete(item.id)}
+                        className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors focus-ring ${progressController.isComplete(item.id)
+                          ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
+                          : 'border-slate-200 bg-white text-slate-600 hover:border-brand-blue/40 hover:text-brand-blue'
+                          }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          {progressController.isComplete(item.id) ? (
+                            <CheckCircle2 className="h-4 w-4" />
+                          ) : (
+                            <Circle className="h-4 w-4" />
+                          )}
+                          <span>{item.label}</span>
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
             <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Lesson navigation</h2>
