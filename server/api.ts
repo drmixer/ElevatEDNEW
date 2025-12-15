@@ -829,11 +829,11 @@ export const createApiHandler = (context: ApiContext) => {
       recordMetrics();
     };
 
-  const handleRoute = async (
-    handler: () => Promise<void>,
-    errorContext?: Record<string, unknown>,
-  ): Promise<boolean> => {
-    try {
+    const handleRoute = async (
+      handler: () => Promise<void>,
+      errorContext?: Record<string, unknown>,
+    ): Promise<boolean> => {
+      try {
         await handler();
       } catch (error) {
         handleApiError(res, error, API_VERSION, { route: path, method, ...errorContext });
@@ -1061,8 +1061,47 @@ export const createApiHandler = (context: ApiContext) => {
         return handleRoute(async () => {
           await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
           const preferences = await fetchStudentPreferences(supabase, actor.id);
-        sendJson(res, 200, { preferences }, API_VERSION);
-      }, { actorId: actor.id });
+          sendJson(res, 200, { preferences }, API_VERSION);
+        }, { actorId: actor.id });
+      }
+
+      if (method === 'PUT') {
+        return handleRoute(async () => {
+          await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
+          const body = await readValidatedJson<{
+            avatarId?: string | null;
+            tutorPersonaId?: string | null;
+            optInAi?: boolean;
+            goalFocus?: string | null;
+            theme?: string | null;
+          }>(req);
+
+          const updates: Record<string, unknown> = {};
+
+          if (typeof body.avatarId === 'string' && body.avatarId.trim().length > 0) {
+            updates.avatar_id = body.avatarId.trim();
+          }
+          if (typeof body.tutorPersonaId === 'string' && body.tutorPersonaId.trim().length > 0) {
+            updates.tutor_persona_id = body.tutorPersonaId.trim();
+          }
+          if (typeof body.optInAi === 'boolean') {
+            updates.opt_in_ai = body.optInAi;
+          }
+          if (typeof body.goalFocus === 'string') {
+            updates.goal_focus = body.goalFocus.trim();
+          }
+          if (typeof body.theme === 'string') {
+            updates.theme = body.theme.trim();
+          }
+
+          if (!Object.keys(updates).length) {
+            throw new HttpError(400, 'No preference fields provided.', 'invalid_payload');
+          }
+
+          const preferences = await saveStudentPreferences(supabase, actor.id, updates);
+          sendJson(res, 200, { preferences }, API_VERSION);
+        }, { actorId: actor.id });
+      }
     }
 
     if (method === 'GET' && path === '/student/family-code') {
@@ -1071,6 +1110,7 @@ export const createApiHandler = (context: ApiContext) => {
 
       return handleRoute(async () => {
         await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
+        const writer = serviceSupabase ?? supabase;
         const { data, error } = await supabase
           .from('student_profiles')
           .select('family_link_code')
@@ -1079,10 +1119,31 @@ export const createApiHandler = (context: ApiContext) => {
         if (error) {
           throw new HttpError(500, `Unable to load family link code: ${error.message}`, 'family_code_lookup_failed');
         }
-        const code = (data?.family_link_code as string | null | undefined)?.trim();
+        let code = (data?.family_link_code as string | null | undefined)?.trim() || null;
+
+        // Auto-generate a family link code if one doesn't exist
         if (!code) {
-          throw new HttpError(404, 'Family link code not found.', 'family_code_missing');
+          let attempts = 0;
+          while (attempts < 5) {
+            attempts += 1;
+            const candidate = randomBytes(8).toString('hex');
+            const { error: updateError } = await writer
+              .from('student_profiles')
+              .update({ family_link_code: candidate })
+              .eq('id', actor.id);
+            if (!updateError) {
+              code = candidate;
+              break;
+            }
+            if (!/duplicate key value/i.test(updateError.message)) {
+              throw new HttpError(500, `Unable to generate family link code: ${updateError.message}`, 'family_code_generation_failed');
+            }
+          }
+          if (!code) {
+            throw new HttpError(500, 'Unable to generate a unique family link code right now.', 'family_code_retry_failed');
+          }
         }
+
         const { data: guardianLinks, error: guardianError } = await (serviceSupabase ?? supabase)
           .from('guardian_child_links')
           .select('id')
@@ -1276,44 +1337,6 @@ export const createApiHandler = (context: ApiContext) => {
       }, { actorId: actor.id });
     }
 
-      if (method === 'PUT') {
-        return handleRoute(async () => {
-          await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, actor.id);
-          const body = await readValidatedJson<{
-            avatarId?: string | null;
-            tutorPersonaId?: string | null;
-            optInAi?: boolean;
-            goalFocus?: string | null;
-            theme?: string | null;
-          }>(req);
-
-          const updates: Record<string, unknown> = {};
-
-          if (typeof body.avatarId === 'string' && body.avatarId.trim().length > 0) {
-            updates.avatar_id = body.avatarId.trim();
-          }
-          if (typeof body.tutorPersonaId === 'string' && body.tutorPersonaId.trim().length > 0) {
-            updates.tutor_persona_id = body.tutorPersonaId.trim();
-          }
-          if (typeof body.optInAi === 'boolean') {
-            updates.opt_in_ai = body.optInAi;
-          }
-          if (typeof body.goalFocus === 'string') {
-            updates.goal_focus = body.goalFocus.trim();
-          }
-          if (typeof body.theme === 'string') {
-            updates.theme = body.theme.trim();
-          }
-
-          if (!Object.keys(updates).length) {
-            throw new HttpError(400, 'No preference fields provided.', 'invalid_payload');
-          }
-
-          const preferences = await saveStudentPreferences(supabase, actor.id, updates);
-          sendJson(res, 200, { preferences }, API_VERSION);
-        }, { actorId: actor.id });
-      }
-    }
 
     if (method === 'POST' && path === '/student/assessment/start') {
       const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
@@ -1364,23 +1387,23 @@ export const createApiHandler = (context: ApiContext) => {
         const responses =
           Array.isArray(body.responses)
             ? body.responses
-                .map((resp) => {
-                  const bankQuestionId =
-                    typeof resp.bankQuestionId === 'number' && Number.isFinite(resp.bankQuestionId)
-                      ? resp.bankQuestionId
-                      : null;
-                  if (!bankQuestionId) return null;
-                  return {
-                    bankQuestionId,
-                    optionId:
-                      typeof resp.optionId === 'number' && Number.isFinite(resp.optionId) ? resp.optionId : null,
-                    timeSpentSeconds:
-                      typeof resp.timeSpentSeconds === 'number' && Number.isFinite(resp.timeSpentSeconds)
-                        ? resp.timeSpentSeconds
-                        : null,
-                  };
-                })
-                .filter(Boolean)
+              .map((resp) => {
+                const bankQuestionId =
+                  typeof resp.bankQuestionId === 'number' && Number.isFinite(resp.bankQuestionId)
+                    ? resp.bankQuestionId
+                    : null;
+                if (!bankQuestionId) return null;
+                return {
+                  bankQuestionId,
+                  optionId:
+                    typeof resp.optionId === 'number' && Number.isFinite(resp.optionId) ? resp.optionId : null,
+                  timeSpentSeconds:
+                    typeof resp.timeSpentSeconds === 'number' && Number.isFinite(resp.timeSpentSeconds)
+                      ? resp.timeSpentSeconds
+                      : null,
+                };
+              })
+              .filter(Boolean)
             : [];
 
         const pathResult = await submitPlacementAssessment(
@@ -1466,127 +1489,127 @@ export const createApiHandler = (context: ApiContext) => {
       }, { actorId: actor.id });
     }
 
-	    if (method === 'GET' && path === '/plan/opt-outs') {
-	      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
-	      if (!actor) return true;
-	      return handleRoute(async () => {
-	        await listPlanOptOutsApi(req, res, supabase, actor);
-	      }, { actorId: actor.id });
-	    }
+    if (method === 'GET' && path === '/plan/opt-outs') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
+      if (!actor) return true;
+      return handleRoute(async () => {
+        await listPlanOptOutsApi(req, res, supabase, actor);
+      }, { actorId: actor.id });
+    }
 
-	    if (method === 'POST' && path === '/analytics/event') {
-	      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent', 'admin']);
-	      if (!actor) return true;
+    if (method === 'POST' && path === '/analytics/event') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent', 'admin']);
+      if (!actor) return true;
 
-	      return handleRoute(async () => {
-	        const body = await readValidatedJson<{
-	          eventName?: string;
-	          payload?: Record<string, unknown> | null;
-	          occurredAt?: string | null;
-	          events?: Array<{
-	            eventName?: string;
-	            payload?: Record<string, unknown> | null;
-	            occurredAt?: string | null;
-	          }>;
-	        }>(req);
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          eventName?: string;
+          payload?: Record<string, unknown> | null;
+          occurredAt?: string | null;
+          events?: Array<{
+            eventName?: string;
+            payload?: Record<string, unknown> | null;
+            occurredAt?: string | null;
+          }>;
+        }>(req);
 
-	        const items = Array.isArray(body.events)
-	          ? body.events
-	          : [{ eventName: body.eventName, payload: body.payload, occurredAt: body.occurredAt }];
+        const items = Array.isArray(body.events)
+          ? body.events
+          : [{ eventName: body.eventName, payload: body.payload, occurredAt: body.occurredAt }];
 
-	        const inserts: Array<{
-	          event_name: string;
-	          actor_role: string;
-	          student_id: string | null;
-	          parent_id: string | null;
-	          occurred_at: string;
-	          payload: Record<string, unknown>;
-	        }> = [];
+        const inserts: Array<{
+          event_name: string;
+          actor_role: string;
+          student_id: string | null;
+          parent_id: string | null;
+          occurred_at: string;
+          payload: Record<string, unknown>;
+        }> = [];
 
-	        for (const item of items) {
-	          const eventName = typeof item?.eventName === 'string' ? item.eventName.trim() : '';
-	          if (!eventName || !eventName.startsWith('success_')) continue;
+        for (const item of items) {
+          const eventName = typeof item?.eventName === 'string' ? item.eventName.trim() : '';
+          if (!eventName || !eventName.startsWith('success_')) continue;
 
-	          const rawPayload =
-	            item?.payload && typeof item.payload === 'object'
-	              ? (item.payload as Record<string, unknown>)
-	              : {};
-	          const payload = scrubAnalyticsPayload(rawPayload);
+          const rawPayload =
+            item?.payload && typeof item.payload === 'object'
+              ? (item.payload as Record<string, unknown>)
+              : {};
+          const payload = scrubAnalyticsPayload(rawPayload);
 
-	          let studentId: string | null = null;
-	          let parentId: string | null = null;
+          let studentId: string | null = null;
+          let parentId: string | null = null;
 
-	          if (actor.role === 'student') {
-	            studentId = actor.id;
-	          } else if (actor.role === 'parent') {
-	            parentId = actor.id;
-	            const candidate =
-	              typeof rawPayload.childId === 'string'
-	                ? rawPayload.childId
-	                : typeof rawPayload.studentId === 'string'
-	                  ? rawPayload.studentId
-	                  : null;
-	            if (candidate) {
-	              try {
-	                const { data } = await supabase.rpc('is_guardian', { target_student: candidate });
-	                if (data === true) {
-	                  studentId = candidate;
-	                }
-	              } catch (error) {
-	                console.warn('[analytics] unable to verify guardian access', error);
-	              }
-	            }
-	          } else if (actor.role === 'admin') {
-	            const candidateStudent =
-	              typeof rawPayload.studentId === 'string'
-	                ? rawPayload.studentId
-	                : typeof rawPayload.childId === 'string'
-	                  ? rawPayload.childId
-	                  : null;
-	            studentId = candidateStudent ?? null;
-	            parentId = typeof rawPayload.parentId === 'string' ? rawPayload.parentId : null;
-	          }
+          if (actor.role === 'student') {
+            studentId = actor.id;
+          } else if (actor.role === 'parent') {
+            parentId = actor.id;
+            const candidate =
+              typeof rawPayload.childId === 'string'
+                ? rawPayload.childId
+                : typeof rawPayload.studentId === 'string'
+                  ? rawPayload.studentId
+                  : null;
+            if (candidate) {
+              try {
+                const { data } = await supabase.rpc('is_guardian', { target_student: candidate });
+                if (data === true) {
+                  studentId = candidate;
+                }
+              } catch (error) {
+                console.warn('[analytics] unable to verify guardian access', error);
+              }
+            }
+          } else if (actor.role === 'admin') {
+            const candidateStudent =
+              typeof rawPayload.studentId === 'string'
+                ? rawPayload.studentId
+                : typeof rawPayload.childId === 'string'
+                  ? rawPayload.childId
+                  : null;
+            studentId = candidateStudent ?? null;
+            parentId = typeof rawPayload.parentId === 'string' ? rawPayload.parentId : null;
+          }
 
-	          const occurredAt =
-	            typeof item?.occurredAt === 'string' && item.occurredAt.trim().length
-	              ? item.occurredAt
-	              : new Date().toISOString();
+          const occurredAt =
+            typeof item?.occurredAt === 'string' && item.occurredAt.trim().length
+              ? item.occurredAt
+              : new Date().toISOString();
 
-	          inserts.push({
-	            event_name: eventName,
-	            actor_role: actor.role,
-	            student_id: studentId,
-	            parent_id: parentId,
-	            occurred_at: occurredAt,
-	            payload,
-	          });
-	        }
+          inserts.push({
+            event_name: eventName,
+            actor_role: actor.role,
+            student_id: studentId,
+            parent_id: parentId,
+            occurred_at: occurredAt,
+            payload,
+          });
+        }
 
-	        if (!inserts.length) {
-	          throw new HttpError(400, 'No valid analytics events provided.', 'invalid_payload');
-	        }
+        if (!inserts.length) {
+          throw new HttpError(400, 'No valid analytics events provided.', 'invalid_payload');
+        }
 
-	        const { error: insertError } = await (serviceSupabase ?? supabase)
-	          .from('analytics_events')
-	          .insert(inserts);
+        const { error: insertError } = await (serviceSupabase ?? supabase)
+          .from('analytics_events')
+          .insert(inserts);
 
-	        if (insertError) {
-	          throw new HttpError(
-	            500,
-	            `Unable to record analytics events: ${insertError.message}`,
-	            'analytics_insert_failed',
-	          );
-	        }
+        if (insertError) {
+          throw new HttpError(
+            500,
+            `Unable to record analytics events: ${insertError.message}`,
+            'analytics_insert_failed',
+          );
+        }
 
-	        sendJson(res, 200, { ok: true, inserted: inserts.length }, API_VERSION);
-	      }, { actorId: actor.id });
-	    }
+        sendJson(res, 200, { ok: true, inserted: inserts.length }, API_VERSION);
+      }, { actorId: actor.id });
+    }
 
-	    if (method === 'POST' && path === '/student/event') {
-	      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
-	      if (!actor) return true;
+    if (method === 'POST' && path === '/student/event') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
 
-	      return handleRoute(async () => {
+      return handleRoute(async () => {
         const body = await readValidatedJson<{
           eventType?: string;
           pathEntryId?: number | null;
@@ -1752,11 +1775,11 @@ export const createApiHandler = (context: ApiContext) => {
               status: subscriptionRow.status as string,
               plan: subscriptionRow.plans
                 ? {
-                    slug: (subscriptionRow.plans as { slug: string }).slug,
-                    name: (subscriptionRow.plans as { name: string }).name,
-                    priceCents: (subscriptionRow.plans as { price_cents: number }).price_cents,
-                    metadata: (subscriptionRow.plans as { metadata: Record<string, unknown> }).metadata ?? {},
-                  }
+                  slug: (subscriptionRow.plans as { slug: string }).slug,
+                  name: (subscriptionRow.plans as { name: string }).name,
+                  priceCents: (subscriptionRow.plans as { price_cents: number }).price_cents,
+                  metadata: (subscriptionRow.plans as { metadata: Record<string, unknown> }).metadata ?? {},
+                }
                 : null,
               trialEndsAt: (subscriptionRow.trial_ends_at as string | null) ?? null,
               currentPeriodEnd: (subscriptionRow.current_period_end as string | null) ?? null,
@@ -1772,19 +1795,19 @@ export const createApiHandler = (context: ApiContext) => {
           {
             plan: planRow
               ? {
-                  slug: planRow.slug,
-                  name: planRow.name,
-                  priceCents: planRow.price_cents,
-                  metadata: planRow.metadata ?? {},
-                  status: planRow.status,
-                }
+                slug: planRow.slug,
+                name: planRow.name,
+                priceCents: planRow.price_cents,
+                metadata: planRow.metadata ?? {},
+                status: planRow.status,
+              }
               : {
-                  slug: planSlug,
-                  name: planSlug === 'individual-free' ? 'Free' : planSlug,
-                  priceCents: 0,
-                  metadata: {},
-                  status: 'active',
-                },
+                slug: planSlug,
+                name: planSlug === 'individual-free' ? 'Free' : planSlug,
+                priceCents: 0,
+                metadata: {},
+                status: 'active',
+              },
             limits,
             subscription,
             billingRequired: await isBillingRequired(supabase, subscriptionOwner),
@@ -2474,14 +2497,14 @@ export const startApiServer = (
     (process.env.ENABLE_INLINE_IMPORT_QUEUE === 'true' || process.env.NODE_ENV !== 'production');
   const queue = shouldStartQueue
     ? new ImportQueue(serviceSupabase, {
-        logger: (entry) => {
-          const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
-          console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
-          if (entry.level === 'error' || entry.level === 'warn') {
-            captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, entry.level === 'error' ? 'error' : 'warning');
-          }
-        },
-      })
+      logger: (entry) => {
+        const context = entry.context ? ` ${JSON.stringify(entry.context)}` : '';
+        console.log(`[import-queue] ${entry.level}: ${entry.message}${context}`);
+        if (entry.level === 'error' || entry.level === 'warn') {
+          captureServerMessage(entry.message, { source: 'importQueue', context: entry.context }, entry.level === 'error' ? 'error' : 'warning');
+        }
+      },
+    })
     : null;
   const notifier = new NotificationScheduler(serviceSupabase, { pollIntervalMs: 2 * 60 * 1000 });
 
