@@ -858,8 +858,8 @@ const LearningAssistant: React.FC = () => {
         source: 'rules-engine',
         hint_level: metadata?.hintLevel ?? null,
         subject: lessonContext?.subject ?? null,
-        concept: conceptTag,
-        curated_alternate: Boolean(curatedAlternate),
+        concept: conceptTagLabel ?? 'concept',
+        curated_alternate: false,
       });
     } finally {
       setIsTyping(false);
@@ -1013,10 +1013,11 @@ const LearningAssistant: React.FC = () => {
                       setLessonContext(null);
                       setContextHint(null);
                     }}
-                    className="p-1 hover:bg-white/20 rounded-full transition-colors focus-ring"
+                    className="p-2 bg-white/30 hover:bg-white/50 rounded-full transition-colors focus-ring shrink-0"
                     aria-label="Close learning assistant"
+                    title="Close"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-5 w-5 text-gray-900" />
                   </button>
                 </div>
               </div>
