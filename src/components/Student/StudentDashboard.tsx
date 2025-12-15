@@ -1298,10 +1298,7 @@ const StudentDashboard: React.FC = () => {
     if (!candidate) return 10;
     return Math.max(3, Math.round(candidate));
   }, [recommendedLesson, todayActivities]);
-  const tutorPromptChips = useMemo(
-    () => ['Walk me through this lesson', 'Where do I start?', 'Give me a quick hint'],
-    [],
-  );
+
   const todaysPlanProgress = useMemo(() => {
     const total = todaysPlan.length;
     const completed = todaysPlan.filter((lesson) => lesson.status === 'completed').length;
@@ -1893,15 +1890,6 @@ const StudentDashboard: React.FC = () => {
     },
     [recommendedLesson, student.id],
   );
-
-  const handleViewDailyPlan = useCallback(() => {
-    const target =
-      document.getElementById('daily-plan-mobile') ?? document.getElementById('daily-plan-desktop');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      trackEvent('daily_plan_focus_scroll', { studentId: student.id });
-    }
-  }, [student.id]);
 
   if (!student) {
     return null;

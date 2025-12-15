@@ -493,7 +493,7 @@ const ParentDashboard: React.FC = () => {
             ? defaultLearningPreferences.allowedElectiveSubjects
             : ELECTIVE_SUBJECT_OPTIONS.map((entry) => entry.id)) ?? [],
     });
-  }, [currentChild, ELECTIVE_SUBJECT_OPTIONS]);
+  }, [currentChild]);
 
   useEffect(() => {
     setInsightTab('overview');
