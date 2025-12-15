@@ -928,7 +928,7 @@ export const submitPlacementAssessment = async (
     ...pathResult,
     strandEstimates,
     score: masteryPct,
-  masteryPct,
+    masteryPct,
   };
 };
 
@@ -1442,8 +1442,8 @@ export const applyAdaptiveEvent = async (
     (currentPath.path.metadata as Record<string, unknown> | null | undefined)?.adaptive_state?.misconceptions,
   )
     ? (((currentPath.path.metadata as Record<string, unknown> | null | undefined)?.adaptive_state as Record<string, unknown>)?.misconceptions as string[]).filter(
-        (code): code is string => typeof code === 'string',
-      )
+      (code): code is string => typeof code === 'string',
+    )
     : [];
   const newlyTagged = misconceptions.filter((code) => !previousMisconceptions.includes(code)).slice(0, MAX_STANDARDS_TRACKED);
 
@@ -1666,6 +1666,7 @@ const safeNumber = (value: unknown): number | null => {
 
 const MODULE_MASTERY_THRESHOLD = 85;
 const WEEKLY_LOOKBACK_DAYS = 7;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MAX_EVENT_SAMPLE = 200;
 
 export type StudentInsightSnapshot = {
