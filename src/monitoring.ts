@@ -93,9 +93,9 @@ export const initClientMonitoring = (): boolean => {
     beforeBreadcrumb: (breadcrumb) =>
       breadcrumb
         ? {
-            ...breadcrumb,
-            data: scrubRecord(breadcrumb.data as Record<string, unknown> | undefined),
-          }
+          ...breadcrumb,
+          data: scrubRecord(breadcrumb.data as Record<string, unknown> | undefined),
+        }
         : breadcrumb,
     tracesSampleRate,
     replaysSessionSampleRate: replaySessionRate,
@@ -123,4 +123,166 @@ export const captureClientMessage = (
 ): void => {
   if (!lastInitSucceeded) return;
   Sentry.captureMessage(message, { level, extra: scrubRecord(context) });
+};
+
+// ─────────────────────────────────────────────────────────────
+// Phase 8: Key Failure Tracking
+// ─────────────────────────────────────────────────────────────
+
+export type KeyFailureType =
+  | 'auth_failed'
+  | 'profile_load_failed'
+  | 'lesson_load_failed'
+  | 'assessment_failed'
+  | 'tutor_unavailable'
+  | 'path_generation_failed'
+  | 'save_failed'
+  | 'network_error';
+
+/**
+ * Track key failures that impact user experience
+ */
+export const trackKeyFailure = (
+  type: KeyFailureType,
+  error: unknown,
+  context?: Record<string, unknown>,
+): void => {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+
+  // Always log to console for debugging
+  console.error(`[KeyFailure:${type}]`, errorMessage, context);
+
+  // Send to Sentry if enabled
+  if (lastInitSucceeded) {
+    Sentry.captureException(error, {
+      tags: { failure_type: type },
+      extra: scrubRecord({
+        ...context,
+        failure_type: type,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+  }
+};
+
+/**
+ * Track recoverable errors (user can retry)
+ */
+export const trackRecoverableError = (
+  message: string,
+  context?: Record<string, unknown>,
+): void => {
+  console.warn(`[RecoverableError]`, message, context);
+
+  if (lastInitSucceeded) {
+    Sentry.captureMessage(message, {
+      level: 'warning',
+      tags: { error_type: 'recoverable' },
+      extra: scrubRecord(context),
+    });
+  }
+};
+
+// ─────────────────────────────────────────────────────────────
+// Phase 8.1: Performance Measurement
+// ─────────────────────────────────────────────────────────────
+
+const performanceMarks = new Map<string, number>();
+
+/**
+ * Start a performance measurement
+ */
+export const startMeasure = (name: string): void => {
+  performanceMarks.set(name, performance.now());
+};
+
+/**
+ * End a performance measurement and optionally report if slow
+ */
+export const endMeasure = (
+  name: string,
+  thresholdMs = 2000,
+): number | null => {
+  const start = performanceMarks.get(name);
+  if (start === undefined) return null;
+
+  const duration = performance.now() - start;
+  performanceMarks.delete(name);
+
+  // Report slow operations
+  if (duration > thresholdMs && lastInitSucceeded) {
+    Sentry.captureMessage(`Slow operation: ${name}`, {
+      level: 'warning',
+      tags: { performance: 'slow' },
+      extra: {
+        operation: name,
+        duration_ms: Math.round(duration),
+        threshold_ms: thresholdMs,
+      },
+    });
+  }
+
+  return duration;
+};
+
+/**
+ * Measure an async operation
+ */
+export const measureAsync = async <T>(
+  name: string,
+  operation: () => Promise<T>,
+  thresholdMs = 2000,
+): Promise<T> => {
+  startMeasure(name);
+  try {
+    return await operation();
+  } finally {
+    endMeasure(name, thresholdMs);
+  }
+};
+
+// ─────────────────────────────────────────────────────────────
+// Phase 8.2: Offline Detection
+// ─────────────────────────────────────────────────────────────
+
+let isOffline = !navigator.onLine;
+const offlineListeners: Set<(offline: boolean) => void> = new Set();
+
+// Set up online/offline listeners
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    isOffline = false;
+    offlineListeners.forEach(listener => listener(false));
+  });
+
+  window.addEventListener('offline', () => {
+    isOffline = true;
+    offlineListeners.forEach(listener => listener(true));
+  });
+}
+
+/**
+ * Check if the app is offline
+ */
+export const checkIsOffline = (): boolean => isOffline;
+
+/**
+ * Subscribe to offline status changes
+ */
+export const onOfflineChange = (listener: (offline: boolean) => void): (() => void) => {
+  offlineListeners.add(listener);
+  return () => offlineListeners.delete(listener);
+};
+
+/**
+ * Set user context for error tracking
+ */
+export const setUserContext = (userId: string | null, role?: string): void => {
+  if (!lastInitSucceeded) return;
+
+  if (userId) {
+    Sentry.setUser({ id: userId, role });
+  } else {
+    Sentry.setUser(null);
+  }
 };

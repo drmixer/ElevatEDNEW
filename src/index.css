@@ -59,4 +59,105 @@
     mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   }
+
+  /* Phase 7.2: Calm & Breathing Room Utilities */
+  
+  /* Soft background gradients for calm feeling */
+  .bg-calm-primary {
+    background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #fdf4ff 100%);
+  }
+  
+  .bg-calm-success {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0fdfa 100%);
+  }
+  
+  .bg-calm-warm {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fff7ed 100%);
+  }
+  
+  /* Breathing room - generous spacing */
+  .breathing-sm {
+    @apply py-4 px-5;
+  }
+  
+  .breathing-md {
+    @apply py-6 px-6;
+  }
+  
+  .breathing-lg {
+    @apply py-8 px-8;
+  }
+  
+  /* Soft card styles */
+  .card-soft {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm;
+    @apply transition-all duration-200;
+  }
+  
+  .card-soft:hover {
+    @apply shadow-md border-slate-200;
+  }
+  
+  .card-calm {
+    @apply bg-gradient-to-br from-white to-slate-50 rounded-2xl border border-slate-100;
+    @apply shadow-sm transition-shadow duration-300;
+  }
+  
+  /* Playful but subtle animations */
+  @keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  
+  @keyframes gentle-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes gentle-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(1deg); }
+  }
+  
+  .animate-gentle-bounce {
+    animation: gentle-bounce 2s ease-in-out infinite;
+  }
+  
+  .animate-gentle-pulse {
+    animation: gentle-pulse 2s ease-in-out infinite;
+  }
+  
+  .animate-gentle-float {
+    animation: gentle-float 3s ease-in-out infinite;
+  }
+  
+  /* Reduced visual noise - muted badges */
+  .badge-muted {
+    @apply text-xs font-medium px-2 py-1 rounded-full;
+    @apply bg-slate-100 text-slate-600;
+  }
+  
+  .badge-calm-success {
+    @apply text-xs font-medium px-2 py-1 rounded-full;
+    @apply bg-emerald-50 text-emerald-600 border border-emerald-100;
+  }
+  
+  .badge-calm-info {
+    @apply text-xs font-medium px-2 py-1 rounded-full;
+    @apply bg-blue-50 text-blue-600 border border-blue-100;
+  }
+  
+  .badge-calm-warning {
+    @apply text-xs font-medium px-2 py-1 rounded-full;
+    @apply bg-amber-50 text-amber-600 border border-amber-100;
+  }
+  
+  /* Text styles for calm reading */
+  .text-calm {
+    @apply text-slate-600 leading-relaxed;
+  }
+  
+  .text-calm-emphasis {
+    @apply text-slate-800 font-medium;
+  }
 }

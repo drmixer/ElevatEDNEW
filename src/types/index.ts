@@ -164,6 +164,7 @@ export interface LearningPreferences {
   allowTutor?: boolean;
   tutorLessonOnly?: boolean;
   tutorDailyLimit?: number | null;
+  tutorToneId?: string | null; // Phase 5.3: Tutor tone preference
   tutorSettingsUpdatedAt?: string | null;
   tutorSettingsUpdatedBy?: string | null;
 }
@@ -186,6 +187,7 @@ export const defaultLearningPreferences: LearningPreferences = {
   allowTutor: true,
   tutorLessonOnly: false,
   tutorDailyLimit: null,
+  tutorToneId: null, // Default: let student choose
   tutorSettingsUpdatedAt: null,
   tutorSettingsUpdatedBy: null,
 };

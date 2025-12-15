@@ -36,6 +36,11 @@ import type { LessonPracticeQuestion, Student, Subject } from '../types';
 import trackEvent from '../lib/analytics';
 import supabase from '../lib/supabaseClient';
 import LearningAssistant from '../components/Student/LearningAssistant';
+import LessonResourcePanel from '../components/Student/LessonResourcePanel';
+import QuestionContextHeader from '../components/Student/QuestionContextHeader';
+import QuestionFeedbackPanel from '../components/Student/QuestionFeedbackPanel';
+import AdaptiveHelpPanel from '../components/Student/AdaptiveHelpPanel';
+import AdaptivePacingFeedback from '../components/Student/AdaptivePacingFeedback';
 import { useStudentEvent, useStudentPath, useTutorPersona, useXP } from '../hooks/useStudentData';
 import { describePathEntryReason } from '../lib/pathReason';
 
@@ -127,6 +132,14 @@ const LessonPlayerPage: React.FC = () => {
     Map<number, { selectedOptionId: number; isCorrect: boolean }>
   >(new Map());
   const [questionSaving, setQuestionSaving] = useState(false);
+  const [resourcePanelCollapsed, setResourcePanelCollapsed] = useState(true);
+  // Phase 4: Adaptive help tracking
+  const [consecutiveMisses, setConsecutiveMisses] = useState(0);
+  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
+  const [hintLevel, setHintLevel] = useState(0);
+  const [adaptiveHelpLoading, setAdaptiveHelpLoading] = useState(false);
+  const [totalQuestionTime, setTotalQuestionTime] = useState(0);
+  const [showMasteryPrompt, setShowMasteryPrompt] = useState(false);
   const studentId = user?.role === 'student' ? user.id : null;
   const studentUser = user?.role === 'student' ? (user as Student) : null;
   const pathQuery = useStudentPath(studentId);
@@ -283,12 +296,12 @@ const LessonPlayerPage: React.FC = () => {
     progressItemIds,
     lessonDetail && studentId
       ? {
-          studentId,
-          moduleId: lessonDetail.module.id,
-          moduleTitle: lessonDetail.module.title,
-          lessonTitle: lessonDetail.lesson.title,
-          subject: lessonDetail.module.subject,
-        }
+        studentId,
+        moduleId: lessonDetail.module.id,
+        moduleTitle: lessonDetail.module.title,
+        lessonTitle: lessonDetail.lesson.title,
+        subject: lessonDetail.module.subject,
+      }
       : { studentId: null },
   );
 
@@ -359,11 +372,11 @@ const LessonPlayerPage: React.FC = () => {
             source,
             lesson: lessonDetail
               ? {
-                  lessonId: lessonDetail.lesson.id,
-                  lessonTitle: lessonDetail.lesson.title,
-                  moduleTitle: lessonDetail.module.title,
-                  subject: lessonDetail.module.subject,
-                }
+                lessonId: lessonDetail.lesson.id,
+                lessonTitle: lessonDetail.lesson.title,
+                moduleTitle: lessonDetail.module.title,
+                subject: lessonDetail.module.subject,
+              }
               : undefined,
           },
         }),
@@ -444,6 +457,87 @@ const LessonPlayerPage: React.FC = () => {
   );
   const masteryPct = calculateMasteryPct(correctCount, practiceQuestions.length);
 
+  // Phase 4: Adaptive help - derived values
+  const avgTimePerQuestion = useMemo(() => {
+    if (answeredCount === 0) return 0;
+    return totalQuestionTime / answeredCount;
+  }, [answeredCount, totalQuestionTime]);
+
+  const timeOnCurrentQuestion = useMemo(() => {
+    if (!questionStart) return 0;
+    return Math.round((Date.now() - questionStart) / 1000);
+  }, [questionStart]);
+
+  // Phase 4: Adaptive help handlers
+  const handleShowHint = useCallback(() => {
+    if (!currentPracticeQuestion) return;
+    setAdaptiveHelpLoading(true);
+    const hintPrompts = [
+      `Give me a small hint for this question: "${currentPracticeQuestion.prompt}". Don't give away the answer, just nudge me in the right direction.`,
+      `I need another hint for: "${currentPracticeQuestion.prompt}". Can you break it down a bit more?`,
+      `I'm still stuck on "${currentPracticeQuestion.prompt}". Walk me through the thinking step by step.`,
+    ];
+    const prompt = hintPrompts[Math.min(hintLevel, hintPrompts.length - 1)];
+    setHintLevel((prev) => prev + 1);
+    openTutorWithContext(prompt, `hint:${currentPracticeQuestion.id}`);
+    setAdaptiveHelpLoading(false);
+    trackEvent('adaptive_help_used', {
+      type: 'hint',
+      hintLevel,
+      questionId: currentPracticeQuestion.id,
+      lessonId,
+    });
+  }, [currentPracticeQuestion, hintLevel, lessonId, openTutorWithContext]);
+
+  const handleExplainDifferently = useCallback(() => {
+    if (!currentPracticeQuestion) return;
+    setAdaptiveHelpLoading(true);
+    const subject = lessonDetail?.module.subject ?? 'this topic';
+    const prompt = `Can you explain "${currentPracticeQuestion.prompt}" a different way? Maybe use an analogy or a real-world example that relates to ${subject}.`;
+    openTutorWithContext(prompt, `explain_differently:${currentPracticeQuestion.id}`);
+    setAdaptiveHelpLoading(false);
+    trackEvent('adaptive_help_used', {
+      type: 'explain_differently',
+      questionId: currentPracticeQuestion.id,
+      lessonId,
+    });
+  }, [currentPracticeQuestion, lessonDetail?.module.subject, lessonId, openTutorWithContext]);
+
+  const handleMakeSimpler = useCallback(() => {
+    if (!currentPracticeQuestion) return;
+    setAdaptiveHelpLoading(true);
+    const prompt = `I'm confused about "${currentPracticeQuestion.prompt}". Can you break this down into simpler steps? Start with the basics and work up to it.`;
+    openTutorWithContext(prompt, `make_simpler:${currentPracticeQuestion.id}`);
+    setAdaptiveHelpLoading(false);
+    trackEvent('adaptive_help_used', {
+      type: 'make_simpler',
+      questionId: currentPracticeQuestion.id,
+      lessonId,
+    });
+  }, [currentPracticeQuestion, lessonId, openTutorWithContext]);
+
+  const handleTakeBreak = useCallback(() => {
+    const prompt = `I've been working hard and need a moment. Can you share something encouraging and maybe suggest a quick mental break activity before I continue?`;
+    openTutorWithContext(prompt, 'take_break');
+    trackEvent('adaptive_help_used', { type: 'take_break', lessonId });
+  }, [lessonId, openTutorWithContext]);
+
+  const handleSkipAhead = useCallback(() => {
+    const nextUnanswered = practiceQuestions.findIndex(
+      (q, idx) => idx > questionIndex && !questionResponses.has(q.id),
+    );
+    if (nextUnanswered !== -1) {
+      setQuestionIndex(nextUnanswered);
+    }
+    setShowMasteryPrompt(false);
+    trackEvent('adaptive_pacing_skip', {
+      fromQuestion: questionIndex,
+      toQuestion: nextUnanswered,
+      masteryPct,
+      lessonId,
+    });
+  }, [lessonId, masteryPct, practiceQuestions, questionIndex, questionResponses]);
+
   const handleQuestionAnswer = async (optionId: number) => {
     if (!currentPracticeQuestion || questionSaving) {
       return;
@@ -499,13 +593,13 @@ const LessonPlayerPage: React.FC = () => {
             lesson_id: lessonId,
             module_id: lessonDetail?.module.id ?? null,
             standards: lessonStandards,
-          correct: isCorrect,
-          difficulty: adaptiveDifficulty,
-          time_spent: elapsedSeconds,
-        },
-      }).catch((eventError) => {
-        console.warn('[lesson] Failed to emit practice event', eventError);
-      });
+            correct: isCorrect,
+            difficulty: adaptiveDifficulty,
+            time_spent: elapsedSeconds,
+          },
+        }).catch((eventError) => {
+          console.warn('[lesson] Failed to emit practice event', eventError);
+        });
       }
     } catch (error) {
       console.warn('[lesson] Failed to sync practice answer', error);
@@ -517,6 +611,23 @@ const LessonPlayerPage: React.FC = () => {
       isCorrect,
       explanation: selectedOption?.feedback ?? currentPracticeQuestion.explanation ?? null,
     });
+
+    // Phase 4: Track consecutive misses/correct for adaptive help
+    if (isCorrect) {
+      setConsecutiveMisses(0);
+      setConsecutiveCorrect((prev) => prev + 1);
+      setHintLevel(0); // Reset hints on correct answer
+      // Track total time for pacing feedback
+      setTotalQuestionTime((prev) => prev + elapsedSeconds);
+      // Show mastery prompt if doing well
+      if (consecutiveCorrect + 1 >= 3 && masteryAfter >= 85) {
+        setShowMasteryPrompt(true);
+      }
+    } else {
+      setConsecutiveMisses((prev) => prev + 1);
+      setConsecutiveCorrect(0);
+      setTotalQuestionTime((prev) => prev + elapsedSeconds);
+    }
 
     if (status === 'completed') {
       const masteryEventOrder = progressController.allocateEventOrder();
@@ -626,636 +737,655 @@ const LessonPlayerPage: React.FC = () => {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pb-20">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
-          <div className="flex flex-wrap items-center gap-4 text-sm text-brand-blue/80">
-            <Link to="/catalog" className="inline-flex items-center gap-2 hover:text-brand-blue">
-              <ArrowLeft className="h-4 w-4" /> Back to catalog
-            </Link>
-            <span className="text-slate-300">/</span>
-            <Link
-              to={`/module/${lessonDetail.module.id}`}
-              className="inline-flex items-center gap-2 hover:text-brand-blue"
-            >
-              <PlayCircle className="h-4 w-4" /> {lessonDetail.module.title}
-            </Link>
-          </div>
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div className="space-y-3">
-              <div className="text-sm uppercase tracking-wide text-brand-blue font-semibold">
-                {lessonDetail.module.subject} · Grade {lessonDetail.module.gradeBand}
+        <header className="bg-white border-b border-slate-200">
+          <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-brand-blue/80">
+              <Link to="/catalog" className="inline-flex items-center gap-2 hover:text-brand-blue">
+                <ArrowLeft className="h-4 w-4" /> Back to catalog
+              </Link>
+              <span className="text-slate-300">/</span>
+              <Link
+                to={`/module/${lessonDetail.module.id}`}
+                className="inline-flex items-center gap-2 hover:text-brand-blue"
+              >
+                <PlayCircle className="h-4 w-4" /> {lessonDetail.module.title}
+              </Link>
+            </div>
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="space-y-3">
+                <div className="text-sm uppercase tracking-wide text-brand-blue font-semibold">
+                  {lessonDetail.module.subject} · Grade {lessonDetail.module.gradeBand}
+                </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+                  {lessonDetail.lesson.title}
+                </h1>
+                <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                  <span className="inline-flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    {formatDuration(lessonDetail.lesson.estimatedDurationMinutes)}
+                  </span>
+                  <motion.span
+                    key={difficultyLabel}
+                    initial={{ opacity: 0, scale: 0.95, y: -4 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                  >
+                    <Gauge className="h-3 w-3 text-brand-blue" />
+                    Difficulty: {difficultyLabel.charAt(0).toUpperCase() + difficultyLabel.slice(1)}{' '}
+                    <span className="text-[11px] font-normal text-slate-500">(aiming for 65–80% correct)</span>
+                  </motion.span>
+                  {lessonDetail.lesson.openTrack && (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-600">
+                      <Sparkles className="h-3 w-3" /> Open Track friendly
+                    </span>
+                  )}
+                  {lessonDetail.module.openTrack && !lessonDetail.lesson.openTrack && (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                      <Sparkles className="h-3 w-3 text-slate-500" /> Module offers open track alt
+                    </span>
+                  )}
+                </div>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
-                {lessonDetail.lesson.title}
-              </h1>
-              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
-                <span className="inline-flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  {formatDuration(lessonDetail.lesson.estimatedDurationMinutes)}
-                </span>
-                <motion.span
-                  key={difficultyLabel}
-                  initial={{ opacity: 0, scale: 0.95, y: -4 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
-                >
-                  <Gauge className="h-3 w-3 text-brand-blue" />
-                  Difficulty: {difficultyLabel.charAt(0).toUpperCase() + difficultyLabel.slice(1)}{' '}
-                  <span className="text-[11px] font-normal text-slate-500">(aiming for 65–80% correct)</span>
-                </motion.span>
-                {lessonDetail.lesson.openTrack && (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-600">
-                    <Sparkles className="h-3 w-3" /> Open Track friendly
-                  </span>
+              <div className="flex items-center gap-3">
+                {previousLesson && (
+                  <Link
+                    to={`/lesson/${previousLesson.id}`}
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 focus-ring"
+                  >
+                    <ArrowLeft className="h-4 w-4" /> Previous
+                  </Link>
                 )}
-                {lessonDetail.module.openTrack && !lessonDetail.lesson.openTrack && (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                    <Sparkles className="h-3 w-3 text-slate-500" /> Module offers open track alt
-                  </span>
+                {nextLesson && (
+                  <Link
+                    to={`/lesson/${nextLesson.id}`}
+                    className="inline-flex items-center gap-2 rounded-xl bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 focus-ring"
+                  >
+                    Next lesson <ArrowRight className="h-4 w-4" />
+                  </Link>
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              {previousLesson && (
-                <Link
-                  to={`/lesson/${previousLesson.id}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 focus-ring"
-                >
-                  <ArrowLeft className="h-4 w-4" /> Previous
-                </Link>
-              )}
-              {nextLesson && (
-                <Link
-                  to={`/lesson/${nextLesson.id}`}
-                  className="inline-flex items-center gap-2 rounded-xl bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-blue/90 focus-ring"
-                >
-                  Next lesson <ArrowRight className="h-4 w-4" />
-                </Link>
-              )}
-            </div>
-          </div>
             {studentUser && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <div className="text-xs text-slate-500">Lesson progress</div>
-                <div className="flex items-center justify-between mt-1">
-                  <span className="text-lg font-semibold text-brand-blue">{progressController.progress}%</span>
-                  <div className="w-24 h-2 rounded-full bg-white overflow-hidden">
-                    <div
-                      className="h-full bg-brand-blue transition-all"
-                      style={{ width: `${progressController.progress}%` }}
-                    />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-xs text-slate-500">Lesson progress</div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-lg font-semibold text-brand-blue">{progressController.progress}%</span>
+                    <div className="w-24 h-2 rounded-full bg-white overflow-hidden">
+                      <div
+                        className="h-full bg-brand-blue transition-all"
+                        style={{ width: `${progressController.progress}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-xs text-slate-500">Streak</div>
+                  <div className="text-lg font-semibold text-amber-600">{xpState.streakDays} days</div>
+                  <div className="text-[11px] text-slate-500">Keep it going for badge boosts</div>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-xs text-slate-500">XP</div>
+                  <div className="text-lg font-semibold text-emerald-600">{xpState.xp}</div>
+                  <div className="text-[11px] text-slate-500">Earn more by finishing this lesson</div>
+                </div>
               </div>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <div className="text-xs text-slate-500">Streak</div>
-                <div className="text-lg font-semibold text-amber-600">{xpState.streakDays} days</div>
-                <div className="text-[11px] text-slate-500">Keep it going for badge boosts</div>
-              </div>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <div className="text-xs text-slate-500">XP</div>
-                <div className="text-lg font-semibold text-emerald-600">{xpState.xp}</div>
-                <div className="text-[11px] text-slate-500">Earn more by finishing this lesson</div>
-              </div>
-            </div>
-          )}
-        </div>
-      </header>
+            )}
+          </div>
+        </header>
 
-      <main className="max-w-6xl mx-auto px-6 mt-10 grid gap-8 lg:grid-cols-[320px_1fr]">
-        <aside className="space-y-6">
-          {studentId && (
-            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500">Up next</p>
-                  <h2 className="text-lg font-semibold text-slate-900">Adaptive path</h2>
+        <main className="max-w-6xl mx-auto px-6 mt-10 grid gap-8 lg:grid-cols-[320px_1fr]">
+          <aside className="space-y-6">
+            {studentId && (
+              <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Up next</p>
+                    <h2 className="text-lg font-semibold text-slate-900">Adaptive path</h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => pathQuery.refresh()}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
+                  >
+                    <RefreshCw className={`h-3 w-3 ${pathLoading ? 'animate-spin' : ''}`} /> Refresh
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => pathQuery.refresh()}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand-blue hover:underline focus-ring"
-                >
-                  <RefreshCw className={`h-3 w-3 ${pathLoading ? 'animate-spin' : ''}`} /> Refresh
-                </button>
-              </div>
-              {pathLoading ? (
-                <div className="space-y-2">
-                  {[0, 1, 2].map((idx) => (
-                    <div key={idx} className="h-14 rounded-xl bg-slate-100 animate-pulse" />
-                  ))}
-                </div>
-              ) : upNextEntries.length === 0 ? (
-                <p className="text-sm text-slate-600">Start this lesson to see your next recommendations.</p>
-              ) : (
-                <div className="space-y-3">
-                  {upNextEntries.map((entry) => {
-                    const meta = (entry.metadata ?? {}) as Record<string, unknown>;
-                    const title =
-                      (meta.lesson_title as string | undefined) ??
-                      (meta.module_title as string | undefined) ??
-                      (meta.module_slug as string | undefined) ??
-                      `Path item ${entry.position ?? entry.id}`;
-                    const reasonCopy = describePathEntryReason(entry);
-                    const target =
-                      entry.lesson_id != null
-                        ? `/lesson/${entry.lesson_id}`
-                        : entry.module_id != null
-                          ? `/module/${entry.module_id}`
-                          : null;
-                    const isCurrentLesson = entry.lesson_id === lessonId;
-                    const statusLabel =
-                      entry.status === 'not_started'
-                        ? 'Ready'
-                        : entry.status
+                {pathLoading ? (
+                  <div className="space-y-2">
+                    {[0, 1, 2].map((idx) => (
+                      <div key={idx} className="h-14 rounded-xl bg-slate-100 animate-pulse" />
+                    ))}
+                  </div>
+                ) : upNextEntries.length === 0 ? (
+                  <p className="text-sm text-slate-600">Start this lesson to see your next recommendations.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {upNextEntries.map((entry) => {
+                      const meta = (entry.metadata ?? {}) as Record<string, unknown>;
+                      const title =
+                        (meta.lesson_title as string | undefined) ??
+                        (meta.module_title as string | undefined) ??
+                        (meta.module_slug as string | undefined) ??
+                        `Path item ${entry.position ?? entry.id}`;
+                      const reasonCopy = describePathEntryReason(entry);
+                      const target =
+                        entry.lesson_id != null
+                          ? `/lesson/${entry.lesson_id}`
+                          : entry.module_id != null
+                            ? `/module/${entry.module_id}`
+                            : null;
+                      const isCurrentLesson = entry.lesson_id === lessonId;
+                      const statusLabel =
+                        entry.status === 'not_started'
+                          ? 'Ready'
+                          : entry.status
                             .replace(/_/g, ' ')
                             .replace(/\b\w/g, (char) => char.toUpperCase());
 
-                    return (
-                      <div
-                        key={entry.id}
-                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 flex items-center justify-between gap-3"
-                      >
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">{title}</p>
-                          <p className="text-xs text-slate-600 capitalize">
-                            {entry.type} • {statusLabel}
-                          </p>
-                          <div className="mt-1 inline-flex items-center gap-1 text-[11px] text-slate-500">
-                            <Info className="h-3.5 w-3.5" />
-                            <span>
-                              <span className="font-semibold">Why this?</span> {reasonCopy}
-                            </span>
+                      return (
+                        <div
+                          key={entry.id}
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 flex items-center justify-between gap-3"
+                        >
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900">{title}</p>
+                            <p className="text-xs text-slate-600 capitalize">
+                              {entry.type} • {statusLabel}
+                            </p>
+                            <div className="mt-1 inline-flex items-center gap-1 text-[11px] text-slate-500">
+                              <Info className="h-3.5 w-3.5" />
+                              <span>
+                                <span className="font-semibold">Why this?</span> {reasonCopy}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                        {target ? (
-                          <Link
-                            to={target}
-                            className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold focus-ring ${
-                              isCurrentLesson
+                          {target ? (
+                            <Link
+                              to={target}
+                              className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold focus-ring ${isCurrentLesson
                                 ? 'bg-brand-blue/10 text-brand-blue border border-brand-blue/40'
                                 : 'border border-slate-200 text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue'
-                            }`}
-                          >
-                            {isCurrentLesson ? 'In progress' : 'Go'}
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </Link>
+                                }`}
+                            >
+                              {isCurrentLesson ? 'In progress' : 'Go'}
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          ) : (
+                            <span className="text-[11px] font-semibold text-slate-500">Auto-progress</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            )}
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-slate-900">Progress tracker</h2>
+                <span className="text-sm font-semibold text-brand-blue">
+                  {progressController.progress}%
+                </span>
+              </div>
+              <p className="text-sm text-slate-500 mt-1">
+                Check off sections as you facilitate the lesson to keep your session pacing on track.
+              </p>
+              <div className="mt-4 h-2 rounded-full bg-slate-100">
+                <div
+                  className="h-full rounded-full bg-brand-blue transition-all"
+                  style={{ width: `${progressController.progress}%` }}
+                />
+              </div>
+              {(progressController.isLoading || progressController.isSaving) && (
+                <p className="mt-2 text-xs text-slate-400">
+                  {progressController.isLoading ? 'Loading saved progress…' : 'Syncing progress…'}
+                </p>
+              )}
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  disabled={progressDisabled}
+                  onClick={progressController.markComplete}
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90 focus-ring"
+                >
+                  Mark all complete
+                </button>
+                <button
+                  type="button"
+                  onClick={progressController.reset}
+                  disabled={progressDisabled || progressController.progress === 0}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 focus-ring"
+                >
+                  Reset
+                </button>
+              </div>
+              <ul className="mt-5 space-y-2">
+                {progressItems.map((item) => (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      disabled={progressDisabled}
+                      onClick={() => progressController.toggleItem(item.id)}
+                      aria-pressed={progressController.isComplete(item.id)}
+                      className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors focus-ring ${progressController.isComplete(item.id)
+                        ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-brand-blue/40 hover:text-brand-blue'
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {progressController.isComplete(item.id) ? (
+                          <CheckCircle2 className="h-4 w-4" />
                         ) : (
-                          <span className="text-[11px] font-semibold text-slate-500">Auto-progress</span>
+                          <Circle className="h-4 w-4" />
                         )}
+                        <span>{item.label}</span>
+                      </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Lesson navigation</h2>
+              <div className="space-y-2">
+                {moduleLessons.map((lesson, index) => {
+                  const active = lesson.id === lessonDetail.lesson.id;
+                  return (
+                    <Link
+                      key={lesson.id}
+                      to={`/lesson/${lesson.id}`}
+                      className={`flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm transition-colors focus-ring ${active
+                        ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
+                        : 'border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue'
+                        }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-500">
+                          {index + 1}
+                        </span>
+                        {lesson.title}
+                      </span>
+                      <span className="text-xs text-slate-400">
+                        {formatDuration(lesson.estimatedDurationMinutes)}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+
+            {lessonDetail.standards.length > 0 && (
+              <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold text-slate-900">Standards alignment</h2>
+                <div className="mt-4 space-y-3 text-sm">
+                  {lessonDetail.standards.map((standard) => (
+                    <div key={standard.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                      <div className="font-semibold text-slate-700">{standard.code}</div>
+                      <div className="text-xs uppercase tracking-wide text-slate-500">
+                        {standard.framework}
+                      </div>
+                      {standard.description && (
+                        <p className="mt-2 text-slate-600">{standard.description}</p>
+                      )}
+                      {standard.alignmentStrength && (
+                        <div className="mt-2 text-[11px] font-semibold uppercase text-brand-blue">
+                          {standard.alignmentStrength}
+                        </div>
+                      )}
+                      {standard.notes && (
+                        <p className="mt-2 text-xs text-slate-500">{standard.notes}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </aside>
+
+          <section className="space-y-8">
+            <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+              <div className="prose prose-slate max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={MARKDOWN_PLUGINS}
+                  components={{
+                    h2: headingRenderer('h2'),
+                    h3: headingRenderer('h3'),
+                    a: ({ ...rest }) => (
+                      <a {...rest} target="_blank" rel="noreferrer" />
+                    ),
+                  }}
+                >
+                  {lessonDetail.lesson.content}
+                </ReactMarkdown>
+              </div>
+              {lessonDetail.lesson.attributionBlock && (
+                <div className="mt-8 border-t border-slate-200 pt-4 text-xs text-slate-500 [&_a]:text-brand-blue [&_a]:underline">
+                  <ReactMarkdown remarkPlugins={MARKDOWN_PLUGINS}>
+                    {lessonDetail.lesson.attributionBlock}
+                  </ReactMarkdown>
+                </div>
+              )}
+            </article>
+
+            <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-900">Lesson check-in</h2>
+                  <p className="text-sm text-slate-500">
+                    Get quick feedback on the core concept before moving on.
+                  </p>
+                </div>
+                <div className="text-sm font-semibold text-brand-blue">
+                  {answeredCount}/{practiceQuestions.length || 0} answered
+                </div>
+              </div>
+
+              {practiceQuestionQuery.isLoading ? (
+                <div className="mt-6 flex items-center gap-2 text-slate-500">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Loading practice questions…</span>
+                </div>
+              ) : practiceQuestionQuery.isError ? (
+                <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 flex items-start gap-2">
+                  <AlertTriangle className="h-4 w-4 mt-0.5" />
+                  <span>We couldn&apos;t load check-in questions right now.</span>
+                </div>
+              ) : practiceQuestions.length === 0 ? (
+                <div className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
+                  No quick-check questions are linked to this lesson yet.
+                </div>
+              ) : currentPracticeQuestion ? (
+                <div className="mt-6 space-y-5">
+                  {/* Collapsible Lesson Resource Panel - Phase 3 Enhancement */}
+                  <LessonResourcePanel
+                    lessonTitle={lessonDetail.lesson.title}
+                    lessonContent={lessonDetail.lesson.content}
+                    attributionBlock={lessonDetail.lesson.attributionBlock}
+                    isCollapsed={resourcePanelCollapsed}
+                    onToggle={() => setResourcePanelCollapsed(!resourcePanelCollapsed)}
+                  />
+
+                  {/* Question Context Header - Phase 3 Enhancement */}
+                  <QuestionContextHeader
+                    lessonTitle={lessonDetail.lesson.title}
+                    moduleTitle={lessonDetail.module.title}
+                    questionNumber={questionIndex + 1}
+                    totalQuestions={practiceQuestions.length}
+                    onJumpToResource={() => setResourcePanelCollapsed(false)}
+                  />
+
+                  <div className="text-sm text-slate-600">
+                    Current score {masteryPct}% · keep momentum with immediate feedback.
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-slate-900">{currentPracticeQuestion.prompt}</h3>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openTutorWithContext(
+                            `I'm stuck on this practice question: ${currentPracticeQuestion.prompt}. Give me a ${difficultyLabel} hint first before revealing more.`,
+                            `practice:${currentPracticeQuestion.id}`,
+                          )
+                        }
+                        className="inline-flex items-center gap-1 rounded-full border border-brand-blue/40 px-3 py-1 font-semibold text-brand-blue hover:bg-brand-blue/10 focus-ring"
+                      >
+                        <Bot className="h-3 w-3" />
+                        Ask ElevatED for a hint
+                      </button>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600">
+                        <span>{tutorIcon}</span>
+                        {tutorLabel} · {difficultyLabel} pacing
+                      </span>
+                      <span className="text-slate-400">Try your best first, then get a guided nudge.</span>
+                    </div>
+                    <div className="space-y-3">
+                      {currentPracticeQuestion.options.map((option, index) => {
+                        const response = questionResponses.get(currentPracticeQuestion.id);
+                        const answered = Boolean(response);
+                        const isSelected = response?.selectedOptionId === option.id;
+                        const isCorrect = option.isCorrect;
+                        const baseClasses =
+                          'w-full rounded-xl border px-4 py-3 text-left transition-colors flex items-start gap-3';
+                        const stateClasses = !answered
+                          ? 'border-slate-200 hover:border-brand-blue/40 hover:bg-brand-blue/5'
+                          : isSelected && isCorrect
+                            ? 'border-emerald-200 bg-emerald-50'
+                            : isSelected
+                              ? 'border-rose-200 bg-rose-50'
+                              : 'border-slate-200 bg-slate-50';
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            disabled={answered || questionSaving}
+                            onClick={() => handleQuestionAnswer(option.id)}
+                            className={`${baseClasses} ${stateClasses} focus-ring`}
+                          >
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-600">
+                              {String.fromCharCode(65 + index)}
+                            </div>
+                            <div className="flex-1 space-y-1">
+                              <div className="font-medium text-slate-800">{option.text}</div>
+                              {answered && option.feedback && isSelected && (
+                                <p className="text-xs text-slate-600">{option.feedback}</p>
+                              )}
+                            </div>
+                            {answered && isSelected && (
+                              isCorrect ? (
+                                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                              ) : (
+                                <XCircle className="h-5 w-5 text-rose-500" />
+                              )
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Phase 4: Adaptive Help Panel - Always visible help options */}
+                    {!questionResponses.has(currentPracticeQuestion.id) && (
+                      <AdaptiveHelpPanel
+                        consecutiveMisses={consecutiveMisses}
+                        timeOnQuestion={timeOnCurrentQuestion}
+                        autoExpanded={consecutiveMisses >= 2}
+                        onShowHint={handleShowHint}
+                        onExplainDifferently={handleExplainDifferently}
+                        onMakeSimpler={handleMakeSimpler}
+                        onTakeBreak={handleTakeBreak}
+                        hintLevel={hintLevel}
+                        isLoading={adaptiveHelpLoading}
+                        subject={lessonDetail?.module.subject}
+                        questionNumber={questionIndex + 1}
+                        totalQuestions={practiceQuestions.length}
+                      />
+                    )}
+
+                    {/* Enhanced Question Feedback - Phase 3 Enhancement */}
+                    {questionFeedback && currentPracticeQuestion && (
+                      <QuestionFeedbackPanel
+                        isCorrect={questionFeedback.isCorrect}
+                        explanation={questionFeedback.explanation}
+                        questionPrompt={currentPracticeQuestion.prompt}
+                        lessonTitle={lessonDetail.lesson.title}
+                        onAskTutor={openTutorWithContext}
+                        onScrollToResource={() => setResourcePanelCollapsed(false)}
+                        tutorLabel={tutorLabel}
+                      />
+                    )}
+
+                    {/* Phase 4: Adaptive Pacing Feedback - Shows when excelling */}
+                    {questionFeedback?.isCorrect && (
+                      <AdaptivePacingFeedback
+                        masteryPct={masteryPct}
+                        correctCount={correctCount}
+                        totalQuestions={practiceQuestions.length}
+                        consecutiveCorrect={consecutiveCorrect}
+                        avgTimePerQuestion={avgTimePerQuestion}
+                        showSkipPrompt={showMasteryPrompt}
+                        onSkipAhead={handleSkipAhead}
+                        onDismiss={() => setShowMasteryPrompt(false)}
+                      />
+                    )}
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div className="text-sm text-slate-500">
+                        Answered {answeredCount} of {practiceQuestions.length} · Correct {correctCount}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {questionIndex < practiceQuestions.length - 1 && (
+                          <button
+                            type="button"
+                            onClick={handleNextQuestion}
+                            disabled={!questionResponses.has(currentPracticeQuestion.id)}
+                            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue disabled:opacity-60 focus-ring"
+                          >
+                            Next question <ArrowRight className="h-4 w-4" />
+                          </button>
+                        )}
+                        {answeredCount === practiceQuestions.length && (
+                          <span className="text-sm font-semibold text-emerald-600">
+                            Check-in complete · {masteryPct}% mastery
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </article>
+
+            <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                    <Video className="h-5 w-5 text-brand-blue" /> Learning resources
+                  </h2>
+                  <p className="text-sm text-slate-500">
+                    Launch media and supporting materials without leaving the experience.
+                  </p>
+                </div>
+                <label className="inline-flex items-center gap-2 text-sm text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={showOpenOnly}
+                    onChange={(event) => setShowOpenOnly(event.target.checked)}
+                    className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue"
+                  />
+                  Show open-licensed resources only
+                </label>
+              </div>
+
+              {filteredAssets.length === 0 ? (
+                <div className="mt-6 rounded-xl border border-dashed border-slate-200 px-6 py-8 text-center text-sm text-slate-500">
+                  {showOpenOnly
+                    ? 'No open-licensed resources for this lesson yet.'
+                    : 'Supporting assets will appear here once linked to this lesson.'}
+                </div>
+              ) : (
+                <div className="mt-6 space-y-6">
+                  {filteredAssets.map((asset) => {
+                    const isVideo = isVideoAsset(asset.url, asset.kind);
+                    const embedUrl = isVideo ? getVideoEmbedUrl(asset.url) : null;
+                    return (
+                      <div
+                        key={asset.id}
+                        className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
+                      >
+                        <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                          <div>
+                            <div className="text-base font-semibold text-slate-800">
+                              {asset.title ?? asset.url}
+                            </div>
+                            {asset.description && (
+                              <p className="text-sm text-slate-500 mt-1">{asset.description}</p>
+                            )}
+                            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                              <span className="rounded-full bg-white px-2 py-1 font-medium text-slate-600">
+                                {asset.kind ?? 'Resource'}
+                              </span>
+                              <span
+                                className={`rounded-full px-2 py-1 font-medium ${isOpenLicense(asset.license)
+                                  ? 'bg-emerald-100 text-emerald-600'
+                                  : 'bg-slate-200 text-slate-600'
+                                  }`}
+                              >
+                                {asset.license}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!progressDisabled && !progressController.isComplete('assets')) {
+                                progressController.toggleItem('assets');
+                              }
+                              window.open(asset.url, '_blank', 'noopener,noreferrer');
+                            }}
+                            className="inline-flex items-center gap-2 rounded-xl border border-brand-blue/40 px-3 py-2 text-sm font-medium text-brand-blue hover:bg-brand-blue/10"
+                          >
+                            Open resource <ExternalLink className="h-4 w-4" />
+                          </button>
+                        </div>
+                        {embedUrl ? (
+                          <div className="mt-4 overflow-hidden rounded-xl bg-black">
+                            <iframe
+                              src={embedUrl}
+                              title={asset.title ?? 'Lesson video'}
+                              className="h-64 w-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
+                        ) : isVideo ? (
+                          <video controls className="mt-4 w-full rounded-xl">
+                            <source src={asset.url} />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : null}
                       </div>
                     );
                   })}
                 </div>
               )}
-            </section>
-          )}
-          <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">Progress tracker</h2>
-              <span className="text-sm font-semibold text-brand-blue">
-                {progressController.progress}%
-              </span>
-            </div>
-            <p className="text-sm text-slate-500 mt-1">
-              Check off sections as you facilitate the lesson to keep your session pacing on track.
-            </p>
-            <div className="mt-4 h-2 rounded-full bg-slate-100">
-              <div
-                className="h-full rounded-full bg-brand-blue transition-all"
-                style={{ width: `${progressController.progress}%` }}
-              />
-            </div>
-            {(progressController.isLoading || progressController.isSaving) && (
-              <p className="mt-2 text-xs text-slate-400">
-                {progressController.isLoading ? 'Loading saved progress…' : 'Syncing progress…'}
-              </p>
-            )}
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                type="button"
-                disabled={progressDisabled}
-                onClick={progressController.markComplete}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-blue/90 focus-ring"
-              >
-                Mark all complete
-              </button>
-              <button
-                type="button"
-                onClick={progressController.reset}
-                disabled={progressDisabled || progressController.progress === 0}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 focus-ring"
-              >
-                Reset
-              </button>
-            </div>
-            <ul className="mt-5 space-y-2">
-              {progressItems.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    disabled={progressDisabled}
-                    onClick={() => progressController.toggleItem(item.id)}
-                    aria-pressed={progressController.isComplete(item.id)}
-                    className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors focus-ring ${
-                      progressController.isComplete(item.id)
-                        ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-brand-blue/40 hover:text-brand-blue'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {progressController.isComplete(item.id) ? (
-                        <CheckCircle2 className="h-4 w-4" />
-                      ) : (
-                        <Circle className="h-4 w-4" />
-                      )}
-                      <span>{item.label}</span>
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
+            </article>
 
-          <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-4">Lesson navigation</h2>
-            <div className="space-y-2">
-              {moduleLessons.map((lesson, index) => {
-                const active = lesson.id === lessonDetail.lesson.id;
-                return (
-                  <Link
-                    key={lesson.id}
-                    to={`/lesson/${lesson.id}`}
-                    className={`flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm transition-colors focus-ring ${
-                      active
-                        ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue'
-                        : 'border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue'
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-500">
-                        {index + 1}
-                      </span>
-                      {lesson.title}
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      {formatDuration(lesson.estimatedDurationMinutes)}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-
-          {lessonDetail.standards.length > 0 && (
-            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-slate-900">Standards alignment</h2>
-              <div className="mt-4 space-y-3 text-sm">
-                {lessonDetail.standards.map((standard) => (
-                  <div key={standard.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                    <div className="font-semibold text-slate-700">{standard.code}</div>
-                    <div className="text-xs uppercase tracking-wide text-slate-500">
-                      {standard.framework}
-                    </div>
-                    {standard.description && (
-                      <p className="mt-2 text-slate-600">{standard.description}</p>
-                    )}
-                    {standard.alignmentStrength && (
-                      <div className="mt-2 text-[11px] font-semibold uppercase text-brand-blue">
-                        {standard.alignmentStrength}
-                      </div>
-                    )}
-                    {standard.notes && (
-                      <p className="mt-2 text-xs text-slate-500">{standard.notes}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </aside>
-
-        <section className="space-y-8">
-          <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-            <div className="prose prose-slate max-w-none">
-              <ReactMarkdown
-                remarkPlugins={MARKDOWN_PLUGINS}
-                components={{
-                  h2: headingRenderer('h2'),
-                  h3: headingRenderer('h3'),
-                  a: ({ ...rest }) => (
-                    <a {...rest} target="_blank" rel="noreferrer" />
-                  ),
-                }}
-              >
-                {lessonDetail.lesson.content}
-              </ReactMarkdown>
-            </div>
-            {lessonDetail.lesson.attributionBlock && (
-              <div className="mt-8 border-t border-slate-200 pt-4 text-xs text-slate-500 [&_a]:text-brand-blue [&_a]:underline">
-                <ReactMarkdown remarkPlugins={MARKDOWN_PLUGINS}>
-                  {lessonDetail.lesson.attributionBlock}
-                </ReactMarkdown>
-              </div>
-            )}
-          </article>
-
-          <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-xl font-semibold text-slate-900">Lesson check-in</h2>
-                <p className="text-sm text-slate-500">
-                  Get quick feedback on the core concept before moving on.
-                </p>
-              </div>
-              <div className="text-sm font-semibold text-brand-blue">
-                {answeredCount}/{practiceQuestions.length || 0} answered
-              </div>
-            </div>
-
-            {practiceQuestionQuery.isLoading ? (
-              <div className="mt-6 flex items-center gap-2 text-slate-500">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Loading practice questions…</span>
-              </div>
-            ) : practiceQuestionQuery.isError ? (
-              <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 flex items-start gap-2">
-                <AlertTriangle className="h-4 w-4 mt-0.5" />
-                <span>We couldn&apos;t load check-in questions right now.</span>
-              </div>
-            ) : practiceQuestions.length === 0 ? (
-              <div className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
-                No quick-check questions are linked to this lesson yet.
-              </div>
-            ) : currentPracticeQuestion ? (
-                <div className="mt-6 space-y-5">
-                  <div className="text-sm text-slate-600">
-                    Current score {masteryPct}% · keep momentum with immediate feedback.
-                  </div>
-                  <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900">{currentPracticeQuestion.prompt}</h3>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openTutorWithContext(
-                          `I'm stuck on this practice question: ${currentPracticeQuestion.prompt}. Give me a ${difficultyLabel} hint first before revealing more.`,
-                          `practice:${currentPracticeQuestion.id}`,
-                        )
-                      }
-                      className="inline-flex items-center gap-1 rounded-full border border-brand-blue/40 px-3 py-1 font-semibold text-brand-blue hover:bg-brand-blue/10 focus-ring"
-                    >
-                      <Bot className="h-3 w-3" />
-                      Ask ElevatED for a hint
-                    </button>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600">
-                      <span>{tutorIcon}</span>
-                      {tutorLabel} · {difficultyLabel} pacing
-                    </span>
-                    <span className="text-slate-400">Try your best first, then get a guided nudge.</span>
-                  </div>
-                  <div className="space-y-3">
-                    {currentPracticeQuestion.options.map((option, index) => {
-                      const response = questionResponses.get(currentPracticeQuestion.id);
-                      const answered = Boolean(response);
-                      const isSelected = response?.selectedOptionId === option.id;
-                      const isCorrect = option.isCorrect;
-                      const baseClasses =
-                        'w-full rounded-xl border px-4 py-3 text-left transition-colors flex items-start gap-3';
-                      const stateClasses = !answered
-                        ? 'border-slate-200 hover:border-brand-blue/40 hover:bg-brand-blue/5'
-                        : isSelected && isCorrect
-                        ? 'border-emerald-200 bg-emerald-50'
-                        : isSelected
-                        ? 'border-rose-200 bg-rose-50'
-                        : 'border-slate-200 bg-slate-50';
-                    return (
-                      <button
-                        key={option.id}
-                        type="button"
-                        disabled={answered || questionSaving}
-                        onClick={() => handleQuestionAnswer(option.id)}
-                        className={`${baseClasses} ${stateClasses} focus-ring`}
-                      >
-                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-600">
-                          {String.fromCharCode(65 + index)}
-                        </div>
-                        <div className="flex-1 space-y-1">
-                            <div className="font-medium text-slate-800">{option.text}</div>
-                            {answered && option.feedback && isSelected && (
-                              <p className="text-xs text-slate-600">{option.feedback}</p>
-                            )}
-                          </div>
-                          {answered && isSelected && (
-                            isCorrect ? (
-                              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                            ) : (
-                              <XCircle className="h-5 w-5 text-rose-500" />
-                            )
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {questionFeedback && (
-                    <div
-                      className={`rounded-xl border px-4 py-3 text-sm ${
-                        questionFeedback.isCorrect
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                          : 'border-rose-200 bg-rose-50 text-rose-700'
-                      }`}
-                    >
-                      <div className="flex items-start gap-2">
-                        {questionFeedback.isCorrect ? (
-                          <CheckCircle2 className="h-4 w-4 mt-0.5" />
-                        ) : (
-                          <AlertTriangle className="h-4 w-4 mt-0.5" />
-                        )}
-                        <div>
-                          <p className="font-semibold">
-                            {questionFeedback.isCorrect ? 'Nice work! Correct answer.' : 'Not quite—review the explanation.'}
-                          </p>
-                          {questionFeedback.explanation && (
-                          <p className="text-xs mt-1">{questionFeedback.explanation}</p>
-                          )}
-                        </div>
-                      </div>
-                      {!questionFeedback.isCorrect && currentPracticeQuestion && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            openTutorWithContext(
-                              `I missed this check-in question: "${currentPracticeQuestion.prompt}". Walk me through the concept in two steps and give me a quick practice prompt.`,
-                              `practice:${currentPracticeQuestion.id}:extra-help`,
-                            )
-                          }
-                          className="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/70 px-3 py-2 text-xs font-semibold text-brand-blue hover:bg-white"
-                        >
-                          Need extra help? Ask the AI tutor
-                        </button>
-                      )}
-                    </div>
-                  )}
-                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                    <div className="text-sm text-slate-500">
-                      Answered {answeredCount} of {practiceQuestions.length} · Correct {correctCount}
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {questionIndex < practiceQuestions.length - 1 && (
-                        <button
-                          type="button"
-                          onClick={handleNextQuestion}
-                          disabled={!questionResponses.has(currentPracticeQuestion.id)}
-                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-blue/40 hover:text-brand-blue disabled:opacity-60 focus-ring"
-                        >
-                          Next question <ArrowRight className="h-4 w-4" />
-                        </button>
-                      )}
-                      {answeredCount === practiceQuestions.length && (
-                        <span className="text-sm font-semibold text-emerald-600">
-                          Check-in complete · {masteryPct}% mastery
-                        </span>
-                      )}
-                    </div>
-                  </div>
+            <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-900">Wrap-up & reflection</h2>
+                  <p className="text-sm text-slate-500">
+                    Capture learner takeaways or next steps, then mark the reflection complete.
+                  </p>
                 </div>
-              </div>
-            ) : null}
-          </article>
-
-          <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-                  <Video className="h-5 w-5 text-brand-blue" /> Learning resources
-                </h2>
-                <p className="text-sm text-slate-500">
-                  Launch media and supporting materials without leaving the experience.
-                </p>
-              </div>
-              <label className="inline-flex items-center gap-2 text-sm text-slate-600">
-                <input
-                  type="checkbox"
-                  checked={showOpenOnly}
-                  onChange={(event) => setShowOpenOnly(event.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue"
-                />
-                Show open-licensed resources only
-              </label>
-            </div>
-
-            {filteredAssets.length === 0 ? (
-              <div className="mt-6 rounded-xl border border-dashed border-slate-200 px-6 py-8 text-center text-sm text-slate-500">
-                {showOpenOnly
-                  ? 'No open-licensed resources for this lesson yet.'
-                  : 'Supporting assets will appear here once linked to this lesson.'}
-              </div>
-            ) : (
-              <div className="mt-6 space-y-6">
-                {filteredAssets.map((asset) => {
-                  const isVideo = isVideoAsset(asset.url, asset.kind);
-                  const embedUrl = isVideo ? getVideoEmbedUrl(asset.url) : null;
-                  return (
-                    <div
-                      key={asset.id}
-                      className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
-                    >
-                      <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                        <div>
-                          <div className="text-base font-semibold text-slate-800">
-                            {asset.title ?? asset.url}
-                          </div>
-                          {asset.description && (
-                            <p className="text-sm text-slate-500 mt-1">{asset.description}</p>
-                          )}
-                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                            <span className="rounded-full bg-white px-2 py-1 font-medium text-slate-600">
-                              {asset.kind ?? 'Resource'}
-                            </span>
-                            <span
-                              className={`rounded-full px-2 py-1 font-medium ${
-                                isOpenLicense(asset.license)
-                                  ? 'bg-emerald-100 text-emerald-600'
-                                  : 'bg-slate-200 text-slate-600'
-                              }`}
-                            >
-                              {asset.license}
-                            </span>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (!progressDisabled && !progressController.isComplete('assets')) {
-                              progressController.toggleItem('assets');
-                            }
-                            window.open(asset.url, '_blank', 'noopener,noreferrer');
-                          }}
-                          className="inline-flex items-center gap-2 rounded-xl border border-brand-blue/40 px-3 py-2 text-sm font-medium text-brand-blue hover:bg-brand-blue/10"
-                        >
-                          Open resource <ExternalLink className="h-4 w-4" />
-                        </button>
-                      </div>
-                      {embedUrl ? (
-                        <div className="mt-4 overflow-hidden rounded-xl bg-black">
-                          <iframe
-                            src={embedUrl}
-                            title={asset.title ?? 'Lesson video'}
-                            className="h-64 w-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        </div>
-                      ) : isVideo ? (
-                        <video controls className="mt-4 w-full rounded-xl">
-                          <source src={asset.url} />
-                          Your browser does not support the video tag.
-                        </video>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </article>
-
-          <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-xl font-semibold text-slate-900">Wrap-up & reflection</h2>
-                <p className="text-sm text-slate-500">
-                  Capture learner takeaways or next steps, then mark the reflection complete.
-                </p>
-              </div>
-              <button
-                type="button"
-                disabled={progressDisabled}
-                onClick={() => progressController.toggleItem('reflection')}
-                className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
-                  progressController.isComplete('reflection')
+                <button
+                  type="button"
+                  disabled={progressDisabled}
+                  onClick={() => progressController.toggleItem('reflection')}
+                  className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${progressController.isComplete('reflection')
                     ? 'border-brand-blue/50 bg-brand-blue/10 text-brand-blue'
                     : 'border-slate-200 text-slate-600 hover:border-brand-blue/40 hover:text-brand-blue'
-                }`}
-              >
-                {progressController.isComplete('reflection') ? 'Reflection complete' : 'Mark reflection complete'}
-              </button>
-            </div>
-            <div className="mt-4 grid gap-4 md:grid-cols-3 text-sm text-slate-600">
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                Celebrate success: Which moments energized the class?
+                    }`}
+                >
+                  {progressController.isComplete('reflection') ? 'Reflection complete' : 'Mark reflection complete'}
+                </button>
               </div>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                Spot challenges: Where did learners need more scaffolding?
+              <div className="mt-4 grid gap-4 md:grid-cols-3 text-sm text-slate-600">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  Celebrate success: Which moments energized the class?
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  Spot challenges: Where did learners need more scaffolding?
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  Plan forward: Note tomorrow’s warm-up or follow-up support.
+                </div>
               </div>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                Plan forward: Note tomorrow’s warm-up or follow-up support.
-              </div>
-            </div>
-          </article>
-        </section>
-      </main>
+            </article>
+          </section>
+        </main>
       </div>
       {user?.role === 'student' && <LearningAssistant />}
     </>

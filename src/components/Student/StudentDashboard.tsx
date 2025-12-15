@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangle,
+  Award,
   Brain,
   CheckCircle,
   Clock,
@@ -54,6 +55,7 @@ import type {
 } from '../../types';
 const OnboardingFlow = lazy(() => import('./OnboardingFlow'));
 const LearningAssistant = lazy(() => import('./LearningAssistant'));
+import TodaysFocusCard from './TodaysFocusCard';
 import { fetchStudentDashboardData } from '../../services/dashboardService';
 import type { StudentStats } from '../../services/statsService';
 import trackEvent from '../../lib/analytics';
@@ -268,7 +270,7 @@ const StudentDashboard: React.FC = () => {
     return 'g9-plus';
   }, [student?.grade]);
   const [activeView, setActiveView] = useState<'dashboard' | 'onboarding' | 'lesson'>('dashboard');
-  const [activeTab, setActiveTab] = useState<'today' | 'journey'>('today');
+  const [activeTab, setActiveTab] = useState<'today' | 'journey' | 'progress'>('today');
   const [subjectFilter, setSubjectFilter] = useState<Subject | 'all'>('all');
   const [missionCadence, setMissionCadence] = useState<'daily' | 'weekly'>('daily');
   const [achievementFilter, setAchievementFilter] = useState<BadgeCategory | 'all'>('all');
@@ -312,8 +314,8 @@ const StudentDashboard: React.FC = () => {
   );
   const [weeklyPlanFocus, setWeeklyPlanFocus] = useState<Subject | 'balanced'>(
     (student?.learningPreferences?.weeklyPlanFocus as Subject | 'balanced') ??
-      student?.learningPreferences?.focusSubject ??
-      'balanced',
+    student?.learningPreferences?.focusSubject ??
+    'balanced',
   );
   const [weeklyIntent, setWeeklyIntent] = useState<'precision' | 'speed' | 'stretch' | 'balanced'>(
     student?.learningPreferences?.weeklyIntent ?? 'balanced',
@@ -810,8 +812,8 @@ const StudentDashboard: React.FC = () => {
     setWeeklyPlanIntensity(student.learningPreferences.weeklyPlanIntensity ?? 'normal');
     setWeeklyPlanFocus(
       (student.learningPreferences.weeklyPlanFocus as Subject | 'balanced') ??
-        student.learningPreferences.focusSubject ??
-        'balanced',
+      student.learningPreferences.focusSubject ??
+      'balanced',
     );
     setWeeklyIntent(student.learningPreferences.weeklyIntent ?? 'balanced');
     setStudyMode(student.learningPreferences.studyMode ?? 'keep_up');
@@ -983,7 +985,7 @@ const StudentDashboard: React.FC = () => {
       const list = buckets.get(item.subject) ?? [];
       list.push(item);
       buckets.set(item.subject, list);
-      });
+    });
 
     return Array.from(buckets.entries()).map(([subject, items]) => ({
       subject,
@@ -1007,8 +1009,8 @@ const StudentDashboard: React.FC = () => {
       dashboard?.profile?.badges?.length && dashboard.profile.badges.length > 0
         ? dashboard.profile.badges
         : dashboard?.recentBadges?.length
-        ? dashboard.recentBadges
-        : fallbackBadges;
+          ? dashboard.recentBadges
+          : fallbackBadges;
     return pool.slice().sort((a, b) => {
       const aTime = a.earnedAt instanceof Date ? a.earnedAt.getTime() : new Date(a.earnedAt).getTime();
       const bTime = b.earnedAt instanceof Date ? b.earnedAt.getTime() : new Date(b.earnedAt).getTime();
@@ -1296,10 +1298,7 @@ const StudentDashboard: React.FC = () => {
     if (!candidate) return 10;
     return Math.max(3, Math.round(candidate));
   }, [recommendedLesson, todayActivities]);
-  const tutorPromptChips = useMemo(
-    () => ['Walk me through this lesson', 'Where do I start?', 'Give me a quick hint'],
-    [],
-  );
+
   const todaysPlanProgress = useMemo(() => {
     const total = todaysPlan.length;
     const completed = todaysPlan.filter((lesson) => lesson.status === 'completed').length;
@@ -1830,11 +1829,11 @@ const StudentDashboard: React.FC = () => {
       };
       const history = Array.isArray(parsed.history)
         ? parsed.history
-            .filter((entry) => typeof entry?.date === 'string')
-            .map((entry) => ({
-              date: entry.date as string,
-              completed: Boolean(entry.completed),
-            }))
+          .filter((entry) => typeof entry?.date === 'string')
+          .map((entry) => ({
+            date: entry.date as string,
+            completed: Boolean(entry.completed),
+          }))
         : [];
 
       if (parsed.date && parsed.date !== todayKey) {
@@ -1873,11 +1872,11 @@ const StudentDashboard: React.FC = () => {
         source,
         lesson: recommendedLesson
           ? {
-              lessonId: recommendedLesson.id,
-              lessonTitle: recommendedLesson.title,
-              moduleTitle: recommendedLesson.moduleSlug ?? null,
-              subject: recommendedLesson.subject,
-            }
+            lessonId: recommendedLesson.id,
+            lessonTitle: recommendedLesson.title,
+            moduleTitle: recommendedLesson.moduleSlug ?? null,
+            subject: recommendedLesson.subject,
+          }
           : undefined,
       };
       window.dispatchEvent(new CustomEvent('learning-assistant:open', { detail }));
@@ -1891,15 +1890,6 @@ const StudentDashboard: React.FC = () => {
     },
     [recommendedLesson, student.id],
   );
-
-  const handleViewDailyPlan = useCallback(() => {
-    const target =
-      document.getElementById('daily-plan-mobile') ?? document.getElementById('daily-plan-desktop');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      trackEvent('daily_plan_focus_scroll', { studentId: student.id });
-    }
-  }, [student.id]);
 
   if (!student) {
     return null;
@@ -2205,11 +2195,10 @@ const StudentDashboard: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleMicroTaskStateChange(task.id, 'done')}
-                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
-                      status === 'done'
-                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                        : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
-                    }`}
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${status === 'done'
+                      ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
+                      }`}
                   >
                     <CheckCircle className="h-3 w-3" />
                     Done
@@ -2217,11 +2206,10 @@ const StudentDashboard: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleMicroTaskStateChange(task.id, 'skipped')}
-                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${
-                      status === 'skipped'
-                        ? 'bg-amber-100 text-amber-700 border-amber-200'
-                        : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
-                    }`}
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${status === 'skipped'
+                      ? 'bg-amber-100 text-amber-700 border-amber-200'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
+                      }`}
                   >
                     <X className="h-3 w-3" />
                     Skip
@@ -2519,106 +2507,19 @@ const StudentDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 md:mb-8 sticky top-2 z-30 md:static"
-        >
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
-                  <Play className="h-4 w-4" />
-                  <span>Do this now</span>
-                </div>
-                <h2 className="text-xl font-bold text-slate-900">
-                  {recommendedLesson ? recommendedLesson.title : 'Adaptive warm-up'}
-                </h2>
-                <p className="text-sm text-slate-600">
-                  {recommendedLesson
-                    ? recommendedLesson.suggestionReason ?? 'Start here to stay on your path.'
-                    : 'We will slot in your next lesson as soon as your plan syncs.'}
-                </p>
-                <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-2 py-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    ~{primaryTaskMinutes} min
-                  </span>
-                  {recommendedLesson?.subject && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1">
-                      <Target className="h-3.5 w-3.5" />
-                      {formatSubjectLabel(recommendedLesson.subject)}
-                    </span>
-                  )}
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    {recommendedLesson ? PATH_STATUS_LABELS[recommendedLesson.status] : 'Ready soon'}
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => recommendedLesson && handleStartLesson(recommendedLesson)}
-                    disabled={!recommendedLesson}
-                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-brand-blue text-white px-4 py-3 text-sm font-semibold hover:bg-brand-blue/90 disabled:opacity-50 focus-ring"
-                  >
-                    <Play className="h-4 w-4" />
-                    <span>{recommendedLesson ? 'Start now' : 'Syncing plan'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleViewDailyPlan}
-                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-gray-800 hover:border-brand-blue/60 focus-ring"
-                  >
-                    <ArrowRight className="h-4 w-4" />
-                    <span>View daily plan</span>
-                  </button>
-                </div>
-              </div>
-              <div className="w-full md:w-[320px]">
-                <div className="rounded-xl border border-brand-violet/30 bg-brand-light-violet/40 p-4 shadow-sm">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold text-slate-900">Need help? Ask</p>
-                    <span className="text-[11px] font-semibold text-brand-violet">Tutor</span>
-                  </div>
-                  <p className="text-xs text-slate-700">
-                    School-safe tutor stays on your current lesson. Quick prompts keep typing short.
-                  </p>
-                  <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openTutorFromHome()}
-                      className="min-h-[44px] w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-violet text-white px-4 py-3 text-sm font-semibold hover:bg-brand-blue focus-ring"
-                    >
-                      <Bot className="h-4 w-4" />
-                      Open tutor
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => openTutorFromHome('Can you guide me through this lesson?', 'do_this_now_guide')}
-                      className="min-h-[44px] w-full inline-flex items-center justify-center gap-2 rounded-xl border border-brand-violet/50 bg-white px-4 py-3 text-sm font-semibold text-brand-violet hover:border-brand-blue focus-ring"
-                    >
-                      <Sparkles className="h-4 w-4" />
-                      Guide me
-                    </button>
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {tutorPromptChips.map((chip) => (
-                      <button
-                        key={chip}
-                        type="button"
-                        onClick={() => openTutorFromHome(chip, 'do_this_now_chip')}
-                        className="min-h-[44px] px-3 py-2 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-brand-blue/60 focus-ring"
-                      >
-                        {chip}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        {/* Today's Focus - Single Clear Task (Phase 2) */}
+        <div className="mb-6 md:mb-8">
+          <TodaysFocusCard
+            lesson={recommendedLesson}
+            streakDays={quickStats?.streakDays ?? student.streakDays}
+            estimatedMinutes={primaryTaskMinutes}
+            upNextLessons={todaysPlan.slice(1, 4)}
+            onStartLesson={handleStartLesson}
+            onOpenTutor={openTutorFromHome}
+            isLoading={isLoading && !dashboard}
+            studentName={student.name?.split(' ')[0]}
+          />
+        </div>
 
         {activeTab === 'today' && (
           <div className="md:hidden mb-6">{renderDailyPlanSection('daily-plan-mobile')}</div>
@@ -2817,7 +2718,7 @@ const StudentDashboard: React.FC = () => {
 
         {!pathLoading && upNextEntries.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-slate-500">Up Next</p>
@@ -3242,11 +3143,10 @@ const StudentDashboard: React.FC = () => {
                       key={cadence}
                       type="button"
                       onClick={() => setMissionCadence(cadence)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
-                        missionCadence === cadence
-                          ? 'bg-white text-brand-violet border-white shadow-sm'
-                          : 'border-white/30 text-white hover:bg-white/10'
-                      }`}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${missionCadence === cadence
+                        ? 'bg-white text-brand-violet border-white shadow-sm'
+                        : 'border-white/30 text-white hover:bg-white/10'
+                        }`}
                     >
                       {cadence === 'daily' ? 'Mission of the day' : 'Weekly quest'}
                     </button>
@@ -3333,20 +3233,26 @@ const StudentDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('today')}
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${
-                activeTab === 'today' ? 'bg-brand-blue text-white shadow' : 'text-gray-700 hover:text-brand-blue'
-              }`}
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'today' ? 'bg-brand-blue text-white shadow' : 'text-gray-700 hover:text-brand-blue'
+                }`}
             >
               Today&apos;s Focus
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('journey')}
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${
-                activeTab === 'journey' ? 'bg-brand-teal text-white shadow' : 'text-gray-700 hover:text-brand-teal'
-              }`}
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'journey' ? 'bg-brand-teal text-white shadow' : 'text-gray-700 hover:text-brand-teal'
+                }`}
             >
               My Journey
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('progress')}
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'progress' ? 'bg-brand-violet text-white shadow' : 'text-gray-700 hover:text-brand-violet'
+                }`}
+            >
+              My Progress
             </button>
           </div>
           <div className="text-xs text-gray-500 flex items-center space-x-2">
@@ -3358,6 +3264,7 @@ const StudentDashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Today's Focus Tab */}
             {activeTab === 'today' ? (
               <>
                 {renderDailyPlanSection('daily-plan-desktop', 'hidden md:block')}
@@ -3367,32 +3274,31 @@ const StudentDashboard: React.FC = () => {
                   transition={{ delay: 0.18 }}
                   className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
                 >
-              {renderCelebration()}
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
-                    <Target className="h-4 w-4" />
-                    <span>This week&apos;s plan</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mt-1">
-                    {weeklyPlanTargets.lessons} lessons • {weeklyPlanTargets.minutes} minutes • focus:{' '}
-                    {currentPlanFocus === 'balanced'
-                      ? 'Balanced'
-                      : formatSubjectLabel(currentPlanFocus as Subject)}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Stay on track with a simple weekly target. Adjust how this week feels anytime.
-                    {parentGoalActive ? ' Targets set by your parent.' : ''}
-                  </p>
-                </div>
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
-                    weeklyPlanStatus === 'on_track'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                          : weeklyPlanStatus === 'almost'
-                            ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                            : 'bg-rose-50 text-rose-700 border border-rose-100'
-                      }`}
+                  {renderCelebration()}
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
+                        <Target className="h-4 w-4" />
+                        <span>This week&apos;s plan</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mt-1">
+                        {weeklyPlanTargets.lessons} lessons • {weeklyPlanTargets.minutes} minutes • focus:{' '}
+                        {currentPlanFocus === 'balanced'
+                          ? 'Balanced'
+                          : formatSubjectLabel(currentPlanFocus as Subject)}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Stay on track with a simple weekly target. Adjust how this week feels anytime.
+                        {parentGoalActive ? ' Targets set by your parent.' : ''}
+                      </p>
+                    </div>
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${weeklyPlanStatus === 'on_track'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                        : weeklyPlanStatus === 'almost'
+                          ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                          : 'bg-rose-50 text-rose-700 border border-rose-100'
+                        }`}
                       aria-label="Weekly plan status"
                     >
                       {weeklyPlanStatus === 'on_track'
@@ -3486,11 +3392,10 @@ const StudentDashboard: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-semibold text-gray-900">Today / This week</p>
                       <span
-                        className={`text-[11px] px-2 py-1 rounded-full ${
-                          studentCoverage.needMoreData
-                            ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                            : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                        }`}
+                        className={`text-[11px] px-2 py-1 rounded-full ${studentCoverage.needMoreData
+                          ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                          : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                          }`}
                       >
                         {studentCoverage.needMoreData ? 'Need more data' : 'Dialed in'}
                       </span>
@@ -3517,11 +3422,10 @@ const StudentDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateTodayStripState('goal', 'done')}
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
-                              todayLaneState.goal === 'done'
-                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                                : 'bg-white text-slate-700 border-slate-200'
-                            }`}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${todayLaneState.goal === 'done'
+                              ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                              : 'bg-white text-slate-700 border-slate-200'
+                              }`}
                           >
                             <CheckCircle className="h-3 w-3" />
                             Done
@@ -3529,11 +3433,10 @@ const StudentDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateTodayStripState('goal', 'skipped')}
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
-                              todayLaneState.goal === 'skipped'
-                                ? 'bg-amber-100 text-amber-700 border-amber-200'
-                                : 'bg-white text-slate-700 border-slate-200'
-                            }`}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${todayLaneState.goal === 'skipped'
+                              ? 'bg-amber-100 text-amber-700 border-amber-200'
+                              : 'bg-white text-slate-700 border-slate-200'
+                              }`}
                           >
                             <X className="h-3 w-3" />
                             Skip
@@ -3545,13 +3448,12 @@ const StudentDashboard: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <p className="text-xs font-semibold text-gray-800">Diagnostic / milestone</p>
                           <span
-                            className={`text-[11px] px-2 py-1 rounded-full border ${
-                              diagnosticStatus === 'completed'
-                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                                : diagnosticStatus === 'scheduled'
+                            className={`text-[11px] px-2 py-1 rounded-full border ${diagnosticStatus === 'completed'
+                              ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                              : diagnosticStatus === 'scheduled'
                                 ? 'bg-blue-100 text-blue-700 border-blue-200'
                                 : 'bg-slate-100 text-slate-700 border-slate-200'
-                            }`}
+                              }`}
                           >
                             {diagnosticStatus === 'completed' ? 'Done' : diagnosticStatus === 'scheduled' ? 'Scheduled' : 'Not started'}
                           </span>
@@ -3565,11 +3467,10 @@ const StudentDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateTodayStripState('assessment', 'done')}
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
-                              todayLaneState.assessment === 'done'
-                                ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                                : 'bg-white text-slate-700 border-slate-200'
-                            }`}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${todayLaneState.assessment === 'done'
+                              ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                              : 'bg-white text-slate-700 border-slate-200'
+                              }`}
                           >
                             <CheckCircle className="h-3 w-3" />
                             I&apos;m on it
@@ -3577,11 +3478,10 @@ const StudentDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateTodayStripState('assessment', 'skipped')}
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
-                              todayLaneState.assessment === 'skipped'
-                                ? 'bg-amber-100 text-amber-700 border-amber-200'
-                                : 'bg-white text-slate-700 border-slate-200'
-                            }`}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${todayLaneState.assessment === 'skipped'
+                              ? 'bg-amber-100 text-amber-700 border-amber-200'
+                              : 'bg-white text-slate-700 border-slate-200'
+                              }`}
                           >
                             <X className="h-3 w-3" />
                             Remind me
@@ -3611,11 +3511,10 @@ const StudentDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateTodayStripState('adaptive', 'skipped')}
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${
-                              todayLaneState.adaptive === 'skipped'
-                                ? 'bg-amber-100 text-amber-700 border-amber-200'
-                                : 'bg-white text-slate-700 border-slate-200'
-                            }`}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-semibold ${todayLaneState.adaptive === 'skipped'
+                              ? 'bg-amber-100 text-amber-700 border-amber-200'
+                              : 'bg-white text-slate-700 border-slate-200'
+                              }`}
                           >
                             <X className="h-3 w-3" />
                             Skip
@@ -3654,11 +3553,10 @@ const StudentDashboard: React.FC = () => {
                               type="button"
                               onClick={() => handleStudyModeChange(option.id)}
                               disabled={disabled}
-                              className={`px-3 py-2 rounded-xl border text-sm text-left transition ${
-                                active
-                                  ? 'bg-brand-violet text-white border-brand-violet shadow-sm'
-                                  : 'bg-white text-gray-800 border-slate-200 hover:border-brand-violet/60'
-                              } ${disabled ? 'opacity-70 cursor-not-allowed' : ''}`}
+                              className={`px-3 py-2 rounded-xl border text-sm text-left transition ${active
+                                ? 'bg-brand-violet text-white border-brand-violet shadow-sm'
+                                : 'bg-white text-gray-800 border-slate-200 hover:border-brand-violet/60'
+                                } ${disabled ? 'opacity-70 cursor-not-allowed' : ''}`}
                             >
                               <div className="font-semibold">{option.label}</div>
                               <div className="text-[11px] text-gray-600">{option.helper}</div>
@@ -3683,11 +3581,10 @@ const StudentDashboard: React.FC = () => {
                               type="button"
                               onClick={() => handleWeeklyPlanIntensityChange(value)}
                               disabled={parentGoalActive}
-                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${
-                                active
-                                  ? 'bg-brand-blue text-white shadow'
-                                  : 'text-gray-700 hover:text-brand-blue'
-                              }`}
+                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${active
+                                ? 'bg-brand-blue text-white shadow'
+                                : 'text-gray-700 hover:text-brand-blue'
+                                }`}
                             >
                               {value}
                             </button>
@@ -3709,11 +3606,10 @@ const StudentDashboard: React.FC = () => {
                               type="button"
                               onClick={() => handleWeeklyPlanFocusChange(subject)}
                               disabled={parentGoalActive}
-                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
-                                active
-                                  ? 'bg-brand-teal text-white border-brand-teal shadow-sm'
-                                  : 'border-slate-200 text-gray-700 hover:border-brand-teal/60'
-                              }`}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${active
+                                ? 'bg-brand-teal text-white border-brand-teal shadow-sm'
+                                : 'border-slate-200 text-gray-700 hover:border-brand-teal/60'
+                                }`}
                             >
                               {subject === 'balanced' ? 'Balanced' : formatSubjectLabel(subject)}
                             </button>
@@ -3742,11 +3638,10 @@ const StudentDashboard: React.FC = () => {
                               key={intent}
                               type="button"
                               onClick={() => handleWeeklyIntentChange(intent)}
-                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
-                                active
-                                  ? 'bg-amber-100 text-amber-800 border-amber-200 shadow-sm'
-                                  : 'border-slate-200 text-gray-700 hover:border-amber-300'
-                              }`}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${active
+                                ? 'bg-amber-100 text-amber-800 border-amber-200 shadow-sm'
+                                : 'border-slate-200 text-gray-700 hover:border-amber-300'
+                                }`}
                             >
                               <div className="font-semibold capitalize">{intent}</div>
                               <div className="text-[11px] text-gray-500">{helper}</div>
@@ -3772,11 +3667,10 @@ const StudentDashboard: React.FC = () => {
                               key={option.id}
                               type="button"
                               onClick={() => handleMixInModeChange(option.id)}
-                              className={`px-3 py-1.5 rounded-full border text-sm transition ${
-                                active
-                                  ? 'bg-emerald-100 text-emerald-800 border-emerald-200 shadow-sm'
-                                  : 'border-slate-200 text-gray-700 hover:border-emerald-300'
-                              }`}
+                              className={`px-3 py-1.5 rounded-full border text-sm transition ${active
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-200 shadow-sm'
+                                : 'border-slate-200 text-gray-700 hover:border-emerald-300'
+                                }`}
                             >
                               <div className="font-semibold">{option.label}</div>
                               <div className="text-[11px] text-gray-500">{option.helper}</div>
@@ -3798,11 +3692,10 @@ const StudentDashboard: React.FC = () => {
                               key={value}
                               type="button"
                               onClick={() => handleElectiveEmphasisChange(value)}
-                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${
-                                active
-                                  ? 'bg-indigo-600 text-white shadow'
-                                  : 'text-gray-700 hover:text-indigo-600'
-                              }`}
+                              className={`px-3 py-1.5 rounded-full capitalize transition-colors ${active
+                                ? 'bg-indigo-600 text-white shadow'
+                                : 'text-gray-700 hover:text-indigo-600'
+                                }`}
                             >
                               {value === 'light' ? 'Suggest when ahead' : value === 'on' ? 'Offer more' : 'Hide'}
                             </button>
@@ -3830,11 +3723,10 @@ const StudentDashboard: React.FC = () => {
                         }
                       }}
                       disabled={!recommendedLesson}
-                      className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${
-                        recommendedLesson
-                          ? 'bg-brand-blue text-white hover:bg-brand-blue/90'
-                          : 'bg-gray-200 text-gray-500'
-                      }`}
+                      className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${recommendedLesson
+                        ? 'bg-brand-blue text-white hover:bg-brand-blue/90'
+                        : 'bg-gray-200 text-gray-500'
+                        }`}
                     >
                       <Play className="h-4 w-4" />
                       <span>{recommendedLesson ? 'Start next lesson' : 'No lesson ready'}</span>
@@ -3984,11 +3876,10 @@ const StudentDashboard: React.FC = () => {
                           key={subject}
                           type="button"
                           onClick={() => setSubjectFilter(subject)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
-                            active
-                              ? 'bg-brand-blue text-white border-brand-blue shadow-sm'
-                              : 'border-gray-200 text-gray-700 hover:border-brand-blue/60'
-                          }`}
+                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${active
+                            ? 'bg-brand-blue text-white border-brand-blue shadow-sm'
+                            : 'border-gray-200 text-gray-700 hover:border-brand-blue/60'
+                            }`}
                         >
                           {label}
                         </button>
@@ -4010,15 +3901,13 @@ const StudentDashboard: React.FC = () => {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.4 + index * 0.08 }}
-                          className={`flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow ${
-                            activeLessonId === lesson.id ? 'border-brand-teal shadow-lg' : ''
-                          }`}
+                          className={`flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow ${activeLessonId === lesson.id ? 'border-brand-teal shadow-lg' : ''
+                            }`}
                         >
                           <div className="flex items-center space-x-4">
                             <div
-                              className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                                lesson.status === 'completed' ? 'bg-green-100' : 'bg-gray-100'
-                              }`}
+                              className={`w-12 h-12 rounded-full flex items-center justify-center ${lesson.status === 'completed' ? 'bg-green-100' : 'bg-gray-100'
+                                }`}
                             >
                               {lesson.status === 'completed' ? (
                                 <CheckCircle className="h-6 w-6 text-green-600" />
@@ -4031,13 +3920,12 @@ const StudentDashboard: React.FC = () => {
                               <div className="flex items-center space-x-3 text-sm text-gray-600">
                                 <span className="capitalize">{formatSubjectLabel(lesson.subject)}</span>
                                 <span
-                                  className={`px-2 py-1 rounded-full text-xs ${
-                                    lesson.difficulty === 'easy'
-                                      ? 'bg-green-100 text-green-800'
-                                      : lesson.difficulty === 'medium'
+                                  className={`px-2 py-1 rounded-full text-xs ${lesson.difficulty === 'easy'
+                                    ? 'bg-green-100 text-green-800'
+                                    : lesson.difficulty === 'medium'
                                       ? 'bg-yellow-100 text-yellow-800'
                                       : 'bg-red-100 text-red-800'
-                                  }`}
+                                    }`}
                                 >
                                   {lesson.difficulty}
                                 </span>
@@ -4349,28 +4237,27 @@ const StudentDashboard: React.FC = () => {
                           <p className="text-sm text-gray-600">
                             {assessment.scheduledAt
                               ? `Scheduled ${new Date(assessment.scheduledAt).toLocaleString([], {
-                                  weekday: 'short',
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                })}`
+                                weekday: 'short',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                              })}`
                               : 'Flexible timing'}
                           </p>
                         </div>
                         <div className="text-right">
                           <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                              assessment.status === 'completed'
-                                ? 'bg-emerald-100 text-emerald-700'
-                                : assessment.status === 'overdue'
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${assessment.status === 'completed'
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : assessment.status === 'overdue'
                                 ? 'bg-rose-100 text-rose-600'
                                 : 'bg-blue-100 text-blue-600'
-                            }`}
+                              }`}
                           >
                             {assessment.status === 'completed'
                               ? 'Completed'
                               : assessment.status === 'overdue'
-                              ? 'Overdue'
-                              : 'Scheduled'}
+                                ? 'Overdue'
+                                : 'Scheduled'}
                           </span>
                           {assessment.masteryTarget && (
                             <div className="text-xs text-gray-500 mt-1">
@@ -4390,7 +4277,7 @@ const StudentDashboard: React.FC = () => {
                   </div>
                 </motion.div>
               </>
-            ) : (
+            ) : activeTab === 'journey' ? (
               <>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -4581,6 +4468,127 @@ const StudentDashboard: React.FC = () => {
                   </p>
                 </motion.div>
               </>
+            ) : (
+              /* My Progress Tab */
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-gradient-to-r from-brand-violet to-brand-blue rounded-2xl p-6 text-white mb-6"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <Trophy className="h-6 w-6" />
+                    <h2 className="text-2xl font-bold">My Progress</h2>
+                  </div>
+                  <p className="text-white/90">Track your growth, celebrate wins, and see how far you've come!</p>
+                </motion.div>
+
+                {/* Quick Stats Grid */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
+                >
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <Star className="h-5 w-5 text-brand-blue" />
+                      <span className="text-[11px] font-semibold text-brand-blue uppercase">Level</span>
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">{quickStats?.level ?? student.level}</div>
+                    <p className="text-xs text-gray-500">Current level</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <Flame className="h-5 w-5 text-orange-500" />
+                      <span className="text-[11px] font-semibold text-orange-600 uppercase">Streak</span>
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">{quickStats?.streakDays ?? student.streakDays}</div>
+                    <p className="text-xs text-gray-500">Days in a row</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <Sparkles className="h-5 w-5 text-brand-teal" />
+                      <span className="text-[11px] font-semibold text-brand-teal uppercase">XP</span>
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">{quickStats?.totalXp ?? student.xp}</div>
+                    <p className="text-xs text-gray-500">Total earned</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <Trophy className="h-5 w-5 text-amber-500" />
+                      <span className="text-[11px] font-semibold text-amber-600 uppercase">Badges</span>
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">{dashboard?.recentBadges.length ?? student.badges.length}</div>
+                    <p className="text-xs text-gray-500">Earned</p>
+                  </div>
+                </motion.div>
+
+                {/* Active Mission */}
+                {activeMission && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-6"
+                  >
+                    <div className="flex items-center gap-2 mb-4">
+                      <MapIcon className="h-5 w-5 text-brand-violet" />
+                      <h3 className="text-lg font-bold text-gray-900">Current Mission</h3>
+                      <span className="px-2 py-1 rounded-full text-[11px] font-semibold bg-brand-light-violet text-brand-violet">
+                        {missionCadence === 'daily' ? 'Daily' : 'Weekly'}
+                      </span>
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">{activeMission.title}</h4>
+                    <p className="text-sm text-gray-600 mb-4">{activeMission.description}</p>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-gray-700">Progress</span>
+                      <span className="text-sm font-bold text-brand-violet">{missionProgress(activeMission)}%</span>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-3 mb-3">
+                      <div
+                        className="bg-gradient-to-r from-brand-violet to-brand-blue h-3 rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(missionProgress(activeMission), 100)}%` }}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Gift className="h-4 w-4 text-amber-500" />
+                      <span className="text-sm text-gray-600">Reward: +{activeMission.rewardXp} XP</span>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Recent Badges */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Award className="h-5 w-5 text-amber-500" />
+                      <h3 className="text-lg font-bold text-gray-900">Recent Achievements</h3>
+                    </div>
+                  </div>
+                  {(dashboard?.recentBadges ?? student.badges).length === 0 ? (
+                    <div className="text-center py-8 border border-dashed border-gray-200 rounded-xl bg-gray-50">
+                      <Trophy className="h-10 w-10 text-gray-300 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500">Complete lessons to earn badges!</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {(dashboard?.recentBadges ?? student.badges).slice(0, 6).map((badge) => (
+                        <div key={badge.id} className="flex flex-col items-center p-4 bg-gray-50 rounded-xl">
+                          <div className="text-3xl mb-2">{badge.icon}</div>
+                          <p className="text-sm font-semibold text-gray-900 text-center">{badge.name}</p>
+                          <p className="text-[11px] text-gray-500 capitalize">{badge.rarity}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              </>
             )}
           </div>
 
@@ -4597,29 +4605,29 @@ const StudentDashboard: React.FC = () => {
                 {showSkeleton
                   ? [0, 1, 2, 3].map((idx) => <SkeletonCard key={idx} className="h-16" />)
                   : masteryDisplay.map((subject) => (
-                      <div key={subject.subject}>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2">
-                            <TrendingUp className="h-4 w-4 text-brand-blue" />
-                            <span className="font-semibold text-gray-900">{subject.label}</span>
-                          </div>
-                          <span className="text-sm text-gray-600">
-                            {Math.round(subject.mastery)}%
-                          </span>
+                    <div key={subject.subject}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          <TrendingUp className="h-4 w-4 text-brand-blue" />
+                          <span className="font-semibold text-gray-900">{subject.label}</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-gradient-to-r from-brand-teal to-brand-blue h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${Math.min(subject.mastery, 100)}%` }}
-                          />
-                        </div>
-                        {subject.goal && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            Goal {subject.goal}% · Cohort avg {subject.cohortAverage ?? '—'}%
-                          </p>
-                        )}
+                        <span className="text-sm text-gray-600">
+                          {Math.round(subject.mastery)}%
+                        </span>
                       </div>
-                    ))}
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-brand-teal to-brand-blue h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${Math.min(subject.mastery, 100)}%` }}
+                        />
+                      </div>
+                      {subject.goal && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Goal {subject.goal}% · Cohort avg {subject.cohortAverage ?? '—'}%
+                        </p>
+                      )}
+                    </div>
+                  ))}
               </div>
             </motion.div>
 
@@ -4646,13 +4654,12 @@ const StudentDashboard: React.FC = () => {
                       key={option}
                       type="button"
                       onClick={() => handleReadingSelect(index)}
-                      className={`w-full text-left px-3 py-2 rounded-lg border text-sm transition-colors ${
-                        isSelected
-                          ? isCorrect
-                            ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                            : 'border-rose-300 bg-rose-50 text-rose-700'
-                          : 'border-slate-200 hover:border-brand-blue/50'
-                      }`}
+                      className={`w-full text-left px-3 py-2 rounded-lg border text-sm transition-colors ${isSelected
+                        ? isCorrect
+                          ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                          : 'border-rose-300 bg-rose-50 text-rose-700'
+                        : 'border-slate-200 hover:border-brand-blue/50'
+                        }`}
                     >
                       {option}
                     </button>
@@ -4681,11 +4688,10 @@ const StudentDashboard: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setAchievementFilter('all')}
-                    className={`px-3 py-1 rounded-full border ${
-                      achievementFilter === 'all'
-                        ? 'bg-brand-blue text-white border-brand-blue'
-                        : 'border-gray-200 text-gray-700 hover:border-brand-blue/60'
-                    }`}
+                    className={`px-3 py-1 rounded-full border ${achievementFilter === 'all'
+                      ? 'bg-brand-blue text-white border-brand-blue'
+                      : 'border-gray-200 text-gray-700 hover:border-brand-blue/60'
+                      }`}
                   >
                     All
                   </button>
@@ -4694,21 +4700,20 @@ const StudentDashboard: React.FC = () => {
                       key={category}
                       type="button"
                       onClick={() => setAchievementFilter(category as BadgeCategory)}
-                      className={`px-3 py-1 rounded-full border ${
-                        achievementFilter === category
-                          ? 'bg-brand-teal text-white border-brand-teal'
-                          : 'border-gray-200 text-gray-700 hover:border-brand-teal/60'
-                      }`}
+                      className={`px-3 py-1 rounded-full border ${achievementFilter === category
+                        ? 'bg-brand-teal text-white border-brand-teal'
+                        : 'border-gray-200 text-gray-700 hover:border-brand-teal/60'
+                        }`}
                     >
                       {category === 'math' ||
-                      category === 'english' ||
-                      category === 'science' ||
-                      category === 'social_studies' ||
-                      category === 'study_skills'
+                        category === 'english' ||
+                        category === 'science' ||
+                        category === 'social_studies' ||
+                        category === 'study_skills'
                         ? formatSubjectLabel(category as Subject)
                         : category === 'general'
-                        ? 'General'
-                        : (category as string).replace('_', ' ')}
+                          ? 'General'
+                          : (category as string).replace('_', ' ')}
                     </button>
                   ))}
                 </div>
@@ -4847,11 +4852,10 @@ const StudentDashboard: React.FC = () => {
                           key={persona.id}
                           type="button"
                           onClick={() => handleSelectTutorPersona(persona.id)}
-                          className={`flex items-start gap-3 rounded-xl border p-3 text-left transition shadow-sm ${
-                            isSelected
-                              ? 'border-brand-blue ring-2 ring-brand-blue/30 bg-brand-light-blue/30'
-                              : 'border-gray-200 hover:border-brand-blue/50 bg-white'
-                          }`}
+                          className={`flex items-start gap-3 rounded-xl border p-3 text-left transition shadow-sm ${isSelected
+                            ? 'border-brand-blue ring-2 ring-brand-blue/30 bg-brand-light-blue/30'
+                            : 'border-gray-200 hover:border-brand-blue/50 bg-white'
+                            }`}
                         >
                           <div
                             className="w-10 h-10 rounded-full flex items-center justify-center"
@@ -4899,14 +4903,13 @@ const StudentDashboard: React.FC = () => {
                     !tutorPersonaId ||
                     (!!tutorNameError && tutorNameInput.trim().length > 0)
                   }
-                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${
-                    tutorSaving ||
+                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ${tutorSaving ||
                     personalizationLoading ||
                     !tutorPersonaId ||
                     (!!tutorNameError && tutorNameInput.trim().length > 0)
-                      ? 'bg-gray-200 text-gray-500'
-                      : 'bg-brand-blue text-white hover:bg-brand-blue/90'
-                  }`}
+                    ? 'bg-gray-200 text-gray-500'
+                    : 'bg-brand-blue text-white hover:bg-brand-blue/90'
+                    }`}
                 >
                   {tutorSaving ? 'Saving...' : 'Save tutor look'}
                 </button>
@@ -4978,13 +4981,12 @@ const StudentDashboard: React.FC = () => {
                             type="button"
                             onClick={() => void handleEquipAvatar(option)}
                             disabled={!unlocked || avatarSaving}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
-                              isEquipped
-                                ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                                : unlocked && !avatarSaving
-                                  ? 'bg-brand-blue text-white'
-                                  : 'bg-gray-100 text-gray-500'
-                            }`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${isEquipped
+                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                              : unlocked && !avatarSaving
+                                ? 'bg-brand-blue text-white'
+                                : 'bg-gray-100 text-gray-500'
+                              }`}
                           >
                             {isEquipped
                               ? 'Equipped'
@@ -5112,96 +5114,98 @@ const StudentDashboard: React.FC = () => {
         </div>
       </div>
 
-      {reflectionModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Reflection</p>
-                <h4 className="text-lg font-bold text-gray-900">Jot a quick takeaway</h4>
-                <p className="text-sm text-gray-600">Takes &lt;10s. Share with family if you want.</p>
-              </div>
-              <button
-                onClick={() => {
-                  setReflectionModalOpen(false);
-                  trackEvent('reflection_skipped', { reason: 'skip' });
-                }}
-                className="p-1 rounded-full hover:bg-slate-100 focus-ring"
-                aria-label="Close reflection"
-              >
-                <X className="h-5 w-5 text-gray-500" />
-              </button>
-            </div>
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-gray-800">
-                Prompt
-                <select
-                  value={reflectionQuestion}
-                  onChange={(e) => setReflectionQuestion(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+      {
+        reflectionModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Reflection</p>
+                  <h4 className="text-lg font-bold text-gray-900">Jot a quick takeaway</h4>
+                  <p className="text-sm text-gray-600">Takes &lt;10s. Share with family if you want.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setReflectionModalOpen(false);
+                    trackEvent('reflection_skipped', { reason: 'skip' });
+                  }}
+                  className="p-1 rounded-full hover:bg-slate-100 focus-ring"
+                  aria-label="Close reflection"
                 >
-                  <option value="what_learned">What did you learn?</option>
-                  <option value="try_next">What will you try next time?</option>
-                  <option value="confidence">How confident do you feel? (Low / Medium / High)</option>
-                </select>
-              </label>
-              <label className="block text-sm font-semibold text-gray-800">
-                Your takeaway
-                <textarea
-                  value={reflectionText}
-                  onChange={(e) => setReflectionText(e.target.value)}
-                  maxLength={220}
-                  rows={3}
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
-                  placeholder="One thing I’d try differently next time is..."
-                />
-              </label>
-              <div className="flex items-center gap-2 text-sm">
-                <input
-                  id="reflection-share"
-                  type="checkbox"
-                  checked={reflectionShare}
-                  onChange={(e) => setReflectionShare(e.target.checked)}
-                />
-                <label htmlFor="reflection-share" className="text-gray-700">
-                  Share with parent/guardian
-                </label>
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
               </div>
-              {reflectionError && (
-                <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-md px-2 py-1">
-                  {reflectionError}
-                </p>
-              )}
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => {
-                  setReflectionModalOpen(false);
-                  trackEvent('reflection_skipped', { reason: 'skip' });
-                }}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-800 focus-ring"
-              >
-                Skip for now
-              </button>
-              <button
-                type="button"
-                onClick={() => void handleSaveReflectionEntry()}
-                disabled={reflectionSaving}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-4 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-50"
-              >
-                {reflectionSaving ? 'Saving...' : 'Save reflection'}
-              </button>
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-gray-800">
+                  Prompt
+                  <select
+                    value={reflectionQuestion}
+                    onChange={(e) => setReflectionQuestion(e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                  >
+                    <option value="what_learned">What did you learn?</option>
+                    <option value="try_next">What will you try next time?</option>
+                    <option value="confidence">How confident do you feel? (Low / Medium / High)</option>
+                  </select>
+                </label>
+                <label className="block text-sm font-semibold text-gray-800">
+                  Your takeaway
+                  <textarea
+                    value={reflectionText}
+                    onChange={(e) => setReflectionText(e.target.value)}
+                    maxLength={220}
+                    rows={3}
+                    className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                    placeholder="One thing I’d try differently next time is..."
+                  />
+                </label>
+                <div className="flex items-center gap-2 text-sm">
+                  <input
+                    id="reflection-share"
+                    type="checkbox"
+                    checked={reflectionShare}
+                    onChange={(e) => setReflectionShare(e.target.checked)}
+                  />
+                  <label htmlFor="reflection-share" className="text-gray-700">
+                    Share with parent/guardian
+                  </label>
+                </div>
+                {reflectionError && (
+                  <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-md px-2 py-1">
+                    {reflectionError}
+                  </p>
+                )}
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReflectionModalOpen(false);
+                    trackEvent('reflection_skipped', { reason: 'skip' });
+                  }}
+                  className="text-sm font-semibold text-gray-600 hover:text-gray-800 focus-ring"
+                >
+                  Skip for now
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleSaveReflectionEntry()}
+                  disabled={reflectionSaving}
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-blue text-white px-4 py-2 text-sm font-semibold hover:bg-brand-blue/90 focus-ring disabled:opacity-50"
+                >
+                  {reflectionSaving ? 'Saving...' : 'Save reflection'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       <div id="assistant" className="sr-only" aria-hidden />
       <Suspense fallback={<div className="px-4 py-8 text-sm text-gray-500">Loading assistant…</div>}>
         <LearningAssistant />
       </Suspense>
-    </div>
+    </div >
   );
 };
 

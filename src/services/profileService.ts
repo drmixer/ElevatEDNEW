@@ -291,6 +291,12 @@ export const castLearningPreferences = (input: unknown): LearningPreferences => 
     }
   }
 
+  // Phase 5.3: Tutor tone preference
+  const tutorToneId = raw.tutorToneId ?? raw.tutor_tone_id ?? raw.tutorTone ?? raw.tutor_tone;
+  if (typeof tutorToneId === 'string' && tutorToneId.trim().length > 0) {
+    prefs.tutorToneId = tutorToneId;
+  }
+
   const tutorSettingsUpdatedAt =
     raw.tutorSettingsUpdatedAt ?? raw.tutor_settings_updated_at ?? raw.ai_settings_updated_at;
   if (typeof tutorSettingsUpdatedAt === 'string') {
@@ -498,18 +504,18 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
 
     weeklyReport = weeklyReportRow
       ? {
-          weekStart: weeklyReportRow.week_start,
-          summary: weeklyReportRow.summary ?? '',
-          highlights: castStringArray(weeklyReportRow.highlights),
-          recommendations: castStringArray(weeklyReportRow.recommendations),
-          aiGenerated: weeklyReportRow.ai_generated ?? undefined,
-          changes: weeklyReportRow.changes
-            ? {
-                improvements: castStringArray((weeklyReportRow.changes as { improvements?: unknown })?.improvements),
-                risks: castStringArray((weeklyReportRow.changes as { risks?: unknown })?.risks),
-              }
-            : undefined,
-        }
+        weekStart: weeklyReportRow.week_start,
+        summary: weeklyReportRow.summary ?? '',
+        highlights: castStringArray(weeklyReportRow.highlights),
+        recommendations: castStringArray(weeklyReportRow.recommendations),
+        aiGenerated: weeklyReportRow.ai_generated ?? undefined,
+        changes: weeklyReportRow.changes
+          ? {
+            improvements: castStringArray((weeklyReportRow.changes as { improvements?: unknown })?.improvements),
+            risks: castStringArray((weeklyReportRow.changes as { risks?: unknown })?.risks),
+          }
+          : undefined,
+      }
       : null;
   }
 

@@ -1,0 +1,755 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - navigation [ref=e5]:
+      - generic [ref=e7]:
+        - img "ElevatED" [ref=e9] [cursor=pointer]
+        - generic [ref=e10]:
+          - button "Features" [ref=e11] [cursor=pointer]
+          - button "How It Works" [ref=e12] [cursor=pointer]
+          - button "Pricing" [ref=e13] [cursor=pointer]
+          - button "FAQ" [ref=e14] [cursor=pointer]
+        - generic [ref=e15]:
+          - button "Log in" [ref=e16] [cursor=pointer]
+          - button "Get Started" [ref=e17] [cursor=pointer]
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]: Home Learning • Family-First
+        - heading "Home learning, elevated. AI tutoring built for every K-12 learner." [level=1] [ref=e26]:
+          - text: Home learning, elevated.
+          - generic [ref=e27]: AI tutoring built for every K-12 learner.
+        - paragraph [ref=e28]: Adaptive AI instruction meets family-ready insights to help every student learn with confidence. ElevatED creates personalized learning journeys that feel handcrafted, supported by intuitive dashboards that keep progress clear, calm, and easy to follow.
+        - generic [ref=e29]:
+          - button "Start Learning Today" [ref=e30] [cursor=pointer]:
+            - generic [ref=e32]:
+              - text: Start Learning Today
+              - img [ref=e33]
+          - button "Watch Guided Tour" [ref=e35] [cursor=pointer]:
+            - img [ref=e37]
+            - text: Watch Guided Tour
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - img [ref=e41]
+            - text: 4.9/5 from 2,800+ families
+          - generic [ref=e43]:
+            - img [ref=e44]
+            - text: 50,000+ students thriving
+          - generic [ref=e49]:
+            - img [ref=e50]
+            - text: Avg. +38% mastery lifts
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - img [ref=e56]
+            - generic [ref=e66]:
+              - heading "Adaptive mastery at home" [level=3] [ref=e67]
+              - paragraph [ref=e68]: AI tailors every lesson, hint, and challenge to each child's pace.
+          - generic [ref=e69]:
+            - img [ref=e71]
+            - generic [ref=e74]:
+              - heading "Family clarity" [level=3] [ref=e75]
+              - paragraph [ref=e76]: Dashboards speak to parents in plain language with weekly digests.
+          - generic [ref=e77]:
+            - img [ref=e79]
+            - generic [ref=e85]:
+              - heading "Joyful motivation" [level=3] [ref=e86]
+              - paragraph [ref=e87]: Game loops, streaks, and story-driven rewards make momentum stick.
+      - generic [ref=e88]:
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - generic [ref=e94]:
+              - paragraph [ref=e95]: Today
+              - heading "Mission Progress" [level=3] [ref=e96]
+              - paragraph [ref=e97]: AI recalibrated 3 lessons to match Amira's pace.
+            - generic [ref=e98]:
+              - img [ref=e99]
+              - text: +32 XP
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - paragraph [ref=e103]: Focus
+              - paragraph [ref=e104]: 92%
+              - paragraph [ref=e105]: +14% this week
+            - generic [ref=e106]:
+              - paragraph [ref=e107]: Mastery
+              - paragraph [ref=e108]: "18"
+              - paragraph [ref=e109]: Concepts unlocked
+            - generic [ref=e110]:
+              - paragraph [ref=e111]: Confidence
+              - paragraph [ref=e112]: A+
+              - paragraph [ref=e113]: Rising steadily
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - paragraph [ref=e116]: Live Tutoring
+              - generic [ref=e117]: Active
+            - paragraph [ref=e119]: “Let's break this fraction into friendlier steps.”
+            - paragraph [ref=e120]: ElevatED AI • Focused on 5th Grade Math
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - img [ref=e124]
+            - generic [ref=e129]:
+              - paragraph [ref=e130]: Parent Insights
+              - paragraph [ref=e131]: Weekly AI digest ready
+          - generic [ref=e132]:
+            - paragraph [ref=e133]: "- Focus growth in Math is 1.4x faster than peers."
+            - paragraph [ref=e134]: "- Recommend: Celebrate streak day 15 tonight."
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - paragraph [ref=e137]: Streak
+            - generic [ref=e138]: Day 15
+          - paragraph [ref=e139]: "+12"
+          - paragraph [ref=e140]: New badges unlocked this month
+          - generic [ref=e141]:
+            - img [ref=e142]
+            - text: Keep the momentum tomorrow to double XP.
+    - generic [ref=e147]:
+      - generic [ref=e148]:
+        - heading "Built for Families Learning at Home" [level=2] [ref=e149]
+        - paragraph [ref=e150]: Everything students and parents need to keep home learning personal, clear, and motivating
+      - generic [ref=e151]:
+        - generic [ref=e152]:
+          - img [ref=e156]
+          - heading "AI-Powered Adaptive Learning" [level=3] [ref=e166]
+          - paragraph [ref=e167]: Intelligent algorithms adjust difficulty in real-time based on student performance, ensuring optimal challenge levels.
+          - generic [ref=e168]:
+            - generic [ref=e169]: Learn more
+            - generic [ref=e170]: →
+        - generic [ref=e171]:
+          - img [ref=e175]
+          - heading "Diagnostic Assessments" [level=3] [ref=e179]
+          - paragraph [ref=e180]: Comprehensive evaluations across Math, English, Science, and Social Studies to create personalized learning paths.
+          - generic [ref=e181]:
+            - generic [ref=e182]: Learn more
+            - generic [ref=e183]: →
+        - generic [ref=e184]:
+          - img [ref=e188]
+          - heading "Parent Dashboard" [level=3] [ref=e193]
+          - paragraph [ref=e194]: Real-time progress tracking, performance insights, and weekly AI-generated summaries for complete visibility.
+          - generic [ref=e195]:
+            - generic [ref=e196]: Learn more
+            - generic [ref=e197]: →
+        - generic [ref=e198]:
+          - img [ref=e202]
+          - heading "Gamified Experience" [level=3] [ref=e208]
+          - paragraph [ref=e209]: XP points, achievement badges, streak counters, and level progression keep students motivated and engaged.
+          - generic [ref=e210]:
+            - generic [ref=e211]: Learn more
+            - generic [ref=e212]: →
+        - generic [ref=e213]:
+          - img [ref=e217]
+          - heading "Advanced Analytics" [level=3] [ref=e219]
+          - paragraph [ref=e220]: Detailed performance metrics, concept mastery tracking, and learning trend analysis for data-driven insights.
+          - generic [ref=e221]:
+            - generic [ref=e222]: Learn more
+            - generic [ref=e223]: →
+        - generic [ref=e224]:
+          - img [ref=e228]
+          - heading "AI Learning Assistant" [level=3] [ref=e230]
+          - paragraph [ref=e231]: Context-aware tutoring bot that provides step-by-step guidance, study tips, and personalized motivation.
+          - generic [ref=e232]:
+            - generic [ref=e233]: Learn more
+            - generic [ref=e234]: →
+        - generic [ref=e235]:
+          - img [ref=e239]
+          - heading "Comprehensive Curriculum" [level=3] [ref=e242]
+          - paragraph [ref=e243]: K-12 content across core subjects with adaptive difficulty and concept-specific reinforcement.
+          - generic [ref=e244]:
+            - generic [ref=e245]: Learn more
+            - generic [ref=e246]: →
+        - generic [ref=e247]:
+          - img [ref=e251]
+          - heading "Instant Feedback" [level=3] [ref=e253]
+          - paragraph [ref=e254]: Immediate quiz results, detailed explanations, and smart suggestions for review or advancement.
+          - generic [ref=e255]:
+            - generic [ref=e256]: Learn more
+            - generic [ref=e257]: →
+    - generic [ref=e259]:
+      - generic [ref=e260]:
+        - heading "See ElevatED in Action" [level=2] [ref=e261]
+        - paragraph [ref=e262]: Experience our intuitive dashboards designed for both students and parents.
+        - generic [ref=e263]:
+          - generic [ref=e264]:
+            - img [ref=e265]
+            - generic [ref=e268]: Demo mode with anonymized sample data - no live learner information.
+          - paragraph [ref=e269]: Metrics are generated from offline snapshots to keep real accounts protected.
+        - generic [ref=e271]:
+          - button "Student Dashboard" [ref=e272] [cursor=pointer]
+          - button "Parent Dashboard" [ref=e273] [cursor=pointer]
+      - generic [ref=e274]:
+        - generic [ref=e276]:
+          - generic [ref=e277]:
+            - heading "Welcome back, Sample Student! 🌟" [level=3] [ref=e278]
+            - paragraph [ref=e279]: Ready to continue your learning journey?
+          - generic [ref=e280]:
+            - generic [ref=e281]: Sample View
+            - generic [ref=e283]:
+              - generic [ref=e284]: "2450"
+              - generic [ref=e285]: Total XP
+        - generic [ref=e286]:
+          - generic [ref=e287]:
+            - generic [ref=e289]:
+              - generic [ref=e290]:
+                - generic [ref=e291]: "8"
+                - generic [ref=e292]: Current Level
+              - img [ref=e293]
+            - generic [ref=e296]:
+              - generic [ref=e297]:
+                - generic [ref=e298]: "12"
+                - generic [ref=e299]: Day Streak
+              - generic [ref=e300]: 🔥
+            - generic [ref=e302]:
+              - generic [ref=e303]:
+                - generic [ref=e304]: "15"
+                - generic [ref=e305]: Badges Earned
+              - img [ref=e306]
+            - generic [ref=e313]:
+              - generic [ref=e314]:
+                - generic [ref=e315]: 18h
+                - generic [ref=e316]: This Week
+              - img [ref=e317]
+          - generic [ref=e319]:
+            - generic [ref=e320]:
+              - heading "Subject Progress" [level=4] [ref=e321]
+              - generic [ref=e322]:
+                - generic [ref=e324]:
+                  - heading "Math" [level=5] [ref=e325]
+                  - generic [ref=e326]: 85%
+                - generic [ref=e330]:
+                  - heading "Reading & Writing" [level=5] [ref=e331]
+                  - generic [ref=e332]: 92%
+                - generic [ref=e336]:
+                  - heading "Science" [level=5] [ref=e337]
+                  - generic [ref=e338]: 78%
+                - generic [ref=e342]:
+                  - heading "Social Studies" [level=5] [ref=e343]
+                  - generic [ref=e344]: 65%
+                - generic [ref=e348]:
+                  - heading "Study Skills & Executive Functioning" [level=5] [ref=e349]
+                  - generic [ref=e350]: 58%
+            - generic [ref=e353]:
+              - heading "Today's Lessons" [level=4] [ref=e354]
+              - generic [ref=e355]:
+                - generic [ref=e356]:
+                  - generic [ref=e357]:
+                    - img [ref=e359]
+                    - generic [ref=e365]:
+                      - heading "Quadratic Equations" [level=5] [ref=e366]
+                      - paragraph [ref=e367]: Math
+                  - generic [ref=e369]: +75 XP
+                - generic [ref=e370]:
+                  - generic [ref=e371]:
+                    - img [ref=e373]
+                    - generic [ref=e375]:
+                      - heading "Essay Writing" [level=5] [ref=e376]
+                      - paragraph [ref=e377]: Reading & Writing
+                  - generic [ref=e378]:
+                    - generic [ref=e379]: +50 XP
+                    - button "Start" [ref=e380] [cursor=pointer]
+                - generic [ref=e381]:
+                  - generic [ref=e382]:
+                    - img [ref=e384]
+                    - generic [ref=e386]:
+                      - heading "Build a weekly plan" [level=5] [ref=e387]
+                      - paragraph [ref=e388]: Study Skills & Executive Functioning
+                  - generic [ref=e389]:
+                    - generic [ref=e390]: +30 XP
+                    - button "Start" [ref=e391] [cursor=pointer]
+    - generic [ref=e393]:
+      - generic [ref=e394]:
+        - heading "Interactive Learning Experience" [level=2] [ref=e395]
+        - paragraph [ref=e396]: See how our adaptive lessons guide students through concepts with personalized explanations and instant feedback
+      - generic [ref=e397]:
+        - generic [ref=e399]:
+          - generic [ref=e400]:
+            - heading "Math • Grade 3" [level=3] [ref=e401]
+            - paragraph [ref=e402]: Multiplication Basics
+          - generic [ref=e403]:
+            - button "Previous lesson example" [ref=e404] [cursor=pointer]:
+              - img [ref=e405]
+            - generic [ref=e407]: Lesson 1 of 3
+            - button "Next lesson example" [ref=e408] [cursor=pointer]:
+              - img [ref=e409]
+          - generic [ref=e411]: Step 1 of 3
+        - generic [ref=e414]:
+          - generic [ref=e416]:
+            - img [ref=e418]
+            - generic [ref=e428]:
+              - heading "Multiplication Basics" [level=3] [ref=e429]
+              - paragraph [ref=e430]: Understanding Products
+          - generic [ref=e432]:
+            - generic [ref=e433]: ✖️
+            - paragraph [ref=e434]: Today we'll learn the fundamentals of multiplication. It's a key skill for everyday math!
+            - button "Let's Start Learning" [ref=e435] [cursor=pointer]:
+              - text: Let's Start Learning
+              - img [ref=e436]
+        - generic [ref=e438]:
+          - generic [ref=e439]:
+            - img [ref=e441]
+            - generic [ref=e451]:
+              - heading "AI Learning Assistant" [level=4] [ref=e452]
+              - paragraph [ref=e453]: Always ready to help when you're stuck
+          - generic [ref=e455]:
+            - img [ref=e457]
+            - paragraph [ref=e468]: "\"Great job exploring multiplication basics! I can tee up a tougher challenge or revisit the fundamentals whenever you're ready.\""
+    - generic [ref=e470]:
+      - generic [ref=e471]:
+        - paragraph [ref=e472]: About for Families
+        - heading "The parent + student journey, end to end" [level=2] [ref=e473]
+        - paragraph [ref=e474]: ElevatED is for students and parents at home, not school teachers. The flow is intentionally simple so families can start in minutes and keep learning momentum without classroom software in the way.
+      - generic [ref=e475]:
+        - generic [ref=e476]:
+          - img [ref=e478]
+          - heading "Parents create the space" [level=3] [ref=e483]
+          - paragraph [ref=e484]: Invite each learner, set weekly goals, and choose the right guardrails. No school setup or classroom rosters required.
+          - generic [ref=e485]: Step 1
+        - generic [ref=e486]:
+          - img [ref=e488]
+          - heading "Students meet their tutor" [level=3] [ref=e491]
+          - paragraph [ref=e492]: A quick adaptive check-in sets the starting point. The AI tutor adjusts reading level, pacing, and hints instantly.
+          - generic [ref=e493]: Step 2
+        - generic [ref=e494]:
+          - img [ref=e496]
+          - heading "Daily learning at home" [level=3] [ref=e498]
+          - paragraph [ref=e499]: Learners work through personalized lessons, streaks, and challenges that feel like a game, not homework assigned by a teacher.
+          - generic [ref=e500]: Step 3
+        - generic [ref=e501]:
+          - img [ref=e503]
+          - heading "Parents stay informed" [level=3] [ref=e506]
+          - paragraph [ref=e507]: Weekly digests, clear alerts, and side-by-side sibling views keep families aligned without jargon or school dashboards.
+          - generic [ref=e508]: Step 4
+        - generic [ref=e509]:
+          - img [ref=e511]
+          - heading "Celebrate growth together" [level=3] [ref=e514]
+          - paragraph [ref=e515]: Badges, milestones, and goal streaks give you moments to celebrate at the dinner table. Progress is explained in plain language.
+          - generic [ref=e516]: Step 5
+      - generic [ref=e517]:
+        - generic [ref=e518]:
+          - img [ref=e520]
+          - generic [ref=e523]:
+            - paragraph [ref=e524]: Clearly separated admin workspace
+            - paragraph [ref=e525]:
+              - text: Bulk imports and advanced controls live at
+              - code [ref=e526]: /workspace/admin
+              - text: so the family app stays focused on home learning.
+        - generic [ref=e527]: "Built for households: no teacher accounts, no district provisioning, just students and parents at home."
+    - generic [ref=e531]:
+      - generic [ref=e532]:
+        - heading "How ElevatED Works" [level=2] [ref=e533]
+        - paragraph [ref=e534]: A home-learning flow that makes sense for families and keeps students moving forward
+      - generic [ref=e536]:
+        - generic [ref=e537]:
+          - img [ref=e539]
+          - heading "Create Your Family Space" [level=3] [ref=e542]
+          - paragraph [ref=e543]: Parents invite learners and set simple goals. Students join with their own login so privacy and progress stay separate.
+        - generic [ref=e544]:
+          - img [ref=e546]
+          - heading "Meet the AI Tutor" [level=3] [ref=e556]
+          - paragraph [ref=e557]: Learners take a short adaptive check-in so the tutor can set the right starting point across subjects.
+        - generic [ref=e558]:
+          - img [ref=e560]
+          - heading "Follow Personalized Paths" [level=3] [ref=e563]
+          - paragraph [ref=e564]: Daily lessons adapt automatically. Students get hints, practice, and encouragement without needing a classroom teacher.
+        - generic [ref=e565]:
+          - img [ref=e567]
+          - heading "Parents Stay in the Loop" [level=3] [ref=e570]
+          - paragraph [ref=e571]: Weekly summaries, clear alerts, and side-by-side sibling views keep parents informed without jargon.
+      - generic [ref=e573]:
+        - heading "Ready to Transform Learning?" [level=3] [ref=e574]
+        - paragraph [ref=e575]: Join thousands of students and parents already using ElevatED
+        - button "Start Your Free Trial" [ref=e576] [cursor=pointer]
+    - generic [ref=e578]:
+      - generic [ref=e579]:
+        - heading "Choose Your Learning Plan" [level=2] [ref=e580]
+        - paragraph [ref=e581]: Flexible pricing designed to grow with your learning needs
+      - generic [ref=e582]:
+        - generic [ref=e584]:
+          - generic [ref=e585]:
+            - img [ref=e587]
+            - generic [ref=e590]:
+              - generic [ref=e591]: 📘
+              - heading "Free" [level=3] [ref=e592]
+            - paragraph [ref=e593]: Start your smarter learning journey
+            - generic [ref=e594]:
+              - generic [ref=e595]:
+                - generic [ref=e596]: $0
+                - generic [ref=e597]: /month
+              - paragraph [ref=e598]: 1 student included
+            - paragraph [ref=e599]: Everything you need to start
+            - paragraph [ref=e600]: Try diagnostics, a personalized path, and core progress tracking.
+          - list [ref=e602]:
+            - listitem [ref=e603]:
+              - img [ref=e604]
+              - generic [ref=e606]: Adaptive diagnostic + personalized path
+            - listitem [ref=e607]:
+              - img [ref=e608]
+              - generic [ref=e610]: Up to 10 lessons/assignments per month
+            - listitem [ref=e611]:
+              - img [ref=e612]
+              - generic [ref=e614]: "AI tutor: 3 chats per day"
+            - listitem [ref=e615]:
+              - img [ref=e616]
+              - generic [ref=e618]: Basic progress view (last 30 days)
+            - listitem [ref=e619]:
+              - img [ref=e620]
+              - generic [ref=e622]: Weekly digest email (optional)
+            - listitem [ref=e623]:
+              - img [ref=e624]
+              - generic [ref=e626]: XP, streaks, badges to build habits
+          - generic [ref=e627]:
+            - generic [ref=e628]:
+              - img [ref=e629]
+              - generic [ref=e635]: "Perfect for:"
+            - paragraph [ref=e636]: Exploring ElevatED and building daily learning habits
+          - button "Start Free" [ref=e637] [cursor=pointer]
+        - generic [ref=e638]:
+          - generic [ref=e640]:
+            - img [ref=e641]
+            - generic [ref=e643]: Most Popular
+          - generic [ref=e644]:
+            - generic [ref=e645]:
+              - img [ref=e647]
+              - generic [ref=e657]:
+                - generic [ref=e658]: 📘
+                - heading "Plus" [level=3] [ref=e659]
+              - paragraph [ref=e660]: Unlock deeper insights and personalized progress
+              - generic [ref=e661]:
+                - generic [ref=e662]:
+                  - generic [ref=e663]: $6.99
+                  - generic [ref=e664]: /month (first student)
+                - paragraph [ref=e665]: Each additional student $5.59 (20% off), up to 4 seats
+                - paragraph [ref=e666]: 1 included (up to 4 seats)
+              - paragraph [ref=e667]: Everything in Free, plus
+              - paragraph [ref=e668]: More headroom, analytics, and weekly AI summaries.
+            - list [ref=e670]:
+              - listitem [ref=e671]:
+                - img [ref=e672]
+                - generic [ref=e674]: Up to ~100 lessons/assignments per month
+              - listitem [ref=e675]:
+                - img [ref=e676]
+                - generic [ref=e678]: "AI tutor: high daily cap (fair use)"
+              - listitem [ref=e679]:
+                - img [ref=e680]
+                - generic [ref=e682]: Advanced analytics + weekly AI summaries
+              - listitem [ref=e683]:
+                - img [ref=e684]
+                - generic [ref=e686]: Parent alerts and saved practice sets
+              - listitem [ref=e687]:
+                - img [ref=e688]
+                - generic [ref=e690]: Exports/PDF reports for progress reviews
+            - generic [ref=e691]:
+              - generic [ref=e692]:
+                - img [ref=e693]
+                - generic [ref=e699]: "Perfect for:"
+              - paragraph [ref=e700]: Families ready for consistent progress and richer insights
+            - button "Upgrade to Plus" [ref=e701] [cursor=pointer]
+        - generic [ref=e703]:
+          - generic [ref=e704]:
+            - img [ref=e706]
+            - generic [ref=e711]:
+              - generic [ref=e712]: 📘
+              - heading "Pro" [level=3] [ref=e713]
+            - paragraph [ref=e714]: Full power for serious results
+            - generic [ref=e715]:
+              - generic [ref=e716]:
+                - generic [ref=e717]: $9.99
+                - generic [ref=e718]: /month (first student)
+              - paragraph [ref=e719]: Each additional student $7.99 (20% off), up to 6 seats
+              - paragraph [ref=e720]: 1 included (up to 6 seats)
+            - paragraph [ref=e721]: Everything in Plus, plus
+            - paragraph [ref=e722]: Unlimited learning, priority support, and deepest insights.
+          - list [ref=e724]:
+            - listitem [ref=e725]:
+              - img [ref=e726]
+              - generic [ref=e728]: Unlimited lessons/assignments
+            - listitem [ref=e729]:
+              - img [ref=e730]
+              - generic [ref=e732]: "AI tutor: effectively unlimited (with fair-use guardrails)"
+            - listitem [ref=e733]:
+              - img [ref=e734]
+              - generic [ref=e736]: Priority support and faster responses
+            - listitem [ref=e737]:
+              - img [ref=e738]
+              - generic [ref=e740]: Full exports/CSV and deeper analytics history
+            - listitem [ref=e741]:
+              - img [ref=e742]
+              - generic [ref=e744]: "Automation: weekly study plan refresh and upcoming content first"
+          - generic [ref=e745]:
+            - generic [ref=e746]:
+              - img [ref=e747]
+              - generic [ref=e753]: "Perfect for:"
+            - paragraph [ref=e754]: Households with serious goals or multiple active learners
+          - button "Go Pro" [ref=e755] [cursor=pointer]
+      - table [ref=e757]:
+        - rowgroup [ref=e758]:
+          - row "Plan Snapshot Free Plus Pro" [ref=e759]:
+            - columnheader "Plan Snapshot" [ref=e760]
+            - columnheader "Free" [ref=e761]
+            - columnheader "Plus" [ref=e762]
+            - columnheader "Pro" [ref=e763]
+        - rowgroup [ref=e764]:
+          - row "Monthly price $0 $6.99 (first student) $9.99 (first student)" [ref=e765]:
+            - cell "Monthly price" [ref=e766]
+            - cell "$0" [ref=e767]
+            - cell "$6.99 (first student)" [ref=e768]
+            - cell "$9.99 (first student)" [ref=e769]
+          - row "Additional students Not available $5.59 each (20% off, up to 4) $7.99 each (20% off, up to 6)" [ref=e770]:
+            - cell "Additional students" [ref=e771]
+            - cell "Not available" [ref=e772]
+            - cell "$5.59 each (20% off, up to 4)" [ref=e773]
+            - cell "$7.99 each (20% off, up to 6)" [ref=e774]
+          - row "Lesson/assignment limit 10 per month ~100 per month Unlimited" [ref=e775]:
+            - cell "Lesson/assignment limit" [ref=e776]
+            - cell "10 per month" [ref=e777]
+            - cell "~100 per month" [ref=e778]
+            - cell "Unlimited" [ref=e779]
+          - row "AI tutor 3 chats/day High cap (≈30/day) Effectively unlimited (fair use)" [ref=e780]:
+            - cell "AI tutor" [ref=e781]
+            - cell "3 chats/day" [ref=e782]
+            - cell "High cap (≈30/day)" [ref=e783]
+            - cell "Effectively unlimited (fair use)" [ref=e784]
+          - row "Analytics & summaries Basic progress (30 days) Advanced analytics + weekly AI summaries Full analytics history + exports" [ref=e785]:
+            - cell "Analytics & summaries" [ref=e786]
+            - cell "Basic progress (30 days)" [ref=e787]
+            - cell "Advanced analytics + weekly AI summaries" [ref=e788]
+            - cell "Full analytics history + exports" [ref=e789]
+      - generic [ref=e791]:
+        - heading "What You Get" [level=3] [ref=e792]
+        - generic [ref=e793]:
+          - generic [ref=e794]:
+            - img [ref=e796]
+            - heading "Adaptive Lessons" [level=4] [ref=e806]
+            - paragraph [ref=e807]: Every activity adjusts in real time to keep students challenged but confident.
+          - generic [ref=e808]:
+            - img [ref=e810]
+            - heading "Live Feedback" [level=4] [ref=e815]
+            - paragraph [ref=e816]: Students get instant hints, chat support, and step-by-step explanations.
+          - generic [ref=e817]:
+            - img [ref=e819]
+            - heading "Parent Dashboard" [level=4] [ref=e825]
+            - paragraph [ref=e826]: Track progress, set goals, and celebrate wins from a single family view.
+        - paragraph [ref=e828]:
+          - strong [ref=e829]: "Money-back guarantee:"
+          - text: Not satisfied within 30 days? Get a full refund, no questions asked.
+    - generic [ref=e831]:
+      - generic [ref=e832]:
+        - generic [ref=e833]:
+          - img [ref=e834]
+          - generic [ref=e837]: Email verification
+        - heading "Need a new verification link?" [level=3] [ref=e838]
+        - paragraph [ref=e839]: Enter your email and role and we'll resend the confirmation. We don't reveal whether an account exists for privacy—check the inbox and spam folder for the latest link.
+        - list [ref=e840]:
+          - listitem [ref=e841]: • Uses the same redirect as signup so you land in the right dashboard.
+          - listitem [ref=e842]: • Works for parents or students who changed emails and need a fresh link.
+          - listitem [ref=e843]:
+            - text: • Support can help at
+            - link "support@elevated.edu" [ref=e844] [cursor=pointer]:
+              - /url: mailto:support@elevated.edu
+            - text: .
+      - generic [ref=e846]:
+        - generic [ref=e847]:
+          - generic [ref=e848]: Email
+          - generic [ref=e849]:
+            - img [ref=e850]
+            - textbox "name@example.com" [ref=e853]: test-grade6-1765759195027@example.com
+        - generic [ref=e854]:
+          - generic [ref=e855]: I'm signing in as
+          - generic [ref=e856]:
+            - button "Parent/Guardian" [pressed] [ref=e857] [cursor=pointer]
+            - button "Student" [ref=e858] [cursor=pointer]
+        - button "Resend verification link" [ref=e859] [cursor=pointer]
+    - generic [ref=e861]:
+      - generic [ref=e862]:
+        - heading "Frequently Asked Questions" [level=2] [ref=e863]
+        - paragraph [ref=e864]: Everything you need to know about ElevatED's personalized, family-first learning platform
+      - generic [ref=e865]:
+        - generic [ref=e866]:
+          - heading "What ElevatED is" [level=3] [ref=e867]
+          - list [ref=e868]:
+            - listitem [ref=e869]: • A home-learning companion for students and parents.
+            - listitem [ref=e870]: • Adaptive AI tutor with family dashboards and weekly digests.
+            - listitem [ref=e871]: • Simple catalog browsing so parents can launch the right lessons.
+        - generic [ref=e872]:
+          - heading "What ElevatED is not" [level=3] [ref=e873]
+          - list [ref=e874]:
+            - listitem [ref=e875]: • Not a school SIS/LMS, teacher gradebook, or district roster tool.
+            - listitem [ref=e876]: • Not built for classroom schedules or bulk teacher provisioning.
+            - listitem [ref=e877]:
+              - text: • Admin/import tools live separately at
+              - code [ref=e878]: /workspace/admin
+              - text: .
+          - paragraph [ref=e879]: ElevatED is for students and parents at home, not schools or teachers.
+      - generic [ref=e880]:
+        - generic [ref=e881]:
+          - button "How does the adaptive learning system work?" [ref=e882] [cursor=pointer]:
+            - heading "How does the adaptive learning system work?" [level=3] [ref=e883]
+            - img [ref=e884]
+          - paragraph [ref=e888]: Our AI engine analyzes student responses in real-time and adjusts difficulty per concept. If a student struggles with multiplication but excels at addition, the system provides more multiplication practice while advancing their addition skills. This ensures optimal challenge levels for maximum learning efficiency.
+        - button "What subjects and grade levels are covered?" [ref=e890] [cursor=pointer]:
+          - heading "What subjects and grade levels are covered?" [level=3] [ref=e891]
+          - img [ref=e892]
+        - button "How long does the diagnostic assessment take?" [ref=e895] [cursor=pointer]:
+          - heading "How long does the diagnostic assessment take?" [level=3] [ref=e896]
+          - img [ref=e897]
+        - button "What can parents see in their dashboard?" [ref=e900] [cursor=pointer]:
+          - heading "What can parents see in their dashboard?" [level=3] [ref=e901]
+          - img [ref=e902]
+        - button "Is there a free version available?" [ref=e905] [cursor=pointer]:
+          - heading "Is there a free version available?" [level=3] [ref=e906]
+          - img [ref=e907]
+        - button "How does the AI learning assistant help students?" [ref=e910] [cursor=pointer]:
+          - heading "How does the AI learning assistant help students?" [level=3] [ref=e911]
+          - img [ref=e912]
+        - button "Can multiple children use one parent account?" [ref=e915] [cursor=pointer]:
+          - heading "Can multiple children use one parent account?" [level=3] [ref=e916]
+          - img [ref=e917]
+        - button "What devices and browsers are supported?" [ref=e920] [cursor=pointer]:
+          - heading "What devices and browsers are supported?" [level=3] [ref=e921]
+          - img [ref=e922]
+        - button "How is student data protected?" [ref=e925] [cursor=pointer]:
+          - heading "How is student data protected?" [level=3] [ref=e926]
+          - img [ref=e927]
+        - button "Can I cancel or change my subscription anytime?" [ref=e930] [cursor=pointer]:
+          - heading "Can I cancel or change my subscription anytime?" [level=3] [ref=e931]
+          - img [ref=e932]
+      - generic [ref=e935]:
+        - heading "Still have questions?" [level=3] [ref=e936]
+        - paragraph [ref=e937]: Our support team is here to help you get the most out of ElevatED
+        - generic [ref=e938]:
+          - button "Contact Support" [ref=e939] [cursor=pointer]
+          - button "Schedule Demo" [ref=e940] [cursor=pointer]
+    - contentinfo [ref=e941]:
+      - generic [ref=e942]:
+        - generic [ref=e943]:
+          - generic [ref=e944]:
+            - generic [ref=e945]:
+              - img "ElevatED Logo" [ref=e946]
+              - generic [ref=e947]:
+                - heading "ElevatED" [level=3] [ref=e948]
+                - paragraph [ref=e949]: AI-Powered Learning
+            - paragraph [ref=e950]: Transforming education through personalized AI-powered learning experiences. Helping students achieve their full potential with adaptive content and intelligent tutoring.
+            - generic [ref=e951]:
+              - generic [ref=e952]:
+                - img [ref=e953]
+                - generic [ref=e956]: support@elevated.edu
+              - generic [ref=e957]:
+                - img [ref=e958]
+                - generic [ref=e960]: 1-800-ELEVATE
+              - generic [ref=e961]:
+                - img [ref=e962]
+                - generic [ref=e965]: San Francisco, CA
+          - generic [ref=e966]:
+            - heading "Product" [level=4] [ref=e967]
+            - list [ref=e968]:
+              - listitem [ref=e969]:
+                - link "Features" [ref=e970] [cursor=pointer]:
+                  - /url: "#features"
+              - listitem [ref=e971]:
+                - link "How It Works" [ref=e972] [cursor=pointer]:
+                  - /url: "#how-it-works"
+              - listitem [ref=e973]:
+                - link "Pricing" [ref=e974] [cursor=pointer]:
+                  - /url: "#pricing"
+              - listitem [ref=e975]:
+                - link "Demo" [ref=e976] [cursor=pointer]:
+                  - /url: "#demo"
+          - generic [ref=e977]:
+            - heading "Support" [level=4] [ref=e978]
+            - list [ref=e979]:
+              - listitem [ref=e980]:
+                - link "Help Center" [ref=e981] [cursor=pointer]:
+                  - /url: "#help"
+              - listitem [ref=e982]:
+                - link "Contact Us" [ref=e983] [cursor=pointer]:
+                  - /url: "#contact"
+              - listitem [ref=e984]:
+                - link "System Status" [ref=e985] [cursor=pointer]:
+                  - /url: "#status"
+              - listitem [ref=e986]:
+                - link "Bug Reports" [ref=e987] [cursor=pointer]:
+                  - /url: "#bugs"
+          - generic [ref=e988]:
+            - heading "Company" [level=4] [ref=e989]
+            - list [ref=e990]:
+              - listitem [ref=e991]:
+                - link "About Us" [ref=e992] [cursor=pointer]:
+                  - /url: "#about"
+              - listitem [ref=e993]:
+                - link "Careers" [ref=e994] [cursor=pointer]:
+                  - /url: "#careers"
+              - listitem [ref=e995]:
+                - link "Press" [ref=e996] [cursor=pointer]:
+                  - /url: "#press"
+              - listitem [ref=e997]:
+                - link "Partners" [ref=e998] [cursor=pointer]:
+                  - /url: "#partners"
+          - generic [ref=e999]:
+            - heading "Legal" [level=4] [ref=e1000]
+            - list [ref=e1001]:
+              - listitem [ref=e1002]:
+                - link "Privacy Policy" [ref=e1003] [cursor=pointer]:
+                  - /url: /legal/privacy
+              - listitem [ref=e1004]:
+                - link "Terms of Service" [ref=e1005] [cursor=pointer]:
+                  - /url: /legal/terms
+              - listitem [ref=e1006]:
+                - link "Cookie Policy" [ref=e1007] [cursor=pointer]:
+                  - /url: /legal/privacy#cookies
+              - listitem [ref=e1008]:
+                - link "COPPA Compliance" [ref=e1009] [cursor=pointer]:
+                  - /url: /legal/privacy#coppa
+        - generic [ref=e1011]:
+          - generic [ref=e1012]: © 2024 ElevatED. All rights reserved. | Empowering learners worldwide.
+          - generic [ref=e1013]:
+            - link "Facebook" [ref=e1014] [cursor=pointer]:
+              - /url: "#facebook"
+              - img [ref=e1015]
+            - link "Twitter" [ref=e1017] [cursor=pointer]:
+              - /url: "#twitter"
+              - img [ref=e1018]
+            - link "Instagram" [ref=e1020] [cursor=pointer]:
+              - /url: "#instagram"
+              - img [ref=e1021]
+            - link "LinkedIn" [ref=e1024] [cursor=pointer]:
+              - /url: "#linkedin"
+              - img [ref=e1025]
+    - button "Open ElevatED marketing assistant chat" [ref=e1029] [cursor=pointer]:
+      - img [ref=e1030]
+  - dialog "Welcome Back!" [ref=e1032]:
+    - generic [ref=e1033]:
+      - button "Close authentication modal" [ref=e1034] [cursor=pointer]:
+        - img [ref=e1035]
+      - generic [ref=e1038]:
+        - img "ElevatED" [ref=e1039]
+        - generic [ref=e1040]:
+          - heading "Welcome Back!" [level=2] [ref=e1041]
+          - paragraph [ref=e1042]: Sign in to continue learning
+    - generic [ref=e1043]:
+      - generic [ref=e1044]:
+        - generic [ref=e1045]:
+          - generic [ref=e1046]: Email Address
+          - generic [ref=e1047]:
+            - img [ref=e1048]
+            - textbox "Enter your email" [active] [ref=e1051]
+        - generic [ref=e1052]:
+          - generic [ref=e1053]: Password
+          - generic [ref=e1054]:
+            - img [ref=e1055]
+            - textbox "Enter your password" [ref=e1058]: TestPassword123!
+            - button "Show password" [ref=e1059] [cursor=pointer]:
+              - img [ref=e1060]
+        - button "Sign In" [ref=e1063] [cursor=pointer]
+      - paragraph [ref=e1064]:
+        - text: By continuing you agree to our
+        - link "Terms" [ref=e1065] [cursor=pointer]:
+          - /url: /legal/terms
+        - text: and
+        - link "Privacy Policy" [ref=e1066] [cursor=pointer]:
+          - /url: /legal/privacy
+        - text: . Students under 13 should sign up with a parent/guardian present.
+      - paragraph [ref=e1067]: Parents own the family account and can request data export or deletion anytime from the Family Dashboard. Learners keep their view focused on lessons only.
+      - generic [ref=e1069]:
+        - button "Don't have an account? Sign up" [ref=e1070] [cursor=pointer]
+        - button "Forgot password?" [ref=e1071] [cursor=pointer]
+        - link "Open reset page" [ref=e1072] [cursor=pointer]:
+          - /url: /auth/reset
+```
