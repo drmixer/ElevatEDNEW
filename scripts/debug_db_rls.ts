@@ -1,4 +1,4 @@
-import { createServiceRoleClient, createRlsClient } from './utils/supabase.js';
+import { createServiceRoleClient } from './utils/supabase.js';
 
 /**
  * Debug script to check database tables and RLS policies for student dashboard issues
@@ -13,7 +13,7 @@ async function main() {
 
     // 1. Check if we can connect
     console.log('1. Testing connection...');
-    const { data: testData, error: testError } = await supabase.from('profiles').select('id').limit(1);
+    const { error: testError } = await supabase.from('profiles').select('id').limit(1);
     if (testError) {
         console.error('❌ Connection failed:', testError.message);
         return;
