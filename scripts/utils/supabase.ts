@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import process from 'node:process';
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
@@ -37,8 +38,8 @@ export const createRlsClient = (accessToken?: string | null): SupabaseClient =>
     global: {
       headers: accessToken
         ? {
-            Authorization: `Bearer ${accessToken}`,
-          }
+          Authorization: `Bearer ${accessToken}`,
+        }
         : {},
     },
   });

@@ -1,0 +1,1221 @@
+{
+    "math_1": {
+        "grade_band": "1",
+        "subject": "math",
+        "title": "Grade 1 Math Diagnostic",
+        "description": "Counting, basic addition and subtraction, shapes, and patterns.",
+        "estimatedDurationMinutes": 8,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "counting",
+                    "strand": "Counting",
+                    "standards": [
+                        "1.NBT.A.1"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "add_sub",
+                    "strand": "Addition & Subtraction",
+                    "standards": [
+                        "1.OA.A.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "shapes",
+                    "strand": "Shapes",
+                    "standards": [
+                        "1.G.A.1"
+                    ],
+                    "itemCount": 3
+                },
+                {
+                    "id": "patterns",
+                    "strand": "Patterns",
+                    "standards": [
+                        "1.OA.D.8"
+                    ],
+                    "itemCount": 3
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "1m-count-1",
+                "prompt": "How many apples? 🍎🍎🍎🍎🍎",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "1.NBT.A.1",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-count-2",
+                "prompt": "What number comes after 7?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "1.NBT.A.1",
+                "options": [
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-count-3",
+                "prompt": "Which number is bigger: 4 or 9?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "1.NBT.A.1",
+                "options": [
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "They are the same",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "I don't know",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-count-4",
+                "prompt": "Count by 2s: 2, 4, 6, ___",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "1.NBT.A.1",
+                "options": [
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-add-1",
+                "prompt": "What is 2 + 3?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition & Subtraction",
+                "standard": "1.OA.A.1",
+                "options": [
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-add-2",
+                "prompt": "What is 5 + 4?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition & Subtraction",
+                "standard": "1.OA.A.1",
+                "options": [
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-sub-1",
+                "prompt": "What is 6 - 2?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition & Subtraction",
+                "standard": "1.OA.A.1",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-sub-2",
+                "prompt": "What is 10 - 5?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition & Subtraction",
+                "standard": "1.OA.A.1",
+                "options": [
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "15",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-add-3",
+                "prompt": "I have 3 cookies. My friend gives me 2 more. How many cookies do I have?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition & Subtraction",
+                "standard": "1.OA.A.1",
+                "options": [
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "1",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-shape-1",
+                "prompt": "What shape has 3 sides?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "1.G.A.1",
+                "options": [
+                    {
+                        "text": "Circle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Square",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Triangle",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Rectangle",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-shape-2",
+                "prompt": "A ball is shaped like a ___.",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "1.G.A.1",
+                "options": [
+                    {
+                        "text": "Square",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Circle",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Triangle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Star",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-shape-3",
+                "prompt": "How many corners does a square have?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "1.G.A.1",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "0",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-pat-1",
+                "prompt": "What comes next? Red, Blue, Red, Blue, ___",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Patterns",
+                "standard": "1.OA.D.8",
+                "options": [
+                    {
+                        "text": "Red",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Blue",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Green",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Yellow",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-pat-2",
+                "prompt": "What comes next? 1, 2, 3, 1, 2, 3, ___",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Patterns",
+                "standard": "1.OA.D.8",
+                "options": [
+                    {
+                        "text": "1",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1m-pat-3",
+                "prompt": "What comes next? ⭐🌙⭐🌙___",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Patterns",
+                "standard": "1.OA.D.8",
+                "options": [
+                    {
+                        "text": "⭐",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "🌙",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "☀️",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "🌈",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "ela_1": {
+        "grade_band": "1",
+        "subject": "ela",
+        "title": "Grade 1 ELA Diagnostic",
+        "description": "Letter sounds, sight words, simple reading, and rhyming.",
+        "estimatedDurationMinutes": 8,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "phonics",
+                    "strand": "Phonics",
+                    "standards": [
+                        "RF.1.2"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "sight_words",
+                    "strand": "Sight Words",
+                    "standards": [
+                        "RF.1.3"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "comprehension",
+                    "strand": "Comprehension",
+                    "standards": [
+                        "RL.1.1"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "rhyming",
+                    "strand": "Rhyming",
+                    "standards": [
+                        "RF.1.2.A"
+                    ],
+                    "itemCount": 3
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "1e-phon-1",
+                "prompt": "What sound does the letter B make?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Phonics",
+                "standard": "RF.1.2",
+                "options": [
+                    {
+                        "text": "buh",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "duh",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "puh",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "tuh",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-phon-2",
+                "prompt": "Which word starts with the same sound as 'cat'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Phonics",
+                "standard": "RF.1.2",
+                "options": [
+                    {
+                        "text": "dog",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "cup",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "ball",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "tree",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-phon-3",
+                "prompt": "What letter does 'sun' start with?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Phonics",
+                "standard": "RF.1.2",
+                "options": [
+                    {
+                        "text": "S",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Z",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "C",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "M",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-phon-4",
+                "prompt": "How many sounds are in the word 'hat'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Phonics",
+                "standard": "RF.1.2",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-sight-1",
+                "prompt": "Which word says 'the'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sight Words",
+                "standard": "RF.1.3",
+                "options": [
+                    {
+                        "text": "the",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "they",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "then",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "that",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-sight-2",
+                "prompt": "Read the word: said",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sight Words",
+                "standard": "RF.1.3",
+                "options": [
+                    {
+                        "text": "I can read 'said'",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "I need help",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "I don't know this word",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Skip",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-sight-3",
+                "prompt": "Which is a color word?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sight Words",
+                "standard": "RF.1.3",
+                "options": [
+                    {
+                        "text": "red",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "run",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "had",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "sit",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-sight-4",
+                "prompt": "Fill in: I ___ a dog.",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sight Words",
+                "standard": "RF.1.3",
+                "options": [
+                    {
+                        "text": "have",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "hav",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "hive",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "has",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-comp-1",
+                "prompt": "Read: 'The cat sat on the mat.' Where is the cat?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Comprehension",
+                "standard": "RL.1.1",
+                "options": [
+                    {
+                        "text": "On the mat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "In a tree",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Under the bed",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "At school",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-comp-2",
+                "prompt": "Read: 'Sam is happy. He is smiling.' How does Sam feel?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Comprehension",
+                "standard": "RL.1.1",
+                "options": [
+                    {
+                        "text": "Sad",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Happy",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Angry",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Scared",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-comp-3",
+                "prompt": "Read: 'The dog ran fast.' What did the dog do?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Comprehension",
+                "standard": "RL.1.1",
+                "options": [
+                    {
+                        "text": "Slept",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Ate",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Ran",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Jumped",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-comp-4",
+                "prompt": "Read: 'Mom gave me a hug.' Who gave the hug?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Comprehension",
+                "standard": "RL.1.1",
+                "options": [
+                    {
+                        "text": "Dad",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Mom",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Sister",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Friend",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-rhyme-1",
+                "prompt": "Which word rhymes with 'cat'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Rhyming",
+                "standard": "RF.1.2.A",
+                "options": [
+                    {
+                        "text": "hat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "dog",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "cup",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "book",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-rhyme-2",
+                "prompt": "Which word rhymes with 'sun'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Rhyming",
+                "standard": "RF.1.2.A",
+                "options": [
+                    {
+                        "text": "run",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "sit",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "hot",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "bed",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1e-rhyme-3",
+                "prompt": "Which word rhymes with 'hop'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Rhyming",
+                "standard": "RF.1.2.A",
+                "options": [
+                    {
+                        "text": "top",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "run",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "big",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "sat",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "science_1": {
+        "grade_band": "1",
+        "subject": "science",
+        "title": "Grade 1 Science Diagnostic",
+        "description": "Living things, weather, and senses.",
+        "estimatedDurationMinutes": 6,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "living",
+                    "strand": "Living Things",
+                    "standards": [
+                        "1-LS1-1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "weather",
+                    "strand": "Weather",
+                    "standards": [
+                        "1-ESS1-2"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "senses",
+                    "strand": "Senses",
+                    "standards": [
+                        "1-PS4-1"
+                    ],
+                    "itemCount": 3
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "1s-liv-1",
+                "prompt": "Which one is alive?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Living Things",
+                "standard": "1-LS1-1",
+                "options": [
+                    {
+                        "text": "A rock",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "A tree",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "A chair",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "A toy",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-liv-2",
+                "prompt": "What do plants need to grow?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Living Things",
+                "standard": "1-LS1-1",
+                "options": [
+                    {
+                        "text": "Water and sunlight",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Only candy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Only toys",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Nothing",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-liv-3",
+                "prompt": "Which animal has fur?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Living Things",
+                "standard": "1-LS1-1",
+                "options": [
+                    {
+                        "text": "Fish",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Dog",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Snake",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Bird",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-liv-4",
+                "prompt": "What do animals need to live?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Living Things",
+                "standard": "1-LS1-1",
+                "options": [
+                    {
+                        "text": "Food, water, and air",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Only TV",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Only toys",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Only sleep",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-liv-5",
+                "prompt": "A baby dog is called a ___.",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Living Things",
+                "standard": "1-LS1-1",
+                "options": [
+                    {
+                        "text": "Kitten",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Puppy",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Cub",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Chick",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-wea-1",
+                "prompt": "What do you wear when it rains?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Weather",
+                "standard": "1-ESS1-2",
+                "options": [
+                    {
+                        "text": "Raincoat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Swimsuit",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Pajamas",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Nothing",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-wea-2",
+                "prompt": "In summer, it is usually ___.",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Weather",
+                "standard": "1-ESS1-2",
+                "options": [
+                    {
+                        "text": "Hot",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Snowy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Freezing",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Icy",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-wea-3",
+                "prompt": "What falls from clouds?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Weather",
+                "standard": "1-ESS1-2",
+                "options": [
+                    {
+                        "text": "Rain",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Rocks",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Leaves",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Stars",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-wea-4",
+                "prompt": "The sun gives us ___.",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Weather",
+                "standard": "1-ESS1-2",
+                "options": [
+                    {
+                        "text": "Light and heat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Snow",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Rain",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Wind",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-sense-1",
+                "prompt": "What do you use to see?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Senses",
+                "standard": "1-PS4-1",
+                "options": [
+                    {
+                        "text": "Eyes",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Ears",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Nose",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Hands",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-sense-2",
+                "prompt": "What do you use to hear?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Senses",
+                "standard": "1-PS4-1",
+                "options": [
+                    {
+                        "text": "Eyes",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Ears",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Tongue",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Feet",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "1s-sense-3",
+                "prompt": "What do you use to smell flowers?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Senses",
+                "standard": "1-PS4-1",
+                "options": [
+                    {
+                        "text": "Nose",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Ears",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Mouth",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Eyes",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    }
+}

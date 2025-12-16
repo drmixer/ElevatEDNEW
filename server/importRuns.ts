@@ -5,6 +5,10 @@ import type {
   ImportRunStatus,
 } from '../shared/import-runs.js';
 
+// Re-export for use in other server modules
+export type { ImportRunLogEntry };
+
+
 export type ImportRunRow = {
   id: number;
   source: string;
@@ -32,11 +36,11 @@ const parseLogEntries = (value: unknown): ImportRunLogEntry[] => {
     return [];
   }
   return value
-    .map((item) => {
+    .map((item): ImportRunLogEntry => {
       if (item && typeof item === 'object') {
         const record = item as Record<string, unknown>;
         const message = typeof record.message === 'string' ? record.message : JSON.stringify(record);
-        const level = record.level === 'warn' || record.level === 'error' ? record.level : 'info';
+        const level: ImportRunLogEntry['level'] = record.level === 'warn' || record.level === 'error' ? record.level : 'info';
         const timestamp =
           typeof record.timestamp === 'string' ? record.timestamp : new Date().toISOString();
         const context = record.context && typeof record.context === 'object' ? (record.context as Record<string, unknown>) : undefined;
@@ -44,12 +48,13 @@ const parseLogEntries = (value: unknown): ImportRunLogEntry[] => {
       }
       return {
         message: typeof item === 'string' ? item : JSON.stringify(item),
-        level: 'info',
+        level: 'info' as const,
         timestamp: new Date().toISOString(),
       };
     })
     .filter((entry) => entry.message.length > 0);
 };
+
 
 export const coerceImportRunRow = (value: Record<string, unknown>): ImportRunRow => {
   const id = Number.parseInt(String(value.id ?? ''), 10);

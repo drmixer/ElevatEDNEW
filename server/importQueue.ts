@@ -21,11 +21,13 @@ const claimPendingRun = async (client: SupabaseClient): Promise<ImportRunRow | n
     throw new Error(`Failed to claim pending import runs: ${error.message}`);
   }
 
-  if (!data) {
+  // Handle various empty states: null, undefined, empty object, or object without valid id
+  if (!data || typeof data !== 'object' || !('id' in data) || data.id === null || data.id === undefined) {
     return null;
   }
 
   const run = coerceImportRunRow(data as Record<string, unknown>);
+
   const claimedLogs = appendLogEntry(run, buildLogEntry('info', 'Worker claimed import run.'));
 
   const { data: updated, error: updateError } = await client
@@ -54,7 +56,7 @@ export class ImportQueue {
   constructor(
     private readonly client: SupabaseClient,
     private readonly options: ImportQueueOptions = {},
-  ) {}
+  ) { }
 
   start(): void {
     if (this.timer) {

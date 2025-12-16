@@ -4,6 +4,7 @@ import { createServiceRoleClient } from '../scripts/utils/supabase.js';
 import { buildCoachingSuggestions } from '../src/lib/parentSuggestions';
 import { normalizeSubject } from '../src/lib/subjects';
 import type { ParentChildSnapshot } from '../src/types';
+import { sendBatchEmails, isEmailConfigured, type EmailPayload, type EmailBatchResult } from './emailService.js';
 
 type ParentWeeklyReportRow = {
   parent_id: string;
@@ -167,7 +168,7 @@ const buildEmailBody = (
   ].join('\n');
 };
 
-export const runWeeklyEmailJob = async (): Promise<void> => {
+export const runWeeklyEmailJob = async (): Promise<EmailBatchResult | void> => {
   const supabase = createServiceRoleClient();
   const cutoffWeek = weekStartIso();
 
@@ -251,7 +252,29 @@ export const runWeeklyEmailJob = async (): Promise<void> => {
     console.log(`[weekly-email] ${payload.to} • ${payload.subject}`);
   });
 
-  // Hook your ESP/worker here. We intentionally only prepare payloads to keep this repo side-effect free.
+  // Check email service status and send emails
+  const emailStatus = isEmailConfigured();
+  console.log(`[weekly-email] Email service configured: ${emailStatus.configured}, enabled: ${emailStatus.enabled}`);
+
+  if (emailStatus.issues.length > 0) {
+    console.log(`[weekly-email] Issues: ${emailStatus.issues.join(', ')}`);
+  }
+
+  // Convert to email payloads and send
+  const emailPayloads: EmailPayload[] = payloads.map((p) => ({
+    to: p.to,
+    subject: p.subject,
+    body: p.body,
+    tags: [
+      { name: 'type', value: 'weekly-digest' },
+      { name: 'parent_id', value: p.parentId },
+    ],
+  }));
+
+  const result = await sendBatchEmails(emailPayloads);
+  console.log(`[weekly-email] Send complete: ${result.sent}/${result.total} sent, ${result.failed} failed`);
+
+  return result;
 };
 
 if (require.main === module) {
