@@ -12,20 +12,20 @@ export default defineConfig(({ command }) => {
 
   const proxyPlugin = enableProxy
     ? [
-        {
-          name: 'elevated-api-proxy',
-          configureServer(server) {
-            const supabase = createServiceRoleClient();
-            const handler = createApiHandler({ supabase });
-            server.middlewares.use(async (req, res, next) => {
-              const handled = await handler(req, res);
-              if (!handled) {
-                next();
-              }
-            });
-          },
+      {
+        name: 'elevated-api-proxy',
+        configureServer(server) {
+          const supabase = createServiceRoleClient();
+          const handler = createApiHandler({ serviceSupabase: supabase });
+          server.middlewares.use(async (req, res, next) => {
+            const handled = await handler(req, res);
+            if (!handled) {
+              next();
+            }
+          });
         },
-      ]
+      },
+    ]
     : [];
 
   return {

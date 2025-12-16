@@ -1,0 +1,1541 @@
+{
+    "math_10": {
+        "grade_band": "10",
+        "subject": "math",
+        "title": "Grade 10 Math Diagnostic",
+        "description": "Placement for algebra, geometry, functions, and data analysis.",
+        "estimatedDurationMinutes": 15,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "algebra",
+                    "strand": "Algebra",
+                    "standards": [
+                        "HSA-REI.B.4"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "geometry",
+                    "strand": "Geometry",
+                    "standards": [
+                        "HSG-SRT.C.8"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "functions",
+                    "strand": "Functions",
+                    "standards": [
+                        "HSF-IF.C.7"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "data",
+                    "strand": "Data & Statistics",
+                    "standards": [
+                        "HSS-ID.A.1"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "10m-alg-1",
+                "prompt": "Solve for x: 3x + 7 = 22",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Algebra",
+                "standard": "HSA-REI.B.4",
+                "options": [
+                    {
+                        "text": "x = 3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "x = 5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "x = 7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "x = 15",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-alg-2",
+                "prompt": "Factor the expression: x² - 9",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Algebra",
+                "standard": "HSA-REI.B.4",
+                "options": [
+                    {
+                        "text": "(x - 3)(x - 3)",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "(x + 3)(x - 3)",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "(x + 9)(x - 1)",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Cannot be factored",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-alg-3",
+                "prompt": "Solve the system: y = 2x + 1 and y = x + 4. Find x.",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Algebra",
+                "standard": "HSA-REI.B.4",
+                "options": [
+                    {
+                        "text": "x = 1",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "x = 2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "x = 3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "x = 4",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-alg-4",
+                "prompt": "Simplify: (2x³)(3x²)",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Algebra",
+                "standard": "HSA-REI.B.4",
+                "options": [
+                    {
+                        "text": "5x⁵",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6x⁵",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6x⁶",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5x⁶",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-alg-5",
+                "prompt": "What is the slope of the line y = -2x + 5?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Algebra",
+                "standard": "HSA-REI.B.4",
+                "options": [
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "-2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "-5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-geo-1",
+                "prompt": "In a right triangle, if one leg is 3 and the other is 4, what is the hypotenuse?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Geometry",
+                "standard": "HSG-SRT.C.8",
+                "options": [
+                    {
+                        "text": "5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "12",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-geo-2",
+                "prompt": "What is the area of a circle with radius 4? (Use π ≈ 3.14)",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Geometry",
+                "standard": "HSG-SRT.C.8",
+                "options": [
+                    {
+                        "text": "12.56 square units",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "25.12 square units",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "50.24 square units",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "100.48 square units",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-geo-3",
+                "prompt": "Two angles are supplementary. If one is 70°, what is the other?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Geometry",
+                "standard": "HSG-SRT.C.8",
+                "options": [
+                    {
+                        "text": "20°",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "90°",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "110°",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "290°",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-geo-4",
+                "prompt": "What is the volume of a rectangular prism with length 5, width 3, and height 2?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Geometry",
+                "standard": "HSG-SRT.C.8",
+                "options": [
+                    {
+                        "text": "10 cubic units",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "16 cubic units",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "30 cubic units",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "62 cubic units",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-geo-5",
+                "prompt": "If two triangles are similar and one has sides 3, 4, 5 and the other has a side of 6 corresponding to the side of 3, what is the scale factor?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Geometry",
+                "standard": "HSG-SRT.C.8",
+                "options": [
+                    {
+                        "text": "0.5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-func-1",
+                "prompt": "If f(x) = 2x + 3, what is f(4)?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Functions",
+                "standard": "HSF-IF.C.7",
+                "options": [
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "11",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "14",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-func-2",
+                "prompt": "What is the y-intercept of y = 3x - 7?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Functions",
+                "standard": "HSF-IF.C.7",
+                "options": [
+                    {
+                        "text": "(0, 3)",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "(0, -7)",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "(-7, 0)",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "(3, 0)",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-func-3",
+                "prompt": "Which graph represents a quadratic function?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Functions",
+                "standard": "HSF-IF.C.7",
+                "options": [
+                    {
+                        "text": "A straight line",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "A parabola (U-shape)",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "A circle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "A horizontal line",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-func-4",
+                "prompt": "What is the domain of f(x) = √x?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Functions",
+                "standard": "HSF-IF.C.7",
+                "options": [
+                    {
+                        "text": "All real numbers",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "x ≥ 0",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "x > 0",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "x ≤ 0",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-data-1",
+                "prompt": "What is the mean of: 4, 6, 8, 10, 12?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Data & Statistics",
+                "standard": "HSS-ID.A.1",
+                "options": [
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "40",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-data-2",
+                "prompt": "What is the median of: 3, 7, 9, 12, 15?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Data & Statistics",
+                "standard": "HSS-ID.A.1",
+                "options": [
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "9.2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "12",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-data-3",
+                "prompt": "In a standard normal distribution, what percentage of data falls within 1 standard deviation of the mean?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Data & Statistics",
+                "standard": "HSS-ID.A.1",
+                "options": [
+                    {
+                        "text": "About 50%",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "About 68%",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "About 95%",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "About 99%",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10m-data-4",
+                "prompt": "A coin is flipped twice. What is the probability of getting heads both times?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Data & Statistics",
+                "standard": "HSS-ID.A.1",
+                "options": [
+                    {
+                        "text": "1/8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "1/4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "1/2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3/4",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "ela_10": {
+        "grade_band": "10",
+        "subject": "ela",
+        "title": "Grade 10 ELA Diagnostic",
+        "description": "Literary analysis, rhetoric, vocabulary, and writing skills.",
+        "estimatedDurationMinutes": 15,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "literary",
+                    "strand": "Literary Analysis",
+                    "standards": [
+                        "RL.9-10.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "rhetoric",
+                    "strand": "Rhetoric & Argument",
+                    "standards": [
+                        "RI.9-10.6"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "vocabulary",
+                    "strand": "Vocabulary",
+                    "standards": [
+                        "L.9-10.4"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "writing",
+                    "strand": "Writing",
+                    "standards": [
+                        "W.9-10.1"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "10e-lit-1",
+                "prompt": "In literature, what is 'foreshadowing'?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Literary Analysis",
+                "standard": "RL.9-10.1",
+                "options": [
+                    {
+                        "text": "A flashback to earlier events",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Hints about what will happen later",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The moral of a story",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "A character's inner thoughts",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-lit-2",
+                "prompt": "What is the difference between a protagonist and an antagonist?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Literary Analysis",
+                "standard": "RL.9-10.1",
+                "options": [
+                    {
+                        "text": "One is good, one is evil",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Main character vs. opposing force",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "One is fictional, one is real",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "There is no difference",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-lit-3",
+                "prompt": "'The wind howled angrily' is an example of which literary device?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Literary Analysis",
+                "standard": "RL.9-10.1",
+                "options": [
+                    {
+                        "text": "Simile",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Personification",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Hyperbole",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Alliteration",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-lit-4",
+                "prompt": "What does 'theme' refer to in literature?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Literary Analysis",
+                "standard": "RL.9-10.1",
+                "options": [
+                    {
+                        "text": "The sequence of events",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The setting of the story",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The central message or insight",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The narrator's point of view",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-lit-5",
+                "prompt": "'Life is like a box of chocolates' is an example of:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Literary Analysis",
+                "standard": "RL.9-10.1",
+                "options": [
+                    {
+                        "text": "Metaphor",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Simile",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Irony",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Onomatopoeia",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-rhet-1",
+                "prompt": "What is 'ethos' in persuasive writing?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Rhetoric & Argument",
+                "standard": "RI.9-10.6",
+                "options": [
+                    {
+                        "text": "Appeal to emotion",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Appeal to logic",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Appeal to credibility/authority",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Appeal to time",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-rhet-2",
+                "prompt": "Which is an example of a logical fallacy?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Rhetoric & Argument",
+                "standard": "RI.9-10.6",
+                "options": [
+                    {
+                        "text": "Using statistics to support a claim",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Attacking the person instead of the argument",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Citing expert sources",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Providing multiple examples",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-rhet-3",
+                "prompt": "What is the purpose of a counterargument in an essay?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Rhetoric & Argument",
+                "standard": "RI.9-10.6",
+                "options": [
+                    {
+                        "text": "To confuse the reader",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To address opposing views and strengthen your argument",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "To change your thesis",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To introduce new topics",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-rhet-4",
+                "prompt": "What is 'pathos' in rhetorical appeals?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Rhetoric & Argument",
+                "standard": "RI.9-10.6",
+                "options": [
+                    {
+                        "text": "Appeal to emotion",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Appeal to logic",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Appeal to ethics",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Appeal to authority",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-rhet-5",
+                "prompt": "Which source would be MOST credible for a research paper?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Rhetoric & Argument",
+                "standard": "RI.9-10.6",
+                "options": [
+                    {
+                        "text": "A random blog post",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "A peer-reviewed journal article",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "A social media comment",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "An anonymous website",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-voc-1",
+                "prompt": "What does 'ambiguous' mean?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.9-10.4",
+                "options": [
+                    {
+                        "text": "Clear and obvious",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Open to multiple interpretations",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Extremely boring",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Very dangerous",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-voc-2",
+                "prompt": "What does 'ubiquitous' mean?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Vocabulary",
+                "standard": "L.9-10.4",
+                "options": [
+                    {
+                        "text": "Rare and unusual",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Present everywhere",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Extremely small",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Moving quickly",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-voc-3",
+                "prompt": "The prefix 'anti-' means:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.9-10.4",
+                "options": [
+                    {
+                        "text": "Before",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Against",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "After",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "With",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-voc-4",
+                "prompt": "What does 'pragmatic' mean?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Vocabulary",
+                "standard": "L.9-10.4",
+                "options": [
+                    {
+                        "text": "Idealistic and dreamy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Practical and realistic",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Angry and hostile",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Quiet and reserved",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-writ-1",
+                "prompt": "What should a thesis statement do?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Writing",
+                "standard": "W.9-10.1",
+                "options": [
+                    {
+                        "text": "Summarize the entire essay",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "State the main argument or claim",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "List all the topics covered",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Ask a question",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-writ-2",
+                "prompt": "Which sentence uses a semicolon correctly?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Writing",
+                "standard": "W.9-10.1",
+                "options": [
+                    {
+                        "text": "I went to the store; and bought milk.",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "I was tired; I went to bed early.",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The dog; ran across the yard.",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "She likes; apples and oranges.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-writ-3",
+                "prompt": "What is the purpose of a topic sentence?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Writing",
+                "standard": "W.9-10.1",
+                "options": [
+                    {
+                        "text": "To conclude the paragraph",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To introduce the main idea of a paragraph",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "To cite sources",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To ask a question",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10e-writ-4",
+                "prompt": "Which transition word shows cause and effect?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Writing",
+                "standard": "W.9-10.1",
+                "options": [
+                    {
+                        "text": "However",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Therefore",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Meanwhile",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Similarly",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "science_10": {
+        "grade_band": "10",
+        "subject": "science",
+        "title": "Grade 10 Science Diagnostic",
+        "description": "Chemistry, biology, physics, and earth science fundamentals.",
+        "estimatedDurationMinutes": 12,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "chemistry",
+                    "strand": "Chemistry",
+                    "standards": [
+                        "HS-PS1-1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "biology",
+                    "strand": "Biology",
+                    "standards": [
+                        "HS-LS1-1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "physics",
+                    "strand": "Physics",
+                    "standards": [
+                        "HS-PS2-1"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "earth",
+                    "strand": "Earth Science",
+                    "standards": [
+                        "HS-ESS1-1"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "10s-chem-1",
+                "prompt": "What is the atomic number of an element?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Chemistry",
+                "standard": "HS-PS1-1",
+                "options": [
+                    {
+                        "text": "Number of neutrons",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Number of protons",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Mass of the atom",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Number of electrons only",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-chem-2",
+                "prompt": "What type of bond forms when electrons are shared between atoms?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Chemistry",
+                "standard": "HS-PS1-1",
+                "options": [
+                    {
+                        "text": "Ionic bond",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Covalent bond",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Hydrogen bond",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Metallic bond",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-chem-3",
+                "prompt": "Which of the following is a chemical change?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Chemistry",
+                "standard": "HS-PS1-1",
+                "options": [
+                    {
+                        "text": "Ice melting",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Paper burning",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Water boiling",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Wood being cut",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-chem-4",
+                "prompt": "What does pH measure?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Chemistry",
+                "standard": "HS-PS1-1",
+                "options": [
+                    {
+                        "text": "Temperature",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Acidity or basicity",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Density",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Pressure",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-chem-5",
+                "prompt": "In a balanced chemical equation, what is conserved?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Chemistry",
+                "standard": "HS-PS1-1",
+                "options": [
+                    {
+                        "text": "Volume",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Mass",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Temperature",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Color",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-bio-1",
+                "prompt": "What is the primary function of mitochondria?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Biology",
+                "standard": "HS-LS1-1",
+                "options": [
+                    {
+                        "text": "Protein synthesis",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Energy production (ATP)",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Cell division",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Storage",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-bio-2",
+                "prompt": "DNA is composed of building blocks called:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Biology",
+                "standard": "HS-LS1-1",
+                "options": [
+                    {
+                        "text": "Amino acids",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Nucleotides",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Lipids",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Carbohydrates",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-bio-3",
+                "prompt": "What is the process by which plants convert sunlight to energy?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Biology",
+                "standard": "HS-LS1-1",
+                "options": [
+                    {
+                        "text": "Respiration",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Photosynthesis",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Fermentation",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Transpiration",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-bio-4",
+                "prompt": "What carries genetic information from parent to offspring?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Biology",
+                "standard": "HS-LS1-1",
+                "options": [
+                    {
+                        "text": "Proteins",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "DNA",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Carbohydrates",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Lipids",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-bio-5",
+                "prompt": "What is natural selection?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Biology",
+                "standard": "HS-LS1-1",
+                "options": [
+                    {
+                        "text": "Random changes in DNA",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Survival and reproduction of organisms best adapted to their environment",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Human breeding of animals",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Migration of species",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-phys-1",
+                "prompt": "Newton's First Law states that an object at rest will:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Physics",
+                "standard": "HS-PS2-1",
+                "options": [
+                    {
+                        "text": "Accelerate",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Stay at rest unless acted on by a force",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Move in a circle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Slow down",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-phys-2",
+                "prompt": "What is the SI unit for force?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Physics",
+                "standard": "HS-PS2-1",
+                "options": [
+                    {
+                        "text": "Joule",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Newton",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Watt",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Pascal",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-phys-3",
+                "prompt": "If an object has a mass of 5 kg and an acceleration of 2 m/s², what is the force? (F = ma)",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Physics",
+                "standard": "HS-PS2-1",
+                "options": [
+                    {
+                        "text": "2.5 N",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7 N",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10 N",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "25 N",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-phys-4",
+                "prompt": "What is kinetic energy?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Physics",
+                "standard": "HS-PS2-1",
+                "options": [
+                    {
+                        "text": "Stored energy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Energy of motion",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Heat energy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Light energy",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-earth-1",
+                "prompt": "What causes Earth's seasons?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Earth Science",
+                "standard": "HS-ESS1-1",
+                "options": [
+                    {
+                        "text": "Distance from the Sun",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Tilt of Earth's axis",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Speed of Earth's rotation",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Moon's orbit",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-earth-2",
+                "prompt": "What type of plate boundary causes earthquakes and volcanic activity at subduction zones?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Earth Science",
+                "standard": "HS-ESS1-1",
+                "options": [
+                    {
+                        "text": "Divergent",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Convergent",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Transform",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Passive",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-earth-3",
+                "prompt": "What is the main cause of climate change according to scientific consensus?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Earth Science",
+                "standard": "HS-ESS1-1",
+                "options": [
+                    {
+                        "text": "Solar flares",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Volcanic eruptions",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Greenhouse gas emissions",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Ocean currents",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "10s-earth-4",
+                "prompt": "Which layer of Earth's atmosphere contains the ozone layer?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Earth Science",
+                "standard": "HS-ESS1-1",
+                "options": [
+                    {
+                        "text": "Troposphere",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Stratosphere",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Mesosphere",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Thermosphere",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    }
+}
