@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-const STUDENT_ID = '7534cea0-d6a2-4cac-bca9-cfb16df83039';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _STUDENT_ID = '7534cea0-d6a2-4cac-bca9-cfb16df83039';
 const GRADE_LEVEL = 7;
 const PATH_ID = 4; // Created in previous run
 const SUBJECT_PRIORITY = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies', 'Electives'];

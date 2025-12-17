@@ -355,7 +355,8 @@ async function main() {
             if ((i + 1) % 100 === 0 || i === lessons.length - 1) {
                 console.log(`Progress: ${i + 1}/${lessons.length} (${successCount} added, ${skippedCount} skipped, ${errorCount} errors)`);
             }
-        } catch (err) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_err) {
             errorCount++;
         }
     }

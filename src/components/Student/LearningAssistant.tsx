@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, ShieldCheck, Flag, Wand2, Layers, Repeat } from 'lucide-react';
+import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, Flag, Wand2, Layers, Repeat } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatMessage, Student, Subject } from '../../types';
@@ -190,7 +190,8 @@ const LearningAssistant: React.FC = () => {
   const [showExplainModal, setShowExplainModal] = useState(false);
   const assistantWindowRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [chatModeSaving, setChatModeSaving] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_chatModeSaving, setChatModeSaving] = useState(false);
   const [explainerSource, setExplainerSource] = useState<'first_run' | 'header' | 'guardrail' | null>(null);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
@@ -282,7 +283,8 @@ const LearningAssistant: React.FC = () => {
     );
 
   const guardrailContextLabel = lessonContext?.lessonTitle ?? lessonContext?.moduleTitle ?? contextHint ?? 'On-task';
-  const guardrailPillText = useMemo(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _guardrailPillText = useMemo(
     () => `School-safe${guardrailContextLabel ? ` · Lesson: ${guardrailContextLabel}` : ''}`,
     [guardrailContextLabel],
   );
@@ -528,7 +530,8 @@ const LearningAssistant: React.FC = () => {
     });
   };
 
-  const handleChatModeChange = async (mode: 'guided_only' | 'guided_preferred' | 'free') => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handleChatModeChange = async (mode: 'guided_only' | 'guided_preferred' | 'free') => {
     if (chatMode === mode) return;
     if (chatModeLocked && mode !== 'guided_only') {
       return;

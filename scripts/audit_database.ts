@@ -13,7 +13,8 @@ async function auditDatabase() {
     console.log('='.repeat(60));
     console.log('');
 
-    const results: AuditResult[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _results: AuditResult[] = [];
 
     // 1. Core user tables
     console.log('📊 USER TABLES');
@@ -131,7 +132,8 @@ async function auditDatabase() {
     console.log('-'.repeat(40));
 
     // Students without paths
-    const { data: studentsWithoutPaths } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: _studentsWithoutPaths } = await supabase
         .from('student_profiles')
         .select('id, first_name, last_name, grade')
         .not('id', 'in',

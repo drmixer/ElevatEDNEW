@@ -5,7 +5,8 @@ async function viewSamples() {
     console.log('=== SAMPLE LESSON CONTENT ===\n');
 
     // Get a few sample lessons from different categories
-    const samples = [
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _samples = [
         { name: 'Well-formatted Launch Lesson', query: { title: 'like', value: '%Launch Lesson%' } },
         { name: 'Intro Lesson (missing goals)', query: { title: 'like', value: 'Intro:%' } },
         { name: 'Has video reference', query: { content: 'like', value: '%video%' } }
@@ -21,7 +22,7 @@ async function viewSamples() {
     if (launch?.[0]) {
         console.log('--- WELL-FORMATTED LAUNCH LESSON ---');
         console.log(`Title: ${launch[0].title}`);
-        console.log(`Grade: ${(launch[0].modules as any)?.grade_band} | Subject: ${(launch[0].modules as any)?.subject}`);
+        console.log(`Grade: ${(launch[0].modules as { grade_band?: string; subject?: string })?.grade_band} | Subject: ${(launch[0].modules as { grade_band?: string; subject?: string })?.subject}`);
         console.log('\nContent:\n');
         console.log(launch[0].content?.substring(0, 1500));
         console.log('\n' + '='.repeat(60) + '\n');
@@ -37,7 +38,7 @@ async function viewSamples() {
     if (intro?.[0]) {
         console.log('--- INTRO LESSON (May lack structured goals) ---');
         console.log(`Title: ${intro[0].title}`);
-        console.log(`Grade: ${(intro[0].modules as any)?.grade_band} | Subject: ${(intro[0].modules as any)?.subject}`);
+        console.log(`Grade: ${(intro[0].modules as { grade_band?: string; subject?: string })?.grade_band} | Subject: ${(intro[0].modules as { grade_band?: string; subject?: string })?.subject}`);
         console.log('\nContent:\n');
         console.log(intro[0].content?.substring(0, 1500));
         console.log('\n' + '='.repeat(60) + '\n');
@@ -53,7 +54,7 @@ async function viewSamples() {
     if (withoutGoals?.[0]) {
         console.log('--- LESSON WITHOUT EXPLICIT LEARNING GOALS ---');
         console.log(`Title: ${withoutGoals[0].title}`);
-        console.log(`Grade: ${(withoutGoals[0].modules as any)?.grade_band}`);
+        console.log(`Grade: ${(withoutGoals[0].modules as { grade_band?: string; subject?: string })?.grade_band}`);
         console.log('\nContent:\n');
         console.log(withoutGoals[0].content?.substring(0, 1500));
     }

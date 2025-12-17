@@ -98,7 +98,7 @@ function validateLesson(lesson: LessonRecord): ValidationResult {
     const hasResources = /##\s*(Additional\s*)?Resources|##\s*Going\s*Further/i.test(content);
 
     // Count external links
-    const externalLinks = content.match(/https?:\/\/[^\s\)]+/gi) || [];
+    const externalLinks = content.match(/https?:\/\/[^\s)]+/gi) || [];
     const externalLinkCount = externalLinks.length;
 
     // Check for placeholder text
@@ -211,7 +211,8 @@ async function main() {
 
     const subjectFilter = process.argv.find(arg => arg.startsWith('--subject='))?.split('=')[1];
     const showPassing = process.argv.includes('--show-passing');
-    const fixMode = process.argv.includes('--fix');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _fixMode = process.argv.includes('--fix');
 
     console.log('Fetching all lessons...\n');
     let lessons = await fetchLessons();

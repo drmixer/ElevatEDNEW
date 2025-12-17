@@ -23,7 +23,8 @@ async function auditLessons() {
     console.log('=== LESSON CONTENT AUDIT ===\n');
 
     // Get all lessons with pagination
-    let allLessons: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const allLessons: any[] = [];
     let start = 0;
     const pageSize = 500;
 
@@ -103,14 +104,14 @@ async function auditLessons() {
         audits.push({
             id: lesson.id,
             title: lesson.title,
-            grade_band: (lesson.modules as any)?.grade_band || 'unknown',
-            subject: (lesson.modules as any)?.subject || 'unknown',
+            grade_band: lesson.modules?.[0]?.grade_band || lesson.modules?.grade_band || 'unknown',
+            subject: lesson.modules?.[0]?.subject || lesson.modules?.subject || 'unknown',
             hasContent: contentLength > 0,
             contentLength,
             hasTitle,
             hasLearningGoals,
             hasExternalLink,
-            hasVideo,
+            hasVideo: Boolean(hasVideo),
             hasImage,
             hasMediaUrl,
             mediaType,

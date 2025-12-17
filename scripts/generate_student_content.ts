@@ -28,7 +28,8 @@ interface LessonRecord {
 }
 
 // Grade band content length targets
-const CONTENT_LENGTH_TARGETS: Record<string, { min: number; max: number; sentences: number }> = {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _CONTENT_LENGTH_TARGETS: Record<string, { min: number; max: number; sentences: number }> = {
     'K': { min: 200, max: 400, sentences: 3 },
     '1': { min: 200, max: 400, sentences: 3 },
     '2': { min: 250, max: 450, sentences: 4 },
@@ -70,7 +71,8 @@ function getComplexityLevel(grade: string): 'simple' | 'moderate' | 'advanced' {
 
 function generateMathContent(topic: string, strand: string, grade: string): string {
     const complexity = getComplexityLevel(grade);
-    const audience = getGradeBandDescription(grade);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _audience = getGradeBandDescription(grade);
 
     let intro = '';
     let keyConceptsIntro = '';
@@ -447,7 +449,7 @@ Explore more about ${topic}:
 `;
 }
 
-function generateLearningGoalsForContent(subject: string, strand: string, topic: string, grade: string): string {
+function generateLearningGoalsForContent(_subject: string, _strand: string, topic: string, grade: string): string {
     const complexity = getComplexityLevel(grade);
     let goals: string[] = [];
 
