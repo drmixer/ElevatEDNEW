@@ -20,11 +20,7 @@ if (!SUPABASE_URL) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY || SUPABASE_ANON_KEY || '');
 
-interface TableStats {
-    table: string;
-    count: number | null;
-    sample?: unknown;
-}
+
 
 async function getTableCount(tableName: string): Promise<number | null> {
     try {
@@ -43,22 +39,7 @@ async function getTableCount(tableName: string): Promise<number | null> {
     }
 }
 
-async function getSampleRow(tableName: string, columns: string = '*'): Promise<unknown> {
-    try {
-        const { data, error } = await supabase
-            .from(tableName)
-            .select(columns)
-            .limit(1)
-            .single();
 
-        if (error) {
-            return null;
-        }
-        return data;
-    } catch {
-        return null;
-    }
-}
 
 async function main() {
     console.log('\n📊 ElevatED Database Diagnostics');

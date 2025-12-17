@@ -179,7 +179,7 @@ async function testStudentProfiles(): Promise<{ passed: boolean; message: string
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
     try {
-        const { data: students, error, count } = await supabase
+        const { error, count } = await supabase
             .from('student_profiles')
             .select('id, grade', { count: 'exact' })
             .limit(5);

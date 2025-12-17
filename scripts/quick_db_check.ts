@@ -60,7 +60,7 @@ async function check() {
         .limit(500);
 
     if (allWithImages) {
-        let total = allWithImages.length;
+        const total = allWithImages.length;
         let withImage = 0;
         for (const l of allWithImages) {
             const c = l.content as Record<string, unknown>;
