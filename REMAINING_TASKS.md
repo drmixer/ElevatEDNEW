@@ -32,7 +32,7 @@ These items should be completed before public beta launch:
 - [x] Verify diagnostics exist for each in-scope grade/subject (**IMPROVED: 14% → 43% coverage**)
 - [x] Seed Math/ELA/Science diagnostics for grades 6-8 (`scripts/seed_diagnostic_assessments.ts` ✅ RAN)
 - [x] Add `diagnostic_status` column migration (`supabase/migrations/046_diagnostic_status.sql`)
-- [ ] Apply migration to production database (requires Supabase access)
+- [x] Apply migration to production database ✅ Applied
 - [ ] Create diagnostics for grades K-5 (data files needed)
 - [x] Verify adaptive pathing uses diagnostic signals (✅ 6 students have learning_path data)
 
@@ -82,17 +82,20 @@ The backend metrics exist (`opsMetrics.ts`) and are already exposed in the admin
 From `prelaunch-readiness-checklist.md` §6-7:
 
 ### E2E Test Coverage
-- [ ] Add test: Subscription upgrade/downgrade enforcement
-- [ ] Add test: Unsafe chat scenario triggering guardrails
+- [x] Add test: Subscription upgrade/downgrade enforcement → `tests/e2e/subscription-flows.spec.ts`
+- [x] Add test: Unsafe chat scenario triggering guardrails → `tests/e2e/guardrail-report.spec.ts`
 - [ ] Verify events/logs emitted as expected in tests
 
 ### Manual Smoke Test Checklist
-- [ ] Document staging smoke test procedure:
-  - Sign in (parent + student) visit dashboards
-  - Start lesson, complete checkpoint
-  - Send tutor question, receive safe response
-  - Trigger billing action (sandbox)
-  - Basic accessibility check (keyboard, focus states)
+- [x] Document staging smoke test procedure → `docs/smoke-test-procedure.md`
+  - ✅ Authentication & Onboarding tests
+  - ✅ Parent Dashboard tests  
+  - ✅ Student Dashboard tests
+  - ✅ Lesson Player tests
+  - ✅ AI Tutor tests (including safety)
+  - ✅ Billing & Subscription tests (sandbox)
+  - ✅ Admin Dashboard tests
+  - ✅ Accessibility checks
 
 ### Launch Sign-offs
 - [ ] Product sign-off on first-run experience
