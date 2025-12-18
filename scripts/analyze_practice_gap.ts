@@ -79,7 +79,7 @@ async function analyzeAuthoredFiles(): Promise<{
 
                     const isPlaceholder =
                         item.prompt?.includes('Practice Item') ||
-                        item.options?.some((o: any) => o.text === 'Correct answer');
+                        item.options?.some((o: { text: string }) => o.text === 'Correct answer');
 
                     if (isPlaceholder) {
                         placeholderQuestions++;
@@ -166,7 +166,7 @@ async function getSubjectDistribution(): Promise<Map<string, { total: number; wi
     const subjectStats = new Map<string, { total: number; withPractice: number }>();
 
     for (const lesson of lessons || []) {
-        const subjectName = (lesson.module as any)?.subject?.name || 'Unknown';
+        const subjectName = (lesson.module as { subject?: { name?: string } })?.subject?.name || 'Unknown';
 
         if (!subjectStats.has(subjectName)) {
             subjectStats.set(subjectName, { total: 0, withPractice: 0 });
@@ -214,9 +214,9 @@ async function getLessonsNeedingPractice(): Promise<Array<{
         .map(l => ({
             id: l.id,
             title: l.title,
-            moduleSlug: (l.module as any)?.slug || '',
-            subject: (l.module as any)?.subject?.name || 'Unknown',
-            gradeBand: (l.module as any)?.grade_band || ''
+            moduleSlug: (l.module as { slug?: string })?.slug || '',
+            subject: (l.module as { subject?: { name?: string } })?.subject?.name || 'Unknown',
+            gradeBand: (l.module as { grade_band?: string })?.grade_band || ''
         }));
 
     return needsPractice;

@@ -48,7 +48,7 @@ async function fetchPracticeQuestions(lessonId: number, limit = 4) {
     console.log('\nPractice Questions:');
     for (const q of questions || []) {
         console.log('Q' + q.id + ':', (q.prompt?.substring(0, 60) || '') + '...');
-        console.log('  Options:', (q.question_options as any[])?.length || 0);
+        console.log('  Options:', (q.question_options as Array<{ id: number; content: string; is_correct: boolean }>)?.length || 0);
     }
 
     return questions;

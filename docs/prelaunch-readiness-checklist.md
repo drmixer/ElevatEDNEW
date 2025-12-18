@@ -53,7 +53,7 @@
 - [x] Add a visible “Report this answer” affordance to the tutor UI with:
   - [x] Simple reasons (e.g., “incorrect,” “confusing,” “not school-safe”).
   - [x] Optional free-text field (capped length; no PII requested).
-- [ ] On report:
+- [x] On report:
   - [x] Log the conversation ID, student id, reason, and the model’s answer.
   - [x] Flag the conversation in a lightweight review queue (start with a simple admin table + filter).
   - [x] Show a confirmation to the student with a reassuring message (“Thanks for flagging, an adult will review this.”).
@@ -62,7 +62,7 @@
 - [ ] Add a short “Safety & Privacy” panel accessible from:
   - [x] The tutor panel itself.
   - [x] Parent account settings.
-- [ ] Include:
+- [x] Include:
   - [x] What the tutor can and can’t do.
   - [x] What data are stored and why (high level).
   - [x] How to contact support or report broader issues.
@@ -114,24 +114,24 @@
 ## 5. Operational readiness & monitoring
 
 ### 5.1 Metrics & logs
-- [ ] Implement or verify metrics for:
-  - [ ] Tutor success/error rate (by route and model).
-  - [ ] Safety-blocked tutor requests (per reason).
-  - [ ] Plan-limit hits for tutor usage (per plan).
-  - [ ] Supabase function / API failures for core routes.
+- [x] Implement or verify metrics for:
+    - [x] Tutor success/error rate (by route and model).
+    - [x] Safety-blocked tutor requests (per reason).
+    - [x] Plan-limit hits for tutor usage (per plan).
+    - [x] Supabase function / API failures for core routes.
 - [ ] Expose a simple internal “ops dashboard” or logs view that aggregates:
   - [ ] Error rate over time with alert thresholds.
   - [ ] Top safety-block reasons.
   - [ ] Top routes causing failures.
 
 ### 5.2 Runbooks
-- [ ] Define runbooks for:
-  - [ ] AI provider degradation/outage (e.g., switch to fallback model, show “assistant unavailable,” keep lesson content usable).
-  - [ ] Supabase connectivity issues (what’s read-only vs broken, and how the UI degrades).
-  - [ ] Stripe or billing webhook failures (how to reconcile, what the user sees).
-- [ ] Store runbooks in `docs/deployment-runbook.md` or a linked doc, with:
-  - [ ] Who is on point for each type of incident.
-  - [ ] Quick commands / dashboards to check.
+- [x] Define runbooks for:
+    - [x] AI provider degradation/outage (e.g., switch to fallback model, show “assistant unavailable,” keep lesson content usable).
+    - [x] Supabase connectivity issues (what’s read-only vs broken, and how the UI degrades).
+    - [x] Stripe or billing webhook failures (how to reconcile, what the user sees).
+- [x] Store runbooks in `docs/deployment-runbook.md` or a linked doc, with:
+    - [x] Who is on point for each type of incident.
+    - [x] Quick commands / dashboards to check.
 
 ---
 

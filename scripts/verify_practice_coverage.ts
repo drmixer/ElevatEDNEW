@@ -24,7 +24,7 @@ async function main() {
         .select('id', { count: 'exact', head: true });
 
     // Get unique lessons with skills linked - must paginate due to Supabase 1000 row limit
-    const allLessonSkills: any[] = [];
+    const allLessonSkills: Array<{ lesson_id: number }> = [];
     let offset = 0;
     const batchSize = 1000;
 

@@ -339,7 +339,7 @@ async function getLessonsNeedingPractice(): Promise<LessonToProcess[]> {
     // Note: modules.subject is a text field, not a FK
     // Must paginate because Supabase has 1000 row default limit
 
-    const allLessons: any[] = [];
+    const allLessons: Array<{ id: number; title: string; content: string | null; module_id: number; modules: { id: number; slug: string; title: string; grade_band: string; subject: string } }> = [];
     let offset = 0;
     const batchSize = 1000;
 
@@ -391,7 +391,7 @@ async function getLessonsNeedingPractice(): Promise<LessonToProcess[]> {
     }
 
     // Get lessons that already have skills linked (also paginate)
-    const allLessonSkills: any[] = [];
+    const allLessonSkills: Array<{ lesson_id: number }> = [];
     offset = 0;
 
     while (true) {
@@ -414,7 +414,7 @@ async function getLessonsNeedingPractice(): Promise<LessonToProcess[]> {
 
     for (const lesson of allLessons) {
         if (!lessonsWithSkills.has(lesson.id)) {
-            const module = lesson.modules as any;
+            const module = lesson.modules;
             const subjectName = module?.subject || 'Unknown';
             const subjectId = subjectMap.get(subjectName) || 0;
 

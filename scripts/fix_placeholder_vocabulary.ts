@@ -27,7 +27,7 @@ interface LessonData {
 // Extract key topic from lesson title
 function extractTopic(title: string): string {
     // Remove common prefixes
-    let topic = title
+    const topic = title
         .replace(/^(Launch Lesson:|Intro:|Introduction to|Refresher:?)/i, '')
         .replace(/\(Grade \d+\)/i, '')
         .replace(/\(PD\)/i, '')

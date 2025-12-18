@@ -43,8 +43,8 @@ async function main() {
         .map(l => ({
             id: l.id,
             title: l.title,
-            subject: (l.modules as any)?.subject || 'Unknown',
-            grade: (l.modules as any)?.grade_band || ''
+            subject: (l.modules as { subject?: string })?.subject || 'Unknown',
+            grade: (l.modules as { grade_band?: string })?.grade_band || ''
         }));
 
     // Group by subject

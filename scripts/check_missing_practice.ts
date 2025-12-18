@@ -15,9 +15,9 @@ async function checkMissingPractice() {
     console.log('=== CHECK MISSING PRACTICE ===\n');
 
     // Get lesson IDs from the audit
-    const report = JSON.parse(fs.readFileSync('data/audits/content_quality_report.json', 'utf-8'));
-    const practiceIssues = report.issues.filter((i: any) => i.issueType === 'missing_practice');
-    const lessonIds = practiceIssues.map((i: any) => i.lessonId);
+    const report = JSON.parse(fs.readFileSync('data/audits/content_quality_report.json', 'utf-8')) as { issues: Array<{ issueType: string; lessonId: number }> };
+    const practiceIssues = report.issues.filter((i) => i.issueType === 'missing_practice');
+    const lessonIds = practiceIssues.map((i) => i.lessonId);
 
     console.log(`Checking ${lessonIds.length} lessons with missing practice...\n`);
 

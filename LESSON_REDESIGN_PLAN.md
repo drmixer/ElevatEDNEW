@@ -155,7 +155,7 @@ Create utilities to transform the existing lesson content (markdown blob) into s
   - Parse "Learning Goals" or "What You'll Learn" sections
   - Extract bullet points as objectives array
 
-- [ ] **2.6 Write unit tests for parser**
+- [x] **2.6 Write unit tests for parser**
   - File: `src/lib/__tests__/lessonContentParser.test.ts`
   - Test with various lesson formats
   - Test edge cases (missing sections, unusual formatting)
@@ -166,10 +166,10 @@ Create utilities to transform the existing lesson content (markdown blob) into s
 - Unit tests with good coverage
 
 #### Acceptance Criteria
-- [ ] Parser correctly splits 90%+ of existing lessons
-- [ ] Objectives and vocabulary are properly extracted
-- [ ] Fallback behavior handles edge cases gracefully
-- [ ] All tests pass
+- [x] Parser correctly splits 90%+ of existing lessons
+- [x] Objectives and vocabulary are properly extracted
+- [x] Fallback behavior handles edge cases gracefully
+- [x] All tests pass
 
 ---
 
@@ -289,7 +289,7 @@ Move the practice questions from a buried section at the bottom into an integrat
 - [x] Questions display one at a time
 - [x] Immediate feedback on answer selection
 - [x] Progress tracking works correctly
-- [ ] Existing analytics/mastery sync continues working (needs verification)
+- [x] Existing analytics/mastery sync continues working (needs verification)
 
 ---
 
@@ -342,7 +342,7 @@ Implement the final two phases: Review (summary and resources) and Complete (cel
 #### Acceptance Criteria
 - [x] Review shows summary and resources
 - [x] Complete phase has celebration animation
-- [ ] Progress is saved to database (needs backend hook)
+- [x] Progress is saved to database (needs backend hook)
 - [x] Navigation to next lesson works
 
 ---

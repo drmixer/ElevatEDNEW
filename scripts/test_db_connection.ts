@@ -30,8 +30,8 @@ async function test() {
         } else {
             console.log(`✅ Connected! Found ${count} lessons (${elapsed}ms)`);
         }
-    } catch (e: any) {
-        console.log('❌ Exception:', e.message);
+    } catch (e: unknown) {
+        console.log('❌ Exception:', e instanceof Error ? e.message : String(e));
     }
 }
 
