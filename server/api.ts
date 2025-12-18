@@ -85,6 +85,7 @@ import {
 } from './personalization.js';
 import { recordLearningEvent } from './xpService.js';
 import { upsertPlanOptOut, listPlanOptOutsApi } from './optOuts.js';
+import { getContentCoverage, getCoverageSummary } from './contentCoverage.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -2133,6 +2134,22 @@ export const createApiHandler = (context: ApiContext) => {
               : undefined;
           const snapshot = getOpsSnapshot(windowMs);
           sendJson(res, 200, snapshot, API_VERSION);
+        });
+      }
+
+      // Content coverage endpoints for monitoring minimum viable content
+      if (method === 'GET' && path === '/admins/content-coverage') {
+        return handleRoute(async () => {
+          const forceRefresh = url.query.refresh === 'true';
+          const coverage = await getContentCoverage(forceRefresh);
+          sendJson(res, 200, { coverage }, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/content-coverage/summary') {
+        return handleRoute(async () => {
+          const summary = await getCoverageSummary();
+          sendJson(res, 200, summary, API_VERSION);
         });
       }
 

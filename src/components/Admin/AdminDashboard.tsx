@@ -44,7 +44,9 @@ import {
   fetchAccountDeletionRequests,
   resolveAccountDeletionRequest,
   processAccountDeletionQueue,
+  fetchContentCoverageSummary,
   type OpsMetricsSnapshot,
+  type ContentCoverageSummary,
 } from '../../services/adminService';
 import {
   fetchTutorReports,
@@ -231,6 +233,15 @@ const AdminDashboard: React.FC = () => {
       safetyRate: Math.round(safetyRate * 100),
     };
   }, [opsMetrics]);
+
+  // Content coverage for launch readiness
+  const coverageQuery = useQuery({
+    queryKey: ['admin-content-coverage-summary'],
+    queryFn: fetchContentCoverageSummary,
+    staleTime: 1000 * 60 * 10, // 10 minutes
+    enabled: Boolean(admin),
+  });
+  const coverageSummary: ContentCoverageSummary | undefined = coverageQuery.data;
 
   const tutorReportsQuery = useQuery({
     queryKey: ['admin-tutor-reports', reportStatusFilter],
@@ -776,28 +787,27 @@ const AdminDashboard: React.FC = () => {
                 {showSkeleton
                   ? [0, 1, 2].map((idx) => <SkeletonCard key={idx} className="h-20" />)
                   : (dashboard?.alerts ?? []).map((alert) => (
-                      <div
-                        key={alert.id}
-                        className={`p-4 border rounded-xl ${
-                          alert.severity === 'high'
-                            ? 'border-rose-200 bg-rose-50 text-rose-700'
-                            : alert.severity === 'medium'
-                            ? 'border-amber-200 bg-amber-50 text-amber-700'
-                            : 'border-blue-200 bg-blue-50 text-blue-700'
+                    <div
+                      key={alert.id}
+                      className={`p-4 border rounded-xl ${alert.severity === 'high'
+                        ? 'border-rose-200 bg-rose-50 text-rose-700'
+                        : alert.severity === 'medium'
+                          ? 'border-amber-200 bg-amber-50 text-amber-700'
+                          : 'border-blue-200 bg-blue-50 text-blue-700'
                         }`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <p className="text-sm font-semibold">{alert.title}</p>
-                          <span className="text-xs uppercase tracking-wide">
-                            {alert.severity} priority
-                          </span>
-                        </div>
-                        <p className="text-sm">{alert.description}</p>
-                        <p className="text-xs opacity-80 mt-2">
-                          {new Date(alert.createdAt).toLocaleString()}
-                        </p>
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm font-semibold">{alert.title}</p>
+                        <span className="text-xs uppercase tracking-wide">
+                          {alert.severity} priority
+                        </span>
                       </div>
-                    ))}
+                      <p className="text-sm">{alert.description}</p>
+                      <p className="text-xs opacity-80 mt-2">
+                        {new Date(alert.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  ))}
               </div>
             </motion.div>
 
@@ -813,13 +823,12 @@ const AdminDashboard: React.FC = () => {
                   <p className="text-sm text-slate-600">Signals from tutor and path updates</p>
                 </div>
                 <span
-                  className={`text-xs px-3 py-1 rounded-full border ${
-                    adaptiveHealth.status === 'healthy'
-                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                      : adaptiveHealth.status === 'watch'
-                        ? 'bg-amber-50 border-amber-200 text-amber-700'
-                        : 'bg-rose-50 border-rose-200 text-rose-700'
-                  }`}
+                  className={`text-xs px-3 py-1 rounded-full border ${adaptiveHealth.status === 'healthy'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    : adaptiveHealth.status === 'watch'
+                      ? 'bg-amber-50 border-amber-200 text-amber-700'
+                      : 'bg-rose-50 border-rose-200 text-rose-700'
+                    }`}
                 >
                   {adaptiveHealth.label}
                 </span>
@@ -851,6 +860,88 @@ const AdminDashboard: React.FC = () => {
               )}
             </motion.div>
 
+            {/* Content Coverage - Launch Readiness */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.34 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Content Coverage</h3>
+                  <p className="text-sm text-slate-600">Grade/subject launch readiness</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {coverageSummary && (
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full border ${coverageSummary.readinessPercent >= 90
+                          ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                          : coverageSummary.readinessPercent >= 70
+                            ? 'bg-amber-50 border-amber-200 text-amber-700'
+                            : 'bg-rose-50 border-rose-200 text-rose-700'
+                        }`}
+                    >
+                      {coverageSummary.readinessPercent}% ready
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => coverageQuery.refetch()}
+                    className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                    disabled={coverageQuery.isFetching}
+                  >
+                    <RefreshCw className={`h-4 w-4 ${coverageQuery.isFetching ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+              </div>
+              {coverageQuery.isLoading ? (
+                <SkeletonCard className="h-28" />
+              ) : coverageSummary ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+                      <p className="text-xs uppercase tracking-wide text-emerald-700 font-semibold">Ready</p>
+                      <p className="text-2xl font-bold text-emerald-700">{coverageSummary.readyCount}</p>
+                      <p className="text-[11px] text-emerald-600">Meets all thresholds</p>
+                    </div>
+                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+                      <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold">Beta</p>
+                      <p className="text-2xl font-bold text-amber-700">{coverageSummary.betaCount}</p>
+                      <p className="text-[11px] text-amber-600">Soft launch OK</p>
+                    </div>
+                    <div className="rounded-lg border border-rose-200 bg-rose-50 p-3">
+                      <p className="text-xs uppercase tracking-wide text-rose-700 font-semibold">Thin</p>
+                      <p className="text-2xl font-bold text-rose-700">{coverageSummary.thinCount}</p>
+                      <p className="text-[11px] text-rose-600">Below minimum</p>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">In Scope</p>
+                      <p className="text-2xl font-bold text-slate-900">
+                        {coverageSummary.inScopeReady}/{coverageSummary.inScopeTotal}
+                      </p>
+                      <p className="text-[11px] text-slate-500">Launch grades ready</p>
+                    </div>
+                  </div>
+                  {coverageSummary.topGaps.length > 0 && (
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Top content gaps</p>
+                      <ul className="space-y-1 text-sm text-slate-800">
+                        {coverageSummary.topGaps.map((gap, idx) => (
+                          <li key={idx} className="flex justify-between">
+                            <span>Grade {gap.grade} {gap.subject}</span>
+                            <span className="text-rose-600 text-xs">{gap.issue}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-600">Unable to load coverage data.</p>
+              )}
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -875,22 +966,22 @@ const AdminDashboard: React.FC = () => {
                 <SkeletonCard className="h-28" />
               ) : opsMetrics ? (
                 <div className="space-y-4">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {([
-                    { label: 'Tutor successes', value: opsMetrics.totals.tutor_success, tone: 'default' },
-                    { label: 'Tutor errors', value: opsMetrics.totals.tutor_error, tone: 'warn' },
-                    { label: 'Safety blocks', value: opsMetrics.totals.tutor_safety_block, tone: 'amber' },
-                    { label: 'Plan/limit blocks', value: opsMetrics.totals.tutor_plan_limit, tone: 'amber' },
-                    { label: 'Tutor latency pings', value: opsMetrics.totals.tutor_latency, tone: 'default' },
-                    { label: 'API failures', value: opsMetrics.totals.api_failure, tone: 'warn' },
-                    { label: 'Slow APIs', value: opsMetrics.totals.api_slow, tone: 'default' },
-                    { label: 'Path progression', value: opsMetrics.totals.path_progress, tone: 'default' },
-                    { label: 'XP events', value: opsMetrics.totals.xp_rate, tone: 'default' },
-                  ] as const).map((stat) => {
-                    const tone =
-                      stat.tone === 'warn'
-                        ? 'bg-rose-50 border-rose-200 text-rose-700'
-                        : stat.tone === 'amber'
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {([
+                      { label: 'Tutor successes', value: opsMetrics.totals.tutor_success, tone: 'default' },
+                      { label: 'Tutor errors', value: opsMetrics.totals.tutor_error, tone: 'warn' },
+                      { label: 'Safety blocks', value: opsMetrics.totals.tutor_safety_block, tone: 'amber' },
+                      { label: 'Plan/limit blocks', value: opsMetrics.totals.tutor_plan_limit, tone: 'amber' },
+                      { label: 'Tutor latency pings', value: opsMetrics.totals.tutor_latency, tone: 'default' },
+                      { label: 'API failures', value: opsMetrics.totals.api_failure, tone: 'warn' },
+                      { label: 'Slow APIs', value: opsMetrics.totals.api_slow, tone: 'default' },
+                      { label: 'Path progression', value: opsMetrics.totals.path_progress, tone: 'default' },
+                      { label: 'XP events', value: opsMetrics.totals.xp_rate, tone: 'default' },
+                    ] as const).map((stat) => {
+                      const tone =
+                        stat.tone === 'warn'
+                          ? 'bg-rose-50 border-rose-200 text-rose-700'
+                          : stat.tone === 'amber'
                             ? 'bg-amber-50 border-amber-200 text-amber-700'
                             : 'bg-slate-50 border-slate-200 text-slate-800';
                       return (
@@ -1037,9 +1128,8 @@ const AdminDashboard: React.FC = () => {
                   disabled={modulesQuery.isFetching || studentsQuery.isFetching}
                 >
                   <RefreshCw
-                    className={`h-4 w-4 ${
-                      modulesQuery.isFetching || studentsQuery.isFetching ? 'animate-spin' : ''
-                    }`}
+                    className={`h-4 w-4 ${modulesQuery.isFetching || studentsQuery.isFetching ? 'animate-spin' : ''
+                      }`}
                   />
                 </button>
               </div>
@@ -1224,11 +1314,10 @@ const AdminDashboard: React.FC = () => {
                     type="button"
                     onClick={handleBillingToggle}
                     disabled={billingSaving || billingConfigQuery.isLoading}
-                    className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold focus-ring ${
-                      billingRequired
-                        ? 'bg-amber-600 text-white hover:bg-amber-700'
-                        : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    } disabled:opacity-60 disabled:cursor-not-allowed`}
+                    className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold focus-ring ${billingRequired
+                      ? 'bg-amber-600 text-white hover:bg-amber-700'
+                      : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                      } disabled:opacity-60 disabled:cursor-not-allowed`}
                   >
                     {billingSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
                     {billingRequired ? 'Turn billing off' : 'Turn billing on'}
@@ -1440,24 +1529,24 @@ const AdminDashboard: React.FC = () => {
                 {showSkeleton
                   ? [0, 1, 2].map((idx) => <SkeletonCard key={idx} className="h-20" />)
                   : (dashboard?.topStudents ?? []).map((studentEntry) => (
-                      <div
-                        key={studentEntry.id}
-                        className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
-                      >
-                        <div>
-                          <p className="font-semibold text-gray-900">{studentEntry.name}</p>
-                          <p className="text-sm text-gray-600">Grade {studentEntry.grade}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-semibold text-brand-teal">
-                            +{studentEntry.xpEarnedWeek} XP
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {studentEntry.lessonsCompletedWeek} lessons
-                          </p>
-                        </div>
+                    <div
+                      key={studentEntry.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
+                    >
+                      <div>
+                        <p className="font-semibold text-gray-900">{studentEntry.name}</p>
+                        <p className="text-sm text-gray-600">Grade {studentEntry.grade}</p>
                       </div>
-                    ))}
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-brand-teal">
+                          +{studentEntry.xpEarnedWeek} XP
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {studentEntry.lessonsCompletedWeek} lessons
+                        </p>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </motion.div>
           </div>
@@ -1551,13 +1640,12 @@ const AdminDashboard: React.FC = () => {
                         <td className="px-4 py-2 text-slate-800">{request.includeStudentIds.length || '—'}</td>
                         <td className="px-4 py-2">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              request.status === 'pending'
-                                ? 'bg-amber-100 text-amber-800'
-                                : request.status === 'completed'
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : 'bg-slate-100 text-slate-700'
-                            }`}
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${request.status === 'pending'
+                              ? 'bg-amber-100 text-amber-800'
+                              : request.status === 'completed'
+                                ? 'bg-emerald-100 text-emerald-800'
+                                : 'bg-slate-100 text-slate-700'
+                              }`}
                           >
                             {request.status}
                           </span>

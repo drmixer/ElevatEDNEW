@@ -166,3 +166,43 @@ export const processAccountDeletionQueue = async (): Promise<{ processed: number
   const payload = await handleApiResponse<{ result: { processed: number; errors: unknown[] } }>(response);
   return payload.result;
 };
+
+// Content Coverage Types and Functions
+export type CoverageStatus = 'ready' | 'beta' | 'thin' | 'empty';
+
+export type GradeSubjectCoverage = {
+  grade: string;
+  subject: string;
+  status: CoverageStatus;
+  moduleCount: number;
+  lessonCount: number;
+  questionCount: number;
+  strandsWithContent: number;
+  totalStrands: number;
+  meetsMinimum: boolean;
+  details: string[];
+};
+
+export type ContentCoverageSummary = {
+  totalGradeSubjects: number;
+  readyCount: number;
+  betaCount: number;
+  thinCount: number;
+  emptyCount: number;
+  inScopeReady: number;
+  inScopeTotal: number;
+  readinessPercent: number;
+  topGaps: Array<{ grade: string; subject: string; issue: string }>;
+};
+
+export const fetchContentCoverage = async (forceRefresh = false): Promise<GradeSubjectCoverage[]> => {
+  const params = forceRefresh ? '?refresh=true' : '';
+  const response = await authenticatedFetch(`/api/v1/admins/content-coverage${params}`);
+  const payload = await handleApiResponse<{ coverage: GradeSubjectCoverage[] }>(response);
+  return payload.coverage ?? [];
+};
+
+export const fetchContentCoverageSummary = async (): Promise<ContentCoverageSummary> => {
+  const response = await authenticatedFetch('/api/v1/admins/content-coverage/summary');
+  return handleApiResponse<ContentCoverageSummary>(response);
+};
