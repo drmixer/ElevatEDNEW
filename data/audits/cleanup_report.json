@@ -1,0 +1,720 @@
+{
+  "timestamp": "2025-12-17T23:07:05.244Z",
+  "mode": "applied",
+  "totalProcessed": 1190,
+  "totalChanged": 89,
+  "changes": [
+    {
+      "lessonId": 114,
+      "title": "What is Surface Area?",
+      "gradeBand": "6",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 96,
+      "title": "Habitats Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 71,
+      "title": "Length/Weight/Capacity (non-standard/standard) Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 83,
+      "title": "Perimeter (intro) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1645,
+      "title": "Habitats Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 1647,
+      "title": "Plants/Animals Needs Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 1613,
+      "title": "Sun/Moon/Stars (patterns) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 166,
+      "title": "Area/Perimeter",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1661,
+      "title": "Habitats Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 730,
+      "title": "Intro: Life Cycles",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 1697,
+      "title": "Life Cycles Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 694,
+      "title": "Intro: 2D/3D Shapes & Attributes",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 870,
+      "title": "Intro: Ask/Imagine/Plan/Create/Test (Design Cycle) (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 731,
+      "title": "Intro: Plants/Animals Needs",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 729,
+      "title": "Intro: Habitats",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 702,
+      "title": "Intro: Length/Weight/Capacity (non-standard/standard)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1568,
+      "title": "Earth Materials (rocks/soil) Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 848,
+      "title": "Intro: Perimeter (intro) (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 3276,
+      "title": "Earth Materials (rocks/soil) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 77,
+      "title": "Angles & Lines Launch Lesson",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 718,
+      "title": "Intro: Earth Materials (rocks/soil)",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 720,
+      "title": "Intro: Weather & Seasons",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1625,
+      "title": "Ask/Imagine/Plan/Create/Test (Design Cycle) Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1662,
+      "title": "Life Cycles Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 115,
+      "title": "Nets and Prisms",
+      "gradeBand": "6",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 871,
+      "title": "Intro: Habitats (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 245,
+      "title": "Launch Lesson: Engineering Practices Prototypes And Iteration",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 249,
+      "title": "Launch Lesson: Life Science Human Body Systems Intro",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 255,
+      "title": "Launch Lesson: Earth And Space Weather And Climate",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1663,
+      "title": "Plants/Animals Needs Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 219,
+      "title": "Similarity & Congruence",
+      "gradeBand": "7",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 519,
+      "title": "Launch Lesson: Earth And Space Solar System Relative Scale",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 849,
+      "title": "Intro: Time & Money (intro) (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1698,
+      "title": "Plants/Animals Needs Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 1615,
+      "title": "Ask/Imagine/Plan/Create/Test (Design Cycle) Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 242,
+      "title": "Launch Lesson: Earth And Space Solar System Relative Scale",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1644,
+      "title": "Ask/Imagine/Plan/Create/Test (Design Cycle) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 863,
+      "title": "Intro: Earth Materials (rocks/soil) (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 864,
+      "title": "Intro: Sun/Moon/Stars (patterns) (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 865,
+      "title": "Intro: Weather & Seasons (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 866,
+      "title": "Intro: Earth Materials (rocks/soil) (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1416,
+      "title": "2D/3D Shapes & Attributes Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 719,
+      "title": "Intro: Sun/Moon/Stars (patterns)",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 872,
+      "title": "Intro: Life Cycles (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 873,
+      "title": "Intro: Plants/Animals Needs (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 874,
+      "title": "Intro: Life Cycles (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 3264,
+      "title": "Weather & Seasons Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 207,
+      "title": "Transformations & Symmetry",
+      "gradeBand": "6",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 3269,
+      "title": "Earth Systems (geosphere/hydrosphere) Launch Lesson",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 180,
+      "title": "Transformations (intro)",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 192,
+      "title": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "5",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1476,
+      "title": "Perimeter (intro) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1564,
+      "title": "Weather & Seasons Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 218,
+      "title": "Pythagorean Theorem",
+      "gradeBand": "7",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 253,
+      "title": "Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1581,
+      "title": "Earth Materials (rocks/soil) Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1583,
+      "title": "Weather & Seasons Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1477,
+      "title": "Time & Money (intro) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1612,
+      "title": "Earth Materials (rocks/soil) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1614,
+      "title": "Weather & Seasons Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1646,
+      "title": "Life Cycles Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 1474,
+      "title": "2D/3D Shapes & Attributes Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1696,
+      "title": "Habitats Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 867,
+      "title": "Intro: Sun/Moon/Stars (patterns) (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 868,
+      "title": "Intro: Weather & Seasons (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 247,
+      "title": "Launch Lesson: Life Science Ecosystems And Food Webs",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Plant_cell\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 90,
+      "title": "Solar System (relative scale) Launch Lesson",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1475,
+      "title": "Length/Weight/Capacity (non-standard/standard) Launch Lesson",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 1569,
+      "title": "Sun/Moon/Stars (patterns) Launch Lesson",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 1582,
+      "title": "Sun/Moon/Stars (patterns) Launch Lesson",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 181,
+      "title": "Volume",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 221,
+      "title": "Volume & Surface Area",
+      "gradeBand": "7",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 244,
+      "title": "Launch Lesson: Engineering Practices Criteria And Constraints",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 246,
+      "title": "Launch Lesson: Life Science Adaptations",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 256,
+      "title": "Launch Lesson: Engineering Practices Criteria And Constraints",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 852,
+      "title": "Intro: Time & Money (intro) (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 190,
+      "title": "Angles & Lines",
+      "gradeBand": "5",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 869,
+      "title": "Intro: Ask/Imagine/Plan/Create/Test (Design Cycle) (Grade 2)",
+      "gradeBand": "2",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 167,
+      "title": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 168,
+      "title": "Transformations (intro)",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 191,
+      "title": "Area/Perimeter",
+      "gradeBand": "5",
+      "changes": [
+        "Removed image \"Pythagorean_theorem\" (requires Grade 8+)"
+      ]
+    },
+    {
+      "lessonId": 241,
+      "title": "Launch Lesson: Earth And Space Natural Resources",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 240,
+      "title": "Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 254,
+      "title": "Launch Lesson: Earth And Space Natural Resources",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 243,
+      "title": "Launch Lesson: Earth And Space Weather And Climate",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 248,
+      "title": "Launch Lesson: Life Science Heredity Intro",
+      "gradeBand": "3",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    },
+    {
+      "lessonId": 257,
+      "title": "Launch Lesson: Engineering Practices Prototypes And Iteration",
+      "gradeBand": "4",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 725,
+      "title": "Intro: Ask/Imagine/Plan/Create/Test (Design Cycle)",
+      "gradeBand": "1",
+      "changes": [
+        "Removed image \"Periodic_table\" (requires Grade 5+)"
+      ]
+    },
+    {
+      "lessonId": 875,
+      "title": "Intro: Plants/Animals Needs (Grade K)",
+      "gradeBand": "K",
+      "changes": [
+        "Removed image \"Animal_cell_structure\" (requires Grade 4+)"
+      ]
+    }
+  ]
+}

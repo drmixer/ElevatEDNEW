@@ -56,8 +56,8 @@ const LearningAssistant: React.FC = () => {
   const { persona: tutorPersona } = useTutorPersona(student?.id);
   const pathQuery = useStudentPath(student?.id);
   const tutorAvatar = useMemo(
-    () => TUTOR_AVATARS.find((avatar) => avatar.id === student.tutorAvatarId) ?? TUTOR_AVATARS[0],
-    [student.tutorAvatarId],
+    () => TUTOR_AVATARS.find((avatar) => avatar.id === student?.tutorAvatarId) ?? TUTOR_AVATARS[0],
+    [student?.tutorAvatarId],
   );
   const personaPalette = useMemo(
     () => (tutorPersona ? resolvePalette((tutorPersona.metadata ?? {}) as Record<string, unknown>) : null),

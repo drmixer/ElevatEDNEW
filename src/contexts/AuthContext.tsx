@@ -125,9 +125,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.log('[Auth] Found user, loading profile...');
           const profileResult = await withTimeout(loadProfile(session.user.id), 4000);
           if (profileResult.timedOut) {
-            console.warn('[Auth] Profile load timed out; continuing as signed out');
+            console.warn('[Auth] Profile load timed out; signing out to clear stale session');
             safeSetUser(null);
-            scheduleSilentRefresh();
+            // Sign out to clear potentially corrupt session
+            try {
+              await supabase.auth.signOut();
+            } catch (signOutError) {
+              console.warn('[Auth] Failed to sign out during timeout recovery', signOutError);
+            }
           }
         } else {
           console.log('[Auth] No user found');
