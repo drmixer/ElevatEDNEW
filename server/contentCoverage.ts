@@ -60,7 +60,7 @@ async function fetchCoverageData(): Promise<{
     );
 
     // Fallback if RPC doesn't exist - fetch lessons directly
-    let lessonCounts = new Map<number, number>();
+    const lessonCounts = new Map<number, number>();
     if (lessonError || !lessonData) {
         console.log('[ContentCoverage] RPC not available, fetching lessons directly');
         const { data: lessons } = await supabase
