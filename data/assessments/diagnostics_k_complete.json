@@ -1,0 +1,700 @@
+{
+    "math_K": {
+        "grade_band": "K",
+        "subject": "math",
+        "title": "Kindergarten Math Diagnostic",
+        "description": "Number recognition, counting to 10, basic shapes, and sorting.",
+        "estimatedDurationMinutes": 6,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "numbers",
+                    "strand": "Numbers",
+                    "standards": [
+                        "K.CC.A.1"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "counting",
+                    "strand": "Counting",
+                    "standards": [
+                        "K.CC.B.4"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "shapes",
+                    "strand": "Shapes",
+                    "standards": [
+                        "K.G.A.2"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "km-num-1",
+                "prompt": "Which number is this? 3",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Numbers",
+                "standard": "K.CC.A.1",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-num-2",
+                "prompt": "Which number is this? 7",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Numbers",
+                "standard": "K.CC.A.1",
+                "options": [
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-num-3",
+                "prompt": "What number comes after 4?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Numbers",
+                "standard": "K.CC.A.1",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-num-4",
+                "prompt": "Which number is the smallest?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Numbers",
+                "standard": "K.CC.A.1",
+                "options": [
+                    {
+                        "text": "1",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-cnt-1",
+                "prompt": "How many stars? ⭐⭐⭐",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "K.CC.B.4",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-cnt-2",
+                "prompt": "How many hearts? ❤️❤️❤️❤️",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "K.CC.B.4",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-cnt-3",
+                "prompt": "Count: 1, 2, ___",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "K.CC.B.4",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-cnt-4",
+                "prompt": "Which group has MORE? 🍎🍎 or 🍎🍎🍎🍎",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Counting",
+                "standard": "K.CC.B.4",
+                "options": [
+                    {
+                        "text": "🍎🍎",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "🍎🍎🍎🍎",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Same",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "I don't know",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-shp-1",
+                "prompt": "What shape is a ball?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "K.G.A.2",
+                "options": [
+                    {
+                        "text": "Square",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Triangle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Circle",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Rectangle",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-shp-2",
+                "prompt": "How many sides does a triangle have?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "K.G.A.2",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-shp-3",
+                "prompt": "Which shape has 4 equal sides?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "K.G.A.2",
+                "options": [
+                    {
+                        "text": "Circle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Triangle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Square",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Star",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "km-shp-4",
+                "prompt": "A door is shaped like a ___.",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Shapes",
+                "standard": "K.G.A.2",
+                "options": [
+                    {
+                        "text": "Circle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Rectangle",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Triangle",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Star",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "ela_K": {
+        "grade_band": "K",
+        "subject": "ela",
+        "title": "Kindergarten ELA Diagnostic",
+        "description": "Letter recognition, beginning sounds, and simple words.",
+        "estimatedDurationMinutes": 6,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "letters",
+                    "strand": "Letters",
+                    "standards": [
+                        "RF.K.1"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "sounds",
+                    "strand": "Sounds",
+                    "standards": [
+                        "RF.K.2"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "words",
+                    "strand": "Words",
+                    "standards": [
+                        "RF.K.3"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "ke-let-1",
+                "prompt": "Which letter is this? A",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Letters",
+                "standard": "RF.K.1",
+                "options": [
+                    {
+                        "text": "A",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "B",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "C",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "D",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-let-2",
+                "prompt": "Which letter is this? M",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Letters",
+                "standard": "RF.K.1",
+                "options": [
+                    {
+                        "text": "N",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "W",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "M",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "V",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-let-3",
+                "prompt": "What letter comes after B?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Letters",
+                "standard": "RF.K.1",
+                "options": [
+                    {
+                        "text": "A",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "B",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "C",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "D",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-let-4",
+                "prompt": "What is the first letter of the alphabet?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Letters",
+                "standard": "RF.K.1",
+                "options": [
+                    {
+                        "text": "A",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "B",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Z",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "C",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-snd-1",
+                "prompt": "What sound does 'B' make?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sounds",
+                "standard": "RF.K.2",
+                "options": [
+                    {
+                        "text": "buh",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "duh",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "puh",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "tuh",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-snd-2",
+                "prompt": "What letter makes the 'sss' sound?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sounds",
+                "standard": "RF.K.2",
+                "options": [
+                    {
+                        "text": "Z",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "S",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "C",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "X",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-snd-3",
+                "prompt": "'Cat' starts with what sound?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sounds",
+                "standard": "RF.K.2",
+                "options": [
+                    {
+                        "text": "kuh",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "tuh",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "aah",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "suh",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-snd-4",
+                "prompt": "'Dog' starts with what letter?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Sounds",
+                "standard": "RF.K.2",
+                "options": [
+                    {
+                        "text": "B",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "D",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "G",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "O",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-wrd-1",
+                "prompt": "Which word is 'cat'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Words",
+                "standard": "RF.K.3",
+                "options": [
+                    {
+                        "text": "cat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "bat",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "hat",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "rat",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-wrd-2",
+                "prompt": "Which word is 'dog'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Words",
+                "standard": "RF.K.3",
+                "options": [
+                    {
+                        "text": "fog",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "log",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "dog",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "hog",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-wrd-3",
+                "prompt": "What word is this? 'the'",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Words",
+                "standard": "RF.K.3",
+                "options": [
+                    {
+                        "text": "the",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "then",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "they",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "this",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "ke-wrd-4",
+                "prompt": "What word is this? 'I'",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Words",
+                "standard": "RF.K.3",
+                "options": [
+                    {
+                        "text": "a",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "I",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "in",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "it",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    }
+}

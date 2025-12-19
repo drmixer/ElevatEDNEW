@@ -72,7 +72,15 @@ const SUBJECT_LABELS: Record<string, string> = {
   science: 'Science',
 };
 
-const DEFAULT_FILE = path.resolve(process.cwd(), 'data/assessments/diagnostics_phase13.json');
+const DIAGNOSTIC_FILES = [
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_phase13.json'),
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_gradesK2.json'),
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_grades35.json'),
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_k_complete.json'),
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_grade2.json'),
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_grade3.json'),
+  path.resolve(process.cwd(), 'data/assessments/diagnostics_grade5.json'),
+];
 
 const normalizeSubject = (subject: string): string => {
   const key = subject.trim().toLowerCase().replace(/[\s-]+/g, '_');
@@ -286,24 +294,33 @@ const insertDiagnostic = async (
 };
 
 const main = async () => {
-  const config = await loadStructuredFile<DiagnosticFile>(DEFAULT_FILE);
-  const entries = Object.values(config ?? {});
-
-  if (!entries.length) {
-    console.log(`No diagnostic definitions found in ${DEFAULT_FILE}`);
-    return;
-  }
-
   const supabase = createServiceRoleClient();
   const subjects = await fetchSubjects(supabase);
 
-  for (const entry of entries) {
-    const subjectLabel = normalizeSubject(entry.subject);
-    const subjectId = subjects.get(subjectLabel)?.id ?? null;
-    await deleteExistingDiagnostic(supabase, entry.grade_band, entry.subject);
-    await insertDiagnostic(supabase, entry, subjectId, entry.subject);
-    console.log(`Seeded diagnostic for grade ${entry.grade_band} ${subjectLabel}: ${entry.items.length} items.`);
+  let totalSeeded = 0;
+
+  for (const filePath of DIAGNOSTIC_FILES) {
+    const config = await loadStructuredFile<DiagnosticFile>(filePath);
+    const entries = Object.values(config ?? {});
+
+    if (!entries.length) {
+      console.log(`No diagnostic definitions found in ${filePath}`);
+      continue;
+    }
+
+    console.log(`\nLoading ${entries.length} diagnostics from ${path.basename(filePath)}...`);
+
+    for (const entry of entries) {
+      const subjectLabel = normalizeSubject(entry.subject);
+      const subjectId = subjects.get(subjectLabel)?.id ?? null;
+      await deleteExistingDiagnostic(supabase, entry.grade_band, entry.subject);
+      await insertDiagnostic(supabase, entry, subjectId, entry.subject);
+      console.log(`  ✓ Seeded diagnostic for grade ${entry.grade_band} ${subjectLabel}: ${entry.items.length} items.`);
+      totalSeeded++;
+    }
   }
+
+  console.log(`\n✅ Done! Seeded ${totalSeeded} diagnostic assessments.`);
 };
 
 const invokedFromCli =

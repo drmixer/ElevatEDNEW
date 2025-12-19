@@ -1,0 +1,752 @@
+{
+    "math_2": {
+        "grade_band": "2",
+        "subject": "math",
+        "title": "Grade 2 Math Diagnostic",
+        "description": "Addition and subtraction within 100, place value, and measurement.",
+        "estimatedDurationMinutes": 10,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "addition",
+                    "strand": "Addition",
+                    "standards": [
+                        "2.NBT.B.5"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "subtraction",
+                    "strand": "Subtraction",
+                    "standards": [
+                        "2.NBT.B.5"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "place_value",
+                    "strand": "Place Value",
+                    "standards": [
+                        "2.NBT.A.1"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "2m-add-1",
+                "prompt": "What is 5 + 7?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "11",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "12",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "13",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "14",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-add-2",
+                "prompt": "What is 8 + 9?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "16",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "17",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "18",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "19",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-add-3",
+                "prompt": "What is 25 + 10?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "30",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "35",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "40",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "26",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-add-4",
+                "prompt": "What is 14 + 6?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "18",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "19",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "20",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "21",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-add-5",
+                "prompt": "Sam has 8 toys. He gets 5 more. How many toys does Sam have now?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Addition",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "12",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "13",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "14",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-sub-1",
+                "prompt": "What is 15 - 7?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Subtraction",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-sub-2",
+                "prompt": "What is 20 - 5?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Subtraction",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "15",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "25",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "14",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-sub-3",
+                "prompt": "What is 12 - 4?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Subtraction",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-sub-4",
+                "prompt": "There are 16 birds. 9 fly away. How many are left?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Subtraction",
+                "standard": "2.NBT.B.5",
+                "options": [
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-pv-1",
+                "prompt": "In the number 34, what does the 3 stand for?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Place Value",
+                "standard": "2.NBT.A.1",
+                "options": [
+                    {
+                        "text": "3 ones",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3 tens",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "30 ones",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3 hundreds",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-pv-2",
+                "prompt": "What number is 4 tens and 5 ones?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Place Value",
+                "standard": "2.NBT.A.1",
+                "options": [
+                    {
+                        "text": "54",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "45",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "49",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "40",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-pv-3",
+                "prompt": "Which number is greater: 56 or 65?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Place Value",
+                "standard": "2.NBT.A.1",
+                "options": [
+                    {
+                        "text": "56",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "65",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Same",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Cannot tell",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2m-pv-4",
+                "prompt": "What is 10 more than 47?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Place Value",
+                "standard": "2.NBT.A.1",
+                "options": [
+                    {
+                        "text": "48",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "57",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "37",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "50",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "ela_2": {
+        "grade_band": "2",
+        "subject": "ela",
+        "title": "Grade 2 ELA Diagnostic",
+        "description": "Reading fluency, comprehension, and vocabulary.",
+        "estimatedDurationMinutes": 10,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "reading",
+                    "strand": "Reading",
+                    "standards": [
+                        "RL.2.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "vocabulary",
+                    "strand": "Vocabulary",
+                    "standards": [
+                        "L.2.4"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "grammar",
+                    "strand": "Grammar",
+                    "standards": [
+                        "L.2.1"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "2e-rd-1",
+                "prompt": "Read: 'The big dog ran fast.' What did the dog do?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.2.1",
+                "options": [
+                    {
+                        "text": "Slept",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Ran",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Ate",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Jumped",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-rd-2",
+                "prompt": "Read: 'Sam was happy because he got a new toy.' Why was Sam happy?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.2.1",
+                "options": [
+                    {
+                        "text": "He was sleepy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "He got a new toy",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "He ate cake",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "He ran fast",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-rd-3",
+                "prompt": "Read: 'The cat sat on the mat. It was soft.' What was soft?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.2.1",
+                "options": [
+                    {
+                        "text": "The cat",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The mat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The floor",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The room",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-rd-4",
+                "prompt": "Read: 'Mom made cookies. They smelled good.' What smelled good?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.2.1",
+                "options": [
+                    {
+                        "text": "Mom",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The kitchen",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The cookies",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The oven",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-rd-5",
+                "prompt": "Read: 'It was raining outside. Tim stayed inside.' Why did Tim stay inside?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.2.1",
+                "options": [
+                    {
+                        "text": "He was sick",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "It was raining",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "He was tired",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "It was bedtime",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-voc-1",
+                "prompt": "What does 'happy' mean?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Vocabulary",
+                "standard": "L.2.4",
+                "options": [
+                    {
+                        "text": "Sad",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Glad",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Mad",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Tired",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-voc-2",
+                "prompt": "What does 'big' mean?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Vocabulary",
+                "standard": "L.2.4",
+                "options": [
+                    {
+                        "text": "Small",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Large",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Short",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Thin",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-voc-3",
+                "prompt": "What is the opposite of 'hot'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Vocabulary",
+                "standard": "L.2.4",
+                "options": [
+                    {
+                        "text": "Warm",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Cold",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Wet",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Dry",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-voc-4",
+                "prompt": "What is the opposite of 'fast'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Vocabulary",
+                "standard": "L.2.4",
+                "options": [
+                    {
+                        "text": "Quick",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Slow",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Loud",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Tall",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-gr-1",
+                "prompt": "Which sentence is correct?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Grammar",
+                "standard": "L.2.1",
+                "options": [
+                    {
+                        "text": "She run fast.",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "She runs fast.",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "She running fast.",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "She runned fast.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-gr-2",
+                "prompt": "Choose the verb: 'The dog barks loudly.'",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Grammar",
+                "standard": "L.2.1",
+                "options": [
+                    {
+                        "text": "dog",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "barks",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "loudly",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-gr-3",
+                "prompt": "Choose the noun: 'The cat sleeps.'",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Grammar",
+                "standard": "L.2.1",
+                "options": [
+                    {
+                        "text": "The",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "cat",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "sleeps",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "all of them",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "2e-gr-4",
+                "prompt": "What is the plural of 'cat'?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Grammar",
+                "standard": "L.2.1",
+                "options": [
+                    {
+                        "text": "cates",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "cats",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "catses",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "catis",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    }
+}

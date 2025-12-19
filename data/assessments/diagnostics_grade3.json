@@ -1,0 +1,752 @@
+{
+    "math_3": {
+        "grade_band": "3",
+        "subject": "math",
+        "title": "Grade 3 Math Diagnostic",
+        "description": "Multiplication, division, fractions, and area.",
+        "estimatedDurationMinutes": 12,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "mult",
+                    "strand": "Multiplication",
+                    "standards": [
+                        "3.OA.A.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "div",
+                    "strand": "Division",
+                    "standards": [
+                        "3.OA.A.2"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "frac",
+                    "strand": "Fractions",
+                    "standards": [
+                        "3.NF.A.1"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "3m-mult-1",
+                "prompt": "What is 3 × 4?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Multiplication",
+                "standard": "3.OA.A.1",
+                "options": [
+                    {
+                        "text": "7",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "12",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "14",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-mult-2",
+                "prompt": "What is 5 × 6?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Multiplication",
+                "standard": "3.OA.A.1",
+                "options": [
+                    {
+                        "text": "25",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "30",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "35",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "36",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-mult-3",
+                "prompt": "What is 7 × 3?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Multiplication",
+                "standard": "3.OA.A.1",
+                "options": [
+                    {
+                        "text": "18",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "21",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "24",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "27",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-mult-4",
+                "prompt": "What is 8 × 2?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Multiplication",
+                "standard": "3.OA.A.1",
+                "options": [
+                    {
+                        "text": "14",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "16",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "18",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "10",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-mult-5",
+                "prompt": "There are 4 groups with 5 apples each. How many apples total?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Multiplication",
+                "standard": "3.OA.A.1",
+                "options": [
+                    {
+                        "text": "9",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "15",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "20",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "25",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-div-1",
+                "prompt": "What is 12 ÷ 3?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Division",
+                "standard": "3.OA.A.2",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-div-2",
+                "prompt": "What is 20 ÷ 5?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Division",
+                "standard": "3.OA.A.2",
+                "options": [
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-div-3",
+                "prompt": "What is 18 ÷ 6?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Division",
+                "standard": "3.OA.A.2",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-div-4",
+                "prompt": "24 cookies are shared equally among 4 friends. How many does each get?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Division",
+                "standard": "3.OA.A.2",
+                "options": [
+                    {
+                        "text": "4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-frac-1",
+                "prompt": "What fraction of the shape is shaded? (2 out of 4 parts)",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Fractions",
+                "standard": "3.NF.A.1",
+                "options": [
+                    {
+                        "text": "1/4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "2/4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3/4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4/4",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-frac-2",
+                "prompt": "Which is larger: 1/2 or 1/4?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Fractions",
+                "standard": "3.NF.A.1",
+                "options": [
+                    {
+                        "text": "1/2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "1/4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "They are equal",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Cannot tell",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-frac-3",
+                "prompt": "A pizza is cut into 8 slices. You eat 3. What fraction did you eat?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Fractions",
+                "standard": "3.NF.A.1",
+                "options": [
+                    {
+                        "text": "3/8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "5/8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "8/3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3/5",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3m-frac-4",
+                "prompt": "What fraction is equivalent to 2/4?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Fractions",
+                "standard": "3.NF.A.1",
+                "options": [
+                    {
+                        "text": "1/4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "1/2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3/4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "2/2",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "ela_3": {
+        "grade_band": "3",
+        "subject": "ela",
+        "title": "Grade 3 ELA Diagnostic",
+        "description": "Reading comprehension, main idea, and vocabulary.",
+        "estimatedDurationMinutes": 12,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "reading",
+                    "strand": "Reading",
+                    "standards": [
+                        "RL.3.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "main_idea",
+                    "strand": "Main Idea",
+                    "standards": [
+                        "RI.3.2"
+                    ],
+                    "itemCount": 4
+                },
+                {
+                    "id": "vocabulary",
+                    "strand": "Vocabulary",
+                    "standards": [
+                        "L.3.4"
+                    ],
+                    "itemCount": 4
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "3e-rd-1",
+                "prompt": "Read: 'Tom went to the park. He played on the swings and slides.' What did Tom do at the park?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.3.1",
+                "options": [
+                    {
+                        "text": "Read books",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Played on swings and slides",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Had a picnic",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Fed the birds",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-rd-2",
+                "prompt": "Read: 'The sun was shining and birds were singing. It was a beautiful spring day.' What season is it?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.3.1",
+                "options": [
+                    {
+                        "text": "Winter",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Summer",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Spring",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Fall",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-rd-3",
+                "prompt": "Read: 'Maya was nervous about her first day at the new school. Her mom gave her a hug.' How did Maya feel?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.3.1",
+                "options": [
+                    {
+                        "text": "Excited",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Nervous",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Angry",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Tired",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-rd-4",
+                "prompt": "Read: 'First, Sara woke up. Then she ate breakfast. Finally, she went to school.' What did Sara do first?",
+                "type": "multiple_choice",
+                "difficulty": 1,
+                "strand": "Reading",
+                "standard": "RL.3.1",
+                "options": [
+                    {
+                        "text": "Ate breakfast",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Went to school",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Woke up",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Got dressed",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-rd-5",
+                "prompt": "Read: 'The dog chased the ball. It ran very fast.' What does 'it' refer to?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Reading",
+                "standard": "RL.3.1",
+                "options": [
+                    {
+                        "text": "The ball",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The dog",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The park",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The boy",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-mi-1",
+                "prompt": "What is the main idea? 'Dogs make great pets. They are loyal and loving. They can be trained to do tricks.'",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Main Idea",
+                "standard": "RI.3.2",
+                "options": [
+                    {
+                        "text": "Dogs can do tricks",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Dogs make great pets",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Dogs are loyal",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Dogs are loving",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-mi-2",
+                "prompt": "What is the main idea? 'Brushing your teeth is important. It keeps your teeth healthy. Brush twice a day.'",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Main Idea",
+                "standard": "RI.3.2",
+                "options": [
+                    {
+                        "text": "Brush twice a day",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Teeth can get dirty",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Brushing teeth is important",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Toothpaste tastes good",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-mi-3",
+                "prompt": "Which detail supports: 'Exercise is good for you'?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Main Idea",
+                "standard": "RI.3.2",
+                "options": [
+                    {
+                        "text": "Exercise can be tiring",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Running makes your heart stronger",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Gyms have equipment",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Some sports cost money",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-mi-4",
+                "prompt": "What is the main idea? 'Water is important. We need it to drink and stay healthy. Without water, we cannot live.'",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Main Idea",
+                "standard": "RI.3.2",
+                "options": [
+                    {
+                        "text": "Water is wet",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Water is important",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "We drink water",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Water is everywhere",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-voc-1",
+                "prompt": "What does 'gigantic' mean?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.3.4",
+                "options": [
+                    {
+                        "text": "Very small",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Very big",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Very fast",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Very slow",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-voc-2",
+                "prompt": "What does 'furious' mean?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.3.4",
+                "options": [
+                    {
+                        "text": "Very happy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Very sad",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Very angry",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Very tired",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-voc-3",
+                "prompt": "What is a synonym for 'quick'?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.3.4",
+                "options": [
+                    {
+                        "text": "Slow",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Fast",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Heavy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Light",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "3e-voc-4",
+                "prompt": "What is an antonym for 'difficult'?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.3.4",
+                "options": [
+                    {
+                        "text": "Hard",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Easy",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Tough",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Tricky",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    }
+}

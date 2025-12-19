@@ -26,33 +26,24 @@ These items should be completed before public beta launch:
 ---
 
 ### 2. Diagnostic Verification (from `prelaunch-readiness-checklist.md` §4.2)
-**Priority:** High | **Effort:** 2-3 hours | **Status:** ⚙️ 43% Complete
+**Priority:** High | **Effort:** 2-3 hours | **Status:** ✅ 100% Complete
 
 - [x] Add QA script for end-to-end diagnostic → path flow (`scripts/verify_diagnostics.ts`)
-- [x] Verify diagnostics exist for each in-scope grade/subject (**IMPROVED: 14% → 43% coverage**)
+- [x] Verify diagnostics exist for each in-scope grade/subject (**100% coverage achieved**)
 - [x] Seed Math/ELA/Science diagnostics for grades 6-8 (`scripts/seed_diagnostic_assessments.ts` ✅ RAN)
+- [x] Seed Math/ELA diagnostics for grades K-5 ✅ Created and seeded
 - [x] Add `diagnostic_status` column migration (`supabase/migrations/046_diagnostic_status.sql`)
 - [x] Apply migration to production database ✅ Applied
-- [ ] Create diagnostics for grades K-5 (data files needed)
 - [x] Verify adaptive pathing uses diagnostic signals (✅ 6 students have learning_path data)
 
 **Verification Results (from script):**
 | Category | Status |
 |----------|--------|
+| Math Grades K-8 | ✅ All have diagnostics (12-20 questions each) |
+| ELA Grades K-8 | ✅ All have diagnostics (12-18 questions each) |
 | Science Grades 6-8 | ✅ Have diagnostics (8-9 questions each) |
-| Math Grades 6-8 | ✅ Seeded (20 questions each) |
-| ELA Grades 6-8 | ✅ Seeded (18 questions each) |
-| Math/ELA K-5 | ❌ Need diagnostic data files |
-| Student profiles | 📋 Migration created, needs to be applied |
+| Student profiles | ✅ Migration applied, column exists |
 | Adaptive pathing | ✅ Working (6 students have paths) |
-
-**To apply the migration, run this SQL in Supabase:**
-```sql
--- See supabase/migrations/046_diagnostic_status.sql
-ALTER TABLE student_profiles
-ADD COLUMN IF NOT EXISTS diagnostic_status text,
-ADD COLUMN IF NOT EXISTS diagnostic_completed_at timestamptz;
-```
 
 **Run verification:**
 ```bash

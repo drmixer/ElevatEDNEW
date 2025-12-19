@@ -1,0 +1,856 @@
+{
+    "math_5": {
+        "grade_band": "5",
+        "subject": "math",
+        "title": "Grade 5 Math Diagnostic",
+        "description": "Decimals, fractions, multi-digit operations, and volume.",
+        "estimatedDurationMinutes": 14,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "decimals",
+                    "strand": "Decimals",
+                    "standards": [
+                        "5.NBT.A.3"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "fractions",
+                    "strand": "Fractions",
+                    "standards": [
+                        "5.NF.A.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "operations",
+                    "strand": "Operations",
+                    "standards": [
+                        "5.NBT.B.5"
+                    ],
+                    "itemCount": 5
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "5m-dec-1",
+                "prompt": "What is 0.5 + 0.3?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Decimals",
+                "standard": "5.NBT.A.3",
+                "options": [
+                    {
+                        "text": "0.2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "0.8",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "0.53",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-dec-2",
+                "prompt": "Which is greater: 0.45 or 0.5?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Decimals",
+                "standard": "5.NBT.A.3",
+                "options": [
+                    {
+                        "text": "0.45",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "0.5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Same",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Cannot tell",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-dec-3",
+                "prompt": "What is 2.4 × 3?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Decimals",
+                "standard": "5.NBT.A.3",
+                "options": [
+                    {
+                        "text": "6.2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "7.2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "72",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "5.4",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-dec-4",
+                "prompt": "Round 3.467 to the nearest tenth.",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Decimals",
+                "standard": "5.NBT.A.3",
+                "options": [
+                    {
+                        "text": "3.4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3.5",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3.46",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3.47",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-dec-5",
+                "prompt": "What is 6.5 ÷ 5?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Decimals",
+                "standard": "5.NBT.A.3",
+                "options": [
+                    {
+                        "text": "1.2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "1.3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "1.5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "0.13",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-frac-1",
+                "prompt": "What is 1/2 + 1/4?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Fractions",
+                "standard": "5.NF.A.1",
+                "options": [
+                    {
+                        "text": "2/6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3/4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "1/6",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "2/4",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-frac-2",
+                "prompt": "What is 3/4 - 1/4?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Fractions",
+                "standard": "5.NF.A.1",
+                "options": [
+                    {
+                        "text": "1/4",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "2/4",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "1/2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "4/4",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-frac-3",
+                "prompt": "What is 1/3 × 6?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Fractions",
+                "standard": "5.NF.A.1",
+                "options": [
+                    {
+                        "text": "2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6/3",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "1/18",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-frac-4",
+                "prompt": "Convert 3/5 to a decimal.",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Fractions",
+                "standard": "5.NF.A.1",
+                "options": [
+                    {
+                        "text": "0.35",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "0.6",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "0.53",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "1.6",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-frac-5",
+                "prompt": "Which is greater: 2/3 or 3/5?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Fractions",
+                "standard": "5.NF.A.1",
+                "options": [
+                    {
+                        "text": "2/3",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3/5",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Same",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Cannot tell",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-ops-1",
+                "prompt": "What is 24 × 15?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Operations",
+                "standard": "5.NBT.B.5",
+                "options": [
+                    {
+                        "text": "340",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "350",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "360",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "380",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-ops-2",
+                "prompt": "What is 456 ÷ 8?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Operations",
+                "standard": "5.NBT.B.5",
+                "options": [
+                    {
+                        "text": "55",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "56",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "57",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "58",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-ops-3",
+                "prompt": "What is 1,234 + 5,678?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Operations",
+                "standard": "5.NBT.B.5",
+                "options": [
+                    {
+                        "text": "6,812",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6,912",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "7,012",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "6,802",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-ops-4",
+                "prompt": "What is 5,000 - 1,234?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Operations",
+                "standard": "5.NBT.B.5",
+                "options": [
+                    {
+                        "text": "3,766",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "3,866",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "3,666",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "4,766",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5m-ops-5",
+                "prompt": "A box has length 4 cm, width 3 cm, and height 2 cm. What is its volume?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Operations",
+                "standard": "5.NBT.B.5",
+                "options": [
+                    {
+                        "text": "9 cm³",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "18 cm³",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "24 cm³",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "36 cm³",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "ela_5": {
+        "grade_band": "5",
+        "subject": "ela",
+        "title": "Grade 5 ELA Diagnostic",
+        "description": "Reading comprehension, inference, vocabulary, and writing conventions.",
+        "estimatedDurationMinutes": 14,
+        "blueprint": {
+            "sections": [
+                {
+                    "id": "comprehension",
+                    "strand": "Comprehension",
+                    "standards": [
+                        "RL.5.1"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "inference",
+                    "strand": "Inference",
+                    "standards": [
+                        "RL.5.4"
+                    ],
+                    "itemCount": 5
+                },
+                {
+                    "id": "vocabulary",
+                    "strand": "Vocabulary",
+                    "standards": [
+                        "L.5.4"
+                    ],
+                    "itemCount": 5
+                }
+            ]
+        },
+        "items": [
+            {
+                "id": "5e-comp-1",
+                "prompt": "Read: 'The scientist studied animals in their natural habitat. She observed their behavior for months.' What did the scientist study?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Comprehension",
+                "standard": "RL.5.1",
+                "options": [
+                    {
+                        "text": "Plants",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Animals",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Weather",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Stars",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-comp-2",
+                "prompt": "Read: 'After the storm, the garden was destroyed. The flowers were bent and the vegetables were ruined.' What caused the damage?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Comprehension",
+                "standard": "RL.5.1",
+                "options": [
+                    {
+                        "text": "Animals",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "People",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The storm",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Insects",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-comp-3",
+                "prompt": "Read: 'Thomas Edison invented many things, including the light bulb. He never gave up even after many failures.' What trait describes Edison?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Comprehension",
+                "standard": "RL.5.1",
+                "options": [
+                    {
+                        "text": "Lazy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Persistent",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Greedy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Shy",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-comp-4",
+                "prompt": "In a story, the setting is:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Comprehension",
+                "standard": "RL.5.1",
+                "options": [
+                    {
+                        "text": "What happens",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Where and when the story takes place",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The main character",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The problem to solve",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-comp-5",
+                "prompt": "The theme of a story is:",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Comprehension",
+                "standard": "RL.5.1",
+                "options": [
+                    {
+                        "text": "The title",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The main message or lesson",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "The setting",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "The characters",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-inf-1",
+                "prompt": "Read: 'Sam slammed his book shut and stomped to his room.' How is Sam probably feeling?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Inference",
+                "standard": "RL.5.4",
+                "options": [
+                    {
+                        "text": "Happy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Frustrated",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Tired",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Excited",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-inf-2",
+                "prompt": "Read: 'Maria smiled as she looked at her test. She couldn't wait to show her parents.' How did Maria probably do?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Inference",
+                "standard": "RL.5.4",
+                "options": [
+                    {
+                        "text": "Very well",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Very poorly",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Average",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "She didn't take it",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-inf-3",
+                "prompt": "Read: 'The leaves were changing colors and falling from the trees.' What season is it most likely?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Inference",
+                "standard": "RL.5.4",
+                "options": [
+                    {
+                        "text": "Spring",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Summer",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Fall",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Winter",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-inf-4",
+                "prompt": "Why might an author use short sentences?",
+                "type": "multiple_choice",
+                "difficulty": 3,
+                "strand": "Inference",
+                "standard": "RL.5.4",
+                "options": [
+                    {
+                        "text": "To create excitement or tension",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "To save paper",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Because they're lazy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To confuse readers",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-inf-5",
+                "prompt": "If a character 'rolled their eyes,' they probably feel:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Inference",
+                "standard": "RL.5.4",
+                "options": [
+                    {
+                        "text": "Happy",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Annoyed",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Scared",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Confused",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-voc-1",
+                "prompt": "What does 'hesitant' mean?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.5.4",
+                "options": [
+                    {
+                        "text": "Confident",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Unsure or uncertain",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Excited",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Angry",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-voc-2",
+                "prompt": "What does 'abundant' mean?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.5.4",
+                "options": [
+                    {
+                        "text": "Rare",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Plentiful",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Empty",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Broken",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-voc-3",
+                "prompt": "The prefix 'un-' in 'unhappy' means:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.5.4",
+                "options": [
+                    {
+                        "text": "Very",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Not",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Again",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Before",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-voc-4",
+                "prompt": "The suffix '-ful' in 'helpful' means:",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.5.4",
+                "options": [
+                    {
+                        "text": "Without",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Full of",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Against",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "More than",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": "5e-voc-5",
+                "prompt": "What does 'predict' mean?",
+                "type": "multiple_choice",
+                "difficulty": 2,
+                "strand": "Vocabulary",
+                "standard": "L.5.4",
+                "options": [
+                    {
+                        "text": "To look back",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To guess what will happen",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "To summarize",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "To compare",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    }
+}
