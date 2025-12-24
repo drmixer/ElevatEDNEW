@@ -566,11 +566,11 @@
                 "standard": "RL.4.1",
                 "options": [
                     {
-                        "text": "To sell eggs",
+                        "text": "To help her grandmother with chores",
                         "isCorrect": false
                     },
                     {
-                        "text": "To see her grandmother",
+                        "text": "Because she loved visiting her grandmother",
                         "isCorrect": true
                     },
                     {
@@ -578,7 +578,7 @@
                         "isCorrect": false
                     },
                     {
-                        "text": "To fix the henhouse",
+                        "text": "To learn about farming",
                         "isCorrect": false
                     }
                 ]

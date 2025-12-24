@@ -32,6 +32,7 @@ const SUBJECT_ALIASES: Record<string, Subject> = {
   ela: 'english',
   language_arts: 'english',
   english_language_arts: 'english',
+  'english language arts': 'english',
   literacy: 'english',
   reading: 'english',
   writing: 'english',

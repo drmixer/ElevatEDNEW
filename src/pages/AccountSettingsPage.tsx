@@ -26,7 +26,7 @@ import type {
   PrivacyRequestStatus,
   PrivacyRequestType,
 } from '../types';
-import { updateLearningPreferences } from '../services/profileService';
+import { updateLearningPreferences, updateTutorName } from '../services/profileService';
 import trackEvent from '../lib/analytics';
 import { formatSubjectLabel, SUBJECTS } from '../lib/subjects';
 import { listPrivacyRequests, submitPrivacyRequest } from '../services/privacyService';
@@ -86,11 +86,22 @@ const AccountSettingsPage: React.FC = () => {
   const [parentDeletionSaving, setParentDeletionSaving] = useState(false);
   const [parentDeletionStudentIds, setParentDeletionStudentIds] = useState<string[]>(parentUser?.children?.map((child) => child.id) ?? []);
 
+  // Tutor settings state
+  const [tutorNameInput, setTutorNameInput] = useState<string>(studentUser?.tutorName ?? '');
+  const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
+    studentUser?.learningPreferences?.studyMode ?? 'keep_up'
+  );
+  const [tutorSettingsMessage, setTutorSettingsMessage] = useState<string | null>(null);
+  const [tutorSettingsError, setTutorSettingsError] = useState<string | null>(null);
+  const [savingTutorSettings, setSavingTutorSettings] = useState(false);
+
   useEffect(() => {
     if (!studentUser) return;
     setSessionLength(studentUser.learningPreferences.sessionLength);
     setFocusSubject(studentUser.learningPreferences.focusSubject);
     setFocusIntensity(studentUser.learningPreferences.focusIntensity);
+    setTutorNameInput(studentUser.tutorName ?? '');
+    setStudyMode(studentUser.learningPreferences?.studyMode ?? 'keep_up');
   }, [studentUser]);
 
   useEffect(() => {
@@ -142,6 +153,44 @@ const AccountSettingsPage: React.FC = () => {
       setPrefError(error instanceof Error ? error.message : 'Unable to save preferences right now.');
     } finally {
       setSavingPrefs(false);
+    }
+  };
+
+  const handleSaveTutorSettings = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!studentUser) {
+      setTutorSettingsError('Tutor settings are only available for student accounts.');
+      return;
+    }
+    setSavingTutorSettings(true);
+    setTutorSettingsError(null);
+    setTutorSettingsMessage(null);
+    try {
+      // Save tutor name
+      await updateTutorName(studentUser.id, tutorNameInput.trim() || null);
+
+      // Save study mode if changed and not locked
+      if (!studentUser.learningPreferences?.studyModeLocked) {
+        const updatedPrefs = {
+          ...studentUser.learningPreferences,
+          studyMode,
+          studyModeSetAt: new Date().toISOString(),
+        };
+        await updateLearningPreferences(studentUser.id, updatedPrefs);
+      }
+
+      setTutorSettingsMessage('Saved! Your tutor is ready with your new settings.');
+      trackEvent('student_tutor_settings_saved', {
+        studentId: studentUser.id,
+        tutorName: tutorNameInput.trim() || null,
+        studyMode,
+      });
+      await refreshUser();
+    } catch (error) {
+      console.error('[Settings] failed to save tutor settings', error);
+      setTutorSettingsError(error instanceof Error ? error.message : 'Unable to save tutor settings right now.');
+    } finally {
+      setSavingTutorSettings(false);
     }
   };
 
@@ -592,11 +641,10 @@ const AccountSettingsPage: React.FC = () => {
 
               <form onSubmit={handleParentDeletionRequest} className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <label className={`rounded-lg border px-3 py-2 text-sm cursor-pointer ${
-                    parentDeletionScope === 'parent_only'
-                      ? 'border-rose-300 bg-rose-50 text-rose-800'
-                      : 'border-slate-200 text-slate-700 hover:border-rose-200'
-                  }`}>
+                  <label className={`rounded-lg border px-3 py-2 text-sm cursor-pointer ${parentDeletionScope === 'parent_only'
+                    ? 'border-rose-300 bg-rose-50 text-rose-800'
+                    : 'border-slate-200 text-slate-700 hover:border-rose-200'
+                    }`}>
                     <input
                       type="radio"
                       name="parent-deletion-scope"
@@ -608,11 +656,10 @@ const AccountSettingsPage: React.FC = () => {
                     <p className="text-xs mt-1">Cancels billing and removes your guardian access.</p>
                   </label>
 
-                  <label className={`rounded-lg border px-3 py-2 text-sm cursor-pointer ${
-                    parentDeletionScope === 'parent_and_students'
-                      ? 'border-rose-300 bg-rose-50 text-rose-800'
-                      : 'border-slate-200 text-slate-700 hover:border-rose-200'
-                  }`}>
+                  <label className={`rounded-lg border px-3 py-2 text-sm cursor-pointer ${parentDeletionScope === 'parent_and_students'
+                    ? 'border-rose-300 bg-rose-50 text-rose-800'
+                    : 'border-slate-200 text-slate-700 hover:border-rose-200'
+                    }`}>
                     <input
                       type="radio"
                       name="parent-deletion-scope"
@@ -635,11 +682,10 @@ const AccountSettingsPage: React.FC = () => {
                           return (
                             <label
                               key={child.id}
-                              className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm cursor-pointer ${
-                                checked
-                                  ? 'border-rose-300 bg-white text-slate-900'
-                                  : 'border-rose-100 bg-white hover:border-rose-200'
-                              }`}
+                              className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm cursor-pointer ${checked
+                                ? 'border-rose-300 bg-white text-slate-900'
+                                : 'border-rose-100 bg-white hover:border-rose-200'
+                                }`}
                             >
                               <span>{child.name} (Grade {child.grade})</span>
                               <input
@@ -741,11 +787,10 @@ const AccountSettingsPage: React.FC = () => {
                         type="button"
                         key={option.value}
                         onClick={() => setSessionLength(option.value as SessionLengthPreference)}
-                        className={`text-left rounded-xl border px-4 py-3 transition-all ${
-                          active
-                            ? 'border-brand-teal bg-brand-light-teal/40 text-brand-teal shadow-sm'
-                            : 'border-slate-200 hover:border-brand-blue'
-                        }`}
+                        className={`text-left rounded-xl border px-4 py-3 transition-all ${active
+                          ? 'border-brand-teal bg-brand-light-teal/40 text-brand-teal shadow-sm'
+                          : 'border-slate-200 hover:border-brand-blue'
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-semibold">{option.label}</span>
@@ -789,22 +834,20 @@ const AccountSettingsPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setFocusIntensity('balanced')}
-                      className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
-                        focusIntensity === 'balanced'
-                          ? 'border-brand-blue text-brand-blue bg-brand-light-blue/30'
-                          : 'border-slate-200 text-slate-700 hover:border-brand-blue'
-                      }`}
+                      className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${focusIntensity === 'balanced'
+                        ? 'border-brand-blue text-brand-blue bg-brand-light-blue/30'
+                        : 'border-slate-200 text-slate-700 hover:border-brand-blue'
+                        }`}
                     >
                       Balanced
                     </button>
                     <button
                       type="button"
                       onClick={() => setFocusIntensity('focused')}
-                      className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
-                        focusIntensity === 'focused'
-                          ? 'border-brand-teal text-brand-teal bg-brand-light-teal/40'
-                          : 'border-slate-200 text-slate-700 hover:border-brand-teal'
-                      }`}
+                      className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${focusIntensity === 'focused'
+                        ? 'border-brand-teal text-brand-teal bg-brand-light-teal/40'
+                        : 'border-slate-200 text-slate-700 hover:border-brand-teal'
+                        }`}
                     >
                       Extra emphasis
                     </button>
@@ -831,6 +874,89 @@ const AccountSettingsPage: React.FC = () => {
                 {prefError && (
                   <span className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
                     {prefError}
+                  </span>
+                )}
+              </div>
+            </form>
+          </div>
+        )}
+
+        {studentUser && (
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4 mb-6">
+            <div className="flex items-center gap-3">
+              <Sparkles className="h-5 w-5 text-brand-violet" />
+              <h3 className="text-xl font-bold text-slate-900">My AI Tutor</h3>
+            </div>
+            <p className="text-sm text-slate-700">
+              Customize your tutor's name and how they communicate with you. Your tutor is a helper, not a teacher, and won't help you cheat.
+            </p>
+
+            <form onSubmit={handleSaveTutorSettings} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">
+                    Tutor nickname
+                  </label>
+                  <input
+                    type="text"
+                    value={tutorNameInput}
+                    onChange={(e) => setTutorNameInput(e.target.value)}
+                    placeholder="e.g., Coach Sky, Study Buddy"
+                    maxLength={24}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-brand-violet focus:ring-2 focus:ring-brand-violet/20"
+                  />
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    Names are filtered for classroom safety. Leave blank for the default.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">
+                    Study mode
+                  </label>
+                  <select
+                    value={studyMode}
+                    onChange={(e) => setStudyMode(e.target.value as 'catch_up' | 'keep_up' | 'get_ahead')}
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-violet focus:ring-2 focus:ring-brand-violet/20"
+                    disabled={studentUser.learningPreferences?.studyModeLocked}
+                  >
+                    <option value="catch_up">Catch Up – Focus on gaps first</option>
+                    <option value="keep_up">Keep Up – Balanced progress</option>
+                    <option value="get_ahead">Get Ahead – Challenge me more</option>
+                  </select>
+                  {studentUser.learningPreferences?.studyModeLocked && (
+                    <p className="text-[11px] text-amber-600 mt-1">
+                      Study mode is locked by your parent/guardian.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-xs text-slate-600">
+                  <strong>What your tutor does:</strong> Gives hints, explains concepts, tracks your progress, and celebrates your wins.
+                </p>
+                <p className="text-xs text-slate-600 mt-1">
+                  <strong>What your tutor won't do:</strong> Give test answers, chat about personal topics, or share contact info.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  type="submit"
+                  disabled={savingTutorSettings}
+                  className="inline-flex items-center px-4 py-2 rounded-lg bg-brand-violet text-white text-sm font-semibold hover:bg-brand-violet/90 disabled:opacity-60"
+                >
+                  {savingTutorSettings ? 'Saving…' : 'Save tutor settings'}
+                </button>
+                {tutorSettingsMessage && (
+                  <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                    {tutorSettingsMessage}
+                  </span>
+                )}
+                {tutorSettingsError && (
+                  <span className="text-xs text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                    {tutorSettingsError}
                   </span>
                 )}
               </div>

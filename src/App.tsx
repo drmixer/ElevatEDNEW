@@ -12,7 +12,9 @@ import AuthResetPage from './pages/AuthResetPage';
 import type { UserRole } from './types';
 
 const StudentDashboard = lazy(() => import('./components/Student/StudentDashboard'));
+const StudentDashboardSimplified = lazy(() => import('./components/Student/StudentDashboardSimplified'));
 const ParentDashboard = lazy(() => import('./components/Parent/ParentDashboard'));
+const ParentDashboardSimplified = lazy(() => import('./components/Parent/ParentDashboardSimplified'));
 const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard'));
 const CatalogPage = lazy(() => import('./pages/CatalogPage'));
 const ModulePage = lazy(() => import('./pages/ModulePage'));
@@ -21,6 +23,10 @@ const LessonPlayerPage = lazy(() => import('./pages/LessonPlayerPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const AccountSettingsPage = lazy(() => import('./pages/AccountSettingsPage'));
+
+// Feature flag: Set to true to use the new simplified dashboards
+// Toggle this to switch between old (cluttered) and new (clean) dashboards
+const USE_SIMPLIFIED_DASHBOARDS = true;
 
 const DashboardContainer: React.FC<{ children: React.ReactElement; transitionKey: string }> = ({
   children,
@@ -117,7 +123,7 @@ const AppContent: React.FC = () => {
               <ProtectedRoute allowedRoles={['student']}>
                 <DashboardContainer transitionKey="student">
                   <Suspense fallback={<DashboardRouteSkeleton role="student" />}>
-                    <StudentDashboard />
+                    {USE_SIMPLIFIED_DASHBOARDS ? <StudentDashboardSimplified /> : <StudentDashboard />}
                   </Suspense>
                 </DashboardContainer>
               </ProtectedRoute>
@@ -129,7 +135,7 @@ const AppContent: React.FC = () => {
               <ProtectedRoute allowedRoles={['parent']}>
                 <DashboardContainer transitionKey="parent">
                   <Suspense fallback={<DashboardRouteSkeleton role="parent" />}>
-                    <ParentDashboard />
+                    {USE_SIMPLIFIED_DASHBOARDS ? <ParentDashboardSimplified /> : <ParentDashboard />}
                   </Suspense>
                 </DashboardContainer>
               </ProtectedRoute>

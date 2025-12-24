@@ -556,3 +556,17 @@ export const updateLearningPreferences = async (
     throw new Error(error.message ?? 'Failed to update learning preferences');
   }
 };
+
+export const updateTutorName = async (
+  studentId: string,
+  tutorName: string | null,
+): Promise<void> => {
+  const { error } = await supabase
+    .from('student_profiles')
+    .update({ tutor_name: tutorName })
+    .eq('id', studentId);
+
+  if (error) {
+    throw new Error(error.message ?? 'Failed to update tutor name');
+  }
+};

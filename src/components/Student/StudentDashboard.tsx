@@ -333,7 +333,7 @@ const StudentDashboard: React.FC = () => {
   const [studyMode, setStudyMode] = useState<'catch_up' | 'keep_up' | 'get_ahead'>(
     student?.learningPreferences?.studyMode ?? 'keep_up',
   );
-  const studyModeLocked = student.learningPreferences.studyModeLocked ?? false;
+  const studyModeLocked = student?.learningPreferences?.studyModeLocked ?? false;
   const [weeklyPlanStatusTracked, setWeeklyPlanStatusTracked] = useState(false);
   const [celebrationQueue, setCelebrationQueue] = useState<CelebrationMoment[]>([]);
   const [celebrationShownIds, setCelebrationShownIds] = useState<Set<string>>(new Set());
@@ -694,8 +694,8 @@ const StudentDashboard: React.FC = () => {
   const parentGoalActive = Boolean(parentGoals?.weeklyLessons || parentGoals?.practiceMinutes);
 
   const studyModeSetAt = useMemo(
-    () => (student?.learningPreferences.studyModeSetAt ? new Date(student.learningPreferences.studyModeSetAt) : null),
-    [student?.learningPreferences.studyModeSetAt],
+    () => (student?.learningPreferences?.studyModeSetAt ? new Date(student.learningPreferences.studyModeSetAt) : null),
+    [student?.learningPreferences?.studyModeSetAt],
   );
   const studyModeExpired =
     studyModeSetAt != null ? Date.now() - studyModeSetAt.getTime() > 1000 * 60 * 60 * 24 * 7 : false;
@@ -809,16 +809,16 @@ const StudentDashboard: React.FC = () => {
   useEffect(() => {
     if (!student) return;
     setTutorNameInput(student.tutorName ?? '');
-    setWeeklyPlanIntensity(student.learningPreferences.weeklyPlanIntensity ?? 'normal');
+    setWeeklyPlanIntensity(student.learningPreferences?.weeklyPlanIntensity ?? 'normal');
     setWeeklyPlanFocus(
-      (student.learningPreferences.weeklyPlanFocus as Subject | 'balanced') ??
-      student.learningPreferences.focusSubject ??
+      (student.learningPreferences?.weeklyPlanFocus as Subject | 'balanced') ??
+      student.learningPreferences?.focusSubject ??
       'balanced',
     );
-    setWeeklyIntent(student.learningPreferences.weeklyIntent ?? 'balanced');
-    setStudyMode(student.learningPreferences.studyMode ?? 'keep_up');
-    setMixInMode(student.learningPreferences.mixInMode ?? 'auto');
-    setElectiveEmphasis(student.learningPreferences.electiveEmphasis ?? 'light');
+    setWeeklyIntent(student.learningPreferences?.weeklyIntent ?? 'balanced');
+    setStudyMode(student.learningPreferences?.studyMode ?? 'keep_up');
+    setMixInMode(student.learningPreferences?.mixInMode ?? 'auto');
+    setElectiveEmphasis(student.learningPreferences?.electiveEmphasis ?? 'light');
   }, [student]);
 
   useEffect(() => {
