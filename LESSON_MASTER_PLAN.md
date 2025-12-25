@@ -1,9 +1,11 @@
 # ElevatED Lesson System Master Plan
 
+> ⚠️ **Note:** This plan has been consolidated into **[MASTER_IMPROVEMENTS_PLAN.md](./MASTER_IMPROVEMENTS_PLAN.md)**. See that document for current status and roadmap. This file is retained for detailed implementation reference.
+
 > **Goal:** Deliver a complete, high-quality lesson experience from UI to content
 > 
 > **Created:** December 17, 2024  
-> **Status:** ✅ COMPLETE - All Content Quality Issues Resolved
+> **Status:** ✅ COMPLETE - All Content Quality Issues Resolved - See Master Plan
 > **Last Updated:** December 18, 2024
 
 ---

@@ -192,7 +192,7 @@
             },
             {
                 "id": "5m-frac-2",
-                "prompt": "What is 3/4 - 1/4?",
+                "prompt": "What is 3/4 - 1/4? (Simplify your answer.)",
                 "type": "multiple_choice",
                 "difficulty": 2,
                 "strand": "Fractions",
@@ -204,7 +204,7 @@
                     },
                     {
                         "text": "2/4",
-                        "isCorrect": true
+                        "isCorrect": false
                     },
                     {
                         "text": "1/2",

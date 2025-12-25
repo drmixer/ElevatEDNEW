@@ -90,6 +90,7 @@ import {
 import ParentSummaryCard from './ParentSummaryCard';
 import PathExplanationCard from './PathExplanationCard';
 import WeeklyCoachingSuggestions from './WeeklyCoachingSuggestions';
+import ParentLearningAssistant from './ParentLearningAssistant';
 
 // Extracted modules
 import {
@@ -7307,6 +7308,11 @@ const ParentDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Parent Learning Assistant - AI-powered insights for parents */}
+      {dashboard?.children && dashboard.children.length > 0 && (
+        <ParentLearningAssistant children={dashboard.children} />
+      )}
     </>
   );
 };

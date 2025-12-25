@@ -16,7 +16,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchStudentDashboardData } from '../../services/dashboardService';
 import { useStudentPath, useStudentStats } from '../../hooks/useStudentData';
-import { formatSubjectLabel } from '../../lib/subjects';
+import { formatSubjectLabel, normalizeSubject } from '../../lib/subjects';
 import type { DashboardLesson, Student, Subject } from '../../types';
 
 // ============================================================================
@@ -38,8 +38,27 @@ const SUBJECT_COLORS: Record<Subject | string, { bg: string; text: string; borde
     computer_science: { bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200' },
 };
 
-const getSubjectColor = (subject: Subject | string) =>
-    SUBJECT_COLORS[subject] || SUBJECT_COLORS.study_skills;
+const DEFAULT_SUBJECT_COLOR = { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' };
+
+/**
+ * Get the color scheme for a subject. Normalizes raw subject strings first.
+ */
+const getSubjectColor = (subject: Subject | string | null | undefined) => {
+    if (!subject) return DEFAULT_SUBJECT_COLOR;
+
+    // Normalize the subject to handle raw strings like "English Language Arts"
+    const normalized = normalizeSubject(subject);
+    if (normalized && SUBJECT_COLORS[normalized]) {
+        return SUBJECT_COLORS[normalized];
+    }
+
+    // Fallback: try direct lookup (for already normalized subjects)
+    if (typeof subject === 'string' && SUBJECT_COLORS[subject]) {
+        return SUBJECT_COLORS[subject];
+    }
+
+    return DEFAULT_SUBJECT_COLOR;
+};
 
 // ============================================================================
 // Sub-components

@@ -41,6 +41,7 @@
                 "difficulty": 1,
                 "strand": "Addition",
                 "standard": "2.NBT.B.5",
+                "explanation": "Count up from 5: 6, 7, 8, 9, 10, 11, 12. Or use doubles: 5 + 5 = 10, then add 2 more to get 12.",
                 "options": [
                     {
                         "text": "11",
@@ -67,6 +68,7 @@
                 "difficulty": 1,
                 "strand": "Addition",
                 "standard": "2.NBT.B.5",
+                "explanation": "Think of 9 as 10 - 1. So 8 + 9 = 8 + 10 - 1 = 18 - 1 = 17. Or use doubles: 8 + 8 = 16, plus 1 more = 17.",
                 "options": [
                     {
                         "text": "16",
@@ -93,6 +95,7 @@
                 "difficulty": 1,
                 "strand": "Addition",
                 "standard": "2.NBT.B.5",
+                "explanation": "When you add 10, the tens digit goes up by 1. 25 has 2 tens, add 1 more ten to get 3 tens = 35.",
                 "options": [
                     {
                         "text": "30",
@@ -119,6 +122,7 @@
                 "difficulty": 1,
                 "strand": "Addition",
                 "standard": "2.NBT.B.5",
+                "explanation": "14 + 6 makes a friendly 10! 4 + 6 = 10, so 14 + 6 = 20.",
                 "options": [
                     {
                         "text": "18",
@@ -145,6 +149,7 @@
                 "difficulty": 1,
                 "strand": "Addition",
                 "standard": "2.NBT.B.5",
+                "explanation": "This is an addition problem. Sam starts with 8 toys and gets more, so we add: 8 + 5 = 13 toys.",
                 "options": [
                     {
                         "text": "12",
@@ -171,6 +176,7 @@
                 "difficulty": 1,
                 "strand": "Subtraction",
                 "standard": "2.NBT.B.5",
+                "explanation": "Start at 15 and count back 7: 14, 13, 12, 11, 10, 9, 8. Or think: 15 - 5 = 10, then 10 - 2 = 8.",
                 "options": [
                     {
                         "text": "7",
@@ -197,6 +203,7 @@
                 "difficulty": 1,
                 "strand": "Subtraction",
                 "standard": "2.NBT.B.5",
+                "explanation": "20 - 5 = 15. Think of it as taking away half of 10 from 20.",
                 "options": [
                     {
                         "text": "10",
@@ -223,6 +230,7 @@
                 "difficulty": 1,
                 "strand": "Subtraction",
                 "standard": "2.NBT.B.5",
+                "explanation": "12 - 4 = 8. You can count back from 12: 11, 10, 9, 8. Or think: 12 - 2 = 10, then 10 - 2 = 8.",
                 "options": [
                     {
                         "text": "6",
@@ -249,6 +257,7 @@
                 "difficulty": 1,
                 "strand": "Subtraction",
                 "standard": "2.NBT.B.5",
+                "explanation": "When things go away, we subtract. 16 - 9 = 7. Think: 16 - 10 = 6, then add 1 back = 7.",
                 "options": [
                     {
                         "text": "5",
@@ -275,6 +284,7 @@
                 "difficulty": 1,
                 "strand": "Place Value",
                 "standard": "2.NBT.A.1",
+                "explanation": "In 34, the 3 is in the tens place. It means 3 groups of ten, which equals 30.",
                 "options": [
                     {
                         "text": "3 ones",
@@ -285,7 +295,7 @@
                         "isCorrect": true
                     },
                     {
-                        "text": "30 ones",
+                        "text": "34 ones",
                         "isCorrect": false
                     },
                     {
@@ -301,6 +311,7 @@
                 "difficulty": 1,
                 "strand": "Place Value",
                 "standard": "2.NBT.A.1",
+                "explanation": "4 tens = 40 and 5 ones = 5. Put them together: 40 + 5 = 45.",
                 "options": [
                     {
                         "text": "54",
@@ -327,6 +338,7 @@
                 "difficulty": 1,
                 "strand": "Place Value",
                 "standard": "2.NBT.A.1",
+                "explanation": "Compare the tens first. 65 has 6 tens, 56 has 5 tens. 6 tens is more than 5 tens, so 65 is greater.",
                 "options": [
                     {
                         "text": "56",
@@ -353,6 +365,7 @@
                 "difficulty": 1,
                 "strand": "Place Value",
                 "standard": "2.NBT.A.1",
+                "explanation": "Adding 10 means adding one more ten. 47 has 4 tens; add 1 ten to get 5 tens = 57.",
                 "options": [
                     {
                         "text": "48",
@@ -416,6 +429,7 @@
                 "difficulty": 1,
                 "strand": "Reading",
                 "standard": "RL.2.1",
+                "explanation": "The sentence says the dog 'ran fast.' The action word (verb) tells us what the dog did.",
                 "options": [
                     {
                         "text": "Slept",
@@ -442,6 +456,7 @@
                 "difficulty": 1,
                 "strand": "Reading",
                 "standard": "RL.2.1",
+                "explanation": "The word 'because' tells us the reason. Sam was happy because he got a new toy.",
                 "options": [
                     {
                         "text": "He was sleepy",
@@ -463,11 +478,12 @@
             },
             {
                 "id": "2e-rd-3",
-                "prompt": "Read: 'The cat sat on the mat. It was soft.' What was soft?",
+                "prompt": "Read: 'The cat sat on the mat. The mat was soft.' What was soft?",
                 "type": "multiple_choice",
                 "difficulty": 1,
                 "strand": "Reading",
                 "standard": "RL.2.1",
+                "explanation": "The second sentence clearly says 'The mat was soft.' So the mat is what was soft.",
                 "options": [
                     {
                         "text": "The cat",
@@ -494,6 +510,7 @@
                 "difficulty": 1,
                 "strand": "Reading",
                 "standard": "RL.2.1",
+                "explanation": "The word 'they' refers back to 'cookies' from the first sentence. The cookies smelled good.",
                 "options": [
                     {
                         "text": "Mom",
@@ -520,6 +537,7 @@
                 "difficulty": 1,
                 "strand": "Reading",
                 "standard": "RL.2.1",
+                "explanation": "The sentences are connected. It was raining, so Tim stayed inside to avoid the rain.",
                 "options": [
                     {
                         "text": "He was sick",
@@ -546,6 +564,7 @@
                 "difficulty": 1,
                 "strand": "Vocabulary",
                 "standard": "L.2.4",
+                "explanation": "'Happy' means feeling good or joyful. 'Glad' means the same thing - it's a synonym!",
                 "options": [
                     {
                         "text": "Sad",
@@ -572,6 +591,7 @@
                 "difficulty": 1,
                 "strand": "Vocabulary",
                 "standard": "L.2.4",
+                "explanation": "'Big' means large in size. 'Large' is a synonym for 'big.'",
                 "options": [
                     {
                         "text": "Small",
@@ -598,6 +618,7 @@
                 "difficulty": 1,
                 "strand": "Vocabulary",
                 "standard": "L.2.4",
+                "explanation": "The opposite of 'hot' is 'cold.' These are antonyms - words with opposite meanings.",
                 "options": [
                     {
                         "text": "Warm",
@@ -624,6 +645,7 @@
                 "difficulty": 1,
                 "strand": "Vocabulary",
                 "standard": "L.2.4",
+                "explanation": "The opposite of 'fast' is 'slow.' If something isn't fast, it moves slowly.",
                 "options": [
                     {
                         "text": "Quick",
@@ -650,6 +672,7 @@
                 "difficulty": 1,
                 "strand": "Grammar",
                 "standard": "L.2.1",
+                "explanation": "With 'she' (one person), the verb needs an 's' at the end. 'She runs' is correct. 'She run' is missing the 's.'",
                 "options": [
                     {
                         "text": "She run fast.",
@@ -676,6 +699,7 @@
                 "difficulty": 1,
                 "strand": "Grammar",
                 "standard": "L.2.1",
+                "explanation": "A verb is an action word - it tells what someone or something does. 'Barks' is what the dog does.",
                 "options": [
                     {
                         "text": "dog",
@@ -702,6 +726,7 @@
                 "difficulty": 1,
                 "strand": "Grammar",
                 "standard": "L.2.1",
+                "explanation": "A noun is a person, place, or thing. 'Cat' is a thing (an animal), so it's the noun.",
                 "options": [
                     {
                         "text": "The",
@@ -728,6 +753,7 @@
                 "difficulty": 1,
                 "strand": "Grammar",
                 "standard": "L.2.1",
+                "explanation": "To make most words plural (meaning more than one), add 's' to the end. One cat, two cats!",
                 "options": [
                     {
                         "text": "cates",
