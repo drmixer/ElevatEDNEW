@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import React, { useMemo, useState, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
     AlertCircle,
@@ -18,8 +18,13 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchParentDashboardData } from '../../services/dashboardService';
+import { updateLearningPreferences } from '../../services/profileService';
 import { formatSubjectLabel } from '../../lib/subjects';
-import type { Parent, ParentChildSnapshot } from '../../types';
+import type { Parent, ParentChildSnapshot, LearningPreferences, Subject } from '../../types';
+import SubjectStatusCards from './SubjectStatusCards';
+import WeeklyCoachingSuggestions from './WeeklyCoachingSuggestions';
+import ParentTutorControls from './ParentTutorControls';
+import { defaultLearningPreferences } from '../../types';
 import {
     ResponsiveContainer,
     AreaChart,
@@ -381,6 +386,12 @@ const QuickActions: React.FC = () => (
 const ParentDashboardSimplified: React.FC = () => {
     const { user } = useAuth();
     const parent = (user as Parent) ?? null;
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    // Track which child is expanded for detailed view (Sprint 3)
+    const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+    const [savingTutor, setSavingTutor] = useState<string | null>(null);
 
     // Fetch dashboard data
     const {
@@ -398,6 +409,35 @@ const ParentDashboardSimplified: React.FC = () => {
         if (!dashboard?.alerts) return 0;
         return dashboard.alerts.filter((a) => a.type === 'warning').length;
     }, [dashboard?.alerts]);
+
+    // Get selected child for expanded view
+    const selectedChild = useMemo(() => {
+        if (!selectedChildId || !dashboard?.children) return null;
+        return dashboard.children.find((c) => c.id === selectedChildId) ?? null;
+    }, [selectedChildId, dashboard?.children]);
+
+    // Handle tutor settings save
+    const handleSaveTutorSettings = useCallback(
+        async (childId: string, updates: Partial<LearningPreferences>) => {
+            setSavingTutor(childId);
+            try {
+                await updateLearningPreferences(childId, updates);
+                // Invalidate dashboard to refresh child data
+                await queryClient.invalidateQueries({ queryKey: ['parent-dashboard'] });
+            } finally {
+                setSavingTutor(null);
+            }
+        },
+        [queryClient],
+    );
+
+    // Navigate to subject details
+    const handleViewSubject = useCallback(
+        (childId: string, subject: Subject) => {
+            navigate(`/parent/child/${childId}?subject=${subject}`);
+        },
+        [navigate],
+    );
 
     // Loading state
     if (isLoading && !dashboard) {
@@ -435,6 +475,15 @@ const ParentDashboardSimplified: React.FC = () => {
                         {children.length > 0 && (
                             <span className="text-sm text-slate-500">
                                 {children.length} learner{children.length > 1 ? 's' : ''}
+                                {selectedChildId && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedChildId(null)}
+                                        className="ml-3 text-teal-600 hover:text-teal-700 font-medium"
+                                    >
+                                        Show all
+                                    </button>
+                                )}
                             </span>
                         )}
                     </div>
@@ -458,12 +507,59 @@ const ParentDashboardSimplified: React.FC = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {children.map((child) => (
-                                <ChildCard key={child.id} child={child} />
-                            ))}
+                            {children
+                                .filter((c) => !selectedChildId || c.id === selectedChildId)
+                                .map((child) => (
+                                    <div
+                                        key={child.id}
+                                        onClick={() => setSelectedChildId(selectedChildId === child.id ? null : child.id)}
+                                        className={`cursor-pointer transition-all ${selectedChildId === child.id ? 'md:col-span-2' : ''
+                                            }`}
+                                    >
+                                        <ChildCard child={child} />
+                                    </div>
+                                ))}
                         </div>
                     )}
                 </section>
+
+                {/* Sprint 3: Selected Child Detailed View */}
+                {selectedChild && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="space-y-8"
+                    >
+                        {/* Subject Status Cards */}
+                        {selectedChild.subjectStatuses && selectedChild.subjectStatuses.length > 0 && (
+                            <SubjectStatusCards
+                                childName={selectedChild.name}
+                                statuses={selectedChild.subjectStatuses}
+                                onViewSubject={(subject) => handleViewSubject(selectedChild.id, subject)}
+                            />
+                        )}
+
+                        {/* Two Column Layout: Coaching + Tutor Controls */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Weekly Coaching Suggestions */}
+                            <WeeklyCoachingSuggestions
+                                childName={selectedChild.name}
+                                suggestions={selectedChild.coachingSuggestions ?? []}
+                                focusSubject={
+                                    selectedChild.masteryBySubject?.[0]?.subject ?? null
+                                }
+                            />
+
+                            {/* AI Tutor Controls */}
+                            <ParentTutorControls
+                                childName={selectedChild.name}
+                                preferences={selectedChild.learningPreferences ?? defaultLearningPreferences}
+                                onSave={(updates) => handleSaveTutorSettings(selectedChild.id, updates)}
+                                saving={savingTutor === selectedChild.id}
+                            />
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Weekly Summary Chart */}
                 {dashboard?.activitySeries && dashboard.activitySeries.length > 0 && (

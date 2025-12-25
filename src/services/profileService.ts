@@ -545,11 +545,29 @@ export const fetchUserProfile = async (userId: string): Promise<User> => {
 
 export const updateLearningPreferences = async (
   studentId: string,
-  preferences: LearningPreferences,
+  updates: Partial<LearningPreferences>,
 ): Promise<void> => {
+  // First, fetch current preferences to merge with updates
+  const { data: currentProfile, error: fetchError } = await supabase
+    .from('student_profiles')
+    .select('learning_style')
+    .eq('id', studentId)
+    .single();
+
+  if (fetchError) {
+    throw new Error(fetchError.message ?? 'Failed to fetch current preferences');
+  }
+
+  // Merge existing preferences with updates
+  const existingPrefs = castLearningPreferences(currentProfile?.learning_style);
+  const mergedPreferences: LearningPreferences = {
+    ...existingPrefs,
+    ...updates,
+  };
+
   const { error } = await supabase
     .from('student_profiles')
-    .update({ learning_style: preferences })
+    .update({ learning_style: mergedPreferences })
     .eq('id', studentId);
 
   if (error) {

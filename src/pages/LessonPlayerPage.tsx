@@ -58,7 +58,7 @@ const LessonContent: React.FC<{
     lessonDetail: NonNullable<Awaited<ReturnType<typeof fetchLessonDetail>>>;
     practiceQuestions: LessonPracticeQuestion[];
     onAnswerSubmit: (questionId: number, optionId: number, isCorrect: boolean) => void;
-    onAskTutor: (context: string) => void;
+    onAskTutor?: (context: string) => void;
     xpEarned: number;
 }> = ({
     lessonDetail,
@@ -492,7 +492,7 @@ const LessonPlayerPage: React.FC = () => {
                             lessonDetail={lessonDetail}
                             practiceQuestions={practiceQuestions}
                             onAnswerSubmit={handleAnswerSubmit}
-                            onAskTutor={handleAskTutor}
+                            onAskTutor={studentId ? handleAskTutor : undefined}
                             xpEarned={xpEarned}
                         />
                     </main>

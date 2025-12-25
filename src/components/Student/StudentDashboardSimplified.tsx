@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
     ArrowRight,
@@ -8,6 +8,7 @@ import {
     Clock,
     Flame,
     Play,
+    Settings,
     Sparkles,
     Star,
     Target,
@@ -15,8 +16,13 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchStudentDashboardData } from '../../services/dashboardService';
+import { updateLearningPreferences } from '../../services/profileService';
 import { useStudentPath, useStudentStats } from '../../hooks/useStudentData';
 import { formatSubjectLabel, normalizeSubject } from '../../lib/subjects';
+import TutorOnboarding, { shouldShowTutorOnboarding } from './TutorOnboarding';
+import WeeklyPlanCard from './WeeklyPlanCard';
+import StudyModeSelector, { type StudyMode } from './StudyModeSelector';
+import CelebrationSystem from './CelebrationSystem';
 import type { DashboardLesson, Student, Subject } from '../../types';
 
 // ============================================================================
@@ -70,7 +76,11 @@ interface WelcomeHeaderProps {
     avatarId?: string | null;
 }
 
-const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ name, xp }) => {
+interface WelcomeHeaderPropsExtended extends WelcomeHeaderProps {
+    onCustomizeTutor?: () => void;
+}
+
+const WelcomeHeader: React.FC<WelcomeHeaderPropsExtended> = ({ name, xp, onCustomizeTutor }) => {
     const firstName = name?.split(' ')[0] || 'Learner';
     const today = new Date().toLocaleDateString(undefined, {
         weekday: 'long',
@@ -87,6 +97,18 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ name, xp }) => {
                 <p className="text-slate-500 mt-1">{today}</p>
             </div>
             <div className="flex items-center gap-3">
+                {/* Customize Tutor button */}
+                {onCustomizeTutor && (
+                    <button
+                        type="button"
+                        onClick={onCustomizeTutor}
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                        title="Customize your AI tutor"
+                    >
+                        <Settings className="w-4 h-4" />
+                        <span className="hidden sm:inline">Tutor</span>
+                    </button>
+                )}
                 {/* XP Badge */}
                 <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full border border-indigo-100">
                     <Star className="w-5 h-5 text-indigo-600" />
@@ -431,9 +453,38 @@ const UpNextList: React.FC<UpNextListProps> = ({ lessons, maxItems = 3 }) => {
 // ============================================================================
 
 const StudentDashboardSimplified: React.FC = () => {
-    const { user } = useAuth();
+    const { user, refreshUser } = useAuth();
     const student = (user as Student) ?? null;
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    // Tutor onboarding modal state
+    const [showTutorOnboarding, setShowTutorOnboarding] = useState(false);
+
+    // Check if tutor onboarding should show on mount
+    useEffect(() => {
+        if (student?.id && shouldShowTutorOnboarding(student.id)) {
+            // Small delay to let dashboard render first
+            const timer = setTimeout(() => setShowTutorOnboarding(true), 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [student?.id]);
+
+    const handleOpenTutorOnboarding = useCallback(() => {
+        setShowTutorOnboarding(true);
+    }, []);
+
+    const handleCloseTutorOnboarding = useCallback(() => {
+        setShowTutorOnboarding(false);
+    }, []);
+
+    const handleTutorOnboardingComplete = useCallback(async () => {
+        setShowTutorOnboarding(false);
+        // Refresh user data to get updated preferences
+        await refreshUser?.();
+        // Invalidate any persona-related queries
+        queryClient.invalidateQueries({ queryKey: ['tutor-persona'] }).catch(() => undefined);
+    }, [refreshUser, queryClient]);
 
     // Fetch dashboard data
     const {
@@ -482,6 +533,75 @@ const StudentDashboardSimplified: React.FC = () => {
     const streakDays = studentStats?.streakDays ?? student?.streakDays ?? 0;
     const totalXp = studentStats?.xpTotal ?? student?.xp ?? 0;
 
+    // Compute weekly minutes from daily activity
+    const minutesThisWeek = useMemo(() => {
+        if (!dashboard?.dailyActivity) return 0;
+        return dashboard.dailyActivity.reduce((acc, day) => acc + (day.practiceMinutes ?? 0), 0);
+    }, [dashboard?.dailyActivity]);
+
+    // Get focus subject from diagnostic or balanced
+    const focusSubject = useMemo(() => {
+        if (student?.learningPreferences?.weeklyPlanFocus) {
+            return student.learningPreferences.weeklyPlanFocus;
+        }
+        // If student has weaknesses, focus on the first one
+        if (student?.weaknesses?.length) {
+            const firstWeakness = student.weaknesses[0];
+            const normalized = normalizeSubject(firstWeakness);
+            if (normalized) return normalized as Subject;
+        }
+        return 'balanced' as const;
+    }, [student?.learningPreferences?.weeklyPlanFocus, student?.weaknesses]);
+
+    // Handle intensity change
+    const handleIntensityChange = useCallback(
+        async (intensity: 'light' | 'normal' | 'challenge') => {
+            if (!student?.id) return;
+            try {
+                await updateLearningPreferences(student.id, {
+                    weeklyPlanIntensity: intensity,
+                });
+                await refreshUser?.();
+            } catch (err) {
+                console.error('Failed to update intensity:', err);
+            }
+        },
+        [student?.id, refreshUser]
+    );
+
+    // Handle focus change
+    const handleFocusChange = useCallback(
+        async (focus: Subject | 'balanced') => {
+            if (!student?.id) return;
+            try {
+                await updateLearningPreferences(student.id, {
+                    weeklyPlanFocus: focus,
+                });
+                await refreshUser?.();
+            } catch (err) {
+                console.error('Failed to update focus:', err);
+            }
+        },
+        [student?.id, refreshUser]
+    );
+
+    // Handle study mode change
+    const handleStudyModeChange = useCallback(
+        async (mode: StudyMode) => {
+            if (!student?.id) return;
+            try {
+                await updateLearningPreferences(student.id, {
+                    studyMode: mode,
+                    studyModeSetAt: new Date().toISOString(),
+                });
+                await refreshUser?.();
+            } catch (err) {
+                console.error('Failed to update study mode:', err);
+            }
+        },
+        [student?.id, refreshUser]
+    );
+
     // Loading state
     if (dashboardLoading && !dashboard) {
         return (
@@ -527,53 +647,100 @@ const StudentDashboardSimplified: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white p-6 md:p-8 lg:p-12">
-            <div className="max-w-4xl mx-auto">
-                {/* Welcome Header */}
-                <WelcomeHeader
-                    name={student?.name ?? 'Learner'}
-                    xp={totalXp}
-                    avatarId={student?.studentAvatarId}
-                />
+        <>
+            {/* Celebration System */}
+            <CelebrationSystem
+                celebrations={dashboard?.celebrationMoments}
+                currentLevel={student?.level}
+                currentStreak={streakDays}
+            />
 
-                {/* Primary: Today's Focus */}
-                <section className="mb-8">
-                    <TodaysFocusCard lesson={todaysFocus} isLoading={dashboardLoading} />
-                </section>
+            {/* Tutor Onboarding Modal */}
+            <TutorOnboarding
+                isOpen={showTutorOnboarding}
+                onClose={handleCloseTutorOnboarding}
+                onComplete={handleTutorOnboardingComplete}
+                studentId={student?.id ?? ''}
+                studentName={student?.name}
+                currentPersonaId={student?.tutorAvatarId}
+                currentTutorName={student?.tutorName}
+            />
 
-                {/* Stats Row */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <WeeklyProgressCard
-                        lessonsCompleted={lessonsThisWeek}
-                        lessonsTarget={weeklyTarget}
+            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white p-6 md:p-8 lg:p-12">
+                <div className="max-w-4xl mx-auto">
+                    {/* Welcome Header */}
+                    <WelcomeHeader
+                        name={student?.name ?? 'Learner'}
+                        xp={totalXp}
+                        avatarId={student?.studentAvatarId}
+                        onCustomizeTutor={handleOpenTutorOnboarding}
                     />
-                    <StreakCard streakDays={streakDays} />
-                </section>
 
-                {/* Up Next List */}
-                {upcomingLessons.length > 0 && (
+                    {/* Study Mode Selector */}
+                    <section className="mb-6">
+                        <StudyModeSelector
+                            value={student?.learningPreferences?.studyMode ?? 'keep_up'}
+                            onChange={handleStudyModeChange}
+                            parentLocked={student?.learningPreferences?.studyModeLocked}
+                            compact
+                        />
+                    </section>
+
+                    {/* Weekly Plan Card */}
                     <section className="mb-8">
-                        <UpNextList lessons={upcomingLessons} maxItems={3} />
+                        <WeeklyPlanCard
+                            lessonsCompleted={lessonsThisWeek}
+                            minutesCompleted={minutesThisWeek}
+                            parentGoals={dashboard?.parentGoals}
+                            preferences={student?.learningPreferences}
+                            focusSubject={focusSubject}
+                            nextLesson={todaysFocus}
+                            hasPractice={Boolean(dashboard?.todaysPlan?.length)}
+                            onIntensityChange={handleIntensityChange}
+                            onFocusChange={handleFocusChange}
+                            grade={student?.grade}
+                        />
                     </section>
-                )}
 
-                {/* Recent Wins (if any celebrations) */}
-                {dashboard?.celebrationMoments && dashboard.celebrationMoments.length > 0 && (
-                    <section>
-                        <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Wins 🎉</h3>
-                        <div className="space-y-3">
-                            {dashboard.celebrationMoments.slice(0, 2).map((moment) => (
-                                <RecentWin
-                                    key={moment.id}
-                                    title={moment.title}
-                                    description={moment.description}
-                                />
-                            ))}
-                        </div>
+                    {/* Primary: Today's Focus */}
+                    <section className="mb-8">
+                        <TodaysFocusCard lesson={todaysFocus} isLoading={dashboardLoading} />
                     </section>
-                )}
+
+                    {/* Stats Row */}
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <WeeklyProgressCard
+                            lessonsCompleted={lessonsThisWeek}
+                            lessonsTarget={weeklyTarget}
+                        />
+                        <StreakCard streakDays={streakDays} />
+                    </section>
+
+                    {/* Up Next List */}
+                    {upcomingLessons.length > 0 && (
+                        <section className="mb-8">
+                            <UpNextList lessons={upcomingLessons} maxItems={3} />
+                        </section>
+                    )}
+
+                    {/* Recent Wins (if any celebrations) */}
+                    {dashboard?.celebrationMoments && dashboard.celebrationMoments.length > 0 && (
+                        <section>
+                            <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Wins 🎉</h3>
+                            <div className="space-y-3">
+                                {dashboard.celebrationMoments.slice(0, 2).map((moment) => (
+                                    <RecentWin
+                                        key={moment.id}
+                                        title={moment.title}
+                                        description={moment.description}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
