@@ -86,6 +86,7 @@ import {
 import { recordLearningEvent } from './xpService.js';
 import { upsertPlanOptOut, listPlanOptOutsApi } from './optOuts.js';
 import { getContentCoverage, getCoverageSummary } from './contentCoverage.js';
+import { getContentQualityMetrics } from './contentQuality.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -2150,6 +2151,13 @@ export const createApiHandler = (context: ApiContext) => {
         return handleRoute(async () => {
           const summary = await getCoverageSummary();
           sendJson(res, 200, summary, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/content-quality') {
+        return handleRoute(async () => {
+          const metrics = await getContentQualityMetrics();
+          sendJson(res, 200, metrics, API_VERSION);
         });
       }
 

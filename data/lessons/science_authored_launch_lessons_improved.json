@@ -1,0 +1,546 @@
+{
+    "3-science-earth-and-space-earth-systems-geosphere-hydrosphere": {
+        "title": "Earth's Land and Water Systems",
+        "summary": "Explore the solid Earth (geosphere) and its waters (hydrosphere). Learn how rocks, soil, rivers, and oceans work together to shape our planet.",
+        "objectives": [
+            "Identify the geosphere (land) and hydrosphere (water) as Earth systems",
+            "Explain how water and land interact in the water cycle",
+            "Observe how water shapes landforms over time",
+            "Describe the importance of protecting Earth's water resources"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-ESS2-1",
+            "3-ESS2-2"
+        ],
+        "outline": {
+            "hook": "Show a time-lapse video of a river carving through rock (like the Grand Canyon forming). Ask: 'How did water create this giant canyon? Can something as soft as water really break rocks?' Let students share their initial ideas.",
+            "direct_instruction": "Introduce the geosphere (all of Earth's rocks, soil, and land) and hydrosphere (all of Earth's water - oceans, rivers, lakes, ice, and clouds). Use a globe or diagram to show these layers. Explain that these systems interact: rain falls on land, rivers carry soil to oceans, and waves shape coastlines. Demonstrate with a small stream table if available.",
+            "guided_practice": "In groups, students create a mini-model of the water cycle using a sealed container with water and soil. Observe how water evaporates, condenses, and falls back down. Discuss: 'Where is the geosphere in our model? Where is the hydrosphere? How do they interact?'",
+            "independent_practice": "Students draw and label a diagram showing how a river interacts with the land around it. They identify where erosion happens, where sediment collects, and how the river changes the landscape. They write one sentence explaining the interaction.",
+            "check_for_understanding": "Ask: 'What is one example of water changing land?' 'Why do rivers have bends and curves?' 'What would happen if all Earth's water disappeared?' Have students explain their thinking to a partner.",
+            "exit_ticket": "Students complete: 'The geosphere is ___. The hydrosphere is ___. One way they work together is ___.'",
+            "materials": [
+                "Globe or Earth diagram",
+                "Clear container with lid for mini water cycle",
+                "Blue and brown clay or play-dough",
+                "Stream table or shallow pan with sand",
+                "Water cycle diagram poster"
+            ]
+        }
+    },
+    "3-science-earth-and-space-natural-resources": {
+        "title": "Earth's Natural Resources",
+        "summary": "Discover the natural resources Earth provides. Learn to identify renewable and nonrenewable resources and understand why conservation matters.",
+        "objectives": [
+            "Define natural resources and give examples",
+            "Distinguish between renewable and nonrenewable resources",
+            "Explain why conservation of resources is important",
+            "Identify ways to reduce, reuse, and recycle"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-ESS3-1"
+        ],
+        "outline": {
+            "hook": "Bring in everyday items: a wooden pencil, plastic bottle, metal paperclip, and a glass of water. Ask: 'Where did each of these come from?' Lead students to discover that everything comes from Earth's resources. 'What would happen if we used them all up?'",
+            "direct_instruction": "Define natural resources as materials from Earth that people use. Explain renewable resources (trees, water, sunlight, wind) that can be replaced, and nonrenewable resources (coal, oil, natural gas, minerals) that take millions of years to form. Show images of resource extraction and discuss responsible use.",
+            "guided_practice": "Sort resource cards into 'Renewable' and 'Nonrenewable' categories as a class. Discuss tricky examples. Students work in pairs to think of three ways we use each type of resource in daily life.",
+            "independent_practice": "Students complete a resource hunt worksheet, identifying 10 objects in the classroom and tracing each back to its natural resource origin. They categorize each as renewable or nonrenewable and suggest one way to conserve that resource.",
+            "check_for_understanding": "Play 'Resource Quick Quiz': Give a resource and have students hold up 'R' for renewable or 'N' for nonrenewable. Discuss any that students find challenging.",
+            "exit_ticket": "Students write: 'One renewable resource is ___ because ___. One way I can help conserve resources is ___.'",
+            "materials": [
+                "Collection of everyday objects from different resources",
+                "Resource sorting cards (images of trees, coal, water, oil, etc.)",
+                "R and N letter cards for each student",
+                "Resource hunt worksheet",
+                "Recycling symbol poster"
+            ]
+        }
+    },
+    "3-science-earth-and-space-solar-system-relative-scale": {
+        "title": "Our Solar System: Size and Scale",
+        "summary": "Journey through our solar system! Learn about the Sun, planets, and how incredibly vast space really is through hands-on scale models.",
+        "objectives": [
+            "Name the eight planets in order from the Sun",
+            "Compare the relative sizes of planets and the Sun",
+            "Understand distance in the solar system using models",
+            "Explain why Earth is special for supporting life"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-ESS1-1"
+        ],
+        "outline": {
+            "hook": "Ask: 'If the Sun were the size of a basketball, how big would Earth be?' Let students guess, then reveal that Earth would be smaller than a pea! Show a scale comparison image. 'Today we're going to explore just how BIG our solar system really is.'",
+            "direct_instruction": "Introduce the Sun as our star (a giant ball of burning gas), then the eight planets in order using a mnemonic: 'My Very Energetic Mother Just Served Us Nachos.' Show relative size images comparing rocky inner planets (Mercury, Venus, Earth, Mars) to gas giants (Jupiter, Saturn, Uranus, Neptune). Explain distance using light travel time.",
+            "guided_practice": "Create a class scale model: assign each student a planet to hold (use different-sized balls or fruits). Line up in order from the Sun at one end of the playground. Calculate actual walking distances if the Sun is at the end. Discuss: 'Why is there so much empty space?'",
+            "independent_practice": "Students create a solar system foldable book with each page showing a planet, its distance from the Sun, its size compared to Earth, and one interesting fact. They color and label accurately.",
+            "check_for_understanding": "Ask: 'Which planet is biggest? Smallest? Closest to the Sun? Farthest?' 'Why do you think Earth is the only planet we know of with life?' Have students justify their answers.",
+            "exit_ticket": "Students draw Earth's position in the solar system and write one reason why Earth is special.",
+            "materials": [
+                "Basketball or large ball (Sun)",
+                "Various sized balls for planets",
+                "Planet images and fact cards",
+                "Foldable book template",
+                "Solar system scale chart"
+            ]
+        }
+    },
+    "3-science-earth-and-space-weather-and-climate": {
+        "title": "Weather and Climate",
+        "summary": "Explore the difference between weather (what's happening now) and climate (patterns over time). Learn to observe, measure, and predict weather patterns.",
+        "objectives": [
+            "Distinguish between weather and climate",
+            "Identify and measure weather variables (temperature, precipitation, wind)",
+            "Recognize weather patterns and make simple predictions",
+            "Explain how weather affects daily life"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-ESS2-1"
+        ],
+        "outline": {
+            "hook": "Look outside the window together. Ask: 'What is the weather like right now?' Record observations. Then ask: 'What is the weather usually like here in [month]?' Explain: 'The first answer is weather. The second is climate. What's the difference?'",
+            "direct_instruction": "Define weather as day-to-day conditions and climate as long-term patterns. Introduce weather vocabulary: temperature (how hot or cold), precipitation (rain, snow, sleet), wind (moving air), humidity (water in air). Show weather instruments: thermometer, rain gauge, wind vane, anemometer. Demonstrate how to read each.",
+            "guided_practice": "Take students outside for a weather station activity. In groups, students measure current temperature, observe clouds, feel wind direction, and record data. Compare results across groups and discuss any differences.",
+            "independent_practice": "Students start a week-long weather journal. Each day they record temperature, precipitation, cloud cover, and wind. At the end of the week, they identify patterns and make a prediction for the next day.",
+            "check_for_understanding": "Ask: 'Is a hot summer day weather or climate?' 'Is knowing that December is usually cold weather or climate?' 'How can knowing climate help you pack for a vacation?'",
+            "exit_ticket": "Students complete: 'Weather is ___. Climate is ___. Today's weather is ___. Our climate here is usually ___.'",
+            "materials": [
+                "Thermometer",
+                "Rain gauge or measuring cup",
+                "Wind vane or ribbon on stick",
+                "Cloud identification chart",
+                "Weather journal templates"
+            ]
+        }
+    },
+    "3-science-life-science-adaptations": {
+        "title": "Animal and Plant Adaptations",
+        "summary": "Discover how living things have special features that help them survive. Explore amazing adaptations from camouflage to hibernation!",
+        "objectives": [
+            "Define adaptation as a trait that helps survival",
+            "Identify adaptations in various animals and plants",
+            "Explain how adaptations match an organism's environment",
+            "Predict what adaptations an animal might need in a new environment"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-LS4-3"
+        ],
+        "outline": {
+            "hook": "Show a picture of a leaf-tailed gecko camouflaged on tree bark. Ask: 'Can you find the animal?' Reveal the gecko. 'How does looking like a leaf help this animal survive?' Introduce the concept of adaptation.",
+            "direct_instruction": "Define adaptation as a body part or behavior that helps an organism survive in its environment. Show examples: thick fur for cold climates, webbed feet for swimming, sharp teeth for hunting, bright colors as warning signs. Discuss plant adaptations: cacti storing water, venus flytraps catching insects, tall trees reaching sunlight.",
+            "guided_practice": "Play 'Adaptation Match': Students match animals to their environments based on visible adaptations. Discuss: 'A polar bear has thick white fur. What environment does it live in? Why is white fur helpful there?'",
+            "independent_practice": "Students choose an animal and create an 'Adaptation ID Card' including: the animal's name, its habitat, three adaptations, and how each adaptation helps survival. They draw the animal showing its adaptations.",
+            "check_for_understanding": "Present a mystery animal: 'This animal has long legs, a long neck, and spotted brown coloring. Where might it live? What does it eat? How do you know?' Have students use adaptation clues to figure out it's a giraffe.",
+            "exit_ticket": "Students answer: 'One adaptation I learned about is ___. It helps the animal survive by ___.'",
+            "materials": [
+                "Pictures of camouflaged animals",
+                "Adaptation matching cards",
+                "Animal habitat posters",
+                "Adaptation ID Card template",
+                "Colored pencils"
+            ]
+        }
+    },
+    "3-science-life-science-ecosystems-and-food-webs": {
+        "title": "Ecosystems and Food Webs",
+        "summary": "Explore how living things depend on each other for survival. Build a food web and discover what happens when one part is removed.",
+        "objectives": [
+            "Define ecosystem, habitat, and food web",
+            "Identify producers, consumers, and decomposers",
+            "Construct a simple food web showing energy flow",
+            "Predict effects of changes in a food web"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-LS2-1"
+        ],
+        "outline": {
+            "hook": "Show a picture of a pond ecosystem. Ask: 'What do you see living here? How many different plants and animals can you find?' Make a class list, then ask: 'What do you think would happen if all the frogs disappeared?' Introduce the idea that everything is connected.",
+            "direct_instruction": "Define ecosystem as all living and nonliving things in an area working together. Introduce producers (plants that make their own food using sunlight), consumers (animals that eat other living things), and decomposers (organisms that break down dead material). Show how energy flows: Sun → plant → grasshopper → frog → snake → hawk.",
+            "guided_practice": "Build a class food web using yarn and organism cards. Each student holds a card. Connect with yarn to show 'who eats whom.' What happens if we remove one organism? Pull that card and see which strings go slack. Discuss the effects.",
+            "independent_practice": "Students create their own food web for a chosen ecosystem (forest, ocean, desert). They include at least one producer, three consumers, and one decomposer. They draw arrows showing energy flow and label each organism's role.",
+            "check_for_understanding": "Ask: 'Why do food webs always start with the Sun?' 'What would happen to hawks if all the snakes died?' 'Why are decomposers important even though they're not cute?' Have students think-pair-share.",
+            "exit_ticket": "Students answer: 'A producer is ___. A consumer is ___. In my food web, if ___ disappeared, ___ would happen.'",
+            "materials": [
+                "Pond/forest ecosystem pictures",
+                "Organism cards (plants, herbivores, carnivores, decomposers)",
+                "Ball of yarn",
+                "Food web template",
+                "Ecosystem role labels"
+            ]
+        }
+    },
+    "3-science-life-science-heredity-intro": {
+        "title": "Heredity: Traits Passed Down",
+        "summary": "Explore how traits are passed from parents to offspring. Discover why you look like your family but are still unique!",
+        "objectives": [
+            "Define heredity and inherited traits",
+            "Identify traits that can be inherited",
+            "Compare traits among family members",
+            "Understand that offspring are similar but not identical to parents"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-LS3-1"
+        ],
+        "outline": {
+            "hook": "Show pictures of baby animals with their parents (puppy with dog, kitten with cat, calf with cow). Ask: 'How do you know these babies belong to these parents?' Lead students to notice that babies look like their parents. 'But do they look exactly the same?' Discuss similarities and differences.",
+            "direct_instruction": "Introduce heredity as the passing of traits from parents to offspring. Define inherited traits (eye color, hair color, face shape) versus acquired traits (a scar, learned skills, haircut). Show examples of inherited traits in humans: attached vs. detached earlobes, ability to roll tongue, dimples.",
+            "guided_practice": "Conduct a class trait survey: poll students on inherited traits (tongue rolling, earlobes, dimples, hitchhiker's thumb). Create a class graph showing trait distribution. Discuss: 'Why don't we all have the same traits?'",
+            "independent_practice": "Students complete a 'My Traits Investigation' where they identify 5 of their own traits, predict which might be inherited, and (if possible) compare with family photos or descriptions to see if family members share these traits.",
+            "check_for_understanding": "Ask: 'If both your parents have brown eyes, what color might your eyes be?' 'Is being good at basketball an inherited trait or an acquired trait? Why?' 'Why do siblings look similar but not identical?'",
+            "exit_ticket": "Students write: 'Heredity means ___. One trait I inherited from my family might be ___. This is different from acquired traits because ___.'",
+            "materials": [
+                "Pictures of baby animals with parents",
+                "Trait survey cards",
+                "Class graphing materials",
+                "My Traits Investigation worksheet",
+                "Family trait comparison chart"
+            ]
+        }
+    },
+    "3-science-life-science-human-body-systems-intro": {
+        "title": "Introduction to Body Systems",
+        "summary": "Take a journey inside your own body! Learn how different systems work together to keep you alive and healthy.",
+        "objectives": [
+            "Identify major body systems and their functions",
+            "Explain how different systems work together",
+            "Describe simple ways to keep body systems healthy",
+            "Model how at least one body system works"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-LS1-1"
+        ],
+        "outline": {
+            "hook": "Have students feel their own pulse on their wrist or neck. Ask: 'What is that beating? Why does it beat all the time without you thinking about it?' Then have them take a deep breath. 'What systems are working right now to keep you alive?' Introduce the idea that our bodies have many systems working together.",
+            "direct_instruction": "Introduce the major body systems with simple models: Skeletal (bones = body's frame), Muscular (muscles move bones), Circulatory (heart pumps blood like a delivery truck), Respiratory (lungs bring in oxygen like a filter), Digestive (stomach and intestines break down food like a factory), Nervous (brain sends signals like a computer). Use diagrams and simple analogies.",
+            "guided_practice": "Assign small groups to be 'experts' on one system. Each group creates a human body outline and labels their system's main parts. Groups then 'teach' their system to the class using their poster.",
+            "independent_practice": "Students complete a 'Body Systems Connections' activity where they trace what happens when they eat an apple: mouth chews (digestive), nutrients go to blood (circulatory), oxygen helps release energy (respiratory), brain tells muscles to chew (nervous), bones provide structure (skeletal).",
+            "check_for_understanding": "Play 'System Charades': call out a body activity and students identify which systems are involved. 'Running' = muscular, skeletal, circulatory, respiratory. 'Eating lunch' = digestive, muscular, skeletal.",
+            "exit_ticket": "Students name one body system, describe what it does, and explain one way to keep it healthy.",
+            "materials": [
+                "Body outline posters",
+                "Body system diagrams",
+                "Colored markers",
+                "Body systems connection worksheet",
+                "Stethoscope (optional)"
+            ]
+        }
+    },
+    "3-science-physical-science-energy-transfer": {
+        "title": "Energy Transfer: Moving Energy Around",
+        "summary": "Discover how energy moves from one place to another through heat, light, and motion. See how energy is never lost, just transferred!",
+        "objectives": [
+            "Define energy and energy transfer",
+            "Identify examples of energy transfer in everyday life",
+            "Observe energy transfer through heat, light, and motion",
+            "Explain that energy is not created or destroyed, only transferred"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-PS3-1"
+        ],
+        "outline": {
+            "hook": "Have students rub their hands together quickly for 10 seconds. Ask: 'What do you feel?' (Warmth) 'Where did that heat come from?' Lead them to understand that the motion of their hands was transformed into heat. 'Energy just moved from one form to another!'",
+            "direct_instruction": "Define energy as the ability to do work or make things happen. Explain that energy can transfer (move from one object to another) and transform (change from one type to another). Show examples: Sun's light energy → plant stores it → animal eats plant → animal has energy to move. A lightbulb converts electrical energy to light and heat.",
+            "guided_practice": "Set up energy transfer stations: (1) Roll a marble into another marble and observe motion transfer; (2) Feel a cold metal spoon in warm water as heat transfers; (3) Use a magnifying glass to focus sunlight (light energy to heat). Students rotate and record observations.",
+            "independent_practice": "Students trace an 'Energy Story': Choose an event (kicking a ball, cooking food, turning on a lamp) and draw the energy transfers involved. Label each type of energy (motion, heat, light, electrical, chemical).",
+            "check_for_understanding": "Ask: 'When you push a swing, where does your energy go?' 'Why does a phone need to be charged?' 'If energy can't be destroyed, where does the energy go when you stop a spinning top?'",
+            "exit_ticket": "Students explain: 'Energy transfer means ___. When I clap my hands, energy transfers from ___ to ___.'",
+            "materials": [
+                "Marbles and cardboard track",
+                "Metal spoons and warm water",
+                "Magnifying glass and dark paper",
+                "Energy story worksheet",
+                "Energy type labels"
+            ]
+        }
+    },
+    "3-science-physical-science-forces-balanced-unbalanced": {
+        "title": "Forces: Balanced and Unbalanced",
+        "summary": "Explore what makes things move, stop, or stay still. Learn how forces push and pull in different directions!",
+        "objectives": [
+            "Define force as a push or pull",
+            "Identify balanced and unbalanced forces",
+            "Predict motion based on force diagrams",
+            "Observe how unbalanced forces cause acceleration"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-PS2-1"
+        ],
+        "outline": {
+            "hook": "Have two students play tug-of-war with a rope (or pretend). Ask: 'Why is the rope not moving?' (Equal pulls) Then have more students join one side. 'Now what happens?' Introduce balanced (equal forces = no motion change) and unbalanced (unequal forces = motion).",
+            "direct_instruction": "Define force as a push or pull that can change an object's motion. Show balanced forces: a book sitting on a table (gravity pulls down, table pushes up equally). Show unbalanced forces: kicking a ball (your foot's push is greater than air resistance). Use arrows to represent forces and compare their lengths.",
+            "guided_practice": "Students work in pairs with toy cars on flat surfaces. They apply forces (push gently, push hard, push from both ends) and observe what happens. Record: 'When forces were balanced, the car ___. When forces were unbalanced, the car ___.'",
+            "independent_practice": "Students complete force diagrams: given a situation (book on table, person pushing a box, two people pushing a box from opposite sides), they draw arrows showing forces and identify if the forces are balanced or unbalanced. They predict what will happen.",
+            "check_for_understanding": "Show pictures of objects (car at rest, ball flying through air, tug-of-war with one side winning). Ask: 'Are the forces balanced or unbalanced? How do you know?' Have students explain their reasoning.",
+            "exit_ticket": "Students explain: 'Balanced forces mean ___. Unbalanced forces mean ___. One example of unbalanced forces is ___ because ___.'",
+            "materials": [
+                "Rope for tug-of-war",
+                "Toy cars",
+                "Force diagram worksheets",
+                "Arrow cards of different sizes",
+                "Force and motion pictures"
+            ]
+        }
+    },
+    "3-science-physical-science-matter-particles": {
+        "title": "Matter and Particles",
+        "summary": "Discover that everything is made of tiny particles! Learn about solids, liquids, and gases and how their particles behave.",
+        "objectives": [
+            "Define matter as anything that has mass and takes up space",
+            "Explain that matter is made of tiny particles too small to see",
+            "Compare particle arrangement in solids, liquids, and gases",
+            "Model particle behavior in the three states of matter"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-PS1-1"
+        ],
+        "outline": {
+            "hook": "Ask students to look at a balloon filled with air and a glass of water. 'Both of these contain billions and billions of tiny particles, but you can't see them. How can that be?' Introduce the idea that all matter is made of particles too small to see, but we can observe how they behave.",
+            "direct_instruction": "Define matter as anything that has mass and takes up space. Explain that matter is made of tiny particles (later called molecules and atoms). Compare states: In solids, particles are packed tightly and vibrate in place. In liquids, particles are close but can slide past each other. In gases, particles are far apart and move freely. Use animated diagrams or bead models.",
+            "guided_practice": "Students become 'particles'! In a clear space, have students act out: Solid (stand close, arms linked, vibrate slightly), Liquid (stand close but move slowly around each other), Gas (spread far apart, move quickly in all directions). Then model what happens when you 'heat up' – particles move faster!",
+            "independent_practice": "Students draw particle diagrams for three objects: an ice cube (solid), water (liquid), and steam (gas). They label each state and describe how particles are arranged and moving. They answer: 'What happens to particles when ice melts?'",
+            "check_for_understanding": "Show a diagram of random particles and ask: 'Is this a solid, liquid, or gas? How can you tell?' 'Why does a solid keep its shape but a liquid takes the shape of its container?'",
+            "exit_ticket": "Students explain: 'All matter is made of ___. In a solid, particles are ___. When matter is heated, particles ___.'",
+            "materials": [
+                "Balloons filled with air",
+                "Glass of water",
+                "Ice cube",
+                "Particle animation or diagrams",
+                "Colored beads for models"
+            ]
+        }
+    },
+    "3-science-physical-science-waves-intro": {
+        "title": "Introduction to Waves",
+        "summary": "Explore the world of waves! Learn how waves carry energy through water, sound, and light.",
+        "objectives": [
+            "Define wave as a repeating disturbance that transfers energy",
+            "Identify wave properties: amplitude, wavelength",
+            "Observe waves in water, springs, and sound",
+            "Explain that waves transfer energy without transferring matter"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-PS4-1"
+        ],
+        "outline": {
+            "hook": "Drop a stone into a pan of water and watch the ripples spread. Ask: 'What is spreading outward?' (Waves) 'Is the water moving to the edge of the pan, or is something else moving through the water?' Lead students to understand that energy, not water, is spreading.",
+            "direct_instruction": "Define a wave as a repeating disturbance that transfers energy from one place to another. Show that the medium (water, air, spring) doesn't travel with the wave – it just moves up and down or back and forth while the energy moves along. Introduce amplitude (height of wave) and wavelength (distance between waves). Use a slinky to demonstrate.",
+            "guided_practice": "Wave station rotations: (1) Create water waves and measure how far ripples travel; (2) Use a slinky to send waves back and forth, observe compression waves; (3) Sound waves – tap a tuning fork and feel the vibrations, see how they make water splash. Students record observations at each station.",
+            "independent_practice": "Students draw and label a wave, marking amplitude and wavelength. They write one sentence explaining what waves do (transfer energy) and give one example of a wave from their daily life (sound from speaker, waves at beach, light from Sun).",
+            "check_for_understanding": "Ask: 'If waves transfer energy, why doesn't the water in a wave end up on the beach?' 'What is the difference between a big wave and a small wave?' 'Can you think of a wave you can hear but not see?'",
+            "exit_ticket": "Students answer: 'A wave transfers ___. Amplitude is ___. One wave I experience every day is ___.'",
+            "materials": [
+                "Shallow pan of water",
+                "Stones or droppers",
+                "Slinky spring",
+                "Tuning fork",
+                "Wave diagram worksheet"
+            ]
+        }
+    },
+    "3-science-engineering-practices-criteria-and-constraints": {
+        "title": "Engineering Design: Criteria and Constraints",
+        "summary": "Think like an engineer! Learn to identify what a design must do (criteria) and the limitations you must work within (constraints).",
+        "objectives": [
+            "Define criteria as goals a design must meet",
+            "Define constraints as limitations on a design",
+            "Identify criteria and constraints in a design challenge",
+            "Apply criteria and constraints to evaluate designs"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-ETS1-1"
+        ],
+        "outline": {
+            "hook": "Present a challenge: 'Design a container to carry eggs safely across the room. You can only use paper, tape, and straws. You have 10 minutes.' Ask: 'What must your design DO?' (Criteria) 'What LIMITS do you have?' (Constraints) Introduce these key engineering terms.",
+            "direct_instruction": "Explain that engineers always start by identifying criteria (requirements for success – the design must keep eggs safe, must be carried by one person) and constraints (limitations – only certain materials, limited time, size limits, budget). Real-world examples: building a bridge (criteria: hold cars safely; constraints: budget, river width). Show how engineers document these before designing.",
+            "guided_practice": "Present the marshmallow tower challenge. As a class, brainstorm: What are the criteria? (Stand on its own, be as tall as possible, hold a marshmallow on top) What are the constraints? (Only spaghetti and marshmallows, 15-minute time limit, no tape). Record on chart paper.",
+            "independent_practice": "Students receive a new design challenge (build a paper airplane, design a shade structure, create a marble run). They independently write the criteria and constraints before starting. They must get criteria/constraints approved before building.",
+            "check_for_understanding": "Ask: 'Why is it important to know the criteria before you start designing?' 'What happens if you ignore a constraint?' 'How do criteria help you know if your design is good?'",
+            "exit_ticket": "Students answer: 'Criteria are ___. Constraints are ___. For the egg carrier challenge, one criterion was ___ and one constraint was ___.'",
+            "materials": [
+                "Paper, tape, straws for egg challenge",
+                "Spaghetti and marshmallows",
+                "Design challenge cards",
+                "Criteria/constraints planning sheets",
+                "Eggs (raw or hard-boiled)"
+            ]
+        }
+    },
+    "3-science-engineering-practices-prototypes-and-iteration": {
+        "title": "Prototypes and Iteration",
+        "summary": "Learn the engineering cycle! Build prototypes, test them, learn from failure, and improve your design through iteration.",
+        "objectives": [
+            "Define prototype as a first version or model of a design",
+            "Explain iteration as the process of improving through repeated testing",
+            "Build and test a prototype",
+            "Analyze results and improve a design"
+        ],
+        "grade_band": "Grade 3",
+        "subject": "Science",
+        "standards": [
+            "3-ETS1-2",
+            "3-ETS1-3"
+        ],
+        "outline": {
+            "hook": "Show pictures of early prototypes of familiar inventions (early lightbulbs, first airplanes, early phones). Ask: 'These were the first versions. What changed?' Explain that inventors don't get it right the first time – they build, test, learn, and improve. This is called iteration.",
+            "direct_instruction": "Define prototype as the first version of a design built to test an idea. It doesn't have to be perfect! Define iteration as making improvements based on testing. Show the Design Cycle: Identify Problem → Brainstorm → Build Prototype → Test → Reflect → Improve → Test Again. Emphasize that failure is valuable – every failure teaches something!",
+            "guided_practice": "Parachute challenge: Students build a simple parachute (plastic bag, string, weight). Test by dropping from the same height. Time how long it takes to fall. Record results. Discuss: 'What worked? What didn't? How could we improve it?' Build version 2 and test again.",
+            "independent_practice": "Students complete a design journal documenting their iterations: Draw prototype 1, record test results, list what worked and what to improve. Draw prototype 2 with improvements labeled. Test and record new results. Reflect: 'Did the improvements help?'",
+            "check_for_understanding": "Ask: 'Why do we build prototypes instead of making the final product right away?' 'What does it mean that failure is part of engineering?' 'How many iterations do you think engineers made before building the smartphone?'",
+            "exit_ticket": "Students answer: 'A prototype is ___. Iteration means ___. In my parachute challenge, I learned ___ and improved my design by ___.'",
+            "materials": [
+                "Plastic bags, string, small weights for parachutes",
+                "Stopwatch or timer",
+                "Design journal templates",
+                "Pictures of invention prototypes",
+                "Materials for chosen design challenge"
+            ]
+        }
+    },
+    "4-science-life-science-adaptations": {
+        "title": "Adaptations for Survival",
+        "summary": "Dive deeper into adaptations! Examine structural and behavioral adaptations and how organisms are suited to their specific environments.",
+        "objectives": [
+            "Distinguish between structural and behavioral adaptations",
+            "Analyze how adaptations improve survival and reproduction",
+            "Research adaptations of organisms in extreme environments",
+            "Design an organism with adaptations for a specific habitat"
+        ],
+        "grade_band": "Grade 4",
+        "subject": "Science",
+        "standards": [
+            "4-LS4-1"
+        ],
+        "outline": {
+            "hook": "Show a video of an arctic fox in summer (brown fur) and winter (white fur). Ask: 'Why does this fox change colors? What advantage does that give it?' Introduce the distinction between structural adaptations (body parts) and behavioral adaptations (actions).",
+            "direct_instruction": "Define structural adaptations (physical features like claws, fur, beaks) and behavioral adaptations (actions like migration, hibernation, playing dead). Examine case studies: Polar bears (structural: thick fur, white color; behavioral: hunt seals at ice holes), Desert plants (structural: thick stems store water, spines reduce water loss; behavioral: open pores only at night).",
+            "guided_practice": "Adaptation Investigation: Groups receive an 'extreme environment' (deep ocean, desert, arctic, rainforest canopy). They research 3 organisms in that environment and identify 2 structural and 1 behavioral adaptation for each. Present findings to the class.",
+            "independent_practice": "Students design an imaginary animal for a specific extreme environment. They must include at least 3 structural adaptations and 2 behavioral adaptations, explaining how each helps the animal survive. They create a labeled drawing and written explanation.",
+            "check_for_understanding": "Present unfamiliar organisms and have students identify likely adaptations. 'This fish has huge eyes – what environment might it live in? Why?' 'This bird flies thousands of miles each year – is that structural or behavioral?'",
+            "exit_ticket": "Students explain: 'Structural adaptations are ___. Behavioral adaptations are ___. One organism I learned about has ___ which helps it survive by ___.'",
+            "materials": [
+                "Arctic fox video",
+                "Extreme environment research packets",
+                "Organism adaptation cards",
+                "Imaginary animal design template",
+                "Reference materials on extreme environments"
+            ]
+        }
+    },
+    "4-science-physical-science-energy-transfer": {
+        "title": "Energy Transfer and Transformation",
+        "summary": "Explore how energy changes form and moves between objects. From potential to kinetic, from electrical to heat, energy is always on the move!",
+        "objectives": [
+            "Identify potential and kinetic energy",
+            "Trace energy transformations through systems",
+            "Measure energy transfer in simple experiments",
+            "Apply energy concepts to real-world technologies"
+        ],
+        "grade_band": "Grade 4",
+        "subject": "Science",
+        "standards": [
+            "4-PS3-1",
+            "4-PS3-2",
+            "4-PS3-4"
+        ],
+        "outline": {
+            "hook": "Show a video of a roller coaster or have students watch a ball roll down a ramp. Ask: 'Where does the ball have the most energy? At the top or the bottom?' Introduce potential energy (stored energy) and kinetic energy (energy of motion).",
+            "direct_instruction": "Define potential energy as stored energy (a ball at the top of a ramp, a stretched rubber band) and kinetic energy as energy of motion. Energy transforms between forms constantly: a falling ball converts potential → kinetic → sound/heat when it bounces. Trace energy in complex systems: a power plant (coal's chemical energy → heat → steam's kinetic → electrical → light in your home).",
+            "guided_practice": "Pendulum investigation: Students build pendulums and mark the swing's highest point (most potential energy) and lowest point (most kinetic energy). They observe: 'What happens to the height over time? Where is energy going?' Discuss energy transfer to air and heat.",
+            "independent_practice": "Students create 'Energy Flow Maps' for everyday technologies: a flashlight (chemical energy in battery → electrical energy in circuit → light and heat from bulb), a car, a microwave. They draw the system and label each energy transformation with arrows.",
+            "check_for_understanding": "Present scenarios: 'A skateboarder at the top of a half-pipe – potential or kinetic?' 'Where does the energy go when I stop a swing?' 'Why does a light bulb get hot?' Have students explain each answer.",
+            "exit_ticket": "Students explain: 'Potential energy is ___. Kinetic energy is ___. When a roller coaster goes down a hill, ___ energy changes to ___ energy.'",
+            "materials": [
+                "Ramps and balls",
+                "String and weights for pendulums",
+                "Energy flow diagram templates",
+                "Roller coaster video",
+                "Flashlight for demonstration"
+            ]
+        }
+    },
+    "5-science-life-science-ecosystems-and-food-webs": {
+        "title": "Complex Ecosystems and Energy Flow",
+        "summary": "Analyze how energy and matter cycle through ecosystems. Explore what happens when ecosystems are disrupted and how they recover.",
+        "objectives": [
+            "Trace the flow of energy through a complex food web",
+            "Explain the cycling of matter through ecosystems",
+            "Predict effects of ecosystem disruptions",
+            "Analyze real-world case studies of ecosystem change"
+        ],
+        "grade_band": "Grade 5",
+        "subject": "Science",
+        "standards": [
+            "5-LS2-1"
+        ],
+        "outline": {
+            "hook": "Show before/after images of Yellowstone National Park (before and after wolf reintroduction). Ask: 'How could bringing back wolves affect the rivers?' This unexpected connection introduces the complexity of ecosystems where everything is linked.",
+            "direct_instruction": "Review food webs and introduce energy pyramids: Only about 10% of energy transfers to the next level. Explain matter cycling: Carbon, nitrogen, and water move in cycles through living and nonliving parts of ecosystems. Decomposers are essential for returning nutrients to soil. Discuss trophic cascades: changes at one level affect all others.",
+            "guided_practice": "Ecosystem simulation: Students play roles in an ecosystem (producers, herbivores, carnivores, decomposers). Hand out energy tokens according to the 10% rule. Simulate what happens when producers decrease (drought), when a predator is removed (wolves leave), or when pollution kills decomposers. Discuss observations.",
+            "independent_practice": "Students research an ecosystem disruption case study (Yellowstone wolves, invasive species, coral bleaching). They create a poster showing: (1) the original food web, (2) what changed, (3) ripple effects through the ecosystem, (4) recovery efforts or outcomes.",
+            "check_for_understanding": "Present a hypothetical scenario: 'What would happen to a grassland if all the insects disappeared? Think about pollination, decomposition, food sources.' Have groups trace the effects through the ecosystem.",
+            "exit_ticket": "Students explain: 'Energy moves through ecosystems by ___. Matter cycles means ___. One example of how ecosystems are connected is ___.'",
+            "materials": [
+                "Yellowstone wolf case study materials",
+                "Role cards for ecosystem simulation",
+                "Energy tokens",
+                "Ecosystem case study research packets",
+                "Energy pyramid diagrams"
+            ]
+        }
+    },
+    "5-science-physical-science-forces-balanced-unbalanced": {
+        "title": "Forces, Motion, and Newton's Laws",
+        "summary": "Investigate how forces affect motion through Newton's Laws. Predict and measure changes in motion caused by unbalanced forces.",
+        "objectives": [
+            "Apply Newton's First Law (inertia) to explain motion",
+            "Calculate the effect of unbalanced forces on motion",
+            "Investigate friction as a force that opposes motion",
+            "Design experiments to test force and motion relationships"
+        ],
+        "grade_band": "Grade 5",
+        "subject": "Science",
+        "standards": [
+            "5-PS2-1"
+        ],
+        "outline": {
+            "hook": "Demonstrate with a tablecloth trick (or video of one): pull a cloth quickly from under dishes and they stay in place. Ask: 'Why don't the dishes fly with the cloth?' Introduce Newton's First Law: objects resist changes in motion (inertia).",
+            "direct_instruction": "Newton's First Law: An object at rest stays at rest; an object in motion stays in motion unless acted on by an unbalanced force. Newton's Second Law: Force = mass × acceleration (a bigger push makes faster acceleration; heavier objects need more force). Discuss friction as a force that opposes motion and why it matters (braking, walking, writing).",
+            "guided_practice": "Cart and ramp experiments: Measure how far a cart travels with different pushing forces (1 push, 2 pushes). Try different surfaces (smooth, rough – friction changes). Record data and look for patterns. Calculate relationships between force and distance.",
+            "independent_practice": "Students design their own force experiment with a hypothesis, procedure, data table, and conclusion. They might test: How does mass affect distance? How does surface affect friction? How does ramp angle affect speed?",
+            "check_for_understanding": "Present situations and have students apply Newton's Laws: 'Why does a hockey puck slide farther on ice than on carpet?' 'Why do you lean back when a bus accelerates?' 'What forces act on a skydiver falling at constant speed?'",
+            "exit_ticket": "Students explain: 'Inertia means ___. Newton's Second Law says ___. Friction affects motion by ___.'",
+            "materials": [
+                "Tablecloth trick supplies or video",
+                "Toy carts and ramps",
+                "Different surface materials",
+                "Force meters or spring scales",
+                "Experiment design templates"
+            ]
+        }
+    }
+}

@@ -1,0 +1,326 @@
+{
+  "timestamp": "2025-12-26T06:52:15.332Z",
+  "totalLessons": 1190,
+  "issueCount": 30,
+  "issuesByType": {
+    "template_content": 25,
+    "grade_inappropriate": 5
+  },
+  "issuesBySeverity": {
+    "medium": 25,
+    "critical": 5
+  },
+  "issuesBySubject": {
+    "Mathematics": 30
+  },
+  "issuesByGrade": {
+    "3": 2,
+    "4": 2,
+    "5": 1,
+    "6": 9,
+    "7": 8,
+    "8": 8
+  },
+  "issues": [
+    {
+      "lessonId": 209,
+      "lessonTitle": "Expressions & Equations",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 230,
+      "lessonTitle": "Coordinate Geometry",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 204,
+      "lessonTitle": "Coordinate Geometry",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 219,
+      "lessonTitle": "Similarity & Congruence",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 212,
+      "lessonTitle": "Percent & Rates",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 206,
+      "lessonTitle": "Similarity & Congruence",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 222,
+      "lessonTitle": "Expressions & Equations",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 231,
+      "lessonTitle": "Pythagorean Theorem",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 238,
+      "lessonTitle": "Percent & Rates",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 179,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "grade_inappropriate",
+      "severity": "critical",
+      "details": "Advanced term \"Pythagorean\" may be inappropriate for Grade 4"
+    },
+    {
+      "lessonId": 179,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "grade_inappropriate",
+      "severity": "critical",
+      "details": "Advanced term \"theorem\" may be inappropriate for Grade 4"
+    },
+    {
+      "lessonId": 235,
+      "lessonTitle": "Expressions & Equations",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 239,
+      "lessonTitle": "Ratios & Proportional Reasoning",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 225,
+      "lessonTitle": "Percent & Rates",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 205,
+      "lessonTitle": "Pythagorean Theorem",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 210,
+      "lessonTitle": "Functions (intro)",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 237,
+      "lessonTitle": "Integers & Rational Numbers",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 217,
+      "lessonTitle": "Coordinate Geometry",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 192,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "grade_inappropriate",
+      "severity": "critical",
+      "details": "Advanced term \"Pythagorean\" may be inappropriate for Grade 5"
+    },
+    {
+      "lessonId": 218,
+      "lessonTitle": "Pythagorean Theorem",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 224,
+      "lessonTitle": "Integers & Rational Numbers",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 232,
+      "lessonTitle": "Similarity & Congruence",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 226,
+      "lessonTitle": "Ratios & Proportional Reasoning",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 367,
+      "lessonTitle": "Ratios and Proportional Reasoning (Grade 6)",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 167,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "grade_inappropriate",
+      "severity": "critical",
+      "details": "Advanced term \"Pythagorean\" may be inappropriate for Grade 3"
+    },
+    {
+      "lessonId": 167,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "grade_inappropriate",
+      "severity": "critical",
+      "details": "Advanced term \"theorem\" may be inappropriate for Grade 3"
+    },
+    {
+      "lessonId": 223,
+      "lessonTitle": "Functions (intro)",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 474,
+      "lessonTitle": "Ratios & Proportional Reasoning",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 236,
+      "lessonTitle": "Functions (intro)",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    },
+    {
+      "lessonId": 211,
+      "lessonTitle": "Integers & Rational Numbers",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "issueType": "template_content",
+      "severity": "medium",
+      "details": "Template/generated content detected"
+    }
+  ],
+  "lessonsNeedingReview": [
+    209,
+    230,
+    204,
+    219,
+    212,
+    206,
+    222,
+    231,
+    238,
+    179,
+    235,
+    239,
+    225,
+    205,
+    210,
+    237,
+    217,
+    192,
+    218,
+    224,
+    232,
+    226,
+    367,
+    167,
+    223,
+    474,
+    236,
+    211
+  ]
+}

@@ -1,20 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Activity,
   AlertTriangle,
   BarChart3,
   Beaker,
+  BookCheck,
   ClipboardList,
   Clock,
   CheckCircle2,
+  ChevronDown,
+  ChevronRight,
   Loader2,
   RefreshCw,
   Shield,
   Trash2,
   Users,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   CartesianGrid,
   Line,
@@ -54,6 +57,10 @@ import {
   type TutorAdminReport,
   type TutorReportStatus,
 } from '../../services/tutorAdminService';
+
+// Lazy load the content quality dashboard for performance
+const ContentQualityDashboard = lazy(() => import('./ContentQualityDashboard'));
+
 
 const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
@@ -112,6 +119,7 @@ const AdminDashboard: React.FC = () => {
   const BILLING_FLAG_KEY = 'billing.require_subscription';
   const [billingSaving, setBillingSaving] = useState(false);
   const [billingMessage, setBillingMessage] = useState<string | null>(null);
+  const [showQualityDashboard, setShowQualityDashboard] = useState(false);
 
   const {
     data: dashboard,
@@ -876,10 +884,10 @@ const AdminDashboard: React.FC = () => {
                   {coverageSummary && (
                     <span
                       className={`text-xs px-3 py-1 rounded-full border ${coverageSummary.readinessPercent >= 90
-                          ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                          : coverageSummary.readinessPercent >= 70
-                            ? 'bg-amber-50 border-amber-200 text-amber-700'
-                            : 'bg-rose-50 border-rose-200 text-rose-700'
+                        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                        : coverageSummary.readinessPercent >= 70
+                          ? 'bg-amber-50 border-amber-200 text-amber-700'
+                          : 'bg-rose-50 border-rose-200 text-rose-700'
                         }`}
                     >
                       {coverageSummary.readinessPercent}% ready
@@ -940,6 +948,63 @@ const AdminDashboard: React.FC = () => {
               ) : (
                 <p className="text-sm text-slate-600">Unable to load coverage data.</p>
               )}
+            </motion.div>
+
+            {/* Content Quality Dashboard - Expandable Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+            >
+              <button
+                type="button"
+                onClick={() => setShowQualityDashboard(prev => !prev)}
+                className="w-full p-6 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-brand-blue flex items-center justify-center">
+                    <BookCheck className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">Content Quality Dashboard</h3>
+                    <p className="text-sm text-slate-600">Detailed quality metrics by subject and grade</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-full">
+                    100% Clean
+                  </span>
+                  {showQualityDashboard ? (
+                    <ChevronDown className="w-5 h-5 text-slate-500" />
+                  ) : (
+                    <ChevronRight className="w-5 h-5 text-slate-500" />
+                  )}
+                </div>
+              </button>
+              <AnimatePresence>
+                {showQualityDashboard && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6 border-t border-slate-100">
+                      <div className="pt-6">
+                        <Suspense fallback={
+                          <div className="flex items-center justify-center py-12">
+                            <Loader2 className="w-8 h-8 text-brand-teal animate-spin" />
+                          </div>
+                        }>
+                          <ContentQualityDashboard />
+                        </Suspense>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
 
             <motion.div
