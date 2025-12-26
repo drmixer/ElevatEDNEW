@@ -52,9 +52,54 @@ type MessageMetadata = { source?: 'card' | 'free' | 'scaffold'; cardId?: string;
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
-  const student = user as Student;
-  const { persona: tutorPersona } = useTutorPersona(student?.id);
-  const pathQuery = useStudentPath(student?.id);
+
+  // Derive student safely - hooks below will work with fallback values
+  const isStudent = user?.role === 'student';
+  const actualStudent = isStudent ? (user as Student) : null;
+
+  // Create a safe student object with all required properties for hooks
+  // This avoids TypeScript errors while allowing us to return null before render
+  const student: Student = actualStudent ?? {
+    id: '',
+    email: '',
+    name: '',
+    role: 'student',
+    grade: 0,
+    xp: 0,
+    level: 1,
+    badges: [],
+    streakDays: 0,
+    strengths: [],
+    weaknesses: [],
+    learningPath: [],
+    learningPreferences: {
+      sessionLength: 'standard',
+      focusSubject: 'balanced',
+      focusIntensity: 'balanced',
+      allowTutor: true,
+      tutorLessonOnly: false,
+      chatMode: 'free',
+      chatModeLocked: false,
+    },
+    assessmentCompleted: false,
+  };
+
+  // Ensure student has required properties with safe defaults
+  const studentStrengths = student.strengths ?? [];
+  const studentWeaknesses = student.weaknesses ?? [];
+  const studentLearningPreferences = student.learningPreferences ?? {
+    sessionLength: 'standard' as const,
+    focusSubject: 'balanced' as const,
+    focusIntensity: 'balanced' as const,
+    allowTutor: true,
+    tutorLessonOnly: false,
+    chatMode: 'free' as const,
+    chatModeLocked: false,
+  };
+
+  // All hooks must be called unconditionally
+  const { persona: tutorPersona } = useTutorPersona(actualStudent?.id);
+  const pathQuery = useStudentPath(actualStudent?.id);
   const tutorAvatar = useMemo(
     () => TUTOR_AVATARS.find((avatar) => avatar.id === student?.tutorAvatarId) ?? TUTOR_AVATARS[0],
     [student?.tutorAvatarId],
@@ -95,7 +140,7 @@ const LearningAssistant: React.FC = () => {
       : [];
     return list;
   }, [pathMetadata]);
-  const strongestSubject = useMemo(() => humanizeStandard(student.strengths[0] ?? null), [student.strengths]);
+  const strongestSubject = useMemo(() => humanizeStandard(studentStrengths[0] ?? null), [studentStrengths]);
   const adaptivePromptHint = useMemo(() => {
     const pieces: string[] = [];
     if (adaptiveMisconceptions.length) {
@@ -122,14 +167,14 @@ const LearningAssistant: React.FC = () => {
   const tutorLabel = tutorPersona?.name ?? tutorAvatar.label;
   const autoChatMode: 'guided_only' | 'guided_preferred' | 'free' =
     student.grade <= 3 ? 'guided_only' : student.grade <= 5 ? 'guided_preferred' : 'free';
-  const tutorDisabled = student.learningPreferences.allowTutor === false;
+  const tutorDisabled = studentLearningPreferences.allowTutor === false;
   const lessonOnlyMode =
-    student.learningPreferences.tutorLessonOnly ??
+    studentLearningPreferences.tutorLessonOnly ??
     (student.grade > 0 && student.grade < 13 ? true : false);
   const [chatMode, setChatMode] = useState<'guided_only' | 'guided_preferred' | 'free'>(
-    student.learningPreferences.chatMode ?? autoChatMode,
+    studentLearningPreferences.chatMode ?? autoChatMode,
   );
-  const chatModeLocked = student.learningPreferences.chatModeLocked ?? false;
+  const chatModeLocked = studentLearningPreferences.chatModeLocked ?? false;
   const [guidedCardUsed, setGuidedCardUsed] = useState(false);
   const tutorToneDescriptor = useMemo(() => {
     switch (personaTone) {
@@ -149,11 +194,11 @@ const LearningAssistant: React.FC = () => {
     const preferredName = student.tutorName?.trim();
     const introName =
       preferredName && preferredName.length ? `${preferredName}, your personal learning guide` : 'your personal learning assistant';
-    const strengths = student.strengths[0] || 'your current subjects';
+    const strengths = studentStrengths[0] || 'your current subjects';
     const safetyLine = 'I stay school-safe, will not help with cheating, and I do not replace your teacher';
     const personaStyleHint = tutorPersona?.prompt_snippet ?? tutorToneDescriptor;
     return `Hi there! I'm ${introName}. I can help with ${strengths}, study tips, or motivation. ${personaStyleHint} ${safetyLine}. What would you like to work on today?`;
-  }, [student.strengths, student.tutorName, tutorPersona?.prompt_snippet, tutorToneDescriptor]);
+  }, [studentStrengths, student.tutorName, tutorPersona?.prompt_snippet, tutorToneDescriptor]);
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
@@ -401,7 +446,7 @@ const LearningAssistant: React.FC = () => {
     const message = userMessage.toLowerCase();
 
     if (message.includes('help') || message.includes('stuck')) {
-      return `I can see you're working on ${student.strengths[0] || 'several topics'}. When you're stuck, try breaking the problem into smaller steps. What specific part is challenging you? I can walk you through it step by step! 🤔`;
+      return `I can see you're working on ${studentStrengths[0] || 'several topics'}. When you're stuck, try breaking the problem into smaller steps. What specific part is challenging you? I can walk you through it step by step! 🤔`;
     }
 
     if (message.includes('motivation') || message.includes('tired') || message.includes('give up')) {
@@ -421,14 +466,14 @@ const LearningAssistant: React.FC = () => {
     }
 
     if (message.includes('study tip') || message.includes('how to study')) {
-      return `Here's a personalized study tip for you: Since ${student.weaknesses[0] || 'some areas'} need more practice, try the Feynman Technique - explain the concept in simple terms as if teaching a friend. This reveals gaps in understanding! Also, take breaks every 25 minutes (Pomodoro technique). 🧠`;
+      return `Here's a personalized study tip for you: Since ${studentWeaknesses[0] || 'some areas'} need more practice, try the Feynman Technique - explain the concept in simple terms as if teaching a friend. This reveals gaps in understanding! Also, take breaks every 25 minutes (Pomodoro technique). 🧠`;
     }
 
     if (message.includes('weak') || message.includes('difficult') || message.includes('struggle')) {
-      return `I notice you're working on improving in ${student.weaknesses[0] || 'certain areas'}. That's totally normal! Everyone has topics that challenge them more. The key is consistent practice and not being afraid to ask questions. Would you like some specific strategies for this topic? 🎯`;
+      return `I notice you're working on improving in ${studentWeaknesses[0] || 'certain areas'}. That's totally normal! Everyone has topics that challenge them more. The key is consistent practice and not being afraid to ask questions. Would you like some specific strategies for this topic? 🎯`;
     }
 
-    return `That's a great question! Based on your learning profile (Level ${student.level}, strong in ${student.strengths[0] || 'multiple areas'}), I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
+    return `That's a great question! Based on your learning profile (Level ${student.level}, strong in ${studentStrengths[0] || 'multiple areas'}), I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
   };
 
   const handleReportSubmit = async () => {
@@ -545,7 +590,7 @@ const LearningAssistant: React.FC = () => {
     });
     try {
       await updateLearningPreferences(student.id, {
-        ...student.learningPreferences,
+        ...studentLearningPreferences,
         chatMode: mode,
       });
     } catch (error) {
@@ -712,8 +757,8 @@ const LearningAssistant: React.FC = () => {
               : personaTone === 'concise'
                 ? 'concise, to-the-point tone'
                 : 'encouraging, warm tone');
-      const planIntensity = student.learningPreferences?.weeklyPlanIntensity ?? 'normal';
-      const planIntent = student.learningPreferences?.weeklyIntent ?? 'balanced';
+      const planIntensity = studentLearningPreferences.weeklyPlanIntensity ?? 'normal';
+      const planIntent = studentLearningPreferences.weeklyIntent ?? 'balanced';
       const planTone =
         planIntensity === 'light'
           ? 'Keep encouragement gentle and celebrate small wins.'
@@ -911,6 +956,12 @@ const LearningAssistant: React.FC = () => {
       previouslyFocused?.focus();
     };
   }, [isOpen]);
+
+  // Early return if there's no user or user isn't a student
+  // This check is placed AFTER all hooks to comply with React's rules of hooks
+  if (!actualStudent) {
+    return null;
+  }
 
   return (
     <>

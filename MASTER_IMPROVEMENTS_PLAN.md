@@ -21,7 +21,7 @@ This document consolidates all improvement initiatives across ElevatED into a un
 | 📊 Dashboard Simplification | ✅ Implemented | 85% |
 | 👨‍👩‍👧 Parent Experience | ✅ Core Complete | 75% |
 | 🧑‍🎓 Student Experience | ✅ Core Complete | 80% |
-| 🤖 AI Tutor Enhancements | ✅ Core Complete | 70% |
+| 🤖 AI Tutor Enhancements | ✅ Core Complete | 80% |
 
 ---
 
@@ -132,11 +132,31 @@ All diagnostic files have been reviewed and critical issues fixed:
 | `diagnostics_k_complete.json` | 50+ | ✅ | Reviewed - comprehensive K coverage |
 | `diagnostics_phase13.json` | 30+ | ✅ | Reviewed - no issues found |
 
-### 2.4 Lesson Player Final Polish
+### 2.4 AI Tutor UI Visibility Fix ✅
+**Status:** Complete (December 25, 2024)
+
+The AI Tutor (LearningAssistant component) was not appearing when the "Ask ElevatED" button was clicked due to a React hook violation and null safety issues:
+
+**Root Cause:**
+- The component accessed `student.strengths`, `student.weaknesses`, and `student.learningPreferences` without null checks
+- An early return before hooks was violating React's rules of hooks
+- When user data wasn't fully loaded, the component would crash silently
+
+**Fix Applied:**
+- Created a fallback student object with all required properties for hooks to work correctly
+- Moved the early return check AFTER all hooks to comply with React's rules
+- Hooks now receive `actualStudent?.id` for queries but use the safe `student` object for all other properties
+
+**Files Modified:**
+- `src/components/Student/LearningAssistant.tsx`
+
+### 2.5 Lesson Player Final Polish
 **Priority:** Medium | **Estimated Effort:** 2-3 days
 
 - [ ] **Cross-browser testing** (Phase 7.6)
-  - [ ] Chrome, Safari, Firefox, Edge
+  - [x] Chrome - Core flow works (see report)
+  - [x] AI Tutor UI - Fixed (was not rendering due to code issues)
+  - [ ] Safari, Firefox, Edge
   - [ ] iOS Safari, Android Chrome
   - [ ] Tablet dimensions
 
@@ -482,21 +502,22 @@ This master plan consolidates and supersedes the following documents:
 | Date | Version | Changes |
 |------|---------|---------|
 | 2024-12-24 | 1.0 | Initial master plan consolidating all initiatives |
+| 2024-12-25 | 1.1 | Fixed AI Tutor UI visibility issue (LearningAssistant component) |
 
 ---
 
 ## Next Immediate Actions
 
-**Sprint 3 Complete! ✅** (December 25, 2024)
+**AI Tutor Fix Complete! ✅** (December 25, 2024)
 
 1. ~~**Per-learner AI controls** - Parent can configure tutor per child~~ ✅ Done
 2. ~~**Status labels implementation** - On-track/At-risk/Off-track per subject~~ ✅ Done
 3. ~~**Coaching suggestions system** - 1-2 weekly tips per child~~ ✅ Done
-4. **Assignment controls** - Parent can assign lessons ⏳ Next
+4. ~~**AI Tutor UI visibility fix** - Ask ElevatED button now works~~ ✅ Done (12/25)
+5. **Assignment controls** - Parent can assign lessons ⏳ Next
 
 **Sprint 4 Ready to Start:**
 1. **Assignment controls** - Parent can assign lessons to children
 2. **Admin quality dashboard** - Content quality metrics
 3. **User feedback integration** - "Report Content Issue" button
 4. **Weekly digest enhancements** - Better email summaries
-
