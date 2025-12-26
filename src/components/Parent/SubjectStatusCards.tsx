@@ -19,6 +19,7 @@ import {
     TrendingUp,
     BookOpen,
     Target,
+    Plus,
 } from 'lucide-react';
 import type { Subject } from '../../types';
 import { formatSubjectLabel } from '../../lib/subjects';
@@ -34,6 +35,7 @@ interface SubjectStatusCardsProps {
     childName: string;
     statuses: SubjectStatus[];
     onViewSubject?: (subject: Subject) => void;
+    onAssignSubject?: (subject: Subject) => void;
 }
 
 const StatusIcon: React.FC<{ status: OnTrackStatus; className?: string }> = ({
@@ -71,7 +73,8 @@ const StatusCard: React.FC<{
     status: SubjectStatus;
     childName: string;
     onViewSubject?: (subject: Subject) => void;
-}> = ({ status, childName, onViewSubject }) => {
+    onAssignSubject?: (subject: Subject) => void;
+}> = ({ status, childName, onViewSubject, onAssignSubject }) => {
     const [showTooltip, setShowTooltip] = useState(false);
     const [expanded, setExpanded] = useState(false);
     const firstName = childName.split(' ')[0];
@@ -192,16 +195,28 @@ const StatusCard: React.FC<{
                                 <p className="bg-white/80 rounded-lg px-3 py-2.5 border border-slate-100">
                                     {status.recommendation}
                                 </p>
-                                {onViewSubject && (
-                                    <button
-                                        type="button"
-                                        onClick={() => onViewSubject(status.subject)}
-                                        className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium"
-                                    >
-                                        <TrendingUp className="w-3.5 h-3.5" />
-                                        View {firstName}'s Progress
-                                    </button>
-                                )}
+                                <div className="mt-2 flex gap-2">
+                                    {onAssignSubject && (
+                                        <button
+                                            type="button"
+                                            onClick={() => onAssignSubject(status.subject)}
+                                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-brand-blue text-white rounded-lg hover:bg-brand-violet transition-colors font-medium"
+                                        >
+                                            <Plus className="w-3.5 h-3.5" />
+                                            Assign Lessons
+                                        </button>
+                                    )}
+                                    {onViewSubject && (
+                                        <button
+                                            type="button"
+                                            onClick={() => onViewSubject(status.subject)}
+                                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium"
+                                        >
+                                            <TrendingUp className="w-3.5 h-3.5" />
+                                            View Progress
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </motion.div>
                     )}
@@ -215,6 +230,7 @@ const SubjectStatusCards: React.FC<SubjectStatusCardsProps> = ({
     childName,
     statuses,
     onViewSubject,
+    onAssignSubject,
 }) => {
     if (!statuses?.length) {
         return null;
@@ -276,6 +292,7 @@ const SubjectStatusCards: React.FC<SubjectStatusCardsProps> = ({
                         status={status}
                         childName={childName}
                         onViewSubject={onViewSubject}
+                        onAssignSubject={onAssignSubject}
                     />
                 ))}
             </div>

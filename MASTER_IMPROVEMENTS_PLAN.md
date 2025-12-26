@@ -276,11 +276,13 @@ The AI Tutor (LearningAssistant component) was not appearing when the "Ask Eleva
 - [ ] "Done" / "Not relevant" feedback buttons
 - [ ] Vetted suggestion library (50+ per subject/grade)
 
-#### C.4 Assignment & Pacing Controls
-- [ ] Assign lessons from subject card
-- [ ] Weekly lesson target stepper
-- [ ] Assignment states (Not started / In progress / Completed)
-- [ ] Guardrails (within 1 unit of adaptive path)
+#### C.4 Assignment & Pacing Controls ✅
+**Status:** Core Complete (December 25, 2024)
+
+- [x] Assign lessons from subject card - `ParentAssignmentControls` component
+- [x] Weekly lesson target stepper - `WeeklyTargetStepper` in assignment modal
+- [x] Assignment states (Not started / In progress / Completed) - `AssignmentCard` with status display
+- [x] Guardrails (within 1 unit of adaptive path) - Enforced by backend API
 
 #### C.5 Safety & Transparency Surfaces
 - [ ] "Safety & Privacy" section
@@ -503,21 +505,22 @@ This master plan consolidates and supersedes the following documents:
 |------|---------|---------|
 | 2024-12-24 | 1.0 | Initial master plan consolidating all initiatives |
 | 2024-12-25 | 1.1 | Fixed AI Tutor UI visibility issue (LearningAssistant component) |
+| 2024-12-25 | 1.2 | Implemented ParentAssignmentControls for Sprint 4 (Phase C.4) |
 
 ---
 
 ## Next Immediate Actions
 
-**AI Tutor Fix Complete! ✅** (December 25, 2024)
+**Sprint 4 In Progress! 🚀** (December 25, 2024)
 
 1. ~~**Per-learner AI controls** - Parent can configure tutor per child~~ ✅ Done
 2. ~~**Status labels implementation** - On-track/At-risk/Off-track per subject~~ ✅ Done
 3. ~~**Coaching suggestions system** - 1-2 weekly tips per child~~ ✅ Done
 4. ~~**AI Tutor UI visibility fix** - Ask ElevatED button now works~~ ✅ Done (12/25)
-5. **Assignment controls** - Parent can assign lessons ⏳ Next
+5. ~~**Assignment controls** - Parent can assign lessons~~ ✅ Done (12/25)
 
-**Sprint 4 Ready to Start:**
-1. **Assignment controls** - Parent can assign lessons to children
-2. **Admin quality dashboard** - Content quality metrics
-3. **User feedback integration** - "Report Content Issue" button
-4. **Weekly digest enhancements** - Better email summaries
+**Next Priorities:**
+1. **Admin quality dashboard** - Content quality metrics ⏳ Next
+2. **User feedback integration** - "Report Content Issue" button
+3. **Weekly digest enhancements** - Better email summaries
+4. **Safety & Transparency surfaces** - Privacy section in parent dashboard
