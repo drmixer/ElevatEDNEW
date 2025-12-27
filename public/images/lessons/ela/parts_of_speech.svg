@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 350" width="700" height="350">
+  <title>Parts of Speech: 8 Categories</title>
+  <desc>Educational diagram showing the eight parts of speech with examples</desc>
+  
+  <!-- Background -->
+  <rect width="700" height="350" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="350" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#1e293b">Parts of Speech</text>
+  <text x="350" y="52" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#64748b">The 8 building blocks of language</text>
+  
+  <!-- Row 1: Nouns, Verbs, Adjectives, Adverbs -->
+  
+  <!-- NOUN -->
+  <g transform="translate(45, 85)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#1d4ed8">NOUN</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#3b82f6">person, place, thing, idea</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#93c5fd" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🏫 school</text>
+    <text x="80" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🐕 dog</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">💡 idea</text>
+    <text x="80" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">👩 Maria</text>
+  </g>
+  
+  <!-- VERB -->
+  <g transform="translate(205, 85)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#15803d">VERB</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#22c55e">action or state of being</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#86efac" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🏃 run</text>
+    <text x="80" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">💭 think</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">✨ is/are</text>
+    <text x="80" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🎵 sing</text>
+  </g>
+  
+  <!-- ADJECTIVE -->
+  <g transform="translate(365, 85)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#be185d">ADJECTIVE</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#ec4899">describes a noun</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#f9a8d4" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🔵 blue</text>
+    <text x="80" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">📏 tall</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">😊 happy</text>
+    <text x="80" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🔢 three</text>
+  </g>
+  
+  <!-- ADVERB -->
+  <g transform="translate(525, 85)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#b45309">ADVERB</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#f59e0b">describes verb/adj/adv</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#fcd34d" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">⚡ quickly</text>
+    <text x="85" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🔊 loudly</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">✨ very</text>
+    <text x="85" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">📅 today</text>
+  </g>
+  
+  <!-- Row 2: Pronoun, Preposition, Conjunction, Interjection -->
+  
+  <!-- PRONOUN -->
+  <g transform="translate(45, 205)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#4338ca">PRONOUN</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#6366f1">replaces a noun</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#a5b4fc" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">👤 he/she</text>
+    <text x="85" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">👥 they</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">📍 it</text>
+    <text x="85" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🙋 we</text>
+  </g>
+  
+  <!-- PREPOSITION -->
+  <g transform="translate(205, 205)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#ccfbf1" stroke="#14b8a6" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#0f766e">PREPOSITION</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#14b8a6">shows relationship</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#5eead4" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">📦 in/on</text>
+    <text x="85" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">⬇️ under</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">➡️ to</text>
+    <text x="85" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">⏰ before</text>
+  </g>
+  
+  <!-- CONJUNCTION -->
+  <g transform="translate(365, 205)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#f3e8ff" stroke="#a855f7" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#7e22ce">CONJUNCTION</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#a855f7">connects words/clauses</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#d8b4fe" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🔗 and</text>
+    <text x="72" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">⚖️ but</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">↔️ or</text>
+    <text x="72" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🤔 because</text>
+  </g>
+  
+  <!-- INTERJECTION -->
+  <g transform="translate(525, 205)">
+    <rect x="0" y="0" width="145" height="100" rx="10" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+    <text x="72" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#b91c1c">INTERJECTION</text>
+    <text x="72" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#ef4444">expresses emotion</text>
+    <line x1="15" y1="50" x2="130" y2="50" stroke="#fca5a5" stroke-width="1"/>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">😲 Wow!</text>
+    <text x="85" y="68" font-family="system-ui, sans-serif" font-size="11" fill="#334155">😮 Oh!</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">🎉 Yay!</text>
+    <text x="85" y="88" font-family="system-ui, sans-serif" font-size="11" fill="#334155">😬 Oops!</text>
+  </g>
+  
+  <!-- Footer tip -->
+  <text x="350" y="335" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">💡 Every word belongs to at least one of these categories!</text>
+</svg>

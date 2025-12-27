@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 350" width="700" height="350">
+  <title>Order of Operations (PEMDAS)</title>
+  <desc>Educational diagram showing the order of operations for math: Parentheses, Exponents, Multiplication, Division, Addition, Subtraction</desc>
+  
+  <!-- Background -->
+  <rect width="700" height="350" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="350" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Order of Operations</text>
+  <text x="350" y="52" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#64748b">Remember: Please Excuse My Dear Aunt Sally</text>
+  
+  <!-- PEMDAS Steps -->
+  <g transform="translate(50, 90)">
+    
+    <!-- Step 1: Parentheses -->
+    <g transform="translate(0, 0)">
+      <circle cx="25" cy="25" r="25" fill="#8b5cf6"/>
+      <text x="25" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">P</text>
+      <text x="70" y="20" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#7c3aed">Parentheses</text>
+      <text x="70" y="40" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Solve inside ( ) first</text>
+      <text x="220" y="30" font-family="system-ui, sans-serif" font-size="14" fill="#64748b">Ex: (3 + 2) × 4 = 5 × 4</text>
+    </g>
+    
+    <!-- Step 2: Exponents -->
+    <g transform="translate(300, 0)">
+      <circle cx="25" cy="25" r="25" fill="#6366f1"/>
+      <text x="25" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">E</text>
+      <text x="70" y="20" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#4f46e5">Exponents</text>
+      <text x="70" y="40" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Powers like 2² or 3³</text>
+      <text x="205" y="30" font-family="system-ui, sans-serif" font-size="14" fill="#64748b">Ex: 2³ = 2×2×2 = 8</text>
+    </g>
+    
+    <!-- Arrow between rows -->
+    <path d="M 350,55 L 350,75" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arrowDown)"/>
+    
+    <!-- Step 3 & 4: Multiplication and Division (same level) -->
+    <g transform="translate(0, 85)">
+      <rect x="-5" y="-10" width="610" height="65" rx="8" fill="#dcfce7" stroke="#86efac" stroke-width="2"/>
+      
+      <circle cx="25" cy="25" r="25" fill="#22c55e"/>
+      <text x="25" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">M</text>
+      <text x="70" y="20" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#15803d">Multiply</text>
+      <text x="70" y="38" font-family="system-ui, sans-serif" font-size="11" fill="#16a34a">×</text>
+      
+      <circle cx="325" cy="25" r="25" fill="#16a34a"/>
+      <text x="325" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">D</text>
+      <text x="370" y="20" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#15803d">Divide</text>
+      <text x="370" y="38" font-family="system-ui, sans-serif" font-size="11" fill="#16a34a">÷</text>
+      
+      <text x="200" y="30" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#166534">←  LEFT to RIGHT  →</text>
+      <text x="500" y="30" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#166534">←  LEFT to RIGHT  →</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 350,155 L 350,175" stroke="#cbd5e1" stroke-width="3" marker-end="url(#arrowDown)"/>
+    
+    <!-- Step 5 & 6: Addition and Subtraction (same level) -->
+    <g transform="translate(0, 185)">
+      <rect x="-5" y="-10" width="610" height="65" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+      
+      <circle cx="25" cy="25" r="25" fill="#3b82f6"/>
+      <text x="25" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">A</text>
+      <text x="70" y="20" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#1d4ed8">Add</text>
+      <text x="70" y="38" font-family="system-ui, sans-serif" font-size="11" fill="#3b82f6">+</text>
+      
+      <circle cx="325" cy="25" r="25" fill="#2563eb"/>
+      <text x="325" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">S</text>
+      <text x="370" y="20" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#1d4ed8">Subtract</text>
+      <text x="370" y="38" font-family="system-ui, sans-serif" font-size="11" fill="#3b82f6">−</text>
+      
+      <text x="200" y="30" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1e40af">←  LEFT to RIGHT  →</text>
+      <text x="500" y="30" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1e40af">←  LEFT to RIGHT  →</text>
+    </g>
+  </g>
+  
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowDown" markerWidth="10" markerHeight="10" refX="5" refY="8" orient="auto">
+      <path d="M0,0 L10,0 L5,9 z" fill="#cbd5e1"/>
+    </marker>
+  </defs>
+  
+  <!-- Example problem -->
+  <g transform="translate(50, 315)">
+    <rect x="0" y="-5" width="600" height="35" rx="6" fill="#fef3c7" stroke="#fcd34d"/>
+    <text x="300" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#92400e">
+      <tspan font-weight="600">Try it:</tspan>
+      <tspan> 2 + 3 × (4 - 1)² = 2 + 3 × 3² = 2 + 3 × 9 = 2 + 27 = </tspan>
+      <tspan font-weight="700" fill="#15803d">29</tspan>
+    </text>
+  </g>
+</svg>

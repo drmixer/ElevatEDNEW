@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <title>Understanding Fractions: Visual Models</title>
+  <desc>Educational diagram showing fractions using circles, rectangles, and number lines</desc>
+  
+  <!-- Background -->
+  <rect width="800" height="450" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#1e293b">Understanding Fractions</text>
+  
+  <!-- CIRCLE FRACTIONS -->
+  <g transform="translate(100, 80)">
+    <text x="80" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#334155">Circle Models</text>
+    
+    <!-- 1/2 circle -->
+    <g transform="translate(0, 30)">
+      <circle cx="40" cy="40" r="35" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <path d="M 40,40 L 40,5 A 35,35 0 0,1 40,75 Z" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+      <line x1="40" y1="5" x2="40" y2="75" stroke="#1e293b" stroke-width="2"/>
+      <text x="40" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#2563eb">1/2</text>
+      <text x="40" y="116" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">one half</text>
+    </g>
+    
+    <!-- 1/4 circle -->
+    <g transform="translate(100, 30)">
+      <circle cx="40" cy="40" r="35" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <path d="M 40,40 L 40,5 A 35,35 0 0,1 75,40 Z" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+      <line x1="40" y1="5" x2="40" y2="75" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="5" y1="40" x2="75" y2="40" stroke="#94a3b8" stroke-width="1"/>
+      <text x="40" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#7c3aed">1/4</text>
+      <text x="40" y="116" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">one fourth</text>
+    </g>
+    
+    <!-- 3/4 circle -->
+    <g transform="translate(200, 30)">
+      <circle cx="40" cy="40" r="35" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <path d="M 40,40 L 40,5 A 35,35 0 1,1 5,40 Z" fill="#14b8a6" stroke="#0d9488" stroke-width="2"/>
+      <line x1="40" y1="5" x2="40" y2="75" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="5" y1="40" x2="75" y2="40" stroke="#94a3b8" stroke-width="1"/>
+      <text x="40" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#0d9488">3/4</text>
+      <text x="40" y="116" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">three fourths</text>
+    </g>
+  </g>
+  
+  <!-- RECTANGLE FRACTIONS -->
+  <g transform="translate(480, 80)">
+    <text x="120" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#334155">Bar Models</text>
+    
+    <!-- 1/3 bar -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="240" height="35" fill="white" stroke="#e2e8f0" stroke-width="2" rx="4"/>
+      <rect x="2" y="2" width="78" height="31" fill="#f97316" rx="2"/>
+      <line x1="80" y1="0" x2="80" y2="35" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="160" y1="0" x2="160" y2="35" stroke="#94a3b8" stroke-width="1"/>
+      <text x="120" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#ea580c">1/3</text>
+      <text x="120" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">one third</text>
+    </g>
+    
+    <!-- 2/3 bar -->
+    <g transform="translate(0, 100)">
+      <rect x="0" y="0" width="240" height="35" fill="white" stroke="#e2e8f0" stroke-width="2" rx="4"/>
+      <rect x="2" y="2" width="158" height="31" fill="#ec4899" rx="2"/>
+      <line x1="80" y1="0" x2="80" y2="35" stroke="#f9a8d4" stroke-width="1"/>
+      <line x1="160" y1="0" x2="160" y2="35" stroke="#94a3b8" stroke-width="1"/>
+      <text x="120" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#db2777">2/3</text>
+      <text x="120" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">two thirds</text>
+    </g>
+  </g>
+  
+  <!-- NUMBER LINE -->
+  <g transform="translate(50, 280)">
+    <text x="350" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#334155">Number Line</text>
+    
+    <!-- Main line -->
+    <line x1="0" y1="50" x2="700" y2="50" stroke="#1e293b" stroke-width="3"/>
+    
+    <!-- Tick marks and labels -->
+    <g font-family="system-ui, sans-serif" font-size="14" fill="#334155">
+      <!-- 0 -->
+      <line x1="0" y1="40" x2="0" y2="60" stroke="#1e293b" stroke-width="2"/>
+      <text x="0" y="80" text-anchor="middle" font-weight="600">0</text>
+      
+      <!-- 1/4 -->
+      <line x1="175" y1="45" x2="175" y2="55" stroke="#1e293b" stroke-width="1.5"/>
+      <circle cx="175" cy="50" r="8" fill="#8b5cf6"/>
+      <text x="175" y="80" text-anchor="middle" fill="#7c3aed" font-weight="600">1/4</text>
+      
+      <!-- 1/2 -->
+      <line x1="350" y1="40" x2="350" y2="60" stroke="#1e293b" stroke-width="2"/>
+      <circle cx="350" cy="50" r="8" fill="#3b82f6"/>
+      <text x="350" y="80" text-anchor="middle" fill="#2563eb" font-weight="600">1/2</text>
+      
+      <!-- 3/4 -->
+      <line x1="525" y1="45" x2="525" y2="55" stroke="#1e293b" stroke-width="1.5"/>
+      <circle cx="525" cy="50" r="8" fill="#14b8a6"/>
+      <text x="525" y="80" text-anchor="middle" fill="#0d9488" font-weight="600">3/4</text>
+      
+      <!-- 1 -->
+      <line x1="700" y1="40" x2="700" y2="60" stroke="#1e293b" stroke-width="2"/>
+      <text x="700" y="80" text-anchor="middle" font-weight="600">1</text>
+    </g>
+  </g>
+  
+  <!-- EQUIVALENT FRACTIONS -->
+  <g transform="translate(50, 380)">
+    <text x="100" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#334155">Equivalent Fractions</text>
+    
+    <!-- 1/2 bar -->
+    <rect x="0" y="15" width="200" height="20" fill="white" stroke="#e2e8f0" stroke-width="1" rx="3"/>
+    <rect x="1" y="16" width="99" height="18" fill="#3b82f6" rx="2"/>
+    <text x="220" y="30" font-family="system-ui, sans-serif" font-size="14" fill="#2563eb" font-weight="600">1/2</text>
+    
+    <!-- 2/4 bar -->
+    <rect x="0" y="40" width="200" height="20" fill="white" stroke="#e2e8f0" stroke-width="1" rx="3"/>
+    <rect x="1" y="41" width="99" height="18" fill="#8b5cf6" rx="2"/>
+    <line x1="50" y1="40" x2="50" y2="60" stroke="#c4b5fd" stroke-width="1"/>
+    <line x1="100" y1="40" x2="100" y2="60" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="150" y1="40" x2="150" y2="60" stroke="#94a3b8" stroke-width="1"/>
+    <text x="220" y="55" font-family="system-ui, sans-serif" font-size="14" fill="#7c3aed" font-weight="600">2/4</text>
+    
+    <!-- Equals sign -->
+    <text x="260" y="42" font-family="system-ui, sans-serif" font-size="24" fill="#64748b" font-weight="600">=</text>
+    
+    <text x="290" y="55" font-family="system-ui, sans-serif" font-size="12" fill="#64748b">Same amount!</text>
+  </g>
+  
+  <!-- Key insight box -->
+  <g transform="translate(500, 370)">
+    <rect x="0" y="0" width="250" height="60" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1"/>
+    <text x="20" y="25" font-family="system-ui, sans-serif" font-size="13" fill="#166534" font-weight="600">💡 Remember:</text>
+    <text x="20" y="45" font-family="system-ui, sans-serif" font-size="12" fill="#15803d">The larger the denominator,</text>
+    <text x="20" y="58" font-family="system-ui, sans-serif" font-size="12" fill="#15803d">the smaller each piece!</text>
+  </g>
+</svg>

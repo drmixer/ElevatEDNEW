@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 400" width="650" height="400">
+  <title>Comparing Decimals, Fractions, and Percentages</title>
+  <desc>Educational diagram showing how decimals, fractions, and percentages relate</desc>
+  
+  <!-- Background -->
+  <rect width="650" height="400" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="325" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#1e293b">Decimals, Fractions, and Percentages</text>
+  <text x="325" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Different ways to show parts of a whole</text>
+  
+  <!-- Column headers -->
+  <g font-family="system-ui, sans-serif" font-size="14" font-weight="600" text-anchor="middle">
+    <rect x="50" y="65" width="130" height="35" rx="6" fill="#8b5cf6"/>
+    <text x="115" y="88" fill="white">FRACTION</text>
+    
+    <rect x="200" y="65" width="130" height="35" rx="6" fill="#3b82f6"/>
+    <text x="265" y="88" fill="white">DECIMAL</text>
+    
+    <rect x="350" y="65" width="130" height="35" rx="6" fill="#22c55e"/>
+    <text x="415" y="88" fill="white">PERCENT</text>
+    
+    <rect x="500" y="65" width="130" height="35" rx="6" fill="#f97316"/>
+    <text x="565" y="88" fill="white">VISUAL</text>
+  </g>
+  
+  <!-- Row 1: 1/2 = 0.5 = 50% -->
+  <g transform="translate(0, 115)">
+    <rect x="20" y="0" width="610" height="50" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="115" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#7c3aed">½</text>
+    <text x="265" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1d4ed8">0.5</text>
+    <text x="415" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#15803d">50%</text>
+    <!-- Visual: half filled bar -->
+    <rect x="510" y="15" width="100" height="20" fill="#e2e8f0" rx="3"/>
+    <rect x="510" y="15" width="50" height="20" fill="#f97316" rx="3"/>
+  </g>
+  
+  <!-- Row 2: 1/4 = 0.25 = 25% -->
+  <g transform="translate(0, 175)">
+    <rect x="20" y="0" width="610" height="50" rx="6" fill="white" stroke="#e2e8f0"/>
+    <text x="115" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#7c3aed">¼</text>
+    <text x="265" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1d4ed8">0.25</text>
+    <text x="415" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#15803d">25%</text>
+    <!-- Visual: quarter filled bar -->
+    <rect x="510" y="15" width="100" height="20" fill="#e2e8f0" rx="3"/>
+    <rect x="510" y="15" width="25" height="20" fill="#f97316" rx="3"/>
+  </g>
+  
+  <!-- Row 3: 3/4 = 0.75 = 75% -->
+  <g transform="translate(0, 235)">
+    <rect x="20" y="0" width="610" height="50" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="115" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#7c3aed">¾</text>
+    <text x="265" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1d4ed8">0.75</text>
+    <text x="415" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#15803d">75%</text>
+    <!-- Visual: 3/4 filled bar -->
+    <rect x="510" y="15" width="100" height="20" fill="#e2e8f0" rx="3"/>
+    <rect x="510" y="15" width="75" height="20" fill="#f97316" rx="3"/>
+  </g>
+  
+  <!-- Row 4: 1/10 = 0.1 = 10% -->
+  <g transform="translate(0, 295)">
+    <rect x="20" y="0" width="610" height="50" rx="6" fill="white" stroke="#e2e8f0"/>
+    <text x="115" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#7c3aed">1/10</text>
+    <text x="265" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1d4ed8">0.1</text>
+    <text x="415" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#15803d">10%</text>
+    <!-- Visual: 1/10 filled bar -->
+    <rect x="510" y="15" width="100" height="20" fill="#e2e8f0" rx="3"/>
+    <rect x="510" y="15" width="10" height="20" fill="#f97316" rx="3"/>
+  </g>
+  
+  <!-- Conversion tips -->
+  <g transform="translate(50, 365)">
+    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="11" fill="#475569">
+      <tspan font-weight="600">💡 Convert:</tspan>
+      <tspan fill="#7c3aed"> Fraction → Decimal:</tspan> divide top ÷ bottom  |  
+      <tspan fill="#1d4ed8">Decimal → Percent:</tspan> × 100  |  
+      <tspan fill="#15803d">Percent → Decimal:</tspan> ÷ 100
+    </text>
+  </g>
+</svg>

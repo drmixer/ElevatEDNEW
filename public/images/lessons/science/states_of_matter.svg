@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 350" width="700" height="350">
+  <title>States of Matter</title>
+  <desc>Educational diagram showing solid, liquid, and gas states with particle arrangement</desc>
+  
+  <!-- Background -->
+  <rect width="700" height="350" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="350" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">States of Matter</text>
+  
+  <!-- SOLID -->
+  <g transform="translate(120, 170)">
+    <rect x="-90" y="-90" width="180" height="180" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    
+    <!-- Particle container -->
+    <rect x="-55" y="-50" width="110" height="80" rx="6" fill="#bfdbfe" stroke="#60a5fa" stroke-width="1"/>
+    
+    <!-- Tightly packed particles in grid -->
+    <g fill="#3b82f6">
+      <circle cx="-40" cy="-35" r="10"/>
+      <circle cx="-18" cy="-35" r="10"/>
+      <circle cx="4" cy="-35" r="10"/>
+      <circle cx="26" cy="-35" r="10"/>
+      <circle cx="48" cy="-35" r="10"/>
+      
+      <circle cx="-40" cy="-12" r="10"/>
+      <circle cx="-18" cy="-12" r="10"/>
+      <circle cx="4" cy="-12" r="10"/>
+      <circle cx="26" cy="-12" r="10"/>
+      <circle cx="48" cy="-12" r="10"/>
+      
+      <circle cx="-40" cy="11" r="10"/>
+      <circle cx="-18" cy="11" r="10"/>
+      <circle cx="4" cy="11" r="10"/>
+      <circle cx="26" cy="11" r="10"/>
+      <circle cx="48" cy="11" r="10"/>
+    </g>
+    
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#1d4ed8">SOLID</text>
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#3b82f6">Fixed shape &amp; volume</text>
+    <text x="0" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Particles packed tightly</text>
+    
+    <!-- Example -->
+    <text x="0" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">🧊 Ice, Wood, Rock</text>
+  </g>
+  
+  <!-- LIQUID -->
+  <g transform="translate(350, 170)">
+    <rect x="-90" y="-90" width="180" height="180" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    
+    <!-- Container (beaker shape) -->
+    <path d="M -50,-50 L -55,30 L 55,30 L 50,-50" fill="#bbf7d0" stroke="#86efac" stroke-width="1"/>
+    
+    <!-- Loosely packed particles -->
+    <g fill="#22c55e">
+      <circle cx="-35" cy="-20" r="10"/>
+      <circle cx="-10" cy="-30" r="10"/>
+      <circle cx="20" cy="-15" r="10"/>
+      <circle cx="40" cy="-28" r="10"/>
+      
+      <circle cx="-40" cy="5" r="10"/>
+      <circle cx="-15" cy="0" r="10"/>
+      <circle cx="10" cy="10" r="10"/>
+      <circle cx="35" cy="3" r="10"/>
+      
+      <circle cx="-25" cy="22" r="10"/>
+      <circle cx="5" cy="25" r="10"/>
+      <circle cx="30" cy="20" r="10"/>
+    </g>
+    
+    <!-- Flow arrows -->
+    <path d="M -20,-35 Q -30,-25 -25,-15" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <path d="M 25,-20 Q 35,-10 30,5" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="3,2"/>
+    
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#15803d">LIQUID</text>
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#22c55e">Takes shape of container</text>
+    <text x="0" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Particles slide past each other</text>
+    
+    <!-- Example -->
+    <text x="0" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">💧 Water, Juice, Oil</text>
+  </g>
+  
+  <!-- GAS -->
+  <g transform="translate(580, 170)">
+    <rect x="-90" y="-90" width="180" height="180" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    
+    <!-- Container outline (dotted to show no fixed shape) -->
+    <rect x="-55" y="-50" width="110" height="80" rx="6" fill="#fef9c3" stroke="#fcd34d" stroke-width="1" stroke-dasharray="5,3"/>
+    
+    <!-- Spread out particles with motion lines -->
+    <g fill="#f59e0b">
+      <circle cx="-40" cy="-35" r="8"/>
+      <circle cx="10" cy="-40" r="8"/>
+      <circle cx="45" cy="-25" r="8"/>
+      <circle cx="-25" cy="0" r="8"/>
+      <circle cx="30" cy="5" r="8"/>
+      <circle cx="-5" cy="20" r="8"/>
+      <circle cx="45" cy="18" r="8"/>
+    </g>
+    
+    <!-- Motion lines -->
+    <g stroke="#fbbf24" stroke-width="1.5">
+      <line x1="-48" y1="-35" x2="-55" y2="-40"/>
+      <line x1="18" y1="-40" x2="25" y2="-48"/>
+      <line x1="45" y1="-17" x2="52" y2="-10"/>
+      <line x1="-25" y1="8" x2="-30" y2="18"/>
+      <line x1="38" y1="5" x2="48" y2="0"/>
+      <line x1="-5" y1="28" x2="-10" y2="38"/>
+    </g>
+    
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#b45309">GAS</text>
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#d97706">Fills any container</text>
+    <text x="0" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Particles move freely</text>
+    
+    <!-- Example -->
+    <text x="0" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">💨 Air, Steam, Helium</text>
+  </g>
+  
+  <!-- Phase change arrows -->
+  <g transform="translate(235, 75)">
+    <path d="M 0,0 L 50,0" stroke="#64748b" stroke-width="2" marker-end="url(#arrowGray3)"/>
+    <text x="25" y="-8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">melting</text>
+    <path d="M 50,15 L 0,15" stroke="#64748b" stroke-width="2" marker-end="url(#arrowGray3)"/>
+    <text x="25" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">freezing</text>
+  </g>
+  
+  <g transform="translate(465, 75)">
+    <path d="M 0,0 L 50,0" stroke="#64748b" stroke-width="2" marker-end="url(#arrowGray3)"/>
+    <text x="25" y="-8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">evaporation</text>
+    <path d="M 50,15 L 0,15" stroke="#64748b" stroke-width="2" marker-end="url(#arrowGray3)"/>
+    <text x="25" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">condensation</text>
+  </g>
+  
+  <defs>
+    <marker id="arrowGray3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  
+  <!-- Footer -->
+  <text x="350" y="335" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">💡 Adding heat makes particles move faster and spread apart!</text>
+</svg>

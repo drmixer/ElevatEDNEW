@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400">
+  <title>Food Chain: Energy Flow</title>
+  <desc>Educational diagram showing how energy flows through a food chain from producers to decomposers</desc>
+  
+  <!-- Background -->
+  <rect width="700" height="400" fill="#f0fdf4"/>
+  
+  <!-- Title -->
+  <text x="350" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#166534">Food Chain: Energy Flow</text>
+  
+  <!-- Sun (energy source) -->
+  <g transform="translate(80, 100)">
+    <circle cx="0" cy="0" r="35" fill="#fbbf24"/>
+    <circle cx="0" cy="0" r="28" fill="#fcd34d"/>
+    <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <line x1="0" y1="-45" x2="0" y2="-55"/>
+      <line x1="0" y1="45" x2="0" y2="55"/>
+      <line x1="-45" y1="0" x2="-55" y2="0"/>
+      <line x1="45" y1="0" x2="55" y2="0"/>
+      <line x1="-32" y1="-32" x2="-40" y2="-40"/>
+      <line x1="32" y1="-32" x2="40" y2="-40"/>
+      <line x1="-32" y1="32" x2="-40" y2="40"/>
+      <line x1="32" y1="32" x2="40" y2="40"/>
+    </g>
+    <text x="0" y="80" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#b45309" font-weight="600">SUN</text>
+    <text x="0" y="94" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#92400e">(Energy Source)</text>
+  </g>
+  
+  <!-- Arrow from sun to producer -->
+  <path d="M 125,100 L 170,100" fill="none" stroke="#22c55e" stroke-width="3" marker-end="url(#arrowGreen)"/>
+  <text x="148" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#22c55e">energy</text>
+  
+  <!-- PRODUCER (Plant) -->
+  <g transform="translate(220, 100)">
+    <rect x="-45" y="-55" width="90" height="110" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <!-- Plant drawing -->
+    <path d="M 0,30 L 0,-10" stroke="#15803d" stroke-width="4"/>
+    <ellipse cx="-15" cy="-15" rx="12" ry="8" fill="#22c55e" transform="rotate(-30 -15 -15)"/>
+    <ellipse cx="15" cy="-15" rx="12" ry="8" fill="#22c55e" transform="rotate(30 15 -15)"/>
+    <ellipse cx="-10" cy="-30" rx="10" ry="7" fill="#22c55e" transform="rotate(-20 -10 -30)"/>
+    <ellipse cx="10" cy="-30" rx="10" ry="7" fill="#22c55e" transform="rotate(20 10 -30)"/>
+    <ellipse cx="0" cy="-40" rx="8" ry="6" fill="#22c55e"/>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#15803d" font-weight="600">PRODUCER</text>
+    <text x="0" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#16a34a">(makes food)</text>
+  </g>
+  
+  <!-- Arrow from producer to primary consumer -->
+  <path d="M 275,100 L 315,100" fill="none" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  
+  <!-- PRIMARY CONSUMER (Rabbit) -->
+  <g transform="translate(370, 100)">
+    <rect x="-45" y="-55" width="90" height="110" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <!-- Rabbit drawing -->
+    <ellipse cx="0" cy="5" rx="20" ry="15" fill="#94a3b8"/>
+    <ellipse cx="0" cy="-15" rx="12" ry="10" fill="#94a3b8"/>
+    <ellipse cx="-5" cy="-35" rx="4" ry="12" fill="#cbd5e1"/>
+    <ellipse cx="5" cy="-35" rx="4" ry="12" fill="#cbd5e1"/>
+    <circle cx="-4" cy="-18" r="2" fill="#1e293b"/>
+    <circle cx="4" cy="-18" r="2" fill="#1e293b"/>
+    <ellipse cx="0" cy="-10" rx="2" ry="1.5" fill="#f472b6"/>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#1d4ed8" font-weight="600">PRIMARY</text>
+    <text x="0" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#1d4ed8" font-weight="600">CONSUMER</text>
+    <text x="0" y="74" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#3b82f6">(herbivore)</text>
+  </g>
+  
+  <!-- Arrow from primary to secondary consumer -->
+  <path d="M 425,100 L 465,100" fill="none" stroke="#f97316" stroke-width="3" marker-end="url(#arrowOrange)"/>
+  
+  <!-- SECONDARY CONSUMER (Fox) -->
+  <g transform="translate(520, 100)">
+    <rect x="-45" y="-55" width="90" height="110" rx="10" fill="#ffedd5" stroke="#f97316" stroke-width="2"/>
+    <!-- Fox drawing -->
+    <ellipse cx="0" cy="10" rx="22" ry="12" fill="#f97316"/>
+    <ellipse cx="0" cy="-8" rx="14" ry="12" fill="#f97316"/>
+    <polygon points="-12,-20 -8,-35 -3,-20" fill="#f97316"/>
+    <polygon points="12,-20 8,-35 3,-20" fill="#f97316"/>
+    <polygon points="0,-2 -5,8 5,8" fill="white"/>
+    <circle cx="-5" cy="-12" r="2" fill="#1e293b"/>
+    <circle cx="5" cy="-12" r="2" fill="#1e293b"/>
+    <ellipse cx="-25" cy="15" rx="8" ry="4" fill="#fb923c" transform="rotate(-20 -25 15)"/>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#c2410c" font-weight="600">SECONDARY</text>
+    <text x="0" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#c2410c" font-weight="600">CONSUMER</text>
+    <text x="0" y="74" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#ea580c">(carnivore)</text>
+  </g>
+  
+  <!-- Arrow from secondary to tertiary consumer -->
+  <path d="M 575,100 L 615,100" fill="none" stroke="#ef4444" stroke-width="3" marker-end="url(#arrowRed)"/>
+  
+  <!-- TERTIARY CONSUMER (Eagle) -->
+  <g transform="translate(665, 100)">
+    <rect x="-40" y="-55" width="80" height="110" rx="10" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+    <!-- Eagle drawing -->
+    <ellipse cx="0" cy="5" rx="15" ry="18" fill="#78350f"/>
+    <ellipse cx="0" cy="-18" rx="10" ry="8" fill="white"/>
+    <polygon points="0,-10 -3,-5 3,-5" fill="#fbbf24"/>
+    <circle cx="-3" cy="-20" r="2" fill="#1e293b"/>
+    <circle cx="3" cy="-20" r="2" fill="#1e293b"/>
+    <!-- Wings -->
+    <path d="M -15,0 Q -35,-15 -25,-25" fill="none" stroke="#78350f" stroke-width="3"/>
+    <path d="M 15,0 Q 35,-15 25,-25" fill="none" stroke="#78350f" stroke-width="3"/>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#b91c1c" font-weight="600">TERTIARY</text>
+    <text x="0" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#b91c1c" font-weight="600">CONSUMER</text>
+    <text x="0" y="74" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#dc2626">(apex predator)</text>
+  </g>
+  
+  <!-- DECOMPOSER section -->
+  <g transform="translate(350, 280)">
+    <rect x="-280" y="-40" width="560" height="80" rx="10" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+    <text x="0" y="-15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#854d0e">DECOMPOSERS</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a16207">Break down dead organisms and return nutrients to the soil</text>
+    <!-- Mushroom icons -->
+    <g transform="translate(-180, 15)">
+      <ellipse cx="0" cy="0" rx="12" ry="8" fill="#a16207"/>
+      <rect x="-3" y="0" width="6" height="10" fill="#d4d4d4"/>
+    </g>
+    <g transform="translate(-140, 18)">
+      <ellipse cx="0" cy="0" rx="8" ry="5" fill="#92400e"/>
+      <rect x="-2" y="0" width="4" height="7" fill="#e5e5e5"/>
+    </g>
+    <!-- Bacteria/worm icons -->
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#78350f">🍄 Fungi  •  🪱 Worms  •  🦠 Bacteria</text>
+  </g>
+  
+  <!-- Arrows to decomposer -->
+  <path d="M 220,170 Q 220,230 180,260" fill="none" stroke="#ca8a04" stroke-width="2" stroke-dasharray="5,3"/>
+  <path d="M 370,170 Q 370,220 350,240" fill="none" stroke="#ca8a04" stroke-width="2" stroke-dasharray="5,3"/>
+  <path d="M 520,170 Q 520,220 520,240" fill="none" stroke="#ca8a04" stroke-width="2" stroke-dasharray="5,3"/>
+  
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#22c55e"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f97316"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"/>
+    </marker>
+  </defs>
+  
+  <!-- Energy flow legend -->
+  <g transform="translate(350, 370)">
+    <text x="0" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">→ Arrows show energy flow (about 10% passes to next level)</text>
+  </g>
+</svg>

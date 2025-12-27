@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400">
+  <title>Human Body Systems: Major Organs</title>
+  <desc>Educational diagram showing the major organ systems of the human body</desc>
+  
+  <!-- Background -->
+  <rect width="700" height="400" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="350" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Major Body Systems</text>
+  
+  <!-- Human body outline (center) -->
+  <g transform="translate(350, 220)">
+    <!-- Head -->
+    <ellipse cx="0" cy="-130" rx="35" ry="40" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <!-- Neck -->
+    <rect x="-12" y="-95" width="24" height="20" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <!-- Torso -->
+    <ellipse cx="0" cy="-20" rx="55" ry="75" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <!-- Arms -->
+    <ellipse cx="-70" cy="-40" rx="15" ry="50" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" transform="rotate(-15 -70 -40)"/>
+    <ellipse cx="70" cy="-40" rx="15" ry="50" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" transform="rotate(15 70 -40)"/>
+    <!-- Legs -->
+    <ellipse cx="-25" cy="95" rx="18" ry="55" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <ellipse cx="25" cy="95" rx="18" ry="55" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    
+    <!-- BRAIN (Nervous System) -->
+    <ellipse cx="0" cy="-135" rx="22" ry="20" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+    <path d="M -10,-145 Q -5,-130 -12,-120" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+    <path d="M 10,-145 Q 5,-130 12,-120" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+    
+    <!-- HEART (Circulatory) -->
+    <path d="M 0,-45 C -15,-60 -25,-40 -10,-25 L 0,-15 L 10,-25 C 25,-40 15,-60 0,-45" fill="#fecaca" stroke="#ef4444" stroke-width="2"/>
+    
+    <!-- LUNGS (Respiratory) -->
+    <ellipse cx="-25" cy="-40" rx="18" ry="30" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <ellipse cx="25" cy="-40" rx="18" ry="30" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    
+    <!-- STOMACH (Digestive) -->
+    <ellipse cx="-10" cy="10" rx="20" ry="18" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <!-- Intestines hint -->
+    <path d="M -10,28 Q 5,40 -5,50 Q -20,55 0,65" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- KIDNEYS -->
+    <ellipse cx="-35" cy="15" rx="8" ry="12" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+    <ellipse cx="35" cy="15" rx="8" ry="12" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+    
+    <!-- BONES hint (skeletal) -->
+    <line x1="0" y1="-85" x2="0" y2="45" stroke="#94a3b8" stroke-width="3" stroke-dasharray="5,5"/>
+  </g>
+  
+  <!-- System Labels with leader lines -->
+  
+  <!-- Nervous System -->
+  <g>
+    <line x1="350" y1="85" x2="120" y2="60" stroke="#6366f1" stroke-width="1.5"/>
+    <rect x="20" y="40" width="115" height="50" rx="6" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="78" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#4f46e5">🧠 Nervous</text>
+    <text x="78" y="78" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6366f1">Brain, nerves</text>
+    <text x="78" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Controls everything!</text>
+  </g>
+  
+  <!-- Respiratory System -->
+  <g>
+    <line x1="325" y1="180" x2="120" y2="140" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="20" y="110" width="115" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="78" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#1d4ed8">🫁 Respiratory</text>
+    <text x="78" y="148" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#3b82f6">Lungs, trachea</text>
+    <text x="78" y="160" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Breathing oxygen</text>
+  </g>
+  
+  <!-- Circulatory System -->
+  <g>
+    <line x1="350" y1="175" x2="580" y2="60" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="565" y="40" width="115" height="50" rx="6" fill="#fecaca" stroke="#ef4444" stroke-width="2"/>
+    <text x="623" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#dc2626">❤️ Circulatory</text>
+    <text x="623" y="78" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#ef4444">Heart, blood vessels</text>
+    <text x="623" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Moves blood</text>
+  </g>
+  
+  <!-- Digestive System -->
+  <g>
+    <line x1="340" y1="230" x2="580" y2="140" stroke="#22c55e" stroke-width="1.5"/>
+    <rect x="565" y="110" width="115" height="50" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <text x="623" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#15803d">🍏 Digestive</text>
+    <text x="623" y="148" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#22c55e">Stomach, intestines</text>
+    <text x="623" y="160" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Breaks down food</text>
+  </g>
+  
+  <!-- Skeletal System -->
+  <g>
+    <line x1="350" y1="250" x2="120" y2="220" stroke="#71717a" stroke-width="1.5"/>
+    <rect x="20" y="185" width="115" height="50" rx="6" fill="#f4f4f5" stroke="#71717a" stroke-width="2"/>
+    <text x="78" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#3f3f46">🦴 Skeletal</text>
+    <text x="78" y="223" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#71717a">206 bones</text>
+    <text x="78" y="235" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Support &amp; protect</text>
+  </g>
+  
+  <!-- Muscular System -->
+  <g>
+    <line x1="420" y1="180" x2="580" y2="220" stroke="#f97316" stroke-width="1.5"/>
+    <rect x="565" y="185" width="115" height="50" rx="6" fill="#ffedd5" stroke="#f97316" stroke-width="2"/>
+    <text x="623" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#ea580c">💪 Muscular</text>
+    <text x="623" y="223" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#f97316">600+ muscles</text>
+    <text x="623" y="235" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Movement</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="350" y="385" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">💡 All body systems work together to keep you healthy and alive!</text>
+</svg>

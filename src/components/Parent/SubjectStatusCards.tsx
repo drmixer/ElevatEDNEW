@@ -77,7 +77,7 @@ const StatusCard: React.FC<{
 }> = ({ status, childName, onViewSubject, onAssignSubject }) => {
     const [showTooltip, setShowTooltip] = useState(false);
     const [expanded, setExpanded] = useState(false);
-    const firstName = childName.split(' ')[0];
+    const _firstName = childName.split(' ')[0];
 
     const borderColor =
         status.status === 'on_track'

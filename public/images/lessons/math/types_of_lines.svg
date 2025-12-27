@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 350" width="650" height="350">
+  <title>Types of Lines</title>
+  <desc>Educational diagram showing parallel, perpendicular, and intersecting lines</desc>
+  
+  <!-- Background -->
+  <rect width="650" height="350" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="325" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Types of Lines</text>
+  
+  <!-- Grid background for visual reference -->
+  <defs>
+    <pattern id="lineGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f1f5f9" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  
+  <!-- PARALLEL LINES -->
+  <g transform="translate(110, 170)">
+    <rect x="-90" y="-100" width="180" height="200" fill="url(#lineGrid)" stroke="#e2e8f0" rx="8"/>
+    <rect x="-90" y="-100" width="180" height="200" fill="#f0f9ff" fill-opacity="0.5" stroke="#3b82f6" stroke-width="2" rx="8"/>
+    
+    <!-- Two parallel horizontal lines -->
+    <line x1="-60" y1="-30" x2="60" y2="-30" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-60" y1="30" x2="60" y2="30" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Arrow indicators showing they don't meet -->
+    <g stroke="#60a5fa" stroke-width="1.5" fill="none">
+      <path d="M 70,-30 L 85,-30"/>
+      <polygon points="85,-30 80,-34 80,-26" fill="#60a5fa"/>
+      <path d="M 70,30 L 85,30"/>
+      <polygon points="85,30 80,26 80,34" fill="#60a5fa"/>
+    </g>
+    
+    <!-- Distance markers -->
+    <line x1="0" y1="-30" x2="0" y2="30" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="8" y="5" font-family="system-ui, sans-serif" font-size="10" fill="#3b82f6">same distance</text>
+    
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#1d4ed8">Parallel Lines</text>
+    <text x="0" y="93" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#3b82f6">Never touch or cross</text>
+    <text x="0" y="108" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">∥ = parallel symbol</text>
+  </g>
+  
+  <!-- PERPENDICULAR LINES -->
+  <g transform="translate(325, 170)">
+    <rect x="-90" y="-100" width="180" height="200" fill="url(#lineGrid)" stroke="#e2e8f0" rx="8"/>
+    <rect x="-90" y="-100" width="180" height="200" fill="#fefce8" fill-opacity="0.5" stroke="#eab308" stroke-width="2" rx="8"/>
+    
+    <!-- Perpendicular lines (cross at 90°) -->
+    <line x1="-50" y1="0" x2="50" y2="0" stroke="#eab308" stroke-width="4" stroke-linecap="round"/>
+    <line x1="0" y1="-50" x2="0" y2="50" stroke="#eab308" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Right angle square -->
+    <rect x="-15" y="-15" width="15" height="15" fill="none" stroke="#f59e0b" stroke-width="2"/>
+    <text x="-7" y="-5" font-family="system-ui, sans-serif" font-size="9" fill="#b45309">90°</text>
+    
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#a16207">Perpendicular</text>
+    <text x="0" y="93" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#ca8a04">Cross at right angles (90°)</text>
+    <text x="0" y="108" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">⊥ = perpendicular symbol</text>
+  </g>
+  
+  <!-- INTERSECTING LINES -->
+  <g transform="translate(540, 170)">
+    <rect x="-90" y="-100" width="180" height="200" fill="url(#lineGrid)" stroke="#e2e8f0" rx="8"/>
+    <rect x="-90" y="-100" width="180" height="200" fill="#f0fdf4" fill-opacity="0.5" stroke="#22c55e" stroke-width="2" rx="8"/>
+    
+    <!-- Intersecting lines (cross at any angle) -->
+    <line x1="-55" y1="40" x2="55" y2="-40" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-55" y1="-20" x2="55" y2="20" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Angle arc -->
+    <path d="M 10,-2 A 15,15 0 0,1 8,12" fill="none" stroke="#16a34a" stroke-width="2"/>
+    <text x="20" y="8" font-family="system-ui, sans-serif" font-size="9" fill="#15803d">any angle</text>
+    
+    <!-- Intersection point -->
+    <circle cx="0" cy="0" r="5" fill="#22c55e"/>
+    
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#15803d">Intersecting</text>
+    <text x="0" y="93" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#22c55e">Cross at one point</text>
+    <text x="0" y="108" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Any angle (not 90°)</text>
+  </g>
+  
+  <!-- Real-world examples -->
+  <g transform="translate(325, 320)">
+    <rect x="-290" y="-15" width="580" height="35" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="0" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">
+      <tspan fill="#1d4ed8">Parallel: Railroad tracks</tspan>
+      <tspan> • </tspan>
+      <tspan fill="#a16207">Perpendicular: Street corners</tspan>
+      <tspan> • </tspan>
+      <tspan fill="#15803d">Intersecting: Scissors opening</tspan>
+    </text>
+  </g>
+</svg>

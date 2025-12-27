@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 400" width="650" height="400">
+  <title>Simple Machines</title>
+  <desc>Educational diagram showing the six types of simple machines</desc>
+  
+  <!-- Background -->
+  <rect width="650" height="400" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="325" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Six Simple Machines</text>
+  <text x="325" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Tools that make work easier by changing force or direction</text>
+  
+  <!-- Row 1 -->
+  
+  <!-- LEVER -->
+  <g transform="translate(115, 140)">
+    <rect x="-90" y="-70" width="180" height="140" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <!-- Fulcrum (triangle) -->
+    <polygon points="0,30 -15,50 15,50" fill="#3b82f6"/>
+    <!-- Lever bar -->
+    <line x1="-60" y1="25" x2="60" y2="30" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+    <!-- Load on left -->
+    <rect x="-65" y="0" width="20" height="20" fill="#f97316"/>
+    <!-- Effort arrow on right -->
+    <path d="M 50,25 L 50,-5" stroke="#22c55e" stroke-width="3" marker-end="url(#arrowGreen2)"/>
+    <text x="60" y="0" font-family="system-ui, sans-serif" font-size="9" fill="#16a34a">push</text>
+    
+    <text x="0" y="-45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#1d4ed8">LEVER</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Ex: Seesaw, Crowbar</text>
+  </g>
+  
+  <!-- WHEEL AND AXLE -->
+  <g transform="translate(325, 140)">
+    <rect x="-90" y="-70" width="180" height="140" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <!-- Wheel -->
+    <circle cx="0" cy="5" r="35" fill="#86efac" stroke="#22c55e" stroke-width="3"/>
+    <!-- Axle -->
+    <circle cx="0" cy="5" r="10" fill="#22c55e"/>
+    <!-- Spokes -->
+    <line x1="0" y1="-30" x2="0" y2="40" stroke="#22c55e" stroke-width="2"/>
+    <line x1="-35" y1="5" x2="35" y2="5" stroke="#22c55e" stroke-width="2"/>
+    
+    <text x="0" y="-45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#15803d">WHEEL &amp; AXLE</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Ex: Doorknob, Steering wheel</text>
+  </g>
+  
+  <!-- PULLEY -->
+  <g transform="translate(535, 140)">
+    <rect x="-90" y="-70" width="180" height="140" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <!-- Support -->
+    <line x1="0" y1="-50" x2="0" y2="-25" stroke="#1e293b" stroke-width="3"/>
+    <!-- Wheel -->
+    <circle cx="0" cy="-15" r="15" fill="#fcd34d" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="0" cy="-15" r="4" fill="#f59e0b"/>
+    <!-- Rope -->
+    <path d="M -15,-15 L -15,35" stroke="#1e293b" stroke-width="2"/>
+    <path d="M 15,-15 L 15,35" stroke="#1e293b" stroke-width="2"/>
+    <!-- Load -->
+    <rect x="-25" y="35" width="20" height="15" fill="#ef4444"/>
+    <!-- Pull arrow -->
+    <path d="M 15,30 L 15,45" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowGreen2)"/>
+    
+    <text x="0" y="-52" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#b45309">PULLEY</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Ex: Flagpole, Blinds</text>
+  </g>
+  
+  <!-- Row 2 -->
+  
+  <!-- INCLINED PLANE -->
+  <g transform="translate(115, 300)">
+    <rect x="-90" y="-70" width="180" height="140" rx="10" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+    <!-- Ramp -->
+    <polygon points="-60,40 60,40 60,0" fill="#a5b4fc" stroke="#6366f1" stroke-width="2"/>
+    <!-- Box on ramp -->
+    <rect x="0" y="8" width="20" height="15" fill="#f97316" transform="rotate(-25 10 15)"/>
+    <!-- Arrow showing motion -->
+    <path d="M -30,25 L 20,0" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowGreen2)"/>
+    
+    <text x="0" y="-45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#4f46e5">INCLINED PLANE</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Ex: Ramp, Slide</text>
+  </g>
+  
+  <!-- WEDGE -->
+  <g transform="translate(325, 300)">
+    <rect x="-90" y="-70" width="180" height="140" rx="10" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+    <!-- Wedge shape (triangle pointing right) -->
+    <polygon points="-30,30 -30,-20 40,5" fill="#f9a8d4" stroke="#ec4899" stroke-width="2"/>
+    <!-- Force arrow -->
+    <path d="M -55,5 L -35,5" stroke="#22c55e" stroke-width="3" marker-end="url(#arrowGreen2)"/>
+    <!-- Split arrows -->
+    <path d="M 35,-10 L 55,-25" stroke="#64748b" stroke-width="2" marker-end="url(#arrowGray4)"/>
+    <path d="M 35,20 L 55,35" stroke="#64748b" stroke-width="2" marker-end="url(#arrowGray4)"/>
+    
+    <text x="0" y="-45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#be185d">WEDGE</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Ex: Axe, Knife, Doorstop</text>
+  </g>
+  
+  <!-- SCREW -->
+  <g transform="translate(535, 300)">
+    <rect x="-90" y="-70" width="180" height="140" rx="10" fill="#ccfbf1" stroke="#14b8a6" stroke-width="2"/>
+    <!-- Screw -->
+    <rect x="-8" y="-35" width="16" height="60" fill="#5eead4" stroke="#14b8a6" stroke-width="2" rx="2"/>
+    <!-- Threads -->
+    <g stroke="#0d9488" stroke-width="2">
+      <line x1="-12" y1="-25" x2="12" y2="-20"/>
+      <line x1="-12" y1="-10" x2="12" y2="-5"/>
+      <line x1="-12" y1="5" x2="12" y2="10"/>
+      <line x1="-12" y1="20" x2="12" y2="25"/>
+    </g>
+    <!-- Point -->
+    <polygon points="-8,25 8,25 0,40" fill="#5eead4" stroke="#14b8a6" stroke-width="2"/>
+    <!-- Head -->
+    <rect x="-15" y="-45" width="30" height="12" fill="#14b8a6" rx="2"/>
+    <!-- Rotation arrow -->
+    <path d="M 25,-15 A 15,15 0 1,1 25,15" fill="none" stroke="#22c55e" stroke-width="2"/>
+    <polygon points="28,15 22,18 22,12" fill="#22c55e"/>
+    
+    <text x="0" y="-52" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#0f766e">SCREW</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Ex: Jar lid, Light bulb</text>
+  </g>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowGreen2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#22c55e"/>
+    </marker>
+    <marker id="arrowGray4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  
+  <!-- Footer -->
+  <text x="325" y="385" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">💡 Simple machines reduce effort needed OR change the direction of force</text>
+</svg>

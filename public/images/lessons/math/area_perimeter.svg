@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" width="600" height="300">
+  <title>Area and Perimeter</title>
+  <desc>Educational diagram showing the difference between area (inside) and perimeter (around)</desc>
+  
+  <!-- Background -->
+  <rect width="600" height="300" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="300" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Area vs. Perimeter</text>
+  
+  <!-- PERIMETER SECTION -->
+  <g transform="translate(80, 70)">
+    <text x="75" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#8b5cf6">Perimeter</text>
+    <text x="75" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">(Distance around)</text>
+    
+    <!-- Rectangle outline with animated dash -->
+    <rect x="0" y="30" width="150" height="100" fill="white" stroke="#8b5cf6" stroke-width="4" rx="2"/>
+    
+    <!-- Measurement labels -->
+    <g font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#7c3aed">
+      <!-- Top -->
+      <line x1="10" y1="25" x2="140" y2="25" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="75" y="22" text-anchor="middle">8 units</text>
+      
+      <!-- Right -->
+      <line x1="155" y1="40" x2="155" y2="120" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="175" y="85" text-anchor="middle">5 units</text>
+      
+      <!-- Bottom -->
+      <line x1="10" y1="135" x2="140" y2="135" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="75" y="148" text-anchor="middle">8 units</text>
+      
+      <!-- Left -->
+      <line x1="-5" y1="40" x2="-5" y2="120" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="-25" y="85" text-anchor="middle">5 units</text>
+    </g>
+    
+    <!-- Formula -->
+    <rect x="10" y="165" width="130" height="45" rx="6" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text x="75" y="183" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#5b21b6">P = 2l + 2w</text>
+    <text x="75" y="200" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#7c3aed">P = 2(8) + 2(5) = 26 units</text>
+  </g>
+  
+  <!-- AREA SECTION -->
+  <g transform="translate(350, 70)">
+    <text x="75" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#14b8a6">Area</text>
+    <text x="75" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">(Space inside)</text>
+    
+    <!-- Rectangle with grid squares -->
+    <rect x="0" y="30" width="150" height="100" fill="#ccfbf1" stroke="#14b8a6" stroke-width="2" rx="2"/>
+    
+    <!-- Grid lines (8 columns x 5 rows with smaller units for visual) -->
+    <g stroke="#5eead4" stroke-width="0.5">
+      <!-- Vertical lines -->
+      <line x1="18.75" y1="30" x2="18.75" y2="130"/>
+      <line x1="37.5" y1="30" x2="37.5" y2="130"/>
+      <line x1="56.25" y1="30" x2="56.25" y2="130"/>
+      <line x1="75" y1="30" x2="75" y2="130"/>
+      <line x1="93.75" y1="30" x2="93.75" y2="130"/>
+      <line x1="112.5" y1="30" x2="112.5" y2="130"/>
+      <line x1="131.25" y1="30" x2="131.25" y2="130"/>
+      
+      <!-- Horizontal lines -->
+      <line x1="0" y1="50" x2="150" y2="50"/>
+      <line x1="0" y1="70" x2="150" y2="70"/>
+      <line x1="0" y1="90" x2="150" y2="90"/>
+      <line x1="0" y1="110" x2="150" y2="110"/>
+    </g>
+    
+    <!-- Highlight some squares -->
+    <rect x="0" y="30" width="18.75" height="20" fill="#14b8a6" fill-opacity="0.4"/>
+    <rect x="18.75" y="30" width="18.75" height="20" fill="#14b8a6" fill-opacity="0.3"/>
+    <rect x="37.5" y="30" width="18.75" height="20" fill="#14b8a6" fill-opacity="0.4"/>
+    
+    <!-- Measurement labels -->
+    <g font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#0d9488">
+      <!-- Top -->
+      <text x="75" y="22" text-anchor="middle">8 units</text>
+      
+      <!-- Right -->
+      <text x="175" y="85" text-anchor="middle">5 units</text>
+    </g>
+    
+    <!-- Count indicator -->
+    <text x="75" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#0d9488" opacity="0.3">40</text>
+    
+    <!-- Formula -->
+    <rect x="10" y="165" width="130" height="45" rx="6" fill="#f0fdfa" stroke="#99f6e4"/>
+    <text x="75" y="183" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#0f766e">A = l × w</text>
+    <text x="75" y="200" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#0d9488">A = 8 × 5 = 40 sq units</text>
+  </g>
+  
+  <!-- Comparison callout -->
+  <g transform="translate(215, 230)">
+    <rect x="0" y="0" width="170" height="50" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="85" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">Perimeter = distance</text>
+    <text x="85" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">Area = space (in squares)</text>
+    <rect x="130" y="35" width="8" height="8" fill="#14b8a6" opacity="0.5"/>
+    <text x="142" y="43" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">= 1 sq unit</text>
+  </g>
+  
+  <!-- VS divider -->
+  <text x="300" y="140" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#94a3b8">VS</text>
+</svg>

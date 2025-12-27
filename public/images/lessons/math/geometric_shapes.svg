@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 350" width="700" height="350">
+  <title>Basic 2D and 3D Shapes</title>
+  <desc>Educational diagram showing common geometric shapes with names and properties</desc>
+  
+  <!-- Background -->
+  <rect width="700" height="350" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="350" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Geometric Shapes</text>
+  
+  <!-- 2D Shapes Section -->
+  <text x="200" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">2D Shapes (Flat)</text>
+  <line x1="50" y1="68" x2="350" y2="68" stroke="#93c5fd" stroke-width="2"/>
+  
+  <!-- Circle -->
+  <g transform="translate(80, 130)">
+    <circle cx="0" cy="0" r="35" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1d4ed8">Circle</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">0 sides, 0 corners</text>
+  </g>
+  
+  <!-- Triangle -->
+  <g transform="translate(170, 130)">
+    <polygon points="0,-35 -35,30 35,30" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#15803d">Triangle</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">3 sides, 3 corners</text>
+  </g>
+  
+  <!-- Square -->
+  <g transform="translate(260, 130)">
+    <rect x="-30" y="-30" width="60" height="60" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#b45309">Square</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">4 equal sides</text>
+  </g>
+  
+  <!-- Rectangle -->
+  <g transform="translate(80, 250)">
+    <rect x="-40" y="-25" width="80" height="50" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#be185d">Rectangle</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">4 sides, 4 right angles</text>
+  </g>
+  
+  <!-- Pentagon -->
+  <g transform="translate(170, 250)">
+    <polygon points="0,-30 28,-10 18,28 -18,28 -28,-10" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#4f46e5">Pentagon</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">5 sides, 5 corners</text>
+  </g>
+  
+  <!-- Hexagon -->
+  <g transform="translate(260, 250)">
+    <polygon points="30,0 15,26 -15,26 -30,0 -15,-26 15,-26" fill="#ccfbf1" stroke="#14b8a6" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#0d9488">Hexagon</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">6 sides, 6 corners</text>
+  </g>
+  
+  <!-- 3D Shapes Section -->
+  <text x="525" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#8b5cf6">3D Shapes (Solid)</text>
+  <line x1="400" y1="68" x2="650" y2="68" stroke="#c4b5fd" stroke-width="2"/>
+  
+  <!-- Sphere -->
+  <g transform="translate(430, 130)">
+    <defs>
+      <radialGradient id="sphereGrad" cx="30%" cy="30%">
+        <stop offset="0%" style="stop-color:#dbeafe"/>
+        <stop offset="100%" style="stop-color:#3b82f6"/>
+      </radialGradient>
+    </defs>
+    <circle cx="0" cy="0" r="30" fill="url(#sphereGrad)"/>
+    <ellipse cx="0" cy="5" rx="20" ry="8" fill="none" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1d4ed8">Sphere</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Like a ball</text>
+  </g>
+  
+  <!-- Cube -->
+  <g transform="translate(530, 130)">
+    <!-- Back face -->
+    <rect x="-15" y="-30" width="40" height="40" fill="#a5b4fc" stroke="#6366f1" stroke-width="1"/>
+    <!-- Front face -->
+    <rect x="-25" y="-20" width="40" height="40" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+    <!-- Top face -->
+    <polygon points="-25,-20 -15,-30 25,-30 15,-20" fill="#c7d2fe" stroke="#6366f1" stroke-width="1"/>
+    <!-- Right face -->
+    <polygon points="15,-20 25,-30 25,10 15,20" fill="#a5b4fc" stroke="#6366f1" stroke-width="1"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#4f46e5">Cube</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">6 square faces</text>
+  </g>
+  
+  <!-- Cylinder -->
+  <g transform="translate(620, 130)">
+    <ellipse cx="0" cy="25" rx="25" ry="10" fill="#fcd34d" stroke="#f59e0b" stroke-width="2"/>
+    <rect x="-25" y="-25" width="50" height="50" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <ellipse cx="0" cy="-25" rx="25" ry="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#b45309">Cylinder</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">2 circles + 1 curved</text>
+  </g>
+  
+  <!-- Cone -->
+  <g transform="translate(430, 250)">
+    <ellipse cx="0" cy="25" rx="25" ry="10" fill="#fed7aa" stroke="#f97316" stroke-width="2"/>
+    <polygon points="0,-35 -25,25 25,25" fill="#ffedd5" stroke="#f97316" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#ea580c">Cone</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">1 circle base, 1 point</text>
+  </g>
+  
+  <!-- Pyramid -->
+  <g transform="translate(530, 250)">
+    <!-- Base (slightly visible) -->
+    <polygon points="0,25 -30,15 0,5 30,15" fill="#d4d4d8" stroke="#71717a" stroke-width="1"/>
+    <!-- Front face -->
+    <polygon points="0,-30 -30,15 0,25" fill="#fafafa" stroke="#71717a" stroke-width="2"/>
+    <!-- Right face -->
+    <polygon points="0,-30 0,25 30,15" fill="#e4e4e7" stroke="#71717a" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#52525b">Pyramid</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Polygon base, triangles</text>
+  </g>
+  
+  <!-- Rectangular Prism -->
+  <g transform="translate(620, 250)">
+    <!-- Back face -->
+    <rect x="-10" y="-25" width="45" height="35" fill="#86efac" stroke="#22c55e" stroke-width="1"/>
+    <!-- Front face -->
+    <rect x="-25" y="-15" width="45" height="35" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <!-- Top face -->
+    <polygon points="-25,-15 -10,-25 35,-25 20,-15" fill="#bbf7d0" stroke="#22c55e" stroke-width="1"/>
+    <!-- Right face -->
+    <polygon points="20,-15 35,-25 35,10 20,20" fill="#86efac" stroke="#22c55e" stroke-width="1"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#15803d">Rect. Prism</text>
+    <text x="0" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">6 rectangular faces</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="350" y="335" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">💡 2D shapes are flat, 3D shapes have depth (length, width, AND height)</text>
+</svg>

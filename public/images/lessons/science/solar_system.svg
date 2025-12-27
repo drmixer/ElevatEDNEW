@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <title>The Solar System</title>
+  <desc>Educational diagram showing all eight planets in order from the Sun</desc>
+  
+  <!-- Space background -->
+  <rect width="800" height="400" fill="#0f172a"/>
+  
+  <!-- Stars -->
+  <g fill="white">
+    <circle cx="50" cy="30" r="1"/>
+    <circle cx="120" cy="80" r="0.8"/>
+    <circle cx="200" cy="25" r="1.2"/>
+    <circle cx="280" cy="60" r="0.6"/>
+    <circle cx="350" cy="35" r="1"/>
+    <circle cx="420" cy="75" r="0.7"/>
+    <circle cx="500" cy="20" r="1.1"/>
+    <circle cx="580" cy="55" r="0.9"/>
+    <circle cx="650" cy="30" r="1"/>
+    <circle cx="720" cy="70" r="0.8"/>
+    <circle cx="780" cy="40" r="0.6"/>
+    <circle cx="100" cy="350" r="0.8"/>
+    <circle cx="180" cy="380" r="1"/>
+    <circle cx="300" cy="360" r="0.7"/>
+    <circle cx="450" cy="370" r="0.9"/>
+    <circle cx="600" cy="355" r="1.1"/>
+    <circle cx="700" cy="385" r="0.8"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="white">The Solar System</text>
+  
+  <!-- Orbit lines (simplified) -->
+  <g fill="none" stroke="#334155" stroke-width="1" opacity="0.4">
+    <ellipse cx="70" cy="200" rx="25" ry="80"/>
+    <ellipse cx="70" cy="200" rx="45" ry="110"/>
+    <ellipse cx="70" cy="200" rx="70" ry="130"/>
+    <ellipse cx="70" cy="200" rx="100" ry="145"/>
+  </g>
+  
+  <!-- SUN -->
+  <g transform="translate(55, 200)">
+    <defs>
+      <radialGradient id="sunGlow">
+        <stop offset="0%" style="stop-color:#fef08a"/>
+        <stop offset="50%" style="stop-color:#fbbf24"/>
+        <stop offset="100%" style="stop-color:#f59e0b"/>
+      </radialGradient>
+    </defs>
+    <circle cx="0" cy="0" r="45" fill="url(#sunGlow)"/>
+    <circle cx="0" cy="0" r="55" fill="#fbbf24" opacity="0.2"/>
+    <circle cx="0" cy="0" r="65" fill="#fbbf24" opacity="0.1"/>
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#fbbf24" font-weight="600">Sun</text>
+  </g>
+  
+  <!-- MERCURY -->
+  <g transform="translate(130, 200)">
+    <circle cx="0" cy="0" r="6" fill="#94a3b8"/>
+    <text x="0" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Mercury</text>
+  </g>
+  
+  <!-- VENUS -->
+  <g transform="translate(175, 200)">
+    <circle cx="0" cy="0" r="10" fill="#fcd34d"/>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#fcd34d">Venus</text>
+  </g>
+  
+  <!-- EARTH -->
+  <g transform="translate(230, 200)">
+    <circle cx="0" cy="0" r="11" fill="#3b82f6"/>
+    <circle cx="3" cy="-3" r="4" fill="#22c55e" opacity="0.7"/>
+    <circle cx="-4" cy="4" r="3" fill="#22c55e" opacity="0.6"/>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#60a5fa" font-weight="600">Earth</text>
+    <text x="0" y="37" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#60a5fa">(our home!)</text>
+  </g>
+  
+  <!-- MARS -->
+  <g transform="translate(290, 200)">
+    <circle cx="0" cy="0" r="8" fill="#ef4444"/>
+    <circle cx="2" cy="-2" r="2" fill="#fca5a5" opacity="0.4"/>
+    <text x="0" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#ef4444">Mars</text>
+  </g>
+  
+  <!-- Asteroid Belt indicator -->
+  <g transform="translate(340, 200)">
+    <circle cx="-5" cy="-8" r="2" fill="#64748b"/>
+    <circle cx="3" cy="6" r="1.5" fill="#64748b"/>
+    <circle cx="-2" cy="3" r="1" fill="#64748b"/>
+    <circle cx="5" cy="-4" r="1.5" fill="#64748b"/>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#64748b" font-style="italic">Asteroid Belt</text>
+  </g>
+  
+  <!-- JUPITER -->
+  <g transform="translate(420, 200)">
+    <circle cx="0" cy="0" r="28" fill="#d97706"/>
+    <ellipse cx="0" cy="-5" rx="26" ry="4" fill="#fbbf24" opacity="0.4"/>
+    <ellipse cx="0" cy="5" rx="24" ry="3" fill="#92400e" opacity="0.4"/>
+    <ellipse cx="0" cy="12" rx="22" ry="3" fill="#fbbf24" opacity="0.3"/>
+    <circle cx="8" cy="8" r="5" fill="#dc2626" opacity="0.7"/>
+    <text x="0" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#fbbf24" font-weight="600">Jupiter</text>
+    <text x="0" y="57" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#d97706">(largest)</text>
+  </g>
+  
+  <!-- SATURN -->
+  <g transform="translate(530, 200)">
+    <circle cx="0" cy="0" r="22" fill="#fcd34d"/>
+    <ellipse cx="0" cy="-3" rx="20" ry="3" fill="#fef3c7" opacity="0.4"/>
+    <!-- Rings -->
+    <ellipse cx="0" cy="0" rx="40" ry="10" fill="none" stroke="#fcd34d" stroke-width="4" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="35" ry="8" fill="none" stroke="#fef3c7" stroke-width="2" opacity="0.4"/>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#fcd34d" font-weight="600">Saturn</text>
+    <text x="0" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#d97706">(rings!)</text>
+  </g>
+  
+  <!-- URANUS -->
+  <g transform="translate(620, 200)">
+    <circle cx="0" cy="0" r="14" fill="#67e8f9"/>
+    <ellipse cx="0" cy="0" rx="20" ry="5" fill="none" stroke="#a5f3fc" stroke-width="1.5" opacity="0.5" transform="rotate(80)"/>
+    <text x="0" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#67e8f9">Uranus</text>
+  </g>
+  
+  <!-- NEPTUNE -->
+  <g transform="translate(700, 200)">
+    <circle cx="0" cy="0" r="13" fill="#3b82f6"/>
+    <circle cx="3" cy="-3" r="3" fill="#60a5fa" opacity="0.4"/>
+    <text x="0" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#60a5fa">Neptune</text>
+  </g>
+  
+  <!-- Legend: Inner vs Outer planets -->
+  <g transform="translate(150, 320)">
+    <rect x="0" y="0" width="220" height="55" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="110" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="white" font-weight="600">Rocky vs Gas Giants</text>
+    <line x1="10" y1="25" x2="210" y2="25" stroke="#334155"/>
+    <circle cx="25" cy="40" r="6" fill="#94a3b8"/>
+    <text x="40" y="44" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">Inner: Rocky (small)</text>
+    <circle cx="135" cy="40" r="8" fill="#fbbf24"/>
+    <text x="152" y="44" font-family="system-ui, sans-serif" font-size="9" fill="#fbbf24">Outer: Gas (large)</text>
+  </g>
+  
+  <!-- Not to scale note -->
+  <text x="400" y="385" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" font-style="italic">Note: Sizes and distances not to scale</text>
+</svg>

@@ -13,6 +13,7 @@ export { LessonNavigation } from './LessonNavigation';
 export { LessonCard, LessonCardPadded, LessonCardHeader, LessonCardBody, LessonCardFooter } from './LessonCard';
 export { LessonHeader } from './LessonHeader';
 export { ContentIssueReport } from './ContentIssueReport';
+export { ReflectionPrompt } from './ReflectionPrompt';
 
 // Phase components
 export {

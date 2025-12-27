@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <title>Multiplication Table (1-10)</title>
+  <desc>Educational multiplication table showing products from 1x1 to 10x10</desc>
+  
+  <!-- Background -->
+  <rect width="600" height="400" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#1e293b">Multiplication Table</text>
+  
+  <!-- Grid -->
+  <g transform="translate(50, 50)">
+    <!-- Header row background -->
+    <rect x="0" y="0" width="500" height="30" fill="#3b82f6" rx="4"/>
+    <!-- Header column background -->
+    <rect x="0" y="0" width="45" height="330" fill="#3b82f6" rx="4"/>
+    
+    <!-- Multiplication symbol in corner -->
+    <rect x="0" y="0" width="45" height="30" fill="#1d4ed8" rx="4"/>
+    <text x="22" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="white" font-weight="700">×</text>
+    
+    <!-- Column headers (1-10) -->
+    <g font-family="system-ui, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">
+      <text x="72" y="22">1</text>
+      <text x="117" y="22">2</text>
+      <text x="162" y="22">3</text>
+      <text x="207" y="22">4</text>
+      <text x="252" y="22">5</text>
+      <text x="297" y="22">6</text>
+      <text x="342" y="22">7</text>
+      <text x="387" y="22">8</text>
+      <text x="432" y="22">9</text>
+      <text x="477" y="22">10</text>
+    </g>
+    
+    <!-- Row headers (1-10) -->
+    <g font-family="system-ui, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">
+      <text x="22" y="52">1</text>
+      <text x="22" y="82">2</text>
+      <text x="22" y="112">3</text>
+      <text x="22" y="142">4</text>
+      <text x="22" y="172">5</text>
+      <text x="22" y="202">6</text>
+      <text x="22" y="232">7</text>
+      <text x="22" y="262">8</text>
+      <text x="22" y="292">9</text>
+      <text x="22" y="322">10</text>
+    </g>
+    
+    <!-- Grid lines -->
+    <g stroke="#e2e8f0" stroke-width="1">
+      <!-- Horizontal -->
+      <line x1="45" y1="60" x2="500" y2="60"/>
+      <line x1="45" y1="90" x2="500" y2="90"/>
+      <line x1="45" y1="120" x2="500" y2="120"/>
+      <line x1="45" y1="150" x2="500" y2="150"/>
+      <line x1="45" y1="180" x2="500" y2="180"/>
+      <line x1="45" y1="210" x2="500" y2="210"/>
+      <line x1="45" y1="240" x2="500" y2="240"/>
+      <line x1="45" y1="270" x2="500" y2="270"/>
+      <line x1="45" y1="300" x2="500" y2="300"/>
+      <!-- Vertical -->
+      <line x1="95" y1="30" x2="95" y2="330"/>
+      <line x1="140" y1="30" x2="140" y2="330"/>
+      <line x1="185" y1="30" x2="185" y2="330"/>
+      <line x1="230" y1="30" x2="230" y2="330"/>
+      <line x1="275" y1="30" x2="275" y2="330"/>
+      <line x1="320" y1="30" x2="320" y2="330"/>
+      <line x1="365" y1="30" x2="365" y2="330"/>
+      <line x1="410" y1="30" x2="410" y2="330"/>
+      <line x1="455" y1="30" x2="455" y2="330"/>
+    </g>
+    
+    <!-- Data cells -->
+    <g font-family="system-ui, sans-serif" font-size="12" fill="#334155" text-anchor="middle">
+      <!-- Row 1 -->
+      <text x="72" y="52">1</text><text x="117" y="52">2</text><text x="162" y="52">3</text><text x="207" y="52">4</text><text x="252" y="52">5</text><text x="297" y="52">6</text><text x="342" y="52">7</text><text x="387" y="52">8</text><text x="432" y="52">9</text><text x="477" y="52">10</text>
+      <!-- Row 2 -->
+      <text x="72" y="82">2</text><text x="117" y="82">4</text><text x="162" y="82">6</text><text x="207" y="82">8</text><text x="252" y="82">10</text><text x="297" y="82">12</text><text x="342" y="82">14</text><text x="387" y="82">16</text><text x="432" y="82">18</text><text x="477" y="82">20</text>
+      <!-- Row 3 -->
+      <text x="72" y="112">3</text><text x="117" y="112">6</text><text x="162" y="112">9</text><text x="207" y="112">12</text><text x="252" y="112">15</text><text x="297" y="112">18</text><text x="342" y="112">21</text><text x="387" y="112">24</text><text x="432" y="112">27</text><text x="477" y="112">30</text>
+      <!-- Row 4 -->
+      <text x="72" y="142">4</text><text x="117" y="142">8</text><text x="162" y="142">12</text><text x="207" y="142">16</text><text x="252" y="142">20</text><text x="297" y="142">24</text><text x="342" y="142">28</text><text x="387" y="142">32</text><text x="432" y="142">36</text><text x="477" y="142">40</text>
+      <!-- Row 5 -->
+      <text x="72" y="172">5</text><text x="117" y="172">10</text><text x="162" y="172">15</text><text x="207" y="172">20</text><text x="252" y="172" font-weight="600" fill="#8b5cf6">25</text><text x="297" y="172">30</text><text x="342" y="172">35</text><text x="387" y="172">40</text><text x="432" y="172">45</text><text x="477" y="172">50</text>
+      <!-- Row 6 -->
+      <text x="72" y="202">6</text><text x="117" y="202">12</text><text x="162" y="202">18</text><text x="207" y="202">24</text><text x="252" y="202">30</text><text x="297" y="202">36</text><text x="342" y="202">42</text><text x="387" y="202">48</text><text x="432" y="202">54</text><text x="477" y="202">60</text>
+      <!-- Row 7 -->
+      <text x="72" y="232">7</text><text x="117" y="232">14</text><text x="162" y="232">21</text><text x="207" y="232">28</text><text x="252" y="232">35</text><text x="297" y="232">42</text><text x="342" y="232">49</text><text x="387" y="232">56</text><text x="432" y="232">63</text><text x="477" y="232">70</text>
+      <!-- Row 8 -->
+      <text x="72" y="262">8</text><text x="117" y="262">16</text><text x="162" y="262">24</text><text x="207" y="262">32</text><text x="252" y="262">40</text><text x="297" y="262">48</text><text x="342" y="262">56</text><text x="387" y="262">64</text><text x="432" y="262">72</text><text x="477" y="262">80</text>
+      <!-- Row 9 -->
+      <text x="72" y="292">9</text><text x="117" y="292">18</text><text x="162" y="292">27</text><text x="207" y="292">36</text><text x="252" y="292">45</text><text x="297" y="292">54</text><text x="342" y="292">63</text><text x="387" y="292">72</text><text x="432" y="292">81</text><text x="477" y="292">90</text>
+      <!-- Row 10 -->
+      <text x="72" y="322">10</text><text x="117" y="322">20</text><text x="162" y="322">30</text><text x="207" y="322">40</text><text x="252" y="322">50</text><text x="297" y="322">60</text><text x="342" y="322">70</text><text x="387" y="322">80</text><text x="432" y="322">90</text><text x="477" y="322" font-weight="600" fill="#14b8a6">100</text>
+    </g>
+    
+    <!-- Highlight diagonal (square numbers) -->
+    <g fill="#fef3c7" opacity="0.5">
+      <rect x="45" y="30" width="50" height="30" rx="2"/>
+      <rect x="95" y="60" width="45" height="30" rx="2"/>
+      <rect x="140" y="90" width="45" height="30" rx="2"/>
+      <rect x="185" y="120" width="45" height="30" rx="2"/>
+      <rect x="230" y="150" width="45" height="30" rx="2"/>
+      <rect x="275" y="180" width="45" height="30" rx="2"/>
+      <rect x="320" y="210" width="45" height="30" rx="2"/>
+      <rect x="365" y="240" width="45" height="30" rx="2"/>
+      <rect x="410" y="270" width="45" height="30" rx="2"/>
+      <rect x="455" y="300" width="45" height="30" rx="2"/>
+    </g>
+  </g>
+  
+  <!-- Tip box -->
+  <g transform="translate(420, 385)">
+    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">💡 Yellow diagonal = square numbers (1, 4, 9, 16...)</text>
+  </g>
+</svg>

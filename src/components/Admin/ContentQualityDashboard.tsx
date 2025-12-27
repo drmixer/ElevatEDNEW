@@ -89,12 +89,12 @@ const CoverageBar: React.FC<{ value: number; label: string; showLabel?: boolean 
                 animate={{ width: `${Math.min(100, Math.max(0, value))}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 className={`h-full rounded-full ${value >= 90
-                        ? 'bg-emerald-500'
-                        : value >= 75
-                            ? 'bg-teal-500'
-                            : value >= 60
-                                ? 'bg-amber-500'
-                                : 'bg-rose-500'
+                    ? 'bg-emerald-500'
+                    : value >= 75
+                        ? 'bg-teal-500'
+                        : value >= 60
+                            ? 'bg-amber-500'
+                            : 'bg-rose-500'
                     }`}
             />
         </div>
@@ -122,12 +122,12 @@ const SubjectQualityCard: React.FC<{
                 <div className="flex items-center gap-3">
                     <div
                         className={`w-12 h-12 rounded-xl flex items-center justify-center ${qualityScore >= 90
-                                ? 'bg-emerald-100'
-                                : qualityScore >= 75
-                                    ? 'bg-teal-100'
-                                    : qualityScore >= 60
-                                        ? 'bg-amber-100'
-                                        : 'bg-rose-100'
+                            ? 'bg-emerald-100'
+                            : qualityScore >= 75
+                                ? 'bg-teal-100'
+                                : qualityScore >= 60
+                                    ? 'bg-amber-100'
+                                    : 'bg-rose-100'
                             }`}
                     >
                         <span className={`text-lg font-bold ${getScoreColor(qualityScore)}`}>
@@ -416,10 +416,10 @@ const ContentQualityDashboard: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                         className={`border rounded-xl p-5 ${metrics.lessonsNeedingReview === 0
-                                ? 'bg-emerald-50 border-emerald-200'
-                                : metrics.lessonsNeedingReview < 10
-                                    ? 'bg-amber-50 border-amber-200'
-                                    : 'bg-rose-50 border-rose-200'
+                            ? 'bg-emerald-50 border-emerald-200'
+                            : metrics.lessonsNeedingReview < 10
+                                ? 'bg-amber-50 border-amber-200'
+                                : 'bg-rose-50 border-rose-200'
                             }`}
                     >
                         <div className="flex items-center justify-between">
@@ -429,10 +429,10 @@ const ContentQualityDashboard: React.FC = () => {
                                 </p>
                                 <p
                                     className={`text-3xl font-bold mt-1 ${metrics.lessonsNeedingReview === 0
-                                            ? 'text-emerald-600'
-                                            : metrics.lessonsNeedingReview < 10
-                                                ? 'text-amber-600'
-                                                : 'text-rose-600'
+                                        ? 'text-emerald-600'
+                                        : metrics.lessonsNeedingReview < 10
+                                            ? 'text-amber-600'
+                                            : 'text-rose-600'
                                         }`}
                                 >
                                     {metrics.lessonsNeedingReview}

@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <title>Plant Life Cycle</title>
+  <desc>Educational diagram showing the stages of a plant life cycle: seed, germination, seedling, adult plant, flower, fruit, and back to seed</desc>
+  
+  <!-- Background -->
+  <rect width="500" height="500" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="250" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#166534">Plant Life Cycle</text>
+  
+  <!-- Central circle path -->
+  <circle cx="250" cy="270" r="150" fill="none" stroke="#86efac" stroke-width="3" stroke-dasharray="8,4"/>
+  
+  <!-- Arrow decorations on circle -->
+  <g fill="#22c55e">
+    <polygon points="380,195 395,185 388,202"/>
+    <polygon points="120,340 105,350 112,333"/>
+  </g>
+  
+  <!-- 1. SEED (bottom) -->
+  <g transform="translate(250, 430)">
+    <ellipse cx="0" cy="0" rx="18" ry="12" fill="#92400e"/>
+    <ellipse cx="0" cy="-3" rx="14" ry="8" fill="#b45309"/>
+    <circle cx="0" cy="25" r="25" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#b45309">1. Seed</text>
+  </g>
+  
+  <!-- 2. GERMINATION (bottom-left) -->
+  <g transform="translate(120, 380)">
+    <!-- Soil -->
+    <ellipse cx="0" cy="10" rx="30" ry="10" fill="#92400e"/>
+    <!-- Sprout -->
+    <path d="M 0,5 Q -5,-15 0,-25 Q 5,-15 0,5" fill="#22c55e"/>
+    <circle cx="0" cy="35" r="30" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#b45309">2. Germination</text>
+    <text x="0" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#92400e">(sprouting)</text>
+  </g>
+  
+  <!-- 3. SEEDLING (left) -->
+  <g transform="translate(90, 270)">
+    <!-- Soil -->
+    <ellipse cx="0" cy="20" rx="25" ry="8" fill="#92400e"/>
+    <!-- Stem -->
+    <line x1="0" y1="15" x2="0" y2="-20" stroke="#22c55e" stroke-width="4"/>
+    <!-- Leaves -->
+    <ellipse cx="-12" cy="-15" rx="10" ry="6" fill="#22c55e" transform="rotate(-30 -12 -15)"/>
+    <ellipse cx="12" cy="-15" rx="10" ry="6" fill="#22c55e" transform="rotate(30 12 -15)"/>
+    <circle cx="0" cy="50" r="28" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#b45309">3. Seedling</text>
+    <text x="0" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#92400e">(young plant)</text>
+  </g>
+  
+  <!-- 4. ADULT PLANT (top-left) -->
+  <g transform="translate(130, 145)">
+    <!-- Pot -->
+    <path d="M -20,30 L -25,50 L 25,50 L 20,30" fill="#b45309"/>
+    <rect x="-22" y="25" width="44" height="8" fill="#d97706" rx="2"/>
+    <!-- Plant -->
+    <line x1="0" y1="25" x2="0" y2="-25" stroke="#15803d" stroke-width="5"/>
+    <ellipse cx="-18" cy="5" rx="15" ry="8" fill="#22c55e" transform="rotate(-40 -18 5)"/>
+    <ellipse cx="18" cy="5" rx="15" ry="8" fill="#22c55e" transform="rotate(40 18 5)"/>
+    <ellipse cx="-15" cy="-15" rx="12" ry="7" fill="#22c55e" transform="rotate(-30 -15 -15)"/>
+    <ellipse cx="15" cy="-15" rx="12" ry="7" fill="#22c55e" transform="rotate(30 15 -15)"/>
+    <circle cx="0" cy="-55" r="28" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#b45309">4. Adult</text>
+    <text x="0" y="-43" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#b45309">Plant</text>
+  </g>
+  
+  <!-- 5. FLOWER (top) -->
+  <g transform="translate(250, 100)">
+    <!-- Stem -->
+    <line x1="0" y1="35" x2="0" y2="10" stroke="#22c55e" stroke-width="4"/>
+    <!-- Flower petals -->
+    <ellipse cx="0" cy="-12" rx="8" ry="15" fill="#f472b6"/>
+    <ellipse cx="0" cy="12" rx="8" ry="15" fill="#f472b6" transform="rotate(180 0 0)"/>
+    <ellipse cx="-12" cy="0" rx="8" ry="15" fill="#f472b6" transform="rotate(-90 -12 0)"/>
+    <ellipse cx="12" cy="0" rx="8" ry="15" fill="#f472b6" transform="rotate(90 12 0)"/>
+    <ellipse cx="-9" cy="-9" rx="7" ry="13" fill="#fb7185" transform="rotate(-45 -9 -9)"/>
+    <ellipse cx="9" cy="-9" rx="7" ry="13" fill="#fb7185" transform="rotate(45 9 -9)"/>
+    <ellipse cx="-9" cy="9" rx="7" ry="13" fill="#fb7185" transform="rotate(-135 -9 9)"/>
+    <ellipse cx="9" cy="9" rx="7" ry="13" fill="#fb7185" transform="rotate(135 9 9)"/>
+    <!-- Center -->
+    <circle cx="0" cy="0" r="10" fill="#fbbf24"/>
+    <circle cx="0" cy="0" r="6" fill="#f59e0b"/>
+    <!-- Leaves -->
+    <ellipse cx="-15" cy="25" rx="10" ry="5" fill="#22c55e" transform="rotate(-30 -15 25)"/>
+    <ellipse cx="15" cy="25" rx="10" ry="5" fill="#22c55e" transform="rotate(30 15 25)"/>
+    
+    <circle cx="0" cy="65" r="25" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="68" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#b45309">5. Flower</text>
+  </g>
+  
+  <!-- 6. FRUIT (top-right) -->
+  <g transform="translate(370, 145)">
+    <!-- Apple shape -->
+    <ellipse cx="0" cy="0" rx="22" ry="25" fill="#ef4444"/>
+    <ellipse cx="-5" cy="-5" rx="4" ry="5" fill="#fca5a5" opacity="0.5"/>
+    <!-- Stem -->
+    <path d="M 0,-25 Q 5,-32 3,-38" fill="none" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+    <!-- Leaf -->
+    <ellipse cx="10" cy="-32" rx="8" ry="4" fill="#22c55e" transform="rotate(20 10 -32)"/>
+    
+    <circle cx="0" cy="55" r="28" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#b45309">6. Fruit</text>
+    <text x="0" y="67" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#92400e">(with seeds)</text>
+  </g>
+  
+  <!-- 7. SEEDS SPREAD (right) -->
+  <g transform="translate(410, 270)">
+    <!-- Multiple seeds falling -->
+    <ellipse cx="-10" cy="-10" rx="6" ry="4" fill="#92400e"/>
+    <ellipse cx="5" cy="0" rx="6" ry="4" fill="#b45309"/>
+    <ellipse cx="-5" cy="15" rx="6" ry="4" fill="#92400e"/>
+    <ellipse cx="10" cy="20" rx="5" ry="3" fill="#b45309"/>
+    <!-- Arrows showing spread -->
+    <path d="M -5,-20 Q -15,-10 -15,5" fill="none" stroke="#64748b" stroke-width="1" stroke-dasharray="3,2"/>
+    <path d="M 5,-20 Q 15,0 10,15" fill="none" stroke="#64748b" stroke-width="1" stroke-dasharray="3,2"/>
+    
+    <circle cx="0" cy="55" r="28" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="52" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#b45309">7. Seeds</text>
+    <text x="0" y="64" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#b45309">Spread</text>
+  </g>
+  
+  <!-- Back to seed arrow -->
+  <g transform="translate(340, 400)">
+    <path d="M 0,0 Q 30,15 50,40" fill="none" stroke="#22c55e" stroke-width="2"/>
+    <polygon points="48,40 55,48 42,47" fill="#22c55e"/>
+    <text x="60" y="20" font-family="system-ui, sans-serif" font-size="10" fill="#15803d" font-style="italic">cycle repeats!</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="250" y="485" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">The life cycle continues as new seeds grow into plants!</text>
+</svg>
