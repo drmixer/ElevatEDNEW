@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <title>Cause and Effect</title>
+  <desc>Educational diagram showing cause and effect relationships with examples and signal words</desc>
+  
+  <rect width="800" height="500" fill="#f0fdf4"/>
+  
+  <text x="400" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#166534">Cause and Effect</text>
+  
+  <!-- Main concept visual -->
+  <g transform="translate(400, 150)">
+    <rect x="-150" y="-40" width="130" height="80" rx="12" fill="#fbbf24" stroke="#f59e0b" stroke-width="3"/>
+    <text x="-85" y="8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#78350f">CAUSE</text>
+    <text x="-85" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#92400e">Why it happened</text>
+    
+    <path d="M-10,0 L60,0" fill="none" stroke="#22c55e" stroke-width="6" marker-end="url(#greenArr)"/>
+    <text x="25" y="-15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#16a34a">leads to</text>
+    
+    <rect x="70" y="-40" width="130" height="80" rx="12" fill="#3b82f6" stroke="#2563eb" stroke-width="3"/>
+    <text x="135" y="8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="white">EFFECT</text>
+    <text x="135" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#bfdbfe">What happened</text>
+  </g>
+  
+  <defs>
+    <marker id="greenArr" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L12,4 z" fill="#22c55e"/>
+    </marker>
+  </defs>
+  
+  <!-- Example 1 -->
+  <g transform="translate(200, 280)">
+    <rect x="-140" y="-30" width="280" height="60" rx="10" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+    <circle cx="-110" cy="0" r="20" fill="#fbbf24"/>
+    <text x="-110" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20">☀️</text>
+    <text x="-55" y="-5" font-family="system-ui, sans-serif" font-size="12" fill="#374151">The sun came out</text>
+    <path d="M5,0 L35,0" fill="none" stroke="#22c55e" stroke-width="3" marker-end="url(#smArr)"/>
+    <circle cx="95" cy="0" r="20" fill="#3b82f6"/>
+    <text x="95" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18">🌡️</text>
+    <text x="-55" y="15" font-family="system-ui, sans-serif" font-size="12" fill="#6b7280" font-style="italic">so the ice melted</text>
+  </g>
+  
+  <!-- Example 2 -->
+  <g transform="translate(600, 280)">
+    <rect x="-140" y="-30" width="280" height="60" rx="10" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+    <circle cx="-110" cy="0" r="20" fill="#fbbf24"/>
+    <text x="-110" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20">📚</text>
+    <text x="-55" y="-5" font-family="system-ui, sans-serif" font-size="12" fill="#374151">She studied hard</text>
+    <path d="M5,0 L35,0" fill="none" stroke="#22c55e" stroke-width="3" marker-end="url(#smArr)"/>
+    <circle cx="95" cy="0" r="20" fill="#3b82f6"/>
+    <text x="95" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18">⭐</text>
+    <text x="-55" y="15" font-family="system-ui, sans-serif" font-size="12" fill="#6b7280" font-style="italic">so she got an A</text>
+  </g>
+  
+  <defs>
+    <marker id="smArr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
+    </marker>
+  </defs>
+  
+  <!-- Signal Words -->
+  <g transform="translate(400, 390)">
+    <rect x="-280" y="-35" width="560" height="80" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+    <text x="0" y="-12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#166534">Signal Words to Look For:</text>
+    
+    <g transform="translate(-220, 22)">
+      <rect x="-30" y="-15" width="60" height="28" rx="6" fill="#fbbf24"/>
+      <text x="0" y="3" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#78350f">because</text>
+    </g>
+    <g transform="translate(-130, 22)">
+      <rect x="-30" y="-15" width="60" height="28" rx="6" fill="#fbbf24"/>
+      <text x="0" y="3" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#78350f">since</text>
+    </g>
+    <g transform="translate(-40, 22)">
+      <rect x="-30" y="-15" width="60" height="28" rx="6" fill="#3b82f6"/>
+      <text x="0" y="3" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">so</text>
+    </g>
+    <g transform="translate(50, 22)">
+      <rect x="-35" y="-15" width="70" height="28" rx="6" fill="#3b82f6"/>
+      <text x="0" y="3" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">therefore</text>
+    </g>
+    <g transform="translate(145, 22)">
+      <rect x="-40" y="-15" width="80" height="28" rx="6" fill="#3b82f6"/>
+      <text x="0" y="3" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">as a result</text>
+    </g>
+    <g transform="translate(235, 22)">
+      <rect x="-30" y="-15" width="60" height="28" rx="6" fill="#fbbf24"/>
+      <text x="0" y="3" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#78350f">due to</text>
+    </g>
+  </g>
+  
+  <rect x="0" y="465" width="800" height="35" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="400" y="488" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#166534">Ask: "Why did this happen?" (cause) and "What happened next?" (effect)</text>
+</svg>

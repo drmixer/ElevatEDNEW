@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <title>Atom Structure</title>
+  <desc>Educational diagram showing protons, neutrons in the nucleus and electrons orbiting</desc>
+  
+  <defs>
+    <radialGradient id="protonG" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#f87171"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </radialGradient>
+    <radialGradient id="neutronG" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#a3a3a3"/>
+      <stop offset="100%" style="stop-color:#525252"/>
+    </radialGradient>
+    <radialGradient id="electronG" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="800" height="500" fill="#0f172a"/>
+  
+  <text x="400" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="white">Structure of an Atom</text>
+  
+  <g transform="translate(300, 270)">
+    <ellipse cx="0" cy="0" rx="170" ry="55" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.5" transform="rotate(-20)"/>
+    <ellipse cx="0" cy="0" rx="170" ry="55" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.5" transform="rotate(40)"/>
+    <ellipse cx="0" cy="0" rx="170" ry="55" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.5" transform="rotate(100)"/>
+    <ellipse cx="0" cy="0" rx="95" ry="32" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.4" transform="rotate(-30)"/>
+    
+    <circle cx="0" cy="0" r="55" fill="#fbbf24" opacity="0.15"/>
+    
+    <circle cx="-16" cy="-10" r="15" fill="url(#protonG)"/>
+    <circle cx="16" cy="-10" r="15" fill="url(#neutronG)"/>
+    <circle cx="-16" cy="14" r="15" fill="url(#neutronG)"/>
+    <circle cx="16" cy="14" r="15" fill="url(#protonG)"/>
+    <circle cx="0" cy="-22" r="13" fill="url(#protonG)"/>
+    <circle cx="0" cy="26" r="13" fill="url(#neutronG)"/>
+    
+    <text x="-16" y="-6" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="700" fill="white">P+</text>
+    <text x="16" y="-6" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="700" fill="white">N</text>
+    <text x="-16" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="700" fill="white">N</text>
+    <text x="16" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="700" fill="white">P+</text>
+    
+    <circle cx="155" cy="-50" r="11" fill="url(#electronG)"/>
+    <text x="155" y="-46" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="700" fill="white">e-</text>
+    <circle cx="-160" cy="40" r="11" fill="url(#electronG)"/>
+    <text x="-160" y="44" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="700" fill="white">e-</text>
+    <circle cx="75" cy="50" r="11" fill="url(#electronG)"/>
+    <text x="75" y="54" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="700" fill="white">e-</text>
+    <circle cx="-80" cy="-22" r="9" fill="url(#electronG)"/>
+    <text x="-80" y="-18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" font-weight="700" fill="white">e-</text>
+    
+    <text x="0" y="80" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fbbf24">NUCLEUS</text>
+  </g>
+  
+  <g transform="translate(580, 130)">
+    <rect x="-60" y="-40" width="200" height="250" rx="12" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+    <text x="40" y="-15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="white">Subatomic Particles</text>
+    
+    <circle cx="0" cy="25" r="16" fill="url(#protonG)"/>
+    <text x="0" y="29" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">P+</text>
+    <text x="75" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#f87171">Proton</text>
+    <text x="75" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#fca5a5">Positive (+)</text>
+    
+    <circle cx="0" cy="85" r="16" fill="url(#neutronG)"/>
+    <text x="0" y="89" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">N</text>
+    <text x="75" y="80" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#a3a3a3">Neutron</text>
+    <text x="75" y="95" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#d4d4d4">Neutral (0)</text>
+    
+    <circle cx="0" cy="145" r="12" fill="url(#electronG)"/>
+    <text x="0" y="149" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="700" fill="white">e-</text>
+    <text x="75" y="140" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#60a5fa">Electron</text>
+    <text x="75" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">Negative (-)</text>
+    
+    <text x="40" y="190" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#fcd34d"># Protons = Atomic #</text>
+  </g>
+  
+  <rect x="0" y="470" width="800" height="30" fill="#3b82f6" fill-opacity="0.2"/>
+  <text x="400" y="490" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#93c5fd">Atoms are 99.9% empty space! The nucleus contains most of the mass.</text>
+</svg>

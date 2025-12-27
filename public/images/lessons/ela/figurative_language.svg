@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <title>Figurative Language</title>
+  <desc>Educational diagram showing types of figurative language: simile, metaphor, personification, hyperbole, and more</desc>
+  
+  <rect width="800" height="500" fill="#faf5ff"/>
+  
+  <text x="400" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#7c3aed">Figurative Language</text>
+  <text x="400" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#a78bfa">Words that paint pictures in your mind!</text>
+  
+  <!-- Simile -->
+  <g transform="translate(150, 150)">
+    <rect x="-115" y="-45" width="230" height="90" rx="12" fill="white" stroke="#3b82f6" stroke-width="3"/>
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#1e40af">SIMILE</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#3b82f6">Compares using "like" or "as"</text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b" font-style="italic">"Fast as a cheetah"</text>
+  </g>
+  
+  <!-- Metaphor -->
+  <g transform="translate(400, 150)">
+    <rect x="-115" y="-45" width="230" height="90" rx="12" fill="white" stroke="#22c55e" stroke-width="3"/>
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#166534">METAPHOR</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#22c55e">Says one thing IS another</text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b" font-style="italic">"Life is a roller coaster"</text>
+  </g>
+  
+  <!-- Personification -->
+  <g transform="translate(650, 150)">
+    <rect x="-115" y="-45" width="230" height="90" rx="12" fill="white" stroke="#f59e0b" stroke-width="3"/>
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#b45309">PERSONIFICATION</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#f59e0b">Gives human traits to non-humans</text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b" font-style="italic">"The sun smiled down"</text>
+  </g>
+  
+  <!-- Hyperbole -->
+  <g transform="translate(150, 290)">
+    <rect x="-115" y="-45" width="230" height="90" rx="12" fill="white" stroke="#ef4444" stroke-width="3"/>
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#b91c1c">HYPERBOLE</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#ef4444">Extreme exaggeration</text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b" font-style="italic">"I've told you a million times!"</text>
+  </g>
+  
+  <!-- Onomatopoeia -->
+  <g transform="translate(400, 290)">
+    <rect x="-115" y="-45" width="230" height="90" rx="12" fill="white" stroke="#8b5cf6" stroke-width="3"/>
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#6d28d9">ONOMATOPOEIA</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#8b5cf6">Words that sound like sounds</text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b" font-style="italic">"Buzz, crash, sizzle"</text>
+  </g>
+  
+  <!-- Alliteration -->
+  <g transform="translate(650, 290)">
+    <rect x="-115" y="-45" width="230" height="90" rx="12" fill="white" stroke="#ec4899" stroke-width="3"/>
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#be185d">ALLITERATION</text>
+    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#ec4899">Repeated beginning sounds</text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b" font-style="italic">"Peter Piper picked peppers"</text>
+  </g>
+  
+  <!-- Why it matters -->
+  <g transform="translate(400, 410)">
+    <rect x="-280" y="-35" width="560" height="70" rx="10" fill="#7c3aed" fill-opacity="0.1" stroke="#a78bfa" stroke-width="2"/>
+    <text x="0" y="-10" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#6d28d9">Why Use Figurative Language?</text>
+    <text x="0" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#374151">• Makes writing more interesting and vivid</text>
+    <text x="0" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#374151">• Helps readers visualize and feel emotions</text>
+  </g>
+  
+  <rect x="0" y="470" width="800" height="30" fill="#8b5cf6" fill-opacity="0.1"/>
+  <text x="400" y="490" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#7c3aed">Figurative language makes writing come alive - it's not meant to be taken literally!</text>
+</svg>

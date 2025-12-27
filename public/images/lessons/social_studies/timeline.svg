@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <title>Timeline</title>
+  <desc>Educational diagram showing how to read and create a timeline with historical events</desc>
+  
+  <rect width="800" height="500" fill="#fef7ed"/>
+  
+  <text x="400" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#b45309">How to Read a Timeline</text>
+  <text x="400" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#d97706">Events Shown in Order from Past to Present</text>
+  
+  <!-- Main timeline -->
+  <g transform="translate(100, 200)">
+    <!-- Timeline line -->
+    <line x1="0" y1="0" x2="600" y2="0" stroke="#b45309" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- Arrow at end -->
+    <polygon points="600,0 590,-10 590,10" fill="#b45309"/>
+    
+    <!-- Era labels -->
+    <text x="0" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">PAST</text>
+    <text x="600" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">PRESENT</text>
+    
+    <!-- Event 1 -->
+    <g transform="translate(50, 0)">
+      <circle cx="0" cy="0" r="10" fill="#ef4444"/>
+      <line x1="0" y1="-10" x2="0" y2="-60" stroke="#ef4444" stroke-width="2"/>
+      <rect x="-50" y="-110" width="100" height="45" rx="6" fill="white" stroke="#ef4444" stroke-width="2"/>
+      <text x="0" y="-85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#b91c1c">1776</text>
+      <text x="0" y="-70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#374151">Declaration of</text>
+      <text x="0" y="-58" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#374151">Independence</text>
+    </g>
+    
+    <!-- Event 2 -->
+    <g transform="translate(200, 0)">
+      <circle cx="0" cy="0" r="10" fill="#3b82f6"/>
+      <line x1="0" y1="10" x2="0" y2="60" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="-50" y="65" width="100" height="45" rx="6" fill="white" stroke="#3b82f6" stroke-width="2"/>
+      <text x="0" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#1e40af">1865</text>
+      <text x="0" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#374151">Civil War Ends</text>
+    </g>
+    
+    <!-- Event 3 -->
+    <g transform="translate(350, 0)">
+      <circle cx="0" cy="0" r="10" fill="#22c55e"/>
+      <line x1="0" y1="-10" x2="0" y2="-60" stroke="#22c55e" stroke-width="2"/>
+      <rect x="-50" y="-110" width="100" height="45" rx="6" fill="white" stroke="#22c55e" stroke-width="2"/>
+      <text x="0" y="-85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#166534">1969</text>
+      <text x="0" y="-70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#374151">Moon Landing</text>
+    </g>
+    
+    <!-- Event 4 -->
+    <g transform="translate(500, 0)">
+      <circle cx="0" cy="0" r="10" fill="#8b5cf6"/>
+      <line x1="0" y1="10" x2="0" y2="60" stroke="#8b5cf6" stroke-width="2"/>
+      <rect x="-50" y="65" width="100" height="45" rx="6" fill="white" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="0" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#6d28d9">2000</text>
+      <text x="0" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#374151">New Millennium</text>
+    </g>
+  </g>
+  
+  <!-- Tips box -->
+  <g transform="translate(400, 400)">
+    <rect x="-300" y="-40" width="600" height="80" rx="12" fill="white" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#b45309">Timeline Tips:</text>
+    <text x="-250" y="10" font-family="system-ui, sans-serif" font-size="11" fill="#374151">• Read left to right (oldest → newest)</text>
+    <text x="-250" y="28" font-family="system-ui, sans-serif" font-size="11" fill="#374151">• Check dates to understand time between events</text>
+    <text x="50" y="10" font-family="system-ui, sans-serif" font-size="11" fill="#374151">• Events are placed in chronological order</text>
+    <text x="50" y="28" font-family="system-ui, sans-serif" font-size="11" fill="#374151">• Space between events shows time passed</text>
+  </g>
+  
+  <rect x="0" y="470" width="800" height="30" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="400" y="490" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#b45309">Timelines help us see the order of events and how much time passed between them!</text>
+</svg>

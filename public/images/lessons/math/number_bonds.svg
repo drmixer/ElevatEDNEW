@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <title>Number Bonds</title>
+  <desc>Educational diagram showing number bonds (part-part-whole relationships) with visual examples for understanding addition and subtraction</desc>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#eff6ff"/>
+      <stop offset="100%" style="stop-color:#f0fdf4"/>
+    </linearGradient>
+    <linearGradient id="wholeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="part1Gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    <linearGradient id="part2Gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bgGradient)"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#1e40af">Number Bonds</text>
+  <text x="400" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#3b82f6">Part-Part-Whole Relationships</text>
+  
+  <!-- ========== MAIN EXAMPLE (Center) - Number Bond for 10 ========== -->
+  <g transform="translate(400, 200)">
+    <!-- Title for this bond -->
+    <text x="0" y="-95" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#1e40af">Number Bond for 10</text>
+    
+    <!-- Whole (top) -->
+    <circle cx="0" cy="-50" r="45" fill="url(#wholeGradient)" stroke="#1e40af" stroke-width="3"/>
+    <text x="0" y="-40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" font-weight="700" fill="white">10</text>
+    <text x="0" y="-60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#bfdbfe">WHOLE</text>
+    
+    <!-- Connecting lines -->
+    <line x1="-25" y1="-10" x2="-60" y2="35" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+    <line x1="25" y1="-10" x2="60" y2="35" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Part 1 (bottom left) -->
+    <circle cx="-80" cy="75" r="40" fill="url(#part1Gradient)" stroke="#15803d" stroke-width="3"/>
+    <text x="-80" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="white">7</text>
+    <text x="-80" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#bbf7d0">PART</text>
+    
+    <!-- Part 2 (bottom right) -->
+    <circle cx="80" cy="75" r="40" fill="url(#part2Gradient)" stroke="#b45309" stroke-width="3"/>
+    <text x="80" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="white">3</text>
+    <text x="80" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#fef3c7">PART</text>
+    
+    <!-- Plus and Equals -->
+    <text x="0" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="700" fill="#64748b">+</text>
+    
+    <!-- Equation below -->
+    <rect x="-100" y="130" width="200" height="35" rx="8" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="0" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#374151">7 + 3 = 10</text>
+  </g>
+  
+  <!-- ========== SMALLER EXAMPLE 1 (Left) - Number Bond for 5 ========== -->
+  <g transform="translate(130, 350)">
+    <!-- Title -->
+    <text x="0" y="-75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#7c3aed">Bond for 5</text>
+    
+    <!-- Whole -->
+    <circle cx="0" cy="-40" r="30" fill="#8b5cf6" stroke="#6d28d9" stroke-width="2"/>
+    <text x="0" y="-32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="700" fill="white">5</text>
+    
+    <!-- Lines -->
+    <line x1="-18" y1="-15" x2="-40" y2="20" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+    <line x1="18" y1="-15" x2="40" y2="20" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Parts -->
+    <circle cx="-50" cy="50" r="28" fill="#ec4899" stroke="#be185d" stroke-width="2"/>
+    <text x="-50" y="58" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">2</text>
+    
+    <circle cx="50" cy="50" r="28" fill="#06b6d4" stroke="#0e7490" stroke-width="2"/>
+    <text x="50" y="58" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">3</text>
+    
+    <!-- Equation -->
+    <text x="0" y="105" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#6b7280">2 + 3 = 5</text>
+  </g>
+  
+  <!-- ========== SMALLER EXAMPLE 2 (Right) - Number Bond for 8 ========== -->
+  <g transform="translate(670, 350)">
+    <!-- Title -->
+    <text x="0" y="-75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#dc2626">Bond for 8</text>
+    
+    <!-- Whole -->
+    <circle cx="0" cy="-40" r="30" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+    <text x="0" y="-32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="700" fill="white">8</text>
+    
+    <!-- Lines -->
+    <line x1="-18" y1="-15" x2="-40" y2="20" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+    <line x1="18" y1="-15" x2="40" y2="20" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Parts -->
+    <circle cx="-50" cy="50" r="28" fill="#14b8a6" stroke="#0f766e" stroke-width="2"/>
+    <text x="-50" y="58" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">5</text>
+    
+    <circle cx="50" cy="50" r="28" fill="#a855f7" stroke="#7e22ce" stroke-width="2"/>
+    <text x="50" y="58" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">3</text>
+    
+    <!-- Equation -->
+    <text x="0" y="105" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#6b7280">5 + 3 = 8</text>
+  </g>
+  
+  <!-- ========== EXPLANATION BOX (Left side) ========== -->
+  <g transform="translate(90, 130)">
+    <rect x="-70" y="-40" width="140" height="140" rx="12" fill="white" stroke="#3b82f6" stroke-width="2"/>
+    <text x="0" y="-18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#1e40af">How It Works</text>
+    
+    <circle cx="-35" cy="10" r="12" fill="#3b82f6"/>
+    <text x="-35" y="15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="white" font-weight="600">W</text>
+    <text x="10" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#374151">= Whole</text>
+    
+    <circle cx="-35" cy="45" r="12" fill="#22c55e"/>
+    <text x="-35" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="white" font-weight="600">P</text>
+    <text x="10" y="50" font-family="system-ui, sans-serif" font-size="11" fill="#374151">= Part</text>
+    
+    <text x="0" y="80" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">Part + Part</text>
+    <text x="0" y="95" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">= Whole</text>
+  </g>
+  
+  <!-- ========== RELATED FACTS BOX (Right side) ========== -->
+  <g transform="translate(710, 130)">
+    <rect x="-70" y="-40" width="140" height="140" rx="12" fill="white" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#b45309">Related Facts</text>
+    
+    <text x="0" y="10" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#374151">If 7 + 3 = 10, then:</text>
+    
+    <text x="0" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#22c55e">3 + 7 = 10</text>
+    <text x="0" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ef4444">10 - 7 = 3</text>
+    <text x="0" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#8b5cf6">10 - 3 = 7</text>
+    
+    <text x="0" y="95" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#9ca3af">Fact Family!</text>
+  </g>
+  
+  <!-- ========== VISUAL COUNTERS (showing 7 + 3 = 10) ========== -->
+  <g transform="translate(400, 380)">
+    <rect x="-180" y="-25" width="360" height="65" rx="10" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+    <text x="0" y="-8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#6b7280">Visual: 7 + 3 = 10</text>
+    
+    <!-- 7 green circles -->
+    <g transform="translate(-160, 20)">
+      <circle cx="0" cy="0" r="10" fill="#22c55e"/>
+      <circle cx="25" cy="0" r="10" fill="#22c55e"/>
+      <circle cx="50" cy="0" r="10" fill="#22c55e"/>
+      <circle cx="75" cy="0" r="10" fill="#22c55e"/>
+      <circle cx="100" cy="0" r="10" fill="#22c55e"/>
+      <circle cx="125" cy="0" r="10" fill="#22c55e"/>
+      <circle cx="150" cy="0" r="10" fill="#22c55e"/>
+    </g>
+    
+    <!-- Plus sign -->
+    <text x="15" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#64748b">+</text>
+    
+    <!-- 3 orange circles -->
+    <g transform="translate(40, 20)">
+      <circle cx="0" cy="0" r="10" fill="#f59e0b"/>
+      <circle cx="25" cy="0" r="10" fill="#f59e0b"/>
+      <circle cx="50" cy="0" r="10" fill="#f59e0b"/>
+    </g>
+    
+    <!-- Equals -->
+    <text x="115" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#64748b">=</text>
+    
+    <!-- Result: 10 -->
+    <circle cx="150" cy="20" r="18" fill="#3b82f6"/>
+    <text x="150" y="26" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white">10</text>
+  </g>
+  
+  <!-- Footer -->
+  <rect x="0" y="465" width="800" height="35" fill="#1e40af" fill-opacity="0.1"/>
+  <text x="400" y="488" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#1e40af">Number bonds help you see how numbers can be broken apart and put back together!</text>
+</svg>

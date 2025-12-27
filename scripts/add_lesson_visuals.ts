@@ -186,6 +186,186 @@ const CONCEPT_IMAGE_MAP: Record<string, {
         forStrands: ['Number & Operations'],
         forTopics: ['Decimals', 'Percentages', 'Comparing', 'Convert'],
     },
+    'rock_cycle': {
+        imageUrl: '/images/lessons/science/rock_cycle.svg',
+        altText: 'Diagram of the rock cycle showing igneous, sedimentary, and metamorphic rocks with transformation processes',
+        forStrands: ['Earth Science', 'Geology'],
+        forTopics: ['Rock Cycle', 'Rocks', 'Igneous', 'Sedimentary', 'Metamorphic', 'Geology', 'Minerals'],
+    },
+    'cell_structure': {
+        imageUrl: '/images/lessons/science/cell_structure.svg',
+        altText: 'Comparison of plant and animal cells showing organelles like nucleus, mitochondria, and chloroplasts',
+        forStrands: ['Life Science', 'Biology'],
+        forTopics: ['Cell', 'Cells', 'Plant Cell', 'Animal Cell', 'Organelles', 'Nucleus', 'Mitochondria', 'Chloroplast'],
+    },
+    'number_bonds': {
+        imageUrl: '/images/lessons/math/number_bonds.svg',
+        altText: 'Number bonds showing part-part-whole relationships for understanding addition and subtraction',
+        forStrands: ['Number & Operations', 'Addition', 'Subtraction'],
+        forTopics: ['Number Bonds', 'Part-Part-Whole', 'Fact Families', 'Addition Facts', 'Subtraction Facts', 'Bonds to 10'],
+    },
+    'moon_phases': {
+        imageUrl: '/images/lessons/science/moon_phases.svg',
+        altText: 'Diagram of the eight moon phases from new moon to full moon',
+        forStrands: ['Earth Science', 'Space', 'Astronomy'],
+        forTopics: ['Moon', 'Moon Phases', 'Lunar', 'New Moon', 'Full Moon', 'Crescent', 'Gibbous'],
+    },
+    'layers_of_earth': {
+        imageUrl: '/images/lessons/science/layers_of_earth.svg',
+        altText: 'Cross-section showing Earth layers: crust, mantle, outer core, inner core',
+        forStrands: ['Earth Science', 'Geology'],
+        forTopics: ['Layers of Earth', 'Crust', 'Mantle', 'Core', 'Geosphere', 'Earth Structure'],
+    },
+    'symmetry': {
+        imageUrl: '/images/lessons/math/symmetry.svg',
+        altText: 'Lines of symmetry showing examples with butterfly, square, circle, and other shapes',
+        forStrands: ['Geometry & Measurement'],
+        forTopics: ['Symmetry', 'Line of Symmetry', 'Reflection', 'Mirror', 'Congruent'],
+    },
+    'atom_structure': {
+        imageUrl: '/images/lessons/science/atom_structure.svg',
+        altText: 'Atom structure showing protons, neutrons in nucleus and electrons orbiting',
+        forStrands: ['Physical Science', 'Chemistry'],
+        forTopics: ['Atom', 'Atoms', 'Protons', 'Neutrons', 'Electrons', 'Nucleus', 'Atomic'],
+    },
+    'types_of_sentences': {
+        imageUrl: '/images/lessons/ela/types_of_sentences.svg',
+        altText: 'Four types of sentences: declarative, interrogative, imperative, exclamatory',
+        forStrands: ['Grammar', 'Writing', 'Language'],
+        forTopics: ['Types of Sentences', 'Declarative', 'Interrogative', 'Imperative', 'Exclamatory', 'Sentence Types'],
+    },
+    'electrical_circuits': {
+        imageUrl: '/images/lessons/science/electrical_circuits.svg',
+        altText: 'Comparison of series and parallel circuits with batteries and light bulbs',
+        forStrands: ['Physical Science', 'Engineering'],
+        forTopics: ['Circuit', 'Circuits', 'Series', 'Parallel', 'Electricity', 'Current', 'Voltage'],
+    },
+    'cause_and_effect': {
+        imageUrl: '/images/lessons/ela/cause_and_effect.svg',
+        altText: 'Cause and effect diagram showing relationships with signal words',
+        forStrands: ['Reading', 'Writing', 'Comprehension'],
+        forTopics: ['Cause and Effect', 'Cause', 'Effect', 'Signal Words', 'Text Structure'],
+    },
+    'venn_diagram': {
+        imageUrl: '/images/lessons/math/venn_diagram.svg',
+        altText: 'Venn diagram showing how to compare and contrast two things',
+        forStrands: ['Data & Statistics', 'Reading'],
+        forTopics: ['Venn Diagram', 'Compare', 'Contrast', 'Sets', 'Comparing'],
+    },
+    'probability': {
+        imageUrl: '/images/lessons/math/probability.svg',
+        altText: 'Probability concepts with spinner, dice, coin flip and likelihood scale',
+        forStrands: ['Data & Statistics', 'Probability'],
+        forTopics: ['Probability', 'Chance', 'Likely', 'Unlikely', 'Certain', 'Impossible', 'Outcomes'],
+    },
+    'seasons': {
+        imageUrl: '/images/lessons/science/seasons.svg',
+        altText: 'Diagram showing how Earth tilt and orbit cause the four seasons',
+        forStrands: ['Earth Science', 'Space'],
+        forTopics: ['Seasons', 'Summer', 'Winter', 'Spring', 'Fall', 'Earth Tilt', 'Orbit'],
+    },
+    'digestive_system': {
+        imageUrl: '/images/lessons/science/digestive_system.svg',
+        altText: 'Digestive system showing organs: mouth, esophagus, stomach, intestines',
+        forStrands: ['Life Science', 'Biology', 'Health'],
+        forTopics: ['Digestive', 'Digestion', 'Stomach', 'Intestine', 'Nutrition', 'Organs'],
+    },
+    'light_spectrum': {
+        imageUrl: '/images/lessons/science/light_spectrum.svg',
+        altText: 'Light spectrum showing prism refraction and rainbow colors with wavelengths',
+        forStrands: ['Physical Science', 'Physics'],
+        forTopics: ['Light', 'Spectrum', 'Rainbow', 'Prism', 'Wavelength', 'Color', 'Refraction'],
+    },
+    'main_idea_details': {
+        imageUrl: '/images/lessons/ela/main_idea_details.svg',
+        altText: 'Main idea and supporting details diagram',
+        forStrands: ['Reading', 'Comprehension'],
+        forTopics: ['Main Idea', 'Supporting Details', 'Central Idea', 'Key Details', 'Comprehension'],
+    },
+    'figurative_language': {
+        imageUrl: '/images/lessons/ela/figurative_language.svg',
+        altText: 'Figurative language types: simile, metaphor, personification, hyperbole',
+        forStrands: ['Reading', 'Writing', 'Literature'],
+        forTopics: ['Figurative Language', 'Simile', 'Metaphor', 'Personification', 'Hyperbole', 'Imagery'],
+    },
+    'compass_rose': {
+        imageUrl: '/images/lessons/social_studies/compass_rose.svg',
+        altText: 'Compass rose showing cardinal and intermediate directions',
+        forStrands: ['Geography', 'Social Studies'],
+        forTopics: ['Compass', 'Directions', 'Cardinal', 'North', 'South', 'East', 'West', 'Map Skills'],
+    },
+    'weather_symbols': {
+        imageUrl: '/images/lessons/science/weather_symbols.svg',
+        altText: 'Weather symbols showing sunny, cloudy, rain, snow, thunderstorm, fog, windy',
+        forStrands: ['Earth Science', 'Weather'],
+        forTopics: ['Weather', 'Forecast', 'Sunny', 'Cloudy', 'Rain', 'Snow', 'Thunderstorm', 'Climate'],
+    },
+    'punctuation': {
+        imageUrl: '/images/lessons/ela/punctuation.svg',
+        altText: 'Punctuation marks: period, question mark, exclamation, comma, apostrophe, quotation marks',
+        forStrands: ['Grammar', 'Writing'],
+        forTopics: ['Punctuation', 'Period', 'Question Mark', 'Comma', 'Apostrophe', 'Quotation', 'End Marks'],
+    },
+    'pythagorean_theorem': {
+        imageUrl: '/images/lessons/math/pythagorean_theorem.svg',
+        altText: 'Pythagorean theorem with visual proof showing squares on triangle sides',
+        forStrands: ['Geometry & Measurement'],
+        forTopics: ['Pythagorean', 'Right Triangle', 'Hypotenuse', 'Theorem', 'a² + b² = c²'],
+    },
+    'money_coins': {
+        imageUrl: '/images/lessons/math/money_coins.svg',
+        altText: 'US coins and currency: penny, nickel, dime, quarter, and bills',
+        forStrands: ['Number & Operations', 'Money'],
+        forTopics: ['Money', 'Coins', 'Penny', 'Nickel', 'Dime', 'Quarter', 'Dollar', 'Currency', 'Counting Money'],
+    },
+    'bar_models': {
+        imageUrl: '/images/lessons/math/bar_models.svg',
+        altText: 'Bar models (tape diagrams) for addition, subtraction, multiplication, division',
+        forStrands: ['Number & Operations', 'Problem Solving'],
+        forTopics: ['Bar Model', 'Tape Diagram', 'Part-Whole', 'Problem Solving', 'Word Problems'],
+    },
+    'measurement_tools': {
+        imageUrl: '/images/lessons/math/measurement_tools.svg',
+        altText: 'Measurement tools: ruler, protractor, scale, measuring cup, thermometer',
+        forStrands: ['Geometry & Measurement', 'Science'],
+        forTopics: ['Measurement', 'Ruler', 'Protractor', 'Scale', 'Thermometer', 'Length', 'Weight', 'Temperature'],
+    },
+    'slope_linear': {
+        imageUrl: '/images/lessons/math/slope_linear.svg',
+        altText: 'Slope and linear equations showing y=mx+b with rise over run',
+        forStrands: ['Algebra', 'Functions'],
+        forTopics: ['Slope', 'Linear', 'Equation', 'Rise', 'Run', 'y-intercept', 'Line', 'Graph'],
+    },
+    'text_features': {
+        imageUrl: '/images/lessons/ela/text_features.svg',
+        altText: 'Text features: headings, captions, bold, italic, glossary, index, table of contents',
+        forStrands: ['Reading', 'Comprehension'],
+        forTopics: ['Text Features', 'Heading', 'Caption', 'Glossary', 'Index', 'Table of Contents', 'Bold', 'Italic'],
+    },
+    'timeline': {
+        imageUrl: '/images/lessons/social_studies/timeline.svg',
+        altText: 'Timeline showing how to read events in chronological order',
+        forStrands: ['History', 'Social Studies'],
+        forTopics: ['Timeline', 'Chronological', 'History', 'Events', 'Order', 'Dates'],
+    },
+    'supply_demand': {
+        imageUrl: '/images/lessons/social_studies/supply_demand.svg',
+        altText: 'Supply and demand curves showing equilibrium price',
+        forStrands: ['Economics', 'Social Studies'],
+        forTopics: ['Supply', 'Demand', 'Economics', 'Price', 'Market', 'Equilibrium'],
+    },
+    'pattern_blocks': {
+        imageUrl: '/images/lessons/math/pattern_blocks.svg',
+        altText: 'Pattern blocks showing standard shapes and tessellations',
+        forStrands: ['Geometry & Measurement', 'Number & Operations'],
+        forTopics: ['Pattern Block', 'Tessellation', 'Shape Pattern', 'Polygon', 'Hexagon'],
+    },
+    'us_regions_map': {
+        imageUrl: '/images/lessons/social_studies/us_regions_map.svg',
+        altText: 'Map of the United States separated into major regions',
+        forStrands: ['Social Studies', 'Geography'],
+        forTopics: ['Region', 'US Regions', 'United States Map', 'Geography', 'West', 'Midwest', 'Northeast'],
+    },
 };
 
 interface LessonData {
@@ -283,7 +463,7 @@ async function main() {
     }
 
     const audit = JSON.parse(fs.readFileSync(auditPath, 'utf-8'));
-    const topCandidates = audit.topCandidates.slice(0, 200);
+    const topCandidates = audit.topCandidates.slice(0, 2000);
 
     console.log(`Processing ${topCandidates.length} high-priority lessons...\n`);
 

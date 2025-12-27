@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <title>Digestive System</title>
+  <desc>Educational diagram showing the organs of the digestive system and the path food takes</desc>
+  
+  <rect width="800" height="500" fill="#fef7ed"/>
+  
+  <text x="400" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#b45309">The Digestive System</text>
+  <text x="400" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#d97706">The Journey of Food Through Your Body</text>
+  
+  <!-- Body outline -->
+  <g transform="translate(280, 90)">
+    <!-- Head -->
+    <ellipse cx="60" cy="35" rx="45" ry="40" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+    
+    <!-- 1. Mouth -->
+    <ellipse cx="60" cy="50" rx="20" ry="10" fill="#fca5a5" stroke="#ef4444" stroke-width="2"/>
+    <text x="60" y="54" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#7f1d1d">Mouth</text>
+    
+    <!-- Body -->
+    <path d="M15,75 L15,350 Q60,380 105,350 L105,75" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+    
+    <!-- 2. Esophagus -->
+    <path d="M60,60 L60,120" fill="none" stroke="#f87171" stroke-width="12" stroke-linecap="round"/>
+    <path d="M60,60 L60,120" fill="none" stroke="#fca5a5" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- 3. Stomach -->
+    <path d="M35,120 Q20,140 25,175 Q35,210 70,200 Q100,190 95,150 Q90,120 60,115" fill="#fbbf24" stroke="#f59e0b" stroke-width="3"/>
+    <text x="55" y="165" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#78350f">Stomach</text>
+    
+    <!-- 4. Small Intestine -->
+    <path d="M70,200 Q90,210 85,230 Q80,240 60,245 Q40,250 45,265 Q50,280 70,275 Q90,270 85,290 Q80,305 55,310" fill="none" stroke="#fb923c" stroke-width="10" stroke-linecap="round"/>
+    <path d="M70,200 Q90,210 85,230 Q80,240 60,245 Q40,250 45,265 Q50,280 70,275 Q90,270 85,290 Q80,305 55,310" fill="none" stroke="#fed7aa" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- 5. Large Intestine -->
+    <path d="M25,310 Q10,290 15,250 Q20,210 30,200 L30,200 Q35,195 38,200" fill="none" stroke="#22c55e" stroke-width="14" stroke-linecap="round"/>
+    <path d="M25,310 L80,310 Q95,310 95,330 L95,350" fill="none" stroke="#22c55e" stroke-width="14" stroke-linecap="round"/>
+    
+    <!-- 6. Liver (helper organ) -->
+    <ellipse cx="95" cy="145" rx="25" ry="20" fill="#a16207" stroke="#78350f" stroke-width="2"/>
+    <text x="95" y="149" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="600" fill="white">Liver</text>
+  </g>
+  
+  <!-- Labels with descriptions -->
+  <g transform="translate(500, 100)">
+    <rect x="0" y="0" width="260" height="340" rx="12" fill="white" stroke="#fcd34d" stroke-width="2"/>
+    <text x="130" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#b45309">Digestive Organs</text>
+    
+    <!-- 1. Mouth -->
+    <g transform="translate(15, 45)">
+      <circle cx="10" cy="8" r="10" fill="#ef4444"/>
+      <text x="10" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">1</text>
+      <text x="30" y="5" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#b91c1c">Mouth</text>
+      <text x="30" y="18" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">Chews &amp; breaks down food</text>
+    </g>
+    
+    <!-- 2. Esophagus -->
+    <g transform="translate(15, 85)">
+      <circle cx="10" cy="8" r="10" fill="#f87171"/>
+      <text x="10" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">2</text>
+      <text x="30" y="5" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#dc2626">Esophagus</text>
+      <text x="30" y="18" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">Tube to stomach</text>
+    </g>
+    
+    <!-- 3. Stomach -->
+    <g transform="translate(15, 125)">
+      <circle cx="10" cy="8" r="10" fill="#fbbf24"/>
+      <text x="10" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">3</text>
+      <text x="30" y="5" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#b45309">Stomach</text>
+      <text x="30" y="18" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">Mixes &amp; breaks down more</text>
+    </g>
+    
+    <!-- 4. Small Intestine -->
+    <g transform="translate(15, 165)">
+      <circle cx="10" cy="8" r="10" fill="#fb923c"/>
+      <text x="10" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">4</text>
+      <text x="30" y="5" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#ea580c">Small Intestine</text>
+      <text x="30" y="18" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">Absorbs nutrients (~20 ft!)</text>
+    </g>
+    
+    <!-- 5. Large Intestine -->
+    <g transform="translate(15, 205)">
+      <circle cx="10" cy="8" r="10" fill="#22c55e"/>
+      <text x="10" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white">5</text>
+      <text x="30" y="5" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#16a34a">Large Intestine</text>
+      <text x="30" y="18" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">Absorbs water</text>
+    </g>
+    
+    <!-- Helper organs -->
+    <g transform="translate(15, 255)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#78350f">Helper Organs:</text>
+      <text x="0" y="18" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">• Liver - makes bile</text>
+      <text x="0" y="33" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">• Pancreas - enzymes</text>
+      <text x="0" y="48" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">• Gallbladder - stores bile</text>
+    </g>
+    
+    <!-- Time fact -->
+    <g transform="translate(15, 310)">
+      <text x="115" y="0" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#b45309">⏱️ Takes 24-72 hours!</text>
+    </g>
+  </g>
+  
+  <!-- Flow arrows -->
+  <path d="M340,155 Q360,155 370,175" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#flowArr)"/>
+  
+  <defs>
+    <marker id="flowArr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+  
+  <rect x="0" y="465" width="800" height="35" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="400" y="488" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#b45309">Your digestive system turns food into energy and nutrients your body can use!</text>
+</svg>
