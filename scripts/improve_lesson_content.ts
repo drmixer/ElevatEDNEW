@@ -20,17 +20,25 @@ import * as path from 'path';
 import { createServiceRoleClient } from './utils/supabase.js';
 
 const supabase = createServiceRoleClient();
+
+// Groq API (Primary - generous free tier: 7000 requests/day)
+const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+
+// OpenRouter API (Fallback)
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY;
 
 // FREE high-quality models available on OpenRouter (December 2024)
 // You can switch between these based on availability:
+// FREE high-quality models available on OpenRouter (December 2024)
+// You can switch between these based on availability:
 const FREE_MODELS = {
     'gemini-flash': 'google/gemini-2.0-flash-exp:free',      // Google's newest, very fast
-    'deepseek-r1': 'deepseek/deepseek-r1:free',              // 671B params, great reasoning
-    'llama-scout': 'meta-llama/llama-4-scout:free',          // Meta's free model
-    'quasar': 'openrouter/quasar-alpha',                      // Free, 1M context
-    'qwen': 'qwen/qwen3-235b-a22b:free',                     // Alibaba, very capable
+    'llama-scout': 'meta-llama/llama-3.2-3b-instruct:free',   // Very reliable small model (updated from scout)
+    'mistral-free': 'mistralai/mistral-7b-instruct:free',    // Reliable fallback
+    'qwen': 'qwen/qwen-2-7b-instruct:free',                  // Alibaba, very capable
+    'toppy': 'undi95/toppy-m-7b:free',                       // Another good free option
 };
 
 // Use Gemini 2.0 Flash - it's free and high quality!
@@ -331,12 +339,11 @@ async function callOpenRouter(prompt: string, retries = 3): Promise<string> {
         throw new Error('Missing OPENROUTER_API_KEY environment variable');
     }
 
-    // List of free models to try in order (fallback chain)
+    // Models to try - paid first, then free fallbacks
     const modelsToTry = [
-        FREE_MODELS['gemini-flash'],
-        FREE_MODELS['deepseek-r1'],
-        FREE_MODELS['qwen'],
-        FREE_MODELS['quasar'],
+        'openai/gpt-4o-mini',                    // Very cheap paid model
+        'anthropic/claude-3-haiku',              // Very cheap paid model
+        'google/gemini-2.0-flash-exp:free',      // Free fallback
     ];
 
     for (const model of modelsToTry) {
@@ -355,7 +362,7 @@ async function callOpenRouter(prompt: string, retries = 3): Promise<string> {
                         messages: [
                             { role: 'user', content: prompt }
                         ],
-                        max_tokens: 4000,
+                        max_tokens: 2500,
                         temperature: 0.7,
                     }),
                 });
@@ -365,7 +372,12 @@ async function callOpenRouter(prompt: string, retries = 3): Promise<string> {
                     // If rate limited (429), try next model
                     if (response.status === 429) {
                         console.log(`  Model ${model} rate limited, trying next...`);
-                        break; // Break inner retry loop, try next model
+                        break;
+                    }
+                    // If out of credits (402), try next model
+                    if (response.status === 402) {
+                        console.log(`  Model ${model} out of credits, trying next...`);
+                        break;
                     }
                     throw new Error(`OpenRouter API error: ${response.status} - ${errorText}`);
                 }
@@ -379,18 +391,11 @@ async function callOpenRouter(prompt: string, retries = 3): Promise<string> {
 
                 return content;
             } catch (error) {
-                const errStr = String(error);
-                // If it's a rate limit error, try next model
-                if (errStr.includes('429') || errStr.includes('rate-limited')) {
-                    console.log(`  Model ${model} failed (rate limit), trying next...`);
-                    break;
-                }
                 console.error(`  Attempt ${attempt} failed:`, error);
                 if (attempt === retries) {
-                    // Try next model instead of failing completely
-                    break;
+                    break; // Try next model
                 }
-                await new Promise(r => setTimeout(r, 2000 * attempt)); // Exponential backoff
+                await new Promise(r => setTimeout(r, 2000 * attempt));
             }
         }
     }
@@ -474,8 +479,8 @@ async function main(): Promise<void> {
 
             stats.improved++;
 
-            // Rate limiting - wait between API calls (longer for free models)
-            await new Promise(r => setTimeout(r, 3000));
+            // Rate limiting - 10s delay for paid OpenRouter models
+            await new Promise(r => setTimeout(r, 10000));
 
         } catch (error) {
             console.error(`  ERROR: Failed to improve lesson ${lesson.id}:`, error);

@@ -28,3 +28,1086 @@
 {"timestamp":"2025-12-26T08:09:45.703Z","lessonId":1414,"status":"success"}
 {"timestamp":"2025-12-26T08:09:54.070Z","lessonId":1476,"status":"success"}
 {"timestamp":"2025-12-26T08:10:02.902Z","lessonId":1477,"status":"success"}
+{"timestamp":"2025-12-26T08:12:57.719Z","lessonId":686,"status":"success"}
+{"timestamp":"2025-12-26T08:13:06.059Z","lessonId":687,"status":"success"}
+{"timestamp":"2025-12-26T08:13:14.817Z","lessonId":688,"status":"success"}
+{"timestamp":"2025-12-26T08:13:22.890Z","lessonId":689,"status":"success"}
+{"timestamp":"2025-12-26T08:13:31.900Z","lessonId":694,"status":"success"}
+{"timestamp":"2025-12-26T08:13:39.882Z","lessonId":695,"status":"success"}
+{"timestamp":"2025-12-26T08:13:48.459Z","lessonId":696,"status":"success"}
+{"timestamp":"2025-12-26T08:13:57.100Z","lessonId":703,"status":"success"}
+{"timestamp":"2025-12-26T08:14:06.295Z","lessonId":704,"status":"success"}
+{"timestamp":"2025-12-26T08:14:14.760Z","lessonId":705,"status":"success"}
+{"timestamp":"2025-12-26T08:14:23.983Z","lessonId":706,"status":"success"}
+{"timestamp":"2025-12-26T08:14:32.822Z","lessonId":707,"status":"success"}
+{"timestamp":"2025-12-26T08:14:58.081Z","lessonId":1366,"status":"success"}
+{"timestamp":"2025-12-26T08:15:06.481Z","lessonId":1418,"status":"success"}
+{"timestamp":"2025-12-26T08:15:15.783Z","lessonId":1419,"status":"success"}
+{"timestamp":"2025-12-26T08:17:17.116Z","lessonId":702,"status":"success"}
+{"timestamp":"2025-12-26T08:17:26.247Z","lessonId":840,"status":"success"}
+{"timestamp":"2025-12-26T08:17:35.169Z","lessonId":841,"status":"success"}
+{"timestamp":"2025-12-26T08:17:59.659Z","lessonId":842,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:18:19.014Z","lessonId":843,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:18:38.632Z","lessonId":848,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:18:58.171Z","lessonId":849,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:19:17.810Z","lessonId":853,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:19:37.226Z","lessonId":854,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:19:57.068Z","lessonId":855,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:20:16.850Z","lessonId":856,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:20:36.188Z","lessonId":857,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:20:55.546Z","lessonId":1382,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:21:15.368Z","lessonId":1437,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:21:34.925Z","lessonId":1438,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:21:49.231Z","lessonId":842,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:02.783Z","lessonId":843,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:16.418Z","lessonId":848,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:29.964Z","lessonId":849,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:39.722Z","lessonId":842,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:40.321Z","lessonId":843,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:40.931Z","lessonId":848,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:41.506Z","lessonId":849,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:42.078Z","lessonId":853,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:42.816Z","lessonId":854,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:43.488Z","lessonId":855,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:43.554Z","lessonId":853,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:43.922Z","lessonId":856,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:44.146Z","lessonId":857,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:44.357Z","lessonId":1382,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:44.553Z","lessonId":1437,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:44.776Z","lessonId":1438,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:22:57.250Z","lessonId":854,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:23:11.174Z","lessonId":855,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:23:24.540Z","lessonId":856,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:23:29.060Z","lessonId":842,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:23:38.063Z","lessonId":857,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:23:44.985Z","lessonId":843,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:23:51.611Z","lessonId":1382,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:24:00.894Z","lessonId":848,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:24:05.190Z","lessonId":1437,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:24:16.924Z","lessonId":849,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:24:18.941Z","lessonId":1438,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:24:32.790Z","lessonId":853,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:24:44.733Z","lessonId":842,"status":"success"}
+{"timestamp":"2025-12-26T08:24:48.780Z","lessonId":854,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:25:04.755Z","lessonId":855,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:25:20.778Z","lessonId":856,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:25:22.593Z","lessonId":843,"status":"success"}
+{"timestamp":"2025-12-26T08:25:36.655Z","lessonId":857,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:25:52.570Z","lessonId":1382,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:25:54.259Z","lessonId":848,"status":"success"}
+{"timestamp":"2025-12-26T08:26:08.700Z","lessonId":1437,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:26:24.612Z","lessonId":1438,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T08:26:32.150Z","lessonId":849,"status":"success"}
+{"timestamp":"2025-12-26T08:27:11.756Z","lessonId":853,"status":"success"}
+{"timestamp":"2025-12-26T08:27:42.981Z","lessonId":76,"status":"success"}
+{"timestamp":"2025-12-26T08:27:49.481Z","lessonId":854,"status":"success"}
+{"timestamp":"2025-12-26T08:28:19.129Z","lessonId":110,"status":"success"}
+{"timestamp":"2025-12-26T08:28:27.480Z","lessonId":855,"status":"success"}
+{"timestamp":"2025-12-26T08:28:59.911Z","lessonId":111,"status":"success"}
+{"timestamp":"2025-12-26T08:29:16.559Z","lessonId":856,"status":"success"}
+{"timestamp":"2025-12-26T08:29:40.342Z","lessonId":161,"status":"success"}
+{"timestamp":"2025-12-26T08:30:01.130Z","lessonId":857,"status":"success"}
+{"timestamp":"2025-12-26T08:30:24.156Z","lessonId":162,"status":"success"}
+{"timestamp":"2025-12-26T08:30:38.599Z","lessonId":1382,"status":"success"}
+{"timestamp":"2025-12-26T08:31:08.631Z","lessonId":163,"status":"success"}
+{"timestamp":"2025-12-26T08:31:17.251Z","lessonId":1437,"status":"success"}
+{"timestamp":"2025-12-26T08:31:49.591Z","lessonId":1438,"status":"success"}
+{"timestamp":"2025-12-26T08:31:55.100Z","lessonId":164,"status":"success"}
+{"timestamp":"2025-12-26T08:32:30.646Z","lessonId":165,"status":"success"}
+{"timestamp":"2025-12-26T08:33:02.207Z","lessonId":166,"status":"success"}
+{"timestamp":"2025-12-26T08:33:34.173Z","lessonId":168,"status":"success"}
+{"timestamp":"2025-12-26T08:34:07.807Z","lessonId":169,"status":"success"}
+{"timestamp":"2025-12-26T08:34:46.050Z","lessonId":170,"status":"success"}
+{"timestamp":"2025-12-26T08:35:31.581Z","lessonId":171,"status":"success"}
+{"timestamp":"2025-12-26T08:36:10.683Z","lessonId":172,"status":"success"}
+{"timestamp":"2025-12-26T08:36:43.160Z","lessonId":173,"status":"success"}
+{"timestamp":"2025-12-26T08:37:23.712Z","lessonId":431,"status":"success"}
+{"timestamp":"2025-12-26T08:39:54.726Z","lessonId":3,"status":"success"}
+{"timestamp":"2025-12-26T08:40:30.145Z","lessonId":63,"status":"success"}
+{"timestamp":"2025-12-26T08:41:07.696Z","lessonId":117,"status":"success"}
+{"timestamp":"2025-12-26T08:41:41.471Z","lessonId":118,"status":"success"}
+{"timestamp":"2025-12-26T08:42:17.214Z","lessonId":119,"status":"success"}
+{"timestamp":"2025-12-26T08:43:01.656Z","lessonId":120,"status":"success"}
+{"timestamp":"2025-12-26T08:43:38.346Z","lessonId":125,"status":"success"}
+{"timestamp":"2025-12-26T08:44:16.017Z","lessonId":371,"status":"success"}
+{"timestamp":"2025-12-26T08:44:51.683Z","lessonId":372,"status":"success"}
+{"timestamp":"2025-12-26T08:45:27.115Z","lessonId":373,"status":"success"}
+{"timestamp":"2025-12-26T08:46:02.322Z","lessonId":374,"status":"success"}
+{"timestamp":"2025-12-26T08:46:30.650Z","lessonId":77,"status":"success"}
+{"timestamp":"2025-12-26T08:46:40.189Z","lessonId":375,"status":"success"}
+{"timestamp":"2025-12-26T08:47:06.745Z","lessonId":174,"status":"success"}
+{"timestamp":"2025-12-26T08:47:44.874Z","lessonId":175,"status":"success"}
+{"timestamp":"2025-12-26T08:47:46.938Z","lessonId":64,"status":"success"}
+{"timestamp":"2025-12-26T08:48:18.590Z","lessonId":176,"status":"success"}
+{"timestamp":"2025-12-26T08:48:22.610Z","lessonId":126,"status":"success"}
+{"timestamp":"2025-12-26T08:48:58.355Z","lessonId":127,"status":"success"}
+{"timestamp":"2025-12-26T08:48:59.722Z","lessonId":177,"status":"success"}
+{"timestamp":"2025-12-26T08:49:37.251Z","lessonId":128,"status":"success"}
+{"timestamp":"2025-12-26T08:49:39.398Z","lessonId":178,"status":"success"}
+{"timestamp":"2025-12-26T08:50:15.006Z","lessonId":129,"status":"success"}
+{"timestamp":"2025-12-26T08:50:18.054Z","lessonId":180,"status":"success"}
+{"timestamp":"2025-12-26T08:50:52.307Z","lessonId":130,"status":"success"}
+{"timestamp":"2025-12-26T08:50:52.999Z","lessonId":181,"status":"success"}
+{"timestamp":"2025-12-26T08:51:28.048Z","lessonId":182,"status":"success"}
+{"timestamp":"2025-12-26T08:51:29.487Z","lessonId":386,"status":"success"}
+{"timestamp":"2025-12-26T08:51:52.290Z","lessonId":78,"status":"success"}
+{"timestamp":"2025-12-26T08:52:25.717Z","lessonId":187,"status":"success"}
+{"timestamp":"2025-12-26T08:53:07.126Z","lessonId":188,"status":"success"}
+{"timestamp":"2025-12-26T08:53:47.995Z","lessonId":189,"status":"success"}
+{"timestamp":"2025-12-26T08:54:30.107Z","lessonId":190,"status":"success"}
+{"timestamp":"2025-12-26T08:55:05.052Z","lessonId":191,"status":"success"}
+{"timestamp":"2025-12-26T08:55:44.233Z","lessonId":193,"status":"success"}
+{"timestamp":"2025-12-26T08:56:20.803Z","lessonId":194,"status":"success"}
+{"timestamp":"2025-12-26T08:57:00.260Z","lessonId":195,"status":"success"}
+{"timestamp":"2025-12-26T08:57:39.424Z","lessonId":196,"status":"success"}
+{"timestamp":"2025-12-26T08:58:24.873Z","lessonId":197,"status":"success"}
+{"timestamp":"2025-12-26T08:59:03.874Z","lessonId":198,"status":"success"}
+{"timestamp":"2025-12-26T08:59:36.438Z","lessonId":199,"status":"success"}
+{"timestamp":"2025-12-26T09:00:19.089Z","lessonId":447,"status":"success"}
+{"timestamp":"2025-12-26T09:02:50.946Z","lessonId":183,"status":"success"}
+{"timestamp":"2025-12-26T09:03:30.605Z","lessonId":184,"status":"success"}
+{"timestamp":"2025-12-26T09:04:19.582Z","lessonId":185,"status":"success"}
+{"timestamp":"2025-12-26T09:05:02.631Z","lessonId":186,"status":"success"}
+{"timestamp":"2025-12-26T09:05:43.527Z","lessonId":437,"status":"success"}
+{"timestamp":"2025-12-26T09:20:31.348Z","lessonId":65,"status":"success"}
+{"timestamp":"2025-12-26T09:21:04.410Z","lessonId":116,"status":"success"}
+{"timestamp":"2025-12-26T09:21:36.435Z","lessonId":133,"status":"success"}
+{"timestamp":"2025-12-26T09:22:08.778Z","lessonId":134,"status":"success"}
+{"timestamp":"2025-12-26T09:22:46.976Z","lessonId":135,"status":"success"}
+{"timestamp":"2025-12-26T09:23:26.429Z","lessonId":136,"status":"success"}
+{"timestamp":"2025-12-26T09:24:09.412Z","lessonId":137,"status":"success"}
+{"timestamp":"2025-12-26T09:24:43.319Z","lessonId":139,"status":"success"}
+{"timestamp":"2025-12-26T09:28:06.009Z","lessonId":79,"status":"success"}
+{"timestamp":"2025-12-26T09:28:43.635Z","lessonId":114,"status":"success"}
+{"timestamp":"2025-12-26T09:29:20.060Z","lessonId":115,"status":"success"}
+{"timestamp":"2025-12-26T09:29:58.176Z","lessonId":200,"status":"success"}
+{"timestamp":"2025-12-26T09:30:38.080Z","lessonId":201,"status":"success"}
+{"timestamp":"2025-12-26T09:31:17.076Z","lessonId":202,"status":"success"}
+{"timestamp":"2025-12-26T09:31:53.519Z","lessonId":203,"status":"success"}
+{"timestamp":"2025-12-26T09:32:31.357Z","lessonId":205,"status":"success"}
+{"timestamp":"2025-12-26T09:33:07.899Z","lessonId":206,"status":"success"}
+{"timestamp":"2025-12-26T09:33:45.722Z","lessonId":207,"status":"success"}
+{"timestamp":"2025-12-26T09:34:27.273Z","lessonId":208,"status":"success"}
+{"timestamp":"2025-12-26T09:35:03.914Z","lessonId":66,"status":"success"}
+{"timestamp":"2025-12-26T09:35:13.409Z","lessonId":209,"status":"success"}
+{"timestamp":"2025-12-26T09:35:46.059Z","lessonId":141,"status":"success"}
+{"timestamp":"2025-12-26T09:35:49.036Z","lessonId":210,"status":"success"}
+{"timestamp":"2025-12-26T09:36:20.380Z","lessonId":146,"status":"success"}
+{"timestamp":"2025-12-26T09:36:30.421Z","lessonId":211,"status":"success"}
+{"timestamp":"2025-12-26T09:37:01.165Z","lessonId":397,"status":"success"}
+{"timestamp":"2025-12-26T09:37:04.782Z","lessonId":367,"status":"success"}
+{"timestamp":"2025-12-26T09:37:42.547Z","lessonId":474,"status":"success"}
+{"timestamp":"2025-12-26T09:49:14.750Z","lessonId":67,"status":"success"}
+{"timestamp":"2025-12-26T09:49:16.979Z","lessonId":113,"status":"success"}
+{"timestamp":"2025-12-26T09:49:55.745Z","lessonId":148,"status":"success"}
+{"timestamp":"2025-12-26T09:49:57.433Z","lessonId":213,"status":"success"}
+{"timestamp":"2025-12-26T09:50:35.359Z","lessonId":214,"status":"success"}
+{"timestamp":"2025-12-26T09:50:36.504Z","lessonId":149,"status":"success"}
+{"timestamp":"2025-12-26T09:51:18.320Z","lessonId":153,"status":"success"}
+{"timestamp":"2025-12-26T09:51:20.110Z","lessonId":215,"status":"success"}
+{"timestamp":"2025-12-26T09:52:02.100Z","lessonId":216,"status":"success"}
+{"timestamp":"2025-12-26T09:52:47.470Z","lessonId":218,"status":"success"}
+{"timestamp":"2025-12-26T09:53:24.471Z","lessonId":219,"status":"success"}
+{"timestamp":"2025-12-26T09:54:01.869Z","lessonId":220,"status":"success"}
+{"timestamp":"2025-12-26T09:54:44.542Z","lessonId":221,"status":"success"}
+{"timestamp":"2025-12-26T09:55:31.811Z","lessonId":222,"status":"success"}
+{"timestamp":"2025-12-26T09:56:21.784Z","lessonId":223,"status":"success"}
+{"timestamp":"2025-12-26T09:56:59.672Z","lessonId":224,"status":"success"}
+{"timestamp":"2025-12-26T09:57:30.408Z","lessonId":226,"status":"success"}
+{"timestamp":"2025-12-26T09:58:27.148Z","lessonId":80,"status":"success"}
+{"timestamp":"2025-12-26T09:58:31.775Z","lessonId":68,"status":"success"}
+{"timestamp":"2025-12-26T09:59:05.331Z","lessonId":112,"status":"success"}
+{"timestamp":"2025-12-26T09:59:09.074Z","lessonId":154,"status":"success"}
+{"timestamp":"2025-12-26T09:59:39.263Z","lessonId":227,"status":"success"}
+{"timestamp":"2025-12-26T09:59:46.819Z","lessonId":155,"status":"success"}
+{"timestamp":"2025-12-26T10:00:16.180Z","lessonId":228,"status":"success"}
+{"timestamp":"2025-12-26T10:00:39.278Z","lessonId":160,"status":"success"}
+{"timestamp":"2025-12-26T10:00:59.584Z","lessonId":229,"status":"success"}
+{"timestamp":"2025-12-26T10:01:45.884Z","lessonId":231,"status":"success"}
+{"timestamp":"2025-12-26T10:01:47.035Z","lessonId":69,"status":"success"}
+{"timestamp":"2025-12-26T10:01:55.041Z","lessonId":82,"status":"success"}
+{"timestamp":"2025-12-26T10:02:26.505Z","lessonId":914,"status":"success"}
+{"timestamp":"2025-12-26T10:02:26.978Z","lessonId":232,"status":"success"}
+{"timestamp":"2025-12-26T10:02:35.729Z","lessonId":922,"status":"success"}
+{"timestamp":"2025-12-26T10:03:04.259Z","lessonId":915,"status":"success"}
+{"timestamp":"2025-12-26T10:03:12.145Z","lessonId":233,"status":"success"}
+{"timestamp":"2025-12-26T10:03:26.969Z","lessonId":923,"status":"success"}
+{"timestamp":"2025-12-26T10:03:43.790Z","lessonId":916,"status":"success"}
+{"timestamp":"2025-12-26T10:03:56.890Z","lessonId":234,"status":"success"}
+{"timestamp":"2025-12-26T10:04:07.786Z","lessonId":924,"status":"success"}
+{"timestamp":"2025-12-26T10:04:23.636Z","lessonId":917,"status":"success"}
+{"timestamp":"2025-12-26T10:04:38.765Z","lessonId":235,"status":"success"}
+{"timestamp":"2025-12-26T10:04:48.663Z","lessonId":925,"status":"success"}
+{"timestamp":"2025-12-26T10:05:03.915Z","lessonId":918,"status":"success"}
+{"timestamp":"2025-12-26T10:05:12.904Z","lessonId":236,"status":"success"}
+{"timestamp":"2025-12-26T10:05:29.389Z","lessonId":926,"status":"success"}
+{"timestamp":"2025-12-26T10:05:40.507Z","lessonId":919,"status":"success"}
+{"timestamp":"2025-12-26T10:05:54.246Z","lessonId":237,"status":"success"}
+{"timestamp":"2025-12-26T10:06:03.984Z","lessonId":927,"status":"success"}
+{"timestamp":"2025-12-26T10:06:18.495Z","lessonId":920,"status":"success"}
+{"timestamp":"2025-12-26T10:06:29.807Z","lessonId":239,"status":"success"}
+{"timestamp":"2025-12-26T10:06:46.036Z","lessonId":928,"status":"success"}
+{"timestamp":"2025-12-26T10:06:59.521Z","lessonId":921,"status":"success"}
+{"timestamp":"2025-12-26T10:07:09.186Z","lessonId":491,"status":"success"}
+{"timestamp":"2025-12-26T10:07:26.626Z","lessonId":929,"status":"success"}
+{"timestamp":"2025-12-26T10:07:39.847Z","lessonId":1261,"status":"success"}
+{"timestamp":"2025-12-26T10:08:00.518Z","lessonId":930,"status":"success"}
+{"timestamp":"2025-12-26T10:08:15.363Z","lessonId":1262,"status":"success"}
+{"timestamp":"2025-12-26T10:08:45.138Z","lessonId":931,"status":"success"}
+{"timestamp":"2025-12-26T10:08:56.032Z","lessonId":1263,"status":"success"}
+{"timestamp":"2025-12-26T10:09:30.450Z","lessonId":932,"status":"success"}
+{"timestamp":"2025-12-26T10:09:33.933Z","lessonId":1298,"status":"success"}
+{"timestamp":"2025-12-26T10:10:09.410Z","lessonId":1299,"status":"success"}
+{"timestamp":"2025-12-26T10:10:15.715Z","lessonId":933,"status":"success"}
+{"timestamp":"2025-12-26T10:10:45.183Z","lessonId":1300,"status":"success"}
+{"timestamp":"2025-12-26T10:10:54.027Z","lessonId":934,"status":"success"}
+{"timestamp":"2025-12-26T10:11:22.065Z","lessonId":1315,"status":"success"}
+{"timestamp":"2025-12-26T10:11:38.615Z","lessonId":935,"status":"success"}
+{"timestamp":"2025-12-26T10:12:00.468Z","lessonId":1328,"status":"success"}
+{"timestamp":"2025-12-26T10:12:13.361Z","lessonId":936,"status":"success"}
+{"timestamp":"2025-12-26T10:12:41.349Z","lessonId":1341,"status":"success"}
+{"timestamp":"2025-12-26T10:12:51.358Z","lessonId":937,"status":"success"}
+{"timestamp":"2025-12-26T10:13:32.117Z","lessonId":938,"status":"success"}
+{"timestamp":"2025-12-26T10:13:41.211Z","lessonId":72,"status":"success"}
+{"timestamp":"2025-12-26T10:13:46.458Z","lessonId":59,"status":"success"}
+{"timestamp":"2025-12-26T10:14:12.798Z","lessonId":939,"status":"success"}
+{"timestamp":"2025-12-26T10:14:25.592Z","lessonId":681,"status":"success"}
+{"timestamp":"2025-12-26T10:14:26.046Z","lessonId":666,"status":"success"}
+{"timestamp":"2025-12-26T10:14:53.982Z","lessonId":940,"status":"success"}
+{"timestamp":"2025-12-26T10:14:57.699Z","lessonId":667,"status":"success"}
+{"timestamp":"2025-12-26T10:15:01.803Z","lessonId":682,"status":"success"}
+{"timestamp":"2025-12-26T10:15:33.779Z","lessonId":668,"status":"success"}
+{"timestamp":"2025-12-26T10:15:39.803Z","lessonId":941,"status":"success"}
+{"timestamp":"2025-12-26T10:15:41.188Z","lessonId":683,"status":"success"}
+{"timestamp":"2025-12-26T10:16:16.884Z","lessonId":942,"status":"success"}
+{"timestamp":"2025-12-26T10:16:17.418Z","lessonId":671,"status":"success"}
+{"timestamp":"2025-12-26T10:16:25.368Z","lessonId":684,"status":"success"}
+{"timestamp":"2025-12-26T10:16:55.542Z","lessonId":672,"status":"success"}
+{"timestamp":"2025-12-26T10:16:58.562Z","lessonId":943,"status":"success"}
+{"timestamp":"2025-12-26T10:17:04.328Z","lessonId":685,"status":"success"}
+{"timestamp":"2025-12-26T10:17:33.352Z","lessonId":676,"status":"success"}
+{"timestamp":"2025-12-26T10:17:38.735Z","lessonId":944,"status":"success"}
+{"timestamp":"2025-12-26T10:17:44.121Z","lessonId":690,"status":"success"}
+{"timestamp":"2025-12-26T10:18:16.743Z","lessonId":678,"status":"success"}
+{"timestamp":"2025-12-26T10:18:22.546Z","lessonId":691,"status":"success"}
+{"timestamp":"2025-12-26T10:18:22.547Z","lessonId":1360,"status":"success"}
+{"timestamp":"2025-12-26T10:19:02.162Z","lessonId":692,"status":"success"}
+{"timestamp":"2025-12-26T10:19:04.148Z","lessonId":1361,"status":"success"}
+{"timestamp":"2025-12-26T10:19:07.882Z","lessonId":680,"status":"success"}
+{"timestamp":"2025-12-26T10:19:41.267Z","lessonId":693,"status":"success"}
+{"timestamp":"2025-12-26T10:19:44.522Z","lessonId":1362,"status":"success"}
+{"timestamp":"2025-12-26T10:19:48.507Z","lessonId":1239,"status":"success"}
+{"timestamp":"2025-12-26T10:20:23.887Z","lessonId":1363,"status":"success"}
+{"timestamp":"2025-12-26T10:20:24.211Z","lessonId":1240,"status":"success"}
+{"timestamp":"2025-12-26T10:20:39.146Z","lessonId":697,"status":"success"}
+{"timestamp":"2025-12-26T10:21:04.716Z","lessonId":1241,"status":"success"}
+{"timestamp":"2025-12-26T10:21:08.723Z","lessonId":1364,"status":"success"}
+{"timestamp":"2025-12-26T10:21:23.630Z","lessonId":698,"status":"success"}
+{"timestamp":"2025-12-26T10:21:44.989Z","lessonId":1268,"status":"success"}
+{"timestamp":"2025-12-26T10:22:00.317Z","lessonId":1408,"status":"success"}
+{"timestamp":"2025-12-26T10:22:06.599Z","lessonId":699,"status":"success"}
+{"timestamp":"2025-12-26T10:22:24.948Z","lessonId":1269,"status":"success"}
+{"timestamp":"2025-12-26T10:22:40.163Z","lessonId":1409,"status":"success"}
+{"timestamp":"2025-12-26T10:22:45.155Z","lessonId":700,"status":"success"}
+{"timestamp":"2025-12-26T10:23:01.930Z","lessonId":1270,"status":"success"}
+{"timestamp":"2025-12-26T10:23:16.507Z","lessonId":1410,"status":"success"}
+{"timestamp":"2025-12-26T10:23:28.676Z","lessonId":708,"status":"success"}
+{"timestamp":"2025-12-26T10:23:39.811Z","lessonId":1305,"status":"success"}
+{"timestamp":"2025-12-26T10:24:00.288Z","lessonId":1411,"status":"success"}
+{"timestamp":"2025-12-26T10:24:12.488Z","lessonId":709,"status":"success"}
+{"timestamp":"2025-12-26T10:24:22.058Z","lessonId":1318,"status":"success"}
+{"timestamp":"2025-12-26T10:24:49.588Z","lessonId":710,"status":"success"}
+{"timestamp":"2025-12-26T10:24:51.487Z","lessonId":1469,"status":"success"}
+{"timestamp":"2025-12-26T10:25:00.783Z","lessonId":1331,"status":"success"}
+{"timestamp":"2025-12-26T10:25:32.643Z","lessonId":1470,"status":"success"}
+{"timestamp":"2025-12-26T10:25:32.891Z","lessonId":711,"status":"success"}
+{"timestamp":"2025-12-26T10:26:13.903Z","lessonId":712,"status":"success"}
+{"timestamp":"2025-12-26T10:26:15.172Z","lessonId":60,"status":"success"}
+{"timestamp":"2025-12-26T10:26:16.019Z","lessonId":73,"status":"success"}
+{"timestamp":"2025-12-26T10:26:18.353Z","lessonId":1471,"status":"success"}
+{"timestamp":"2025-12-26T10:26:56.139Z","lessonId":713,"status":"success"}
+{"timestamp":"2025-12-26T10:26:57.367Z","lessonId":673,"status":"success"}
+{"timestamp":"2025-12-26T10:27:00.012Z","lessonId":1472,"status":"success"}
+{"timestamp":"2025-12-26T10:27:00.563Z","lessonId":701,"status":"success"}
+{"timestamp":"2025-12-26T10:27:30.257Z","lessonId":714,"status":"success"}
+{"timestamp":"2025-12-26T10:27:35.327Z","lessonId":763,"status":"success"}
+{"timestamp":"2025-12-26T10:27:43.604Z","lessonId":769,"status":"success"}
+{"timestamp":"2025-12-26T10:27:44.858Z","lessonId":1473,"status":"success"}
+{"timestamp":"2025-12-26T10:28:12.003Z","lessonId":715,"status":"success"}
+{"timestamp":"2025-12-26T10:28:16.104Z","lessonId":764,"status":"success"}
+{"timestamp":"2025-12-26T10:28:24.559Z","lessonId":770,"status":"success"}
+{"timestamp":"2025-12-26T10:28:36.333Z","lessonId":1533,"status":"success"}
+{"timestamp":"2025-12-26T10:28:53.151Z","lessonId":765,"status":"success"}
+{"timestamp":"2025-12-26T10:28:55.551Z","lessonId":716,"status":"success"}
+{"timestamp":"2025-12-26T10:29:08.063Z","lessonId":771,"status":"success"}
+{"timestamp":"2025-12-26T10:29:12.738Z","lessonId":1534,"status":"success"}
+{"timestamp":"2025-12-26T10:29:33.233Z","lessonId":766,"status":"success"}
+{"timestamp":"2025-12-26T10:29:35.425Z","lessonId":717,"status":"success"}
+{"timestamp":"2025-12-26T10:29:49.248Z","lessonId":1535,"status":"success"}
+{"timestamp":"2025-12-26T10:29:50.885Z","lessonId":772,"status":"success"}
+{"timestamp":"2025-12-26T10:30:17.715Z","lessonId":1345,"status":"success"}
+{"timestamp":"2025-12-26T10:30:20.982Z","lessonId":767,"status":"success"}
+{"timestamp":"2025-12-26T10:30:28.207Z","lessonId":1536,"status":"success"}
+{"timestamp":"2025-12-26T10:30:30.567Z","lessonId":773,"status":"success"}
+{"timestamp":"2025-12-26T10:30:51.961Z","lessonId":1346,"status":"success"}
+{"timestamp":"2025-12-26T10:31:01.046Z","lessonId":768,"status":"success"}
+{"timestamp":"2025-12-26T10:31:09.395Z","lessonId":1537,"status":"success"}
+{"timestamp":"2025-12-26T10:31:14.855Z","lessonId":774,"status":"success"}
+{"timestamp":"2025-12-26T10:31:25.931Z","lessonId":1347,"status":"success"}
+{"timestamp":"2025-12-26T10:31:44.698Z","lessonId":1242,"status":"success"}
+{"timestamp":"2025-12-26T10:31:50.116Z","lessonId":1558,"status":"success"}
+{"timestamp":"2025-12-26T10:32:00.178Z","lessonId":775,"status":"success"}
+{"timestamp":"2025-12-26T10:32:00.981Z","lessonId":1348,"status":"success"}
+{"timestamp":"2025-12-26T10:32:27.554Z","lessonId":1243,"status":"success"}
+{"timestamp":"2025-12-26T10:32:32.627Z","lessonId":1559,"status":"success"}
+{"timestamp":"2025-12-26T10:32:40.715Z","lessonId":776,"status":"success"}
+{"timestamp":"2025-12-26T10:32:44.675Z","lessonId":1349,"status":"success"}
+{"timestamp":"2025-12-26T10:33:01.465Z","lessonId":1244,"status":"success"}
+{"timestamp":"2025-12-26T10:33:06.430Z","lessonId":1560,"status":"success"}
+{"timestamp":"2025-12-26T10:33:22.695Z","lessonId":777,"status":"success"}
+{"timestamp":"2025-12-26T10:33:27.639Z","lessonId":1368,"status":"success"}
+{"timestamp":"2025-12-26T10:33:42.340Z","lessonId":1271,"status":"success"}
+{"timestamp":"2025-12-26T10:33:52.410Z","lessonId":1561,"status":"success"}
+{"timestamp":"2025-12-26T10:34:00.574Z","lessonId":778,"status":"success"}
+{"timestamp":"2025-12-26T10:34:07.634Z","lessonId":1369,"status":"success"}
+{"timestamp":"2025-12-26T10:34:18.395Z","lessonId":1272,"status":"success"}
+{"timestamp":"2025-12-26T10:34:33.210Z","lessonId":1562,"status":"success"}
+{"timestamp":"2025-12-26T10:34:49.278Z","lessonId":779,"status":"success"}
+{"timestamp":"2025-12-26T10:34:53.840Z","lessonId":1370,"status":"success"}
+{"timestamp":"2025-12-26T10:35:02.655Z","lessonId":1273,"status":"success"}
+{"timestamp":"2025-12-26T10:35:32.681Z","lessonId":780,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:35:37.215Z","lessonId":1371,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:35:45.932Z","lessonId":1306,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:35:55.926Z","lessonId":781,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:00.655Z","lessonId":1420,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:09.356Z","lessonId":1319,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:19.371Z","lessonId":782,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:24.095Z","lessonId":1421,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:32.701Z","lessonId":1332,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:42.734Z","lessonId":783,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:36:47.502Z","lessonId":1422,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:06.667Z","lessonId":784,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:10.800Z","lessonId":1423,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:30.088Z","lessonId":785,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:34.100Z","lessonId":1424,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:53.687Z","lessonId":1306,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:53.726Z","lessonId":780,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:54.245Z","lessonId":786,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:37:57.355Z","lessonId":1483,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:04.295Z","lessonId":1319,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:04.327Z","lessonId":781,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:14.907Z","lessonId":1332,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:14.912Z","lessonId":782,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:18.300Z","lessonId":787,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:20.815Z","lessonId":1484,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:25.624Z","lessonId":783,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:36.305Z","lessonId":784,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:41.699Z","lessonId":788,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:44.999Z","lessonId":1485,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:46.910Z","lessonId":785,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:38:58.267Z","lessonId":786,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:05.263Z","lessonId":789,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:08.506Z","lessonId":1486,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:08.857Z","lessonId":787,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:19.427Z","lessonId":788,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:28.526Z","lessonId":1350,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:30.060Z","lessonId":789,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:32.046Z","lessonId":1487,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:40.738Z","lessonId":1350,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:51.414Z","lessonId":1351,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:52.055Z","lessonId":1351,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:39:56.063Z","lessonId":1543,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:02.209Z","lessonId":1352,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:12.925Z","lessonId":1353,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:15.645Z","lessonId":1352,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:19.871Z","lessonId":1544,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:23.538Z","lessonId":1354,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:34.186Z","lessonId":1373,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:39.388Z","lessonId":1353,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:43.210Z","lessonId":1545,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T10:40:44.894Z","lessonId":1374,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T11:12:35.909Z","lessonId":1354,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T11:27:59.223Z","lessonId":1546,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T12:17:44.992Z","lessonId":1373,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T12:33:41.099Z","lessonId":1547,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T12:55:06.421Z","lessonId":1374,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T12:55:23.026Z","lessonId":1375,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T13:27:28.081Z","lessonId":1376,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T13:42:42.214Z","lessonId":1375,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T13:58:08.278Z","lessonId":1425,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T14:29:54.399Z","lessonId":1426,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T14:43:42.290Z","lessonId":1376,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T14:43:47.726Z","lessonId":1427,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T15:16:17.873Z","lessonId":1428,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T15:44:42.054Z","lessonId":1425,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T15:44:44.201Z","lessonId":1429,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T16:08:37.243Z","lessonId":1488,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T16:25:35.126Z","lessonId":1489,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T16:30:11.022Z","lessonId":1426,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T16:30:17.778Z","lessonId":1490,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T16:45:47.158Z","lessonId":1491,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T17:02:10.055Z","lessonId":1427,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T17:09:01.699Z","lessonId":1492,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T17:10:32.629Z","lessonId":1548,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T17:44:01.477Z","lessonId":1428,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T17:44:02.773Z","lessonId":1549,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T17:46:53.145Z","lessonId":1550,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T18:19:39.232Z","lessonId":1429,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T18:19:39.232Z","lessonId":1551,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T18:19:50.021Z","lessonId":1552,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T18:37:52.156Z","lessonId":1488,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T19:19:44.140Z","lessonId":1489,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T19:51:28.117Z","lessonId":1490,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T20:37:31.258Z","lessonId":1491,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T20:49:46.408Z","lessonId":1492,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T21:03:38.950Z","lessonId":1548,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T21:06:00.607Z","lessonId":1549,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T21:06:48.181Z","lessonId":1550,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T21:39:04.938Z","lessonId":1551,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T21:50:50.674Z","lessonId":1552,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:18:51.233Z","lessonId":780,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:18:51.322Z","lessonId":1306,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:19:14.672Z","lessonId":1319,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:19:14.845Z","lessonId":781,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:19:38.078Z","lessonId":1332,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:19:38.421Z","lessonId":782,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:20:02.189Z","lessonId":783,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:20:25.761Z","lessonId":784,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:20:49.425Z","lessonId":785,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:21:13.049Z","lessonId":786,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:21:36.592Z","lessonId":787,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:21:59.985Z","lessonId":788,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:22:23.521Z","lessonId":789,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:22:47.279Z","lessonId":1350,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:23:11.075Z","lessonId":1351,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:23:34.825Z","lessonId":1352,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:23:58.563Z","lessonId":1353,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:24:21.999Z","lessonId":1354,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:24:45.655Z","lessonId":1373,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:25:09.320Z","lessonId":1374,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:25:32.973Z","lessonId":1375,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:25:56.626Z","lessonId":1376,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:26:22.024Z","lessonId":1425,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:26:45.950Z","lessonId":1426,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:27:02.091Z","lessonId":780,"status":"success"}
+{"timestamp":"2025-12-26T22:27:03.041Z","lessonId":1306,"status":"success"}
+{"timestamp":"2025-12-26T22:27:11.580Z","lessonId":1427,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:27:35.398Z","lessonId":1428,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:27:45.592Z","lessonId":1319,"status":"success"}
+{"timestamp":"2025-12-26T22:33:13.978Z","lessonId":1332,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:33:33.233Z","lessonId":1332,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:35:57.939Z","lessonId":781,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-26T22:50:18.928Z","lessonId":39,"status":"success"}
+{"timestamp":"2025-12-26T22:50:51.689Z","lessonId":40,"status":"success"}
+{"timestamp":"2025-12-26T22:51:12.575Z","lessonId":41,"status":"success"}
+{"timestamp":"2025-12-26T22:51:44.731Z","lessonId":43,"status":"success"}
+{"timestamp":"2025-12-26T22:52:17.188Z","lessonId":52,"status":"success"}
+{"timestamp":"2025-12-26T22:52:49.348Z","lessonId":53,"status":"success"}
+{"timestamp":"2025-12-26T22:53:22.013Z","lessonId":54,"status":"success"}
+{"timestamp":"2025-12-26T22:53:54.882Z","lessonId":56,"status":"success"}
+{"timestamp":"2025-12-26T22:54:27.618Z","lessonId":61,"status":"success"}
+{"timestamp":"2025-12-26T22:55:00.644Z","lessonId":74,"status":"success"}
+{"timestamp":"2025-12-26T22:55:33.147Z","lessonId":85,"status":"success"}
+{"timestamp":"2025-12-26T22:56:05.860Z","lessonId":86,"status":"success"}
+{"timestamp":"2025-12-26T22:56:38.771Z","lessonId":87,"status":"success"}
+{"timestamp":"2025-12-26T22:57:10.895Z","lessonId":89,"status":"success"}
+{"timestamp":"2025-12-26T22:57:43.537Z","lessonId":90,"status":"success"}
+{"timestamp":"2025-12-26T22:58:16.272Z","lessonId":91,"status":"success"}
+{"timestamp":"2025-12-26T22:58:48.569Z","lessonId":92,"status":"success"}
+{"timestamp":"2025-12-26T22:59:21.034Z","lessonId":93,"status":"success"}
+{"timestamp":"2025-12-26T22:59:53.468Z","lessonId":94,"status":"success"}
+{"timestamp":"2025-12-26T23:00:26.227Z","lessonId":95,"status":"success"}
+{"timestamp":"2025-12-26T23:00:58.934Z","lessonId":98,"status":"success"}
+{"timestamp":"2025-12-26T23:01:31.788Z","lessonId":99,"status":"success"}
+{"timestamp":"2025-12-26T23:02:04.144Z","lessonId":102,"status":"success"}
+{"timestamp":"2025-12-26T23:02:36.609Z","lessonId":103,"status":"success"}
+{"timestamp":"2025-12-26T23:03:09.403Z","lessonId":104,"status":"success"}
+{"timestamp":"2025-12-26T23:03:41.860Z","lessonId":105,"status":"success"}
+{"timestamp":"2025-12-26T23:04:14.537Z","lessonId":106,"status":"success"}
+{"timestamp":"2025-12-26T23:04:47.574Z","lessonId":108,"status":"success"}
+{"timestamp":"2025-12-26T23:05:20.186Z","lessonId":153,"status":"success"}
+{"timestamp":"2025-12-26T23:05:52.913Z","lessonId":161,"status":"success"}
+{"timestamp":"2025-12-26T23:06:25.571Z","lessonId":164,"status":"success"}
+{"timestamp":"2025-12-26T23:06:58.642Z","lessonId":183,"status":"success"}
+{"timestamp":"2025-12-26T23:07:31.957Z","lessonId":207,"status":"success"}
+{"timestamp":"2025-12-26T23:08:04.641Z","lessonId":220,"status":"success"}
+{"timestamp":"2025-12-26T23:08:37.457Z","lessonId":222,"status":"success"}
+{"timestamp":"2025-12-26T23:09:09.684Z","lessonId":240,"status":"success"}
+{"timestamp":"2025-12-26T23:09:42.104Z","lessonId":241,"status":"success"}
+{"timestamp":"2025-12-26T23:10:14.736Z","lessonId":242,"status":"success"}
+{"timestamp":"2025-12-26T23:10:47.764Z","lessonId":244,"status":"success"}
+{"timestamp":"2025-12-26T23:11:21.017Z","lessonId":245,"status":"success"}
+{"timestamp":"2025-12-26T23:11:52.814Z","lessonId":246,"status":"success"}
+{"timestamp":"2025-12-26T23:12:25.137Z","lessonId":247,"status":"success"}
+{"timestamp":"2025-12-26T23:12:57.826Z","lessonId":248,"status":"success"}
+{"timestamp":"2025-12-26T23:13:30.142Z","lessonId":249,"status":"success"}
+{"timestamp":"2025-12-26T23:14:02.215Z","lessonId":250,"status":"success"}
+{"timestamp":"2025-12-26T23:14:35.043Z","lessonId":251,"status":"success"}
+{"timestamp":"2025-12-26T23:15:07.503Z","lessonId":252,"status":"success"}
+{"timestamp":"2025-12-26T23:15:40.056Z","lessonId":253,"status":"success"}
+{"timestamp":"2025-12-26T23:16:12.419Z","lessonId":254,"status":"success"}
+{"timestamp":"2025-12-26T23:16:44.977Z","lessonId":255,"status":"success"}
+{"timestamp":"2025-12-26T23:17:17.866Z","lessonId":256,"status":"success"}
+{"timestamp":"2025-12-26T23:17:50.427Z","lessonId":257,"status":"success"}
+{"timestamp":"2025-12-26T23:18:22.818Z","lessonId":258,"status":"success"}
+{"timestamp":"2025-12-26T23:18:55.170Z","lessonId":259,"status":"success"}
+{"timestamp":"2025-12-26T23:19:55.723Z","lessonId":260,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:20:26.286Z","lessonId":261,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:20:56.904Z","lessonId":262,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:21:27.526Z","lessonId":263,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:21:58.143Z","lessonId":264,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:26:34.961Z","lessonId":261,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:29:35.648Z","lessonId":262,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:32:36.270Z","lessonId":263,"status":"error","message":"Error: All retries failed"}
+{"timestamp":"2025-12-26T23:38:24.049Z","lessonId":261,"status":"success"}
+{"timestamp":"2025-12-26T23:38:42.080Z","lessonId":262,"status":"success"}
+{"timestamp":"2025-12-26T23:39:11.108Z","lessonId":263,"status":"success"}
+{"timestamp":"2025-12-26T23:39:35.552Z","lessonId":264,"status":"success"}
+{"timestamp":"2025-12-26T23:39:59.196Z","lessonId":265,"status":"success"}
+{"timestamp":"2025-12-26T23:40:22.139Z","lessonId":266,"status":"success"}
+{"timestamp":"2025-12-26T23:40:41.206Z","lessonId":267,"status":"success"}
+{"timestamp":"2025-12-26T23:41:02.725Z","lessonId":268,"status":"success"}
+{"timestamp":"2025-12-26T23:41:28.370Z","lessonId":269,"status":"success"}
+{"timestamp":"2025-12-26T23:41:50.716Z","lessonId":270,"status":"success"}
+{"timestamp":"2025-12-26T23:42:13.874Z","lessonId":271,"status":"success"}
+{"timestamp":"2025-12-26T23:42:37.604Z","lessonId":273,"status":"success"}
+{"timestamp":"2025-12-26T23:42:59.810Z","lessonId":274,"status":"success"}
+{"timestamp":"2025-12-26T23:43:22.520Z","lessonId":275,"status":"success"}
+{"timestamp":"2025-12-26T23:43:48.546Z","lessonId":276,"status":"success"}
+{"timestamp":"2025-12-26T23:44:10.289Z","lessonId":277,"status":"success"}
+{"timestamp":"2025-12-26T23:44:33.730Z","lessonId":278,"status":"success"}
+{"timestamp":"2025-12-26T23:44:53.646Z","lessonId":279,"status":"success"}
+{"timestamp":"2025-12-26T23:45:14.967Z","lessonId":280,"status":"success"}
+{"timestamp":"2025-12-26T23:45:36.377Z","lessonId":281,"status":"success"}
+{"timestamp":"2025-12-26T23:45:58.992Z","lessonId":282,"status":"success"}
+{"timestamp":"2025-12-26T23:46:19.589Z","lessonId":283,"status":"success"}
+{"timestamp":"2025-12-26T23:46:40.527Z","lessonId":284,"status":"success"}
+{"timestamp":"2025-12-26T23:47:01.054Z","lessonId":285,"status":"success"}
+{"timestamp":"2025-12-26T23:47:22.255Z","lessonId":286,"status":"success"}
+{"timestamp":"2025-12-26T23:47:44.216Z","lessonId":287,"status":"success"}
+{"timestamp":"2025-12-26T23:48:06.517Z","lessonId":288,"status":"success"}
+{"timestamp":"2025-12-26T23:48:29.473Z","lessonId":289,"status":"success"}
+{"timestamp":"2025-12-26T23:48:53.106Z","lessonId":290,"status":"success"}
+{"timestamp":"2025-12-26T23:49:20.926Z","lessonId":291,"status":"success"}
+{"timestamp":"2025-12-26T23:49:49.858Z","lessonId":292,"status":"success"}
+{"timestamp":"2025-12-26T23:50:09.545Z","lessonId":293,"status":"success"}
+{"timestamp":"2025-12-26T23:50:36.426Z","lessonId":294,"status":"success"}
+{"timestamp":"2025-12-26T23:51:07.665Z","lessonId":295,"status":"success"}
+{"timestamp":"2025-12-26T23:51:34.860Z","lessonId":296,"status":"success"}
+{"timestamp":"2025-12-26T23:51:57.691Z","lessonId":297,"status":"success"}
+{"timestamp":"2025-12-26T23:52:18.218Z","lessonId":298,"status":"success"}
+{"timestamp":"2025-12-26T23:52:41.465Z","lessonId":299,"status":"success"}
+{"timestamp":"2025-12-26T23:53:00.980Z","lessonId":300,"status":"success"}
+{"timestamp":"2025-12-26T23:53:21.540Z","lessonId":301,"status":"success"}
+{"timestamp":"2025-12-26T23:53:40.241Z","lessonId":302,"status":"success"}
+{"timestamp":"2025-12-26T23:54:00.536Z","lessonId":303,"status":"success"}
+{"timestamp":"2025-12-26T23:54:21.705Z","lessonId":304,"status":"success"}
+{"timestamp":"2025-12-26T23:54:45.836Z","lessonId":305,"status":"success"}
+{"timestamp":"2025-12-26T23:55:05.369Z","lessonId":306,"status":"success"}
+{"timestamp":"2025-12-26T23:55:27.777Z","lessonId":307,"status":"success"}
+{"timestamp":"2025-12-26T23:55:48.847Z","lessonId":308,"status":"success"}
+{"timestamp":"2025-12-26T23:56:14.936Z","lessonId":309,"status":"success"}
+{"timestamp":"2025-12-26T23:56:40.895Z","lessonId":310,"status":"success"}
+{"timestamp":"2025-12-26T23:56:59.875Z","lessonId":311,"status":"success"}
+{"timestamp":"2025-12-26T23:57:22.858Z","lessonId":312,"status":"success"}
+{"timestamp":"2025-12-26T23:57:46.715Z","lessonId":313,"status":"success"}
+{"timestamp":"2025-12-26T23:58:07.691Z","lessonId":314,"status":"success"}
+{"timestamp":"2025-12-26T23:58:30.909Z","lessonId":315,"status":"success"}
+{"timestamp":"2025-12-26T23:58:50.086Z","lessonId":316,"status":"success"}
+{"timestamp":"2025-12-26T23:59:17.171Z","lessonId":317,"status":"success"}
+{"timestamp":"2025-12-26T23:59:40.153Z","lessonId":318,"status":"success"}
+{"timestamp":"2025-12-27T00:00:08.474Z","lessonId":319,"status":"success"}
+{"timestamp":"2025-12-27T00:00:41.456Z","lessonId":320,"status":"success"}
+{"timestamp":"2025-12-27T00:01:12.021Z","lessonId":321,"status":"success"}
+{"timestamp":"2025-12-27T00:01:43.482Z","lessonId":322,"status":"success"}
+{"timestamp":"2025-12-27T00:02:10.130Z","lessonId":323,"status":"success"}
+{"timestamp":"2025-12-27T00:02:41.933Z","lessonId":324,"status":"success"}
+{"timestamp":"2025-12-27T00:03:06.551Z","lessonId":325,"status":"success"}
+{"timestamp":"2025-12-27T00:03:28.564Z","lessonId":326,"status":"success"}
+{"timestamp":"2025-12-27T00:03:51.624Z","lessonId":327,"status":"success"}
+{"timestamp":"2025-12-27T00:04:16.915Z","lessonId":328,"status":"success"}
+{"timestamp":"2025-12-27T00:04:44.885Z","lessonId":329,"status":"success"}
+{"timestamp":"2025-12-27T00:05:12.389Z","lessonId":330,"status":"success"}
+{"timestamp":"2025-12-27T00:05:44.720Z","lessonId":331,"status":"success"}
+{"timestamp":"2025-12-27T00:06:04.591Z","lessonId":332,"status":"success"}
+{"timestamp":"2025-12-27T00:06:32.243Z","lessonId":333,"status":"success"}
+{"timestamp":"2025-12-27T00:06:53.766Z","lessonId":334,"status":"success"}
+{"timestamp":"2025-12-27T00:07:24.996Z","lessonId":335,"status":"success"}
+{"timestamp":"2025-12-27T00:07:45.434Z","lessonId":336,"status":"success"}
+{"timestamp":"2025-12-27T00:08:06.547Z","lessonId":337,"status":"success"}
+{"timestamp":"2025-12-27T00:08:30.767Z","lessonId":338,"status":"success"}
+{"timestamp":"2025-12-27T00:08:52.580Z","lessonId":339,"status":"success"}
+{"timestamp":"2025-12-27T00:09:22.357Z","lessonId":340,"status":"success"}
+{"timestamp":"2025-12-27T00:09:46.461Z","lessonId":341,"status":"success"}
+{"timestamp":"2025-12-27T00:10:07.377Z","lessonId":342,"status":"success"}
+{"timestamp":"2025-12-27T00:10:33.674Z","lessonId":343,"status":"success"}
+{"timestamp":"2025-12-27T00:10:57.398Z","lessonId":344,"status":"success"}
+{"timestamp":"2025-12-27T00:11:20.379Z","lessonId":345,"status":"success"}
+{"timestamp":"2025-12-27T00:11:41.360Z","lessonId":346,"status":"success"}
+{"timestamp":"2025-12-27T00:12:07.021Z","lessonId":347,"status":"success"}
+{"timestamp":"2025-12-27T00:12:29.519Z","lessonId":348,"status":"success"}
+{"timestamp":"2025-12-27T00:12:52.734Z","lessonId":349,"status":"success"}
+{"timestamp":"2025-12-27T00:13:15.268Z","lessonId":350,"status":"success"}
+{"timestamp":"2025-12-27T00:13:37.496Z","lessonId":351,"status":"success"}
+{"timestamp":"2025-12-27T00:13:57.014Z","lessonId":352,"status":"success"}
+{"timestamp":"2025-12-27T00:14:26.513Z","lessonId":353,"status":"success"}
+{"timestamp":"2025-12-27T00:14:48.260Z","lessonId":354,"status":"success"}
+{"timestamp":"2025-12-27T00:15:12.457Z","lessonId":355,"status":"success"}
+{"timestamp":"2025-12-27T00:15:35.739Z","lessonId":356,"status":"success"}
+{"timestamp":"2025-12-27T00:15:56.957Z","lessonId":357,"status":"success"}
+{"timestamp":"2025-12-27T00:16:22.704Z","lessonId":358,"status":"success"}
+{"timestamp":"2025-12-27T00:16:51.945Z","lessonId":359,"status":"success"}
+{"timestamp":"2025-12-27T00:17:09.708Z","lessonId":360,"status":"success"}
+{"timestamp":"2025-12-27T00:17:29.465Z","lessonId":361,"status":"success"}
+{"timestamp":"2025-12-27T00:17:51.865Z","lessonId":362,"status":"success"}
+{"timestamp":"2025-12-27T00:18:14.400Z","lessonId":363,"status":"success"}
+{"timestamp":"2025-12-27T00:18:38.005Z","lessonId":364,"status":"success"}
+{"timestamp":"2025-12-27T00:19:00.800Z","lessonId":365,"status":"success"}
+{"timestamp":"2025-12-27T00:19:23.302Z","lessonId":366,"status":"success"}
+{"timestamp":"2025-12-27T00:19:51.944Z","lessonId":367,"status":"success"}
+{"timestamp":"2025-12-27T00:20:11.396Z","lessonId":368,"status":"success"}
+{"timestamp":"2025-12-27T00:20:35.695Z","lessonId":515,"status":"success"}
+{"timestamp":"2025-12-27T00:20:58.795Z","lessonId":519,"status":"success"}
+{"timestamp":"2025-12-27T00:21:23.439Z","lessonId":535,"status":"success"}
+{"timestamp":"2025-12-27T00:21:50.294Z","lessonId":547,"status":"success"}
+{"timestamp":"2025-12-27T00:22:13.250Z","lessonId":570,"status":"success"}
+{"timestamp":"2025-12-27T00:22:33.497Z","lessonId":583,"status":"success"}
+{"timestamp":"2025-12-27T00:22:53.081Z","lessonId":594,"status":"success"}
+{"timestamp":"2025-12-27T00:23:11.926Z","lessonId":607,"status":"success"}
+{"timestamp":"2025-12-27T00:23:28.230Z","lessonId":614,"status":"success"}
+{"timestamp":"2025-12-27T00:23:50.196Z","lessonId":628,"status":"success"}
+{"timestamp":"2025-12-27T00:24:10.147Z","lessonId":640,"status":"success"}
+{"timestamp":"2025-12-27T00:24:30.435Z","lessonId":643,"status":"success"}
+{"timestamp":"2025-12-27T00:24:50.831Z","lessonId":648,"status":"success"}
+{"timestamp":"2025-12-27T00:25:11.050Z","lessonId":650,"status":"success"}
+{"timestamp":"2025-12-27T00:25:34.172Z","lessonId":656,"status":"success"}
+{"timestamp":"2025-12-27T00:25:59.701Z","lessonId":657,"status":"success"}
+{"timestamp":"2025-12-27T00:26:23.225Z","lessonId":661,"status":"success"}
+{"timestamp":"2025-12-27T00:26:47.917Z","lessonId":721,"status":"success"}
+{"timestamp":"2025-12-27T00:27:06.516Z","lessonId":722,"status":"success"}
+{"timestamp":"2025-12-27T00:27:26.603Z","lessonId":723,"status":"success"}
+{"timestamp":"2025-12-27T00:27:46.320Z","lessonId":724,"status":"success"}
+{"timestamp":"2025-12-27T00:28:06.852Z","lessonId":726,"status":"success"}
+{"timestamp":"2025-12-27T00:28:43.545Z","lessonId":727,"status":"success"}
+{"timestamp":"2025-12-27T00:29:03.077Z","lessonId":728,"status":"success"}
+{"timestamp":"2025-12-27T00:29:25.727Z","lessonId":732,"status":"success"}
+{"timestamp":"2025-12-27T00:29:53.422Z","lessonId":733,"status":"success"}
+{"timestamp":"2025-12-27T00:30:16.063Z","lessonId":734,"status":"success"}
+{"timestamp":"2025-12-27T00:30:41.741Z","lessonId":735,"status":"success"}
+{"timestamp":"2025-12-27T00:31:01.334Z","lessonId":736,"status":"success"}
+{"timestamp":"2025-12-27T00:31:30.303Z","lessonId":741,"status":"success"}
+{"timestamp":"2025-12-27T00:31:53.388Z","lessonId":742,"status":"success"}
+{"timestamp":"2025-12-27T00:32:12.295Z","lessonId":743,"status":"success"}
+{"timestamp":"2025-12-27T00:32:37.204Z","lessonId":744,"status":"success"}
+{"timestamp":"2025-12-27T00:33:00.394Z","lessonId":745,"status":"success"}
+{"timestamp":"2025-12-27T00:33:21.799Z","lessonId":748,"status":"success"}
+{"timestamp":"2025-12-27T00:33:46.316Z","lessonId":749,"status":"success"}
+{"timestamp":"2025-12-27T00:34:08.389Z","lessonId":751,"status":"success"}
+{"timestamp":"2025-12-27T00:34:39.306Z","lessonId":752,"status":"success"}
+{"timestamp":"2025-12-27T00:34:57.884Z","lessonId":756,"status":"success"}
+{"timestamp":"2025-12-27T00:35:14.333Z","lessonId":757,"status":"success"}
+{"timestamp":"2025-12-27T00:35:38.940Z","lessonId":759,"status":"success"}
+{"timestamp":"2025-12-27T00:35:59.899Z","lessonId":761,"status":"success"}
+{"timestamp":"2025-12-27T00:36:28.910Z","lessonId":762,"status":"success"}
+{"timestamp":"2025-12-27T00:36:52.577Z","lessonId":781,"status":"success"}
+{"timestamp":"2025-12-27T00:37:15.151Z","lessonId":782,"status":"success"}
+{"timestamp":"2025-12-27T00:37:42.125Z","lessonId":783,"status":"success"}
+{"timestamp":"2025-12-27T00:38:08.979Z","lessonId":784,"status":"success"}
+{"timestamp":"2025-12-27T00:38:37.752Z","lessonId":785,"status":"success"}
+{"timestamp":"2025-12-27T00:38:58.627Z","lessonId":786,"status":"success"}
+{"timestamp":"2025-12-27T00:39:21.178Z","lessonId":787,"status":"success"}
+{"timestamp":"2025-12-27T00:39:49.795Z","lessonId":788,"status":"success"}
+{"timestamp":"2025-12-27T00:40:18.995Z","lessonId":789,"status":"success"}
+{"timestamp":"2025-12-27T00:40:49.150Z","lessonId":790,"status":"success"}
+{"timestamp":"2025-12-27T00:41:11.448Z","lessonId":791,"status":"success"}
+{"timestamp":"2025-12-27T00:41:34.551Z","lessonId":792,"status":"success"}
+{"timestamp":"2025-12-27T00:41:56.213Z","lessonId":793,"status":"success"}
+{"timestamp":"2025-12-27T00:42:14.958Z","lessonId":794,"status":"success"}
+{"timestamp":"2025-12-27T00:42:34.376Z","lessonId":795,"status":"success"}
+{"timestamp":"2025-12-27T00:42:55.786Z","lessonId":796,"status":"success"}
+{"timestamp":"2025-12-27T00:43:17.909Z","lessonId":797,"status":"success"}
+{"timestamp":"2025-12-27T00:43:38.557Z","lessonId":798,"status":"success"}
+{"timestamp":"2025-12-27T00:44:09.382Z","lessonId":799,"status":"success"}
+{"timestamp":"2025-12-27T00:44:30.912Z","lessonId":800,"status":"success"}
+{"timestamp":"2025-12-27T00:44:57.456Z","lessonId":801,"status":"success"}
+{"timestamp":"2025-12-27T00:45:19.878Z","lessonId":802,"status":"success"}
+{"timestamp":"2025-12-27T00:45:45.463Z","lessonId":803,"status":"success"}
+{"timestamp":"2025-12-27T00:46:08.638Z","lessonId":804,"status":"success"}
+{"timestamp":"2025-12-27T00:46:28.584Z","lessonId":805,"status":"success"}
+{"timestamp":"2025-12-27T00:46:49.183Z","lessonId":806,"status":"success"}
+{"timestamp":"2025-12-27T00:47:10.914Z","lessonId":807,"status":"success"}
+{"timestamp":"2025-12-27T00:47:36.026Z","lessonId":808,"status":"success"}
+{"timestamp":"2025-12-27T00:47:59.606Z","lessonId":809,"status":"success"}
+{"timestamp":"2025-12-27T00:48:19.236Z","lessonId":810,"status":"success"}
+{"timestamp":"2025-12-27T00:48:40.384Z","lessonId":811,"status":"success"}
+{"timestamp":"2025-12-27T00:49:04.370Z","lessonId":812,"status":"success"}
+{"timestamp":"2025-12-27T00:49:31.468Z","lessonId":893,"status":"success"}
+{"timestamp":"2025-12-27T00:49:51.255Z","lessonId":897,"status":"success"}
+{"timestamp":"2025-12-27T00:50:14.968Z","lessonId":898,"status":"success"}
+{"timestamp":"2025-12-27T00:50:42.839Z","lessonId":903,"status":"success"}
+{"timestamp":"2025-12-27T00:51:08.165Z","lessonId":907,"status":"success"}
+{"timestamp":"2025-12-27T00:51:28.420Z","lessonId":908,"status":"success"}
+{"timestamp":"2025-12-27T00:51:56.014Z","lessonId":913,"status":"success"}
+{"timestamp":"2025-12-27T00:52:18.145Z","lessonId":945,"status":"success"}
+{"timestamp":"2025-12-27T00:52:42.950Z","lessonId":946,"status":"success"}
+{"timestamp":"2025-12-27T00:53:02.567Z","lessonId":947,"status":"success"}
+{"timestamp":"2025-12-27T00:53:22.897Z","lessonId":948,"status":"success"}
+{"timestamp":"2025-12-27T00:53:47.686Z","lessonId":949,"status":"success"}
+{"timestamp":"2025-12-27T00:54:04.066Z","lessonId":950,"status":"success"}
+{"timestamp":"2025-12-27T00:54:26.534Z","lessonId":951,"status":"success"}
+{"timestamp":"2025-12-27T00:54:55.057Z","lessonId":952,"status":"success"}
+{"timestamp":"2025-12-27T00:55:19.157Z","lessonId":953,"status":"success"}
+{"timestamp":"2025-12-27T00:55:40.697Z","lessonId":954,"status":"success"}
+{"timestamp":"2025-12-27T00:55:59.801Z","lessonId":955,"status":"success"}
+{"timestamp":"2025-12-27T00:56:21.687Z","lessonId":956,"status":"success"}
+{"timestamp":"2025-12-27T00:56:44.472Z","lessonId":957,"status":"success"}
+{"timestamp":"2025-12-27T00:57:07.993Z","lessonId":958,"status":"success"}
+{"timestamp":"2025-12-27T00:57:25.292Z","lessonId":959,"status":"success"}
+{"timestamp":"2025-12-27T00:57:45.203Z","lessonId":960,"status":"success"}
+{"timestamp":"2025-12-27T00:58:07.616Z","lessonId":961,"status":"success"}
+{"timestamp":"2025-12-27T00:58:27.266Z","lessonId":962,"status":"success"}
+{"timestamp":"2025-12-27T00:58:47.332Z","lessonId":963,"status":"success"}
+{"timestamp":"2025-12-27T00:59:09.707Z","lessonId":964,"status":"success"}
+{"timestamp":"2025-12-27T00:59:27.192Z","lessonId":965,"status":"success"}
+{"timestamp":"2025-12-27T00:59:49.129Z","lessonId":1245,"status":"success"}
+{"timestamp":"2025-12-27T01:00:05.616Z","lessonId":1246,"status":"success"}
+{"timestamp":"2025-12-27T01:00:32.205Z","lessonId":1247,"status":"success"}
+{"timestamp":"2025-12-27T01:00:53.741Z","lessonId":1274,"status":"success"}
+{"timestamp":"2025-12-27T01:01:17.543Z","lessonId":1275,"status":"success"}
+{"timestamp":"2025-12-27T01:01:41.952Z","lessonId":1276,"status":"success"}
+{"timestamp":"2025-12-27T01:02:03.225Z","lessonId":1307,"status":"success"}
+{"timestamp":"2025-12-27T01:02:23.933Z","lessonId":1320,"status":"success"}
+{"timestamp":"2025-12-27T01:02:46.017Z","lessonId":1332,"status":"success"}
+{"timestamp":"2025-12-27T01:03:10.912Z","lessonId":1333,"status":"success"}
+{"timestamp":"2025-12-27T01:03:36.368Z","lessonId":1350,"status":"success"}
+{"timestamp":"2025-12-27T01:03:53.606Z","lessonId":1351,"status":"success"}
+{"timestamp":"2025-12-27T01:04:20.359Z","lessonId":1352,"status":"success"}
+{"timestamp":"2025-12-27T01:04:41.799Z","lessonId":1353,"status":"success"}
+{"timestamp":"2025-12-27T01:05:11.574Z","lessonId":1354,"status":"success"}
+{"timestamp":"2025-12-27T01:05:32.607Z","lessonId":1355,"status":"success"}
+{"timestamp":"2025-12-27T01:05:55.754Z","lessonId":1356,"status":"success"}
+{"timestamp":"2025-12-27T01:06:17.707Z","lessonId":1357,"status":"success"}
+{"timestamp":"2025-12-27T01:06:41.816Z","lessonId":1358,"status":"success"}
+{"timestamp":"2025-12-27T01:07:05.242Z","lessonId":1359,"status":"success"}
+{"timestamp":"2025-12-27T01:07:25.227Z","lessonId":1371,"status":"success"}
+{"timestamp":"2025-12-27T01:07:46.619Z","lessonId":1372,"status":"success"}
+{"timestamp":"2025-12-27T01:08:13.452Z","lessonId":1373,"status":"success"}
+{"timestamp":"2025-12-27T01:08:35.509Z","lessonId":1374,"status":"success"}
+{"timestamp":"2025-12-27T01:08:57.266Z","lessonId":1375,"status":"success"}
+{"timestamp":"2025-12-27T01:09:22.269Z","lessonId":1376,"status":"success"}
+{"timestamp":"2025-12-27T01:09:56.638Z","lessonId":1377,"status":"success"}
+{"timestamp":"2025-12-27T01:10:22.854Z","lessonId":1378,"status":"success"}
+{"timestamp":"2025-12-27T01:10:49.534Z","lessonId":1379,"status":"success"}
+{"timestamp":"2025-12-27T01:12:15.465Z","lessonId":1420,"status":"success"}
+{"timestamp":"2025-12-27T01:12:40.090Z","lessonId":1421,"status":"success"}
+{"timestamp":"2025-12-27T01:12:58.470Z","lessonId":1422,"status":"success"}
+{"timestamp":"2025-12-27T01:13:30.548Z","lessonId":1423,"status":"success"}
+{"timestamp":"2025-12-27T01:13:52.689Z","lessonId":1424,"status":"success"}
+{"timestamp":"2025-12-27T01:14:17.055Z","lessonId":1425,"status":"success"}
+{"timestamp":"2025-12-27T01:14:38.960Z","lessonId":1426,"status":"success"}
+{"timestamp":"2025-12-27T01:15:05.602Z","lessonId":1427,"status":"success"}
+{"timestamp":"2025-12-27T01:15:26.761Z","lessonId":1428,"status":"success"}
+{"timestamp":"2025-12-27T01:15:43.315Z","lessonId":1429,"status":"success"}
+{"timestamp":"2025-12-27T01:16:04.223Z","lessonId":1430,"status":"success"}
+{"timestamp":"2025-12-27T01:16:31.957Z","lessonId":1431,"status":"success"}
+{"timestamp":"2025-12-27T01:16:52.377Z","lessonId":1432,"status":"success"}
+{"timestamp":"2025-12-27T01:17:19.970Z","lessonId":1433,"status":"success"}
+{"timestamp":"2025-12-27T01:17:39.072Z","lessonId":1434,"status":"success"}
+{"timestamp":"2025-12-27T01:17:59.812Z","lessonId":1483,"status":"success"}
+{"timestamp":"2025-12-27T01:18:24.306Z","lessonId":1484,"status":"success"}
+{"timestamp":"2025-12-27T01:18:53.216Z","lessonId":1485,"status":"success"}
+{"timestamp":"2025-12-27T01:19:13.461Z","lessonId":1486,"status":"success"}
+{"timestamp":"2025-12-27T01:19:38.536Z","lessonId":1487,"status":"success"}
+{"timestamp":"2025-12-27T01:20:01.450Z","lessonId":1488,"status":"success"}
+{"timestamp":"2025-12-27T01:20:28.700Z","lessonId":1489,"status":"success"}
+{"timestamp":"2025-12-27T01:20:51.038Z","lessonId":1490,"status":"success"}
+{"timestamp":"2025-12-27T01:21:11.963Z","lessonId":1491,"status":"success"}
+{"timestamp":"2025-12-27T01:21:35.213Z","lessonId":1492,"status":"success"}
+{"timestamp":"2025-12-27T01:21:54.263Z","lessonId":1493,"status":"success"}
+{"timestamp":"2025-12-27T01:22:16.724Z","lessonId":1494,"status":"success"}
+{"timestamp":"2025-12-27T01:22:39.687Z","lessonId":1495,"status":"success"}
+{"timestamp":"2025-12-27T01:23:04.087Z","lessonId":1496,"status":"success"}
+{"timestamp":"2025-12-27T01:23:27.324Z","lessonId":1497,"status":"success"}
+{"timestamp":"2025-12-27T01:23:33.667Z","lessonId":1543,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:23:34.681Z","lessonId":1544,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:23:35.295Z","lessonId":1545,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:23:45.102Z","lessonId":1546,"status":"success"}
+{"timestamp":"2025-12-27T01:24:01.023Z","lessonId":1547,"status":"success"}
+{"timestamp":"2025-12-27T01:24:06.936Z","lessonId":1548,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:07.551Z","lessonId":1549,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:08.152Z","lessonId":1550,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:08.879Z","lessonId":1551,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:09.442Z","lessonId":1552,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:10.265Z","lessonId":1553,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:10.934Z","lessonId":1554,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:21.383Z","lessonId":1555,"status":"success"}
+{"timestamp":"2025-12-27T01:24:27.145Z","lessonId":1556,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:27.826Z","lessonId":1557,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:28.073Z","lessonId":1563,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:28.850Z","lessonId":1565,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:29.107Z","lessonId":1567,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:29.669Z","lessonId":1570,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:29.873Z","lessonId":1571,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:30.284Z","lessonId":1572,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:30.553Z","lessonId":1573,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:30.927Z","lessonId":1574,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:31.135Z","lessonId":1575,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:31.615Z","lessonId":1576,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:31.851Z","lessonId":1577,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:32.243Z","lessonId":1578,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:32.467Z","lessonId":1579,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:32.941Z","lessonId":1580,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:33.326Z","lessonId":1608,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:33.619Z","lessonId":1609,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:33.843Z","lessonId":1610,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:34.070Z","lessonId":1611,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:34.310Z","lessonId":1616,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:34.961Z","lessonId":1617,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:35.183Z","lessonId":1618,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:35.399Z","lessonId":1619,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:35.610Z","lessonId":1620,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:35.804Z","lessonId":1621,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:37.758Z","lessonId":1622,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:38.075Z","lessonId":1623,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:38.326Z","lessonId":1624,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:38.537Z","lessonId":1641,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:38.751Z","lessonId":1642,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:39.006Z","lessonId":1643,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:39.211Z","lessonId":1648,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:39.472Z","lessonId":1649,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:39.721Z","lessonId":1650,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:39.907Z","lessonId":1651,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:40.137Z","lessonId":1652,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:40.404Z","lessonId":1653,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:40.602Z","lessonId":1654,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:40.821Z","lessonId":1655,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:41.013Z","lessonId":1656,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:41.213Z","lessonId":1657,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:41.421Z","lessonId":1658,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:41.636Z","lessonId":1659,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:42.117Z","lessonId":1660,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:42.853Z","lessonId":1691,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:43.074Z","lessonId":1692,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:43.288Z","lessonId":1693,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:43.468Z","lessonId":1694,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:43.666Z","lessonId":1695,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:44.387Z","lessonId":1703,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:44.606Z","lessonId":1704,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:44.811Z","lessonId":1705,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:45.021Z","lessonId":1706,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:45.254Z","lessonId":1707,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:45.540Z","lessonId":1708,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:45.750Z","lessonId":1709,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:45.956Z","lessonId":1710,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:46.153Z","lessonId":1711,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:46.336Z","lessonId":1712,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:46.522Z","lessonId":1714,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:46.761Z","lessonId":1715,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:46.956Z","lessonId":1716,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:47.173Z","lessonId":1717,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:47.361Z","lessonId":1718,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:48.011Z","lessonId":1746,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:48.487Z","lessonId":1747,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:48.734Z","lessonId":1748,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:48.958Z","lessonId":1749,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:49.415Z","lessonId":1750,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:49.611Z","lessonId":1761,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:49.886Z","lessonId":1762,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:50.329Z","lessonId":1763,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:50.532Z","lessonId":1764,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:51.145Z","lessonId":1765,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:51.363Z","lessonId":1766,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:51.551Z","lessonId":1780,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:51.772Z","lessonId":1781,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:51.953Z","lessonId":1786,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:52.168Z","lessonId":1787,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:52.357Z","lessonId":1788,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:52.636Z","lessonId":1789,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:53.308Z","lessonId":1790,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:53.507Z","lessonId":1791,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:53.733Z","lessonId":1806,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:53.913Z","lessonId":1807,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:54.123Z","lessonId":1811,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:54.331Z","lessonId":1812,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:54.512Z","lessonId":1813,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:54.710Z","lessonId":1826,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:55.363Z","lessonId":1829,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:55.602Z","lessonId":1831,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:55.810Z","lessonId":1832,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:56.026Z","lessonId":1833,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:56.280Z","lessonId":1834,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:57.006Z","lessonId":1848,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:57.399Z","lessonId":1849,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:57.626Z","lessonId":1851,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:58.341Z","lessonId":1852,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:58.587Z","lessonId":1853,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:58.843Z","lessonId":1854,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:59.031Z","lessonId":1855,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:59.307Z","lessonId":1856,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:59.497Z","lessonId":1857,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:59.684Z","lessonId":1858,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:24:59.893Z","lessonId":1861,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:00.107Z","lessonId":1862,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:00.769Z","lessonId":1863,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:00.970Z","lessonId":1866,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:01.217Z","lessonId":1867,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:01.451Z","lessonId":1868,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:02.027Z","lessonId":1869,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:02.268Z","lessonId":1870,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:02.487Z","lessonId":1872,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:02.696Z","lessonId":1877,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:02.906Z","lessonId":1878,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:03.543Z","lessonId":1879,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:03.752Z","lessonId":1882,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:04.121Z","lessonId":1883,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:04.587Z","lessonId":1884,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:04.813Z","lessonId":1885,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:05.209Z","lessonId":1886,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:05.393Z","lessonId":1887,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:05.603Z","lessonId":1888,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:06.216Z","lessonId":1889,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:06.489Z","lessonId":1890,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:06.686Z","lessonId":1891,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:06.958Z","lessonId":1892,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:07.167Z","lessonId":1895,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:07.454Z","lessonId":1896,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:07.659Z","lessonId":1897,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:07.877Z","lessonId":1898,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:08.786Z","lessonId":1899,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:09.214Z","lessonId":1900,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:09.502Z","lessonId":1901,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:09.731Z","lessonId":1902,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:09.936Z","lessonId":1903,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:10.177Z","lessonId":1904,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:10.398Z","lessonId":1906,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:10.588Z","lessonId":1907,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:11.238Z","lessonId":1908,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:11.653Z","lessonId":1910,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:12.082Z","lessonId":1911,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:12.301Z","lessonId":1912,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:12.527Z","lessonId":1914,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:12.741Z","lessonId":1915,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:13.178Z","lessonId":1916,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:13.411Z","lessonId":1917,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:13.673Z","lessonId":1918,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:14.420Z","lessonId":1919,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:14.661Z","lessonId":1920,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:14.872Z","lessonId":1921,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:15.297Z","lessonId":1922,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:15.731Z","lessonId":1923,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:15.963Z","lessonId":3232,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:16.165Z","lessonId":3239,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:16.353Z","lessonId":3251,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:17.054Z","lessonId":3252,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:17.267Z","lessonId":3259,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:17.886Z","lessonId":3265,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:18.177Z","lessonId":3266,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:18.593Z","lessonId":3267,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:18.979Z","lessonId":3269,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:19.294Z","lessonId":3272,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:19.504Z","lessonId":3278,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:19.688Z","lessonId":3283,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:20.297Z","lessonId":3285,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:20.500Z","lessonId":4500,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:20.703Z","lessonId":4501,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:20.905Z","lessonId":4502,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:21.111Z","lessonId":4503,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:21.311Z","lessonId":4504,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:21.490Z","lessonId":4505,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:21.675Z","lessonId":4506,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:22.447Z","lessonId":4507,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:22.713Z","lessonId":4508,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:22.896Z","lessonId":4509,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:23.211Z","lessonId":4511,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:23.453Z","lessonId":4512,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:23.646Z","lessonId":4513,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:23.872Z","lessonId":4518,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:24.108Z","lessonId":4521,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:24.760Z","lessonId":4522,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:25.081Z","lessonId":4533,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:25.386Z","lessonId":4543,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:25.763Z","lessonId":4549,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:25.979Z","lessonId":4583,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:26.187Z","lessonId":4590,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:26.372Z","lessonId":4595,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:26.573Z","lessonId":4596,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:27.181Z","lessonId":4597,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:27.425Z","lessonId":4598,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:27.630Z","lessonId":4601,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:27.828Z","lessonId":4602,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:28.124Z","lessonId":4603,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:28.317Z","lessonId":4604,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:28.556Z","lessonId":4605,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:28.934Z","lessonId":4606,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:29.676Z","lessonId":4611,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:29.996Z","lessonId":4612,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:30.227Z","lessonId":4617,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:30.643Z","lessonId":4618,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:32.944Z","lessonId":4619,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:34.416Z","lessonId":4620,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:34.648Z","lessonId":4621,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:25:34.991Z","lessonId":4623,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:26.732Z","lessonId":4624,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:27.309Z","lessonId":4625,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:27.869Z","lessonId":4626,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:28.941Z","lessonId":4629,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:30.701Z","lessonId":4631,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:31.286Z","lessonId":4632,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:31.943Z","lessonId":4633,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:32.571Z","lessonId":4634,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:32.973Z","lessonId":4636,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:33.181Z","lessonId":4638,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:33.381Z","lessonId":4639,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:33.605Z","lessonId":4640,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:33.797Z","lessonId":4641,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:34.037Z","lessonId":4642,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:34.282Z","lessonId":4643,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:34.476Z","lessonId":4645,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:34.681Z","lessonId":4646,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:34.893Z","lessonId":4647,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:35.226Z","lessonId":4648,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:35.544Z","lessonId":4649,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:35.735Z","lessonId":4651,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:35.941Z","lessonId":4652,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:36.173Z","lessonId":4654,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:36.415Z","lessonId":4655,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:36.640Z","lessonId":4656,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:36.831Z","lessonId":4660,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:37.075Z","lessonId":4661,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:37.287Z","lessonId":4666,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:37.475Z","lessonId":4667,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:37.708Z","lessonId":4677,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:37.925Z","lessonId":4682,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:38.155Z","lessonId":4683,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:38.345Z","lessonId":4689,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:26:38.528Z","lessonId":4704,"status":"error","message":"Error: All models and retries failed"}
+{"timestamp":"2025-12-27T01:29:06.748Z","lessonId":4631,"status":"success"}
+{"timestamp":"2025-12-27T01:29:54.338Z","lessonId":4632,"status":"success"}
+{"timestamp":"2025-12-27T01:30:38.815Z","lessonId":4633,"status":"success"}
+{"timestamp":"2025-12-27T01:31:20.933Z","lessonId":4634,"status":"success"}
+{"timestamp":"2025-12-27T01:32:06.987Z","lessonId":4636,"status":"success"}
+{"timestamp":"2025-12-27T01:32:51.719Z","lessonId":4638,"status":"success"}
+{"timestamp":"2025-12-27T01:33:35.173Z","lessonId":4639,"status":"success"}
+{"timestamp":"2025-12-27T01:34:01.870Z","lessonId":4640,"status":"success"}
+{"timestamp":"2025-12-27T01:34:26.653Z","lessonId":4641,"status":"success"}
+{"timestamp":"2025-12-27T01:34:50.627Z","lessonId":4642,"status":"success"}
+{"timestamp":"2025-12-27T01:35:19.471Z","lessonId":4643,"status":"success"}
+{"timestamp":"2025-12-27T01:35:44.972Z","lessonId":4645,"status":"success"}
+{"timestamp":"2025-12-27T01:36:17.043Z","lessonId":4646,"status":"success"}
+{"timestamp":"2025-12-27T01:36:46.741Z","lessonId":4647,"status":"success"}
+{"timestamp":"2025-12-27T01:37:12.537Z","lessonId":4648,"status":"success"}
+{"timestamp":"2025-12-27T01:37:41.450Z","lessonId":4649,"status":"success"}
+{"timestamp":"2025-12-27T01:38:12.947Z","lessonId":4651,"status":"success"}
+{"timestamp":"2025-12-27T01:38:35.722Z","lessonId":4652,"status":"success"}
+{"timestamp":"2025-12-27T01:39:02.064Z","lessonId":4654,"status":"success"}
+{"timestamp":"2025-12-27T01:39:34.291Z","lessonId":4655,"status":"success"}
+{"timestamp":"2025-12-27T01:40:04.231Z","lessonId":4656,"status":"success"}
+{"timestamp":"2025-12-27T01:40:27.377Z","lessonId":4660,"status":"success"}
+{"timestamp":"2025-12-27T01:40:52.270Z","lessonId":4661,"status":"success"}
+{"timestamp":"2025-12-27T01:41:20.108Z","lessonId":4666,"status":"success"}
+{"timestamp":"2025-12-27T01:41:46.312Z","lessonId":4667,"status":"success"}
+{"timestamp":"2025-12-27T01:42:13.147Z","lessonId":4677,"status":"success"}
+{"timestamp":"2025-12-27T01:42:39.911Z","lessonId":4682,"status":"success"}
+{"timestamp":"2025-12-27T01:43:00.734Z","lessonId":4683,"status":"success"}
+{"timestamp":"2025-12-27T01:43:26.381Z","lessonId":4689,"status":"success"}
+{"timestamp":"2025-12-27T01:43:50.728Z","lessonId":4704,"status":"success"}

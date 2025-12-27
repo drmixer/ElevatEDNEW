@@ -255,13 +255,19 @@ The AI Tutor (LearningAssistant component) was not appearing when the "Ask Eleva
 - [ ] Confetti animations
 - [ ] Dismissible, non-blocking
 
-#### B.4 Reflection Prompts & Metacognition
-- [ ] Occasional reflection prompts after tricky lessons
+#### B.4 Reflection Prompts & Metacognition ✅ Complete (December 26, 2024)
+- [x] Occasional reflection prompts after tricky lessons
   - "What would you try differently?"
   - "What tip would you give a friend?"
   - Confidence check (Low/Medium/High)
-- [ ] "My takeaways" panel on dashboard
-- [ ] Optional parent sharing
+- [x] Save reflections to database with optional parent sharing
+- [ ] "My takeaways" panel on dashboard (future enhancement)
+
+**Implementation:** `src/components/Lesson/ReflectionPrompt.tsx`
+- 3-step flow: Confidence check → Question selection → Response input
+- Shows after 30% of lessons OR always when score < 70%
+- Integrated into `CompletePhase.tsx` after lesson completion
+- Uses existing `reflectionService.ts` for persistence
 
 ---
 
@@ -298,15 +304,21 @@ The AI Tutor (LearningAssistant component) was not appearing when the "Ask Eleva
 - [x] Assignment states (Not started / In progress / Completed) - `AssignmentCard` with status display
 - [x] Guardrails (within 1 unit of adaptive path) - Enforced by backend API
 
-#### C.5 Safety & Transparency Surfaces
-- [ ] "Safety & Privacy" section
+#### C.5 Safety & Transparency Surfaces ✅ Complete (December 26, 2024)
+- [x] "Safety & Privacy" section
   - What tutor does/doesn't do
   - Data storage summary
   - Policy links
-- [ ] "Report a concern" workflow
+- [x] "Report a concern" workflow
   - Category + description form
   - Routes to appropriate queue
-  - Confirmation email with case ID
+  - Confirmation with case ID
+
+**Implementation:** `src/components/Parent/SafetyTransparencySection.tsx`
+- Accordion-style expandable sections for AI capabilities, data handling, safety notifications, and policy links
+- "Report a Concern" modal with category selection and description form
+- Uses existing `concernService.ts` for persistence
+- Integrated into `ParentDashboardSimplified.tsx`
 
 #### C.6 Notifications & Weekly Digests
 - [ ] Enhanced weekly digest emails
@@ -317,11 +329,18 @@ The AI Tutor (LearningAssistant component) was not appearing when the "Ask Eleva
 - [ ] "This week at a glance" in-app card
 - [ ] Notification preferences panel
 
-#### C.7 Parent Onboarding & Education
-- [ ] First-visit tour (3 steps)
-- [ ] "Parent guide" link with quick explainers
-- [ ] Optional 60-90s video overview
-- [ ] Skippable, re-openable from settings
+#### C.7 Parent Onboarding & Education ✅ Complete (December 26, 2024)
+- [x] First-visit tour (3 steps)
+- [x] "Parent guide" link with quick explainers
+- [x] Optional 60-90s video overview link
+- [x] Skippable, re-openable from settings
+
+**Implementation:** `src/components/Parent/ParentOnboardingTour.tsx`
+- 3-step modal: Welcome → Features → Actions
+- Progress indicator with animated transitions
+- Links to Parent Guide and video overview
+- localStorage persistence via `src/lib/parentOnboardingHelpers.ts`
+- Auto-shows on first visit, dismissible, can be reset
 
 ---
 
@@ -350,10 +369,17 @@ The AI Tutor (LearningAssistant component) was not appearing when the "Ask Eleva
 - [ ] Automated content validation
 - [ ] Quality metrics in deployment pipeline
 
-#### D.3 User Feedback Integration
-- [ ] "Report Content Issue" button on lessons
-- [ ] Issue type capture
-- [ ] Route to review queue
+#### D.3 User Feedback Integration ✅ Complete (December 26, 2024)
+- [x] "Report Content Issue" button on lessons
+- [x] Issue type capture
+- [x] Route to review queue
+
+**Implementation:** `src/components/Lesson/ContentIssueReport.tsx`
+- Compact flag button in lesson header (LessonPlayerPage)
+- Issue type selection: Incorrect, Confusing, Missing, Inappropriate, Technical, Other
+- Description form with optional email
+- Uses existing `concernService.ts` with source metadata
+- Visual feedback with case ID on submission
 
 ---
 
@@ -534,12 +560,13 @@ This master plan consolidates and supersedes the following documents:
 | 2024-12-25 | 1.3 | Seeded 190 authored lessons with high-quality content across all subjects |
 | 2024-12-25 | 1.4 | Fixed all 127 remaining content issues - 100% clean audit achieved |
 | 2024-12-26 | 1.5 | Implemented Admin Quality Dashboard (D.1) |
+| 2024-12-26 | 1.6 | Implemented User Feedback Integration (D.3), Safety & Transparency (C.5), Parent Onboarding Tour (C.7) |
 
 ---
 
 ## Next Immediate Actions
 
-**Sprint 4 Complete! 🎉** (December 26, 2024)
+**Sprint 5 In Progress! 🚀** (December 26, 2024)
 
 1. ~~**Per-learner AI controls** - Parent can configure tutor per child~~ ✅ Done
 2. ~~**Status labels implementation** - On-track/At-risk/Off-track per subject~~ ✅ Done
@@ -549,11 +576,14 @@ This master plan consolidates and supersedes the following documents:
 6. ~~**Authored lesson seeding** - 190 high-quality lessons added~~ ✅ Done (12/25)
 7. ~~**Final content cleanup** - Fixed all 127 remaining issues, 100% clean audit~~ ✅ Done (12/25)
 8. ~~**Admin quality dashboard** - Content quality metrics~~ ✅ Done (12/26)
+9. ~~**User feedback integration** - "Report Content Issue" button~~ ✅ Done (12/26)
+10. ~~**Safety & Transparency surfaces** - Privacy section in parent dashboard~~ ✅ Done (12/26)
+11. ~~**Parent onboarding tour** - First-visit walkthrough~~ ✅ Done (12/26)
 
-**Next Priorities:**
-1. **User feedback integration** - "Report Content Issue" button ⏳ Next
-2. **Cross-browser testing** - Safari, Firefox, Edge, iOS Safari, Android Chrome
-3. **Weekly digest enhancements** - Better email summaries
-4. **Safety & Transparency surfaces** - Privacy section in parent dashboard
-5. **Parent onboarding tour** - First-visit walkthrough
+**Remaining Priorities:**
+1. **Cross-browser testing** - Safari, Firefox, Edge, iOS Safari, Android Chrome
+2. **Weekly digest enhancements** - Better email summaries
+3. **Dashboard edge case testing** - Empty states, multiple children, missing diagnostic data
+4. **Performance optimization** - Dashboard load time < 2s
+5. **"My takeaways" panel** - Student reflections on dashboard (future enhancement)
 

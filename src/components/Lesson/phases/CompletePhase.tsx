@@ -2,9 +2,10 @@
  * CompletePhase Component
  * 
  * Celebration phase showing completion status, score, and next steps.
+ * Optionally shows reflection prompt after tricky lessons.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -17,11 +18,14 @@ import {
 } from 'lucide-react';
 import { LessonCardPadded } from '../LessonCard';
 import { useLessonStepper } from '../LessonStepper';
+import { ReflectionPrompt } from '../ReflectionPrompt';
 
 interface CompletPhaseProps {
+    lessonId: number;
     lessonTitle: string;
     moduleId?: number;
     moduleTitle?: string;
+    subject?: string;
     nextLessonId?: number;
     nextLessonTitle?: string;
     xpEarned?: number;
@@ -29,9 +33,11 @@ interface CompletPhaseProps {
 }
 
 export const CompletePhase: React.FC<CompletPhaseProps> = ({
+    lessonId,
     lessonTitle,
     moduleId,
     moduleTitle,
+    subject,
     nextLessonId,
     nextLessonTitle,
     xpEarned = 0,
@@ -39,12 +45,26 @@ export const CompletePhase: React.FC<CompletPhaseProps> = ({
 }) => {
     const { practiceScore, goToPhase } = useLessonStepper();
     const [showConfetti, setShowConfetti] = useState(false);
+    const [showReflection, setShowReflection] = useState(false);
+    const [reflectionDismissed, setReflectionDismissed] = useState(false);
 
     const scorePercentage = practiceScore.total > 0
         ? Math.round((practiceScore.correct / practiceScore.total) * 100)
         : 0;
 
     const didWell = scorePercentage >= 70;
+
+    // Decide if we should show reflection prompt
+    // Show for: struggling students (< 70%) OR randomly 30% of the time
+    const shouldShowReflection = useMemo(() => {
+        if (reflectionDismissed) return false;
+
+        // Always show for students who struggled
+        if (practiceScore.total > 0 && !didWell) return true;
+
+        // Show randomly 30% of the time for other students
+        return Math.random() < 0.3;
+    }, [didWell, practiceScore.total, reflectionDismissed]);
 
     // Trigger confetti on mount
     useEffect(() => {
@@ -53,12 +73,30 @@ export const CompletePhase: React.FC<CompletPhaseProps> = ({
         return () => clearTimeout(timer);
     }, []);
 
+    // Show reflection after a short delay
+    useEffect(() => {
+        if (shouldShowReflection) {
+            const timer = setTimeout(() => setShowReflection(true), 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [shouldShowReflection]);
+
     const handleRetry = () => {
         if (onRetryPractice) {
             onRetryPractice();
         } else {
             goToPhase('practice');
         }
+    };
+
+    const handleReflectionComplete = () => {
+        setShowReflection(false);
+        setReflectionDismissed(true);
+    };
+
+    const handleReflectionSkip = () => {
+        setShowReflection(false);
+        setReflectionDismissed(true);
     };
 
     return (
@@ -89,7 +127,7 @@ export const CompletePhase: React.FC<CompletPhaseProps> = ({
                                 }}
                                 className={`absolute w-3 h-3 rounded-sm ${['bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-purple-500'][
                                     Math.floor(Math.random() * 5)
-                                    ]
+                                ]
                                     }`}
                             />
                         ))}
@@ -202,8 +240,21 @@ export const CompletePhase: React.FC<CompletPhaseProps> = ({
                     )}
                 </motion.div>
             </LessonCardPadded>
+
+            {/* Reflection Prompt - shows after lesson completion */}
+            {showReflection && (
+                <ReflectionPrompt
+                    lessonId={lessonId}
+                    lessonTitle={lessonTitle}
+                    subject={subject}
+                    didWell={didWell}
+                    onComplete={handleReflectionComplete}
+                    onSkip={handleReflectionSkip}
+                />
+            )}
         </div>
     );
 };
 
 export default CompletePhase;
+

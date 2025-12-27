@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -24,6 +24,9 @@ import type { Parent, ParentChildSnapshot, LearningPreferences, Subject } from '
 import SubjectStatusCards from './SubjectStatusCards';
 import WeeklyCoachingSuggestions from './WeeklyCoachingSuggestions';
 import ParentTutorControls from './ParentTutorControls';
+import SafetyTransparencySection from './SafetyTransparencySection';
+import ParentOnboardingTour from './ParentOnboardingTour';
+import { shouldShowParentOnboarding, markParentOnboardingDone } from '../../lib/parentOnboardingHelpers';
 import { defaultLearningPreferences } from '../../types';
 import {
     ResponsiveContainer,
@@ -392,6 +395,16 @@ const ParentDashboardSimplified: React.FC = () => {
     // Track which child is expanded for detailed view (Sprint 3)
     const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
     const [savingTutor, setSavingTutor] = useState<string | null>(null);
+    const [showOnboarding, setShowOnboarding] = useState(false);
+
+    // Check if parent should see onboarding tour
+    useEffect(() => {
+        if (parent?.id && shouldShowParentOnboarding(parent.id)) {
+            // Small delay for better UX
+            const timer = setTimeout(() => setShowOnboarding(true), 500);
+            return () => clearTimeout(timer);
+        }
+    }, [parent?.id]);
 
     // Fetch dashboard data
     const {
@@ -438,6 +451,14 @@ const ParentDashboardSimplified: React.FC = () => {
         },
         [navigate],
     );
+
+    // Handle onboarding completion
+    const handleOnboardingComplete = useCallback(() => {
+        if (parent?.id) {
+            markParentOnboardingDone(parent.id);
+        }
+        setShowOnboarding(false);
+    }, [parent?.id]);
 
     // Loading state
     if (isLoading && !dashboard) {
@@ -572,7 +593,25 @@ const ParentDashboardSimplified: React.FC = () => {
                 <section>
                     <QuickActions />
                 </section>
+
+                {/* Safety & Transparency Section */}
+                <section className="mt-8">
+                    <SafetyTransparencySection
+                        parentId={parent?.id ?? ''}
+                        studentId={selectedChild?.id}
+                        studentName={selectedChild?.name}
+                    />
+                </section>
             </div>
+
+            {/* Parent Onboarding Tour */}
+            <ParentOnboardingTour
+                isOpen={showOnboarding}
+                onClose={() => setShowOnboarding(false)}
+                onComplete={handleOnboardingComplete}
+                parentName={parent?.name}
+                childrenCount={children.length}
+            />
         </div>
     );
 };

@@ -28,6 +28,7 @@ import trackEvent from '../lib/analytics';
 import LearningAssistant from '../components/Student/LearningAssistant';
 import { useStudentEvent } from '../hooks/useStudentData';
 import { parseLessonContent, consolidateSections } from '../lib/lessonContentParser';
+import ContentIssueReport from '../components/Lesson/ContentIssueReport';
 
 // Core Lesson Components (eagerly loaded)
 import {
@@ -140,9 +141,11 @@ const LessonContent: React.FC<{
 
                         {currentPhase === 'complete' && (
                             <CompletePhase
+                                lessonId={lessonDetail.lesson.id}
                                 lessonTitle={lessonDetail.lesson.title}
                                 moduleId={lessonDetail.module.id}
                                 moduleTitle={lessonDetail.module.title}
+                                subject={lessonDetail.module.subject}
                                 nextLessonId={nextLesson?.id}
                                 nextLessonTitle={nextLesson?.title}
                                 xpEarned={xpEarned}
@@ -477,6 +480,18 @@ const LessonPlayerPage: React.FC = () => {
                                 subject={lessonDetail.module.subject}
                                 gradeBand={lessonDetail.module.gradeBand}
                             />
+
+                            {/* Report Content Issue */}
+                            <div className="flex justify-end mt-2">
+                                <ContentIssueReport
+                                    lessonId={lessonDetail.lesson.id}
+                                    lessonTitle={lessonDetail.lesson.title}
+                                    subject={lessonDetail.module.subject}
+                                    userId={user?.id ?? ''}
+                                    studentId={studentId}
+                                    compact
+                                />
+                            </div>
                         </div>
                     </header>
 

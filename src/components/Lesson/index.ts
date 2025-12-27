@@ -12,6 +12,7 @@ export { LessonProgressBar, LessonProgressBarCompact } from './LessonProgressBar
 export { LessonNavigation } from './LessonNavigation';
 export { LessonCard, LessonCardPadded, LessonCardHeader, LessonCardBody, LessonCardFooter } from './LessonCard';
 export { LessonHeader } from './LessonHeader';
+export { ContentIssueReport } from './ContentIssueReport';
 
 // Phase components
 export {
