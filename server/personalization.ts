@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { findTutorAvatar } from '../shared/avatarManifests.js';
 
 export type StudentPreferences = {
   student_id: string;
@@ -118,16 +119,21 @@ export const updateStudentPreferences = async (
   }
 
   if (updates.tutor_persona_id) {
-    const { data: personaExists, error: personaError } = await supabase
-      .from('tutor_personas')
-      .select('id')
-      .eq('id', updates.tutor_persona_id)
-      .maybeSingle();
-    if (personaError) {
-      throw new Error(`Unable to validate tutor persona: ${personaError.message}`);
-    }
-    if (!personaExists) {
-      throw new Error('Tutor persona not found.');
+    // First check if it's a valid tutor avatar from the manifest
+    const manifestAvatar = findTutorAvatar(updates.tutor_persona_id);
+    if (!manifestAvatar) {
+      // Fall back to database lookup for custom personas
+      const { data: personaExists, error: personaError } = await supabase
+        .from('tutor_personas')
+        .select('id')
+        .eq('id', updates.tutor_persona_id)
+        .maybeSingle();
+      if (personaError) {
+        throw new Error(`Unable to validate tutor persona: ${personaError.message}`);
+      }
+      if (!personaExists) {
+        throw new Error('Tutor persona not found.');
+      }
     }
   }
 
@@ -178,17 +184,17 @@ export const buildTutorContext = async (
   const [persona, avatar, xpRow, recentEvents] = await Promise.all([
     preferences.tutor_persona_id
       ? supabase
-          .from('tutor_personas')
-          .select('id, name, tone, constraints, prompt_snippet, sample_replies, metadata')
-          .eq('id', preferences.tutor_persona_id)
-          .maybeSingle()
+        .from('tutor_personas')
+        .select('id, name, tone, constraints, prompt_snippet, sample_replies, metadata')
+        .eq('id', preferences.tutor_persona_id)
+        .maybeSingle()
       : Promise.resolve({ data: null, error: null }),
     preferences.avatar_id
       ? supabase
-          .from('avatars')
-          .select('id, name, image_url, category, is_default, metadata')
-          .eq('id', preferences.avatar_id)
-          .maybeSingle()
+        .from('avatars')
+        .select('id, name, image_url, category, is_default, metadata')
+        .eq('id', preferences.avatar_id)
+        .maybeSingle()
       : Promise.resolve({ data: null, error: null }),
     supabase
       .from('xp_ledger')
