@@ -60,12 +60,14 @@ const LessonContent: React.FC<{
     practiceQuestions: LessonPracticeQuestion[];
     onAnswerSubmit: (questionId: number, optionId: number, isCorrect: boolean) => void;
     onAskTutor?: (context: string) => void;
+    onSectionComplete?: (sectionIndex: number) => void;
     xpEarned: number;
 }> = ({
     lessonDetail,
     practiceQuestions,
     onAnswerSubmit,
     onAskTutor,
+    onSectionComplete,
     xpEarned,
 }) => {
         const { currentPhase } = useLessonStepper();
@@ -119,7 +121,11 @@ const LessonContent: React.FC<{
                         {currentPhase === 'learn' && (
                             <LearnPhase
                                 sections={learnSections}
+                                lessonTitle={lessonDetail.lesson.title}
+                                subject={lessonDetail.module.subject}
+                                gradeBand={lessonDetail.module.gradeBand}
                                 onAskTutor={onAskTutor}
+                                onSectionComplete={onSectionComplete}
                             />
                         )}
 
@@ -268,6 +274,16 @@ const LessonPlayerPage: React.FC = () => {
                 subject: lessonDetail.module.subject,
             }
             : { studentId: null },
+    );
+
+    const handleSectionComplete = useCallback(
+        (sectionIndex: number) => {
+            const key = `section:${sectionIndex}`;
+            if (!progressController.isComplete(key)) {
+                progressController.toggleItem(key);
+            }
+        },
+        [progressController],
     );
 
     /**
@@ -508,6 +524,7 @@ const LessonPlayerPage: React.FC = () => {
                             practiceQuestions={practiceQuestions}
                             onAnswerSubmit={handleAnswerSubmit}
                             onAskTutor={studentId ? handleAskTutor : undefined}
+                            onSectionComplete={handleSectionComplete}
                             xpEarned={xpEarned}
                         />
                     </main>
