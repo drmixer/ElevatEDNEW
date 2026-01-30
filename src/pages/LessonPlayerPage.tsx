@@ -52,6 +52,75 @@ const PhaseFallback = () => (
     </div>
 );
 
+const shuffleWithCorrectIndex = (
+    options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }>,
+): { options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> } => {
+    const next = options.slice();
+    for (let i = next.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [next[i], next[j]] = [next[j], next[i]];
+    }
+    return { options: next };
+};
+
+const looksLikeGenericPractice = (questions: LessonPracticeQuestion[]): boolean => {
+    if (!questions.length) return false;
+    const genericPrompt = /(main concept|which strategy|real-life situation|what should you do if you get stuck)/i;
+    const genericOption = /(memorizing formulas|only using calculators|avoiding word problems|guessing randomly|skip(ping)? steps|copy someone)/i;
+    return questions.some((q) => genericPrompt.test(q.prompt) || q.options.some((o) => genericOption.test(o.text)));
+};
+
+const generatePerimeterPracticeQuestions = (lessonId: number): LessonPracticeQuestion[] => {
+    // Deterministic, lesson-specific practice for the Grade 2 Perimeter pilot.
+    const base: Array<{ prompt: string; correct: string; wrong: string[]; explanation: string }> = [
+        {
+            prompt: 'A square has side lengths of 3 feet on every side. What is the perimeter?',
+            correct: '12 feet',
+            wrong: ['9 feet', '6 feet', '15 feet'],
+            explanation: 'Perimeter is the distance around the shape: 3 + 3 + 3 + 3 = 12 feet.',
+        },
+        {
+            prompt: 'A rectangle is 4 feet long and 2 feet wide. What is the perimeter?',
+            correct: '12 feet',
+            wrong: ['8 feet', '6 feet', '10 feet'],
+            explanation: 'Add all the sides: 4 + 2 + 4 + 2 = 12 feet.',
+        },
+        {
+            prompt: 'A triangle has sides 2 feet, 3 feet, and 4 feet. What is the perimeter?',
+            correct: '9 feet',
+            wrong: ['8 feet', '10 feet', '12 feet'],
+            explanation: 'Add the three side lengths: 2 + 3 + 4 = 9 feet.',
+        },
+        {
+            prompt: 'What does perimeter mean?',
+            correct: 'The distance around the outside of a shape',
+            wrong: ['The space inside a shape', 'The number of corners on a shape', 'How heavy something is'],
+            explanation: 'Perimeter means you go all the way around the outside edges of a shape.',
+        },
+    ];
+
+    return base.map((item, index) => {
+        const optionsRaw = [
+            { text: item.correct, isCorrect: true, feedback: 'Yes — that matches adding all the sides.' },
+            ...item.wrong.map((text) => ({ text, isCorrect: false, feedback: 'Check by adding all the side lengths.' })),
+        ];
+        const { options } = shuffleWithCorrectIndex(optionsRaw);
+        return {
+            id: 900_000 + lessonId * 10 + index,
+            prompt: item.prompt,
+            type: 'multiple_choice',
+            explanation: item.explanation,
+            options: options.map((o, idx2) => ({
+                id: 9_000_000 + lessonId * 100 + index * 10 + idx2,
+                text: o.text,
+                isCorrect: o.isCorrect,
+                feedback: o.feedback ?? null,
+            })),
+            skillIds: [],
+        };
+    });
+};
+
 /**
  * Inner component that uses stepper context
  */
@@ -207,8 +276,19 @@ const LessonPlayerPage: React.FC = () => {
     });
 
     const practiceQuestions: LessonPracticeQuestion[] = useMemo(
-        () => practiceQuestionQuery.data ?? [],
-        [practiceQuestionQuery.data],
+        () => {
+            const fetched = practiceQuestionQuery.data ?? [];
+            const isGrade2 = lessonDetail?.module.gradeBand === '2';
+            const isMath = (lessonDetail?.module.subject ?? '').toString().toLowerCase().includes('math');
+            const isPerimeter = (lessonDetail?.lesson.title ?? '').toString().toLowerCase().includes('perimeter');
+
+            if (lessonDetail && isGrade2 && isMath && isPerimeter && (fetched.length === 0 || looksLikeGenericPractice(fetched))) {
+                return generatePerimeterPracticeQuestions(lessonDetail.lesson.id);
+            }
+
+            return fetched;
+        },
+        [practiceQuestionQuery.data, lessonDetail],
     );
 
     // Parse content for section count
