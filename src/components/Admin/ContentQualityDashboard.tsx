@@ -40,7 +40,6 @@ import {
 } from 'recharts';
 import {
     fetchContentQualityMetrics,
-    type ContentQualityMetrics,
     type SubjectGradeQuality,
 } from '../../services/contentQualityService';
 
