@@ -21,28 +21,9 @@ import { createServiceRoleClient } from './utils/supabase.js';
 
 const supabase = createServiceRoleClient();
 
-// Groq API (Primary - generous free tier: 7000 requests/day)
-const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-
 // OpenRouter API (Fallback)
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY;
-
-// FREE high-quality models available on OpenRouter (December 2024)
-// You can switch between these based on availability:
-// FREE high-quality models available on OpenRouter (December 2024)
-// You can switch between these based on availability:
-const FREE_MODELS = {
-    'gemini-flash': 'google/gemini-2.0-flash-exp:free',      // Google's newest, very fast
-    'llama-scout': 'meta-llama/llama-3.2-3b-instruct:free',   // Very reliable small model (updated from scout)
-    'mistral-free': 'mistralai/mistral-7b-instruct:free',    // Reliable fallback
-    'qwen': 'qwen/qwen-2-7b-instruct:free',                  // Alibaba, very capable
-    'toppy': 'undi95/toppy-m-7b:free',                       // Another good free option
-};
-
-// Use Gemini 2.0 Flash - it's free and high quality!
-const MODEL = FREE_MODELS['gemini-flash'];
 
 // Quality lesson template for reference
 const QUALITY_LESSON_TEMPLATE = `
@@ -113,7 +94,13 @@ function parseArgs(): {
     startFrom?: number;
 } {
     const args = process.argv.slice(2);
-    const result: any = { dryRun: false };
+    const result: {
+        grade?: string;
+        subject?: string;
+        limit?: number;
+        dryRun: boolean;
+        startFrom?: number;
+    } = { dryRun: false };
 
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--grade' && args[i + 1]) {
@@ -193,7 +180,6 @@ async function fetchLessons(options: {
 
 function needsImprovement(lesson: LessonRecord): boolean {
     const content = lesson.content || '';
-    const title = lesson.title || '';
 
     // Skip if very short (likely a placeholder)
     if (content.length < 200) return true;

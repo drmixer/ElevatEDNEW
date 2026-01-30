@@ -71,13 +71,11 @@ const SubjectIcon: React.FC<{ subject: Subject; className?: string }> = ({
 
 const StatusCard: React.FC<{
     status: SubjectStatus;
-    childName: string;
     onViewSubject?: (subject: Subject) => void;
     onAssignSubject?: (subject: Subject) => void;
-}> = ({ status, childName, onViewSubject, onAssignSubject }) => {
+}> = ({ status, onViewSubject, onAssignSubject }) => {
     const [showTooltip, setShowTooltip] = useState(false);
     const [expanded, setExpanded] = useState(false);
-    const _firstName = childName.split(' ')[0];
 
     const borderColor =
         status.status === 'on_track'
@@ -290,7 +288,6 @@ const SubjectStatusCards: React.FC<SubjectStatusCardsProps> = ({
                     <StatusCard
                         key={status.subject}
                         status={status}
-                        childName={childName}
                         onViewSubject={onViewSubject}
                         onAssignSubject={onAssignSubject}
                     />

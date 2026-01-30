@@ -50,7 +50,7 @@ const EXAMPLE_GENERATORS: Record<string, (title: string, gradeBand: string) => s
         const examples = getScienceExamples(title, gradeBand);
         return `\n\n## Examples\n\n${examples}`;
     },
-    'Social Studies': (title, gradeBand) => {
+    'Social Studies': () => {
         return `\n\n## Examples\n\n**Real-World Connection:** Think about how the concepts in this lesson connect to current events and your community.\n\n**Example:** Consider how the ideas we're studying have shaped the world around us today.\n\n**Try This:** Look for examples of these concepts in news articles or your neighborhood.`;
     },
 };
@@ -100,16 +100,26 @@ function getMathExamples(title: string, grade: number): string {
 
 function getELAExamples(title: string, gradeBand: string): string {
     const titleLower = title.toLowerCase();
+    const grade = parseInt(gradeBand.replace(/\D/g, '') || '5', 10);
 
     if (titleLower.includes('vocabulary') || titleLower.includes('word')) {
+        if (grade <= 2) {
+            return `**Example 1:** The word "unhappy" has the prefix "un-" which means "not." So unhappy means not happy.\n\n**Example 2:** The words "play" and "replay" share the base word "play." The prefix "re-" means "again."\n\n**Try This:** Pick a word you know (like "kind"). What happens if you add "un-" to the front?`;
+        }
         return `**Example 1:** The word "benevolent" contains the root "bene" (good). Think of other "bene" words: benefit, beneficial, benefactor.\n\n**Example 2:** Adding the prefix "un-" to "happy" reverses its meaning: unhappy means not happy.\n\n**Try This:** Find a new word in your reading today and identify its parts (root, prefix, or suffix).`;
     }
 
     if (titleLower.includes('writing') || titleLower.includes('paragraph')) {
+        if (grade <= 2) {
+            return `**Example 1:** A strong sentence tells one idea: "I like dogs because they are friendly."\n\n**Example 2:** Add a detail: "I like dogs because they are friendly and they play with me."\n\n**Try This:** Write one sentence about your favorite game. Add one detail to make it better.`;
+        }
         return `**Example 1:** A strong topic sentence: "Dogs make excellent companions for several reasons." This tells the reader exactly what the paragraph will discuss.\n\n**Example 2:** Supporting details: "First, dogs are loyal and always happy to see you. Second, they encourage exercise through daily walks."\n\n**Try This:** Write a topic sentence for a paragraph about your favorite activity.`;
     }
 
     if (titleLower.includes('reading') || titleLower.includes('comprehension')) {
+        if (grade <= 2) {
+            return `**Example 1:** If the story says, "Sam was smiling and jumping," you can tell Sam feels happy.\n\n**Example 2:** The main idea is what the story is mostly about.\n\n**Try This:** Read 3 sentences and say: Who is it about? What is happening?`;
+        }
         return `**Example 1:** When the text says "Her face fell," we can infer the character became disappointed, even though it doesn't say "disappointed" directly.\n\n**Example 2:** Looking for context clues around an unfamiliar word helps determine its meaning.\n\n**Try This:** Read a short passage and identify the main idea. What details support this main idea?`;
     }
 
@@ -118,16 +128,26 @@ function getELAExamples(title: string, gradeBand: string): string {
 
 function getScienceExamples(title: string, gradeBand: string): string {
     const titleLower = title.toLowerCase();
+    const grade = parseInt(gradeBand.replace(/\D/g, '') || '5', 10);
 
     if (titleLower.includes('energy')) {
+        if (grade <= 2) {
+            return `**Example 1:** When you turn on a lamp, it makes light so you can see.\n\n**Example 2:** When you rub your hands together, they feel warm.\n\n**Try This:** Name one thing at home that uses energy (like a TV, fan, or microwave).`;
+        }
         return `**Example 1:** When you turn on a flashlight, chemical energy in the battery converts to electrical energy, then to light energy.\n\n**Example 2:** Rubbing your hands together converts kinetic (motion) energy to thermal (heat) energy.\n\n**Try This:** Identify three energy transformations that happen in your home every day.`;
     }
 
     if (titleLower.includes('force') || titleLower.includes('motion')) {
+        if (grade <= 2) {
+            return `**Example 1:** When you push a toy car, it moves.\n\n**Example 2:** If you stop pushing, it slows down and stops.\n\n**Try This:** Roll a ball on the floor. What makes it start moving? What makes it stop?`;
+        }
         return `**Example 1:** Pushing a shopping cart: an unbalanced force causes it to accelerate in the direction you push.\n\n**Example 2:** A book on a table: gravity pulls down, the table pushes up equally – balanced forces, no motion.\n\n**Try This:** Observe a ball rolling across the floor. What forces cause it to eventually stop?`;
     }
 
     if (titleLower.includes('ecosystem') || titleLower.includes('food')) {
+        if (grade <= 2) {
+            return `**Example 1:** A food chain can look like: plant → rabbit → fox.\n\n**Example 2:** If there are fewer plants, there may be fewer rabbits.\n\n**Try This:** Name one animal and one plant it might eat (or one animal it might hunt).`;
+        }
         return `**Example 1:** In a pond ecosystem: algae (producer) → small fish (consumer) → heron (consumer) → bacteria (decomposer).\n\n**Example 2:** If frogs disappeared from a pond, insects would increase (no predator) and heron population would decrease (less food).\n\n**Try This:** Draw a simple food web for your backyard or a local park.`;
     }
 
