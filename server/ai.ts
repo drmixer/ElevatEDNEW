@@ -115,7 +115,8 @@ class AiRequestError extends Error {
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 // Keep the marketing assistant aligned with the tutor: OpenRouter + Mistral 7B Instruct (free).
 const PRIMARY_MODEL = 'mistralai/mistral-7b-instruct:free';
-const FALLBACK_MODEL = 'mistralai/mistral-7b-instruct:free';
+// Use a different model as fallback to reduce correlated outages and rate limits.
+const FALLBACK_MODEL = 'google/gemini-2.0-flash-exp:free';
 const DEFAULT_MODEL_TIMEOUT_MS = 12000;
 
 const MAX_PROMPT_CHARS = 1200;
@@ -126,7 +127,7 @@ const MAX_RESPONSE_CHARS = 1600;
 const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const PHONE_REGEX = /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})\b/g;
 const LONG_NUMBER_REGEX = /\b\d{9,}\b/g;
-const recentPromptCache = new Map<string, { hash: string; at: number }>();
+const recentPromptCache = new Map<string, { hash: string; at: number; ok?: boolean }>();
 
 const normalizePrompt = (value: string): string =>
   value
@@ -901,33 +902,61 @@ const callOpenRouter = async (
   apiKey: string,
   timeoutMs: number,
 ): Promise<TutorResponse> => {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
-  let response: Response;
-  try {
-    response = await fetch(OPENROUTER_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.APP_BASE_URL ?? 'https://elevated.chat',
-        'X-Title': 'ElevatED',
-      },
-      body: JSON.stringify({
-        model,
-        messages: buildMessages(context),
-        temperature: 0.4,
-      }),
-      signal: controller.signal,
-    });
-  } catch (error) {
-    clearTimeout(timeout);
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Tutor request timed out.');
+  const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  let response: Response | null = null;
+  let lastError: unknown = null;
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      response = await fetch(OPENROUTER_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': process.env.APP_BASE_URL ?? 'https://elevated.chat',
+          'X-Title': 'ElevatED',
+        },
+        body: JSON.stringify({
+          model,
+          messages: buildMessages(context),
+          temperature: 0.4,
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        const status = response.status;
+        const errorText = await response.text();
+
+        // Retry transient upstream failures quickly.
+        if ([500, 502, 503, 504].includes(status) && attempt < 3) {
+          await sleep(300 * attempt + Math.floor(Math.random() * 150));
+          continue;
+        }
+
+        throw new Error(`OpenRouter request failed (${status} ${response.statusText}) ${errorText}`);
+      }
+
+      break;
+    } catch (error) {
+      lastError = error;
+      if (error instanceof Error && error.name === 'AbortError') {
+        lastError = new Error('Tutor request timed out.');
+      }
+      if (attempt < 3) {
+        await sleep(300 * attempt + Math.floor(Math.random() * 150));
+        continue;
+      }
+      throw lastError instanceof Error ? lastError : new Error('Tutor request failed.');
+    } finally {
+      clearTimeout(timeout);
     }
-    throw error;
-  } finally {
-    clearTimeout(timeout);
+  }
+
+  if (!response) {
+    throw lastError instanceof Error ? lastError : new Error('Tutor request failed.');
   }
 
   if (!response.ok) {
@@ -1034,10 +1063,11 @@ export const handleTutorRequest = async (
   const tutorContext = buildTutorContext(payload, studentContext);
   const normalizedPrompt = normalizePrompt(tutorContext.prompt);
   const cachedPrompt = recentPromptCache.get(usageKey);
-  if (cachedPrompt && cachedPrompt.hash === normalizedPrompt && Date.now() - cachedPrompt.at < 30_000) {
+  if (cachedPrompt && cachedPrompt.ok && cachedPrompt.hash === normalizedPrompt && Date.now() - cachedPrompt.at < 30_000) {
     throw new AiRequestError(429, 'You just asked this—try a different question or wait a moment.');
   }
-  recentPromptCache.set(usageKey, { hash: normalizedPrompt, at: Date.now() });
+  // Mark inflight so we can guard against double-submits, but allow retry if the upstream fails.
+  recentPromptCache.set(usageKey, { hash: normalizedPrompt, at: Date.now(), ok: false });
 
   const safetyIssue = detectUnsafePrompt(tutorContext.prompt, studentContext);
   if (safetyIssue) {
@@ -1150,14 +1180,20 @@ export const handleTutorRequest = async (
       plan: opts.plan?.slug ?? null,
     });
 
-    return {
+    const responsePayload: TutorResponse = {
       ...aiResult,
       remaining: payload.mode === 'learning' ? recordTutorUsage(tutorLimit, usageKey) : null,
       limit: payload.mode === 'learning' ? tutorLimit ?? null : null,
       plan: payload.mode === 'learning' ? opts.plan?.slug ?? null : null,
     };
+    recentPromptCache.set(usageKey, { hash: normalizedPrompt, at: Date.now(), ok: true });
+    return responsePayload;
   } catch (error) {
     const status = error instanceof AiRequestError ? error.status : 500;
+    const cached = recentPromptCache.get(usageKey);
+    if (cached && cached.hash === normalizedPrompt && cached.ok === false) {
+      recentPromptCache.delete(usageKey);
+    }
     const context = {
       mode: tutorContext.mode,
       hashedUser,

@@ -14,6 +14,7 @@ import { LessonNavigation } from '../LessonNavigation';
 import { useLessonStepper } from '../LessonStepper';
 import type { LessonSection } from '../../../types/lesson';
 import getTutorResponse from '../../../services/getTutorResponse';
+import { getSectionVisual } from '../../../lib/lessonVisuals';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
@@ -146,6 +147,17 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         // Pilot: Grade 2 Math checkpoints (tutor-generated).
         return normalizedSubject.includes('math') && grade === 2;
     }, [gradeBand, subject]);
+
+    const sectionVisual = useMemo(() => {
+        if (!currentSection || !checkpointEnabled) return null;
+        return getSectionVisual({
+            lessonTitle: lessonTitle ?? null,
+            subject: subject ?? null,
+            gradeBand: gradeBand ?? null,
+            sectionTitle: currentSection.title ?? null,
+            sectionContent: currentSection.content ?? '',
+        });
+    }, [checkpointEnabled, currentSection, gradeBand, lessonTitle, subject]);
 
     const [checkpointBySection, setCheckpointBySection] = useState<Map<number, CheckpointState>>(
         () => new Map(),
@@ -392,6 +404,16 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
                 {/* Content */}
                 <LessonCardBody className="min-h-[300px]">
+                    {sectionVisual && (
+                        <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                            <img
+                                src={sectionVisual.svg}
+                                alt={sectionVisual.alt}
+                                className="block w-full"
+                                loading="lazy"
+                            />
+                        </div>
+                    )}
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentSectionIndex}
