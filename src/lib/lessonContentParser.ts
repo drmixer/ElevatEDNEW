@@ -129,14 +129,37 @@ function extractResources(content: string): LessonResource[] {
  * Extract a hook/teaser from the introduction content
  */
 function extractHook(content: string): string | undefined {
-    // Get first 1-2 sentences
-    const sentences = content.split(/(?<=[.!?])\s+/);
-    if (sentences.length > 0) {
-        const hook = sentences.slice(0, 2).join(' ').trim();
-        if (hook.length > 20 && hook.length < 300) {
-            return hook;
-        }
+    const raw = (content ?? '').toString();
+    if (!raw.trim()) return undefined;
+
+    // Strip common front-matter / metadata-ish lines that show up in some lessons.
+    const lines = raw
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .filter((line) => !/^#{1,6}\s+/.test(line))
+        .filter((line) => !/(^|\s)\*\*(grade|subject|estimated time)\s*:\*\*/i.test(line))
+        .filter((line) => !/(^|\s)(grade|subject|estimated time)\s*:/i.test(line))
+        .filter((line) => !/^\|/.test(line)); // tables
+
+    const cleaned = lines
+        .join(' ')
+        .replace(/\*\*/g, '')
+        .replace(/[_`]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    if (!cleaned) return undefined;
+
+    // Get first 1-2 sentences (or a short leading chunk if no punctuation).
+    const sentences = cleaned.split(/(?<=[.!?])\s+/);
+    const hookCandidate = (sentences.length > 1 ? sentences.slice(0, 2).join(' ') : cleaned).trim();
+
+    const hook = hookCandidate.length > 300 ? `${hookCandidate.slice(0, 300).trim()}…` : hookCandidate;
+    if (hook.length > 20) {
+        return hook;
     }
+
     return undefined;
 }
 

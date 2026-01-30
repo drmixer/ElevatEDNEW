@@ -52,6 +52,71 @@ const extractJsonObject = (raw: string): string | null => {
     return raw.slice(start, end + 1);
 };
 
+const shuffleWithCorrectIndex = (
+    options: string[],
+    correctIndex: number,
+): { options: string[]; correctIndex: number } => {
+    const paired = options.map((text, index) => ({ text, isCorrect: index === correctIndex }));
+    for (let i = paired.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [paired[i], paired[j]] = [paired[j], paired[i]];
+    }
+    return {
+        options: paired.map((p) => p.text),
+        correctIndex: Math.max(0, paired.findIndex((p) => p.isCorrect)),
+    };
+};
+
+const localCheckpointFromMathPerimeter = (
+    sectionContent: string,
+): CheckpointPayload | null => {
+    const text = (sectionContent ?? '').toString();
+    if (!text.trim()) return null;
+
+    // Example patterns like: "Perimeter = 3 + 3 + 3 + 3 = 12 feet"
+    const perimeterEq = text.match(/Perimeter\s*=\s*([0-9+\s]+)=\s*([0-9]+)\s*(\w+)?/i);
+    if (perimeterEq) {
+        const sum = perimeterEq[1]?.replace(/\s+/g, ' ').trim() ?? '';
+        const total = Number.parseInt(perimeterEq[2] ?? '', 10);
+        const unit = (perimeterEq[3] ?? '').trim();
+        if (Number.isFinite(total)) {
+            const baseOptions = [
+                `${total}${unit ? ` ${unit}` : ''}`,
+                `${total + 2}${unit ? ` ${unit}` : ''}`,
+                `${Math.max(1, total - 2)}${unit ? ` ${unit}` : ''}`,
+                `${total + 4}${unit ? ` ${unit}` : ''}`,
+            ].slice(0, 4);
+            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
+            return {
+                visual: `Perimeter = ${sum} = ${total}${unit ? ` ${unit}` : ''}`,
+                question: 'In this example, what is the perimeter?',
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+                explanation: `Perimeter is the total distance around the shape. You add all the side lengths to get ${total}${unit ? ` ${unit}` : ''}.`,
+            };
+        }
+    }
+
+    // Definition fallback.
+    if (/perimeter/i.test(text)) {
+        const baseOptions = [
+            'The distance around the outside of a shape',
+            'The space inside a shape',
+            'The number of corners on a shape',
+            'How heavy something is',
+        ];
+        const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
+        return {
+            question: 'What does perimeter measure?',
+            options: shuffled.options,
+            correctIndex: shuffled.correctIndex,
+            explanation: 'Perimeter means you go all the way around the outside edges of a shape.',
+        };
+    }
+
+    return null;
+};
+
 export const LearnPhase: React.FC<LearnPhaseProps> = ({
     sections,
     lessonTitle,
@@ -152,8 +217,39 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         ].join('\n');
 
         try {
-            const result = await getTutorResponse(prompt, { systemPrompt, mode: 'learning' });
-            const jsonCandidate = extractJsonObject(result.message) ?? result.message.trim();
+            let lastError: unknown = null;
+            let tutorMessage: string | null = null;
+
+            for (let attempt = 1; attempt <= 3; attempt += 1) {
+                try {
+                    const result = await getTutorResponse(prompt, { systemPrompt, mode: 'learning' });
+                    tutorMessage = result.message;
+                    break;
+                } catch (error) {
+                    lastError = error;
+                    await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+                }
+            }
+
+            if (!tutorMessage) {
+                const local = localCheckpointFromMathPerimeter(currentSection.content ?? '');
+                if (local) {
+                    setCheckpointBySection((prev) => {
+                        const next = new Map(prev);
+                        next.set(currentSectionIndex, {
+                            status: 'ready',
+                            payload: local,
+                            selectedIndex: null,
+                            isCorrect: null,
+                        });
+                        return next;
+                    });
+                    return;
+                }
+                throw lastError instanceof Error ? lastError : new Error('Assistant unavailable');
+            }
+
+            const jsonCandidate = extractJsonObject(tutorMessage) ?? tutorMessage.trim();
             const parsed = JSON.parse(jsonCandidate) as Partial<CheckpointPayload>;
 
             const visual = typeof parsed.visual === 'string' ? parsed.visual.trim() : undefined;
@@ -168,11 +264,13 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 throw new Error('Invalid checkpoint payload');
             }
 
+            const shuffled = shuffleWithCorrectIndex(options, correctIndex);
+
             setCheckpointBySection((prev) => {
                 const next = new Map(prev);
                 next.set(currentSectionIndex, {
                     status: 'ready',
-                    payload: { visual, question, options, correctIndex, explanation },
+                    payload: { visual, question, options: shuffled.options, correctIndex: shuffled.correctIndex, explanation },
                     selectedIndex: null,
                     isCorrect: null,
                 });
