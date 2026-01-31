@@ -15,9 +15,12 @@ import { useLessonStepper } from '../LessonStepper';
 import type { LessonSection } from '../../../types/lesson';
 import getTutorResponse from '../../../services/getTutorResponse';
 import { getSectionVisual } from '../../../lib/lessonVisuals';
+import trackEvent from '../../../lib/analytics';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
+    lessonId?: number;
+    pilotTelemetryEnabled?: boolean;
     lessonTitle?: string;
     subject?: string;
     gradeBand?: string;
@@ -120,6 +123,8 @@ const localCheckpointFromMathPerimeter = (
 
 export const LearnPhase: React.FC<LearnPhaseProps> = ({
     sections,
+    lessonId,
+    pilotTelemetryEnabled,
     lessonTitle,
     subject,
     gradeBand,
@@ -144,9 +149,10 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         const normalizedSubject = (subject ?? '').toString().toLowerCase();
         const gradeMatch = (gradeBand ?? '').toString().match(/\d+/);
         const grade = gradeMatch ? Number.parseInt(gradeMatch[0] ?? '', 10) : null;
-        // Pilot: Grade 2 Math checkpoints (tutor-generated).
-        return normalizedSubject.includes('math') && grade === 2;
-    }, [gradeBand, subject]);
+        const title = (lessonTitle ?? '').toString().toLowerCase();
+        // Pilot: Grade 2 Math Perimeter checkpoints.
+        return normalizedSubject.includes('math') && grade === 2 && title.includes('perimeter');
+    }, [gradeBand, lessonTitle, subject]);
 
     const sectionVisual = useMemo(() => {
         if (!currentSection || !checkpointEnabled) return null;
@@ -256,6 +262,14 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                         });
                         return next;
                     });
+                    if (pilotTelemetryEnabled) {
+                        trackEvent('success_pilot_checkpoint_generated', {
+                            lessonId,
+                            sectionIndex: currentSectionIndex,
+                            source: 'fallback',
+                            reason: 'assistant_unavailable',
+                        });
+                    }
                     return;
                 }
                 throw lastError instanceof Error ? lastError : new Error('Assistant unavailable');
@@ -288,7 +302,37 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 });
                 return next;
             });
+            if (pilotTelemetryEnabled) {
+                trackEvent('success_pilot_checkpoint_generated', {
+                    lessonId,
+                    sectionIndex: currentSectionIndex,
+                    source: 'ai',
+                });
+            }
         } catch (error) {
+            const local = localCheckpointFromMathPerimeter(currentSection.content ?? '');
+            if (local) {
+                setCheckpointBySection((prev) => {
+                    const next = new Map(prev);
+                    next.set(currentSectionIndex, {
+                        status: 'ready',
+                        payload: local,
+                        selectedIndex: null,
+                        isCorrect: null,
+                    });
+                    return next;
+                });
+                if (pilotTelemetryEnabled) {
+                    trackEvent('success_pilot_checkpoint_generated', {
+                        lessonId,
+                        sectionIndex: currentSectionIndex,
+                        source: 'fallback',
+                        reason: 'generation_error',
+                    });
+                }
+                return;
+            }
+
             setCheckpointBySection((prev) => {
                 const next = new Map(prev);
                 next.set(currentSectionIndex, {
@@ -298,7 +342,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return next;
             });
         }
-    }, [currentSection, currentSectionIndex, gradeBand, lessonTitle, subject]);
+    }, [currentSection, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, subject]);
 
     useEffect(() => {
         if (!checkpointEnabled) return;
@@ -325,11 +369,20 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return next;
             });
 
+            if (pilotTelemetryEnabled) {
+                trackEvent('success_pilot_checkpoint_answered', {
+                    lessonId,
+                    sectionIndex: currentSectionIndex,
+                    selectedIndex,
+                    isCorrect,
+                });
+            }
+
             if (isCorrect) {
                 onSectionComplete?.(currentSectionIndex);
             }
         },
-        [checkpointState, currentSectionIndex, onSectionComplete],
+        [checkpointState, currentSectionIndex, lessonId, onSectionComplete, pilotTelemetryEnabled],
     );
 
     const handleAskTutor = () => {
@@ -341,6 +394,13 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     const handleAskForHint = () => {
         if (!onAskTutor || !currentSection) return;
         if (checkpointState.status !== 'ready') return;
+
+        if (pilotTelemetryEnabled) {
+            trackEvent('success_pilot_checkpoint_hint_clicked', {
+                lessonId,
+                sectionIndex: currentSectionIndex,
+            });
+        }
 
         const { question, options } = checkpointState.payload;
         onAskTutor(

@@ -12,13 +12,17 @@ import {
     ArrowRight,
     Lightbulb,
     Bot,
+    ListOrdered,
 } from 'lucide-react';
 import { LessonCard, LessonCardBody, LessonCardFooter } from '../LessonCard';
 import { useLessonStepper } from '../LessonStepper';
 import type { LessonPracticeQuestion, LessonPracticeOption } from '../../../types';
+import trackEvent from '../../../lib/analytics';
 
 interface PracticePhaseProps {
     questions: LessonPracticeQuestion[];
+    lessonId?: number;
+    pilotTelemetryEnabled?: boolean;
     onAnswerSubmit?: (questionId: number, optionId: number, isCorrect: boolean) => void;
     onAskTutor?: (context: string) => void;
 }
@@ -31,6 +35,8 @@ interface QuestionState {
 
 export const PracticePhase: React.FC<PracticePhaseProps> = ({
     questions,
+    lessonId,
+    pilotTelemetryEnabled,
     onAnswerSubmit,
     onAskTutor,
 }) => {
@@ -38,6 +44,8 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [questionStates, setQuestionStates] = useState<Map<number, QuestionState>>(new Map());
+    const [hintShown, setHintShown] = useState<Set<number>>(() => new Set());
+    const [stepsShown, setStepsShown] = useState<Set<number>>(() => new Set());
 
     const currentQuestion = questions[currentIndex];
     const currentState = currentQuestion ? questionStates.get(currentQuestion.id) : null;
@@ -81,9 +89,57 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     };
 
     const handleAskForHint = () => {
-        if (onAskTutor && currentQuestion) {
-            onAskTutor(`I need a hint for this question: "${currentQuestion.prompt}". Don't give away the answer, just help me think about it.`);
+        if (!currentQuestion) return;
+
+        if (pilotTelemetryEnabled) {
+            trackEvent('success_pilot_practice_hint_clicked', {
+                lessonId,
+                questionId: currentQuestion.id,
+                hasDeterministicHint: Boolean(currentQuestion.hint),
+            });
         }
+
+        if (currentQuestion.hint) {
+            setHintShown((prev) => {
+                const next = new Set(prev);
+                if (next.has(currentQuestion.id)) {
+                    next.delete(currentQuestion.id);
+                } else {
+                    next.add(currentQuestion.id);
+                }
+                return next;
+            });
+            return;
+        }
+
+        if (onAskTutor) {
+            onAskTutor(
+                `I need a hint for this question: "${currentQuestion.prompt}". Don't give away the answer, just help me think about it.`,
+            );
+        }
+    };
+
+    const handleShowSteps = () => {
+        if (!currentQuestion) return;
+        if (!currentQuestion.steps || currentQuestion.steps.length === 0) return;
+        if (!isAnswered) return;
+
+        if (pilotTelemetryEnabled) {
+            trackEvent('success_pilot_practice_show_steps_clicked', {
+                lessonId,
+                questionId: currentQuestion.id,
+            });
+        }
+
+        setStepsShown((prev) => {
+            const next = new Set(prev);
+            if (next.has(currentQuestion.id)) {
+                next.delete(currentQuestion.id);
+            } else {
+                next.add(currentQuestion.id);
+            }
+            return next;
+        });
     };
 
     if (questions.length === 0) {
@@ -164,12 +220,22 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                             transition={{ duration: 0.2 }}
                         >
                             {/* Question prompt */}
+                            {currentQuestion?.visual && (
+                                <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                                    <img
+                                        src={currentQuestion.visual.svg}
+                                        alt={currentQuestion.visual.alt}
+                                        className="block w-full"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            )}
                             <h3 className="text-xl font-semibold text-slate-900 mb-6">
                                 {currentQuestion?.prompt}
                             </h3>
 
                             {/* Hint button (before answering) */}
-                            {!isAnswered && onAskTutor && (
+                            {!isAnswered && (onAskTutor || currentQuestion?.hint) && (
                                 <button
                                     type="button"
                                     onClick={handleAskForHint}
@@ -178,6 +244,12 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                     <Bot className="h-4 w-4" />
                                     Need a hint?
                                 </button>
+                            )}
+
+                            {!isAnswered && currentQuestion?.hint && hintShown.has(currentQuestion.id) && (
+                                <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+                                    {currentQuestion.hint}
+                                </div>
                             )}
 
                             {/* Answer options */}
@@ -273,12 +345,33 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                   `}
                                 >
                                     <p className={`font-semibold ${isCorrect ? 'text-emerald-700' : 'text-amber-700'}`}>
-                                        {isCorrect ? '🎉 Correct!' : '💡 Not quite'}
+                                        {isCorrect ? 'Correct!' : 'Not quite'}
                                     </p>
                                     {currentQuestion?.explanation && (
                                         <p className="mt-1 text-sm text-slate-600">
                                             {currentQuestion.explanation}
                                         </p>
+                                    )}
+
+                                    {currentQuestion?.steps && currentQuestion.steps.length > 0 && (
+                                        <div className="mt-3">
+                                            <button
+                                                type="button"
+                                                onClick={handleShowSteps}
+                                                className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800"
+                                            >
+                                                <ListOrdered className="h-4 w-4" />
+                                                {stepsShown.has(currentQuestion.id) ? 'Hide steps' : 'Show steps'}
+                                            </button>
+
+                                            {stepsShown.has(currentQuestion.id) && (
+                                                <ol className="mt-2 list-decimal pl-5 text-sm text-slate-700">
+                                                    {currentQuestion.steps.map((step, idx) => (
+                                                        <li key={idx}>{step}</li>
+                                                    ))}
+                                                </ol>
+                                            )}
+                                        </div>
                                     )}
                                 </motion.div>
                             )}

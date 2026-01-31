@@ -234,6 +234,9 @@ export interface LessonPracticeQuestion {
   prompt: string;
   type: Question['type'] | 'essay';
   explanation?: string | null;
+  hint?: string | null;
+  steps?: string[] | null;
+  visual?: { alt: string; svg: string } | null;
   options: LessonPracticeOption[];
   skillIds: number[];
 }
