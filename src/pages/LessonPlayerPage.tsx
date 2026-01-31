@@ -29,6 +29,7 @@ import LearningAssistant from '../components/Student/LearningAssistant';
 import { useStudentEvent } from '../hooks/useStudentData';
 import { parseLessonContent, consolidateSections } from '../lib/lessonContentParser';
 import ContentIssueReport from '../components/Lesson/ContentIssueReport';
+import { getPracticeQuestionVisual } from '../lib/lessonVisuals';
 
 // Core Lesson Components (eagerly loaded)
 import {
@@ -52,12 +53,24 @@ const PhaseFallback = () => (
     </div>
 );
 
+const mulberry32 = (seed: number) => {
+    let t = seed >>> 0;
+    return () => {
+        t += 0x6D2B79F5;
+        let x = Math.imul(t ^ (t >>> 15), 1 | t);
+        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+};
+
 const shuffleWithCorrectIndex = (
     options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }>,
+    seed: number,
 ): { options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> } => {
     const next = options.slice();
+    const rand = mulberry32(seed);
     for (let i = next.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(rand() * (i + 1));
         [next[i], next[j]] = [next[j], next[i]];
     }
     return { options: next };
@@ -70,32 +83,51 @@ const looksLikeGenericPractice = (questions: LessonPracticeQuestion[]): boolean 
     return questions.some((q) => genericPrompt.test(q.prompt) || q.options.some((o) => genericOption.test(o.text)));
 };
 
-const generatePerimeterPracticeQuestions = (lessonId: number): LessonPracticeQuestion[] => {
+const generatePerimeterPracticeQuestions = (input: {
+    lessonId: number;
+    lessonTitle: string;
+    subject: string;
+    gradeBand: string;
+}): LessonPracticeQuestion[] => {
     // Deterministic, lesson-specific practice for the Grade 2 Perimeter pilot.
-    const base: Array<{ prompt: string; correct: string; wrong: string[]; explanation: string }> = [
+    const base: Array<{
+        prompt: string;
+        correct: string;
+        wrong: string[];
+        explanation: string;
+        hint?: string;
+        steps?: string[];
+    }> = [
+        {
+            prompt: 'What does perimeter mean?',
+            correct: 'The distance around the outside of a shape',
+            wrong: ['The space inside a shape', 'The number of corners on a shape', 'How heavy something is'],
+            explanation: 'Perimeter means you go all the way around the outside edges of a shape.',
+            hint: 'Think: perimeter is how far it is to go all the way around.',
+        },
         {
             prompt: 'A square has side lengths of 3 feet on every side. What is the perimeter?',
             correct: '12 feet',
             wrong: ['9 feet', '6 feet', '15 feet'],
             explanation: 'Perimeter is the distance around the shape: 3 + 3 + 3 + 3 = 12 feet.',
+            hint: 'Perimeter means add all the side lengths.',
+            steps: ['3 + 3 = 6', '6 + 3 = 9', '9 + 3 = 12'],
         },
         {
             prompt: 'A rectangle is 4 feet long and 2 feet wide. What is the perimeter?',
             correct: '12 feet',
             wrong: ['8 feet', '6 feet', '10 feet'],
             explanation: 'Add all the sides: 4 + 2 + 4 + 2 = 12 feet.',
+            hint: 'Count the sides, then add them.',
+            steps: ['4 + 2 = 6', '6 + 4 = 10', '10 + 2 = 12'],
         },
         {
             prompt: 'A triangle has sides 2 feet, 3 feet, and 4 feet. What is the perimeter?',
             correct: '9 feet',
             wrong: ['8 feet', '10 feet', '12 feet'],
             explanation: 'Add the three side lengths: 2 + 3 + 4 = 9 feet.',
-        },
-        {
-            prompt: 'What does perimeter mean?',
-            correct: 'The distance around the outside of a shape',
-            wrong: ['The space inside a shape', 'The number of corners on a shape', 'How heavy something is'],
-            explanation: 'Perimeter means you go all the way around the outside edges of a shape.',
+            hint: 'Add the three side lengths.',
+            steps: ['2 + 3 = 5', '5 + 4 = 9'],
         },
     ];
 
@@ -104,14 +136,25 @@ const generatePerimeterPracticeQuestions = (lessonId: number): LessonPracticeQue
             { text: item.correct, isCorrect: true, feedback: 'Yes — that matches adding all the sides.' },
             ...item.wrong.map((text) => ({ text, isCorrect: false, feedback: 'Check by adding all the side lengths.' })),
         ];
-        const { options } = shuffleWithCorrectIndex(optionsRaw);
+
+        const { options } = shuffleWithCorrectIndex(optionsRaw, input.lessonId * 1_000 + index);
+        const visual = getPracticeQuestionVisual({
+            lessonTitle: input.lessonTitle,
+            subject: input.subject,
+            gradeBand: input.gradeBand,
+            prompt: item.prompt,
+        });
+
         return {
-            id: 900_000 + lessonId * 10 + index,
+            id: 900_000 + input.lessonId * 10 + index,
             prompt: item.prompt,
             type: 'multiple_choice',
             explanation: item.explanation,
+            hint: item.hint ?? null,
+            steps: item.steps ?? null,
+            visual,
             options: options.map((o, idx2) => ({
-                id: 9_000_000 + lessonId * 100 + index * 10 + idx2,
+                id: 9_000_000 + input.lessonId * 100 + index * 10 + idx2,
                 text: o.text,
                 isCorrect: o.isCorrect,
                 feedback: o.feedback ?? null,
@@ -140,6 +183,13 @@ const LessonContent: React.FC<{
     xpEarned,
 }) => {
         const { currentPhase } = useLessonStepper();
+
+        const pilotTelemetryEnabled = useMemo(() => {
+            const isGrade2 = lessonDetail.module.gradeBand === '2';
+            const isMath = (lessonDetail.module.subject ?? '').toString().toLowerCase().includes('math');
+            const isPerimeter = (lessonDetail.lesson.title ?? '').toString().toLowerCase().includes('perimeter');
+            return isGrade2 && isMath && isPerimeter;
+        }, [lessonDetail]);
 
         // Parse lesson content (memoized for performance)
         const parsedContent = useMemo(() => {
@@ -190,6 +240,8 @@ const LessonContent: React.FC<{
                         {currentPhase === 'learn' && (
                             <LearnPhase
                                 sections={learnSections}
+                                lessonId={lessonDetail.lesson.id}
+                                pilotTelemetryEnabled={pilotTelemetryEnabled}
                                 lessonTitle={lessonDetail.lesson.title}
                                 subject={lessonDetail.module.subject}
                                 gradeBand={lessonDetail.module.gradeBand}
@@ -201,6 +253,8 @@ const LessonContent: React.FC<{
                         {currentPhase === 'practice' && (
                             <PracticePhase
                                 questions={practiceQuestions}
+                                lessonId={lessonDetail.lesson.id}
+                                pilotTelemetryEnabled={pilotTelemetryEnabled}
                                 onAnswerSubmit={onAnswerSubmit}
                                 onAskTutor={onAskTutor}
                             />
@@ -263,6 +317,13 @@ const LessonPlayerPage: React.FC = () => {
 
     const lessonDetail = lessonQuery.data ?? null;
 
+    const isPerimeterPilot = useMemo(() => {
+        const isGrade2 = lessonDetail?.module.gradeBand === '2';
+        const isMath = (lessonDetail?.module.subject ?? '').toString().toLowerCase().includes('math');
+        const isPerimeter = (lessonDetail?.lesson.title ?? '').toString().toLowerCase().includes('perimeter');
+        return Boolean(lessonDetail && isGrade2 && isMath && isPerimeter);
+    }, [lessonDetail]);
+
     // Fetch practice questions
     const practiceQuestionQuery = useQuery({
         queryKey: ['lesson-questions', lessonId, lessonDetail?.module.subject],
@@ -278,17 +339,19 @@ const LessonPlayerPage: React.FC = () => {
     const practiceQuestions: LessonPracticeQuestion[] = useMemo(
         () => {
             const fetched = practiceQuestionQuery.data ?? [];
-            const isGrade2 = lessonDetail?.module.gradeBand === '2';
-            const isMath = (lessonDetail?.module.subject ?? '').toString().toLowerCase().includes('math');
-            const isPerimeter = (lessonDetail?.lesson.title ?? '').toString().toLowerCase().includes('perimeter');
 
-            if (lessonDetail && isGrade2 && isMath && isPerimeter && (fetched.length === 0 || looksLikeGenericPractice(fetched))) {
-                return generatePerimeterPracticeQuestions(lessonDetail.lesson.id);
+            if (isPerimeterPilot && lessonDetail && (fetched.length === 0 || looksLikeGenericPractice(fetched))) {
+                return generatePerimeterPracticeQuestions({
+                    lessonId: lessonDetail.lesson.id,
+                    lessonTitle: lessonDetail.lesson.title,
+                    subject: lessonDetail.module.subject,
+                    gradeBand: lessonDetail.module.gradeBand,
+                });
             }
 
             return fetched;
         },
-        [practiceQuestionQuery.data, lessonDetail],
+        [isPerimeterPilot, practiceQuestionQuery.data, lessonDetail],
     );
 
     // Parse content for section count
@@ -438,6 +501,15 @@ const LessonPlayerPage: React.FC = () => {
         const question = practiceQuestions.find((q) => q.id === questionId);
         if (!question) return;
 
+        if (isPerimeterPilot) {
+            trackEvent('success_pilot_practice_answered', {
+                lessonId,
+                questionId,
+                optionId,
+                isCorrect,
+            });
+        }
+
         const elapsedSeconds = 10; // Approximate time per question
 
         try {
@@ -481,7 +553,7 @@ const LessonPlayerPage: React.FC = () => {
         } catch (error) {
             console.warn('[lesson] Failed to record practice answer', error);
         }
-    }, [studentId, lessonDetail, lessonId, practiceQuestions, progressController, lessonStandards, emitStudentEvent]);
+    }, [studentId, lessonDetail, practiceQuestions, isPerimeterPilot, lessonId, progressController, lessonStandards, emitStudentEvent]);
 
     /**
      * Handle AI tutor open with context
