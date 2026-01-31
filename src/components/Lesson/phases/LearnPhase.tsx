@@ -14,7 +14,7 @@ import { LessonNavigation } from '../LessonNavigation';
 import { useLessonStepper } from '../LessonStepper';
 import type { LessonSection } from '../../../types/lesson';
 import getTutorResponse from '../../../services/getTutorResponse';
-import { getSectionVisual } from '../../../lib/lessonVisuals';
+import { extractPerimeterDimensionsFromText, getSectionVisual } from '../../../lib/lessonVisuals';
 import trackEvent from '../../../lib/analytics';
 
 interface LearnPhaseProps {
@@ -36,11 +36,18 @@ type CheckpointPayload = {
     explanation: string;
 };
 
+type CheckpointIntent = 'define' | 'compute' | 'scenario';
+
 type CheckpointState =
     | { status: 'idle' }
     | { status: 'loading' }
-    | { status: 'ready'; payload: CheckpointPayload; selectedIndex: number | null; isCorrect: boolean | null }
+    | { status: 'ready'; payload: CheckpointPayload; intent: CheckpointIntent; selectedIndex: number | null; isCorrect: boolean | null }
     | { status: 'error'; message: string };
+
+const getPilotCheckpointCacheKey = (lessonId: number | undefined, sectionIndex: number, intent: CheckpointIntent) => {
+    const lid = typeof lessonId === 'number' && Number.isFinite(lessonId) ? lessonId : 'unknown';
+    return `pilot_checkpoint_v2:${lid}:${sectionIndex}:${intent}`;
+};
 
 const clampText = (value: string, maxChars: number): string => {
     const trimmed = value.trim();
@@ -71,11 +78,83 @@ const shuffleWithCorrectIndex = (
     };
 };
 
+const unitAbbrev = (unit: string): string => {
+    const u = (unit ?? '').toString().toLowerCase();
+    if (u === 'foot' || u === 'feet' || u === 'ft') return 'ft';
+    if (u === 'inch' || u === 'inches' || u === 'in') return 'in';
+    return u || 'units';
+};
+
 const localCheckpointFromMathPerimeter = (
     sectionContent: string,
+    intent: CheckpointIntent,
 ): CheckpointPayload | null => {
     const text = (sectionContent ?? '').toString();
     if (!text.trim()) return null;
+
+    const dims = extractPerimeterDimensionsFromText(text);
+    if (dims && intent !== 'define') {
+        const unit = unitAbbrev(dims.unit);
+        if (dims.shape === 'square') {
+            const total = dims.a * 4;
+            const baseOptions = [
+                `${total} ${unit}`,
+                `${Math.max(1, total - dims.a)} ${unit}`,
+                `${total + dims.a} ${unit}`,
+                `${Math.max(1, total - 2)} ${unit}`,
+            ].slice(0, 4);
+            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
+            return {
+                question:
+                    intent === 'scenario'
+                        ? `A ribbon goes around a square. Each side is ${dims.a} ${unit}. How long is the ribbon?`
+                        : `A square has side length ${dims.a} ${unit}. What is the perimeter?`,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+                explanation: `Add all 4 sides: ${dims.a} + ${dims.a} + ${dims.a} + ${dims.a} = ${total} ${unit}.`,
+            };
+        }
+
+        if (dims.shape === 'rectangle') {
+            const total = 2 * dims.a + 2 * dims.b;
+            const baseOptions = [
+                `${total} ${unit}`,
+                `${2 * dims.a + dims.b} ${unit}`,
+                `${dims.a + dims.b} ${unit}`,
+                `${total + 2} ${unit}`,
+            ].slice(0, 4);
+            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
+            return {
+                question:
+                    intent === 'scenario'
+                        ? `A fence goes around a garden that is ${dims.a} ${unit} by ${dims.b} ${unit}. How much fence is needed?`
+                        : `A rectangle is ${dims.a} ${unit} by ${dims.b} ${unit}. What is the perimeter?`,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+                explanation: `Add all the sides: ${dims.a} + ${dims.b} + ${dims.a} + ${dims.b} = ${total} ${unit}.`,
+            };
+        }
+
+        if (dims.shape === 'triangle') {
+            const total = dims.a + dims.b + dims.c;
+            const baseOptions = [
+                `${total} ${unit}`,
+                `${dims.a + dims.b} ${unit}`,
+                `${total + 2} ${unit}`,
+                `${Math.max(1, total - 2)} ${unit}`,
+            ].slice(0, 4);
+            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
+            return {
+                question:
+                    intent === 'scenario'
+                        ? `String goes around a triangle with sides ${dims.a} ${unit}, ${dims.b} ${unit}, and ${dims.c} ${unit}. How long is the string?`
+                        : `A triangle has sides ${dims.a} ${unit}, ${dims.b} ${unit}, and ${dims.c} ${unit}. What is the perimeter?`,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+                explanation: `Add the 3 side lengths: ${dims.a} + ${dims.b} + ${dims.c} = ${total} ${unit}.`,
+            };
+        }
+    }
 
     // Example patterns like: "Perimeter = 3 + 3 + 3 + 3 = 12 feet"
     const perimeterEq = text.match(/Perimeter\s*=\s*([0-9+\s]+)=\s*([0-9]+)\s*(\w+)?/i);
@@ -102,7 +181,7 @@ const localCheckpointFromMathPerimeter = (
     }
 
     // Definition fallback.
-    if (/perimeter/i.test(text)) {
+    if (/perimeter/i.test(text) && intent === 'define') {
         const baseOptions = [
             'The distance around the outside of a shape',
             'The space inside a shape',
@@ -119,6 +198,24 @@ const localCheckpointFromMathPerimeter = (
     }
 
     return null;
+};
+
+const containsBannedGenericCoaching = (text: string): boolean => {
+    const t = (text ?? '').toString().toLowerCase();
+    return /(study strategy|study strategies|ask for help|ask a teacher|teacher|main concept|real-life situation|memorize|practice more|use a calculator|copy someone)/i.test(t);
+};
+
+const payloadHasNumbers = (payload: CheckpointPayload): boolean => /\d/.test(`${payload.question} ${payload.options.join(' ')}`);
+
+const isValidCheckpointPayload = (payload: CheckpointPayload, intent: CheckpointIntent): boolean => {
+    if (!payload.question.trim()) return false;
+    if (!Array.isArray(payload.options) || payload.options.length < 3 || payload.options.length > 4) return false;
+    if (payload.correctIndex < 0 || payload.correctIndex >= payload.options.length) return false;
+    if (!payload.explanation.trim()) return false;
+    if (containsBannedGenericCoaching(payload.question) || containsBannedGenericCoaching(payload.explanation)) return false;
+    if (payload.options.some((o) => containsBannedGenericCoaching(o))) return false;
+    if (intent === 'compute' && !payloadHasNumbers(payload)) return false;
+    return true;
 };
 
 export const LearnPhase: React.FC<LearnPhaseProps> = ({
@@ -144,6 +241,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     const hasMultipleSections = sections.length > 1;
     const isLastSection = currentSectionIndex >= sections.length - 1;
     const isFirstSection = currentSectionIndex === 0;
+
+    const checkpointIntent: CheckpointIntent = useMemo(() => {
+        const intents: CheckpointIntent[] = ['define', 'compute', 'scenario'];
+        return intents[currentSectionIndex % intents.length] ?? 'define';
+    }, [currentSectionIndex]);
 
     const checkpointEnabled = useMemo(() => {
         const normalizedSubject = (subject ?? '').toString().toLowerCase();
@@ -198,6 +300,32 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     const generateCheckpoint = useCallback(async () => {
         if (!currentSection) return;
 
+        const cacheKey = getPilotCheckpointCacheKey(lessonId, currentSectionIndex, checkpointIntent);
+        if (typeof window !== 'undefined') {
+            const cached = window.sessionStorage.getItem(cacheKey);
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached) as { payload?: CheckpointPayload; intent?: CheckpointIntent };
+                    if (parsed?.payload && parsed.intent && isValidCheckpointPayload(parsed.payload, parsed.intent)) {
+                        setCheckpointBySection((prev) => {
+                            const next = new Map(prev);
+                            next.set(currentSectionIndex, {
+                                status: 'ready',
+                                payload: parsed.payload,
+                                intent: parsed.intent,
+                                selectedIndex: null,
+                                isCorrect: null,
+                            });
+                            return next;
+                        });
+                        return;
+                    }
+                } catch {
+                    // ignore and regenerate
+                }
+            }
+        }
+
         setCheckpointBySection((prev) => {
             const next = new Map(prev);
             next.set(currentSectionIndex, { status: 'loading' });
@@ -210,6 +338,25 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         const subjectSnippet = clampText(subject ?? 'math', 40);
         const gradeSnippet = clampText(gradeBand ?? 'Grade 2', 40);
 
+        const intentRules =
+            checkpointIntent === 'define'
+                ? [
+                    `Intent: define.`,
+                    `Ask a short definition question about perimeter.`,
+                    `Avoid numbers unless they are in the section.`,
+                ]
+                : checkpointIntent === 'compute'
+                    ? [
+                        `Intent: compute.`,
+                        `The question MUST include numbers and ask for a perimeter calculation.`,
+                        `All options must be numeric answers with units when present.`,
+                    ]
+                    : [
+                        `Intent: scenario.`,
+                        `Ask a simple real-world perimeter scenario tied to the section (fence, ribbon, string).`,
+                        `Include numbers when present in the section.`,
+                    ];
+
         const systemPrompt = [
             `You create one check-for-understanding question for a K-12 learner.`,
             `Target: ${gradeSnippet} ${subjectSnippet}.`,
@@ -217,6 +364,8 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             `CRITICAL: The question must be directly answerable from the provided section content. Do NOT ask meta questions like “What is the main concept?”`,
             `Make it concrete: include at least one specific number, definition, example, or scenario tied to the section.`,
             `Wrong options must be plausible misunderstandings of THIS content (not generic study advice).`,
+            `Never output study strategies, teacher advice, or generic coaching content.`,
+            ...intentRules,
             ``,
             `If it helps engagement, include a simple text diagram in a "visual" field (ASCII box, labeled sides, small table). Keep it short.`,
             ``,
@@ -250,13 +399,14 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             }
 
             if (!tutorMessage) {
-                const local = localCheckpointFromMathPerimeter(currentSection.content ?? '');
+                const local = localCheckpointFromMathPerimeter(currentSection.content ?? '', checkpointIntent);
                 if (local) {
                     setCheckpointBySection((prev) => {
                         const next = new Map(prev);
                         next.set(currentSectionIndex, {
                             status: 'ready',
                             payload: local,
+                            intent: checkpointIntent,
                             selectedIndex: null,
                             isCorrect: null,
                         });
@@ -268,7 +418,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                             sectionIndex: currentSectionIndex,
                             source: 'fallback',
                             reason: 'assistant_unavailable',
+                            intent: checkpointIntent,
                         });
+                    }
+                    if (typeof window !== 'undefined') {
+                        window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: local, intent: checkpointIntent }));
                     }
                     return;
                 }
@@ -286,17 +440,27 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             const correctIndex = typeof parsed.correctIndex === 'number' ? parsed.correctIndex : -1;
             const explanation = typeof parsed.explanation === 'string' ? parsed.explanation.trim() : '';
 
-            if (!question || options.length < 3 || options.length > 4 || correctIndex < 0 || correctIndex >= options.length) {
+            const candidatePayload: CheckpointPayload = { visual, question, options, correctIndex, explanation };
+
+            if (!isValidCheckpointPayload(candidatePayload, checkpointIntent)) {
                 throw new Error('Invalid checkpoint payload');
             }
 
             const shuffled = shuffleWithCorrectIndex(options, correctIndex);
+            const finalPayload: CheckpointPayload = {
+                visual,
+                question,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+                explanation,
+            };
 
             setCheckpointBySection((prev) => {
                 const next = new Map(prev);
                 next.set(currentSectionIndex, {
                     status: 'ready',
-                    payload: { visual, question, options: shuffled.options, correctIndex: shuffled.correctIndex, explanation },
+                    payload: finalPayload,
+                    intent: checkpointIntent,
                     selectedIndex: null,
                     isCorrect: null,
                 });
@@ -307,16 +471,21 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                     lessonId,
                     sectionIndex: currentSectionIndex,
                     source: 'ai',
+                    intent: checkpointIntent,
                 });
             }
+            if (typeof window !== 'undefined') {
+                window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalPayload, intent: checkpointIntent }));
+            }
         } catch (error) {
-            const local = localCheckpointFromMathPerimeter(currentSection.content ?? '');
+            const local = localCheckpointFromMathPerimeter(currentSection.content ?? '', checkpointIntent);
             if (local) {
                 setCheckpointBySection((prev) => {
                     const next = new Map(prev);
                     next.set(currentSectionIndex, {
                         status: 'ready',
                         payload: local,
+                        intent: checkpointIntent,
                         selectedIndex: null,
                         isCorrect: null,
                     });
@@ -328,7 +497,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                         sectionIndex: currentSectionIndex,
                         source: 'fallback',
                         reason: 'generation_error',
+                        intent: checkpointIntent,
                     });
+                }
+                if (typeof window !== 'undefined') {
+                    window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: local, intent: checkpointIntent }));
                 }
                 return;
             }
@@ -342,7 +515,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return next;
             });
         }
-    }, [currentSection, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, subject]);
+    }, [checkpointIntent, currentSection, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, subject]);
 
     useEffect(() => {
         if (!checkpointEnabled) return;
@@ -373,6 +546,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 trackEvent('success_pilot_checkpoint_answered', {
                     lessonId,
                     sectionIndex: currentSectionIndex,
+                    intent: checkpointState.intent,
                     selectedIndex,
                     isCorrect,
                 });

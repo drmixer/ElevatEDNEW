@@ -147,7 +147,7 @@ const triangleSvg = (
   return { alt: 'Triangle with side lengths labeled', svg: encodeSvgDataUrl(svg) };
 };
 
-type PerimeterDimensions =
+export type PerimeterDimensions =
   | { shape: 'rectangle'; a: number; b: number; unit: string }
   | { shape: 'square'; a: number; unit: string }
   | { shape: 'triangle'; a: number; b: number; c: number; unit: string };
@@ -232,6 +232,9 @@ const extractPerimeterDimensions = (
 
   return null;
 };
+
+export const extractPerimeterDimensionsFromText = (text: string): PerimeterDimensions | null =>
+  extractPerimeterDimensions(text);
 
 export const getSectionVisual = (input: {
   lessonTitle?: string | null;
