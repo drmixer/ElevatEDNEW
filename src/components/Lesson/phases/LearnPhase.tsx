@@ -96,13 +96,25 @@ const extractJsonObject = (raw: string): string | null => {
     return raw.slice(start, end + 1);
 };
 
+const mulberry32 = (seed: number) => {
+    let t = seed >>> 0;
+    return () => {
+        t += 0x6D2B79F5;
+        let x = Math.imul(t ^ (t >>> 15), 1 | t);
+        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+};
+
 const shuffleWithCorrectIndex = (
     options: string[],
     correctIndex: number,
+    seed: number,
 ): { options: string[]; correctIndex: number } => {
     const paired = options.map((text, index) => ({ text, isCorrect: index === correctIndex }));
+    const rand = mulberry32(seed);
     for (let i = paired.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(rand() * (i + 1));
         [paired[i], paired[j]] = [paired[j], paired[i]];
     }
     return {
@@ -262,6 +274,9 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         if (!currentSection) return;
 
         const cacheKey = getPilotCheckpointCacheKey(lessonId, currentSectionIndex, checkpointIntent);
+        const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
+        const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
+        const shuffleSeed = seedBase + intentOffset + 11;
         if (typeof window !== 'undefined') {
             const cached = window.sessionStorage.getItem(cacheKey);
             if (cached) {
@@ -413,7 +428,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 throw new Error('Invalid checkpoint payload');
             }
 
-            const shuffled = shuffleWithCorrectIndex(options, correctIndex);
+            const shuffled = shuffleWithCorrectIndex(options, correctIndex, shuffleSeed);
             const finalPayload: CheckpointPayload = {
                 visual,
                 question,
@@ -445,19 +460,23 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalPayload, intent: checkpointIntent }));
             }
         } catch (error) {
-            const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
-            const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
             const local = localCheckpointFromMathPerimeter({
                 sectionContent: currentSection.content ?? '',
                 intent: checkpointIntent,
                 seed: seedBase + intentOffset + 7,
             });
             if (local) {
+                const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+                const finalLocal: CheckpointPayload = {
+                    ...local,
+                    options: shuffled.options,
+                    correctIndex: shuffled.correctIndex,
+                };
                 setCheckpointBySection((prev) => {
                     const next = new Map(prev);
                     next.set(currentSectionIndex, {
                         status: 'ready',
-                        payload: local,
+                        payload: finalLocal,
                         intent: checkpointIntent,
                         selectedIndex: null,
                         isCorrect: null,
@@ -471,10 +490,10 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                         source: 'fallback',
                         reason: 'generation_error',
                         intent: checkpointIntent,
-                    });
+                        });
                 }
                 if (typeof window !== 'undefined') {
-                    window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: local, intent: checkpointIntent }));
+                    window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalLocal, intent: checkpointIntent }));
                 }
                 return;
             }

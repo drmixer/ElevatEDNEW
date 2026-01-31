@@ -77,13 +77,6 @@ const shuffleWithCorrectIndex = (
     return { options: next };
 };
 
-const looksLikeGenericPractice = (questions: LessonPracticeQuestion[]): boolean => {
-    if (!questions.length) return false;
-    const genericPrompt = /(main concept|which strategy|real-life situation|what should you do if you get stuck)/i;
-    const genericOption = /(memorizing formulas|only using calculators|avoiding word problems|guessing randomly|skip(ping)? steps|copy someone)/i;
-    return questions.some((q) => genericPrompt.test(q.prompt) || q.options.some((o) => genericOption.test(o.text)));
-};
-
 const generatePerimeterPracticeQuestions = (input: {
     lessonId: number;
     lessonTitle: string;
@@ -257,6 +250,9 @@ const LessonContent: React.FC<{
                                 questions={practiceQuestions}
                                 lessonId={lessonDetail.lesson.id}
                                 pilotTelemetryEnabled={pilotTelemetryEnabled}
+                                lessonTitle={lessonDetail.lesson.title}
+                                subject={lessonDetail.module.subject}
+                                gradeBand={lessonDetail.module.gradeBand}
                                 onAnswerSubmit={onAnswerSubmit}
                                 onAskTutor={onAskTutor}
                             />
@@ -346,7 +342,9 @@ const LessonPlayerPage: React.FC = () => {
         () => {
             const fetched = practiceQuestionQuery.data ?? [];
 
-            if (isPerimeterPilot && lessonDetail && (fetched.length === 0 || looksLikeGenericPractice(fetched))) {
+            // For the pilot, always use the deterministic, scaffolded practice set so quality is consistent
+            // regardless of backend question-bank coverage.
+            if (isPerimeterPilot && lessonDetail) {
                 return generatePerimeterPracticeQuestions({
                     lessonId: lessonDetail.lesson.id,
                     lessonTitle: lessonDetail.lesson.title,
