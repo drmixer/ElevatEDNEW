@@ -25,6 +25,9 @@ interface PracticePhaseProps {
     questions: LessonPracticeQuestion[];
     lessonId?: number;
     pilotTelemetryEnabled?: boolean;
+    lessonTitle?: string | null;
+    subject?: string | null;
+    gradeBand?: string | null;
     onAnswerSubmit?: (questionId: number, optionId: number, isCorrect: boolean) => void;
     onAskTutor?: (context: string) => void;
 }
@@ -67,6 +70,9 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     questions,
     lessonId,
     pilotTelemetryEnabled,
+    lessonTitle,
+    subject,
+    gradeBand,
     onAnswerSubmit,
     onAskTutor,
 }) => {
@@ -88,6 +94,17 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     const correctCount = Array.from(questionStates.values()).filter((s) => s.isCorrect).length;
     const incorrectCount = Math.max(0, answeredCount - correctCount);
     const detectedShape = detectShapeFromText(currentQuestion?.prompt ?? currentQuestion?.visual?.alt);
+
+    const currentVisual = useMemo(() => {
+        if (!currentQuestion) return null;
+        if (currentQuestion.visual) return currentQuestion.visual;
+        return getPracticeQuestionVisual({
+            lessonTitle: lessonTitle ?? null,
+            subject: subject ?? null,
+            gradeBand: gradeBand ?? null,
+            prompt: currentQuestion.prompt ?? '',
+        });
+    }, [currentQuestion, gradeBand, lessonTitle, subject]);
 
     const [quickReview, setQuickReview] = useState<QuickReviewState>({
         isVisible: false,
@@ -528,11 +545,11 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                         Perimeter means the distance around the outside. Add all the side lengths.
                                     </div>
 
-                                    {currentQuestion?.visual && (
+                                    {currentVisual && (
                                         <div className="mt-3 overflow-hidden rounded-lg border border-amber-200 bg-white">
                                             <img
-                                                src={currentQuestion.visual.svg}
-                                                alt={currentQuestion.visual.alt}
+                                                src={currentVisual.svg}
+                                                alt={currentVisual.alt}
                                                 className="block w-full"
                                                 loading="lazy"
                                             />
@@ -595,11 +612,11 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                             )}
 
                             {/* Question prompt */}
-                            {!showChallengeFlow && currentQuestion?.visual && (
+                            {!showChallengeFlow && currentVisual && (
                                 <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
                                     <img
-                                        src={currentQuestion.visual.svg}
-                                        alt={currentQuestion.visual.alt}
+                                        src={currentVisual.svg}
+                                        alt={currentVisual.alt}
                                         className="block w-full"
                                         loading="lazy"
                                     />
