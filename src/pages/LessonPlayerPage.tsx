@@ -30,6 +30,7 @@ import { useStudentEvent } from '../hooks/useStudentData';
 import { parseLessonContent, consolidateSections } from '../lib/lessonContentParser';
 import ContentIssueReport from '../components/Lesson/ContentIssueReport';
 import { getPracticeQuestionVisual } from '../lib/lessonVisuals';
+import { isGrade2MathPerimeterPilot } from '../lib/pilotConditions';
 
 // Core Lesson Components (eagerly loaded)
 import {
@@ -185,10 +186,11 @@ const LessonContent: React.FC<{
         const { currentPhase } = useLessonStepper();
 
         const pilotTelemetryEnabled = useMemo(() => {
-            const isGrade2 = lessonDetail.module.gradeBand === '2';
-            const isMath = (lessonDetail.module.subject ?? '').toString().toLowerCase().includes('math');
-            const isPerimeter = (lessonDetail.lesson.title ?? '').toString().toLowerCase().includes('perimeter');
-            return isGrade2 && isMath && isPerimeter;
+            return isGrade2MathPerimeterPilot({
+                subject: lessonDetail.module.subject,
+                gradeBand: lessonDetail.module.gradeBand,
+                lessonTitle: lessonDetail.lesson.title,
+            });
         }, [lessonDetail]);
 
         // Parse lesson content (memoized for performance)
@@ -318,10 +320,14 @@ const LessonPlayerPage: React.FC = () => {
     const lessonDetail = lessonQuery.data ?? null;
 
     const isPerimeterPilot = useMemo(() => {
-        const isGrade2 = lessonDetail?.module.gradeBand === '2';
-        const isMath = (lessonDetail?.module.subject ?? '').toString().toLowerCase().includes('math');
-        const isPerimeter = (lessonDetail?.lesson.title ?? '').toString().toLowerCase().includes('perimeter');
-        return Boolean(lessonDetail && isGrade2 && isMath && isPerimeter);
+        return Boolean(
+            lessonDetail &&
+            isGrade2MathPerimeterPilot({
+                subject: lessonDetail.module.subject,
+                gradeBand: lessonDetail.module.gradeBand,
+                lessonTitle: lessonDetail.lesson.title,
+            }),
+        );
     }, [lessonDetail]);
 
     // Fetch practice questions

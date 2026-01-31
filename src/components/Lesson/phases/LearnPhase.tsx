@@ -16,6 +16,9 @@ import type { LessonSection } from '../../../types/lesson';
 import getTutorResponse from '../../../services/getTutorResponse';
 import { extractPerimeterDimensionsFromText, getSectionVisual } from '../../../lib/lessonVisuals';
 import trackEvent from '../../../lib/analytics';
+import { getPerimeterQuickReview } from '../../../lib/pilotPerimeterQuickReview';
+import { isGrade2MathPerimeterPilot } from '../../../lib/pilotConditions';
+import { getDeterministicPerimeterCheckpoint } from '../../../lib/pilotPerimeterCheckpoints';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
@@ -43,6 +46,36 @@ type CheckpointState =
     | { status: 'loading' }
     | { status: 'ready'; payload: CheckpointPayload; intent: CheckpointIntent; selectedIndex: number | null; isCorrect: boolean | null }
     | { status: 'error'; message: string };
+
+type QuickReviewState = {
+    isVisible: boolean;
+    selectedIndex: number | null;
+    isCorrect: boolean | null;
+};
+
+const getDeterministicCheckpointHint = (input: {
+    intent: CheckpointIntent;
+    sectionContent: string;
+}): string => {
+    const dims = extractPerimeterDimensionsFromText(input.sectionContent);
+    if (input.intent === 'define') {
+        return 'Perimeter means the distance around the outside of a shape.';
+    }
+
+    if (dims?.shape === 'square') {
+        return 'A square has 4 equal sides. Add the same number 4 times.';
+    }
+    if (dims?.shape === 'rectangle') {
+        return 'A rectangle has 2 long sides and 2 short sides. Add all 4 sides.';
+    }
+    if (dims?.shape === 'triangle') {
+        return 'A triangle has 3 sides. Add the 3 side lengths.';
+    }
+    if (input.intent === 'scenario') {
+        return 'Perimeter is how much it takes to go all the way around (like fence or string). Add the side lengths.';
+    }
+    return 'Perimeter means add all the side lengths.';
+};
 
 const getPilotCheckpointCacheKey = (lessonId: number | undefined, sectionIndex: number, intent: CheckpointIntent) => {
     const lid = typeof lessonId === 'number' && Number.isFinite(lessonId) ? lessonId : 'unknown';
@@ -78,126 +111,16 @@ const shuffleWithCorrectIndex = (
     };
 };
 
-const unitAbbrev = (unit: string): string => {
-    const u = (unit ?? '').toString().toLowerCase();
-    if (u === 'foot' || u === 'feet' || u === 'ft') return 'ft';
-    if (u === 'inch' || u === 'inches' || u === 'in') return 'in';
-    return u || 'units';
-};
-
-const localCheckpointFromMathPerimeter = (
-    sectionContent: string,
-    intent: CheckpointIntent,
-): CheckpointPayload | null => {
-    const text = (sectionContent ?? '').toString();
-    if (!text.trim()) return null;
-
-    const dims = extractPerimeterDimensionsFromText(text);
-    if (dims && intent !== 'define') {
-        const unit = unitAbbrev(dims.unit);
-        if (dims.shape === 'square') {
-            const total = dims.a * 4;
-            const baseOptions = [
-                `${total} ${unit}`,
-                `${Math.max(1, total - dims.a)} ${unit}`,
-                `${total + dims.a} ${unit}`,
-                `${Math.max(1, total - 2)} ${unit}`,
-            ].slice(0, 4);
-            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
-            return {
-                question:
-                    intent === 'scenario'
-                        ? `A ribbon goes around a square. Each side is ${dims.a} ${unit}. How long is the ribbon?`
-                        : `A square has side length ${dims.a} ${unit}. What is the perimeter?`,
-                options: shuffled.options,
-                correctIndex: shuffled.correctIndex,
-                explanation: `Add all 4 sides: ${dims.a} + ${dims.a} + ${dims.a} + ${dims.a} = ${total} ${unit}.`,
-            };
-        }
-
-        if (dims.shape === 'rectangle') {
-            const total = 2 * dims.a + 2 * dims.b;
-            const baseOptions = [
-                `${total} ${unit}`,
-                `${2 * dims.a + dims.b} ${unit}`,
-                `${dims.a + dims.b} ${unit}`,
-                `${total + 2} ${unit}`,
-            ].slice(0, 4);
-            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
-            return {
-                question:
-                    intent === 'scenario'
-                        ? `A fence goes around a garden that is ${dims.a} ${unit} by ${dims.b} ${unit}. How much fence is needed?`
-                        : `A rectangle is ${dims.a} ${unit} by ${dims.b} ${unit}. What is the perimeter?`,
-                options: shuffled.options,
-                correctIndex: shuffled.correctIndex,
-                explanation: `Add all the sides: ${dims.a} + ${dims.b} + ${dims.a} + ${dims.b} = ${total} ${unit}.`,
-            };
-        }
-
-        if (dims.shape === 'triangle') {
-            const total = dims.a + dims.b + dims.c;
-            const baseOptions = [
-                `${total} ${unit}`,
-                `${dims.a + dims.b} ${unit}`,
-                `${total + 2} ${unit}`,
-                `${Math.max(1, total - 2)} ${unit}`,
-            ].slice(0, 4);
-            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
-            return {
-                question:
-                    intent === 'scenario'
-                        ? `String goes around a triangle with sides ${dims.a} ${unit}, ${dims.b} ${unit}, and ${dims.c} ${unit}. How long is the string?`
-                        : `A triangle has sides ${dims.a} ${unit}, ${dims.b} ${unit}, and ${dims.c} ${unit}. What is the perimeter?`,
-                options: shuffled.options,
-                correctIndex: shuffled.correctIndex,
-                explanation: `Add the 3 side lengths: ${dims.a} + ${dims.b} + ${dims.c} = ${total} ${unit}.`,
-            };
-        }
-    }
-
-    // Example patterns like: "Perimeter = 3 + 3 + 3 + 3 = 12 feet"
-    const perimeterEq = text.match(/Perimeter\s*=\s*([0-9+\s]+)=\s*([0-9]+)\s*(\w+)?/i);
-    if (perimeterEq) {
-        const sum = perimeterEq[1]?.replace(/\s+/g, ' ').trim() ?? '';
-        const total = Number.parseInt(perimeterEq[2] ?? '', 10);
-        const unit = (perimeterEq[3] ?? '').trim();
-        if (Number.isFinite(total)) {
-            const baseOptions = [
-                `${total}${unit ? ` ${unit}` : ''}`,
-                `${total + 2}${unit ? ` ${unit}` : ''}`,
-                `${Math.max(1, total - 2)}${unit ? ` ${unit}` : ''}`,
-                `${total + 4}${unit ? ` ${unit}` : ''}`,
-            ].slice(0, 4);
-            const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
-            return {
-                visual: `Perimeter = ${sum} = ${total}${unit ? ` ${unit}` : ''}`,
-                question: 'In this example, what is the perimeter?',
-                options: shuffled.options,
-                correctIndex: shuffled.correctIndex,
-                explanation: `Perimeter is the total distance around the shape. You add all the side lengths to get ${total}${unit ? ` ${unit}` : ''}.`,
-            };
-        }
-    }
-
-    // Definition fallback.
-    if (/perimeter/i.test(text) && intent === 'define') {
-        const baseOptions = [
-            'The distance around the outside of a shape',
-            'The space inside a shape',
-            'The number of corners on a shape',
-            'How heavy something is',
-        ];
-        const shuffled = shuffleWithCorrectIndex(baseOptions, 0);
-        return {
-            question: 'What does perimeter measure?',
-            options: shuffled.options,
-            correctIndex: shuffled.correctIndex,
-            explanation: 'Perimeter means you go all the way around the outside edges of a shape.',
-        };
-    }
-
-    return null;
+const localCheckpointFromMathPerimeter = (input: {
+    sectionContent: string;
+    intent: CheckpointIntent;
+    seed: number;
+}): CheckpointPayload | null => {
+    return getDeterministicPerimeterCheckpoint({
+        sectionContent: input.sectionContent,
+        intent: input.intent,
+        seed: input.seed,
+    });
 };
 
 const containsBannedGenericCoaching = (text: string): boolean => {
@@ -216,6 +139,14 @@ const isValidCheckpointPayload = (payload: CheckpointPayload, intent: Checkpoint
     if (payload.options.some((o) => containsBannedGenericCoaching(o))) return false;
     if (intent === 'compute' && !payloadHasNumbers(payload)) return false;
     return true;
+};
+
+type ShapeType = 'square' | 'rectangle' | 'triangle';
+
+const shapePillStyles: Record<ShapeType, { label: string; className: string }> = {
+    square: { label: 'Square', className: 'border-emerald-200 bg-emerald-50 text-emerald-800' },
+    rectangle: { label: 'Rectangle', className: 'border-indigo-200 bg-indigo-50 text-indigo-800' },
+    triangle: { label: 'Triangle', className: 'border-amber-200 bg-amber-50 text-amber-900' },
 };
 
 export const LearnPhase: React.FC<LearnPhaseProps> = ({
@@ -248,12 +179,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     }, [currentSectionIndex]);
 
     const checkpointEnabled = useMemo(() => {
-        const normalizedSubject = (subject ?? '').toString().toLowerCase();
-        const gradeMatch = (gradeBand ?? '').toString().match(/\d+/);
-        const grade = gradeMatch ? Number.parseInt(gradeMatch[0] ?? '', 10) : null;
-        const title = (lessonTitle ?? '').toString().toLowerCase();
-        // Pilot: Grade 2 Math Perimeter checkpoints.
-        return normalizedSubject.includes('math') && grade === 2 && title.includes('perimeter');
+        return isGrade2MathPerimeterPilot({ subject, gradeBand, lessonTitle });
     }, [gradeBand, lessonTitle, subject]);
 
     const sectionVisual = useMemo(() => {
@@ -267,13 +193,48 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         });
     }, [checkpointEnabled, currentSection, gradeBand, lessonTitle, subject]);
 
+    const detectedShape: ShapeType | null = useMemo(() => {
+        if (!checkpointEnabled) return null;
+        const dims = extractPerimeterDimensionsFromText(currentSection?.content ?? '');
+        if (dims?.shape === 'square' || dims?.shape === 'rectangle' || dims?.shape === 'triangle') {
+            return dims.shape;
+        }
+        return null;
+    }, [checkpointEnabled, currentSection?.content]);
+
     const [checkpointBySection, setCheckpointBySection] = useState<Map<number, CheckpointState>>(
+        () => new Map(),
+    );
+
+    const [checkpointWrongAttemptsBySection, setCheckpointWrongAttemptsBySection] = useState<Map<number, number>>(
+        () => new Map(),
+    );
+
+    const [quickReviewBySection, setQuickReviewBySection] = useState<Map<number, QuickReviewState>>(
+        () => new Map(),
+    );
+
+    const [checkpointHintShownBySection, setCheckpointHintShownBySection] = useState<Map<number, boolean>>(
         () => new Map(),
     );
 
     const checkpointState: CheckpointState = useMemo(() => {
         return checkpointBySection.get(currentSectionIndex) ?? { status: 'idle' };
     }, [checkpointBySection, currentSectionIndex]);
+
+    const quickReviewState = useMemo(() => {
+        return quickReviewBySection.get(currentSectionIndex) ?? { isVisible: false, selectedIndex: null, isCorrect: null };
+    }, [currentSectionIndex, quickReviewBySection]);
+
+    const quickReviewContent = useMemo(() => {
+        const dims = extractPerimeterDimensionsFromText(currentSection?.content ?? '');
+        return getPerimeterQuickReview(dims);
+    }, [currentSection?.content]);
+
+    const isCheckpointHintShown = useMemo(
+        () => checkpointHintShownBySection.get(currentSectionIndex) ?? false,
+        [checkpointHintShownBySection, currentSectionIndex],
+    );
 
     const hasCheckpointPassed = checkpointState.status === 'ready' && checkpointState.isCorrect === true;
 
@@ -399,7 +360,13 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             }
 
             if (!tutorMessage) {
-                const local = localCheckpointFromMathPerimeter(currentSection.content ?? '', checkpointIntent);
+                const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
+                const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
+                const local = localCheckpointFromMathPerimeter({
+                    sectionContent: currentSection.content ?? '',
+                    intent: checkpointIntent,
+                    seed: seedBase + intentOffset,
+                });
                 if (local) {
                     setCheckpointBySection((prev) => {
                         const next = new Map(prev);
@@ -478,7 +445,13 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalPayload, intent: checkpointIntent }));
             }
         } catch (error) {
-            const local = localCheckpointFromMathPerimeter(currentSection.content ?? '', checkpointIntent);
+            const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
+            const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
+            const local = localCheckpointFromMathPerimeter({
+                sectionContent: currentSection.content ?? '',
+                intent: checkpointIntent,
+                seed: seedBase + intentOffset + 7,
+            });
             if (local) {
                 setCheckpointBySection((prev) => {
                     const next = new Map(prev);
@@ -542,6 +515,15 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return next;
             });
 
+            if (!isCorrect) {
+                setCheckpointWrongAttemptsBySection((prev) => {
+                    const next = new Map(prev);
+                    const count = (next.get(currentSectionIndex) ?? 0) + 1;
+                    next.set(currentSectionIndex, count);
+                    return next;
+                });
+            }
+
             if (pilotTelemetryEnabled) {
                 trackEvent('success_pilot_checkpoint_answered', {
                     lessonId,
@@ -554,10 +536,89 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
             if (isCorrect) {
                 onSectionComplete?.(currentSectionIndex);
+                setQuickReviewBySection((prev) => {
+                    const next = new Map(prev);
+                    next.set(currentSectionIndex, { isVisible: false, selectedIndex: null, isCorrect: null });
+                    return next;
+                });
             }
         },
         [checkpointState, currentSectionIndex, lessonId, onSectionComplete, pilotTelemetryEnabled],
     );
+
+    const checkpointWrongAttempts = useMemo(
+        () => checkpointWrongAttemptsBySection.get(currentSectionIndex) ?? 0,
+        [checkpointWrongAttemptsBySection, currentSectionIndex],
+    );
+
+    useEffect(() => {
+        if (!checkpointEnabled) return;
+        if (!pilotTelemetryEnabled) return;
+        if (hasCheckpointPassed) return;
+        if (checkpointWrongAttempts < 2) return;
+
+        setQuickReviewBySection((prev) => {
+            const existing = prev.get(currentSectionIndex);
+            if (existing?.isVisible) return prev;
+            const next = new Map(prev);
+            next.set(currentSectionIndex, { isVisible: true, selectedIndex: null, isCorrect: null });
+            return next;
+        });
+
+        trackEvent('success_pilot_quick_review_shown', {
+            lessonId,
+            phase: 'learn',
+            sectionIndex: currentSectionIndex,
+            trigger: 'checkpoint_wrong_twice',
+        });
+    }, [checkpointEnabled, checkpointWrongAttempts, currentSectionIndex, hasCheckpointPassed, lessonId, pilotTelemetryEnabled]);
+
+    const handleQuickReviewAnswer = (selectedIndex: number) => {
+        const isCorrect = selectedIndex === quickReviewContent.correctIndex;
+
+        setQuickReviewBySection((prev) => {
+            const next = new Map(prev);
+            next.set(currentSectionIndex, {
+                isVisible: true,
+                selectedIndex,
+                isCorrect,
+            });
+            return next;
+        });
+
+        if (pilotTelemetryEnabled) {
+            trackEvent('success_pilot_quick_review_answered', {
+                lessonId,
+                phase: 'learn',
+                sectionIndex: currentSectionIndex,
+                isCorrect,
+            });
+        }
+    };
+
+    const checkpointHintText = useMemo(() => {
+        if (checkpointState.status !== 'ready') return null;
+        return getDeterministicCheckpointHint({
+            intent: checkpointState.intent,
+            sectionContent: currentSection?.content ?? '',
+        });
+    }, [checkpointState, currentSection?.content]);
+
+    const toggleCheckpointHint = () => {
+        if (!pilotTelemetryEnabled) return;
+        if (checkpointState.status !== 'ready') return;
+        setCheckpointHintShownBySection((prev) => {
+            const next = new Map(prev);
+            next.set(currentSectionIndex, !(prev.get(currentSectionIndex) ?? false));
+            return next;
+        });
+        trackEvent('success_pilot_checkpoint_hint_clicked', {
+            lessonId,
+            sectionIndex: currentSectionIndex,
+            intent: checkpointState.intent,
+            source: 'deterministic',
+        });
+    };
 
     const handleAskTutor = () => {
         if (onAskTutor && currentSection) {
@@ -573,6 +634,8 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             trackEvent('success_pilot_checkpoint_hint_clicked', {
                 lessonId,
                 sectionIndex: currentSectionIndex,
+                intent: checkpointState.intent,
+                source: 'tutor',
             });
         }
 
@@ -667,15 +730,113 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 {/* Navigation */}
                 <LessonCardFooter>
                     {checkpointEnabled && (
-                        <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-5 md:px-6">
+                            {pilotTelemetryEnabled && quickReviewState.isVisible && (
+                                <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                                    <div className="text-sm font-semibold text-amber-900">{quickReviewContent.title}</div>
+                                    <div className="mt-1 text-sm text-amber-900/90">
+                                        Perimeter means the distance around the outside of a shape. You add all the side lengths.
+                                    </div>
+
+                                    {sectionVisual && (
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-amber-200 bg-white">
+                                            <img
+                                                src={sectionVisual.svg}
+                                                alt={sectionVisual.alt}
+                                                className="block w-full"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className="mt-3 text-base font-bold text-slate-900 line-clamp-2">
+                                        {quickReviewContent.prompt}
+                                    </div>
+                                    <div className="mt-2 grid gap-2">
+                                        {quickReviewContent.options.map((option, idx) => {
+                                            const selected = quickReviewState.selectedIndex === idx;
+                                            const showCorrect = quickReviewState.isCorrect !== null && idx === quickReviewContent.correctIndex;
+                                            const showIncorrect =
+                                                quickReviewState.isCorrect === false && selected && idx !== quickReviewContent.correctIndex;
+                                            return (
+                                                <button
+                                                    key={option}
+                                                    type="button"
+                                                    disabled={quickReviewState.isCorrect === true}
+                                                    onClick={() => handleQuickReviewAnswer(idx)}
+                                                    className={[
+                                                        'w-full rounded-xl border-2 px-4 py-3 text-left text-base font-semibold transition-colors',
+                                                        quickReviewState.isCorrect === true
+                                                            ? showCorrect
+                                                                ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
+                                                                : 'border-slate-200 bg-white text-slate-600 opacity-70'
+                                                            : selected
+                                                                ? 'border-blue-300 bg-blue-50 text-slate-900'
+                                                                : 'border-slate-200 bg-white text-slate-900 hover:border-blue-200 hover:bg-blue-50',
+                                                        showIncorrect ? 'border-rose-300 bg-rose-50 text-rose-900' : '',
+                                                    ].join(' ')}
+                                                >
+                                                    <span className="mr-2 text-slate-500">{String.fromCharCode(65 + idx)}.</span>
+                                                    <span className="line-clamp-2">{option}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {quickReviewState.isCorrect === true && (
+                                        <div className="mt-3 text-sm text-emerald-900">
+                                            Nice — now try the checkpoint again.
+                                        </div>
+                                    )}
+                                    {quickReviewState.isCorrect === false && (
+                                        <div className="mt-3 text-sm text-rose-900">
+                                            {quickReviewContent.explanation}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             <div className="flex items-start justify-between gap-3">
                                 <div>
-                                    <div className="text-sm font-semibold text-slate-900">Checkpoint</div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <div className="text-base font-bold text-slate-900">Checkpoint</div>
+                                        {detectedShape && (
+                                            <span
+                                                className={[
+                                                    'inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold',
+                                                    shapePillStyles[detectedShape].className,
+                                                ].join(' ')}
+                                            >
+                                                {shapePillStyles[detectedShape].label}
+                                            </span>
+                                        )}
+                                    </div>
                                     <div className="text-xs text-slate-600">
                                         Answer correctly to continue.
                                     </div>
                                 </div>
-                                {onAskTutor && (
+                                {pilotTelemetryEnabled && checkpointState.status === 'ready' && checkpointHintText ? (
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={toggleCheckpointHint}
+                                            className="inline-flex items-center rounded-lg border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50 transition-colors"
+                                        >
+                                            Hint
+                                        </button>
+                                        {onAskTutor && (
+                                            <button
+                                                type="button"
+                                                onClick={handleAskForHint}
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
+                                            >
+                                                <Bot className="h-4 w-4" />
+                                                Ask
+                                            </button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    onAskTutor && (
                                     <button
                                         type="button"
                                         onClick={handleAskForHint}
@@ -684,8 +845,15 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                         <Bot className="h-4 w-4" />
                                         Hint
                                     </button>
+                                    )
                                 )}
                             </div>
+
+                            {pilotTelemetryEnabled && checkpointState.status === 'ready' && checkpointHintText && isCheckpointHintShown && (
+                                <div className="mt-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+                                    {checkpointHintText}
+                                </div>
+                            )}
 
                             {checkpointState.status === 'loading' && (
                                 <div className="mt-4 flex items-center gap-2 text-sm text-slate-600">
@@ -724,7 +892,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                         </pre>
                                     </div>
                                 )}
-                                <div className="text-sm font-medium text-slate-900">
+                                <div className="text-base md:text-lg font-bold text-slate-900 leading-snug line-clamp-2">
                                     {checkpointState.payload.question}
                                 </div>
                                 <div className="mt-3 grid gap-2">
@@ -742,7 +910,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                                     disabled={checkpointState.isCorrect === true}
                                                     onClick={() => handleSelectOption(idx)}
                                                     className={[
-                                                        'w-full rounded-xl border-2 p-3 text-left text-sm font-medium transition-colors',
+                                                        'w-full rounded-xl border-2 p-4 text-left text-base font-semibold transition-colors',
                                                         checkpointState.isCorrect === true
                                                             ? showCorrect
                                                                 ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
@@ -756,7 +924,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                                     <span className="mr-2 text-slate-500">
                                                         {String.fromCharCode(65 + idx)}.
                                                     </span>
-                                                    {option}
+                                                    <span className="line-clamp-2">{option}</span>
                                                 </button>
                                             );
                                         })}
