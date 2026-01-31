@@ -23,17 +23,41 @@ const computeRectSize = (widthUnits: number, heightUnits: number) => {
   const safeH = Math.max(1, Math.min(999, heightUnits));
   const ratio = safeW / safeH;
 
-  const maxDim = 260;
-  const minDim = 140;
+  // The SVG canvas is 520x220, with a title and labels. Keep the shape itself
+  // comfortably within the viewBox so tall rectangles don't get clipped.
+  const maxWidth = 300;
+  const maxHeight = 140;
+  const minWidth = 140;
+  const minHeight = 90;
 
   if (ratio >= 1) {
-    const width = maxDim;
-    const height = Math.max(minDim, Math.round(maxDim / ratio));
+    let width = maxWidth;
+    let height = Math.round(width / ratio);
+    if (height > maxHeight) {
+      height = maxHeight;
+      width = Math.round(height * ratio);
+    }
+    if (height < minHeight) {
+      height = minHeight;
+      width = Math.min(maxWidth, Math.round(height * ratio));
+    }
+    width = Math.max(1, Math.min(maxWidth, width));
+    height = Math.max(1, Math.min(maxHeight, height));
     return { width, height };
   }
 
-  const height = maxDim;
-  const width = Math.max(minDim, Math.round(maxDim * ratio));
+  let height = maxHeight;
+  let width = Math.round(height * ratio);
+  if (width > maxWidth) {
+    width = maxWidth;
+    height = Math.round(width / ratio);
+  }
+  if (width < minWidth) {
+    width = minWidth;
+    height = Math.min(maxHeight, Math.round(width / ratio));
+  }
+  width = Math.max(1, Math.min(maxWidth, width));
+  height = Math.max(1, Math.min(maxHeight, height));
   return { width, height };
 };
 
@@ -80,6 +104,36 @@ const squareSvg = (sideLabel: string): LessonSectionVisual => {
 </svg>`;
 
   return { alt: 'Square with side length labeled', svg: encodeSvgDataUrl(svg) };
+};
+
+const genericPerimeterSvg = (shape: 'square' | 'rectangle' | 'triangle'): LessonSectionVisual => {
+  if (shape === 'square') {
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="220" viewBox="0 0 520 220" role="img" aria-label="Perimeter shown on a square">
+  <rect x="200" y="55" width="120" height="120" rx="14" fill="#ECFDF5" stroke="#059669" stroke-width="4"/>
+  <rect x="200" y="55" width="120" height="120" rx="14" fill="none" stroke="#0F172A" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="260" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700" fill="#0F172A">Perimeter: go all the way around</text>
+</svg>`;
+    return { alt: 'Perimeter shown on a square', svg: encodeSvgDataUrl(svg) };
+  }
+
+  if (shape === 'triangle') {
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="220" viewBox="0 0 520 220" role="img" aria-label="Perimeter shown on a triangle">
+  <polygon points="180,175 340,175 260,70" fill="#FFFBEB" stroke="#D97706" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="180,175 340,175 260,70" fill="none" stroke="#0F172A" stroke-width="3" stroke-dasharray="8 6" stroke-linejoin="round"/>
+  <text x="260" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700" fill="#0F172A">Perimeter: go all the way around</text>
+</svg>`;
+    return { alt: 'Perimeter shown on a triangle', svg: encodeSvgDataUrl(svg) };
+  }
+
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="220" viewBox="0 0 520 220" role="img" aria-label="Perimeter shown on a rectangle">
+  <rect x="170" y="70" width="180" height="100" rx="14" fill="#EEF2FF" stroke="#4F46E5" stroke-width="4"/>
+  <rect x="170" y="70" width="180" height="100" rx="14" fill="none" stroke="#0F172A" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="260" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700" fill="#0F172A">Perimeter: go all the way around</text>
+</svg>`;
+  return { alt: 'Perimeter shown on a rectangle', svg: encodeSvgDataUrl(svg) };
 };
 
 const triangleSvg = (
@@ -156,21 +210,24 @@ const extractPerimeterDimensions = (
   sectionContent: string,
 ): PerimeterDimensions | null => {
   const text = (sectionContent ?? '').toString();
+  const candidates: Array<{ index: number; dims: PerimeterDimensions }> = [];
+  const pushCandidate = (index: number | undefined, dims: PerimeterDimensions) => {
+    if (typeof index !== 'number' || !Number.isFinite(index)) return;
+    candidates.push({ index, dims });
+  };
 
   // Rectangle: "... 4 feet tall and 2 feet wide ..."
-  const rectWords = text.match(/(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\s*(?:tall|high|long).{0,40}?(\d+)\s*\2\s*(?:wide|across)/i);
-  if (rectWords) {
+  for (const rectWords of text.matchAll(/(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\s*(?:tall|high|long).{0,40}?(\d+)\s*\2\s*(?:wide|across)/gi)) {
     const a = Number.parseInt(rectWords[1] ?? '', 10);
     const unit = (rectWords[2] ?? 'units').toLowerCase();
     const b = Number.parseInt(rectWords[3] ?? '', 10);
     if (Number.isFinite(a) && Number.isFinite(b) && a > 0 && b > 0) {
-      return { shape: 'rectangle', a, b, unit };
+      pushCandidate(rectWords.index, { shape: 'rectangle', a, b, unit });
     }
   }
 
   // Rectangle equation: "Perimeter = 4 + 2 + 4 + 2 = ..."
-  const rectEq = text.match(/perimeter\s*=\s*(\d+)\s*\+\s*(\d+)\s*\+\s*(\d+)\s*\+\s*(\d+)\s*=/i);
-  if (rectEq) {
+  for (const rectEq of text.matchAll(/perimeter\s*=\s*(\d+)\s*\+\s*(\d+)\s*\+\s*(\d+)\s*\+\s*(\d+)\s*=/gi)) {
     const n1 = Number.parseInt(rectEq[1] ?? '', 10);
     const n2 = Number.parseInt(rectEq[2] ?? '', 10);
     const n3 = Number.parseInt(rectEq[3] ?? '', 10);
@@ -178,59 +235,57 @@ const extractPerimeterDimensions = (
     const unitMatch = text.match(/=\s*\d+\s*(feet|foot|ft|inches|inch|in|cm|m)\b/i);
     const unit = (unitMatch?.[1] ?? 'units').toLowerCase();
     if (Number.isFinite(n1) && Number.isFinite(n2) && n1 === n3 && n2 === n4 && n1 > 0 && n2 > 0) {
-      return { shape: 'rectangle', a: n1, b: n2, unit };
+      pushCandidate(rectEq.index, { shape: 'rectangle', a: n1, b: n2, unit });
     }
   }
 
   // Square: "each side ... 3 feet"
-  const squareSide = text.match(/each\s+side.*?(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\b/i);
-  if (squareSide) {
+  for (const squareSide of text.matchAll(/each\s+side.*?(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\b/gi)) {
     const a = Number.parseInt(squareSide[1] ?? '', 10);
     const unit = (squareSide[2] ?? 'units').toLowerCase();
     if (Number.isFinite(a) && a > 0) {
-      return { shape: 'square', a, unit };
+      pushCandidate(squareSide.index, { shape: 'square', a, unit });
     }
   }
 
   // Square equation: "Perimeter = 3 + 3 + 3 + 3 = ..."
-  const squareEq = text.match(/perimeter\s*=\s*(\d+)\s*\+\s*\1\s*\+\s*\1\s*\+\s*\1\s*=/i);
-  if (squareEq) {
+  for (const squareEq of text.matchAll(/perimeter\s*=\s*(\d+)\s*\+\s*\1\s*\+\s*\1\s*\+\s*\1\s*=/gi)) {
     const a = Number.parseInt(squareEq[1] ?? '', 10);
     const unitMatch = text.match(/=\s*\d+\s*(feet|foot|ft|inches|inch|in|cm|m)\b/i);
     const unit = (unitMatch?.[1] ?? 'units').toLowerCase();
     if (Number.isFinite(a) && a > 0) {
-      return { shape: 'square', a, unit };
+      pushCandidate(squareEq.index, { shape: 'square', a, unit });
     }
   }
 
   // Triangle: "A triangle has sides 2 feet, 3 feet, and 4 feet."
-  const triWords = text.match(
-    /triangle[^.]*?sides?\s*(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)?[^0-9]+(\d+)\s*(?:\2)?[^0-9]+(\d+)\s*(?:\2)?/i,
-  );
-  if (triWords) {
+  for (const triWords of text.matchAll(
+    /triangle[^.]*?sides?\s*(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)?[^0-9]+(\d+)\s*(?:\2)?[^0-9]+(\d+)\s*(?:\2)?/gi,
+  )) {
     const a = Number.parseInt(triWords[1] ?? '', 10);
     const b = Number.parseInt(triWords[3] ?? '', 10);
     const c = Number.parseInt(triWords[4] ?? '', 10);
     const unit = ((triWords[2] ?? 'units') as string).toLowerCase();
     if (Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(c) && a > 0 && b > 0 && c > 0) {
-      return { shape: 'triangle', a, b, c, unit };
+      pushCandidate(triWords.index, { shape: 'triangle', a, b, c, unit });
     }
   }
 
   // Triangle equation: "Perimeter = 2 + 3 + 4 = ..."
-  const triEq = text.match(/perimeter\s*=\s*(\d+)\s*\+\s*(\d+)\s*\+\s*(\d+)\s*=/i);
-  if (triEq) {
+  for (const triEq of text.matchAll(/perimeter\s*=\s*(\d+)\s*\+\s*(\d+)\s*\+\s*(\d+)\s*=/gi)) {
     const a = Number.parseInt(triEq[1] ?? '', 10);
     const b = Number.parseInt(triEq[2] ?? '', 10);
     const c = Number.parseInt(triEq[3] ?? '', 10);
     const unitMatch = text.match(/=\s*\d+\s*(feet|foot|ft|inches|inch|in|cm|m)\b/i);
     const unit = (unitMatch?.[1] ?? 'units').toLowerCase();
     if (Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(c) && a > 0 && b > 0 && c > 0) {
-      return { shape: 'triangle', a, b, c, unit };
+      pushCandidate(triEq.index, { shape: 'triangle', a, b, c, unit });
     }
   }
 
-  return null;
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => a.index - b.index);
+  return candidates[candidates.length - 1]?.dims ?? null;
 };
 
 export const extractPerimeterDimensionsFromText = (text: string): PerimeterDimensions | null =>
@@ -254,7 +309,12 @@ export const getSectionVisual = (input: {
   // Pilot: perimeter visuals.
   if (title.includes('perimeter') || (input.sectionTitle ?? '').toString().toLowerCase().includes('perimeter')) {
     const dims = extractPerimeterDimensions(input.sectionContent);
-    if (!dims) return null;
+    if (!dims) {
+      const t = `${input.sectionTitle ?? ''}\n${input.sectionContent ?? ''}`.toLowerCase();
+      if (t.includes('triangle')) return genericPerimeterSvg('triangle');
+      if (t.includes('rectangle')) return genericPerimeterSvg('rectangle');
+      return genericPerimeterSvg('square');
+    }
 
     const unitLabel =
       dims.unit === 'foot' || dims.unit === 'feet' || dims.unit === 'ft'
@@ -301,7 +361,13 @@ export const getPracticeQuestionVisual = (input: {
   if (!title.includes('perimeter')) return null;
 
   const dims = extractPerimeterDimensions(input.prompt);
-  if (!dims) return null;
+  if (!dims) {
+    const t = (input.prompt ?? '').toString().toLowerCase();
+    if (!t.includes('perimeter')) return null;
+    if (t.includes('triangle')) return genericPerimeterSvg('triangle');
+    if (t.includes('rectangle')) return genericPerimeterSvg('rectangle');
+    return genericPerimeterSvg('square');
+  }
 
   const unitLabel =
     dims.unit === 'foot' || dims.unit === 'feet' || dims.unit === 'ft'
