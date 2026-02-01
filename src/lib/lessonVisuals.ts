@@ -306,11 +306,6 @@ export const getSectionVisual = (input: {
     return null;
   }
 
-  const merged = `${input.lessonTitle ?? ''}\n${input.sectionTitle ?? ''}\n${input.sectionContent ?? ''}`.toLowerCase();
-  if (/\bgreat\s+wall\b/.test(merged) || merged.includes('great wall of china')) {
-    return { alt: 'Illustration of the Great Wall of China', svg: '/images/lessons/social_studies/great_wall.svg' };
-  }
-
   if (!subject.includes('math')) {
     return null;
   }

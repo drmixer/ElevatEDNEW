@@ -19,6 +19,7 @@ import trackEvent from '../../../lib/analytics';
 import { getPerimeterQuickReview } from '../../../lib/pilotPerimeterQuickReview';
 import { isGrade2MathPerimeterPilot } from '../../../lib/pilotConditions';
 import { getDeterministicPerimeterCheckpoint } from '../../../lib/pilotPerimeterCheckpoints';
+import { fetchRemoteImage, type RemoteImageResult } from '../../../lib/remoteImageSearch';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
@@ -226,6 +227,45 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             sectionContent: currentSection.content ?? '',
         });
     }, [checkpointEnabled, currentSection, gradeBand, lessonTitle, subject]);
+
+    const [contextImage, setContextImage] = useState<RemoteImageResult | null>(null);
+    const [contextImageStatus, setContextImageStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+
+    const contextImageQuery = useMemo(() => {
+        const text = `${currentSection?.title ?? ''}\n${currentSection?.content ?? ''}`;
+        if (!text.trim()) return null;
+        if (/\bgreat\s+wall\b/i.test(text) || /great\s+wall\s+of\s+china/i.test(text)) {
+            return 'Great Wall of China';
+        }
+        return null;
+    }, [currentSection?.content, currentSection?.title]);
+
+    useEffect(() => {
+        let cancelled = false;
+        const run = async () => {
+            if (!contextImageQuery) {
+                setContextImage(null);
+                setContextImageStatus('idle');
+                return;
+            }
+
+            setContextImageStatus('loading');
+            try {
+                const result = await fetchRemoteImage(contextImageQuery);
+                if (cancelled) return;
+                setContextImage(result);
+                setContextImageStatus(result ? 'ready' : 'error');
+            } catch {
+                if (cancelled) return;
+                setContextImage(null);
+                setContextImageStatus('error');
+            }
+        };
+        void run();
+        return () => {
+            cancelled = true;
+        };
+    }, [contextImageQuery]);
 
     const detectedShape: ShapeType | null = useMemo(() => {
         if (!checkpointEnabled) return null;
@@ -750,6 +790,43 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                 className="block w-full"
                                 loading="lazy"
                             />
+                        </div>
+                    )}
+
+                    {contextImageQuery && (
+                        <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                            {contextImage && (
+                                <img
+                                    src={contextImage.thumbnailUrl || contextImage.url}
+                                    alt={contextImage.title}
+                                    className="block w-full"
+                                    loading="lazy"
+                                />
+                            )}
+
+                            {!contextImage && contextImageStatus === 'loading' && (
+                                <div className="p-4 text-sm text-slate-500">Loading image…</div>
+                            )}
+
+                            {!contextImage && contextImageStatus === 'error' && (
+                                <img
+                                    src="/images/lessons/social_studies/great_wall.svg"
+                                    alt="Illustration of the Great Wall of China"
+                                    className="block w-full"
+                                    loading="lazy"
+                                />
+                            )}
+
+                            <div className="border-t border-slate-100 bg-white px-4 py-3">
+                                <div className="text-xs font-semibold text-slate-700">Visualize</div>
+                                <div className="mt-0.5 text-xs text-slate-600">
+                                    {contextImage?.attributionHtml ? (
+                                        <span dangerouslySetInnerHTML={{ __html: contextImage.attributionHtml }} />
+                                    ) : (
+                                        <span>Great Wall of China</span>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     )}
                     <AnimatePresence mode="wait">
