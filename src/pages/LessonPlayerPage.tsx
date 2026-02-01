@@ -69,12 +69,26 @@ const shuffleWithCorrectIndex = (
     seed: number,
 ): { options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> } => {
     const next = options.slice();
+    const correct = next.find((o) => o.isCorrect);
+    const wrongs = next.filter((o) => !o.isCorrect);
+    if (!correct || wrongs.length < 2) return { options: next };
+
     const rand = mulberry32(seed);
-    for (let i = next.length - 1; i > 0; i -= 1) {
+    for (let i = wrongs.length - 1; i > 0; i -= 1) {
         const j = Math.floor(rand() * (i + 1));
-        [next[i], next[j]] = [next[j], next[i]];
+        [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
     }
-    return { options: next };
+
+    const targetIndex = Math.abs(seed) % next.length;
+    const arranged: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> = new Array(next.length);
+    arranged[targetIndex] = correct;
+    let w = 0;
+    for (let i = 0; i < arranged.length; i += 1) {
+        if (i === targetIndex) continue;
+        arranged[i] = wrongs[w] ?? wrongs[0] ?? correct;
+        w += 1;
+    }
+    return { options: arranged };
 };
 
 const generatePerimeterPracticeQuestions = (input: {

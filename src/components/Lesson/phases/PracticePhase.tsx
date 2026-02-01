@@ -52,6 +52,40 @@ type ChallengeState =
 
 type ShapeType = 'square' | 'rectangle' | 'triangle';
 
+const mulberry32 = (seed: number) => {
+    let t = seed >>> 0;
+    return () => {
+        t += 0x6D2B79F5;
+        let x = Math.imul(t ^ (t >>> 15), 1 | t);
+        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+};
+
+const arrangeOptionsWithCorrectAt = (options: LessonPracticeOption[], seed: number): LessonPracticeOption[] => {
+    const correct = options.find((o) => o.isCorrect);
+    const wrongs = options.filter((o) => !o.isCorrect);
+    if (!correct || wrongs.length < 2) return options;
+
+    const rand = mulberry32(seed);
+    const shuffledWrongs = wrongs.slice();
+    for (let i = shuffledWrongs.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rand() * (i + 1));
+        [shuffledWrongs[i], shuffledWrongs[j]] = [shuffledWrongs[j], shuffledWrongs[i]];
+    }
+
+    const targetIndex = Math.abs(seed) % options.length;
+    const arranged: LessonPracticeOption[] = new Array(options.length);
+    arranged[targetIndex] = correct;
+    let w = 0;
+    for (let i = 0; i < arranged.length; i += 1) {
+        if (i === targetIndex) continue;
+        arranged[i] = shuffledWrongs[w] ?? shuffledWrongs[0] ?? correct;
+        w += 1;
+    }
+    return arranged;
+};
+
 const detectShapeFromText = (text: string | null | undefined): ShapeType | null => {
     const t = (text ?? '').toString().toLowerCase();
     if (/\bsquare\b/.test(t)) return 'square';
@@ -207,12 +241,13 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
             prompt,
         });
 
-        const options: LessonPracticeOption[] = [
+        const optionsRaw: LessonPracticeOption[] = [
             { id: 1, text: '18 ft', isCorrect: true, feedback: 'Yes — 6 + 3 + 6 + 3 = 18.' },
             { id: 2, text: '9 ft', isCorrect: false, feedback: 'That adds only one long + one short side.' },
             { id: 3, text: '12 ft', isCorrect: false, feedback: 'That is 2 × 6, but you also need the 3s.' },
             { id: 4, text: '15 ft', isCorrect: false, feedback: 'Check: you need 6 + 3 + 6 + 3.' },
         ];
+        const options = arrangeOptionsWithCorrectAt(optionsRaw, (lessonId ?? 0) * 100 + 17);
 
         return {
             id: -1,

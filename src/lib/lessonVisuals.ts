@@ -302,7 +302,11 @@ export const getSectionVisual = (input: {
   const grade = parseGrade(input.gradeBand);
   const title = (input.lessonTitle ?? '').toString().toLowerCase();
 
-  if (!subject.includes('math') || grade == null || grade > 5) {
+  if (grade == null || grade > 5) {
+    return null;
+  }
+
+  if (!subject.includes('math')) {
     return null;
   }
 

@@ -4,7 +4,7 @@
  * Main learning content phase with section-by-section navigation.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -19,6 +19,7 @@ import trackEvent from '../../../lib/analytics';
 import { getPerimeterQuickReview } from '../../../lib/pilotPerimeterQuickReview';
 import { isGrade2MathPerimeterPilot } from '../../../lib/pilotConditions';
 import { getDeterministicPerimeterCheckpoint } from '../../../lib/pilotPerimeterCheckpoints';
+import { fetchRemoteImage, type RemoteImageResult } from '../../../lib/remoteImageSearch';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
@@ -111,16 +112,31 @@ const shuffleWithCorrectIndex = (
     correctIndex: number,
     seed: number,
 ): { options: string[]; correctIndex: number } => {
-    const paired = options.map((text, index) => ({ text, isCorrect: index === correctIndex }));
-    const rand = mulberry32(seed);
-    for (let i = paired.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(rand() * (i + 1));
-        [paired[i], paired[j]] = [paired[j], paired[i]];
+    const safeOptions = options.map((o) => (o ?? '').toString().trim()).filter(Boolean);
+    if (safeOptions.length < 3) {
+        return { options: safeOptions, correctIndex: Math.max(0, Math.min(correctIndex, safeOptions.length - 1)) };
     }
-    return {
-        options: paired.map((p) => p.text),
-        correctIndex: Math.max(0, paired.findIndex((p) => p.isCorrect)),
-    };
+
+    const correctText = safeOptions[Math.max(0, Math.min(correctIndex, safeOptions.length - 1))] ?? safeOptions[0] ?? '';
+    const wrongs = safeOptions.filter((_, idx) => idx !== correctIndex);
+
+    const rand = mulberry32(seed);
+    for (let i = wrongs.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rand() * (i + 1));
+        [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
+    }
+
+    const targetIndex = Math.abs(seed) % safeOptions.length;
+    const arranged: string[] = new Array(safeOptions.length);
+    arranged[targetIndex] = correctText;
+    let w = 0;
+    for (let i = 0; i < arranged.length; i += 1) {
+        if (i === targetIndex) continue;
+        arranged[i] = wrongs[w] ?? wrongs[0] ?? '';
+        w += 1;
+    }
+
+    return { options: arranged, correctIndex: targetIndex };
 };
 
 const localCheckpointFromMathPerimeter = (input: {
@@ -171,6 +187,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     onAskTutor,
     onSectionComplete,
 }) => {
+    const topRef = useRef<HTMLDivElement | null>(null);
     const {
         currentSectionIndex,
         nextPhase,
@@ -184,6 +201,12 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     const hasMultipleSections = sections.length > 1;
     const isLastSection = currentSectionIndex >= sections.length - 1;
     const isFirstSection = currentSectionIndex === 0;
+
+    useEffect(() => {
+        // When moving between sections, reset scroll so the new section starts at the top.
+        // This avoids loading the next section at the previous scroll position.
+        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [currentSectionIndex]);
 
     const checkpointIntent: CheckpointIntent = useMemo(() => {
         const intents: CheckpointIntent[] = ['define', 'compute', 'scenario'];
@@ -204,6 +227,45 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             sectionContent: currentSection.content ?? '',
         });
     }, [checkpointEnabled, currentSection, gradeBand, lessonTitle, subject]);
+
+    const [contextImage, setContextImage] = useState<RemoteImageResult | null>(null);
+    const [contextImageStatus, setContextImageStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+
+    const contextImageQuery = useMemo(() => {
+        const text = `${currentSection?.title ?? ''}\n${currentSection?.content ?? ''}`;
+        if (!text.trim()) return null;
+        if (/\bgreat\s+wall\b/i.test(text) || /great\s+wall\s+of\s+china/i.test(text)) {
+            return 'Great Wall of China';
+        }
+        return null;
+    }, [currentSection?.content, currentSection?.title]);
+
+    useEffect(() => {
+        let cancelled = false;
+        const run = async () => {
+            if (!contextImageQuery) {
+                setContextImage(null);
+                setContextImageStatus('idle');
+                return;
+            }
+
+            setContextImageStatus('loading');
+            try {
+                const result = await fetchRemoteImage(contextImageQuery);
+                if (cancelled) return;
+                setContextImage(result);
+                setContextImageStatus(result ? 'ready' : 'error');
+            } catch {
+                if (cancelled) return;
+                setContextImage(null);
+                setContextImageStatus('error');
+            }
+        };
+        void run();
+        return () => {
+            cancelled = true;
+        };
+    }, [contextImageQuery]);
 
     const detectedShape: ShapeType | null = useMemo(() => {
         if (!checkpointEnabled) return null;
@@ -670,7 +732,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     };
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div ref={topRef} className="max-w-3xl mx-auto">
             <LessonCard>
                 {/* Section header */}
                 <div className="border-b border-slate-100 px-6 py-4 md:px-8">
@@ -728,6 +790,43 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                 className="block w-full"
                                 loading="lazy"
                             />
+                        </div>
+                    )}
+
+                    {contextImageQuery && (
+                        <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                            {contextImage && (
+                                <img
+                                    src={contextImage.thumbnailUrl || contextImage.url}
+                                    alt={contextImage.title}
+                                    className="block w-full"
+                                    loading="lazy"
+                                />
+                            )}
+
+                            {!contextImage && contextImageStatus === 'loading' && (
+                                <div className="p-4 text-sm text-slate-500">Loading image…</div>
+                            )}
+
+                            {!contextImage && contextImageStatus === 'error' && (
+                                <img
+                                    src="/images/lessons/social_studies/great_wall.svg"
+                                    alt="Illustration of the Great Wall of China"
+                                    className="block w-full"
+                                    loading="lazy"
+                                />
+                            )}
+
+                            <div className="border-t border-slate-100 bg-white px-4 py-3">
+                                <div className="text-xs font-semibold text-slate-700">Visualize</div>
+                                <div className="mt-0.5 text-xs text-slate-600">
+                                    {contextImage?.attributionHtml ? (
+                                        <span dangerouslySetInnerHTML={{ __html: contextImage.attributionHtml }} />
+                                    ) : (
+                                        <span>Great Wall of China</span>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     )}
                     <AnimatePresence mode="wait">
