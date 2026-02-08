@@ -4,6 +4,7 @@ import { assessPracticeQuestionQuality } from '../shared/questionQuality.js';
 import {
   buildReleaseGateDashboard,
   computeCheckpointEvaluation,
+  computeRetentionEvaluation,
   type CheckpointTelemetryEvent,
 } from '../src/lib/evaluationHarness.js';
 import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
@@ -131,7 +132,7 @@ const main = async (): Promise<void> => {
     supabase
       .from('analytics_events')
       .select('student_id, occurred_at, payload')
-      .eq('event_name', 'success_pilot_checkpoint_answered')
+      .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
       .gte('occurred_at', lookbackIso)
       .order('occurred_at', { ascending: true })
       .limit(10000),
@@ -197,6 +198,18 @@ const main = async (): Promise<void> => {
     })),
   );
 
+  const retentionSummary = computeRetentionEvaluation(
+    ((checkpointResult.data ?? []) as Array<{
+      student_id: string | null;
+      occurred_at: string | null;
+      payload: Record<string, unknown> | null;
+    }>).map<CheckpointTelemetryEvent>((row) => ({
+      studentId: row.student_id,
+      occurredAt: row.occurred_at,
+      payload: row.payload,
+    })),
+  );
+
   let questionSampleRows = (questionQualityResult.data as QuestionQualitySampleRow[] | null) ?? [];
   if (!questionSampleRows.length) {
     const { data: fallbackRows, error: fallbackRowsError } = await supabase
@@ -242,6 +255,8 @@ const main = async (): Promise<void> => {
     assignmentFollowThroughRate,
     checkpointFirstPassRate: checkpointSummary.firstPassRate,
     checkpointRecoveryRate: checkpointSummary.recoveryRateWithinTwo,
+    retention3DayRate: retentionSummary.retention3DayRate,
+    retention7DayRate: retentionSummary.retention7DayRate,
     genericContentRate: genericSummary.genericRate,
     coverageReadinessRate,
     adaptiveErrorRate: null,
@@ -262,6 +277,15 @@ const main = async (): Promise<void> => {
   console.log('');
   console.log(
     `Telemetry samples: checkpoints ${checkpointSummary.attemptCount}, question_quality ${genericSummary.sampleCount}, coverage_rollup_rows ${coverageRows.length}`,
+  );
+  console.log(
+    `Retention coverage: 3d ${retentionSummary.observed3DayCount}/${retentionSummary.eligible3DayCount} (${formatValue(
+      retentionSummary.retention3DayCoverageRate,
+      'percent',
+    )}), 7d ${retentionSummary.observed7DayCount}/${retentionSummary.eligible7DayCount} (${formatValue(
+      retentionSummary.retention7DayCoverageRate,
+      'percent',
+    )})`,
   );
   if (snapshot.blockers.length) {
     console.log('Blocking gates:');

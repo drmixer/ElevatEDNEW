@@ -46,7 +46,7 @@ import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarMan
 import { computeSubjectStatuses } from '../lib/onTrack';
 import { buildCoachingSuggestions } from '../lib/parentSuggestions';
 import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
-import { computeCheckpointEvaluation } from '../lib/evaluationHarness';
+import { computeCheckpointEvaluation, computeRetentionEvaluation } from '../lib/evaluationHarness';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
@@ -888,6 +888,17 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     recoverableCount: allowSyntheticDashboardData ? 146 : 0,
     recoveredWithinTwoCount: allowSyntheticDashboardData ? 108 : 0,
     recoveryRateWithinTwo: allowSyntheticDashboardData ? 74 : null,
+    retentionBaselineMasteredCount: allowSyntheticDashboardData ? 302 : 0,
+    retentionEligible3DayCount: allowSyntheticDashboardData ? 240 : 0,
+    retentionObserved3DayCount: allowSyntheticDashboardData ? 180 : 0,
+    retentionRetained3DayCount: allowSyntheticDashboardData ? 134 : 0,
+    retention3DayRate: allowSyntheticDashboardData ? 74.4 : null,
+    retention3DayCoverageRate: allowSyntheticDashboardData ? 75 : null,
+    retentionEligible7DayCount: allowSyntheticDashboardData ? 188 : 0,
+    retentionObserved7DayCount: allowSyntheticDashboardData ? 126 : 0,
+    retentionRetained7DayCount: allowSyntheticDashboardData ? 85 : 0,
+    retention7DayRate: allowSyntheticDashboardData ? 67.5 : null,
+    retention7DayCoverageRate: allowSyntheticDashboardData ? 67 : null,
     genericContentSampleCount: allowSyntheticDashboardData ? 900 : 0,
     genericContentBlockedCount: allowSyntheticDashboardData ? 12 : 0,
     genericContentRate: allowSyntheticDashboardData ? 1.3 : null,
@@ -3193,7 +3204,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       supabase
         .from('analytics_events')
         .select('student_id, occurred_at, payload')
-        .eq('event_name', 'success_pilot_checkpoint_answered')
+        .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
         .gte('occurred_at', lookbackIso)
         .order('occurred_at', { ascending: true })
         .limit(10000),
@@ -3302,6 +3313,14 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       })),
     );
 
+    const retentionSummary = computeRetentionEvaluation(
+      ((checkpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+        studentId: row.student_id,
+        occurredAt: row.occurred_at,
+        payload: row.payload,
+      })),
+    );
+
     let questionSampleRows = (questionQualityRows as QuestionQualitySampleRow[]) ?? [];
     if (!questionSampleRows.length) {
       const { data: fallbackQualityRows, error: fallbackQualityError } = await supabase
@@ -3327,6 +3346,17 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       recoverableCount: checkpointSummary.recoverableCount,
       recoveredWithinTwoCount: checkpointSummary.recoveredWithinTwoCount,
       recoveryRateWithinTwo: checkpointSummary.recoveryRateWithinTwo,
+      retentionBaselineMasteredCount: retentionSummary.baselineMasteredCount,
+      retentionEligible3DayCount: retentionSummary.eligible3DayCount,
+      retentionObserved3DayCount: retentionSummary.observed3DayCount,
+      retentionRetained3DayCount: retentionSummary.retained3DayCount,
+      retention3DayRate: retentionSummary.retention3DayRate,
+      retention3DayCoverageRate: retentionSummary.retention3DayCoverageRate,
+      retentionEligible7DayCount: retentionSummary.eligible7DayCount,
+      retentionObserved7DayCount: retentionSummary.observed7DayCount,
+      retentionRetained7DayCount: retentionSummary.retained7DayCount,
+      retention7DayRate: retentionSummary.retention7DayRate,
+      retention7DayCoverageRate: retentionSummary.retention7DayCoverageRate,
       genericContentSampleCount: genericContentSummary.sampleCount,
       genericContentBlockedCount: genericContentSummary.genericCount,
       genericContentRate: genericContentSummary.genericRate,

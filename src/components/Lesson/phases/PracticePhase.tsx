@@ -31,6 +31,13 @@ import {
     getNonMathRemediationTopic,
     type NonMathRemediationSubject,
 } from '../../../lib/nonMathRemediation';
+import {
+    getDeterministicK5MathChallengeQuestion,
+    getDeterministicK5MathHint,
+    getDeterministicK5MathQuickReview,
+    getDeterministicK5MathSteps,
+    getK5MathAdaptationTopic,
+} from '../../../lib/k5MathAdaptation';
 
 interface PracticePhaseProps {
     questions: LessonPracticeQuestion[];
@@ -147,8 +154,23 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
             }),
         [currentQuestion?.prompt, lessonContent, lessonTitle, nonMathRemediationSubject],
     );
-    const remediationTelemetrySource = pilotTelemetryEnabled ? 'grade2_math_pilot' : 'non_math_template';
-    const remediationTemplatesEnabled = Boolean(pilotTelemetryEnabled || nonMathRemediationSubject);
+    const k5MathTopic = useMemo(
+        () =>
+            getK5MathAdaptationTopic({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion?.prompt ?? null,
+            }),
+        [currentQuestion?.prompt, gradeBand, lessonContent, lessonTitle, subject],
+    );
+    const remediationTelemetrySource = pilotTelemetryEnabled
+        ? 'grade2_math_pilot'
+        : k5MathTopic
+            ? 'k5_math_template'
+            : 'non_math_template';
+    const remediationTemplatesEnabled = Boolean(pilotTelemetryEnabled || nonMathRemediationSubject || k5MathTopic);
     const currentState = currentQuestion ? questionStates.get(currentQuestion.id) : null;
     const isAnswered = currentState?.isAnswered ?? false;
     const isCorrect = currentState?.isCorrect ?? false;
@@ -208,36 +230,78 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                 questionPrompt: currentQuestion?.prompt ?? '',
             });
         }
+        if (k5MathTopic) {
+            return getDeterministicK5MathQuickReview({
+                lessonId,
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion?.prompt ?? null,
+                topic: k5MathTopic,
+            });
+        }
         return getDeterministicNonMathQuickReview({
             subject: nonMathRemediationSubject ?? null,
             lessonTitle,
             lessonContent,
             questionPrompt: currentQuestion?.prompt ?? null,
         });
-    }, [currentQuestion?.prompt, lessonContent, lessonTitle, nonMathRemediationSubject, pilotTelemetryEnabled, resolvedPilotTopic]);
-    const remediationTopic = pilotTelemetryEnabled ? resolvedPilotTopic : quickReviewContent?.topic ?? nonMathTopic;
+    }, [
+        currentQuestion?.prompt,
+        gradeBand,
+        k5MathTopic,
+        lessonContent,
+        lessonId,
+        lessonTitle,
+        nonMathRemediationSubject,
+        pilotTelemetryEnabled,
+        resolvedPilotTopic,
+        subject,
+    ]);
+    const remediationTopic = pilotTelemetryEnabled ? resolvedPilotTopic : k5MathTopic ?? quickReviewContent?.topic ?? nonMathTopic;
 
     const deterministicHint = useMemo(() => {
         if (!currentQuestion) return null;
         if (currentQuestion.hint) return currentQuestion.hint;
+        if (k5MathTopic) {
+            return getDeterministicK5MathHint({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion.prompt,
+                topic: k5MathTopic,
+            });
+        }
         return getDeterministicNonMathHint({
             subject: nonMathRemediationSubject ?? null,
             lessonTitle,
             lessonContent,
             questionPrompt: currentQuestion.prompt,
         });
-    }, [currentQuestion, lessonContent, lessonTitle, nonMathRemediationSubject]);
+    }, [currentQuestion, gradeBand, k5MathTopic, lessonContent, lessonTitle, nonMathRemediationSubject, subject]);
 
     const deterministicSteps = useMemo(() => {
         if (!currentQuestion) return null;
         if (currentQuestion.steps?.length) return currentQuestion.steps;
+        if (k5MathTopic) {
+            return getDeterministicK5MathSteps({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion.prompt,
+                topic: k5MathTopic,
+            });
+        }
         return getDeterministicNonMathSteps({
             subject: nonMathRemediationSubject ?? null,
             lessonTitle,
             lessonContent,
             questionPrompt: currentQuestion.prompt,
         });
-    }, [currentQuestion, lessonContent, lessonTitle, nonMathRemediationSubject]);
+    }, [currentQuestion, gradeBand, k5MathTopic, lessonContent, lessonTitle, nonMathRemediationSubject, subject]);
 
     const [challengeState, setChallengeState] = useState<ChallengeState>({ status: 'idle' });
     const showChallengeFlow = remediationTemplatesEnabled && challengeState.status !== 'idle';
@@ -485,24 +549,37 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     const challengeQuestion = useMemo((): LessonPracticeQuestion | null => {
         const baseQuestion = pilotTelemetryEnabled
             ? getGrade2MathChallengeQuestion({ topic: resolvedPilotTopic })
-            : getDeterministicNonMathChallengeQuestion({
-                lessonId,
-                subject: nonMathRemediationSubject ?? null,
-                lessonTitle,
-                lessonContent,
-                questionPrompt: currentQuestion?.prompt ?? null,
-            });
+            : k5MathTopic
+                ? getDeterministicK5MathChallengeQuestion({
+                    lessonId,
+                    subject: subject ?? null,
+                    gradeBand: gradeBand ?? null,
+                    lessonTitle,
+                    lessonContent,
+                    questionPrompt: currentQuestion?.prompt ?? null,
+                    topic: k5MathTopic,
+                })
+                : getDeterministicNonMathChallengeQuestion({
+                    lessonId,
+                    subject: nonMathRemediationSubject ?? null,
+                    lessonTitle,
+                    lessonContent,
+                    questionPrompt: currentQuestion?.prompt ?? null,
+                });
         if (!baseQuestion) return null;
         const options = arrangeOptionsWithCorrectAt(baseQuestion.options, (lessonId ?? 0) * 100 + 17);
         return { ...baseQuestion, options };
     }, [
         currentQuestion?.prompt,
+        gradeBand,
+        k5MathTopic,
         lessonContent,
         lessonId,
         lessonTitle,
         nonMathRemediationSubject,
         pilotTelemetryEnabled,
         resolvedPilotTopic,
+        subject,
     ]);
 
     const [challengeSelectedOptionId, setChallengeSelectedOptionId] = useState<number | null>(null);

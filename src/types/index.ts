@@ -892,6 +892,17 @@ export interface AdminCheckpointMetrics {
   recoverableCount: number;
   recoveredWithinTwoCount: number;
   recoveryRateWithinTwo: number | null;
+  retentionBaselineMasteredCount: number;
+  retentionEligible3DayCount: number;
+  retentionObserved3DayCount: number;
+  retentionRetained3DayCount: number;
+  retention3DayRate: number | null;
+  retention3DayCoverageRate: number | null;
+  retentionEligible7DayCount: number;
+  retentionObserved7DayCount: number;
+  retentionRetained7DayCount: number;
+  retention7DayRate: number | null;
+  retention7DayCoverageRate: number | null;
   genericContentSampleCount: number;
   genericContentBlockedCount: number;
   genericContentRate: number | null;

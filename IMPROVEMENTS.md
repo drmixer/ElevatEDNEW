@@ -113,6 +113,38 @@ ElevatED should deliver:
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
       - `/Users/drmixer/code/ElevatEDNEW/scripts/evaluate_release_gates.ts`
       - `/Users/drmixer/code/ElevatEDNEW/package.json`
+12. Started P2 K-5 visual/adaptation generalization:
+    - Added deterministic K-5 math adaptation templates for quick review, hints/steps, challenge questions, and topic detection.
+    - Wired K-5 math adaptation into active lesson practice remediation/challenge flow (without changing Grade 2 pilot behavior).
+    - Expanded deterministic K-5 lesson/practice visual generation beyond perimeter-only coverage (place value, fractions, arrays, number line, measurement, area, data bars), and enabled section visuals regardless of pilot checkpoint gating.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/k5MathAdaptation.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/PracticePhase.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/lessonVisuals.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/k5MathAdaptation.test.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/lessonVisuals.test.ts`
+13. Completed P2 K-5 adaptation expansion in Learn checkpoint loop:
+    - Added deterministic K-5 math checkpoint generation (`define`, `compute`, `scenario`) and checkpoint hint generation by detected topic.
+    - Updated Learn phase checkpoint gating from Grade 2-only pilot detection to K-5 math adaptive detection, while preserving existing Grade 2 pilot AI+fallback path.
+    - Enabled deterministic K-5 checkpoint quick-review/hint behavior and K-5-specific checkpoint telemetry in active Learn flow.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/k5MathAdaptation.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/k5MathAdaptation.test.ts`
+14. Hardened Phase B/C measurement instrumentation for recovery and retention:
+    - Added retention-stability analytics computation (3-day and 7-day rates + follow-up coverage) to the shared evaluation harness and release-gate scoring.
+    - Extended admin/release-gate checkpoint telemetry ingestion to include both pilot and K-5 checkpoint answered events.
+    - Added admin checkpoint retention metrics fields and wired retention rates into release-gate dashboard rendering.
+    - Added richer checkpoint telemetry payload context (`subject`, `gradeBand`, `topic`) in Learn checkpoint events for segment-ready analytics.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/evaluationHarness.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/evaluationHarness.test.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/scripts/evaluate_release_gates.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
 
 Validation run this session:
 - `npm run test -- src/lib/__tests__/questionQuality.test.ts server/__tests__/placementValidation.test.ts src/services/__tests__/lessonPracticeService.test.ts`
@@ -128,6 +160,15 @@ Validation run this session:
 - `npm run test -- src/lib/__tests__/evaluationHarness.test.ts src/services/__tests__/dashboardService.test.ts` (passed; 12 tests total)
 - `npx eslint src/lib/evaluationHarness.ts src/lib/__tests__/evaluationHarness.test.ts src/services/dashboardService.ts src/components/Admin/AdminDashboard.tsx scripts/evaluate_release_gates.ts src/types/index.ts` (passed)
 - `npm run eval:release-gates -- --lookback-days 7 --allow-missing-hard-gates` (completed with gating failure: `FAIL`; blockers: `Diagnostic completion` at `42.9%`, `Generic content rate` at `30%`; no-data on adaptive/checkpoint gates in current telemetry window)
+- `npm run test -- src/lib/__tests__/k5MathAdaptation.test.ts src/lib/__tests__/lessonVisuals.test.ts src/lib/__tests__/pilotConditions.test.ts src/lib/__tests__/nonMathRemediation.test.ts` (passed; 15 tests total)
+- `npx eslint src/lib/k5MathAdaptation.ts src/lib/lessonVisuals.ts src/components/Lesson/phases/PracticePhase.tsx src/components/Lesson/phases/LearnPhase.tsx src/lib/__tests__/k5MathAdaptation.test.ts src/lib/__tests__/lessonVisuals.test.ts` (passed)
+- `npm run test -- src/lib/__tests__/k5MathAdaptation.test.ts src/lib/__tests__/lessonVisuals.test.ts src/lib/__tests__/pilotConditions.test.ts src/lib/__tests__/nonMathRemediation.test.ts` (passed; 17 tests total)
+- `npx eslint src/lib/k5MathAdaptation.ts src/components/Lesson/phases/LearnPhase.tsx src/lib/__tests__/k5MathAdaptation.test.ts` (passed)
+- `npx eslint src/lib/lessonVisuals.ts src/components/Lesson/phases/PracticePhase.tsx src/components/Lesson/phases/LearnPhase.tsx src/lib/k5MathAdaptation.ts src/lib/__tests__/k5MathAdaptation.test.ts src/lib/__tests__/lessonVisuals.test.ts` (passed)
+- `npm run test -- src/lib/__tests__/evaluationHarness.test.ts src/lib/__tests__/k5MathAdaptation.test.ts src/lib/__tests__/lessonVisuals.test.ts src/lib/__tests__/pilotConditions.test.ts src/lib/__tests__/nonMathRemediation.test.ts src/services/__tests__/dashboardService.test.ts` (passed; 30 tests total)
+- `npx eslint src/lib/evaluationHarness.ts src/lib/__tests__/evaluationHarness.test.ts src/services/dashboardService.ts src/types/index.ts src/components/Admin/AdminDashboard.tsx scripts/evaluate_release_gates.ts src/components/Lesson/phases/LearnPhase.tsx` (passed)
+- `npm run test` (passed; 34 files, 110 tests total)
+- `npm run eval:release-gates -- --lookback-days 7 --allow-missing-hard-gates` (completed with gating failure: `FAIL`; blockers: `Diagnostic completion` at `42.9%`, `Generic content rate` at `30%`; retention gates currently `no data` with checkpoint samples `0`)
 
 ---
 
@@ -324,4 +365,4 @@ Expected per-chat output:
 
 - [x] Parent/student decision transparency cards shipped.
 - [x] Eval harness + release gates enforced.
-- [ ] K-5 adaptation expansion completed.
+- [x] K-5 adaptation expansion completed.

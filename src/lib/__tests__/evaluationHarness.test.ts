@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildReleaseGateDashboard,
   computeCheckpointEvaluation,
+  computeRetentionEvaluation,
   type CheckpointTelemetryEvent,
 } from '../evaluationHarness';
 
@@ -99,5 +100,61 @@ describe('buildReleaseGateDashboard', () => {
     expect(result.releaseReady).toBe(false);
     expect(result.blockers).toContain('Generic content rate');
     expect(result.blockers).toContain('Adaptive error rate');
+  });
+});
+
+describe('computeRetentionEvaluation', () => {
+  it('computes 3-day and 7-day retention rates plus coverage', () => {
+    const events: CheckpointTelemetryEvent[] = [
+      {
+        studentId: 'student-1',
+        occurredAt: '2026-01-01T10:00:00.000Z',
+        payload: { lessonId: 101, sectionIndex: 0, isCorrect: true },
+      },
+      {
+        studentId: 'student-1',
+        occurredAt: '2026-01-05T10:00:00.000Z',
+        payload: { lessonId: 101, sectionIndex: 0, isCorrect: true },
+      },
+      {
+        studentId: 'student-1',
+        occurredAt: '2026-01-09T10:00:00.000Z',
+        payload: { lessonId: 101, sectionIndex: 0, isCorrect: false },
+      },
+      {
+        studentId: 'student-2',
+        occurredAt: '2026-01-01T10:00:00.000Z',
+        payload: { lessonId: 102, sectionIndex: 1, isCorrect: true },
+      },
+      {
+        studentId: 'student-2',
+        occurredAt: '2026-01-05T10:00:00.000Z',
+        payload: { lessonId: 102, sectionIndex: 1, isCorrect: false },
+      },
+      {
+        studentId: 'student-2',
+        occurredAt: '2026-01-09T10:00:00.000Z',
+        payload: { lessonId: 102, sectionIndex: 1, isCorrect: true },
+      },
+      {
+        studentId: 'student-3',
+        occurredAt: '2026-01-08T10:00:00.000Z',
+        payload: { lessonId: 103, sectionIndex: 2, isCorrect: true },
+      },
+    ];
+
+    const summary = computeRetentionEvaluation(events);
+
+    expect(summary.baselineMasteredCount).toBe(3);
+    expect(summary.eligible3DayCount).toBe(2);
+    expect(summary.observed3DayCount).toBe(2);
+    expect(summary.retained3DayCount).toBe(1);
+    expect(summary.retention3DayRate).toBe(50);
+    expect(summary.retention3DayCoverageRate).toBe(100);
+    expect(summary.eligible7DayCount).toBe(2);
+    expect(summary.observed7DayCount).toBe(2);
+    expect(summary.retained7DayCount).toBe(1);
+    expect(summary.retention7DayRate).toBe(50);
+    expect(summary.retention7DayCoverageRate).toBe(100);
   });
 });

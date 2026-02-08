@@ -16,6 +16,20 @@ export type CheckpointEvaluationSummary = {
   recoveryRateWithinTwo: number | null;
 };
 
+export type RetentionEvaluationSummary = {
+  baselineMasteredCount: number;
+  eligible3DayCount: number;
+  observed3DayCount: number;
+  retained3DayCount: number;
+  retention3DayRate: number | null;
+  retention3DayCoverageRate: number | null;
+  eligible7DayCount: number;
+  observed7DayCount: number;
+  retained7DayCount: number;
+  retention7DayRate: number | null;
+  retention7DayCoverageRate: number | null;
+};
+
 export type ReleaseGateStatus = 'pass' | 'warn' | 'fail' | 'no_data';
 
 export type ReleaseGateResult = {
@@ -26,6 +40,8 @@ export type ReleaseGateResult = {
     | 'assignment_follow_through'
     | 'checkpoint_first_pass'
     | 'checkpoint_recovery'
+    | 'retention_3day'
+    | 'retention_7day'
     | 'generic_content_rate'
     | 'coverage_readiness'
     | 'adaptive_error_rate'
@@ -60,6 +76,8 @@ export type BuildReleaseGateInput = {
   assignmentFollowThroughRate?: NumericOrNull;
   checkpointFirstPassRate?: NumericOrNull;
   checkpointRecoveryRate?: NumericOrNull;
+  retention3DayRate?: NumericOrNull;
+  retention7DayRate?: NumericOrNull;
   genericContentRate?: NumericOrNull;
   coverageReadinessRate?: NumericOrNull;
   adaptiveErrorRate?: NumericOrNull;
@@ -186,6 +204,118 @@ export const computeCheckpointEvaluation = (
   };
 };
 
+export const computeRetentionEvaluation = (
+  events: CheckpointTelemetryEvent[],
+): RetentionEvaluationSummary => {
+  const attemptsByCheckpoint = new Map<string, Array<{ ts: number; isCorrect: boolean }>>();
+  let maxTimestamp = Number.NEGATIVE_INFINITY;
+
+  events.forEach((event) => {
+    const payload = event.payload ?? {};
+    const studentId = (event.studentId ?? '').toString().trim();
+    const lessonId = parseFiniteNumber(payload.lessonId);
+    const sectionIndex = parseFiniteNumber(payload.sectionIndex);
+    const isCorrect = parseBoolean(payload.isCorrect);
+    const ts = Date.parse(event.occurredAt ?? '');
+
+    if (
+      !studentId ||
+      lessonId == null ||
+      sectionIndex == null ||
+      isCorrect == null ||
+      !Number.isFinite(ts)
+    ) {
+      return;
+    }
+
+    maxTimestamp = Math.max(maxTimestamp, ts);
+    const key = `${studentId}:${lessonId}:${sectionIndex}`;
+    const attempts = attemptsByCheckpoint.get(key) ?? [];
+    attempts.push({ ts, isCorrect });
+    attemptsByCheckpoint.set(key, attempts);
+  });
+
+  if (!Number.isFinite(maxTimestamp) || attemptsByCheckpoint.size === 0) {
+    return {
+      baselineMasteredCount: 0,
+      eligible3DayCount: 0,
+      observed3DayCount: 0,
+      retained3DayCount: 0,
+      retention3DayRate: null,
+      retention3DayCoverageRate: null,
+      eligible7DayCount: 0,
+      observed7DayCount: 0,
+      retained7DayCount: 0,
+      retention7DayRate: null,
+      retention7DayCoverageRate: null,
+    };
+  }
+
+  const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+  const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+
+  let baselineMasteredCount = 0;
+  let eligible3DayCount = 0;
+  let observed3DayCount = 0;
+  let retained3DayCount = 0;
+  let eligible7DayCount = 0;
+  let observed7DayCount = 0;
+  let retained7DayCount = 0;
+
+  attemptsByCheckpoint.forEach((attempts) => {
+    if (!attempts.length) return;
+    attempts.sort((a, b) => a.ts - b.ts);
+
+    const baseline = attempts.find((attempt) => attempt.isCorrect);
+    if (!baseline) return;
+
+    baselineMasteredCount += 1;
+
+    const boundary3 = baseline.ts + threeDaysMs;
+    const boundary7 = baseline.ts + sevenDaysMs;
+
+    if (boundary3 <= maxTimestamp) {
+      eligible3DayCount += 1;
+      const followUp3 = attempts.find((attempt) => attempt.ts >= boundary3);
+      if (followUp3) {
+        observed3DayCount += 1;
+        if (followUp3.isCorrect) {
+          retained3DayCount += 1;
+        }
+      }
+    }
+
+    if (boundary7 <= maxTimestamp) {
+      eligible7DayCount += 1;
+      const followUp7 = attempts.find((attempt) => attempt.ts >= boundary7);
+      if (followUp7) {
+        observed7DayCount += 1;
+        if (followUp7.isCorrect) {
+          retained7DayCount += 1;
+        }
+      }
+    }
+  });
+
+  return {
+    baselineMasteredCount,
+    eligible3DayCount,
+    observed3DayCount,
+    retained3DayCount,
+    retention3DayRate:
+      observed3DayCount > 0 ? roundToTenth((retained3DayCount / observed3DayCount) * 100) : null,
+    retention3DayCoverageRate:
+      eligible3DayCount > 0 ? roundToTenth((observed3DayCount / eligible3DayCount) * 100) : null,
+    eligible7DayCount,
+    observed7DayCount,
+    retained7DayCount,
+    retention7DayRate:
+      observed7DayCount > 0 ? roundToTenth((retained7DayCount / observed7DayCount) * 100) : null,
+    retention7DayCoverageRate:
+      eligible7DayCount > 0 ? roundToTenth((observed7DayCount / eligible7DayCount) * 100) : null,
+  };
+};
+
 export const buildReleaseGateDashboard = (
   input: BuildReleaseGateInput,
 ): ReleaseGateDashboard => {
@@ -196,6 +326,8 @@ export const buildReleaseGateDashboard = (
   const assignmentFollowThroughRate = normalizeNumeric(input.assignmentFollowThroughRate);
   const checkpointFirstPassRate = normalizeNumeric(input.checkpointFirstPassRate);
   const checkpointRecoveryRate = normalizeNumeric(input.checkpointRecoveryRate);
+  const retention3DayRate = normalizeNumeric(input.retention3DayRate);
+  const retention7DayRate = normalizeNumeric(input.retention7DayRate);
   const genericContentRate = normalizeNumeric(input.genericContentRate);
   const coverageReadinessRate = normalizeNumeric(input.coverageReadinessRate);
   const adaptiveErrorRate = normalizeNumeric(input.adaptiveErrorRate);
@@ -259,6 +391,26 @@ export const buildReleaseGateDashboard = (
       unit: 'percent',
       status: metricStatusForLowerBound(checkpointRecoveryRate, 70, 60),
       target: '>= 70% (warn >= 60%)',
+      hardGate: false,
+      isBlocker: false,
+    },
+    {
+      key: 'retention_3day',
+      label: 'Retention stability (3-day)',
+      value: retention3DayRate,
+      unit: 'percent',
+      status: metricStatusForLowerBound(retention3DayRate, 70, 60),
+      target: '>= 70% (warn >= 60%)',
+      hardGate: false,
+      isBlocker: false,
+    },
+    {
+      key: 'retention_7day',
+      label: 'Retention stability (7-day)',
+      value: retention7DayRate,
+      unit: 'percent',
+      status: metricStatusForLowerBound(retention7DayRate, 65, 55),
+      target: '>= 65% (warn >= 55%)',
       hardGate: false,
       isBlocker: false,
     },
