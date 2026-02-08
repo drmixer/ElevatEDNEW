@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildReleaseGateDashboard,
+  computeAdaptiveEvaluation,
   computeCheckpointEvaluation,
   computeRetentionEvaluation,
+  resolveAdaptiveRateForGates,
+  resolveRetentionRateForGates,
+  type AdaptiveTelemetryEvent,
   type CheckpointTelemetryEvent,
 } from '../evaluationHarness';
 
@@ -12,26 +16,31 @@ describe('computeCheckpointEvaluation', () => {
       {
         studentId: 'student-1',
         occurredAt: '2026-02-01T10:00:00.000Z',
+        eventName: 'success_pilot_checkpoint_answered',
         payload: { lessonId: 101, sectionIndex: 0, isCorrect: false },
       },
       {
         studentId: 'student-1',
         occurredAt: '2026-02-01T10:01:00.000Z',
+        eventName: 'success_pilot_checkpoint_answered',
         payload: { lessonId: 101, sectionIndex: 0, isCorrect: true },
       },
       {
         studentId: 'student-2',
         occurredAt: '2026-02-01T10:00:00.000Z',
+        eventName: 'success_k5_math_checkpoint_answered',
         payload: { lessonId: 101, sectionIndex: 0, isCorrect: true },
       },
       {
         studentId: 'student-3',
         occurredAt: '2026-02-01T10:00:00.000Z',
+        eventName: 'success_k5_math_checkpoint_answered',
         payload: { lessonId: 102, sectionIndex: 1, isCorrect: false },
       },
       {
         studentId: 'student-3',
         occurredAt: '2026-02-01T10:01:00.000Z',
+        eventName: 'success_k5_math_checkpoint_answered',
         payload: { lessonId: 102, sectionIndex: 1, isCorrect: false },
       },
       {
@@ -44,6 +53,8 @@ describe('computeCheckpointEvaluation', () => {
     const summary = computeCheckpointEvaluation(events);
 
     expect(summary.attemptCount).toBe(6);
+    expect(summary.pilotAttemptCount).toBe(2);
+    expect(summary.k5AttemptCount).toBe(3);
     expect(summary.firstAttemptCount).toBe(3);
     expect(summary.firstPassCount).toBe(1);
     expect(summary.firstPassRate).toBeCloseTo(33.3, 1);
@@ -60,6 +71,8 @@ describe('computeCheckpointEvaluation', () => {
     ]);
 
     expect(summary.attemptCount).toBe(1);
+    expect(summary.pilotAttemptCount).toBe(0);
+    expect(summary.k5AttemptCount).toBe(0);
     expect(summary.firstAttemptCount).toBe(1);
     expect(summary.firstPassRate).toBe(100);
   });
@@ -156,5 +169,55 @@ describe('computeRetentionEvaluation', () => {
     expect(summary.retained7DayCount).toBe(1);
     expect(summary.retention7DayRate).toBe(50);
     expect(summary.retention7DayCoverageRate).toBe(100);
+  });
+});
+
+describe('computeAdaptiveEvaluation', () => {
+  it('computes adaptive error and safety rates from outcomes', () => {
+    const events: AdaptiveTelemetryEvent[] = [
+      {
+        occurredAt: '2026-02-01T00:00:00.000Z',
+        payload: { outcome: 'success' },
+      },
+      {
+        occurredAt: '2026-02-01T00:01:00.000Z',
+        payload: { outcome: 'error' },
+      },
+      {
+        occurredAt: '2026-02-01T00:02:00.000Z',
+        payload: { outcome: 'safety_block' },
+      },
+      {
+        occurredAt: '2026-02-01T00:03:00.000Z',
+        payload: { outcome: 'success' },
+      },
+    ];
+
+    const summary = computeAdaptiveEvaluation(events);
+    expect(summary.attemptCount).toBe(4);
+    expect(summary.errorCount).toBe(1);
+    expect(summary.safetyBlockCount).toBe(1);
+    expect(summary.errorRate).toBe(25);
+    expect(summary.safetyRate).toBe(25);
+  });
+});
+
+describe('resolveRetentionRateForGates', () => {
+  it('returns 0 when there are eligible samples but no follow-ups', () => {
+    expect(resolveRetentionRateForGates(null, 10, 0)).toBe(0);
+  });
+
+  it('returns 0 when there are no eligible samples', () => {
+    expect(resolveRetentionRateForGates(null, 0, 0)).toBe(0);
+  });
+});
+
+describe('resolveAdaptiveRateForGates', () => {
+  it('returns 100 when adaptive telemetry is missing', () => {
+    expect(resolveAdaptiveRateForGates(null, 0)).toBe(100);
+  });
+
+  it('returns explicit adaptive rate when available', () => {
+    expect(resolveAdaptiveRateForGates(11.4, 12)).toBe(11.4);
   });
 });

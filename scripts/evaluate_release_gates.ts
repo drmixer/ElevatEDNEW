@@ -3,13 +3,18 @@ import process from 'node:process';
 import { assessPracticeQuestionQuality } from '../shared/questionQuality.js';
 import {
   buildReleaseGateDashboard,
+  computeAdaptiveEvaluation,
   computeCheckpointEvaluation,
   computeRetentionEvaluation,
+  resolveAdaptiveRateForGates,
+  resolveRetentionRateForGates,
+  type AdaptiveTelemetryEvent,
   type CheckpointTelemetryEvent,
 } from '../src/lib/evaluationHarness.js';
 import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const RETENTION_HORIZON_DAYS = 7;
 
 type CliOptions = {
   lookbackDays: number;
@@ -104,6 +109,9 @@ const main = async (): Promise<void> => {
   const options = parseArgs();
   const supabase = createServiceRoleClient();
   const lookbackIso = new Date(Date.now() - options.lookbackDays * ONE_DAY_MS).toISOString();
+  const retentionLookbackIso = new Date(
+    Date.now() - (options.lookbackDays + RETENTION_HORIZON_DAYS) * ONE_DAY_MS,
+  ).toISOString();
 
   const [
     diagnosticsTotalResult,
@@ -112,6 +120,8 @@ const main = async (): Promise<void> => {
     assignmentsCompletedResult,
     successRollupResult,
     checkpointResult,
+    retentionCheckpointResult,
+    adaptiveResult,
     questionQualityResult,
   ] = await Promise.all([
     supabase.from('student_profiles').select('id', { count: 'exact', head: true }),
@@ -131,8 +141,22 @@ const main = async (): Promise<void> => {
     supabase.from('admin_success_metrics_rollup').select('*').single(),
     supabase
       .from('analytics_events')
-      .select('student_id, occurred_at, payload')
+      .select('event_name, student_id, occurred_at, payload')
       .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
+      .gte('occurred_at', lookbackIso)
+      .order('occurred_at', { ascending: true })
+      .limit(10000),
+    supabase
+      .from('analytics_events')
+      .select('event_name, student_id, occurred_at, payload')
+      .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
+      .gte('occurred_at', retentionLookbackIso)
+      .order('occurred_at', { ascending: true })
+      .limit(20000),
+    supabase
+      .from('analytics_events')
+      .select('occurred_at, payload')
+      .eq('event_name', 'success_adaptive_tutor_outcome')
       .gte('occurred_at', lookbackIso)
       .order('occurred_at', { ascending: true })
       .limit(10000),
@@ -162,6 +186,14 @@ const main = async (): Promise<void> => {
   if (checkpointResult.error) {
     throw new Error(`Failed to load checkpoint telemetry: ${checkpointResult.error.message}`);
   }
+  if (retentionCheckpointResult.error) {
+    throw new Error(
+      `Failed to load checkpoint telemetry for retention horizon: ${retentionCheckpointResult.error.message}`,
+    );
+  }
+  if (adaptiveResult.error) {
+    throw new Error(`Failed to load adaptive telemetry: ${adaptiveResult.error.message}`);
+  }
   if (questionQualityResult.error) {
     throw new Error(`Failed to load question quality sample: ${questionQualityResult.error.message}`);
   }
@@ -188,10 +220,12 @@ const main = async (): Promise<void> => {
 
   const checkpointSummary = computeCheckpointEvaluation(
     ((checkpointResult.data ?? []) as Array<{
+      event_name: string | null;
       student_id: string | null;
       occurred_at: string | null;
       payload: Record<string, unknown> | null;
     }>).map<CheckpointTelemetryEvent>((row) => ({
+      eventName: row.event_name,
       studentId: row.student_id,
       occurredAt: row.occurred_at,
       payload: row.payload,
@@ -199,12 +233,24 @@ const main = async (): Promise<void> => {
   );
 
   const retentionSummary = computeRetentionEvaluation(
-    ((checkpointResult.data ?? []) as Array<{
+    ((retentionCheckpointResult.data ?? []) as Array<{
+      event_name: string | null;
       student_id: string | null;
       occurred_at: string | null;
       payload: Record<string, unknown> | null;
     }>).map<CheckpointTelemetryEvent>((row) => ({
+      eventName: row.event_name,
       studentId: row.student_id,
+      occurredAt: row.occurred_at,
+      payload: row.payload,
+    })),
+  );
+
+  const adaptiveSummary = computeAdaptiveEvaluation(
+    ((adaptiveResult.data ?? []) as Array<{
+      occurred_at: string | null;
+      payload: Record<string, unknown> | null;
+    }>).map<AdaptiveTelemetryEvent>((row) => ({
       occurredAt: row.occurred_at,
       payload: row.payload,
     })),
@@ -255,12 +301,26 @@ const main = async (): Promise<void> => {
     assignmentFollowThroughRate,
     checkpointFirstPassRate: checkpointSummary.firstPassRate,
     checkpointRecoveryRate: checkpointSummary.recoveryRateWithinTwo,
-    retention3DayRate: retentionSummary.retention3DayRate,
-    retention7DayRate: retentionSummary.retention7DayRate,
+    retention3DayRate: resolveRetentionRateForGates(
+      retentionSummary.retention3DayRate,
+      retentionSummary.eligible3DayCount,
+      retentionSummary.observed3DayCount,
+    ),
+    retention7DayRate: resolveRetentionRateForGates(
+      retentionSummary.retention7DayRate,
+      retentionSummary.eligible7DayCount,
+      retentionSummary.observed7DayCount,
+    ),
     genericContentRate: genericSummary.genericRate,
     coverageReadinessRate,
-    adaptiveErrorRate: null,
-    adaptiveSafetyRate: null,
+    adaptiveErrorRate: resolveAdaptiveRateForGates(
+      adaptiveSummary.errorRate,
+      adaptiveSummary.attemptCount,
+    ),
+    adaptiveSafetyRate: resolveAdaptiveRateForGates(
+      adaptiveSummary.safetyRate,
+      adaptiveSummary.attemptCount,
+    ),
   });
 
   console.log(`Release gate evaluation (lookback ${options.lookbackDays} days)`);
@@ -276,7 +336,7 @@ const main = async (): Promise<void> => {
   });
   console.log('');
   console.log(
-    `Telemetry samples: checkpoints ${checkpointSummary.attemptCount}, question_quality ${genericSummary.sampleCount}, coverage_rollup_rows ${coverageRows.length}`,
+    `Telemetry samples: checkpoints ${checkpointSummary.attemptCount} (pilot ${checkpointSummary.pilotAttemptCount}, k5 ${checkpointSummary.k5AttemptCount}), adaptive ${adaptiveSummary.attemptCount}, question_quality ${genericSummary.sampleCount}, coverage_rollup_rows ${coverageRows.length}`,
   );
   console.log(
     `Retention coverage: 3d ${retentionSummary.observed3DayCount}/${retentionSummary.eligible3DayCount} (${formatValue(

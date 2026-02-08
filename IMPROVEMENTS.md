@@ -145,6 +145,19 @@ ElevatED should deliver:
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
       - `/Users/drmixer/code/ElevatEDNEW/scripts/evaluate_release_gates.ts`
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
+15. Started Phase B/C measurement follow-through for telemetry volume + no-data gate closure:
+    - Added checkpoint telemetry source-volume metrics (`pilot` vs `k5`) in shared checkpoint evaluation summaries and surfaced those volumes in the release-gate harness + admin release-gate panel.
+    - Added retention-horizon ingestion for release-gate retention scoring (fetch window extends by 7 additional days for retention-only computation), and added release-gate fallback behavior to score retention as `0%` when eligible learners exist but no follow-up samples were observed.
+    - Added adaptive outcome telemetry aggregation in the shared evaluation harness and release-gate harness.
+    - Added persisted adaptive outcome events (`success_adaptive_tutor_outcome`) in student tutor flow for success/error/safety outcomes, and wired admin checkpoint metrics to include adaptive attempt/error/safety counts + rates.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/evaluationHarness.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/evaluationHarness.test.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/scripts/evaluate_release_gates.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Student/LearningAssistant.tsx`
 
 Validation run this session:
 - `npm run test -- src/lib/__tests__/questionQuality.test.ts server/__tests__/placementValidation.test.ts src/services/__tests__/lessonPracticeService.test.ts`
@@ -169,6 +182,9 @@ Validation run this session:
 - `npx eslint src/lib/evaluationHarness.ts src/lib/__tests__/evaluationHarness.test.ts src/services/dashboardService.ts src/types/index.ts src/components/Admin/AdminDashboard.tsx scripts/evaluate_release_gates.ts src/components/Lesson/phases/LearnPhase.tsx` (passed)
 - `npm run test` (passed; 34 files, 110 tests total)
 - `npm run eval:release-gates -- --lookback-days 7 --allow-missing-hard-gates` (completed with gating failure: `FAIL`; blockers: `Diagnostic completion` at `42.9%`, `Generic content rate` at `30%`; retention gates currently `no data` with checkpoint samples `0`)
+- `npm run test -- src/lib/__tests__/evaluationHarness.test.ts src/services/__tests__/dashboardService.test.ts` (passed; 18 tests total)
+- `npx eslint src/lib/evaluationHarness.ts src/lib/__tests__/evaluationHarness.test.ts scripts/evaluate_release_gates.ts src/services/dashboardService.ts src/types/index.ts src/components/Admin/AdminDashboard.tsx src/components/Student/LearningAssistant.tsx` (passed with 2 pre-existing warnings in `src/components/Student/LearningAssistant.tsx` for `react-hooks/exhaustive-deps` around `studentStrengths` memo/callback dependencies)
+- `npm run eval:release-gates -- --lookback-days 7 --allow-missing-hard-gates` (completed with gating failure: `FAIL`; blockers: `Diagnostic completion` at `42.9%`, `Generic content rate` at `30%`, `Adaptive error rate` at `100%`; telemetry samples include explicit source splits `checkpoints 0 (pilot 0, k5 0)` plus `adaptive 0`; retention/adaptive gates now resolve to explicit fail scores instead of `no data` when telemetry is missing)
 
 ---
 
@@ -366,3 +382,9 @@ Expected per-chat output:
 - [x] Parent/student decision transparency cards shipped.
 - [x] Eval harness + release gates enforced.
 - [x] K-5 adaptation expansion completed.
+
+## Phase B/C Measurement Follow-through
+
+- [x] Checkpoint telemetry volume instrumentation now reports pilot + K-5 attempt splits in shared evaluation + release-gate surfaces.
+- [x] Retention release-gate computation now uses a retention horizon window and scores eligible-without-followup cohorts as `0%` (fail) instead of unresolved `no data`.
+- [x] Adaptive outcome telemetry contract added (`success_adaptive_tutor_outcome`) and wired into release-gate adaptive rate computation with explicit fail-safe scoring when telemetry volume is missing.

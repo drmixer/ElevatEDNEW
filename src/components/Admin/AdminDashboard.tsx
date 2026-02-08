@@ -469,6 +469,8 @@ const AdminDashboard: React.FC = () => {
 
   const successMetrics = dashboard?.successMetrics ?? null;
   const checkpointMetrics = dashboard?.checkpointMetrics ?? null;
+  const releaseGateAdaptiveErrorRate = adaptiveRates.errorRate ?? checkpointMetrics?.adaptiveErrorRate ?? null;
+  const releaseGateAdaptiveSafetyRate = adaptiveRates.safetyRate ?? checkpointMetrics?.adaptiveSafetyRate ?? null;
 
   const releaseGateSnapshot = useMemo(
     () =>
@@ -484,12 +486,10 @@ const AdminDashboard: React.FC = () => {
         retention7DayRate: checkpointMetrics?.retention7DayRate ?? null,
         genericContentRate: checkpointMetrics?.genericContentRate ?? null,
         coverageReadinessRate: coverageSummary?.readinessPercent ?? null,
-        adaptiveErrorRate: adaptiveRates.errorRate,
-        adaptiveSafetyRate: adaptiveRates.safetyRate,
+        adaptiveErrorRate: releaseGateAdaptiveErrorRate,
+        adaptiveSafetyRate: releaseGateAdaptiveSafetyRate,
       }),
     [
-      adaptiveRates.errorRate,
-      adaptiveRates.safetyRate,
       checkpointMetrics?.firstPassRate,
       checkpointMetrics?.genericContentRate,
       checkpointMetrics?.lookbackDays,
@@ -497,6 +497,8 @@ const AdminDashboard: React.FC = () => {
       checkpointMetrics?.retention3DayRate,
       checkpointMetrics?.retention7DayRate,
       coverageSummary?.readinessPercent,
+      releaseGateAdaptiveErrorRate,
+      releaseGateAdaptiveSafetyRate,
       successMetrics?.assignmentFollowThroughRate,
       successMetrics?.dailyPlanCompletionRateAvg,
       successMetrics?.diagnosticCompletionRate,
@@ -838,6 +840,13 @@ const AdminDashboard: React.FC = () => {
                   <p className="text-2xl font-bold text-rose-700">{releaseGateSnapshot.blockerCount}</p>
                 </div>
               </div>
+              {checkpointMetrics && (
+                <p className="mb-4 text-xs text-slate-600">
+                  Checkpoint telemetry volume: {checkpointMetrics.attemptCount} attempts (pilot{' '}
+                  {checkpointMetrics.pilotAttemptCount}, K-5 {checkpointMetrics.k5AttemptCount}) in the last{' '}
+                  {checkpointMetrics.lookbackDays} days.
+                </p>
+              )}
 
               <div className="grid md:grid-cols-2 gap-3">
                 {releaseGateSnapshot.gates.map((gate) => {

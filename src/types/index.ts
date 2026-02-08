@@ -886,6 +886,8 @@ export interface AdminSuccessMetrics {
 export interface AdminCheckpointMetrics {
   lookbackDays: number;
   attemptCount: number;
+  pilotAttemptCount: number;
+  k5AttemptCount: number;
   firstAttemptCount: number;
   firstPassCount: number;
   firstPassRate: number | null;
@@ -906,4 +908,9 @@ export interface AdminCheckpointMetrics {
   genericContentSampleCount: number;
   genericContentBlockedCount: number;
   genericContentRate: number | null;
+  adaptiveAttemptCount: number;
+  adaptiveErrorCount: number;
+  adaptiveSafetyBlockCount: number;
+  adaptiveErrorRate: number | null;
+  adaptiveSafetyRate: number | null;
 }

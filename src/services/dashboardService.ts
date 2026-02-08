@@ -46,7 +46,13 @@ import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarMan
 import { computeSubjectStatuses } from '../lib/onTrack';
 import { buildCoachingSuggestions } from '../lib/parentSuggestions';
 import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
-import { computeCheckpointEvaluation, computeRetentionEvaluation } from '../lib/evaluationHarness';
+import {
+  computeAdaptiveEvaluation,
+  computeCheckpointEvaluation,
+  computeRetentionEvaluation,
+  resolveAdaptiveRateForGates,
+  resolveRetentionRateForGates,
+} from '../lib/evaluationHarness';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
@@ -54,6 +60,7 @@ const allowSyntheticDashboardData =
   (import.meta.env.DEV || import.meta.env.VITE_ALLOW_FAKE_DASHBOARD_DATA === 'true');
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
+const RETENTION_HORIZON_DAYS = 7;
 
 type SubjectRow = {
   id: number;
@@ -92,7 +99,13 @@ type AssessmentAttemptRow = {
 };
 
 type AnalyticsCheckpointEventRow = {
+  event_name: string | null;
   student_id: string | null;
+  occurred_at: string | null;
+  payload: Record<string, unknown> | null;
+};
+
+type AnalyticsAdaptiveEventRow = {
   occurred_at: string | null;
   payload: Record<string, unknown> | null;
 };
@@ -882,6 +895,8 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   checkpointMetrics: {
     lookbackDays: 7,
     attemptCount: allowSyntheticDashboardData ? 920 : 0,
+    pilotAttemptCount: allowSyntheticDashboardData ? 430 : 0,
+    k5AttemptCount: allowSyntheticDashboardData ? 490 : 0,
     firstAttemptCount: allowSyntheticDashboardData ? 520 : 0,
     firstPassCount: allowSyntheticDashboardData ? 374 : 0,
     firstPassRate: allowSyntheticDashboardData ? 71.9 : null,
@@ -902,6 +917,11 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     genericContentSampleCount: allowSyntheticDashboardData ? 900 : 0,
     genericContentBlockedCount: allowSyntheticDashboardData ? 12 : 0,
     genericContentRate: allowSyntheticDashboardData ? 1.3 : null,
+    adaptiveAttemptCount: allowSyntheticDashboardData ? 360 : 0,
+    adaptiveErrorCount: allowSyntheticDashboardData ? 34 : 0,
+    adaptiveSafetyBlockCount: allowSyntheticDashboardData ? 29 : 0,
+    adaptiveErrorRate: allowSyntheticDashboardData ? 9.4 : null,
+    adaptiveSafetyRate: allowSyntheticDashboardData ? 8.1 : null,
   },
   growthSeries: allowSyntheticDashboardData
     ? Array.from({ length: 8 }).map((_, index) => {
@@ -3144,6 +3164,9 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
   try {
     const lookbackDays = 7;
     const lookbackIso = new Date(Date.now() - ONE_DAY_MS * lookbackDays).toISOString();
+    const retentionLookbackIso = new Date(
+      Date.now() - ONE_DAY_MS * (lookbackDays + RETENTION_HORIZON_DAYS),
+    ).toISOString();
     const [
       { data: metricsRow, error: metricsError },
       { data: growthRows, error: growthError },
@@ -3160,6 +3183,8 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       assignmentsCompletedResult,
       { data: successRollupRow, error: successRollupError },
       { data: checkpointRows, error: checkpointError },
+      { data: retentionCheckpointRows, error: retentionCheckpointError },
+      { data: adaptiveRows, error: adaptiveError },
       { data: questionQualityRows, error: questionQualityError },
     ] = await Promise.all([
       supabase.from('admin_dashboard_metrics').select('*').single(),
@@ -3203,8 +3228,22 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       supabase.from('admin_success_metrics_rollup').select('*').single(),
       supabase
         .from('analytics_events')
-        .select('student_id, occurred_at, payload')
+        .select('event_name, student_id, occurred_at, payload')
         .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(10000),
+      supabase
+        .from('analytics_events')
+        .select('event_name, student_id, occurred_at, payload')
+        .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
+        .gte('occurred_at', retentionLookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(20000),
+      supabase
+        .from('analytics_events')
+        .select('occurred_at, payload')
+        .eq('event_name', 'success_adaptive_tutor_outcome')
         .gte('occurred_at', lookbackIso)
         .order('occurred_at', { ascending: true })
         .limit(10000),
@@ -3243,6 +3282,10 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       console.error('[Dashboard] Admin success metrics rollup fetch failed', successRollupError);
     if (checkpointError)
       console.error('[Dashboard] Admin checkpoint telemetry fetch failed', checkpointError);
+    if (retentionCheckpointError)
+      console.error('[Dashboard] Admin retention telemetry fetch failed', retentionCheckpointError);
+    if (adaptiveError)
+      console.error('[Dashboard] Admin adaptive telemetry fetch failed', adaptiveError);
     if (questionQualityError)
       console.error('[Dashboard] Admin question quality sample fetch failed', questionQualityError);
 
@@ -3307,6 +3350,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
 
     const checkpointSummary = computeCheckpointEvaluation(
       ((checkpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+        eventName: row.event_name,
         studentId: row.student_id,
         occurredAt: row.occurred_at,
         payload: row.payload,
@@ -3314,8 +3358,16 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
     );
 
     const retentionSummary = computeRetentionEvaluation(
-      ((checkpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+      ((retentionCheckpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+        eventName: row.event_name,
         studentId: row.student_id,
+        occurredAt: row.occurred_at,
+        payload: row.payload,
+      })),
+    );
+
+    const adaptiveSummary = computeAdaptiveEvaluation(
+      ((adaptiveRows as AnalyticsAdaptiveEventRow[]) ?? []).map((row) => ({
         occurredAt: row.occurred_at,
         payload: row.payload,
       })),
@@ -3340,6 +3392,8 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
     const checkpointMetrics: AdminCheckpointMetrics = {
       lookbackDays,
       attemptCount: checkpointSummary.attemptCount,
+      pilotAttemptCount: checkpointSummary.pilotAttemptCount,
+      k5AttemptCount: checkpointSummary.k5AttemptCount,
       firstAttemptCount: checkpointSummary.firstAttemptCount,
       firstPassCount: checkpointSummary.firstPassCount,
       firstPassRate: checkpointSummary.firstPassRate,
@@ -3350,16 +3404,35 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       retentionEligible3DayCount: retentionSummary.eligible3DayCount,
       retentionObserved3DayCount: retentionSummary.observed3DayCount,
       retentionRetained3DayCount: retentionSummary.retained3DayCount,
-      retention3DayRate: retentionSummary.retention3DayRate,
+      retention3DayRate: resolveRetentionRateForGates(
+        retentionSummary.retention3DayRate,
+        retentionSummary.eligible3DayCount,
+        retentionSummary.observed3DayCount,
+      ),
       retention3DayCoverageRate: retentionSummary.retention3DayCoverageRate,
       retentionEligible7DayCount: retentionSummary.eligible7DayCount,
       retentionObserved7DayCount: retentionSummary.observed7DayCount,
       retentionRetained7DayCount: retentionSummary.retained7DayCount,
-      retention7DayRate: retentionSummary.retention7DayRate,
+      retention7DayRate: resolveRetentionRateForGates(
+        retentionSummary.retention7DayRate,
+        retentionSummary.eligible7DayCount,
+        retentionSummary.observed7DayCount,
+      ),
       retention7DayCoverageRate: retentionSummary.retention7DayCoverageRate,
       genericContentSampleCount: genericContentSummary.sampleCount,
       genericContentBlockedCount: genericContentSummary.genericCount,
       genericContentRate: genericContentSummary.genericRate,
+      adaptiveAttemptCount: adaptiveSummary.attemptCount,
+      adaptiveErrorCount: adaptiveSummary.errorCount,
+      adaptiveSafetyBlockCount: adaptiveSummary.safetyBlockCount,
+      adaptiveErrorRate: resolveAdaptiveRateForGates(
+        adaptiveSummary.errorRate,
+        adaptiveSummary.attemptCount,
+      ),
+      adaptiveSafetyRate: resolveAdaptiveRateForGates(
+        adaptiveSummary.safetyRate,
+        adaptiveSummary.attemptCount,
+      ),
     };
 
     const growthGrouped = new Map<string, { newStudents: number; activeStudents: number }>();

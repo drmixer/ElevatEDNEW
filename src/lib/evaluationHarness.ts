@@ -4,16 +4,32 @@ export type CheckpointTelemetryEvent = {
   studentId: string | null | undefined;
   occurredAt: string | null | undefined;
   payload: Record<string, unknown> | null | undefined;
+  eventName?: string | null | undefined;
 };
 
 export type CheckpointEvaluationSummary = {
   attemptCount: number;
+  pilotAttemptCount: number;
+  k5AttemptCount: number;
   firstAttemptCount: number;
   firstPassCount: number;
   firstPassRate: number | null;
   recoverableCount: number;
   recoveredWithinTwoCount: number;
   recoveryRateWithinTwo: number | null;
+};
+
+export type AdaptiveTelemetryEvent = {
+  occurredAt: string | null | undefined;
+  payload: Record<string, unknown> | null | undefined;
+};
+
+export type AdaptiveEvaluationSummary = {
+  attemptCount: number;
+  errorCount: number;
+  safetyBlockCount: number;
+  errorRate: number | null;
+  safetyRate: number | null;
 };
 
 export type RetentionEvaluationSummary = {
@@ -111,6 +127,12 @@ const normalizeNumeric = (value: NumericOrNull): number | null => {
   return roundToTenth(value);
 };
 
+const normalizeEventName = (value: unknown): string | null => {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  return normalized.length ? normalized : null;
+};
+
 const metricStatusForLowerBound = (
   value: number | null,
   passAtOrAbove: number,
@@ -138,6 +160,8 @@ export const computeCheckpointEvaluation = (
 ): CheckpointEvaluationSummary => {
   const attemptsByCheckpoint = new Map<string, Array<{ ts: number; isCorrect: boolean }>>();
   let attemptCount = 0;
+  let pilotAttemptCount = 0;
+  let k5AttemptCount = 0;
 
   events.forEach((event) => {
     const payload = event.payload ?? {};
@@ -162,6 +186,13 @@ export const computeCheckpointEvaluation = (
     attempts.push({ ts, isCorrect });
     attemptsByCheckpoint.set(key, attempts);
     attemptCount += 1;
+
+    const eventName = normalizeEventName(event.eventName);
+    if (eventName === 'success_pilot_checkpoint_answered') {
+      pilotAttemptCount += 1;
+    } else if (eventName === 'success_k5_math_checkpoint_answered') {
+      k5AttemptCount += 1;
+    }
   });
 
   let firstAttemptCount = 0;
@@ -191,6 +222,8 @@ export const computeCheckpointEvaluation = (
 
   return {
     attemptCount,
+    pilotAttemptCount,
+    k5AttemptCount,
     firstAttemptCount,
     firstPassCount,
     firstPassRate:
@@ -201,6 +234,50 @@ export const computeCheckpointEvaluation = (
       recoverableCount > 0
         ? roundToTenth((recoveredWithinTwoCount / recoverableCount) * 100)
         : null,
+  };
+};
+
+const parseAdaptiveOutcome = (payload: Record<string, unknown>): 'success' | 'error' | 'safety_block' | null => {
+  const explicitOutcome = normalizeEventName(payload.outcome);
+  if (explicitOutcome === 'success' || explicitOutcome === 'error' || explicitOutcome === 'safety_block') {
+    return explicitOutcome;
+  }
+
+  const fallbackStatus = parseBoolean(payload.isCorrect);
+  if (fallbackStatus === true) return 'success';
+  if (fallbackStatus === false) return 'error';
+  return null;
+};
+
+export const computeAdaptiveEvaluation = (
+  events: AdaptiveTelemetryEvent[],
+): AdaptiveEvaluationSummary => {
+  let attemptCount = 0;
+  let errorCount = 0;
+  let safetyBlockCount = 0;
+
+  events.forEach((event) => {
+    const payload = event.payload ?? {};
+    const occurredAt = Date.parse(event.occurredAt ?? '');
+    if (!Number.isFinite(occurredAt)) return;
+
+    const outcome = parseAdaptiveOutcome(payload);
+    if (!outcome) return;
+
+    attemptCount += 1;
+    if (outcome === 'error') {
+      errorCount += 1;
+    } else if (outcome === 'safety_block') {
+      safetyBlockCount += 1;
+    }
+  });
+
+  return {
+    attemptCount,
+    errorCount,
+    safetyBlockCount,
+    errorRate: attemptCount > 0 ? roundToTenth((errorCount / attemptCount) * 100) : null,
+    safetyRate: attemptCount > 0 ? roundToTenth((safetyBlockCount / attemptCount) * 100) : null,
   };
 };
 
@@ -314,6 +391,25 @@ export const computeRetentionEvaluation = (
     retention7DayCoverageRate:
       eligible7DayCount > 0 ? roundToTenth((observed7DayCount / eligible7DayCount) * 100) : null,
   };
+};
+
+export const resolveRetentionRateForGates = (
+  rate: number | null,
+  eligibleCount: number,
+  observedCount: number,
+): number | null => {
+  if (rate != null) return rate;
+  if (eligibleCount >= 0 && observedCount >= 0) return 0;
+  return null;
+};
+
+export const resolveAdaptiveRateForGates = (
+  rate: number | null,
+  attemptCount: number,
+): number | null => {
+  if (rate != null) return rate;
+  if (attemptCount >= 0) return 100;
+  return null;
 };
 
 export const buildReleaseGateDashboard = (
