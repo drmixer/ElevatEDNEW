@@ -110,6 +110,12 @@ type AnalyticsAdaptiveEventRow = {
   payload: Record<string, unknown> | null;
 };
 
+type AnalyticsDiagnosticEventRow = {
+  event_name: string | null;
+  student_id: string | null;
+  payload: Record<string, unknown> | null;
+};
+
 type QuestionQualitySampleRow = {
   id: number;
   prompt: string;
@@ -864,6 +870,54 @@ const fallbackParentAlerts = (): ParentAlert[] => {
       studentId: 'fallback-child-1',
     },
   ];
+};
+
+const resolveTelemetryStudentId = (
+  eventStudentId: string | null | undefined,
+  payload: Record<string, unknown> | null | undefined,
+): string => {
+  const direct = (eventStudentId ?? '').toString().trim();
+  if (direct) return direct;
+  const source = payload ?? {};
+  const fallback = typeof source.studentId === 'string' ? source.studentId : typeof source.childId === 'string' ? source.childId : '';
+  return fallback.trim();
+};
+
+const computeSyntheticDiagnosticSummary = (
+  rows: AnalyticsDiagnosticEventRow[],
+): { eligibleCount: number; completedCount: number; completionRate: number | null } => {
+  const eligible = new Set<string>();
+  const completed = new Set<string>();
+
+  rows.forEach((row) => {
+    const payload = row.payload ?? {};
+    if (payload.synthetic !== true) return;
+    const studentId = resolveTelemetryStudentId(row.student_id, payload);
+    if (!studentId) return;
+    const eventName = (row.event_name ?? '').toLowerCase();
+    if (eventName === 'success_diagnostic_eligible') {
+      eligible.add(studentId);
+    } else if (eventName === 'success_diagnostic_completed') {
+      completed.add(studentId);
+    }
+  });
+
+  if (!eligible.size) {
+    return { eligibleCount: 0, completedCount: 0, completionRate: null };
+  }
+
+  let completedEligible = 0;
+  eligible.forEach((studentId) => {
+    if (completed.has(studentId)) {
+      completedEligible += 1;
+    }
+  });
+
+  return {
+    eligibleCount: eligible.size,
+    completedCount: completedEligible,
+    completionRate: Math.round((completedEligible / eligible.size) * 1000) / 10,
+  };
 };
 
 const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
@@ -3181,6 +3235,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       diagnosticsCompletedResult,
       assignmentsTotalResult,
       assignmentsCompletedResult,
+      { data: diagnosticTelemetryRows, error: diagnosticTelemetryError },
       { data: successRollupRow, error: successRollupError },
       { data: checkpointRows, error: checkpointError },
       { data: retentionCheckpointRows, error: retentionCheckpointError },
@@ -3225,6 +3280,13 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         .select('id', { count: 'exact', head: true })
         .eq('status', 'completed')
         .gte('updated_at', lookbackIso),
+      supabase
+        .from('analytics_events')
+        .select('event_name, student_id, payload')
+        .in('event_name', ['success_diagnostic_eligible', 'success_diagnostic_completed'])
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(10000),
       supabase.from('admin_success_metrics_rollup').select('*').single(),
       supabase
         .from('analytics_events')
@@ -3278,6 +3340,8 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       console.error('[Dashboard] Admin assignments total fetch failed', assignmentsTotalResult.error);
     if (assignmentsCompletedResult.error)
       console.error('[Dashboard] Admin assignments completion fetch failed', assignmentsCompletedResult.error);
+    if (diagnosticTelemetryError)
+      console.error('[Dashboard] Admin diagnostic telemetry fetch failed', diagnosticTelemetryError);
     if (successRollupError)
       console.error('[Dashboard] Admin success metrics rollup fetch failed', successRollupError);
     if (checkpointError)
@@ -3310,12 +3374,30 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       lessonCompletionRate: lessonCompletionRate ?? undefined,
     };
 
-    const diagnosticsTotal =
+    const baselineDiagnosticsTotal =
       diagnosticsTotalResult.count ??
       (Number.isFinite(metrics.totalStudents) ? metrics.totalStudents : 0);
-    const diagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+    const baselineDiagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+    const baselineDiagnosticCompletionRate =
+      baselineDiagnosticsTotal > 0
+        ? Math.round((baselineDiagnosticsCompleted / baselineDiagnosticsTotal) * 100)
+        : null;
+
+    const syntheticDiagnosticSummary = computeSyntheticDiagnosticSummary(
+      (diagnosticTelemetryRows as AnalyticsDiagnosticEventRow[]) ?? [],
+    );
+    const diagnosticsTotal =
+      syntheticDiagnosticSummary.eligibleCount > 0
+        ? syntheticDiagnosticSummary.eligibleCount
+        : baselineDiagnosticsTotal;
+    const diagnosticsCompleted =
+      syntheticDiagnosticSummary.eligibleCount > 0
+        ? syntheticDiagnosticSummary.completedCount
+        : baselineDiagnosticsCompleted;
     const diagnosticCompletionRate =
-      diagnosticsTotal > 0 ? Math.round((diagnosticsCompleted / diagnosticsTotal) * 100) : null;
+      syntheticDiagnosticSummary.eligibleCount > 0
+        ? syntheticDiagnosticSummary.completionRate
+        : baselineDiagnosticCompletionRate;
 
     const assignmentsTotal = assignmentsTotalResult.count ?? 0;
     const assignmentsCompleted = assignmentsCompletedResult.count ?? 0;

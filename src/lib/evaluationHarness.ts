@@ -122,6 +122,22 @@ const parseBoolean = (value: unknown): boolean | null => {
   return null;
 };
 
+const resolveTelemetryStudentId = (
+  eventStudentId: string | null | undefined,
+  payload: Record<string, unknown>,
+): string => {
+  const direct = (eventStudentId ?? '').toString().trim();
+  if (direct) return direct;
+
+  const fallbackCandidate =
+    typeof payload.studentId === 'string'
+      ? payload.studentId
+      : typeof payload.childId === 'string'
+      ? payload.childId
+      : null;
+  return (fallbackCandidate ?? '').trim();
+};
+
 const normalizeNumeric = (value: NumericOrNull): number | null => {
   if (value == null || !Number.isFinite(value)) return null;
   return roundToTenth(value);
@@ -165,7 +181,7 @@ export const computeCheckpointEvaluation = (
 
   events.forEach((event) => {
     const payload = event.payload ?? {};
-    const studentId = (event.studentId ?? '').toString().trim();
+    const studentId = resolveTelemetryStudentId(event.studentId, payload);
     const lessonId = parseFiniteNumber(payload.lessonId);
     const sectionIndex = parseFiniteNumber(payload.sectionIndex);
     const isCorrect = parseBoolean(payload.isCorrect);
@@ -289,7 +305,7 @@ export const computeRetentionEvaluation = (
 
   events.forEach((event) => {
     const payload = event.payload ?? {};
-    const studentId = (event.studentId ?? '').toString().trim();
+    const studentId = resolveTelemetryStudentId(event.studentId, payload);
     const lessonId = parseFiniteNumber(payload.lessonId);
     const sectionIndex = parseFiniteNumber(payload.sectionIndex);
     const isCorrect = parseBoolean(payload.isCorrect);

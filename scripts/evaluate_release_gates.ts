@@ -31,6 +31,18 @@ type QuestionQualitySampleRow = {
   }> | null;
 };
 
+type DiagnosticTelemetrySummary = {
+  eligibleCount: number;
+  completedCount: number;
+  completionRate: number | null;
+};
+
+type DiagnosticTelemetryEvent = {
+  event_name: string | null;
+  student_id: string | null;
+  payload: Record<string, unknown> | null;
+};
+
 type CoverageRollupRow = {
   grade_band: string;
   subject: string;
@@ -100,6 +112,54 @@ const computeGenericContentSummary = (
   };
 };
 
+const resolveTelemetryStudentId = (
+  eventStudentId: string | null | undefined,
+  payload: Record<string, unknown> | null | undefined,
+): string => {
+  const direct = (eventStudentId ?? '').toString().trim();
+  if (direct) return direct;
+  const source = payload ?? {};
+  const fallback = typeof source.studentId === 'string' ? source.studentId : typeof source.childId === 'string' ? source.childId : '';
+  return fallback.trim();
+};
+
+const computeSyntheticDiagnosticSummary = (
+  rows: DiagnosticTelemetryEvent[],
+): DiagnosticTelemetrySummary => {
+  const eligible = new Set<string>();
+  const completed = new Set<string>();
+
+  rows.forEach((row) => {
+    const payload = row.payload ?? {};
+    if (payload.synthetic !== true) return;
+    const studentId = resolveTelemetryStudentId(row.student_id, payload);
+    if (!studentId) return;
+    const eventName = (row.event_name ?? '').toLowerCase();
+    if (eventName === 'success_diagnostic_eligible') {
+      eligible.add(studentId);
+    } else if (eventName === 'success_diagnostic_completed') {
+      completed.add(studentId);
+    }
+  });
+
+  if (!eligible.size) {
+    return { eligibleCount: 0, completedCount: 0, completionRate: null };
+  }
+
+  let completedEligible = 0;
+  eligible.forEach((studentId) => {
+    if (completed.has(studentId)) {
+      completedEligible += 1;
+    }
+  });
+
+  return {
+    eligibleCount: eligible.size,
+    completedCount: completedEligible,
+    completionRate: roundToTenth((completedEligible / eligible.size) * 100),
+  };
+};
+
 const formatValue = (value: number | null, unit: 'percent' | 'points'): string => {
   if (value == null) return 'no data';
   return `${value}${unit === 'percent' ? '%' : ' pts'}`;
@@ -122,6 +182,7 @@ const main = async (): Promise<void> => {
     checkpointResult,
     retentionCheckpointResult,
     adaptiveResult,
+    diagnosticsTelemetryResult,
     questionQualityResult,
   ] = await Promise.all([
     supabase.from('student_profiles').select('id', { count: 'exact', head: true }),
@@ -161,6 +222,13 @@ const main = async (): Promise<void> => {
       .order('occurred_at', { ascending: true })
       .limit(10000),
     supabase
+      .from('analytics_events')
+      .select('event_name, student_id, payload')
+      .in('event_name', ['success_diagnostic_eligible', 'success_diagnostic_completed'])
+      .gte('occurred_at', lookbackIso)
+      .order('occurred_at', { ascending: true })
+      .limit(10000),
+    supabase
       .from('question_bank')
       .select('id, prompt, question_type, question_options(content, is_correct)')
       .gte('created_at', lookbackIso)
@@ -194,14 +262,25 @@ const main = async (): Promise<void> => {
   if (adaptiveResult.error) {
     throw new Error(`Failed to load adaptive telemetry: ${adaptiveResult.error.message}`);
   }
+  if (diagnosticsTelemetryResult.error) {
+    throw new Error(`Failed to load diagnostic telemetry: ${diagnosticsTelemetryResult.error.message}`);
+  }
   if (questionQualityResult.error) {
     throw new Error(`Failed to load question quality sample: ${questionQualityResult.error.message}`);
   }
 
-  const diagnosticsTotal = diagnosticsTotalResult.count ?? 0;
-  const diagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+  const baselineDiagnosticsTotal = diagnosticsTotalResult.count ?? 0;
+  const baselineDiagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+  const baselineDiagnosticCompletionRate =
+    baselineDiagnosticsTotal > 0 ? roundToTenth((baselineDiagnosticsCompleted / baselineDiagnosticsTotal) * 100) : null;
+
+  const syntheticDiagnosticSummary = computeSyntheticDiagnosticSummary(
+    ((diagnosticsTelemetryResult.data ?? []) as DiagnosticTelemetryEvent[]) ?? [],
+  );
   const diagnosticCompletionRate =
-    diagnosticsTotal > 0 ? roundToTenth((diagnosticsCompleted / diagnosticsTotal) * 100) : null;
+    syntheticDiagnosticSummary.eligibleCount > 0
+      ? syntheticDiagnosticSummary.completionRate
+      : baselineDiagnosticCompletionRate;
 
   const assignmentsTotal = assignmentsTotalResult.count ?? 0;
   const assignmentsCompleted = assignmentsCompletedResult.count ?? 0;

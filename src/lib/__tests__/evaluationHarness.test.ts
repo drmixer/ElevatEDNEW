@@ -76,6 +76,21 @@ describe('computeCheckpointEvaluation', () => {
     expect(summary.firstAttemptCount).toBe(1);
     expect(summary.firstPassRate).toBe(100);
   });
+
+  it('uses payload studentId fallback when row student_id is null', () => {
+    const summary = computeCheckpointEvaluation([
+      {
+        studentId: null,
+        occurredAt: '2026-02-01T00:00:00.000Z',
+        eventName: 'success_pilot_checkpoint_answered',
+        payload: { studentId: 'synthetic-student-1', lessonId: 1, sectionIndex: 0, isCorrect: true },
+      },
+    ]);
+
+    expect(summary.attemptCount).toBe(1);
+    expect(summary.firstAttemptCount).toBe(1);
+    expect(summary.firstPassRate).toBe(100);
+  });
 });
 
 describe('buildReleaseGateDashboard', () => {
