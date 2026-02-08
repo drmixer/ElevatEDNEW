@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { assessPracticeQuestionQuality } from '../shared/questionQuality.js';
 
 type PracticeOption = { text: string; isCorrect: boolean; feedback?: string | null };
 
@@ -57,6 +58,20 @@ const ensureValid = (item: PracticeItem): void => {
     if (!item.options.some((opt) => opt.isCorrect)) {
       throw new Error(`Item "${item.prompt.slice(0, 40)}..." must include a correct option.`);
     }
+  }
+
+  const quality = assessPracticeQuestionQuality({
+    prompt: item.prompt,
+    type: item.type ?? 'multiple_choice',
+    options: (item.options ?? []).map((option) => ({
+      text: option.text,
+      isCorrect: option.isCorrect,
+    })),
+  });
+  if (quality.shouldBlock) {
+    throw new Error(
+      `Item "${item.prompt.slice(0, 40)}..." failed quality gate: ${quality.reasons.join(', ')}`,
+    );
   }
 };
 

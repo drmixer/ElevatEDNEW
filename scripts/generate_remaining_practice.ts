@@ -10,6 +10,7 @@
 import 'dotenv/config';
 import * as fs from 'fs';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { assessPracticeQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 const supabase = createServiceRoleClient();
 
@@ -197,6 +198,8 @@ async function generateQuestionsForRemainingSkills(apply: boolean) {
     let questionsCreated = 0;
     let optionsCreated = 0;
     let skillLinks = 0;
+    let blockedQuality = 0;
+    const blockedReasonCounts: Record<string, number> = {};
 
     // Get subject IDs
     const { data: subjects } = await supabase.from('subjects').select('id, name');
@@ -224,6 +227,26 @@ async function generateQuestionsForRemainingSkills(apply: boolean) {
             const subjectId = subjectIdMap[subject] || subjectIdMap['Electives'] || 15;
 
             for (const q of questions) {
+                const quality = assessPracticeQuestionQuality({
+                    prompt: q.prompt,
+                    type: 'multiple_choice',
+                    options: q.options.map((option) => ({
+                        text: option.text,
+                        isCorrect: option.isCorrect,
+                    })),
+                });
+                if (quality.shouldBlock) {
+                    blockedQuality++;
+                    incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+                    console.warn('[generate_remaining_practice] Blocking low-quality generated practice question', {
+                        source: 'scripts/generate_remaining_practice.ts',
+                        skillId: skill.id,
+                        reasons: quality.reasons,
+                        promptPreview: q.prompt.slice(0, 80),
+                    });
+                    continue;
+                }
+
                 // Insert question
                 const { data: insertedQ, error: qError } = await supabase
                     .from('question_bank')
@@ -281,6 +304,15 @@ async function generateQuestionsForRemainingSkills(apply: boolean) {
     console.log(`Questions ${apply ? 'created' : 'to create'}: ${questionsCreated}`);
     console.log(`Options ${apply ? 'created' : 'to create'}: ${optionsCreated}`);
     console.log(`Skill links ${apply ? 'created' : 'to create'}: ${skillLinks}`);
+    console.log(`Questions blocked by quality gate: ${blockedQuality}`);
+
+    if (blockedQuality > 0) {
+        console.warn('[generate_remaining_practice] Quality gate blocked generated questions', {
+            source: 'scripts/generate_remaining_practice.ts',
+            blockedCount: blockedQuality,
+            reasonCounts: blockedReasonCounts,
+        });
+    }
 
     if (!apply) {
         console.log('\n💡 Run with --apply to make changes');

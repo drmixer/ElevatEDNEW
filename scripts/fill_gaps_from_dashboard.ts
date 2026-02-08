@@ -3,6 +3,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
+import { assessPracticeQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type CoverageCell = {
   module_id: number;
@@ -194,9 +195,45 @@ const ensurePractice = async (
     });
   }
 
+  const blockedReasonCounts: Record<string, number> = {};
+  let blockedCount = 0;
+  const optionTemplate = [
+    { text: 'Correct answer (on-grade).', isCorrect: true },
+    { text: 'Common misconception.', isCorrect: false },
+    { text: 'Partially correct idea.', isCorrect: false },
+    { text: 'Off-topic choice.', isCorrect: false },
+  ];
+  const validQuestions = questions.filter((question) => {
+    const quality = assessPracticeQuestionQuality({
+      prompt: question.prompt,
+      type: question.question_type,
+      options: optionTemplate,
+    });
+    if (quality.shouldBlock) {
+      blockedCount += 1;
+      incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+      return false;
+    }
+    return true;
+  });
+
+  if (blockedCount > 0) {
+    console.warn('[fill_gaps_from_dashboard] Quality gate blocked generated practice items', {
+      source: 'scripts/fill_gaps_from_dashboard.ts',
+      moduleSlug: cell.module_slug,
+      blockedCount,
+      reasonCounts: blockedReasonCounts,
+    });
+  }
+
+  if (!validQuestions.length) {
+    console.log(`Quality gate blocked all generated practice items for ${cell.module_slug}.`);
+    return existingIds;
+  }
+
   const insertedIds: number[] = [];
-  for (let i = 0; i < questions.length; i += PRACTICE_CHUNK_SIZE) {
-    const chunk = questions.slice(i, i + PRACTICE_CHUNK_SIZE);
+  for (let i = 0; i < validQuestions.length; i += PRACTICE_CHUNK_SIZE) {
+    const chunk = validQuestions.slice(i, i + PRACTICE_CHUNK_SIZE);
     const { data: inserted, error: insertError } = await supabase
       .from('question_bank')
       .insert(chunk)

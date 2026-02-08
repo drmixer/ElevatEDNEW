@@ -63,5 +63,20 @@ describe('placementValidation', () => {
       ]),
     ).toThrow(HttpError);
   });
-});
 
+  it('rejects generic prompt templates via quality gate', () => {
+    expect(() =>
+      validatePlacementQuestions([
+        {
+          bankQuestionId: 4,
+          prompt: 'Which of the following best describes ecosystems?',
+          type: 'multiple_choice',
+          options: [
+            { id: 41, text: 'A set of interactions between living and nonliving things', isCorrect: true },
+            { id: 42, text: 'Something only scientists need to know', isCorrect: false },
+          ],
+        },
+      ]),
+    ).toThrow(HttpError);
+  });
+});

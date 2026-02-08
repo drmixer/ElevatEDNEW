@@ -863,6 +863,7 @@ export interface AdminDashboardData {
   admin: Admin;
   metrics: AdminDashboardMetrics;
   successMetrics?: AdminSuccessMetrics;
+  checkpointMetrics?: AdminCheckpointMetrics;
   growthSeries: AdminGrowthPoint[];
   subjectPerformance: AdminSubjectPerformance[];
   alerts: AdminAlert[];
@@ -880,4 +881,18 @@ export interface AdminSuccessMetrics {
   weeklyAccuracyDeltaAvg: number | null;
   dailyPlanCompletionRateAvg: number | null;
   alertResolutionHoursAvg: number | null;
+}
+
+export interface AdminCheckpointMetrics {
+  lookbackDays: number;
+  attemptCount: number;
+  firstAttemptCount: number;
+  firstPassCount: number;
+  firstPassRate: number | null;
+  recoverableCount: number;
+  recoveredWithinTwoCount: number;
+  recoveryRateWithinTwo: number | null;
+  genericContentSampleCount: number;
+  genericContentBlockedCount: number;
+  genericContentRate: number | null;
 }

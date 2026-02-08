@@ -5,6 +5,7 @@ import { buildCanonicalLearningPath } from '../lib/learningPaths';
 import { refreshLearningPathFromSuggestions } from './adaptiveService';
 import { sendStudentEvent, type StudentEventInput, type StudentEventResponse } from './studentEventService';
 import recordReliabilityCheckpoint from '../lib/reliability';
+import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../../shared/questionQuality';
 
 export type AssessmentOption = {
   id: number;
@@ -394,6 +395,9 @@ const fetchAssessmentDefinition = async (
     skillLookup.set(skillRow.question_id, list);
   });
 
+  let blockedQuestionCount = 0;
+  const blockedReasonCounts: Record<string, number> = {};
+
   const questions = questionLinks
     .slice()
     .sort((a, b) => a.question_order - b.question_order)
@@ -403,6 +407,20 @@ const fetchAssessmentDefinition = async (
         throw new Error(`Question ${link.question_id} missing from bank.`);
       }
       const options = (optionLookup.get(link.question_id) ?? []).sort((a, b) => a.id - b.id);
+      const quality = assessAssessmentQuestionQuality({
+        prompt: bankQuestion.prompt,
+        type: bankQuestion.question_type,
+        options: options.map((option) => ({
+          text: option.text,
+          isCorrect: option.isCorrect,
+        })),
+      });
+      if (quality.shouldBlock) {
+        blockedQuestionCount += 1;
+        incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+        return null;
+      }
+
       const skillIds = (skillLookup.get(link.question_id) ?? []).map((skill) => skill.id);
       const concept = deriveConcept(bankQuestion, link, moduleTitle);
       const placement = (bankQuestion.metadata as Record<string, unknown> | null | undefined)?.placement;
@@ -435,11 +453,38 @@ const fetchAssessmentDefinition = async (
         order: link.question_order ?? index + 1,
       } satisfies AssessmentQuestion & { order: number };
     })
+    .filter((question): question is AssessmentQuestion & { order: number } => Boolean(question))
     .sort((a, b) => a.order - b.order)
     .map(({ order, ...rest }) => {
       void order;
       return rest;
     });
+
+  if (blockedQuestionCount > 0) {
+    console.warn('[assessment] Blocked low-quality assessment questions from playback', {
+      studentId,
+      assessmentId: assessmentRow.id,
+      blockedCount: blockedQuestionCount,
+      reasonCounts: blockedReasonCounts,
+    });
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'question_quality_filter',
+      studentId,
+      assessmentId: assessmentRow.id,
+      blockedCount: blockedQuestionCount,
+      reasonCounts: blockedReasonCounts,
+    });
+  }
+
+  if (!questions.length) {
+    recordReliabilityCheckpoint('diagnostic_load', 'error', {
+      phase: 'question_quality_filter',
+      studentId,
+      assessmentId: assessmentRow.id,
+      reason: 'no_valid_questions_after_quality_filter',
+    });
+    throw new Error('Assessment content is incomplete after quality filtering.');
+  }
 
   const { data: attemptRow, error: attemptError } = await supabase
     .from('student_assessment_attempts')

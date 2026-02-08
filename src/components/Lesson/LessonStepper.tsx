@@ -12,6 +12,7 @@ import type {
     LessonStepperContextValue,
 } from '../../types/lesson';
 import { LESSON_PHASES } from '../../types/lesson';
+import recordReliabilityCheckpoint from '../../lib/reliability';
 
 // Initial state
 const initialState: LessonStepperState = {
@@ -48,6 +49,31 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
         }
         return LESSON_PHASES.filter((phase) => phase !== 'practice');
     }, [hasPracticeQuestions]);
+
+    const emitImpossibleTransition = useCallback(
+        (action: string, reason: string, extra?: Record<string, unknown>) => {
+            const detail = {
+                action,
+                reason,
+                currentPhase: state.currentPhase,
+                currentSectionIndex: state.currentSectionIndex,
+                totalSections,
+                hasPracticeQuestions,
+                availablePhases: availablePhases.join(','),
+                ...extra,
+            };
+
+            console.warn('[lesson-stepper] impossible transition blocked', detail);
+            recordReliabilityCheckpoint('lesson_navigation', 'error', detail);
+        },
+        [
+            state.currentPhase,
+            state.currentSectionIndex,
+            totalSections,
+            hasPracticeQuestions,
+            availablePhases,
+        ],
+    );
 
     // Calculate progress (0-100)
     const progress = useMemo(() => {
@@ -87,77 +113,126 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
 
     // Actions
     const goToPhase = useCallback((phase: LessonPhase) => {
-        if (!availablePhases.includes(phase)) return;
+        if (!availablePhases.includes(phase)) {
+            emitImpossibleTransition('go_to_phase', 'phase_not_available', { targetPhase: phase });
+            return;
+        }
+
+        const currentIndex = availablePhases.indexOf(state.currentPhase);
+        const targetIndex = availablePhases.indexOf(phase);
+        const isForwardJump = targetIndex > currentIndex;
+        const isUnlockedForward = state.completedPhases.includes(phase);
+
+        if (isForwardJump && !isUnlockedForward) {
+            emitImpossibleTransition('go_to_phase', 'forward_jump_blocked', {
+                targetPhase: phase,
+                currentIndex,
+                targetIndex,
+            });
+            return;
+        }
+
         setState((prev) => ({
             ...prev,
             currentPhase: phase,
             currentSectionIndex: 0,
         }));
-    }, [availablePhases]);
+    }, [availablePhases, emitImpossibleTransition, state.completedPhases, state.currentPhase]);
 
     const nextPhase = useCallback(() => {
-        setState((prev) => {
-            // If in learn phase with more sections, go to next section
-            if (prev.currentPhase === 'learn' && prev.currentSectionIndex < totalSections - 1) {
-                return { ...prev, currentSectionIndex: prev.currentSectionIndex + 1 };
-            }
+        if (state.currentPhase === 'learn' && state.currentSectionIndex < totalSections - 1) {
+            setState((prev) => ({ ...prev, currentSectionIndex: prev.currentSectionIndex + 1 }));
+            return;
+        }
 
-            // Otherwise go to next phase
-            const currentIndex = availablePhases.indexOf(prev.currentPhase);
-            if (currentIndex < availablePhases.length - 1) {
-                const nextPhaseValue = availablePhases[currentIndex + 1];
-                return {
-                    ...prev,
-                    currentPhase: nextPhaseValue,
-                    currentSectionIndex: 0,
-                    completedPhases: prev.completedPhases.includes(prev.currentPhase)
-                        ? prev.completedPhases
-                        : [...prev.completedPhases, prev.currentPhase],
-                };
-            }
-            return prev;
+        const currentIndex = availablePhases.indexOf(state.currentPhase);
+        if (currentIndex === -1) {
+            emitImpossibleTransition('next_phase', 'current_phase_not_available');
+            return;
+        }
+        if (currentIndex >= availablePhases.length - 1) {
+            emitImpossibleTransition('next_phase', 'already_at_final_phase');
+            return;
+        }
+
+        setState((prev) => {
+            const nextPhaseValue = availablePhases[currentIndex + 1];
+            return {
+                ...prev,
+                currentPhase: nextPhaseValue,
+                currentSectionIndex: 0,
+                completedPhases: prev.completedPhases.includes(prev.currentPhase)
+                    ? prev.completedPhases
+                    : [...prev.completedPhases, prev.currentPhase],
+            };
         });
-    }, [totalSections, availablePhases]);
+    }, [
+        state.currentPhase,
+        state.currentSectionIndex,
+        totalSections,
+        availablePhases,
+        emitImpossibleTransition,
+    ]);
 
     const previousPhase = useCallback(() => {
-        setState((prev) => {
-            // If in learn phase with previous sections, go back
-            if (prev.currentPhase === 'learn' && prev.currentSectionIndex > 0) {
-                return { ...prev, currentSectionIndex: prev.currentSectionIndex - 1 };
-            }
+        if (state.currentPhase === 'learn' && state.currentSectionIndex > 0) {
+            setState((prev) => ({ ...prev, currentSectionIndex: prev.currentSectionIndex - 1 }));
+            return;
+        }
 
-            // If at start of learn phase, go to previous phase at its last section
-            const currentIndex = availablePhases.indexOf(prev.currentPhase);
-            if (currentIndex > 0) {
-                const prevPhaseValue = availablePhases[currentIndex - 1];
-                const prevSectionIndex = prevPhaseValue === 'learn' ? totalSections - 1 : 0;
-                return {
-                    ...prev,
-                    currentPhase: prevPhaseValue,
-                    currentSectionIndex: prevSectionIndex,
-                };
-            }
-            return prev;
-        });
-    }, [totalSections, availablePhases]);
+        const currentIndex = availablePhases.indexOf(state.currentPhase);
+        if (currentIndex === -1) {
+            emitImpossibleTransition('previous_phase', 'current_phase_not_available');
+            return;
+        }
+        if (currentIndex <= 0) {
+            emitImpossibleTransition('previous_phase', 'already_at_first_phase');
+            return;
+        }
+
+        const prevPhaseValue = availablePhases[currentIndex - 1];
+        const prevSectionIndex = prevPhaseValue === 'learn' ? totalSections - 1 : 0;
+        setState((prev) => ({
+            ...prev,
+            currentPhase: prevPhaseValue,
+            currentSectionIndex: prevSectionIndex,
+        }));
+    }, [
+        state.currentPhase,
+        state.currentSectionIndex,
+        totalSections,
+        availablePhases,
+        emitImpossibleTransition,
+    ]);
 
     const nextSection = useCallback(() => {
-        setState((prev) => {
-            if (prev.currentSectionIndex < totalSections - 1) {
-                return { ...prev, currentSectionIndex: prev.currentSectionIndex + 1 };
-            }
-            return prev;
-        });
-    }, [totalSections]);
+        if (state.currentPhase !== 'learn') {
+            emitImpossibleTransition('next_section', 'not_in_learn_phase');
+            return;
+        }
+        if (state.currentSectionIndex >= totalSections - 1) {
+            emitImpossibleTransition('next_section', 'already_at_last_section');
+            return;
+        }
+        setState((prev) => ({ ...prev, currentSectionIndex: prev.currentSectionIndex + 1 }));
+    }, [
+        state.currentPhase,
+        state.currentSectionIndex,
+        totalSections,
+        emitImpossibleTransition,
+    ]);
 
     const previousSection = useCallback(() => {
-        setState((prev) => {
-            if (prev.currentSectionIndex > 0) {
-                return { ...prev, currentSectionIndex: prev.currentSectionIndex - 1 };
-            }
-            return prev;
-        });
-    }, []);
+        if (state.currentPhase !== 'learn') {
+            emitImpossibleTransition('previous_section', 'not_in_learn_phase');
+            return;
+        }
+        if (state.currentSectionIndex <= 0) {
+            emitImpossibleTransition('previous_section', 'already_at_first_section');
+            return;
+        }
+        setState((prev) => ({ ...prev, currentSectionIndex: prev.currentSectionIndex - 1 }));
+    }, [state.currentPhase, state.currentSectionIndex, emitImpossibleTransition]);
 
     const markPhaseComplete = useCallback((phase: LessonPhase) => {
         setState((prev) => {
@@ -193,6 +268,10 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
     // Keyboard navigation
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.repeat) {
+                return;
+            }
+
             // Only handle if not in an input/textarea/button
             if (
                 event.target instanceof HTMLInputElement ||
@@ -204,15 +283,23 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
 
             switch (event.key) {
                 case 'ArrowRight':
-                    if (canGoNext) {
+                    // Only allow keyboard "next" on phases that do not have
+                    // per-phase gating logic (e.g. checkpoints/practice answers).
+                    if (canGoNext && (state.currentPhase === 'welcome' || state.currentPhase === 'review')) {
                         event.preventDefault();
                         nextPhase();
+                    } else if (!canGoNext) {
+                        emitImpossibleTransition('keyboard', 'keyboard_no_forward_transition', { key: event.key });
+                    } else {
+                        emitImpossibleTransition('keyboard', 'keyboard_forward_blocked_by_gate', { key: event.key });
                     }
                     break;
                 case 'ArrowLeft':
                     if (canGoBack) {
                         event.preventDefault();
                         previousPhase();
+                    } else {
+                        emitImpossibleTransition('keyboard', 'keyboard_no_backward_transition', { key: event.key });
                     }
                     break;
                 case 'Enter':
@@ -220,12 +307,18 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
                     if (canGoNext && (state.currentPhase === 'welcome' || state.currentPhase === 'review')) {
                         event.preventDefault();
                         nextPhase();
+                    } else if (!canGoNext) {
+                        emitImpossibleTransition('keyboard', 'keyboard_no_forward_transition', { key: event.key });
+                    } else {
+                        emitImpossibleTransition('keyboard', 'keyboard_forward_blocked_by_gate', { key: event.key });
                     }
                     break;
                 case 'Escape':
                     if (canGoBack) {
                         event.preventDefault();
                         previousPhase();
+                    } else {
+                        emitImpossibleTransition('keyboard', 'keyboard_no_backward_transition', { key: event.key });
                     }
                     break;
             }
@@ -233,7 +326,14 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [canGoNext, canGoBack, nextPhase, previousPhase, state.currentPhase]);
+    }, [
+        canGoNext,
+        canGoBack,
+        nextPhase,
+        previousPhase,
+        state.currentPhase,
+        emitImpossibleTransition,
+    ]);
 
     const contextValue = useMemo<LessonStepperContextValue>(
         () => ({

@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { captureServerMessage } from './monitoring.js';
+import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 export type ModuleListItem = {
   id: number;
@@ -153,10 +154,72 @@ const MODULE_ASSET_LIMIT = parseLimit(process.env.MODULE_ASSET_LIMIT, 400);
 const MODULE_LESSON_LIMIT = parseLimit(process.env.MODULE_LESSON_LIMIT, 120);
 const MIN_LESSONS_PER_MODULE = parseMinLessons(process.env.MIN_LESSONS_PER_MODULE, 2);
 
+const readMetadataText = (
+  metadata: Record<string, unknown> | null | undefined,
+  key: string,
+): string => {
+  const value = metadata?.[key];
+  return typeof value === 'string' ? value.toLowerCase() : '';
+};
+
+const lessonVariantRank = (
+  lesson: {
+    slug?: string | null;
+    title: string;
+    metadata?: Record<string, unknown> | null;
+  },
+): number => {
+  const slug = (lesson.slug ?? '').toLowerCase();
+  const title = lesson.title.toLowerCase();
+  const metadataSignals = [
+    readMetadataText(lesson.metadata, 'variant'),
+    readMetadataText(lesson.metadata, 'lesson_variant'),
+    readMetadataText(lesson.metadata, 'lesson_type'),
+    readMetadataText(lesson.metadata, 'type'),
+    readMetadataText(lesson.metadata, 'seeded_by'),
+  ].join(' ');
+
+  if (
+    slug.endsWith('-launch') ||
+    /\blaunch\b/.test(title) ||
+    /\blaunch\b/.test(metadataSignals)
+  ) {
+    return 0;
+  }
+
+  if (
+    slug.startsWith('intro-') ||
+    title.startsWith('intro:') ||
+    /\bintro\b/.test(metadataSignals)
+  ) {
+    return 2;
+  }
+
+  return 1;
+};
+
+const compareCanonicalLessonOrder = <
+  T extends {
+    id: number;
+    title: string;
+    slug?: string | null;
+    metadata?: Record<string, unknown> | null;
+  },
+>(
+  a: T,
+  b: T,
+): number => {
+  const rankDelta = lessonVariantRank(a) - lessonVariantRank(b);
+  if (rankDelta !== 0) return rankDelta;
+  return a.id - b.id;
+};
+
 type LessonRow = {
   id: number;
   module_id: number;
   title: string;
+  slug: string | null;
+  metadata: Record<string, unknown> | null;
   content: string;
   estimated_duration_minutes: number | null;
   attribution_block: string | null;
@@ -166,6 +229,8 @@ type LessonRow = {
 type LessonNavRow = {
   id: number;
   title: string;
+  slug: string | null;
+  metadata: Record<string, unknown> | null;
   estimated_duration_minutes: number | null;
   open_track: boolean | null;
 };
@@ -430,7 +495,7 @@ export const getModuleDetail = async (
   const [lessonsResult, assetsResult, moduleStandardsResult, assessmentsResult] = await Promise.all([
     supabase
       .from('lessons')
-      .select('id, title, content, estimated_duration_minutes, attribution_block, open_track')
+      .select('id, title, slug, metadata, content, estimated_duration_minutes, attribution_block, open_track')
       .eq('module_id', moduleId)
       .eq('visibility', 'public')
       .order('id', { ascending: true })
@@ -465,10 +530,11 @@ export const getModuleDetail = async (
   }
 
   const lessonsRaw = (lessonsResult.data ?? []) as LessonRow[];
+  const orderedLessons = lessonsRaw.slice().sort(compareCanonicalLessonOrder);
   if (lessonsRaw.length === MODULE_LESSON_LIMIT) {
     captureServerMessage('[modules] lesson list truncated', { moduleId, limit: MODULE_LESSON_LIMIT }, 'warning');
   }
-  const lessons = lessonsRaw.map((lesson) => ({
+  const lessons = orderedLessons.map((lesson) => ({
     id: lesson.id,
     title: lesson.title,
     content: lesson.content,
@@ -651,7 +717,7 @@ export const getLessonDetail = async (
       .order('id', { ascending: true }),
     supabase
       .from('lessons')
-      .select('id, title, estimated_duration_minutes, open_track')
+      .select('id, title, slug, metadata, estimated_duration_minutes, open_track')
       .eq('module_id', moduleId)
       .eq('visibility', 'public')
       .order('id', { ascending: true })
@@ -675,6 +741,7 @@ export const getLessonDetail = async (
 
   const assets = (assetsResult.data ?? []) as AssetSummary[];
   const moduleLessonsRaw = (moduleLessonsResult.data ?? []) as LessonNavRow[];
+  const orderedModuleLessons = moduleLessonsRaw.slice().sort(compareCanonicalLessonOrder);
   if (moduleLessonsRaw.length === MODULE_LESSON_LIMIT) {
     captureServerMessage('[modules] lesson navigation truncated', { moduleId, limit: MODULE_LESSON_LIMIT }, 'warning');
   }
@@ -690,7 +757,7 @@ export const getLessonDetail = async (
       assets,
     },
     module: moduleResult.data as ModuleListItem,
-    module_lessons: moduleLessonsRaw.map((lesson) => ({
+    module_lessons: orderedModuleLessons.map((lesson) => ({
       id: lesson.id,
       title: lesson.title,
       estimated_duration_minutes: lesson.estimated_duration_minutes ?? null,
@@ -804,6 +871,8 @@ export const getModuleAssessment = async (
   }
 
   const sectionToQuestions = new Map<number, ModuleAssessmentQuestion[]>();
+  let blockedQuestionCount = 0;
+  const blockedReasonCounts: Record<string, number> = {};
 
   for (const link of questionLinks) {
     const question = questionLookup.get(link.question_id);
@@ -817,6 +886,20 @@ export const getModuleAssessment = async (
           [standardsValue] :
           [];
     const tags = Array.isArray(question.tags) ? (question.tags as string[]) : [];
+    const sortedOptions = (optionsLookup.get(question.id) ?? []).sort((a, b) => a.order - b.order);
+    const quality = assessAssessmentQuestionQuality({
+      prompt: question.prompt,
+      type: question.question_type,
+      options: sortedOptions.map((option) => ({
+        text: option.content,
+        isCorrect: option.is_correct,
+      })),
+    });
+    if (quality.shouldBlock) {
+      blockedQuestionCount += 1;
+      incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+      continue;
+    }
 
     const questionDetail: ModuleAssessmentQuestion = {
       id: question.id,
@@ -826,12 +909,25 @@ export const getModuleAssessment = async (
       explanation: question.solution_explanation ?? null,
       standards,
       tags,
-      options: (optionsLookup.get(question.id) ?? []).sort((a, b) => a.order - b.order),
+      options: sortedOptions,
     };
 
     const list = sectionToQuestions.get(link.section_id) ?? [];
     list.push(questionDetail);
     sectionToQuestions.set(link.section_id, list);
+  }
+
+  if (blockedQuestionCount > 0) {
+    captureServerMessage(
+      '[module-assessment] blocked low-quality questions during module assessment load',
+      {
+        moduleId,
+        assessmentId: assessmentRow.id,
+        blockedCount: blockedQuestionCount,
+        reasonCounts: blockedReasonCounts,
+      },
+      'warning',
+    );
   }
 
   const detailedSections: ModuleAssessmentSection[] = sections.map((section) => ({

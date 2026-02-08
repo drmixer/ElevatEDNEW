@@ -16,15 +16,15 @@ import type { LessonSection } from '../../../types/lesson';
 import getTutorResponse from '../../../services/getTutorResponse';
 import { extractPerimeterDimensionsFromText, getSectionVisual } from '../../../lib/lessonVisuals';
 import trackEvent from '../../../lib/analytics';
-import { getPerimeterQuickReview } from '../../../lib/pilotPerimeterQuickReview';
-import { isGrade2MathPerimeterPilot } from '../../../lib/pilotConditions';
-import { getDeterministicPerimeterCheckpoint } from '../../../lib/pilotPerimeterCheckpoints';
+import { getGrade2MathPilotTopic, isGrade2MathAdaptivePilot, type Grade2MathPilotTopic } from '../../../lib/pilotConditions';
+import { getDeterministicGrade2MathCheckpoint, getGrade2MathCheckpointHint, getGrade2MathQuickReview } from '../../../lib/pilotGrade2Math';
 import { fetchRemoteImage, type RemoteImageResult } from '../../../lib/remoteImageSearch';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
     lessonId?: number;
     pilotTelemetryEnabled?: boolean;
+    pilotTopic?: Grade2MathPilotTopic | null;
     lessonTitle?: string;
     subject?: string;
     gradeBand?: string;
@@ -52,30 +52,6 @@ type QuickReviewState = {
     isVisible: boolean;
     selectedIndex: number | null;
     isCorrect: boolean | null;
-};
-
-const getDeterministicCheckpointHint = (input: {
-    intent: CheckpointIntent;
-    sectionContent: string;
-}): string => {
-    const dims = extractPerimeterDimensionsFromText(input.sectionContent);
-    if (input.intent === 'define') {
-        return 'Perimeter means the distance around the outside of a shape.';
-    }
-
-    if (dims?.shape === 'square') {
-        return 'A square has 4 equal sides. Add the same number 4 times.';
-    }
-    if (dims?.shape === 'rectangle') {
-        return 'A rectangle has 2 long sides and 2 short sides. Add all 4 sides.';
-    }
-    if (dims?.shape === 'triangle') {
-        return 'A triangle has 3 sides. Add the 3 side lengths.';
-    }
-    if (input.intent === 'scenario') {
-        return 'Perimeter is how much it takes to go all the way around (like fence or string). Add the side lengths.';
-    }
-    return 'Perimeter means add all the side lengths.';
 };
 
 const getPilotCheckpointCacheKey = (lessonId: number | undefined, sectionIndex: number, intent: CheckpointIntent) => {
@@ -139,18 +115,6 @@ const shuffleWithCorrectIndex = (
     return { options: arranged, correctIndex: targetIndex };
 };
 
-const localCheckpointFromMathPerimeter = (input: {
-    sectionContent: string;
-    intent: CheckpointIntent;
-    seed: number;
-}): CheckpointPayload | null => {
-    return getDeterministicPerimeterCheckpoint({
-        sectionContent: input.sectionContent,
-        intent: input.intent,
-        seed: input.seed,
-    });
-};
-
 const containsBannedGenericCoaching = (text: string): boolean => {
     const t = (text ?? '').toString().toLowerCase();
     return /(study strategy|study strategies|ask for help|ask a teacher|teacher|main concept|real-life situation|memorize|practice more|use a calculator|copy someone)/i.test(t);
@@ -181,6 +145,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     sections,
     lessonId,
     pilotTelemetryEnabled,
+    pilotTopic,
     lessonTitle,
     subject,
     gradeBand,
@@ -213,8 +178,13 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         return intents[currentSectionIndex % intents.length] ?? 'define';
     }, [currentSectionIndex]);
 
+    const resolvedPilotTopic = useMemo(() => {
+        if (pilotTopic) return pilotTopic;
+        return getGrade2MathPilotTopic({ subject, gradeBand, lessonTitle });
+    }, [gradeBand, lessonTitle, pilotTopic, subject]);
+
     const checkpointEnabled = useMemo(() => {
-        return isGrade2MathPerimeterPilot({ subject, gradeBand, lessonTitle });
+        return isGrade2MathAdaptivePilot({ subject, gradeBand, lessonTitle });
     }, [gradeBand, lessonTitle, subject]);
 
     const sectionVisual = useMemo(() => {
@@ -301,9 +271,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     }, [currentSectionIndex, quickReviewBySection]);
 
     const quickReviewContent = useMemo(() => {
-        const dims = extractPerimeterDimensionsFromText(currentSection?.content ?? '');
-        return getPerimeterQuickReview(dims);
-    }, [currentSection?.content]);
+        return getGrade2MathQuickReview({
+            topic: resolvedPilotTopic ?? 'perimeter',
+            sectionContent: currentSection?.content ?? '',
+        });
+    }, [currentSection?.content, resolvedPilotTopic]);
 
     const isCheckpointHintShown = useMemo(
         () => checkpointHintShownBySection.get(currentSectionIndex) ?? false,
@@ -334,6 +306,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
     const generateCheckpoint = useCallback(async () => {
         if (!currentSection) return;
+        if (!resolvedPilotTopic) return;
 
         const cacheKey = getPilotCheckpointCacheKey(lessonId, currentSectionIndex, checkpointIntent);
         const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
@@ -362,6 +335,57 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                     // ignore and regenerate
                 }
             }
+        }
+
+        if (resolvedPilotTopic !== 'perimeter') {
+            const local = getDeterministicGrade2MathCheckpoint({
+                topic: resolvedPilotTopic,
+                sectionContent: currentSection.content ?? '',
+                intent: checkpointIntent,
+                seed: seedBase + intentOffset,
+            });
+            if (!local) {
+                setCheckpointBySection((prev) => {
+                    const next = new Map(prev);
+                    next.set(currentSectionIndex, {
+                        status: 'error',
+                        message: 'Unable to generate checkpoint right now.',
+                    });
+                    return next;
+                });
+                return;
+            }
+
+            const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+            const finalLocal: CheckpointPayload = {
+                ...local,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+            };
+            setCheckpointBySection((prev) => {
+                const next = new Map(prev);
+                next.set(currentSectionIndex, {
+                    status: 'ready',
+                    payload: finalLocal,
+                    intent: checkpointIntent,
+                    selectedIndex: null,
+                    isCorrect: null,
+                });
+                return next;
+            });
+            if (pilotTelemetryEnabled) {
+                trackEvent('success_pilot_checkpoint_generated', {
+                    lessonId,
+                    sectionIndex: currentSectionIndex,
+                    source: 'deterministic',
+                    topic: resolvedPilotTopic,
+                    intent: checkpointIntent,
+                });
+            }
+            if (typeof window !== 'undefined') {
+                window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalLocal, intent: checkpointIntent }));
+            }
+            return;
         }
 
         setCheckpointBySection((prev) => {
@@ -439,7 +463,8 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             if (!tutorMessage) {
                 const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
                 const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
-                const local = localCheckpointFromMathPerimeter({
+                const local = getDeterministicGrade2MathCheckpoint({
+                    topic: resolvedPilotTopic,
                     sectionContent: currentSection.content ?? '',
                     intent: checkpointIntent,
                     seed: seedBase + intentOffset,
@@ -522,7 +547,8 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalPayload, intent: checkpointIntent }));
             }
         } catch (error) {
-            const local = localCheckpointFromMathPerimeter({
+            const local = getDeterministicGrade2MathCheckpoint({
+                topic: resolvedPilotTopic,
                 sectionContent: currentSection.content ?? '',
                 intent: checkpointIntent,
                 seed: seedBase + intentOffset + 7,
@@ -569,7 +595,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return next;
             });
         }
-    }, [checkpointIntent, currentSection, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, subject]);
+    }, [checkpointIntent, currentSection, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, resolvedPilotTopic, subject]);
 
     useEffect(() => {
         if (!checkpointEnabled) return;
@@ -679,11 +705,12 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
     const checkpointHintText = useMemo(() => {
         if (checkpointState.status !== 'ready') return null;
-        return getDeterministicCheckpointHint({
+        return getGrade2MathCheckpointHint({
+            topic: resolvedPilotTopic ?? 'perimeter',
             intent: checkpointState.intent,
             sectionContent: currentSection?.content ?? '',
         });
-    }, [checkpointState, currentSection?.content]);
+    }, [checkpointState, currentSection?.content, resolvedPilotTopic]);
 
     const toggleCheckpointHint = () => {
         if (!pilotTelemetryEnabled) return;

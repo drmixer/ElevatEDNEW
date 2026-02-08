@@ -6,6 +6,7 @@ import type {
   AdminDashboardData,
   AdminDashboardMetrics,
   AdminGrowthPoint,
+  AdminCheckpointMetrics,
   AdminSubjectPerformance,
   AdminTopStudent,
   AdminSuccessMetrics,
@@ -44,6 +45,8 @@ import { listPlanOptOuts } from './optOutService';
 import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarManifests';
 import { computeSubjectStatuses } from '../lib/onTrack';
 import { buildCoachingSuggestions } from '../lib/parentSuggestions';
+import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
+import { computeCheckpointEvaluation } from '../lib/evaluationHarness';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
@@ -86,6 +89,22 @@ type XpEventRow = {
 type AssessmentAttemptRow = {
   status: 'in_progress' | 'completed' | 'abandoned' | null;
   completed_at: string | null;
+};
+
+type AnalyticsCheckpointEventRow = {
+  student_id: string | null;
+  occurred_at: string | null;
+  payload: Record<string, unknown> | null;
+};
+
+type QuestionQualitySampleRow = {
+  id: number;
+  prompt: string;
+  question_type: string | null;
+  question_options?: Array<{
+    content: string;
+    is_correct: boolean;
+  }> | null;
 };
 
 type StudentDailyActivityRow = {
@@ -859,6 +878,19 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     weeklyAccuracyDeltaAvg: allowSyntheticDashboardData ? 1.2 : null,
     dailyPlanCompletionRateAvg: allowSyntheticDashboardData ? 64 : null,
     alertResolutionHoursAvg: allowSyntheticDashboardData ? 10.4 : null,
+  },
+  checkpointMetrics: {
+    lookbackDays: 7,
+    attemptCount: allowSyntheticDashboardData ? 920 : 0,
+    firstAttemptCount: allowSyntheticDashboardData ? 520 : 0,
+    firstPassCount: allowSyntheticDashboardData ? 374 : 0,
+    firstPassRate: allowSyntheticDashboardData ? 71.9 : null,
+    recoverableCount: allowSyntheticDashboardData ? 146 : 0,
+    recoveredWithinTwoCount: allowSyntheticDashboardData ? 108 : 0,
+    recoveryRateWithinTwo: allowSyntheticDashboardData ? 74 : null,
+    genericContentSampleCount: allowSyntheticDashboardData ? 900 : 0,
+    genericContentBlockedCount: allowSyntheticDashboardData ? 12 : 0,
+    genericContentRate: allowSyntheticDashboardData ? 1.3 : null,
   },
   growthSeries: allowSyntheticDashboardData
     ? Array.from({ length: 8 }).map((_, index) => {
@@ -2216,6 +2248,33 @@ const buildAdminAlerts = (
   return alerts.length ? alerts : fallbackAdminData(admin).alerts;
 };
 
+const computeGenericQuestionRate = (
+  rows: QuestionQualitySampleRow[],
+): { sampleCount: number; genericCount: number; genericRate: number | null } => {
+  if (!rows.length) {
+    return { sampleCount: 0, genericCount: 0, genericRate: null };
+  }
+
+  let genericCount = 0;
+  rows.forEach((row) => {
+    const quality = assessPracticeQuestionQuality({
+      prompt: row.prompt,
+      type: row.question_type,
+      options: (row.question_options ?? []).map((option) => ({
+        text: option.content,
+        isCorrect: option.is_correct,
+      })),
+    });
+    if (quality.isGeneric) {
+      genericCount += 1;
+    }
+  });
+
+  const sampleCount = rows.length;
+  const genericRate = sampleCount > 0 ? Math.round((genericCount / sampleCount) * 1000) / 10 : null;
+  return { sampleCount, genericCount, genericRate };
+};
+
 export const fetchStudentDashboardData = async (
   student: Student,
 ): Promise<StudentDashboardData> => {
@@ -3089,6 +3148,8 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       assignmentsTotalResult,
       assignmentsCompletedResult,
       { data: successRollupRow, error: successRollupError },
+      { data: checkpointRows, error: checkpointError },
+      { data: questionQualityRows, error: questionQualityError },
     ] = await Promise.all([
       supabase.from('admin_dashboard_metrics').select('*').single(),
       supabase
@@ -3129,6 +3190,19 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         .eq('status', 'completed')
         .gte('updated_at', lookbackIso),
       supabase.from('admin_success_metrics_rollup').select('*').single(),
+      supabase
+        .from('analytics_events')
+        .select('student_id, occurred_at, payload')
+        .eq('event_name', 'success_pilot_checkpoint_answered')
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(10000),
+      supabase
+        .from('question_bank')
+        .select('id, prompt, question_type, question_options(content, is_correct)')
+        .gte('created_at', lookbackIso)
+        .order('created_at', { ascending: false })
+        .limit(2000),
     ]);
 
     if (metricsError) {
@@ -3156,6 +3230,10 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       console.error('[Dashboard] Admin assignments completion fetch failed', assignmentsCompletedResult.error);
     if (successRollupError)
       console.error('[Dashboard] Admin success metrics rollup fetch failed', successRollupError);
+    if (checkpointError)
+      console.error('[Dashboard] Admin checkpoint telemetry fetch failed', checkpointError);
+    if (questionQualityError)
+      console.error('[Dashboard] Admin question quality sample fetch failed', questionQualityError);
 
     const completedLessons = completedProgressResult.count ?? 0;
     const inProgressLessons = inProgressProgressResult.count ?? 0;
@@ -3214,6 +3292,44 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       weeklyAccuracyDeltaAvg,
       dailyPlanCompletionRateAvg,
       alertResolutionHoursAvg,
+    };
+
+    const checkpointSummary = computeCheckpointEvaluation(
+      ((checkpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+        studentId: row.student_id,
+        occurredAt: row.occurred_at,
+        payload: row.payload,
+      })),
+    );
+
+    let questionSampleRows = (questionQualityRows as QuestionQualitySampleRow[]) ?? [];
+    if (!questionSampleRows.length) {
+      const { data: fallbackQualityRows, error: fallbackQualityError } = await supabase
+        .from('question_bank')
+        .select('id, prompt, question_type, question_options(content, is_correct)')
+        .order('created_at', { ascending: false })
+        .limit(500);
+      if (fallbackQualityError) {
+        console.error('[Dashboard] Admin fallback question quality sample fetch failed', fallbackQualityError);
+      } else {
+        questionSampleRows = (fallbackQualityRows as QuestionQualitySampleRow[]) ?? [];
+      }
+    }
+
+    const genericContentSummary = computeGenericQuestionRate(questionSampleRows);
+
+    const checkpointMetrics: AdminCheckpointMetrics = {
+      lookbackDays,
+      attemptCount: checkpointSummary.attemptCount,
+      firstAttemptCount: checkpointSummary.firstAttemptCount,
+      firstPassCount: checkpointSummary.firstPassCount,
+      firstPassRate: checkpointSummary.firstPassRate,
+      recoverableCount: checkpointSummary.recoverableCount,
+      recoveredWithinTwoCount: checkpointSummary.recoveredWithinTwoCount,
+      recoveryRateWithinTwo: checkpointSummary.recoveryRateWithinTwo,
+      genericContentSampleCount: genericContentSummary.sampleCount,
+      genericContentBlockedCount: genericContentSummary.genericCount,
+      genericContentRate: genericContentSummary.genericRate,
     };
 
     const growthGrouped = new Map<string, { newStudents: number; activeStudents: number }>();
@@ -3300,6 +3416,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       alerts,
       topStudents: topStudents.length ? topStudents : fallbackAdminData(admin).topStudents,
       successMetrics,
+      checkpointMetrics,
     };
   } catch (error) {
     console.error('[Dashboard] Admin dashboard fallback engaged', error);

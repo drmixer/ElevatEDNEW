@@ -8,6 +8,7 @@ type ReliabilityStage =
   | 'auth_resend_verification'
   | 'diagnostic_load'
   | 'lesson_playback'
+  | 'lesson_navigation'
   | 'adaptive_path';
 
 type ReliabilityStatus = 'success' | 'error';

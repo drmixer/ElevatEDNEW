@@ -1,4 +1,5 @@
 import { HttpError } from './httpError.js';
+import { assessAssessmentQuestionQuality } from '../shared/questionQuality.js';
 
 export type PlacementQuestionOption = {
   id: number;
@@ -99,6 +100,22 @@ export const validatePlacementQuestions = (
         return null;
       }
 
+      const quality = assessAssessmentQuestionQuality({
+        prompt: question.prompt,
+        type: normalizedType,
+        options: capped.map((option) => ({
+          text: option.text,
+          isCorrect: option.isCorrect,
+        })),
+      });
+      if (quality.shouldBlock) {
+        invalidReasons.push({
+          bankQuestionId: question.bankQuestionId,
+          reason: `quality_${quality.reasons[0] ?? 'blocked'}`,
+        });
+        return null;
+      }
+
       return { ...question, type: normalizedType, options: capped } satisfies PlacementQuestion;
     })
     .filter((question): question is PlacementQuestion => Boolean(question));
@@ -115,4 +132,3 @@ export const validatePlacementQuestions = (
 
   return { questions: validated, invalidReasons, filteredOutCount };
 };
-

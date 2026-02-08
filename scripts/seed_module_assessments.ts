@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type QuizOption = {
   text: string;
@@ -53,6 +54,8 @@ const ensureQuestionsValid = (moduleSlug: string, quiz: QuizDefinition): void =>
   if (!Array.isArray(quiz.questions) || quiz.questions.length === 0) {
     throw new Error(`Module ${moduleSlug} quiz must include at least one question.`);
   }
+  let blockedCount = 0;
+  const reasonCounts: Record<string, number> = {};
   quiz.questions.forEach((question, index) => {
     if (!question.prompt) {
       throw new Error(`Question ${index + 1} for module ${moduleSlug} is missing a prompt.`);
@@ -71,7 +74,32 @@ const ensureQuestionsValid = (moduleSlug: string, quiz: QuizDefinition): void =>
         throw new Error(`Question ${index + 1} for module ${moduleSlug} must include a correct option.`);
       }
     }
+
+    const quality = assessAssessmentQuestionQuality({
+      prompt: question.prompt,
+      type,
+      options: (question.options ?? []).map((option) => ({
+        text: option.text,
+        isCorrect: option.isCorrect,
+      })),
+    });
+    if (quality.shouldBlock) {
+      blockedCount += 1;
+      incrementQuestionQualityReasonCounts(reasonCounts, quality.reasons);
+    }
   });
+
+  if (blockedCount > 0) {
+    console.warn('[seed_module_assessments] Blocked low-quality assessment questions', {
+      source: 'scripts/seed_module_assessments.ts',
+      moduleSlug,
+      blockedCount,
+      reasonCounts,
+    });
+    throw new Error(
+      `Module ${moduleSlug} quiz failed quality gate (${blockedCount} blocked): ${JSON.stringify(reasonCounts)}`,
+    );
+  }
 };
 
 const fetchModuleMetadata = async (supabase: SupabaseClient, moduleIds: number[]): Promise<ModuleRecord[]> => {

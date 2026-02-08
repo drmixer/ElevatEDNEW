@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type DiagnosticOption = {
   text: string;
@@ -222,11 +223,35 @@ const insertDiagnostic = async (
   });
 
   let questionOrder = 1;
+  let blockedCount = 0;
+  const blockedReasonCounts: Record<string, number> = {};
 
   for (const item of config.items) {
     if (!item.prompt || !item.options?.length) {
       throw new Error(`Diagnostic item ${item.id} missing prompt/options.`);
     }
+
+    const quality = assessAssessmentQuestionQuality({
+      prompt: item.prompt,
+      type: item.type ?? 'multiple_choice',
+      options: item.options.map((option) => ({
+        text: option.text,
+        isCorrect: option.isCorrect,
+      })),
+    });
+    if (quality.shouldBlock) {
+      blockedCount += 1;
+      incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+      console.warn('[seed_diagnostic_assessments] Blocking low-quality diagnostic item', {
+        source: 'scripts/seed_diagnostic_assessments.ts',
+        diagnosticTitle: config.title,
+        subjectKey,
+        itemId: item.id,
+        reasons: quality.reasons,
+      });
+      continue;
+    }
+
     const sectionId =
       sectionLookup.get((item.strand ?? '').toLowerCase().trim()) ??
       (sectionRows[0]?.id as number | undefined) ??
@@ -290,6 +315,20 @@ const insertDiagnostic = async (
     }
 
     questionOrder += 1;
+  }
+
+  if (questionOrder === 1) {
+    throw new Error(`Diagnostic ${config.title} has no valid questions after quality filtering.`);
+  }
+
+  if (blockedCount > 0) {
+    console.warn('[seed_diagnostic_assessments] Quality gate blocked diagnostic items', {
+      source: 'scripts/seed_diagnostic_assessments.ts',
+      diagnosticTitle: config.title,
+      subjectKey,
+      blockedCount,
+      reasonCounts: blockedReasonCounts,
+    });
   }
 };
 
