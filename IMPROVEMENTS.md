@@ -434,13 +434,28 @@ Guardrail metrics:
 2. Evaluation harness + release gating dashboards.
 3. Broader K-5 visual/adaptation generalization.
 
+## P3 (Next Wave: Phase D/E Follow-through)
+
+1. Checkpoint/practice comprehension hardening:
+   - reduce truncation risk in prompts/options,
+   - preserve full concept context in student-facing copy.
+2. Confusion + abandon instrumentation:
+   - add checkpoint-moment confusion/exit telemetry,
+   - expose weekly trend slices by grade/subject in admin analytics.
+3. Tutor boundary clarity upgrades:
+   - explicitly label AI-direct vs deterministic fallback responses in tutor outcomes,
+   - add guardrail telemetry for ambiguous boundary cases.
+4. Parent explanation quality pass:
+   - ensure parent support recommendations consistently include concise "why now" rationale,
+   - add review hooks for recommendations missing actionable specificity.
+
 ---
 
 ## 7. Working Protocol For Future Chats
 
 When starting a new chat, reference:
 
-`Use /Users/drmixer/code/ElevatEDNEW/IMPROVEMENTS.md as the active execution plan and continue from the top unfinished P0 item.`
+`Use /Users/drmixer/code/ElevatEDNEW/IMPROVEMENTS.md as the active execution plan and continue from the top unfinished P3 (Phase D/E Follow-through) item.`
 
 Expected per-chat output:
 
@@ -471,6 +486,13 @@ Expected per-chat output:
 - [x] Parent/student decision transparency cards shipped.
 - [x] Eval harness + release gates enforced.
 - [x] K-5 adaptation expansion completed.
+
+## P3 (Phase D/E Follow-through)
+
+- [ ] Checkpoint/practice prompt-option truncation/comprehension hardening shipped in active student flow.
+- [ ] Checkpoint confusion/abandon telemetry added and surfaced for weekly grade/subject slicing.
+- [ ] Tutor boundary clarity event contract expanded to distinguish AI-direct vs deterministic fallback outcomes.
+- [ ] Parent recommendation rationale quality checks added for missing/weak "why now" explanations.
 
 ## Phase B/C Measurement Follow-through
 
