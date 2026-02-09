@@ -52,7 +52,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p coverage-reports
-          npm run eval:release-gates:live -- --lookback-days 7 | tee coverage-reports/release_gates_live.txt
+          npm run eval:release-gates:live -- --lookback-days 30 | tee coverage-reports/release_gates_live.txt
 
       - name: High-traffic module report (14d)
         run: |
@@ -61,6 +61,7 @@ jobs:
           npm run audit:traffic-report -- --days 14 --limit 25 --output ops-reports/high_traffic_modules.txt
 
       - name: Upload coverage artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-audits-${{ github.run_id }}
