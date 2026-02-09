@@ -1966,15 +1966,24 @@ const StudentDashboard: React.FC = () => {
     }
     if (lesson.launchUrl) {
       if (lesson.launchUrl.startsWith('/')) {
-        navigate(lesson.launchUrl);
+        navigate(lesson.launchUrl, {
+          state: {
+            suggestionReason: lesson.suggestionReason ?? null,
+            source: 'student_dashboard',
+          },
+        });
         return;
       }
       window.open(lesson.launchUrl, '_blank', 'noopener');
       return;
     }
     const numericId = Number.parseInt(lesson.id, 10);
+    const launchState = {
+      suggestionReason: lesson.suggestionReason ?? null,
+      source: 'student_dashboard',
+    };
     if (!Number.isNaN(numericId)) {
-      navigate(`/lesson/${numericId}`);
+      navigate(`/lesson/${numericId}`, { state: launchState });
     }
   };
 

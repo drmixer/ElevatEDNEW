@@ -14,6 +14,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { assessPracticeQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 dotenv.config();
 
@@ -480,8 +481,28 @@ async function createQuestion(
     skillId: number,
     subjectId: number,
     gradeBand: string,
-    dryRun: boolean
+    dryRun: boolean,
+    qualityTelemetry: { blockedCount: number; reasonCounts: Record<string, number> }
 ): Promise<number | null> {
+    const quality = assessPracticeQuestionQuality({
+        prompt: question.prompt,
+        type: question.type,
+        options: question.options.map((option) => ({
+            text: option.text,
+            isCorrect: option.isCorrect,
+        })),
+    });
+    if (quality.shouldBlock) {
+        qualityTelemetry.blockedCount += 1;
+        incrementQuestionQualityReasonCounts(qualityTelemetry.reasonCounts, quality.reasons);
+        console.warn('[generate_practice_for_all_lessons] Blocking low-quality generated practice question', {
+            source: 'scripts/generate_practice_for_all_lessons.ts',
+            reasons: quality.reasons,
+            promptPreview: question.prompt.slice(0, 80),
+        });
+        return null;
+    }
+
     if (dryRun) {
         return -1;
     }
@@ -572,7 +593,8 @@ async function linkLessonToSkill(
 async function processLesson(
     lesson: LessonToProcess,
     dryRun: boolean,
-    stats: { skills: number; questions: number; links: number; errors: number }
+    stats: { skills: number; questions: number; links: number; errors: number; blockedQuality: number },
+    qualityTelemetry: { blockedCount: number; reasonCounts: Record<string, number> }
 ): Promise<void> {
     // Create skill for this lesson
     const skillName = createSkillName(lesson);
@@ -602,11 +624,14 @@ async function processLesson(
             skillId,
             lesson.subject_id,
             lesson.grade_band,
-            dryRun
+            dryRun,
+            qualityTelemetry
         );
 
         if (questionId && !dryRun) {
             stats.questions++;
+        } else if (questionId === null) {
+            stats.blockedQuality++;
         }
     }
 }
@@ -657,7 +682,8 @@ async function main() {
     console.log('');
 
     // Process lessons
-    const stats = { skills: 0, questions: 0, links: 0, errors: 0 };
+    const stats = { skills: 0, questions: 0, links: 0, errors: 0, blockedQuality: 0 };
+    const qualityTelemetry = { blockedCount: 0, reasonCounts: {} as Record<string, number> };
     let processed = 0;
 
     for (const lesson of lessons) {
@@ -667,7 +693,7 @@ async function main() {
         }
 
         try {
-            await processLesson(lesson, dryRun, stats);
+            await processLesson(lesson, dryRun, stats, qualityTelemetry);
         } catch (e) {
             console.error(`Error processing lesson ${lesson.id}: ${e}`);
             stats.errors++;
@@ -683,7 +709,16 @@ async function main() {
     console.log(`Skills ${dryRun ? 'would be' : ''} created: ${stats.skills}`);
     console.log(`Questions ${dryRun ? 'would be' : ''} created: ${stats.questions}`);
     console.log(`Lesson-skill links ${dryRun ? 'would be' : ''} created: ${stats.links}`);
+    console.log(`Questions blocked by quality gate: ${stats.blockedQuality}`);
     console.log(`Errors: ${stats.errors}`);
+
+    if (qualityTelemetry.blockedCount > 0) {
+        console.warn('[generate_practice_for_all_lessons] Quality gate blocked generated questions', {
+            source: 'scripts/generate_practice_for_all_lessons.ts',
+            blockedCount: qualityTelemetry.blockedCount,
+            reasonCounts: qualityTelemetry.reasonCounts,
+        });
+    }
 
     if (dryRun) {
         console.log('');

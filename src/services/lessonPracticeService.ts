@@ -1,6 +1,7 @@
 import supabase from '../lib/supabaseClient';
 import type { LessonPracticeQuestion, Subject } from '../types';
 import recordReliabilityCheckpoint from '../lib/reliability';
+import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
 
 type LessonSkillRow = { skill_id: number };
 type QuestionSkillRow = { question_id: number; skill_id: number };
@@ -164,7 +165,42 @@ export const fetchLessonCheckQuestions = async (
     }),
   );
 
-  return mappedQuestions.slice(0, limit);
+  const filteredQuestions: LessonPracticeQuestion[] = [];
+  let blockedCount = 0;
+
+  for (const question of mappedQuestions) {
+    const quality = assessPracticeQuestionQuality({
+      prompt: question.prompt,
+      options: question.options.map((option) => ({
+        text: option.text,
+        isCorrect: option.isCorrect,
+      })),
+      type: question.type,
+    });
+
+    if (quality.shouldBlock) {
+      blockedCount += 1;
+      continue;
+    }
+
+    filteredQuestions.push(question);
+  }
+
+  if (blockedCount > 0) {
+    console.warn('[lesson-quiz] Blocked low-quality practice questions from playback', {
+      lessonId,
+      blockedCount,
+      candidateCount: mappedQuestions.length,
+    });
+    recordReliabilityCheckpoint('lesson_playback', 'error', {
+      phase: 'question_quality_filter',
+      lessonId,
+      blockedCount,
+      candidateCount: mappedQuestions.length,
+    });
+  }
+
+  return filteredQuestions.slice(0, limit);
 };
 
 type QuestionAttemptInput = {

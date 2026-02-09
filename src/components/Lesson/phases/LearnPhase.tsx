@@ -4,7 +4,7 @@
  * Main learning content phase with section-by-section navigation.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -16,14 +16,22 @@ import type { LessonSection } from '../../../types/lesson';
 import getTutorResponse from '../../../services/getTutorResponse';
 import { extractPerimeterDimensionsFromText, getSectionVisual } from '../../../lib/lessonVisuals';
 import trackEvent from '../../../lib/analytics';
-import { getPerimeterQuickReview } from '../../../lib/pilotPerimeterQuickReview';
-import { isGrade2MathPerimeterPilot } from '../../../lib/pilotConditions';
-import { getDeterministicPerimeterCheckpoint } from '../../../lib/pilotPerimeterCheckpoints';
+import { getGrade2MathPilotTopic, type Grade2MathPilotTopic } from '../../../lib/pilotConditions';
+import { getDeterministicGrade2MathCheckpoint, getGrade2MathCheckpointHint, getGrade2MathQuickReview } from '../../../lib/pilotGrade2Math';
+import {
+    getDeterministicK5MathCheckpoint,
+    getDeterministicK5MathQuickReview,
+    getK5MathAdaptationTopic,
+    getK5MathCheckpointHint,
+    isK5MathAdaptiveLesson,
+} from '../../../lib/k5MathAdaptation';
+import { fetchRemoteImage, type RemoteImageResult } from '../../../lib/remoteImageSearch';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
     lessonId?: number;
     pilotTelemetryEnabled?: boolean;
+    pilotTopic?: Grade2MathPilotTopic | null;
     lessonTitle?: string;
     subject?: string;
     gradeBand?: string;
@@ -51,30 +59,6 @@ type QuickReviewState = {
     isVisible: boolean;
     selectedIndex: number | null;
     isCorrect: boolean | null;
-};
-
-const getDeterministicCheckpointHint = (input: {
-    intent: CheckpointIntent;
-    sectionContent: string;
-}): string => {
-    const dims = extractPerimeterDimensionsFromText(input.sectionContent);
-    if (input.intent === 'define') {
-        return 'Perimeter means the distance around the outside of a shape.';
-    }
-
-    if (dims?.shape === 'square') {
-        return 'A square has 4 equal sides. Add the same number 4 times.';
-    }
-    if (dims?.shape === 'rectangle') {
-        return 'A rectangle has 2 long sides and 2 short sides. Add all 4 sides.';
-    }
-    if (dims?.shape === 'triangle') {
-        return 'A triangle has 3 sides. Add the 3 side lengths.';
-    }
-    if (input.intent === 'scenario') {
-        return 'Perimeter is how much it takes to go all the way around (like fence or string). Add the side lengths.';
-    }
-    return 'Perimeter means add all the side lengths.';
 };
 
 const getPilotCheckpointCacheKey = (lessonId: number | undefined, sectionIndex: number, intent: CheckpointIntent) => {
@@ -111,28 +95,31 @@ const shuffleWithCorrectIndex = (
     correctIndex: number,
     seed: number,
 ): { options: string[]; correctIndex: number } => {
-    const paired = options.map((text, index) => ({ text, isCorrect: index === correctIndex }));
-    const rand = mulberry32(seed);
-    for (let i = paired.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(rand() * (i + 1));
-        [paired[i], paired[j]] = [paired[j], paired[i]];
+    const safeOptions = options.map((o) => (o ?? '').toString().trim()).filter(Boolean);
+    if (safeOptions.length < 3) {
+        return { options: safeOptions, correctIndex: Math.max(0, Math.min(correctIndex, safeOptions.length - 1)) };
     }
-    return {
-        options: paired.map((p) => p.text),
-        correctIndex: Math.max(0, paired.findIndex((p) => p.isCorrect)),
-    };
-};
 
-const localCheckpointFromMathPerimeter = (input: {
-    sectionContent: string;
-    intent: CheckpointIntent;
-    seed: number;
-}): CheckpointPayload | null => {
-    return getDeterministicPerimeterCheckpoint({
-        sectionContent: input.sectionContent,
-        intent: input.intent,
-        seed: input.seed,
-    });
+    const correctText = safeOptions[Math.max(0, Math.min(correctIndex, safeOptions.length - 1))] ?? safeOptions[0] ?? '';
+    const wrongs = safeOptions.filter((_, idx) => idx !== correctIndex);
+
+    const rand = mulberry32(seed);
+    for (let i = wrongs.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rand() * (i + 1));
+        [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
+    }
+
+    const targetIndex = Math.abs(seed) % safeOptions.length;
+    const arranged: string[] = new Array(safeOptions.length);
+    arranged[targetIndex] = correctText;
+    let w = 0;
+    for (let i = 0; i < arranged.length; i += 1) {
+        if (i === targetIndex) continue;
+        arranged[i] = wrongs[w] ?? wrongs[0] ?? '';
+        w += 1;
+    }
+
+    return { options: arranged, correctIndex: targetIndex };
 };
 
 const containsBannedGenericCoaching = (text: string): boolean => {
@@ -165,12 +152,14 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     sections,
     lessonId,
     pilotTelemetryEnabled,
+    pilotTopic,
     lessonTitle,
     subject,
     gradeBand,
     onAskTutor,
     onSectionComplete,
 }) => {
+    const topRef = useRef<HTMLDivElement | null>(null);
     const {
         currentSectionIndex,
         nextPhase,
@@ -185,17 +174,42 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     const isLastSection = currentSectionIndex >= sections.length - 1;
     const isFirstSection = currentSectionIndex === 0;
 
+    useEffect(() => {
+        // When moving between sections, reset scroll so the new section starts at the top.
+        // This avoids loading the next section at the previous scroll position.
+        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [currentSectionIndex]);
+
     const checkpointIntent: CheckpointIntent = useMemo(() => {
         const intents: CheckpointIntent[] = ['define', 'compute', 'scenario'];
         return intents[currentSectionIndex % intents.length] ?? 'define';
     }, [currentSectionIndex]);
 
+    const resolvedPilotTopic = useMemo(() => {
+        if (pilotTopic) return pilotTopic;
+        return getGrade2MathPilotTopic({ subject, gradeBand, lessonTitle });
+    }, [gradeBand, lessonTitle, pilotTopic, subject]);
+
+    const resolvedK5MathTopic = useMemo(() => {
+        return getK5MathAdaptationTopic({
+            subject: subject ?? null,
+            gradeBand: gradeBand ?? null,
+            lessonTitle: lessonTitle ?? null,
+            lessonContent: currentSection?.content ?? '',
+        });
+    }, [currentSection?.content, gradeBand, lessonTitle, subject]);
+
     const checkpointEnabled = useMemo(() => {
-        return isGrade2MathPerimeterPilot({ subject, gradeBand, lessonTitle });
-    }, [gradeBand, lessonTitle, subject]);
+        return isK5MathAdaptiveLesson({
+            subject: subject ?? null,
+            gradeBand: gradeBand ?? null,
+            lessonTitle: lessonTitle ?? null,
+            lessonContent: currentSection?.content ?? '',
+        });
+    }, [currentSection?.content, gradeBand, lessonTitle, subject]);
 
     const sectionVisual = useMemo(() => {
-        if (!currentSection || !checkpointEnabled) return null;
+        if (!currentSection) return null;
         return getSectionVisual({
             lessonTitle: lessonTitle ?? null,
             subject: subject ?? null,
@@ -203,7 +217,46 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             sectionTitle: currentSection.title ?? null,
             sectionContent: currentSection.content ?? '',
         });
-    }, [checkpointEnabled, currentSection, gradeBand, lessonTitle, subject]);
+    }, [currentSection, gradeBand, lessonTitle, subject]);
+
+    const [contextImage, setContextImage] = useState<RemoteImageResult | null>(null);
+    const [contextImageStatus, setContextImageStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+
+    const contextImageQuery = useMemo(() => {
+        const text = `${currentSection?.title ?? ''}\n${currentSection?.content ?? ''}`;
+        if (!text.trim()) return null;
+        if (/\bgreat\s+wall\b/i.test(text) || /great\s+wall\s+of\s+china/i.test(text)) {
+            return 'Great Wall of China';
+        }
+        return null;
+    }, [currentSection?.content, currentSection?.title]);
+
+    useEffect(() => {
+        let cancelled = false;
+        const run = async () => {
+            if (!contextImageQuery) {
+                setContextImage(null);
+                setContextImageStatus('idle');
+                return;
+            }
+
+            setContextImageStatus('loading');
+            try {
+                const result = await fetchRemoteImage(contextImageQuery);
+                if (cancelled) return;
+                setContextImage(result);
+                setContextImageStatus(result ? 'ready' : 'error');
+            } catch {
+                if (cancelled) return;
+                setContextImage(null);
+                setContextImageStatus('error');
+            }
+        };
+        void run();
+        return () => {
+            cancelled = true;
+        };
+    }, [contextImageQuery]);
 
     const detectedShape: ShapeType | null = useMemo(() => {
         if (!checkpointEnabled) return null;
@@ -239,9 +292,22 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     }, [currentSectionIndex, quickReviewBySection]);
 
     const quickReviewContent = useMemo(() => {
-        const dims = extractPerimeterDimensionsFromText(currentSection?.content ?? '');
-        return getPerimeterQuickReview(dims);
-    }, [currentSection?.content]);
+        if (!checkpointEnabled) return null;
+        if (pilotTelemetryEnabled) {
+            return getGrade2MathQuickReview({
+                topic: resolvedPilotTopic ?? 'perimeter',
+                sectionContent: currentSection?.content ?? '',
+            });
+        }
+        return getDeterministicK5MathQuickReview({
+            lessonId,
+            subject: subject ?? null,
+            gradeBand: gradeBand ?? null,
+            lessonTitle: lessonTitle ?? null,
+            lessonContent: currentSection?.content ?? '',
+            topic: resolvedK5MathTopic,
+        });
+    }, [checkpointEnabled, currentSection?.content, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, resolvedK5MathTopic, resolvedPilotTopic, subject]);
 
     const isCheckpointHintShown = useMemo(
         () => checkpointHintShownBySection.get(currentSectionIndex) ?? false,
@@ -272,8 +338,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
     const generateCheckpoint = useCallback(async () => {
         if (!currentSection) return;
+        if (!checkpointEnabled) return;
 
-        const cacheKey = getPilotCheckpointCacheKey(lessonId, currentSectionIndex, checkpointIntent);
+        const cacheKey = pilotTelemetryEnabled
+            ? getPilotCheckpointCacheKey(lessonId, currentSectionIndex, checkpointIntent)
+            : `k5_checkpoint_v1:${Number.isFinite(lessonId) ? lessonId : 'unknown'}:${currentSectionIndex}:${resolvedK5MathTopic ?? 'general'}:${checkpointIntent}`;
         const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
         const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
         const shuffleSeed = seedBase + intentOffset + 11;
@@ -302,9 +371,118 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             }
         }
 
-        setCheckpointBySection((prev) => {
-            const next = new Map(prev);
-            next.set(currentSectionIndex, { status: 'loading' });
+        if (!pilotTelemetryEnabled) {
+            const local = getDeterministicK5MathCheckpoint({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle: lessonTitle ?? null,
+                lessonContent: currentSection.content ?? '',
+                intent: checkpointIntent,
+                seed: seedBase + intentOffset,
+                topic: resolvedK5MathTopic,
+            });
+            if (!local) {
+                setCheckpointBySection((prev) => {
+                    const next = new Map(prev);
+                    next.set(currentSectionIndex, {
+                        status: 'error',
+                        message: 'Unable to generate checkpoint right now.',
+                    });
+                    return next;
+                });
+                return;
+            }
+
+            const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+            const finalLocal: CheckpointPayload = {
+                ...local,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+            };
+            setCheckpointBySection((prev) => {
+                const next = new Map(prev);
+                next.set(currentSectionIndex, {
+                    status: 'ready',
+                    payload: finalLocal,
+                    intent: checkpointIntent,
+                    selectedIndex: null,
+                    isCorrect: null,
+                });
+                return next;
+            });
+            trackEvent('success_k5_math_checkpoint_generated', {
+                lessonId,
+                sectionIndex: currentSectionIndex,
+                source: 'deterministic',
+                topic: resolvedK5MathTopic ?? 'general',
+                intent: checkpointIntent,
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+            if (typeof window !== 'undefined') {
+                window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalLocal, intent: checkpointIntent }));
+            }
+            return;
+        }
+
+        if (!resolvedPilotTopic) return;
+
+        if (resolvedPilotTopic !== 'perimeter') {
+            const local = getDeterministicGrade2MathCheckpoint({
+                topic: resolvedPilotTopic,
+                sectionContent: currentSection.content ?? '',
+                intent: checkpointIntent,
+                seed: seedBase + intentOffset,
+            });
+            if (!local) {
+                setCheckpointBySection((prev) => {
+                    const next = new Map(prev);
+                    next.set(currentSectionIndex, {
+                        status: 'error',
+                        message: 'Unable to generate checkpoint right now.',
+                    });
+                    return next;
+                });
+                return;
+            }
+
+            const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+            const finalLocal: CheckpointPayload = {
+                ...local,
+                options: shuffled.options,
+                correctIndex: shuffled.correctIndex,
+            };
+            setCheckpointBySection((prev) => {
+                const next = new Map(prev);
+                next.set(currentSectionIndex, {
+                    status: 'ready',
+                    payload: finalLocal,
+                    intent: checkpointIntent,
+                    selectedIndex: null,
+                    isCorrect: null,
+                });
+                return next;
+            });
+            if (pilotTelemetryEnabled) {
+                trackEvent('success_pilot_checkpoint_generated', {
+                    lessonId,
+                    sectionIndex: currentSectionIndex,
+                    source: 'deterministic',
+                    topic: resolvedPilotTopic,
+                    intent: checkpointIntent,
+                    subject: subject ?? 'math',
+                    gradeBand: gradeBand ?? null,
+                });
+            }
+            if (typeof window !== 'undefined') {
+                window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalLocal, intent: checkpointIntent }));
+            }
+            return;
+        }
+
+            setCheckpointBySection((prev) => {
+                const next = new Map(prev);
+                next.set(currentSectionIndex, { status: 'loading' });
             return next;
         });
 
@@ -377,7 +555,8 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             if (!tutorMessage) {
                 const seedBase = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10;
                 const intentOffset = checkpointIntent === 'define' ? 1 : checkpointIntent === 'compute' ? 2 : 3;
-                const local = localCheckpointFromMathPerimeter({
+                const local = getDeterministicGrade2MathCheckpoint({
+                    topic: resolvedPilotTopic,
                     sectionContent: currentSection.content ?? '',
                     intent: checkpointIntent,
                     seed: seedBase + intentOffset,
@@ -401,6 +580,9 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                             source: 'fallback',
                             reason: 'assistant_unavailable',
                             intent: checkpointIntent,
+                            topic: resolvedPilotTopic,
+                            subject: subject ?? 'math',
+                            gradeBand: gradeBand ?? null,
                         });
                     }
                     if (typeof window !== 'undefined') {
@@ -454,13 +636,17 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                     sectionIndex: currentSectionIndex,
                     source: 'ai',
                     intent: checkpointIntent,
+                    topic: resolvedPilotTopic,
+                    subject: subject ?? 'math',
+                    gradeBand: gradeBand ?? null,
                 });
             }
             if (typeof window !== 'undefined') {
                 window.sessionStorage.setItem(cacheKey, JSON.stringify({ payload: finalPayload, intent: checkpointIntent }));
             }
         } catch (error) {
-            const local = localCheckpointFromMathPerimeter({
+            const local = getDeterministicGrade2MathCheckpoint({
+                topic: resolvedPilotTopic,
                 sectionContent: currentSection.content ?? '',
                 intent: checkpointIntent,
                 seed: seedBase + intentOffset + 7,
@@ -490,6 +676,9 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                         source: 'fallback',
                         reason: 'generation_error',
                         intent: checkpointIntent,
+                        topic: resolvedPilotTopic,
+                        subject: subject ?? 'math',
+                        gradeBand: gradeBand ?? null,
                         });
                 }
                 if (typeof window !== 'undefined') {
@@ -507,7 +696,19 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return next;
             });
         }
-    }, [checkpointIntent, currentSection, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, subject]);
+    }, [
+        checkpointEnabled,
+        checkpointIntent,
+        currentSection,
+        currentSectionIndex,
+        gradeBand,
+        lessonId,
+        lessonTitle,
+        pilotTelemetryEnabled,
+        resolvedK5MathTopic,
+        resolvedPilotTopic,
+        subject,
+    ]);
 
     useEffect(() => {
         if (!checkpointEnabled) return;
@@ -550,6 +751,20 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                     intent: checkpointState.intent,
                     selectedIndex,
                     isCorrect,
+                    topic: resolvedPilotTopic,
+                    subject: subject ?? 'math',
+                    gradeBand: gradeBand ?? null,
+                });
+            } else {
+                trackEvent('success_k5_math_checkpoint_answered', {
+                    lessonId,
+                    sectionIndex: currentSectionIndex,
+                    intent: checkpointState.intent,
+                    selectedIndex,
+                    isCorrect,
+                    topic: resolvedK5MathTopic ?? 'general',
+                    subject: subject ?? 'math',
+                    gradeBand: gradeBand ?? null,
                 });
             }
 
@@ -562,7 +777,17 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 });
             }
         },
-        [checkpointState, currentSectionIndex, lessonId, onSectionComplete, pilotTelemetryEnabled],
+        [
+            checkpointState,
+            currentSectionIndex,
+            gradeBand,
+            lessonId,
+            onSectionComplete,
+            pilotTelemetryEnabled,
+            resolvedK5MathTopic,
+            resolvedPilotTopic,
+            subject,
+        ],
     );
 
     const checkpointWrongAttempts = useMemo(
@@ -572,9 +797,9 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
     useEffect(() => {
         if (!checkpointEnabled) return;
-        if (!pilotTelemetryEnabled) return;
         if (hasCheckpointPassed) return;
         if (checkpointWrongAttempts < 2) return;
+        if (!quickReviewContent) return;
 
         setQuickReviewBySection((prev) => {
             const existing = prev.get(currentSectionIndex);
@@ -584,15 +809,43 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             return next;
         });
 
-        trackEvent('success_pilot_quick_review_shown', {
-            lessonId,
-            phase: 'learn',
-            sectionIndex: currentSectionIndex,
-            trigger: 'checkpoint_wrong_twice',
-        });
-    }, [checkpointEnabled, checkpointWrongAttempts, currentSectionIndex, hasCheckpointPassed, lessonId, pilotTelemetryEnabled]);
+        if (pilotTelemetryEnabled) {
+            trackEvent('success_pilot_quick_review_shown', {
+                lessonId,
+                phase: 'learn',
+                sectionIndex: currentSectionIndex,
+                trigger: 'checkpoint_wrong_twice',
+                topic: resolvedPilotTopic,
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+        } else {
+            trackEvent('success_k5_math_checkpoint_quick_review_shown', {
+                lessonId,
+                phase: 'learn',
+                sectionIndex: currentSectionIndex,
+                trigger: 'checkpoint_wrong_twice',
+                topic: resolvedK5MathTopic ?? 'general',
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+        }
+    }, [
+        checkpointEnabled,
+        checkpointWrongAttempts,
+        currentSectionIndex,
+        gradeBand,
+        hasCheckpointPassed,
+        lessonId,
+        pilotTelemetryEnabled,
+        quickReviewContent,
+        resolvedK5MathTopic,
+        resolvedPilotTopic,
+        subject,
+    ]);
 
     const handleQuickReviewAnswer = (selectedIndex: number) => {
+        if (!quickReviewContent) return;
         const isCorrect = selectedIndex === quickReviewContent.correctIndex;
 
         setQuickReviewBySection((prev) => {
@@ -611,32 +864,71 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 phase: 'learn',
                 sectionIndex: currentSectionIndex,
                 isCorrect,
+                topic: resolvedPilotTopic,
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+        } else {
+            trackEvent('success_k5_math_checkpoint_quick_review_answered', {
+                lessonId,
+                phase: 'learn',
+                sectionIndex: currentSectionIndex,
+                isCorrect,
+                topic: resolvedK5MathTopic ?? 'general',
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
             });
         }
     };
 
     const checkpointHintText = useMemo(() => {
         if (checkpointState.status !== 'ready') return null;
-        return getDeterministicCheckpointHint({
+        if (pilotTelemetryEnabled) {
+            return getGrade2MathCheckpointHint({
+                topic: resolvedPilotTopic ?? 'perimeter',
+                intent: checkpointState.intent,
+                sectionContent: currentSection?.content ?? '',
+            });
+        }
+        return getK5MathCheckpointHint({
+            subject: subject ?? null,
+            gradeBand: gradeBand ?? null,
+            lessonTitle: lessonTitle ?? null,
+            lessonContent: currentSection?.content ?? '',
             intent: checkpointState.intent,
-            sectionContent: currentSection?.content ?? '',
+            topic: resolvedK5MathTopic,
         });
-    }, [checkpointState, currentSection?.content]);
+    }, [checkpointState, currentSection?.content, gradeBand, lessonTitle, pilotTelemetryEnabled, resolvedK5MathTopic, resolvedPilotTopic, subject]);
 
     const toggleCheckpointHint = () => {
-        if (!pilotTelemetryEnabled) return;
+        if (!checkpointEnabled) return;
         if (checkpointState.status !== 'ready') return;
         setCheckpointHintShownBySection((prev) => {
             const next = new Map(prev);
             next.set(currentSectionIndex, !(prev.get(currentSectionIndex) ?? false));
             return next;
         });
-        trackEvent('success_pilot_checkpoint_hint_clicked', {
-            lessonId,
-            sectionIndex: currentSectionIndex,
-            intent: checkpointState.intent,
-            source: 'deterministic',
-        });
+        if (pilotTelemetryEnabled) {
+            trackEvent('success_pilot_checkpoint_hint_clicked', {
+                lessonId,
+                sectionIndex: currentSectionIndex,
+                intent: checkpointState.intent,
+                source: 'deterministic',
+                topic: resolvedPilotTopic,
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+        } else {
+            trackEvent('success_k5_math_checkpoint_hint_clicked', {
+                lessonId,
+                sectionIndex: currentSectionIndex,
+                intent: checkpointState.intent,
+                source: 'deterministic',
+                topic: resolvedK5MathTopic ?? 'general',
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+        }
     };
 
     const handleAskTutor = () => {
@@ -655,6 +947,19 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 sectionIndex: currentSectionIndex,
                 intent: checkpointState.intent,
                 source: 'tutor',
+                topic: resolvedPilotTopic,
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+            });
+        } else {
+            trackEvent('success_k5_math_checkpoint_hint_clicked', {
+                lessonId,
+                sectionIndex: currentSectionIndex,
+                intent: checkpointState.intent,
+                source: 'tutor',
+                topic: resolvedK5MathTopic ?? 'general',
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
             });
         }
 
@@ -670,7 +975,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     };
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div ref={topRef} className="max-w-3xl mx-auto">
             <LessonCard>
                 {/* Section header */}
                 <div className="border-b border-slate-100 px-6 py-4 md:px-8">
@@ -730,6 +1035,43 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                             />
                         </div>
                     )}
+
+                    {contextImageQuery && (
+                        <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                            {contextImage && (
+                                <img
+                                    src={contextImage.thumbnailUrl || contextImage.url}
+                                    alt={contextImage.title}
+                                    className="block w-full"
+                                    loading="lazy"
+                                />
+                            )}
+
+                            {!contextImage && contextImageStatus === 'loading' && (
+                                <div className="p-4 text-sm text-slate-500">Loading image…</div>
+                            )}
+
+                            {!contextImage && contextImageStatus === 'error' && (
+                                <img
+                                    src="/images/lessons/social_studies/great_wall.svg"
+                                    alt="Illustration of the Great Wall of China"
+                                    className="block w-full"
+                                    loading="lazy"
+                                />
+                            )}
+
+                            <div className="border-t border-slate-100 bg-white px-4 py-3">
+                                <div className="text-xs font-semibold text-slate-700">Visualize</div>
+                                <div className="mt-0.5 text-xs text-slate-600">
+                                    {contextImage?.attributionHtml ? (
+                                        <span dangerouslySetInnerHTML={{ __html: contextImage.attributionHtml }} />
+                                    ) : (
+                                        <span>Great Wall of China</span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentSectionIndex}
@@ -750,11 +1092,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 <LessonCardFooter>
                     {checkpointEnabled && (
                         <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-5 md:px-6">
-                            {pilotTelemetryEnabled && quickReviewState.isVisible && (
+                            {quickReviewState.isVisible && quickReviewContent && (
                                 <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
                                     <div className="text-sm font-semibold text-amber-900">{quickReviewContent.title}</div>
                                     <div className="mt-1 text-sm text-amber-900/90">
-                                        Perimeter means the distance around the outside of a shape. You add all the side lengths.
+                                        {quickReviewContent.explanation}
                                     </div>
 
                                     {sectionVisual && (
@@ -834,7 +1176,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                         Answer correctly to continue.
                                     </div>
                                 </div>
-                                {pilotTelemetryEnabled && checkpointState.status === 'ready' && checkpointHintText ? (
+                                {checkpointState.status === 'ready' && checkpointHintText ? (
                                     <div className="flex items-center gap-2">
                                         <button
                                             type="button"
@@ -868,7 +1210,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                 )}
                             </div>
 
-                            {pilotTelemetryEnabled && checkpointState.status === 'ready' && checkpointHintText && isCheckpointHintShown && (
+                            {checkpointState.status === 'ready' && checkpointHintText && isCheckpointHintShown && (
                                 <div className="mt-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
                                     {checkpointHintText}
                                 </div>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="320" viewBox="0 0 820 320" role="img" aria-label="Illustration of the Great Wall of China">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#E0F2FE"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <linearGradient id="hills" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#D1FAE5"/>
+      <stop offset="1" stop-color="#FEF3C7"/>
+    </linearGradient>
+    <linearGradient id="wall" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#94A3B8"/>
+      <stop offset="1" stop-color="#64748B"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="820" height="320" fill="url(#sky)"/>
+
+  <!-- distant hills -->
+  <path d="M0,210 C110,160 210,170 300,205 C390,242 470,250 560,215 C650,180 730,185 820,220 L820,320 L0,320 Z"
+        fill="url(#hills)" opacity="0.85"/>
+
+  <!-- Great Wall (stylized) -->
+  <path d="M40,250
+           C120,205 175,210 255,235
+           C335,260 410,245 490,220
+           C575,193 650,195 730,225
+           L760,235
+           L760,270
+           C675,250 600,260 520,285
+           C430,312 340,312 255,290
+           C170,270 110,270 40,290
+           Z"
+        fill="url(#wall)" stroke="#334155" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- crenellations -->
+  <g fill="#64748B" stroke="#334155" stroke-width="2">
+    <path d="M88,238 h20 v-14 h14 v26 h-48 z"/>
+    <path d="M210,230 h20 v-14 h14 v26 h-48 z"/>
+    <path d="M352,242 h20 v-14 h14 v26 h-48 z"/>
+    <path d="M506,224 h20 v-14 h14 v26 h-48 z"/>
+    <path d="M650,226 h20 v-14 h14 v26 h-48 z"/>
+  </g>
+
+  <!-- label -->
+  <g>
+    <rect x="22" y="22" rx="14" width="340" height="46" fill="white" opacity="0.88"/>
+    <text x="42" y="52" font-family="ui-sans-serif, system-ui" font-size="22" font-weight="700" fill="#0F172A">
+      The Great Wall of China
+    </text>
+  </g>
+</svg>

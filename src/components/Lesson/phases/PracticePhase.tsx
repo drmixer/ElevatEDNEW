@@ -4,7 +4,7 @@
  * Practice questions phase with one-at-a-time display and immediate feedback.
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle2,
@@ -18,14 +18,35 @@ import { LessonCard, LessonCardBody, LessonCardFooter } from '../LessonCard';
 import { useLessonStepper } from '../LessonStepper';
 import type { LessonPracticeQuestion, LessonPracticeOption } from '../../../types';
 import trackEvent from '../../../lib/analytics';
-import { extractPerimeterDimensionsFromText, getPracticeQuestionVisual } from '../../../lib/lessonVisuals';
-import { getPerimeterQuickReview } from '../../../lib/pilotPerimeterQuickReview';
+import { getPracticeQuestionVisual } from '../../../lib/lessonVisuals';
+import type { Grade2MathPilotTopic } from '../../../lib/pilotConditions';
+import { getGrade2MathChallengeQuestion, getGrade2MathQuickReview } from '../../../lib/pilotGrade2Math';
+import { evaluateMasteryTrend } from '../../../lib/masteryTrend';
+import { buildSupportReasonCard } from '../../../lib/transparencyReason';
+import {
+    getDeterministicNonMathChallengeQuestion,
+    getDeterministicNonMathHint,
+    getDeterministicNonMathQuickReview,
+    getDeterministicNonMathSteps,
+    getNonMathRemediationTopic,
+    type NonMathRemediationSubject,
+} from '../../../lib/nonMathRemediation';
+import {
+    getDeterministicK5MathChallengeQuestion,
+    getDeterministicK5MathHint,
+    getDeterministicK5MathQuickReview,
+    getDeterministicK5MathSteps,
+    getK5MathAdaptationTopic,
+} from '../../../lib/k5MathAdaptation';
 
 interface PracticePhaseProps {
     questions: LessonPracticeQuestion[];
     lessonId?: number;
     pilotTelemetryEnabled?: boolean;
+    pilotTopic?: Grade2MathPilotTopic | null;
+    nonMathRemediationSubject?: NonMathRemediationSubject | null;
     lessonTitle?: string | null;
+    lessonContent?: string | null;
     subject?: string | null;
     gradeBand?: string | null;
     onAnswerSubmit?: (questionId: number, optionId: number, isCorrect: boolean) => void;
@@ -52,6 +73,40 @@ type ChallengeState =
 
 type ShapeType = 'square' | 'rectangle' | 'triangle';
 
+const mulberry32 = (seed: number) => {
+    let t = seed >>> 0;
+    return () => {
+        t += 0x6D2B79F5;
+        let x = Math.imul(t ^ (t >>> 15), 1 | t);
+        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+};
+
+const arrangeOptionsWithCorrectAt = (options: LessonPracticeOption[], seed: number): LessonPracticeOption[] => {
+    const correct = options.find((o) => o.isCorrect);
+    const wrongs = options.filter((o) => !o.isCorrect);
+    if (!correct || wrongs.length < 2) return options;
+
+    const rand = mulberry32(seed);
+    const shuffledWrongs = wrongs.slice();
+    for (let i = shuffledWrongs.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rand() * (i + 1));
+        [shuffledWrongs[i], shuffledWrongs[j]] = [shuffledWrongs[j], shuffledWrongs[i]];
+    }
+
+    const targetIndex = Math.abs(seed) % options.length;
+    const arranged: LessonPracticeOption[] = new Array(options.length);
+    arranged[targetIndex] = correct;
+    let w = 0;
+    for (let i = 0; i < arranged.length; i += 1) {
+        if (i === targetIndex) continue;
+        arranged[i] = shuffledWrongs[w] ?? shuffledWrongs[0] ?? correct;
+        w += 1;
+    }
+    return arranged;
+};
+
 const detectShapeFromText = (text: string | null | undefined): ShapeType | null => {
     const t = (text ?? '').toString().toLowerCase();
     if (/\bsquare\b/.test(t)) return 'square';
@@ -70,7 +125,10 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     questions,
     lessonId,
     pilotTelemetryEnabled,
+    pilotTopic,
+    nonMathRemediationSubject,
     lessonTitle,
+    lessonContent,
     subject,
     gradeBand,
     onAnswerSubmit,
@@ -81,9 +139,38 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     const [currentIndex, setCurrentIndex] = useState(0);
     const [questionStates, setQuestionStates] = useState<Map<number, QuestionState>>(new Map());
     const [hintShown, setHintShown] = useState<Set<number>>(() => new Set());
+    const [hintUsedByQuestion, setHintUsedByQuestion] = useState<Set<number>>(() => new Set());
     const [stepsShown, setStepsShown] = useState<Set<number>>(() => new Set());
 
     const currentQuestion = questions[currentIndex];
+    const resolvedPilotTopic = pilotTopic ?? 'perimeter';
+    const nonMathTopic = useMemo(
+        () =>
+            getNonMathRemediationTopic({
+                subject: nonMathRemediationSubject ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion?.prompt ?? null,
+            }),
+        [currentQuestion?.prompt, lessonContent, lessonTitle, nonMathRemediationSubject],
+    );
+    const k5MathTopic = useMemo(
+        () =>
+            getK5MathAdaptationTopic({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion?.prompt ?? null,
+            }),
+        [currentQuestion?.prompt, gradeBand, lessonContent, lessonTitle, subject],
+    );
+    const remediationTelemetrySource = pilotTelemetryEnabled
+        ? 'grade2_math_pilot'
+        : k5MathTopic
+            ? 'k5_math_template'
+            : 'non_math_template';
+    const remediationTemplatesEnabled = Boolean(pilotTelemetryEnabled || nonMathRemediationSubject || k5MathTopic);
     const currentState = currentQuestion ? questionStates.get(currentQuestion.id) : null;
     const isAnswered = currentState?.isAnswered ?? false;
     const isCorrect = currentState?.isCorrect ?? false;
@@ -112,13 +199,187 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
         isCorrect: null,
     });
 
+    const masteryAttempts = useMemo(() => {
+        const attempts: Array<{ isCorrect: boolean; usedHint: boolean }> = [];
+        questions.forEach((question) => {
+            const state = questionStates.get(question.id);
+            if (!state?.isAnswered) return;
+            attempts.push({
+                isCorrect: state.isCorrect,
+                usedHint: hintUsedByQuestion.has(question.id),
+            });
+        });
+        return attempts;
+    }, [hintUsedByQuestion, questionStates, questions]);
+
+    const masteryTrend = useMemo(
+        () =>
+            evaluateMasteryTrend({
+                attempts: masteryAttempts,
+                questionCount: questions.length,
+                quickReviewShown: quickReview.isVisible,
+                quickReviewCorrect: quickReview.isCorrect,
+            }),
+        [masteryAttempts, quickReview.isCorrect, quickReview.isVisible, questions.length],
+    );
+
     const quickReviewContent = useMemo(() => {
-        const dims = extractPerimeterDimensionsFromText(currentQuestion?.prompt ?? '');
-        return getPerimeterQuickReview(dims);
-    }, [currentQuestion?.prompt]);
+        if (pilotTelemetryEnabled) {
+            return getGrade2MathQuickReview({
+                topic: resolvedPilotTopic,
+                questionPrompt: currentQuestion?.prompt ?? '',
+            });
+        }
+        if (k5MathTopic) {
+            return getDeterministicK5MathQuickReview({
+                lessonId,
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion?.prompt ?? null,
+                topic: k5MathTopic,
+            });
+        }
+        return getDeterministicNonMathQuickReview({
+            subject: nonMathRemediationSubject ?? null,
+            lessonTitle,
+            lessonContent,
+            questionPrompt: currentQuestion?.prompt ?? null,
+        });
+    }, [
+        currentQuestion?.prompt,
+        gradeBand,
+        k5MathTopic,
+        lessonContent,
+        lessonId,
+        lessonTitle,
+        nonMathRemediationSubject,
+        pilotTelemetryEnabled,
+        resolvedPilotTopic,
+        subject,
+    ]);
+    const remediationTopic = pilotTelemetryEnabled ? resolvedPilotTopic : k5MathTopic ?? quickReviewContent?.topic ?? nonMathTopic;
+
+    const deterministicHint = useMemo(() => {
+        if (!currentQuestion) return null;
+        if (currentQuestion.hint) return currentQuestion.hint;
+        if (k5MathTopic) {
+            return getDeterministicK5MathHint({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion.prompt,
+                topic: k5MathTopic,
+            });
+        }
+        return getDeterministicNonMathHint({
+            subject: nonMathRemediationSubject ?? null,
+            lessonTitle,
+            lessonContent,
+            questionPrompt: currentQuestion.prompt,
+        });
+    }, [currentQuestion, gradeBand, k5MathTopic, lessonContent, lessonTitle, nonMathRemediationSubject, subject]);
+
+    const deterministicSteps = useMemo(() => {
+        if (!currentQuestion) return null;
+        if (currentQuestion.steps?.length) return currentQuestion.steps;
+        if (k5MathTopic) {
+            return getDeterministicK5MathSteps({
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle,
+                lessonContent,
+                questionPrompt: currentQuestion.prompt,
+                topic: k5MathTopic,
+            });
+        }
+        return getDeterministicNonMathSteps({
+            subject: nonMathRemediationSubject ?? null,
+            lessonTitle,
+            lessonContent,
+            questionPrompt: currentQuestion.prompt,
+        });
+    }, [currentQuestion, gradeBand, k5MathTopic, lessonContent, lessonTitle, nonMathRemediationSubject, subject]);
 
     const [challengeState, setChallengeState] = useState<ChallengeState>({ status: 'idle' });
-    const showChallengeFlow = pilotTelemetryEnabled && challengeState.status !== 'idle';
+    const showChallengeFlow = remediationTemplatesEnabled && challengeState.status !== 'idle';
+    const trendDecisionKeyRef = useRef<string>('');
+    const supportReasonCardKeyRef = useRef<string>('');
+
+    const activeSupportReasonCard = useMemo(() => {
+        if (!remediationTemplatesEnabled) return null;
+
+        if (challengeState.status !== 'idle') {
+            return buildSupportReasonCard({
+                mode: 'challenge',
+                topic: remediationTopic,
+                recommendation: masteryTrend.recommendation,
+                accuracyPct: Math.round(masteryTrend.accuracy * 100),
+                hintRatePct: Math.round(masteryTrend.hintRate * 100),
+            });
+        }
+
+        if (quickReview.isVisible) {
+            return buildSupportReasonCard({
+                mode: 'quick_review',
+                topic: remediationTopic,
+                recommendation: masteryTrend.recommendation,
+                trigger: masteryTrend.shouldTriggerQuickReview ? 'mastery_trend' : 'practice_miss_2plus',
+                accuracyPct: Math.round(masteryTrend.accuracy * 100),
+                hintRatePct: Math.round(masteryTrend.hintRate * 100),
+            });
+        }
+
+        if (currentQuestion && deterministicHint && hintShown.has(currentQuestion.id)) {
+            return buildSupportReasonCard({
+                mode: 'hint',
+                topic: remediationTopic,
+                recommendation: masteryTrend.recommendation,
+            });
+        }
+
+        if (masteryTrend.answered >= 2) {
+            return buildSupportReasonCard({
+                mode: 'trend',
+                topic: remediationTopic,
+                recommendation: masteryTrend.recommendation,
+                accuracyPct: Math.round(masteryTrend.accuracy * 100),
+            });
+        }
+
+        return null;
+    }, [
+        challengeState.status,
+        currentQuestion,
+        deterministicHint,
+        hintShown,
+        masteryTrend.accuracy,
+        masteryTrend.answered,
+        masteryTrend.hintRate,
+        masteryTrend.recommendation,
+        masteryTrend.shouldTriggerQuickReview,
+        quickReview.isVisible,
+        remediationTemplatesEnabled,
+        remediationTopic,
+    ]);
+
+    React.useEffect(() => {
+        if (!activeSupportReasonCard) return;
+        const key = `${activeSupportReasonCard.title}:${activeSupportReasonCard.detail}:${activeSupportReasonCard.tone}`;
+        if (supportReasonCardKeyRef.current === key) return;
+        supportReasonCardKeyRef.current = key;
+        trackEvent('success_transparency_support_reason_shown', {
+            lessonId,
+            phase: 'practice',
+            source: remediationTelemetrySource,
+            subject: nonMathRemediationSubject ?? 'math',
+            topic: remediationTopic,
+            tone: activeSupportReasonCard.tone,
+            title: activeSupportReasonCard.title,
+        });
+    }, [activeSupportReasonCard, lessonId, nonMathRemediationSubject, remediationTelemetrySource, remediationTopic]);
 
     const handleSelectOption = useCallback((option: LessonPracticeOption) => {
         if (isAnswered || !currentQuestion) return;
@@ -143,20 +404,87 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
         onAnswerSubmit?.(currentQuestion.id, option.id, option.isCorrect);
     }, [isAnswered, currentQuestion, correctCount, questions.length, updatePracticeScore, onAnswerSubmit]);
 
+    React.useEffect(() => {
+        if (!remediationTemplatesEnabled) return;
+        if (masteryTrend.answered === 0) return;
+
+        const decisionKey = [
+            masteryTrend.answered,
+            masteryTrend.recommendation,
+            masteryTrend.direction,
+            masteryTrend.score,
+            quickReview.isVisible ? 1 : 0,
+            quickReview.isCorrect == null ? 'na' : quickReview.isCorrect ? '1' : '0',
+        ].join(':');
+        if (trendDecisionKeyRef.current === decisionKey) return;
+        trendDecisionKeyRef.current = decisionKey;
+
+        trackEvent('success_mastery_trend_scheduling_decision', {
+            lessonId,
+            phase: 'practice',
+            source: remediationTelemetrySource,
+            subject: nonMathRemediationSubject ?? 'math',
+            topic: remediationTopic,
+            recommendation: masteryTrend.recommendation,
+            trendDirection: masteryTrend.direction,
+            score: masteryTrend.score,
+            answered: masteryTrend.answered,
+            correct: masteryTrend.correct,
+            incorrect: masteryTrend.incorrect,
+            accuracyPct: Math.round(masteryTrend.accuracy * 100),
+            recentAccuracyPct: Math.round(masteryTrend.recentAccuracy * 100),
+            hintRatePct: Math.round(masteryTrend.hintRate * 100),
+        });
+    }, [
+        lessonId,
+        masteryTrend,
+        nonMathRemediationSubject,
+        quickReview.isCorrect,
+        quickReview.isVisible,
+        remediationTelemetrySource,
+        remediationTemplatesEnabled,
+        remediationTopic,
+    ]);
+
     const quickReviewTrigger = useCallback(() => {
-        if (!pilotTelemetryEnabled) return;
+        if (!remediationTemplatesEnabled) return;
+        if (!quickReviewContent) return;
         if (quickReview.isVisible) return;
-        if (incorrectCount < 2) return;
+        const triggeredByMissCount = incorrectCount >= 2;
+        const triggeredByTrend = !triggeredByMissCount && masteryTrend.shouldTriggerQuickReview;
+        if (!triggeredByMissCount && !triggeredByTrend) return;
+        const trigger = triggeredByMissCount ? 'practice_miss_2plus' : 'mastery_trend';
         setQuickReview({ isVisible: true, selectedIndex: null, isCorrect: null });
+        trackEvent('success_remediation_activated', {
+            lessonId,
+            phase: 'practice',
+            remediationType: 'quick_review',
+            source: remediationTelemetrySource,
+            subject: nonMathRemediationSubject ?? 'math',
+            topic: remediationTopic,
+            trigger,
+            incorrectCount,
+        });
         if (pilotTelemetryEnabled) {
             trackEvent('success_pilot_quick_review_shown', {
                 lessonId,
                 phase: 'practice',
-                trigger: 'practice_miss_2plus',
+                trigger,
                 incorrectCount,
             });
         }
-    }, [incorrectCount, lessonId, pilotTelemetryEnabled, quickReview.isVisible]);
+    }, [
+        incorrectCount,
+        lessonId,
+        masteryTrend.shouldTriggerQuickReview,
+        nonMathRemediationSubject,
+        pilotTelemetryEnabled,
+        quickReview.isVisible,
+        quickReviewContent,
+        remediationTopic,
+        remediationTelemetrySource,
+        remediationTemplatesEnabled,
+    ]);
 
     // Trigger after state updates from answering.
     React.useEffect(() => {
@@ -164,8 +492,18 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     }, [quickReviewTrigger]);
 
     const handleQuickReviewAnswer = (selectedIndex: number) => {
+        if (!quickReviewContent) return;
         const isCorrect = selectedIndex === quickReviewContent.correctIndex;
         setQuickReview((prev) => ({ ...prev, selectedIndex, isCorrect }));
+        trackEvent('success_remediation_outcome', {
+            lessonId,
+            phase: 'practice',
+            remediationType: 'quick_review',
+            source: remediationTelemetrySource,
+            subject: nonMathRemediationSubject ?? 'math',
+            topic: remediationTopic,
+            isCorrect,
+        });
         if (pilotTelemetryEnabled) {
             trackEvent('success_pilot_quick_review_answered', {
                 lessonId,
@@ -177,9 +515,20 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
 
     const handleNext = () => {
         if (isLastQuestion) {
-            const perfectStreak = answeredCount === questions.length && correctCount === questions.length;
-            if (pilotTelemetryEnabled && perfectStreak && challengeState.status === 'idle') {
+            const offerChallenge = remediationTemplatesEnabled && challengeQuestion && masteryTrend.shouldOfferChallenge;
+            if (offerChallenge && challengeState.status === 'idle') {
                 setChallengeState({ status: 'offered' });
+                trackEvent('success_remediation_activated', {
+                    lessonId,
+                    phase: 'practice',
+                    remediationType: 'challenge_offer',
+                    source: remediationTelemetrySource,
+                    subject: nonMathRemediationSubject ?? 'math',
+                    topic: remediationTopic,
+                    trigger: 'mastery_trend',
+                    correctCount,
+                    total: questions.length,
+                });
                 if (pilotTelemetryEnabled) {
                     trackEvent('success_pilot_challenge_offered', {
                         lessonId,
@@ -198,41 +547,56 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     };
 
     const challengeQuestion = useMemo((): LessonPracticeQuestion | null => {
-        if (!pilotTelemetryEnabled) return null;
-        const prompt = 'Challenge: A rectangle is 6 ft long and 3 ft wide. What is the perimeter?';
-        const visual = getPracticeQuestionVisual({
-            lessonTitle: 'Perimeter',
-            subject: 'math',
-            gradeBand: '2',
-            prompt,
-        });
-
-        const options: LessonPracticeOption[] = [
-            { id: 1, text: '18 ft', isCorrect: true, feedback: 'Yes — 6 + 3 + 6 + 3 = 18.' },
-            { id: 2, text: '9 ft', isCorrect: false, feedback: 'That adds only one long + one short side.' },
-            { id: 3, text: '12 ft', isCorrect: false, feedback: 'That is 2 × 6, but you also need the 3s.' },
-            { id: 4, text: '15 ft', isCorrect: false, feedback: 'Check: you need 6 + 3 + 6 + 3.' },
-        ];
-
-        return {
-            id: -1,
-            prompt,
-            type: 'multiple_choice',
-            explanation: 'Add all the sides: 6 + 3 + 6 + 3 = 18 ft.',
-            hint: 'A rectangle has 2 long sides and 2 short sides. Add all 4 sides.',
-            steps: ['6 + 3 = 9', '9 + 6 = 15', '15 + 3 = 18'],
-            visual,
-            options,
-            skillIds: [],
-        };
-    }, [pilotTelemetryEnabled]);
+        const baseQuestion = pilotTelemetryEnabled
+            ? getGrade2MathChallengeQuestion({ topic: resolvedPilotTopic })
+            : k5MathTopic
+                ? getDeterministicK5MathChallengeQuestion({
+                    lessonId,
+                    subject: subject ?? null,
+                    gradeBand: gradeBand ?? null,
+                    lessonTitle,
+                    lessonContent,
+                    questionPrompt: currentQuestion?.prompt ?? null,
+                    topic: k5MathTopic,
+                })
+                : getDeterministicNonMathChallengeQuestion({
+                    lessonId,
+                    subject: nonMathRemediationSubject ?? null,
+                    lessonTitle,
+                    lessonContent,
+                    questionPrompt: currentQuestion?.prompt ?? null,
+                });
+        if (!baseQuestion) return null;
+        const options = arrangeOptionsWithCorrectAt(baseQuestion.options, (lessonId ?? 0) * 100 + 17);
+        return { ...baseQuestion, options };
+    }, [
+        currentQuestion?.prompt,
+        gradeBand,
+        k5MathTopic,
+        lessonContent,
+        lessonId,
+        lessonTitle,
+        nonMathRemediationSubject,
+        pilotTelemetryEnabled,
+        resolvedPilotTopic,
+        subject,
+    ]);
 
     const [challengeSelectedOptionId, setChallengeSelectedOptionId] = useState<number | null>(null);
 
     const handleStartChallenge = () => {
-        if (!pilotTelemetryEnabled) return;
+        if (!remediationTemplatesEnabled) return;
+        if (!challengeQuestion) return;
         setChallengeState({ status: 'active' });
         setChallengeSelectedOptionId(null);
+        trackEvent('success_remediation_activated', {
+            lessonId,
+            phase: 'practice',
+            remediationType: 'challenge_started',
+            source: remediationTelemetrySource,
+            subject: nonMathRemediationSubject ?? 'math',
+            topic: remediationTopic,
+        });
         if (pilotTelemetryEnabled) {
             trackEvent('success_pilot_challenge_started', { lessonId, phase: 'practice' });
         }
@@ -244,6 +608,15 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
         if (challengeSelectedOptionId != null) return;
         setChallengeSelectedOptionId(option.id);
         setChallengeState({ status: 'completed', isCorrect: option.isCorrect });
+        trackEvent('success_remediation_outcome', {
+            lessonId,
+            phase: 'practice',
+            remediationType: 'challenge',
+            source: remediationTelemetrySource,
+            subject: nonMathRemediationSubject ?? 'math',
+            topic: remediationTopic,
+            isCorrect: option.isCorrect,
+        });
         if (pilotTelemetryEnabled) {
             trackEvent('success_pilot_challenge_answered', {
                 lessonId,
@@ -260,11 +633,19 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
             trackEvent('success_pilot_practice_hint_clicked', {
                 lessonId,
                 questionId: currentQuestion.id,
-                hasDeterministicHint: Boolean(currentQuestion.hint),
+                hasDeterministicHint: Boolean(deterministicHint),
             });
         }
 
-        if (currentQuestion.hint) {
+        if (deterministicHint) {
+            const willShow = !hintShown.has(currentQuestion.id);
+            if (willShow) {
+                setHintUsedByQuestion((prev) => {
+                    const next = new Set(prev);
+                    next.add(currentQuestion.id);
+                    return next;
+                });
+            }
             setHintShown((prev) => {
                 const next = new Set(prev);
                 if (next.has(currentQuestion.id)) {
@@ -274,6 +655,17 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                 }
                 return next;
             });
+            if (willShow) {
+                trackEvent('success_remediation_activated', {
+                    lessonId,
+                    phase: 'practice',
+                    remediationType: 'hint',
+                    source: currentQuestion.hint ? 'question_hint' : remediationTelemetrySource,
+                    subject: nonMathRemediationSubject ?? 'math',
+                    topic: remediationTopic,
+                    questionId: currentQuestion.id,
+                });
+            }
             return;
         }
 
@@ -286,7 +678,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
 
     const handleShowSteps = () => {
         if (!currentQuestion) return;
-        if (!currentQuestion.steps || currentQuestion.steps.length === 0) return;
+        if (!deterministicSteps || deterministicSteps.length === 0) return;
         if (!isAnswered) return;
 
         if (pilotTelemetryEnabled) {
@@ -388,7 +780,23 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                             exit={{ opacity: 0, x: -20 }}
                             transition={{ duration: 0.2 }}
                         >
-                            {pilotTelemetryEnabled && challengeState.status === 'offered' && (
+                            {activeSupportReasonCard && (
+                                <div
+                                    className={[
+                                        'mb-4 rounded-xl border px-4 py-3 text-sm',
+                                        activeSupportReasonCard.tone === 'challenge'
+                                            ? 'border-indigo-200 bg-indigo-50 text-indigo-900'
+                                            : activeSupportReasonCard.tone === 'support'
+                                                ? 'border-amber-200 bg-amber-50 text-amber-900'
+                                                : 'border-sky-200 bg-sky-50 text-sky-900',
+                                    ].join(' ')}
+                                >
+                                    <p className="text-xs font-semibold uppercase tracking-wide">{activeSupportReasonCard.title}</p>
+                                    <p className="mt-1">{activeSupportReasonCard.detail}</p>
+                                </div>
+                            )}
+
+                            {remediationTemplatesEnabled && challengeQuestion && challengeState.status === 'offered' && (
                                 <div className="mb-5 rounded-xl border border-indigo-200 bg-indigo-50 p-4">
                                     <div className="text-sm font-semibold text-indigo-900">Nice work!</div>
                                     <div className="mt-1 text-sm text-indigo-900/90">
@@ -413,7 +821,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                 </div>
                             )}
 
-                            {pilotTelemetryEnabled && challengeQuestion && (challengeState.status === 'active' || challengeState.status === 'completed') && (
+                            {remediationTemplatesEnabled && challengeQuestion && (challengeState.status === 'active' || challengeState.status === 'completed') && (
                                 <>
                                     {challengeQuestion.visual && (
                                         <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
@@ -538,11 +946,11 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                 </>
                             )}
 
-                            {!showChallengeFlow && pilotTelemetryEnabled && quickReview.isVisible && (
+                            {!showChallengeFlow && remediationTemplatesEnabled && quickReviewContent && quickReview.isVisible && (
                                 <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
                                     <div className="text-sm font-semibold text-amber-900">Quick Review</div>
                                     <div className="mt-1 text-sm text-amber-900/90">
-                                        Perimeter means the distance around the outside. Add all the side lengths.
+                                        {quickReviewContent.explanation}
                                     </div>
 
                                     {currentVisual && (
@@ -629,7 +1037,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                             )}
 
                             {/* Hint button (before answering) */}
-                            {!showChallengeFlow && !isAnswered && (onAskTutor || currentQuestion?.hint) && (
+                            {!showChallengeFlow && !isAnswered && (onAskTutor || deterministicHint) && (
                                 <button
                                     type="button"
                                     onClick={handleAskForHint}
@@ -640,9 +1048,9 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                 </button>
                             )}
 
-                            {!showChallengeFlow && !isAnswered && currentQuestion?.hint && hintShown.has(currentQuestion.id) && (
+                            {!showChallengeFlow && !isAnswered && deterministicHint && currentQuestion && hintShown.has(currentQuestion.id) && (
                                 <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
-                                    {currentQuestion.hint}
+                                    {deterministicHint}
                                 </div>
                             )}
 
@@ -749,7 +1157,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                         </p>
                                     )}
 
-                                    {currentQuestion?.steps && currentQuestion.steps.length > 0 && (
+                                    {currentQuestion && deterministicSteps && deterministicSteps.length > 0 && (
                                         <div className="mt-3">
                                             <button
                                                 type="button"
@@ -762,7 +1170,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
 
                                             {stepsShown.has(currentQuestion.id) && (
                                                 <ol className="mt-2 list-decimal pl-5 text-sm text-slate-700">
-                                                    {currentQuestion.steps.map((step, idx) => (
+                                                    {deterministicSteps.map((step, idx) => (
                                                         <li key={idx}>{step}</li>
                                                     ))}
                                                 </ol>

@@ -83,6 +83,7 @@ const ParentSummaryCard: React.FC<ParentSummaryCardProps> = ({
         );
         const strongest = sortedSubjects[0];
         const weakest = sortedSubjects[sortedSubjects.length - 1];
+        const topSupportAction = child.coachingSuggestions?.[0] ?? null;
 
         let statusIndicator: 'on_track' | 'needs_practice' | 'struggling' = 'on_track';
         let statusMessage = 'Doing well';
@@ -124,6 +125,9 @@ const ParentSummaryCard: React.FC<ParentSummaryCardProps> = ({
             lessonsThisWeek: child.lessonsCompletedWeek ?? 0,
             strongest: strongest ? formatSubjectLabel(strongest.subject) : null,
             weakest: weakest && weakest.mastery < 70 ? formatSubjectLabel(weakest.subject) : null,
+            supportAction: topSupportAction?.action ?? null,
+            supportWhy: topSupportAction?.why ?? null,
+            supportMinutes: topSupportAction?.timeMinutes ?? null,
         };
     };
 
@@ -278,6 +282,21 @@ const ParentSummaryCard: React.FC<ParentSummaryCardProps> = ({
                                             </span>
                                         )}
                                     </div>
+                                </div>
+                            )}
+
+                            {status.supportAction && (
+                                <div className="mt-3 pt-3 border-t border-gray-100">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-brand-blue">
+                                        Recommended home support action
+                                    </p>
+                                    <p className="mt-1 text-sm text-slate-800">{status.supportAction}</p>
+                                    <p className="mt-1 text-xs text-slate-600">
+                                        {status.supportWhy ?? 'Aligned to this week’s focus.'}
+                                        {typeof status.supportMinutes === 'number' && status.supportMinutes > 0
+                                            ? ` (${status.supportMinutes} min)`
+                                            : ''}
+                                    </p>
                                 </div>
                             )}
                         </motion.div>

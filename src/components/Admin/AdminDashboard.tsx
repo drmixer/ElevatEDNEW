@@ -51,6 +51,7 @@ import {
   type OpsMetricsSnapshot,
   type ContentCoverageSummary,
 } from '../../services/adminService';
+import { buildReleaseGateDashboard } from '../../lib/evaluationHarness';
 import {
   fetchTutorReports,
   updateTutorReportStatus,
@@ -240,6 +241,26 @@ const AdminDashboard: React.FC = () => {
       errorRate: Math.round(errorRate * 100),
       safetyRate: Math.round(safetyRate * 100),
     };
+  }, [opsMetrics]);
+
+  const adaptiveRates = useMemo(() => {
+    if (!opsMetrics) {
+      return { errorRate: null, safetyRate: null } as const;
+    }
+    const successes = opsMetrics.totals.tutor_success ?? 0;
+    const errors = opsMetrics.totals.tutor_error ?? 0;
+    const safetyBlocks = opsMetrics.totals.tutor_safety_block ?? 0;
+    const tutorAttempts = successes + errors;
+    const safetyAttempts = successes + safetyBlocks;
+
+    return {
+      errorRate:
+        tutorAttempts > 0 ? Math.round((errors / tutorAttempts) * 1000) / 10 : null,
+      safetyRate:
+        safetyAttempts > 0
+          ? Math.round((safetyBlocks / safetyAttempts) * 1000) / 10
+          : null,
+    } as const;
   }, [opsMetrics]);
 
   // Content coverage for launch readiness
@@ -447,6 +468,49 @@ const AdminDashboard: React.FC = () => {
   }, [dashboard]);
 
   const successMetrics = dashboard?.successMetrics ?? null;
+  const checkpointMetrics = dashboard?.checkpointMetrics ?? null;
+  const releaseGateTelemetryMode =
+    successMetrics?.telemetryMode ?? checkpointMetrics?.telemetryMode ?? 'live';
+  const releaseGateAdaptiveErrorRate = adaptiveRates.errorRate ?? checkpointMetrics?.adaptiveErrorRate ?? null;
+  const releaseGateAdaptiveSafetyRate = adaptiveRates.safetyRate ?? checkpointMetrics?.adaptiveSafetyRate ?? null;
+
+  const releaseGateSnapshot = useMemo(
+    () =>
+      buildReleaseGateDashboard({
+        lookbackDays: successMetrics?.lookbackDays ?? checkpointMetrics?.lookbackDays ?? 7,
+        learningGainPoints: successMetrics?.weeklyAccuracyDeltaAvg ?? null,
+        dailyPlanCompletionRate: successMetrics?.dailyPlanCompletionRateAvg ?? null,
+        diagnosticCompletionRate: successMetrics?.diagnosticCompletionRate ?? null,
+        assignmentFollowThroughRate: successMetrics?.assignmentFollowThroughRate ?? null,
+        checkpointFirstPassRate: checkpointMetrics?.firstPassRate ?? null,
+        checkpointRecoveryRate: checkpointMetrics?.recoveryRateWithinTwo ?? null,
+        retention3DayRate: checkpointMetrics?.retention3DayRate ?? null,
+        retention7DayRate: checkpointMetrics?.retention7DayRate ?? null,
+        genericContentRate: checkpointMetrics?.genericContentRate ?? null,
+        coverageReadinessRate: coverageSummary?.readinessPercent ?? null,
+        adaptiveAttemptCount: checkpointMetrics?.adaptiveAttemptCount ?? null,
+        adaptiveErrorRate: releaseGateAdaptiveErrorRate,
+        adaptiveSafetyRate: releaseGateAdaptiveSafetyRate,
+      }),
+    [
+      checkpointMetrics?.firstPassRate,
+      checkpointMetrics?.genericContentRate,
+      checkpointMetrics?.lookbackDays,
+      checkpointMetrics?.adaptiveAttemptCount,
+      checkpointMetrics?.recoveryRateWithinTwo,
+      checkpointMetrics?.retention3DayRate,
+      checkpointMetrics?.retention7DayRate,
+      coverageSummary?.readinessPercent,
+      releaseGateAdaptiveErrorRate,
+      releaseGateAdaptiveSafetyRate,
+      successMetrics?.assignmentFollowThroughRate,
+      successMetrics?.dailyPlanCompletionRateAvg,
+      successMetrics?.diagnosticCompletionRate,
+      successMetrics?.lookbackDays,
+      successMetrics?.weeklyAccuracyDeltaAvg,
+    ],
+  );
+
   const successCards = useMemo(
     () => [
       {
@@ -733,6 +797,101 @@ const AdminDashboard: React.FC = () => {
                   </ResponsiveContainer>
                 )}
               </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.28 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Release Gates</h3>
+                  <p className="text-sm text-slate-600">
+                    Evaluation harness snapshot • last {releaseGateSnapshot.lookbackDays} days • telemetry{' '}
+                    {releaseGateTelemetryMode}
+                  </p>
+                </div>
+                <span
+                  className={`text-xs px-3 py-1 rounded-full border ${releaseGateSnapshot.releaseReady
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    : 'bg-rose-50 border-rose-200 text-rose-700'
+                    }`}
+                >
+                  {releaseGateSnapshot.releaseReady ? 'Release ready' : 'Release blocked'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Pass</p>
+                  <p className="text-2xl font-bold text-emerald-700">{releaseGateSnapshot.passCount}</p>
+                </div>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Warn</p>
+                  <p className="text-2xl font-bold text-amber-700">{releaseGateSnapshot.warnCount}</p>
+                </div>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Fail</p>
+                  <p className="text-2xl font-bold text-rose-700">{releaseGateSnapshot.failCount}</p>
+                </div>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">No data</p>
+                  <p className="text-2xl font-bold text-slate-800">{releaseGateSnapshot.noDataCount}</p>
+                </div>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Blockers</p>
+                  <p className="text-2xl font-bold text-rose-700">{releaseGateSnapshot.blockerCount}</p>
+                </div>
+              </div>
+              {checkpointMetrics && (
+                <p className="mb-4 text-xs text-slate-600">
+                  Checkpoint telemetry volume: {checkpointMetrics.attemptCount} attempts (pilot{' '}
+                  {checkpointMetrics.pilotAttemptCount}, K-5 {checkpointMetrics.k5AttemptCount}) in the last{' '}
+                  {checkpointMetrics.lookbackDays} days [{checkpointMetrics.telemetryMode} mode].
+                </p>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-3">
+                {releaseGateSnapshot.gates.map((gate) => {
+                  const statusTone =
+                    gate.status === 'pass'
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                      : gate.status === 'warn'
+                        ? 'bg-amber-50 border-amber-200 text-amber-700'
+                        : gate.status === 'fail'
+                          ? 'bg-rose-50 border-rose-200 text-rose-700'
+                          : 'bg-slate-50 border-slate-200 text-slate-600';
+                  return (
+                    <div key={gate.key} className="rounded-lg border border-slate-200 bg-white p-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">{gate.label}</p>
+                        <span className={`text-[11px] px-2 py-1 rounded-full border ${statusTone}`}>
+                          {gate.status === 'no_data' ? 'no data' : gate.status}
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-slate-900 mt-1">
+                        {gate.value == null ? '—' : `${gate.value}${
+                          gate.unit === 'percent' ? '%' : gate.unit === 'points' ? ' pts' : ''
+                        }`}
+                      </p>
+                      <p className="text-[11px] text-slate-600 mt-1">{gate.target}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {releaseGateSnapshot.blockers.length > 0 && (
+                <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-rose-700 mb-2">Blocking gates</p>
+                  <ul className="space-y-1 text-sm text-rose-700">
+                    {releaseGateSnapshot.blockers.map((label) => (
+                      <li key={label}>{label}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </motion.div>
 
             <motion.div

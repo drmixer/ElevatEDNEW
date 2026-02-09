@@ -11,6 +11,7 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { assessPracticeQuestionQuality } from '../shared/questionQuality.js';
 
 const supabase = createServiceRoleClient();
 
@@ -329,13 +330,14 @@ async function createQuestion(
 async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
     questionsCreated: number;
     skillsLinked: number;
+    blockedGeneric: number;
     errors: number;
 }> {
     const filepath = path.join(process.cwd(), 'data', 'practice', filename);
 
     if (!fs.existsSync(filepath)) {
         console.warn(`File not found: ${filepath}`);
-        return { questionsCreated: 0, skillsLinked: 0, errors: 0 };
+        return { questionsCreated: 0, skillsLinked: 0, blockedGeneric: 0, errors: 0 };
     }
 
     const content = fs.readFileSync(filepath, 'utf-8');
@@ -345,7 +347,7 @@ async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
         parsedData = JSON.parse(content);
     } catch (e) {
         console.error(`Failed to parse ${filename}: ${e}`);
-        return { questionsCreated: 0, skillsLinked: 0, errors: 1 };
+        return { questionsCreated: 0, skillsLinked: 0, blockedGeneric: 0, errors: 1 };
     }
 
     // Handle both array format and object-keyed format
@@ -371,15 +373,32 @@ async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
 
     if (items.length === 0) {
         console.warn(`${filename} has no items`);
-        return { questionsCreated: 0, skillsLinked: 0, errors: 0 };
+        return { questionsCreated: 0, skillsLinked: 0, blockedGeneric: 0, errors: 0 };
     }
 
     let questionsCreated = 0;
     let skillsLinked = 0;
+    let blockedGeneric = 0;
     let errors = 0;
 
     for (const item of items) {
         if (!item.prompt || !item.options || !item.skills) {
+            continue;
+        }
+
+        const quality = assessPracticeQuestionQuality({
+            prompt: item.prompt,
+            type: item.type || 'multiple_choice',
+            options: item.options.map((option) => ({
+                text: option.text,
+                isCorrect: option.isCorrect,
+            })),
+        });
+        if (quality.shouldBlock) {
+            blockedGeneric++;
+            console.warn(
+                `[seed_practice_questions] Blocking low-quality prompt "${item.prompt.slice(0, 60)}..." (${quality.reasons.join(', ')})`,
+            );
             continue;
         }
 
@@ -417,7 +436,7 @@ async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
         }
     }
 
-    return { questionsCreated, skillsLinked, errors };
+    return { questionsCreated, skillsLinked, blockedGeneric, errors };
 }
 
 async function main() {
@@ -441,22 +460,27 @@ async function main() {
 
     let totalQuestions = 0;
     let totalSkillsLinked = 0;
+    let totalBlockedGeneric = 0;
     let totalErrors = 0;
 
     for (const filename of PRACTICE_FILES) {
         console.log(`Processing ${filename}...`);
         const result = await processPracticeFile(filename, dryRun);
 
-        console.log(`  Questions: ${result.questionsCreated}, Skills linked: ${result.skillsLinked}, Errors: ${result.errors}`);
+        console.log(
+            `  Questions: ${result.questionsCreated}, Skills linked: ${result.skillsLinked}, Blocked generic: ${result.blockedGeneric}, Errors: ${result.errors}`,
+        );
 
         totalQuestions += result.questionsCreated;
         totalSkillsLinked += result.skillsLinked;
+        totalBlockedGeneric += result.blockedGeneric;
         totalErrors += result.errors;
     }
 
     console.log('\n=== SUMMARY ===\n');
     console.log(`Total questions created/found: ${totalQuestions}`);
     console.log(`Total lesson-skill links: ${totalSkillsLinked}`);
+    console.log(`Total low-quality questions blocked: ${totalBlockedGeneric}`);
     console.log(`Total errors: ${totalErrors}`);
     console.log(`New skills created: ${skillCache.size}`);
 

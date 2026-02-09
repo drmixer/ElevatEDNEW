@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type DiagnosticOption = {
   text: string;
@@ -293,6 +294,9 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
     throw new Error('Missing subject rows (need Mathematics, English Language Arts, and Science in subjects table).');
   }
 
+  let blockedCount = 0;
+  const blockedReasonCounts: Record<string, number> = {};
+
   const { data: assessmentRow, error: assessmentError } = await supabase
     .from('assessments')
     .insert({
@@ -426,12 +430,33 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
     }
 
     let questionOrder = 1;
+    let insertedForSubject = 0;
     for (const item of picked) {
       if (!item.prompt?.trim().length) {
         throw new Error(`Item ${item.id} is missing a prompt.`);
       }
       if (!Array.isArray(item.options) || item.options.length < 2) {
         throw new Error(`Item ${item.id} is missing options.`);
+      }
+
+      const quality = assessAssessmentQuestionQuality({
+        prompt: item.prompt,
+        type: item.type ?? 'multiple_choice',
+        options: item.options.map((option) => ({
+          text: option.text,
+          isCorrect: option.isCorrect,
+        })),
+      });
+      if (quality.shouldBlock) {
+        blockedCount += 1;
+        incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+        console.warn('[seed_placement_assessment] Blocking low-quality placement item', {
+          source: 'scripts/seed_placement_assessment.ts',
+          subjectKey,
+          itemId: item.id,
+          reasons: quality.reasons,
+        });
+        continue;
       }
 
       const questionId = await insertQuestion({ subjectId, subjectKey, item });
@@ -450,6 +475,11 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
       }
 
       questionOrder += 1;
+      insertedForSubject += 1;
+    }
+
+    if (insertedForSubject < 2) {
+      throw new Error(`Quality gate left too few placement questions for ${subjectKey} (${insertedForSubject}).`);
     }
   };
 
@@ -461,6 +491,14 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
     sectionTitle: 'English Language Arts',
   });
   await seedSubject({ config: scienceConfig, subjectId: scienceSubjectId, subjectKey: 'science', sectionTitle: 'Science' });
+
+  if (blockedCount > 0) {
+    console.warn('[seed_placement_assessment] Quality gate blocked placement items', {
+      source: 'scripts/seed_placement_assessment.ts',
+      blockedCount,
+      reasonCounts: blockedReasonCounts,
+    });
+  }
 
   console.log(`Seeded placement assessment ${assessmentId} for grade band ${gradeBand} (source grade ${sourceGrade}).`);
 };
@@ -492,4 +530,3 @@ if (isDirectRun) {
     process.exit(1);
   });
 }
-

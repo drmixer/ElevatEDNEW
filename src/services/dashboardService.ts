@@ -6,6 +6,7 @@ import type {
   AdminDashboardData,
   AdminDashboardMetrics,
   AdminGrowthPoint,
+  AdminCheckpointMetrics,
   AdminSubjectPerformance,
   AdminTopStudent,
   AdminSuccessMetrics,
@@ -44,13 +45,39 @@ import { listPlanOptOuts } from './optOutService';
 import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarManifests';
 import { computeSubjectStatuses } from '../lib/onTrack';
 import { buildCoachingSuggestions } from '../lib/parentSuggestions';
+import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
+import {
+  computeAdaptiveEvaluation,
+  computeCheckpointEvaluation,
+  computeRetentionEvaluation,
+  resolveAdaptiveRateForGates,
+  resolveRetentionRateForGates,
+  shouldIncludeTelemetryPayload,
+  type TelemetryMode,
+} from '../lib/evaluationHarness';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
   typeof import.meta.env !== 'undefined' &&
   (import.meta.env.DEV || import.meta.env.VITE_ALLOW_FAKE_DASHBOARD_DATA === 'true');
 
+const resolveAdminReleaseGateTelemetryMode = (): TelemetryMode => {
+  const configuredMode =
+    typeof import.meta !== 'undefined' &&
+    typeof import.meta.env !== 'undefined' &&
+    typeof import.meta.env.VITE_RELEASE_GATE_TELEMETRY_MODE === 'string'
+      ? import.meta.env.VITE_RELEASE_GATE_TELEMETRY_MODE.trim().toLowerCase()
+      : '';
+  if (configuredMode === 'synthetic' || configuredMode === 'all' || configuredMode === 'live') {
+    return configuredMode;
+  }
+  return 'live';
+};
+
+const adminReleaseGateTelemetryMode = resolveAdminReleaseGateTelemetryMode();
+
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
+const RETENTION_HORIZON_DAYS = 7;
 
 type SubjectRow = {
   id: number;
@@ -86,6 +113,34 @@ type XpEventRow = {
 type AssessmentAttemptRow = {
   status: 'in_progress' | 'completed' | 'abandoned' | null;
   completed_at: string | null;
+};
+
+type AnalyticsCheckpointEventRow = {
+  event_name: string | null;
+  student_id: string | null;
+  occurred_at: string | null;
+  payload: Record<string, unknown> | null;
+};
+
+type AnalyticsAdaptiveEventRow = {
+  occurred_at: string | null;
+  payload: Record<string, unknown> | null;
+};
+
+type AnalyticsDiagnosticEventRow = {
+  event_name: string | null;
+  student_id: string | null;
+  payload: Record<string, unknown> | null;
+};
+
+type QuestionQualitySampleRow = {
+  id: number;
+  prompt: string;
+  question_type: string | null;
+  question_options?: Array<{
+    content: string;
+    is_correct: boolean;
+  }> | null;
 };
 
 type StudentDailyActivityRow = {
@@ -834,6 +889,56 @@ const fallbackParentAlerts = (): ParentAlert[] => {
   ];
 };
 
+const resolveTelemetryStudentId = (
+  eventStudentId: string | null | undefined,
+  payload: Record<string, unknown> | null | undefined,
+): string => {
+  const direct = (eventStudentId ?? '').toString().trim();
+  if (direct) return direct;
+  const source = payload ?? {};
+  const fallback = typeof source.studentId === 'string' ? source.studentId : typeof source.childId === 'string' ? source.childId : '';
+  return fallback.trim();
+};
+
+const computeSyntheticDiagnosticSummary = (
+  rows: AnalyticsDiagnosticEventRow[],
+  telemetryMode: TelemetryMode,
+): { eligibleCount: number; completedCount: number; completionRate: number | null } => {
+  const eligible = new Set<string>();
+  const completed = new Set<string>();
+
+  rows.forEach((row) => {
+    const payload = row.payload ?? {};
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
+    if (telemetryMode === 'all' && payload.synthetic !== true) return;
+    const studentId = resolveTelemetryStudentId(row.student_id, payload);
+    if (!studentId) return;
+    const eventName = (row.event_name ?? '').toLowerCase();
+    if (eventName === 'success_diagnostic_eligible') {
+      eligible.add(studentId);
+    } else if (eventName === 'success_diagnostic_completed') {
+      completed.add(studentId);
+    }
+  });
+
+  if (!eligible.size) {
+    return { eligibleCount: 0, completedCount: 0, completionRate: null };
+  }
+
+  let completedEligible = 0;
+  eligible.forEach((studentId) => {
+    if (completed.has(studentId)) {
+      completedEligible += 1;
+    }
+  });
+
+  return {
+    eligibleCount: eligible.size,
+    completedCount: completedEligible,
+    completionRate: Math.round((completedEligible / eligible.size) * 1000) / 10,
+  };
+};
+
 const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   admin,
   metrics: {
@@ -850,6 +955,7 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   },
   successMetrics: {
     lookbackDays: 7,
+    telemetryMode: adminReleaseGateTelemetryMode,
     diagnosticsCompleted: allowSyntheticDashboardData ? 1820 : 0,
     diagnosticsTotal: allowSyntheticDashboardData ? 2480 : 0,
     diagnosticCompletionRate: allowSyntheticDashboardData ? 73 : null,
@@ -859,6 +965,38 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     weeklyAccuracyDeltaAvg: allowSyntheticDashboardData ? 1.2 : null,
     dailyPlanCompletionRateAvg: allowSyntheticDashboardData ? 64 : null,
     alertResolutionHoursAvg: allowSyntheticDashboardData ? 10.4 : null,
+  },
+  checkpointMetrics: {
+    lookbackDays: 7,
+    telemetryMode: adminReleaseGateTelemetryMode,
+    attemptCount: allowSyntheticDashboardData ? 920 : 0,
+    pilotAttemptCount: allowSyntheticDashboardData ? 430 : 0,
+    k5AttemptCount: allowSyntheticDashboardData ? 490 : 0,
+    firstAttemptCount: allowSyntheticDashboardData ? 520 : 0,
+    firstPassCount: allowSyntheticDashboardData ? 374 : 0,
+    firstPassRate: allowSyntheticDashboardData ? 71.9 : null,
+    recoverableCount: allowSyntheticDashboardData ? 146 : 0,
+    recoveredWithinTwoCount: allowSyntheticDashboardData ? 108 : 0,
+    recoveryRateWithinTwo: allowSyntheticDashboardData ? 74 : null,
+    retentionBaselineMasteredCount: allowSyntheticDashboardData ? 302 : 0,
+    retentionEligible3DayCount: allowSyntheticDashboardData ? 240 : 0,
+    retentionObserved3DayCount: allowSyntheticDashboardData ? 180 : 0,
+    retentionRetained3DayCount: allowSyntheticDashboardData ? 134 : 0,
+    retention3DayRate: allowSyntheticDashboardData ? 74.4 : null,
+    retention3DayCoverageRate: allowSyntheticDashboardData ? 75 : null,
+    retentionEligible7DayCount: allowSyntheticDashboardData ? 188 : 0,
+    retentionObserved7DayCount: allowSyntheticDashboardData ? 126 : 0,
+    retentionRetained7DayCount: allowSyntheticDashboardData ? 85 : 0,
+    retention7DayRate: allowSyntheticDashboardData ? 67.5 : null,
+    retention7DayCoverageRate: allowSyntheticDashboardData ? 67 : null,
+    genericContentSampleCount: allowSyntheticDashboardData ? 900 : 0,
+    genericContentBlockedCount: allowSyntheticDashboardData ? 12 : 0,
+    genericContentRate: allowSyntheticDashboardData ? 1.3 : null,
+    adaptiveAttemptCount: allowSyntheticDashboardData ? 360 : 0,
+    adaptiveErrorCount: allowSyntheticDashboardData ? 34 : 0,
+    adaptiveSafetyBlockCount: allowSyntheticDashboardData ? 29 : 0,
+    adaptiveErrorRate: allowSyntheticDashboardData ? 9.4 : null,
+    adaptiveSafetyRate: allowSyntheticDashboardData ? 8.1 : null,
   },
   growthSeries: allowSyntheticDashboardData
     ? Array.from({ length: 8 }).map((_, index) => {
@@ -2216,6 +2354,33 @@ const buildAdminAlerts = (
   return alerts.length ? alerts : fallbackAdminData(admin).alerts;
 };
 
+const computeGenericQuestionRate = (
+  rows: QuestionQualitySampleRow[],
+): { sampleCount: number; genericCount: number; genericRate: number | null } => {
+  if (!rows.length) {
+    return { sampleCount: 0, genericCount: 0, genericRate: null };
+  }
+
+  let genericCount = 0;
+  rows.forEach((row) => {
+    const quality = assessPracticeQuestionQuality({
+      prompt: row.prompt,
+      type: row.question_type,
+      options: (row.question_options ?? []).map((option) => ({
+        text: option.content,
+        isCorrect: option.is_correct,
+      })),
+    });
+    if (quality.isGeneric) {
+      genericCount += 1;
+    }
+  });
+
+  const sampleCount = rows.length;
+  const genericRate = sampleCount > 0 ? Math.round((genericCount / sampleCount) * 1000) / 10 : null;
+  return { sampleCount, genericCount, genericRate };
+};
+
 export const fetchStudentDashboardData = async (
   student: Student,
 ): Promise<StudentDashboardData> => {
@@ -3074,6 +3239,9 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
   try {
     const lookbackDays = 7;
     const lookbackIso = new Date(Date.now() - ONE_DAY_MS * lookbackDays).toISOString();
+    const retentionLookbackIso = new Date(
+      Date.now() - ONE_DAY_MS * (lookbackDays + RETENTION_HORIZON_DAYS),
+    ).toISOString();
     const [
       { data: metricsRow, error: metricsError },
       { data: growthRows, error: growthError },
@@ -3088,7 +3256,12 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       diagnosticsCompletedResult,
       assignmentsTotalResult,
       assignmentsCompletedResult,
+      { data: diagnosticTelemetryRows, error: diagnosticTelemetryError },
       { data: successRollupRow, error: successRollupError },
+      { data: checkpointRows, error: checkpointError },
+      { data: retentionCheckpointRows, error: retentionCheckpointError },
+      { data: adaptiveRows, error: adaptiveError },
+      { data: questionQualityRows, error: questionQualityError },
     ] = await Promise.all([
       supabase.from('admin_dashboard_metrics').select('*').single(),
       supabase
@@ -3128,7 +3301,41 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         .select('id', { count: 'exact', head: true })
         .eq('status', 'completed')
         .gte('updated_at', lookbackIso),
+      supabase
+        .from('analytics_events')
+        .select('event_name, student_id, payload')
+        .in('event_name', ['success_diagnostic_eligible', 'success_diagnostic_completed'])
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(10000),
       supabase.from('admin_success_metrics_rollup').select('*').single(),
+      supabase
+        .from('analytics_events')
+        .select('event_name, student_id, occurred_at, payload')
+        .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(10000),
+      supabase
+        .from('analytics_events')
+        .select('event_name, student_id, occurred_at, payload')
+        .in('event_name', ['success_pilot_checkpoint_answered', 'success_k5_math_checkpoint_answered'])
+        .gte('occurred_at', retentionLookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(20000),
+      supabase
+        .from('analytics_events')
+        .select('occurred_at, payload')
+        .eq('event_name', 'success_adaptive_tutor_outcome')
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(10000),
+      supabase
+        .from('question_bank')
+        .select('id, prompt, question_type, question_options(content, is_correct)')
+        .gte('created_at', lookbackIso)
+        .order('created_at', { ascending: false })
+        .limit(2000),
     ]);
 
     if (metricsError) {
@@ -3154,8 +3361,18 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       console.error('[Dashboard] Admin assignments total fetch failed', assignmentsTotalResult.error);
     if (assignmentsCompletedResult.error)
       console.error('[Dashboard] Admin assignments completion fetch failed', assignmentsCompletedResult.error);
+    if (diagnosticTelemetryError)
+      console.error('[Dashboard] Admin diagnostic telemetry fetch failed', diagnosticTelemetryError);
     if (successRollupError)
       console.error('[Dashboard] Admin success metrics rollup fetch failed', successRollupError);
+    if (checkpointError)
+      console.error('[Dashboard] Admin checkpoint telemetry fetch failed', checkpointError);
+    if (retentionCheckpointError)
+      console.error('[Dashboard] Admin retention telemetry fetch failed', retentionCheckpointError);
+    if (adaptiveError)
+      console.error('[Dashboard] Admin adaptive telemetry fetch failed', adaptiveError);
+    if (questionQualityError)
+      console.error('[Dashboard] Admin question quality sample fetch failed', questionQualityError);
 
     const completedLessons = completedProgressResult.count ?? 0;
     const inProgressLessons = inProgressProgressResult.count ?? 0;
@@ -3178,12 +3395,34 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       lessonCompletionRate: lessonCompletionRate ?? undefined,
     };
 
-    const diagnosticsTotal =
+    const baselineDiagnosticsTotal =
       diagnosticsTotalResult.count ??
       (Number.isFinite(metrics.totalStudents) ? metrics.totalStudents : 0);
-    const diagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+    const baselineDiagnosticsCompleted = diagnosticsCompletedResult.count ?? 0;
+    const baselineDiagnosticCompletionRate =
+      baselineDiagnosticsTotal > 0
+        ? Math.round((baselineDiagnosticsCompleted / baselineDiagnosticsTotal) * 100)
+        : null;
+
+    const syntheticDiagnosticSummary = computeSyntheticDiagnosticSummary(
+      (diagnosticTelemetryRows as AnalyticsDiagnosticEventRow[]) ?? [],
+      adminReleaseGateTelemetryMode,
+    );
+    const shouldUseSyntheticDiagnosticCohort =
+      adminReleaseGateTelemetryMode === 'synthetic' ||
+      (adminReleaseGateTelemetryMode === 'all' && syntheticDiagnosticSummary.eligibleCount > 0);
+    const diagnosticsTotal =
+      shouldUseSyntheticDiagnosticCohort
+        ? syntheticDiagnosticSummary.eligibleCount
+        : baselineDiagnosticsTotal;
+    const diagnosticsCompleted =
+      shouldUseSyntheticDiagnosticCohort
+        ? syntheticDiagnosticSummary.completedCount
+        : baselineDiagnosticsCompleted;
     const diagnosticCompletionRate =
-      diagnosticsTotal > 0 ? Math.round((diagnosticsCompleted / diagnosticsTotal) * 100) : null;
+      shouldUseSyntheticDiagnosticCohort
+        ? syntheticDiagnosticSummary.completionRate
+        : baselineDiagnosticCompletionRate;
 
     const assignmentsTotal = assignmentsTotalResult.count ?? 0;
     const assignmentsCompleted = assignmentsCompletedResult.count ?? 0;
@@ -3205,6 +3444,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
 
     const successMetrics: AdminSuccessMetrics = {
       lookbackDays,
+      telemetryMode: adminReleaseGateTelemetryMode,
       diagnosticsCompleted,
       diagnosticsTotal,
       diagnosticCompletionRate,
@@ -3214,6 +3454,97 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       weeklyAccuracyDeltaAvg,
       dailyPlanCompletionRateAvg,
       alertResolutionHoursAvg,
+    };
+
+    const checkpointSummary = computeCheckpointEvaluation(
+      ((checkpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+        eventName: row.event_name,
+        studentId: row.student_id,
+        occurredAt: row.occurred_at,
+        payload: row.payload,
+      })),
+      { telemetryMode: adminReleaseGateTelemetryMode },
+    );
+
+    const retentionSummary = computeRetentionEvaluation(
+      ((retentionCheckpointRows as AnalyticsCheckpointEventRow[]) ?? []).map((row) => ({
+        eventName: row.event_name,
+        studentId: row.student_id,
+        occurredAt: row.occurred_at,
+        payload: row.payload,
+      })),
+      { telemetryMode: adminReleaseGateTelemetryMode },
+    );
+
+    const adaptiveSummary = computeAdaptiveEvaluation(
+      ((adaptiveRows as AnalyticsAdaptiveEventRow[]) ?? []).map((row) => ({
+        occurredAt: row.occurred_at,
+        payload: row.payload,
+      })),
+      { telemetryMode: adminReleaseGateTelemetryMode },
+    );
+
+    let questionSampleRows = (questionQualityRows as QuestionQualitySampleRow[]) ?? [];
+    if (!questionSampleRows.length) {
+      const { data: fallbackQualityRows, error: fallbackQualityError } = await supabase
+        .from('question_bank')
+        .select('id, prompt, question_type, question_options(content, is_correct)')
+        .order('created_at', { ascending: false })
+        .limit(500);
+      if (fallbackQualityError) {
+        console.error('[Dashboard] Admin fallback question quality sample fetch failed', fallbackQualityError);
+      } else {
+        questionSampleRows = (fallbackQualityRows as QuestionQualitySampleRow[]) ?? [];
+      }
+    }
+
+    const genericContentSummary = computeGenericQuestionRate(questionSampleRows);
+
+    const checkpointMetrics: AdminCheckpointMetrics = {
+      lookbackDays,
+      telemetryMode: adminReleaseGateTelemetryMode,
+      attemptCount: checkpointSummary.attemptCount,
+      pilotAttemptCount: checkpointSummary.pilotAttemptCount,
+      k5AttemptCount: checkpointSummary.k5AttemptCount,
+      firstAttemptCount: checkpointSummary.firstAttemptCount,
+      firstPassCount: checkpointSummary.firstPassCount,
+      firstPassRate: checkpointSummary.firstPassRate,
+      recoverableCount: checkpointSummary.recoverableCount,
+      recoveredWithinTwoCount: checkpointSummary.recoveredWithinTwoCount,
+      recoveryRateWithinTwo: checkpointSummary.recoveryRateWithinTwo,
+      retentionBaselineMasteredCount: retentionSummary.baselineMasteredCount,
+      retentionEligible3DayCount: retentionSummary.eligible3DayCount,
+      retentionObserved3DayCount: retentionSummary.observed3DayCount,
+      retentionRetained3DayCount: retentionSummary.retained3DayCount,
+      retention3DayRate: resolveRetentionRateForGates(
+        retentionSummary.retention3DayRate,
+        retentionSummary.eligible3DayCount,
+        retentionSummary.observed3DayCount,
+      ),
+      retention3DayCoverageRate: retentionSummary.retention3DayCoverageRate,
+      retentionEligible7DayCount: retentionSummary.eligible7DayCount,
+      retentionObserved7DayCount: retentionSummary.observed7DayCount,
+      retentionRetained7DayCount: retentionSummary.retained7DayCount,
+      retention7DayRate: resolveRetentionRateForGates(
+        retentionSummary.retention7DayRate,
+        retentionSummary.eligible7DayCount,
+        retentionSummary.observed7DayCount,
+      ),
+      retention7DayCoverageRate: retentionSummary.retention7DayCoverageRate,
+      genericContentSampleCount: genericContentSummary.sampleCount,
+      genericContentBlockedCount: genericContentSummary.genericCount,
+      genericContentRate: genericContentSummary.genericRate,
+      adaptiveAttemptCount: adaptiveSummary.attemptCount,
+      adaptiveErrorCount: adaptiveSummary.errorCount,
+      adaptiveSafetyBlockCount: adaptiveSummary.safetyBlockCount,
+      adaptiveErrorRate: resolveAdaptiveRateForGates(
+        adaptiveSummary.errorRate,
+        adaptiveSummary.attemptCount,
+      ),
+      adaptiveSafetyRate: resolveAdaptiveRateForGates(
+        adaptiveSummary.safetyRate,
+        adaptiveSummary.attemptCount,
+      ),
     };
 
     const growthGrouped = new Map<string, { newStudents: number; activeStudents: number }>();
@@ -3300,6 +3631,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       alerts,
       topStudents: topStudents.length ? topStudents : fallbackAdminData(admin).topStudents,
       successMetrics,
+      checkpointMetrics,
     };
   } catch (error) {
     console.error('[Dashboard] Admin dashboard fallback engaged', error);

@@ -6,12 +6,13 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     AlertTriangle,
     ArrowLeft,
+    HelpCircle,
     Loader2,
     PlayCircle,
 } from 'lucide-react';
@@ -30,7 +31,10 @@ import { useStudentEvent } from '../hooks/useStudentData';
 import { parseLessonContent, consolidateSections } from '../lib/lessonContentParser';
 import ContentIssueReport from '../components/Lesson/ContentIssueReport';
 import { getPracticeQuestionVisual } from '../lib/lessonVisuals';
-import { isGrade2MathPerimeterPilot } from '../lib/pilotConditions';
+import { getGrade2MathPilotTopic, type Grade2MathPilotTopic } from '../lib/pilotConditions';
+import { generateGrade2MathPracticeQuestions } from '../lib/pilotGrade2Math';
+import { getNonMathRemediationSubject, type NonMathRemediationSubject } from '../lib/nonMathRemediation';
+import { buildLessonNextReasonCard } from '../lib/transparencyReason';
 
 // Core Lesson Components (eagerly loaded)
 import {
@@ -69,12 +73,26 @@ const shuffleWithCorrectIndex = (
     seed: number,
 ): { options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> } => {
     const next = options.slice();
+    const correct = next.find((o) => o.isCorrect);
+    const wrongs = next.filter((o) => !o.isCorrect);
+    if (!correct || wrongs.length < 2) return { options: next };
+
     const rand = mulberry32(seed);
-    for (let i = next.length - 1; i > 0; i -= 1) {
+    for (let i = wrongs.length - 1; i > 0; i -= 1) {
         const j = Math.floor(rand() * (i + 1));
-        [next[i], next[j]] = [next[j], next[i]];
+        [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
     }
-    return { options: next };
+
+    const targetIndex = Math.abs(seed) % next.length;
+    const arranged: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> = new Array(next.length);
+    arranged[targetIndex] = correct;
+    let w = 0;
+    for (let i = 0; i < arranged.length; i += 1) {
+        if (i === targetIndex) continue;
+        arranged[i] = wrongs[w] ?? wrongs[0] ?? correct;
+        w += 1;
+    }
+    return { options: arranged };
 };
 
 const generatePerimeterPracticeQuestions = (input: {
@@ -163,6 +181,8 @@ const generatePerimeterPracticeQuestions = (input: {
  */
 const LessonContent: React.FC<{
     lessonDetail: NonNullable<Awaited<ReturnType<typeof fetchLessonDetail>>>;
+    pilotTopic: Grade2MathPilotTopic | null;
+    nonMathRemediationSubject: NonMathRemediationSubject | null;
     practiceQuestions: LessonPracticeQuestion[];
     onAnswerSubmit: (questionId: number, optionId: number, isCorrect: boolean) => void;
     onAskTutor?: (context: string) => void;
@@ -170,6 +190,8 @@ const LessonContent: React.FC<{
     xpEarned: number;
 }> = ({
     lessonDetail,
+    pilotTopic,
+    nonMathRemediationSubject,
     practiceQuestions,
     onAnswerSubmit,
     onAskTutor,
@@ -179,12 +201,8 @@ const LessonContent: React.FC<{
         const { currentPhase } = useLessonStepper();
 
         const pilotTelemetryEnabled = useMemo(() => {
-            return isGrade2MathPerimeterPilot({
-                subject: lessonDetail.module.subject,
-                gradeBand: lessonDetail.module.gradeBand,
-                lessonTitle: lessonDetail.lesson.title,
-            });
-        }, [lessonDetail]);
+            return Boolean(pilotTopic);
+        }, [pilotTopic]);
 
         // Parse lesson content (memoized for performance)
         const parsedContent = useMemo(() => {
@@ -237,6 +255,7 @@ const LessonContent: React.FC<{
                                 sections={learnSections}
                                 lessonId={lessonDetail.lesson.id}
                                 pilotTelemetryEnabled={pilotTelemetryEnabled}
+                                pilotTopic={pilotTopic}
                                 lessonTitle={lessonDetail.lesson.title}
                                 subject={lessonDetail.module.subject}
                                 gradeBand={lessonDetail.module.gradeBand}
@@ -250,7 +269,10 @@ const LessonContent: React.FC<{
                                 questions={practiceQuestions}
                                 lessonId={lessonDetail.lesson.id}
                                 pilotTelemetryEnabled={pilotTelemetryEnabled}
+                                pilotTopic={pilotTopic}
+                                nonMathRemediationSubject={nonMathRemediationSubject}
                                 lessonTitle={lessonDetail.lesson.title}
+                                lessonContent={lessonDetail.lesson.content}
                                 subject={lessonDetail.module.subject}
                                 gradeBand={lessonDetail.module.gradeBand}
                                 onAnswerSubmit={onAnswerSubmit}
@@ -289,6 +311,7 @@ const LessonContent: React.FC<{
  */
 const LessonPlayerPage: React.FC = () => {
     const params = useParams<{ id: string }>();
+    const location = useLocation();
     const { user } = useAuth();
     const lessonId = Number.parseInt(params.id ?? '', 10);
 
@@ -300,6 +323,7 @@ const LessonPlayerPage: React.FC = () => {
     // Lesson started tracking
     const lessonStartedAt = useRef<number>(Date.now());
     const lessonCompletionLogged = useRef<boolean>(false);
+    const lessonReasonTelemetryKey = useRef<string | null>(null);
     const [xpEarned, setXpEarned] = useState(0);
 
     // Validate lesson ID
@@ -315,16 +339,52 @@ const LessonPlayerPage: React.FC = () => {
 
     const lessonDetail = lessonQuery.data ?? null;
 
-    const isPerimeterPilot = useMemo(() => {
-        return Boolean(
-            lessonDetail &&
-            isGrade2MathPerimeterPilot({
-                subject: lessonDetail.module.subject,
-                gradeBand: lessonDetail.module.gradeBand,
-                lessonTitle: lessonDetail.lesson.title,
-            }),
-        );
+    const launchSuggestionReason = useMemo(() => {
+        const state = location.state as Record<string, unknown> | null;
+        if (!state || typeof state !== 'object') return null;
+        const reason = state.suggestionReason;
+        return typeof reason === 'string' && reason.trim().length ? reason.trim() : null;
+    }, [location.state]);
+
+    const grade2MathPilotTopic = useMemo(() => {
+        if (!lessonDetail) return null;
+        return getGrade2MathPilotTopic({
+            subject: lessonDetail.module.subject,
+            gradeBand: lessonDetail.module.gradeBand,
+            lessonTitle: lessonDetail.lesson.title,
+        });
     }, [lessonDetail]);
+
+    const nonMathRemediationSubject = useMemo(() => {
+        if (!lessonDetail) return null;
+        return getNonMathRemediationSubject(lessonDetail.module.subject);
+    }, [lessonDetail]);
+
+    const lessonReasonCard = useMemo(() => {
+        if (!lessonDetail) return null;
+        return buildLessonNextReasonCard({
+            suggestionReason: launchSuggestionReason,
+            subject: lessonDetail.module.subject,
+            moduleTitle: lessonDetail.module.title,
+            lessonTitle: lessonDetail.lesson.title,
+            gradeBand: lessonDetail.module.gradeBand,
+        });
+    }, [launchSuggestionReason, lessonDetail]);
+
+    useEffect(() => {
+        if (!lessonDetail || !lessonReasonCard) return;
+        const key = `${lessonDetail.lesson.id}:${lessonReasonCard.title}:${lessonReasonCard.detail}`;
+        if (lessonReasonTelemetryKey.current === key) return;
+        lessonReasonTelemetryKey.current = key;
+        trackEvent('success_transparency_lesson_reason_shown', {
+            lessonId: lessonDetail.lesson.id,
+            subject: lessonDetail.module.subject,
+            tone: lessonReasonCard.tone,
+            source: launchSuggestionReason ? 'dashboard_reason' : 'deterministic_fallback',
+        });
+    }, [launchSuggestionReason, lessonDetail, lessonReasonCard]);
+
+    const isGrade2MathPilot = Boolean(grade2MathPilotTopic);
 
     // Fetch practice questions
     const practiceQuestionQuery = useQuery({
@@ -344,18 +404,29 @@ const LessonPlayerPage: React.FC = () => {
 
             // For the pilot, always use the deterministic, scaffolded practice set so quality is consistent
             // regardless of backend question-bank coverage.
-            if (isPerimeterPilot && lessonDetail) {
-                return generatePerimeterPracticeQuestions({
+            if (grade2MathPilotTopic && lessonDetail) {
+                if (grade2MathPilotTopic === 'perimeter') {
+                    return generatePerimeterPracticeQuestions({
+                        lessonId: lessonDetail.lesson.id,
+                        lessonTitle: lessonDetail.lesson.title,
+                        subject: lessonDetail.module.subject,
+                        gradeBand: lessonDetail.module.gradeBand,
+                    });
+                }
+
+                return generateGrade2MathPracticeQuestions({
                     lessonId: lessonDetail.lesson.id,
                     lessonTitle: lessonDetail.lesson.title,
+                    lessonContent: lessonDetail.lesson.content,
                     subject: lessonDetail.module.subject,
                     gradeBand: lessonDetail.module.gradeBand,
+                    topic: grade2MathPilotTopic,
                 });
             }
 
             return fetched;
         },
-        [isPerimeterPilot, practiceQuestionQuery.data, lessonDetail],
+        [grade2MathPilotTopic, practiceQuestionQuery.data, lessonDetail],
     );
 
     // Parse content for section count
@@ -505,12 +576,13 @@ const LessonPlayerPage: React.FC = () => {
         const question = practiceQuestions.find((q) => q.id === questionId);
         if (!question) return;
 
-        if (isPerimeterPilot) {
+        if (isGrade2MathPilot) {
             trackEvent('success_pilot_practice_answered', {
                 lessonId,
                 questionId,
                 optionId,
                 isCorrect,
+                topic: grade2MathPilotTopic,
             });
         }
 
@@ -557,7 +629,7 @@ const LessonPlayerPage: React.FC = () => {
         } catch (error) {
             console.warn('[lesson] Failed to record practice answer', error);
         }
-    }, [studentId, lessonDetail, practiceQuestions, isPerimeterPilot, lessonId, progressController, lessonStandards, emitStudentEvent]);
+    }, [studentId, lessonDetail, practiceQuestions, isGrade2MathPilot, grade2MathPilotTopic, lessonId, progressController, lessonStandards, emitStudentEvent]);
 
     /**
      * Handle AI tutor open with context
@@ -653,6 +725,47 @@ const LessonPlayerPage: React.FC = () => {
                                 gradeBand={lessonDetail.module.gradeBand}
                             />
 
+                            {lessonReasonCard && (
+                                <div
+                                    className={[
+                                        'mt-3 rounded-xl border px-4 py-3',
+                                        lessonReasonCard.tone === 'challenge'
+                                            ? 'border-indigo-200 bg-indigo-50'
+                                            : lessonReasonCard.tone === 'support'
+                                                ? 'border-amber-200 bg-amber-50'
+                                                : 'border-blue-200 bg-blue-50',
+                                    ].join(' ')}
+                                >
+                                    <div className="flex items-start gap-2">
+                                        <HelpCircle
+                                            className={[
+                                                'mt-0.5 h-4 w-4 shrink-0',
+                                                lessonReasonCard.tone === 'challenge'
+                                                    ? 'text-indigo-700'
+                                                    : lessonReasonCard.tone === 'support'
+                                                        ? 'text-amber-700'
+                                                        : 'text-blue-700',
+                                            ].join(' ')}
+                                        />
+                                        <div>
+                                            <p
+                                                className={[
+                                                    'text-xs font-semibold uppercase tracking-wide',
+                                                    lessonReasonCard.tone === 'challenge'
+                                                        ? 'text-indigo-800'
+                                                        : lessonReasonCard.tone === 'support'
+                                                            ? 'text-amber-800'
+                                                            : 'text-blue-800',
+                                                ].join(' ')}
+                                            >
+                                                {lessonReasonCard.title}
+                                            </p>
+                                            <p className="mt-1 text-sm text-slate-700">{lessonReasonCard.detail}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Report Content Issue */}
                             <div className="flex justify-end mt-2">
                                 <ContentIssueReport
@@ -677,6 +790,8 @@ const LessonPlayerPage: React.FC = () => {
                         {/* Phase content */}
                         <LessonContent
                             lessonDetail={lessonDetail}
+                            pilotTopic={grade2MathPilotTopic}
+                            nonMathRemediationSubject={nonMathRemediationSubject}
                             practiceQuestions={practiceQuestions}
                             onAnswerSubmit={handleAnswerSubmit}
                             onAskTutor={studentId ? handleAskTutor : undefined}

@@ -17,6 +17,27 @@ const unitAbbrev = (unit: string): string => {
 
 const format = (value: number, unit: string) => `${value} ${unit}`;
 
+const buildOptions = (correct: number, distractors: number[], unit: string): string[] => {
+  const unique = new Set<number>();
+  unique.add(correct);
+  for (const value of distractors) {
+    if (!Number.isFinite(value)) continue;
+    const rounded = Math.max(1, Math.round(value));
+    if (rounded === correct) continue;
+    unique.add(rounded);
+    if (unique.size >= 3) break;
+  }
+
+  let delta = 2;
+  while (unique.size < 3) {
+    unique.add(correct + delta);
+    delta += 2;
+  }
+
+  const values = Array.from(unique);
+  return values.slice(0, 3).map((value) => format(value, unit));
+};
+
 export const getPerimeterQuickReview = (dims: PerimeterDimensions | null): PilotQuickReview => {
   if (!dims) {
     return {
@@ -35,9 +56,9 @@ export const getPerimeterQuickReview = (dims: PerimeterDimensions | null): Pilot
   const unit = unitAbbrev(dims.unit);
 
   if (dims.shape === 'square') {
-    const side = 2;
+    const side = dims.a;
     const total = side * 4;
-    const options = [format(total, unit), format(side * 2, unit), format(total + 2, unit)];
+    const options = buildOptions(total, [side * 2, total + side, total - side], unit);
     return {
       title: 'Quick Review',
       prompt: `A square has side length ${side} ${unit}. What is the perimeter?`,
@@ -48,10 +69,10 @@ export const getPerimeterQuickReview = (dims: PerimeterDimensions | null): Pilot
   }
 
   if (dims.shape === 'rectangle') {
-    const a = 3;
-    const b = 2;
+    const a = dims.a;
+    const b = dims.b;
     const total = 2 * a + 2 * b;
-    const options = [format(total, unit), format(a + b, unit), format(2 * a + b, unit)];
+    const options = buildOptions(total, [a + b, 2 * a + b, a + 2 * b], unit);
     return {
       title: 'Quick Review',
       prompt: `A rectangle is ${a} ${unit} by ${b} ${unit}. What is the perimeter?`,
@@ -61,11 +82,11 @@ export const getPerimeterQuickReview = (dims: PerimeterDimensions | null): Pilot
     };
   }
 
-  const a = 2;
-  const b = 3;
-  const c = 3;
+  const a = dims.a;
+  const b = dims.b;
+  const c = dims.c;
   const total = a + b + c;
-  const options = [format(total, unit), format(a + b, unit), format(total + 2, unit)];
+  const options = buildOptions(total, [a + b, b + c, total - 2], unit);
   return {
     title: 'Quick Review',
     prompt: `A triangle has sides ${a} ${unit}, ${b} ${unit}, and ${c} ${unit}. What is the perimeter?`,
@@ -74,4 +95,3 @@ export const getPerimeterQuickReview = (dims: PerimeterDimensions | null): Pilot
     explanation: `${a} + ${b} + ${c} = ${format(total, unit)}.`,
   };
 };
-

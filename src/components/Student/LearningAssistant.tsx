@@ -864,6 +864,14 @@ const LearningAssistant: React.FC = () => {
         concept: conceptTag,
         curated_alternate: Boolean(curatedAlternate),
       });
+      trackEvent('success_adaptive_tutor_outcome', {
+        studentId: student.id,
+        outcome: 'success',
+        source: 'openrouter',
+        plan: response.plan ?? undefined,
+        subject: lessonContext?.subject ?? null,
+        concept: conceptTag,
+      });
     } catch (err) {
       console.error('[LearningAssistant] AI response failed', err);
       const errorMessage =
@@ -874,6 +882,14 @@ const LearningAssistant: React.FC = () => {
         trackEvent('learning_assistant_limit_reached', {
           studentId: student.id,
           plan: planUsage.plan,
+        });
+        trackEvent('success_adaptive_tutor_outcome', {
+          studentId: student.id,
+          outcome: 'error',
+          source: 'openrouter',
+          reason: 'limit_reached',
+          plan: planUsage.plan,
+          subject: lessonContext?.subject ?? null,
         });
         return;
       }
@@ -888,6 +904,14 @@ const LearningAssistant: React.FC = () => {
         trackEvent('learning_assistant_blocked', {
           studentId: student.id,
           reason: 'safety_guardrail',
+        });
+        trackEvent('success_adaptive_tutor_outcome', {
+          studentId: student.id,
+          outcome: 'safety_block',
+          source: 'openrouter',
+          reason: 'safety_guardrail',
+          subject: lessonContext?.subject ?? null,
+          concept: conceptTagLabel ?? 'concept',
         });
         return;
       }
@@ -908,6 +932,15 @@ const LearningAssistant: React.FC = () => {
         subject: lessonContext?.subject ?? null,
         concept: conceptTagLabel ?? 'concept',
         curated_alternate: false,
+      });
+      trackEvent('success_adaptive_tutor_outcome', {
+        studentId: student.id,
+        outcome: 'error',
+        source: 'openrouter',
+        fallbackSource: 'rules-engine',
+        reason: 'assistant_error_fallback',
+        subject: lessonContext?.subject ?? null,
+        concept: conceptTagLabel ?? 'concept',
       });
     } finally {
       setIsTyping(false);

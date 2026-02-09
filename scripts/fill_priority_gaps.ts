@@ -3,6 +3,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { assessPracticeQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type TargetModule = {
   slug: string;
@@ -611,10 +612,46 @@ const ensurePractice = async (
     });
   }
 
+  const blockedReasonCounts: Record<string, number> = {};
+  let blockedCount = 0;
+  const optionTemplate = [
+    { text: 'Correct answer (on-grade rationale).', isCorrect: true },
+    { text: 'Common misconception.', isCorrect: false },
+    { text: 'Partially correct idea.', isCorrect: false },
+    { text: 'Off-topic choice.', isCorrect: false },
+  ];
+  const validQuestions = questions.filter((question) => {
+    const quality = assessPracticeQuestionQuality({
+      prompt: question.prompt,
+      type: question.question_type,
+      options: optionTemplate,
+    });
+    if (quality.shouldBlock) {
+      blockedCount += 1;
+      incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+      return false;
+    }
+    return true;
+  });
+
+  if (blockedCount > 0) {
+    console.warn('[fill_priority_gaps] Quality gate blocked generated practice items', {
+      source: 'scripts/fill_priority_gaps.ts',
+      moduleSlug: module.slug,
+      blockedCount,
+      reasonCounts: blockedReasonCounts,
+    });
+  }
+
+  if (!validQuestions.length) {
+    console.log(`Quality gate blocked all generated practice items for ${module.slug}.`);
+    return existingRows.map((row) => row.id as number);
+  }
+
   const questionIds: number[] = [];
   const chunks: typeof questions[] = [];
-  for (let i = 0; i < questions.length; i += PRACTICE_CHUNK_SIZE) {
-    chunks.push(questions.slice(i, i + PRACTICE_CHUNK_SIZE));
+  for (let i = 0; i < validQuestions.length; i += PRACTICE_CHUNK_SIZE) {
+    chunks.push(validQuestions.slice(i, i + PRACTICE_CHUNK_SIZE));
   }
 
   for (const chunk of chunks) {

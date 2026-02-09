@@ -35,6 +35,7 @@ npm run import:federal
 
 ### 4. QA & Regression Gates
 - Coverage audits (Phase 15): Trigger the "Coverage Audits" GitHub Actions workflow (runs Mon/Thu 09:30 UTC) or run `npm run audit:completeness`, `npm run audit:coverage-rollup`, `npm run audit:coverage-gaps`, and `npm run audit:practice` with production Supabase secrets. Download/upload the `coverage-reports` artifact so coverage trends stay visible across releases, and block on any red cells.
+- Release-gate enforcement (Phase B/C hard gates): run `npm run eval:release-gates:live -- --lookback-days 7` and require `PASS` before launch. Synthetic mode (`npm run eval:release-gates:synthetic ...`) is for no-user rehearsal only and is not valid as final production sign-off.
 - Human + AI coverage QA (Phase 15): Sample at least one fully covered module per subject, one diagnostic per grade/subject with its generated learning paths, and one project unit per subject. Ask Max High to review diagnostics/quizzes (`Critique this diagnostic for bias/coverage/level.` and `Spot weak questions or misaligned rubrics in this quiz.`); keep final judgment human and record defects + fixes.
 - `npm test -- --run` (Vitest) — validates importer regression coverage.
 - `npm run lint` — confirm lint passes.
@@ -95,6 +96,7 @@ npm run import:federal
 
 ### 8. Staging validation (Phase 10)
 - Use synthetic seeds to hit 100+ lessons and 1K+ assets; verify `/catalog`, `/module/:id`, `/lesson/:id`, `/parent` load without slow warnings.
+- If validating release gates in a no-user staging environment, use `npm run eval:release-gates:synthetic -- --lookback-days 7 --allow-missing-hard-gates`; do not reuse this as production launch evidence.
 - Ensure monitoring emits no `[modules] ... truncated` warnings; if it does, raise `MODULE_ASSET_LIMIT`/`MODULE_LESSON_LIMIT` or paginate assets.
 - Run both fixture and live Playwright suites (see step 4) and capture screenshots/logs for launch notes.
 - Confirm alert routes are wired: Sentry rules for `alert:error_spike`, `alert:billing_webhook_failed`, `[ai] rate limit hit`, and Supabase log drains to Slack/Sentry.
@@ -103,4 +105,5 @@ npm run import:federal
 - Coverage quality: 80%+ of Grades 3–8 Math/ELA coverage_dashboard cells are fully covered (lessons, practice, assessments, and external resources). Confirm with `npm run audit:coverage-rollup` and record counts per grade/subject in release notes; block any launch below the threshold.
 - Diagnostics present: every Grade 3–8 Math/ELA grade has a diagnostic assessment seeded (check Supabase `assessments` with metadata.purpose = diagnostic or `data/assessments/diagnostics_phase13.json`). Missing diagnostics are a release blocker.
 - Priority explanations: no priority matrix or `coverage_anchor` cells ship without a public lesson. `npm run audit:coverage-gaps` must show zero rows with "no public lesson" for those cells; fill the lesson or stop the launch.
+- Live telemetry release gate: `npm run eval:release-gates:live -- --lookback-days 7` must report `PASS`; any `FAIL` blocks launch regardless of synthetic-mode results.
 - Artifact retention: attach the latest `coverage-reports` artifact (from the Coverage Audits workflow) to the release ticket to keep a trend of coverage and gaps over time.

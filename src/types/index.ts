@@ -863,6 +863,7 @@ export interface AdminDashboardData {
   admin: Admin;
   metrics: AdminDashboardMetrics;
   successMetrics?: AdminSuccessMetrics;
+  checkpointMetrics?: AdminCheckpointMetrics;
   growthSeries: AdminGrowthPoint[];
   subjectPerformance: AdminSubjectPerformance[];
   alerts: AdminAlert[];
@@ -871,6 +872,7 @@ export interface AdminDashboardData {
 
 export interface AdminSuccessMetrics {
   lookbackDays: number;
+  telemetryMode: 'live' | 'synthetic' | 'all';
   diagnosticsCompleted: number;
   diagnosticsTotal: number;
   diagnosticCompletionRate: number | null;
@@ -880,4 +882,37 @@ export interface AdminSuccessMetrics {
   weeklyAccuracyDeltaAvg: number | null;
   dailyPlanCompletionRateAvg: number | null;
   alertResolutionHoursAvg: number | null;
+}
+
+export interface AdminCheckpointMetrics {
+  lookbackDays: number;
+  telemetryMode: 'live' | 'synthetic' | 'all';
+  attemptCount: number;
+  pilotAttemptCount: number;
+  k5AttemptCount: number;
+  firstAttemptCount: number;
+  firstPassCount: number;
+  firstPassRate: number | null;
+  recoverableCount: number;
+  recoveredWithinTwoCount: number;
+  recoveryRateWithinTwo: number | null;
+  retentionBaselineMasteredCount: number;
+  retentionEligible3DayCount: number;
+  retentionObserved3DayCount: number;
+  retentionRetained3DayCount: number;
+  retention3DayRate: number | null;
+  retention3DayCoverageRate: number | null;
+  retentionEligible7DayCount: number;
+  retentionObserved7DayCount: number;
+  retentionRetained7DayCount: number;
+  retention7DayRate: number | null;
+  retention7DayCoverageRate: number | null;
+  genericContentSampleCount: number;
+  genericContentBlockedCount: number;
+  genericContentRate: number | null;
+  adaptiveAttemptCount: number;
+  adaptiveErrorCount: number;
+  adaptiveSafetyBlockCount: number;
+  adaptiveErrorRate: number | null;
+  adaptiveSafetyRate: number | null;
 }

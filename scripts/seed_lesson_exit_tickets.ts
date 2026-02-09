@@ -3,6 +3,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type ModuleRow = {
   id: number;
@@ -322,6 +323,8 @@ const seedExitTickets = async () => {
   );
 
   let seeded = 0;
+  let blockedCount = 0;
+  const blockedReasonCounts: Record<string, number> = {};
 
   for (const lesson of lessons) {
     const module = modules.get(lesson.module_id);
@@ -331,11 +334,39 @@ const seedExitTickets = async () => {
       throw new Error(`Subject "${module.subject}" not found for module ${module.slug}`);
     }
 
-    await deleteExistingExitTicket(supabase, module.id, lesson.slug);
     const question = buildQuestion(module);
+    const quality = assessAssessmentQuestionQuality({
+      prompt: question.prompt,
+      type: 'multiple_choice',
+      options: question.options.map((option) => ({
+        text: option.text,
+        isCorrect: option.isCorrect,
+      })),
+    });
+    if (quality.shouldBlock) {
+      blockedCount += 1;
+      incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+      console.warn('[seed_lesson_exit_tickets] Blocking low-quality generated exit ticket question', {
+        source: 'scripts/seed_lesson_exit_tickets.ts',
+        lessonSlug: lesson.slug,
+        moduleSlug: module.slug,
+        reasons: quality.reasons,
+      });
+      continue;
+    }
+
+    await deleteExistingExitTicket(supabase, module.id, lesson.slug);
     const questionId = await insertQuestion(supabase, subject.id, module, lesson, question);
     await insertAssessment(supabase, subject.id, module, lesson, questionId);
     seeded += 1;
+  }
+
+  if (blockedCount > 0) {
+    console.warn('[seed_lesson_exit_tickets] Quality gate blocked generated questions', {
+      source: 'scripts/seed_lesson_exit_tickets.ts',
+      blockedCount,
+      reasonCounts: blockedReasonCounts,
+    });
   }
 
   console.log(`Seeded ${seeded} lesson exit tickets.`);
