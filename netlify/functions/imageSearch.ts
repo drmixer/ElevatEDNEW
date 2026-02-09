@@ -41,6 +41,27 @@ type CommonsImageResult = {
   source: 'wikimedia_commons';
 };
 
+type CommonsImageInfo = {
+  url?: string;
+  thumburl?: string;
+  mime?: string;
+  width?: number;
+  height?: number;
+  extmetadata?: Record<string, { value?: string } | undefined>;
+};
+
+type CommonsImagePage = {
+  title?: string;
+  pageid?: number;
+  imageinfo?: CommonsImageInfo[];
+};
+
+type CommonsApiResponse = {
+  query?: {
+    pages?: Record<string, CommonsImagePage>;
+  };
+};
+
 const stripHtml = (value: string): string => value.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 
 const normalizeLicense = (value: string): string => (value ?? '').toString().trim().toLowerCase();
@@ -155,7 +176,7 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
       setCached(cacheKey, null);
       return json(event, 200, { ok: true, result: null });
     }
-    const data = (await resp.json()) as any;
+    const data = (await resp.json()) as CommonsApiResponse;
     const pages = data?.query?.pages ? Object.values(data.query.pages) : [];
 
     for (const page of pages) {
@@ -212,4 +233,3 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
     return json(event, 200, { ok: false, result: null, error: message });
   }
 };
-
