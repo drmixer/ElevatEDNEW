@@ -488,6 +488,7 @@ const AdminDashboard: React.FC = () => {
         retention7DayRate: checkpointMetrics?.retention7DayRate ?? null,
         genericContentRate: checkpointMetrics?.genericContentRate ?? null,
         coverageReadinessRate: coverageSummary?.readinessPercent ?? null,
+        adaptiveAttemptCount: checkpointMetrics?.adaptiveAttemptCount ?? null,
         adaptiveErrorRate: releaseGateAdaptiveErrorRate,
         adaptiveSafetyRate: releaseGateAdaptiveSafetyRate,
       }),
@@ -495,6 +496,7 @@ const AdminDashboard: React.FC = () => {
       checkpointMetrics?.firstPassRate,
       checkpointMetrics?.genericContentRate,
       checkpointMetrics?.lookbackDays,
+      checkpointMetrics?.adaptiveAttemptCount,
       checkpointMetrics?.recoveryRateWithinTwo,
       checkpointMetrics?.retention3DayRate,
       checkpointMetrics?.retention7DayRate,
@@ -870,7 +872,9 @@ const AdminDashboard: React.FC = () => {
                         </span>
                       </div>
                       <p className="text-2xl font-bold text-slate-900 mt-1">
-                        {gate.value == null ? '—' : `${gate.value}${gate.unit === 'percent' ? '%' : ' pts'}`}
+                        {gate.value == null ? '—' : `${gate.value}${
+                          gate.unit === 'percent' ? '%' : gate.unit === 'points' ? ' pts' : ''
+                        }`}
                       </p>
                       <p className="text-[11px] text-slate-600 mt-1">{gate.target}</p>
                     </div>

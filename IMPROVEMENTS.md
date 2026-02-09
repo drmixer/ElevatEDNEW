@@ -212,6 +212,15 @@ ElevatED should deliver:
     - Files:
       - `/Users/drmixer/code/ElevatEDNEW/scripts/coverage_quick_rollup.ts`
       - `/Users/drmixer/code/ElevatEDNEW/scripts/report_coverage_gaps.ts`
+22. Split adaptive hard-gate signaling to isolate missing telemetry volume from error-rate quality:
+    - Added explicit `Adaptive telemetry volume` hard gate in release-gate scoring (`>= 1 attempt`) so no-volume states are reported as a distinct blocker.
+    - Updated adaptive error-rate fallback behavior to return `no data` when attempt volume is zero, avoiding misleading `100%` error-rate outputs while preserving launch blocking via the new volume gate.
+    - Updated CLI/admin release-gate surfaces to pass adaptive attempt volume into scoring and render count-based gate values.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/evaluationHarness.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/evaluationHarness.test.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/scripts/evaluate_release_gates.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
 
 Validation run this session:
 - `npm run test -- src/lib/__tests__/questionQuality.test.ts server/__tests__/placementValidation.test.ts src/services/__tests__/lessonPracticeService.test.ts`
@@ -262,6 +271,9 @@ Validation run this session:
 - `npm run audit:coverage-rollup` (passed after per-grade query fix; no statement-timeout failures)
 - `npx eslint scripts/report_coverage_gaps.ts` (passed)
 - `npm run audit:coverage-gaps` (passed after per-grade/subject query fix; no statement-timeout failures)
+- `npm run test -- src/lib/__tests__/evaluationHarness.test.ts src/services/__tests__/dashboardService.test.ts` (passed; 24 tests total)
+- `npx eslint src/lib/evaluationHarness.ts src/lib/__tests__/evaluationHarness.test.ts scripts/evaluate_release_gates.ts src/components/Admin/AdminDashboard.tsx` (passed)
+- `npm run eval:release-gates:live -- --lookback-days 30` (completed with expected `FAIL`; blockers now reported as `Diagnostic completion` + `Adaptive telemetry volume`; adaptive error gate resolves to `no data` when attempts are `0`)
 
 ---
 
@@ -471,3 +483,4 @@ Expected per-chat output:
 - [x] Release-gate telemetry mode isolation implemented across shared evaluation, CLI, and admin surfaces (`live` default, explicit `synthetic`/`all`) so synthetic rows cannot silently inflate live readiness.
 - [x] Live-mode release-gate sign-off path enforced in operations docs + CI workflow (`coverage-audits` now runs `eval:release-gates:live` and stores `release_gates_live.txt` artifact evidence).
 - [x] Coverage Audits rollup/gaps timeout paths remediated via per-grade/subject query strategies in `audit:coverage-rollup` and `audit:coverage-gaps`.
+- [x] Adaptive hard-gate split implemented: missing adaptive attempt volume is now an explicit blocker (`Adaptive telemetry volume`) instead of being conflated with adaptive error-rate failure.

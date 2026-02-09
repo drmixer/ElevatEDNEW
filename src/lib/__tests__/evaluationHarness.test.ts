@@ -127,6 +127,7 @@ describe('buildReleaseGateDashboard', () => {
       checkpointRecoveryRate: 73,
       genericContentRate: 1.5,
       coverageReadinessRate: 85,
+      adaptiveAttemptCount: 18,
       adaptiveErrorRate: 8,
       adaptiveSafetyRate: 11,
       strictNoDataForHardGates: true,
@@ -143,13 +144,30 @@ describe('buildReleaseGateDashboard', () => {
       diagnosticCompletionRate: 90,
       coverageReadinessRate: 82,
       genericContentRate: null,
+      adaptiveAttemptCount: null,
       adaptiveErrorRate: null,
       strictNoDataForHardGates: true,
     });
 
     expect(result.releaseReady).toBe(false);
     expect(result.blockers).toContain('Generic content rate');
-    expect(result.blockers).toContain('Adaptive error rate');
+    expect(result.blockers).toContain('Adaptive telemetry volume');
+  });
+
+  it('uses adaptive telemetry volume as explicit blocker when attempts are missing', () => {
+    const result = buildReleaseGateDashboard({
+      lookbackDays: 14,
+      diagnosticCompletionRate: 90,
+      coverageReadinessRate: 82,
+      genericContentRate: 0,
+      adaptiveAttemptCount: 0,
+      adaptiveErrorRate: null,
+      strictNoDataForHardGates: true,
+    });
+
+    expect(result.releaseReady).toBe(false);
+    expect(result.blockers).toContain('Adaptive telemetry volume');
+    expect(result.blockers).not.toContain('Adaptive error rate');
   });
 });
 
@@ -277,11 +295,15 @@ describe('resolveRetentionRateForGates', () => {
 });
 
 describe('resolveAdaptiveRateForGates', () => {
-  it('returns 100 when adaptive telemetry is missing', () => {
-    expect(resolveAdaptiveRateForGates(null, 0)).toBe(100);
+  it('returns no data when adaptive telemetry volume is zero', () => {
+    expect(resolveAdaptiveRateForGates(null, 0)).toBeNull();
   });
 
   it('returns explicit adaptive rate when available', () => {
     expect(resolveAdaptiveRateForGates(11.4, 12)).toBe(11.4);
+  });
+
+  it('fails safe to 100 only when attempts exist but rate is unresolved', () => {
+    expect(resolveAdaptiveRateForGates(null, 3)).toBe(100);
   });
 });

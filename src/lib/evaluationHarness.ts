@@ -65,11 +65,12 @@ export type ReleaseGateResult = {
     | 'retention_7day'
     | 'generic_content_rate'
     | 'coverage_readiness'
+    | 'adaptive_telemetry_volume'
     | 'adaptive_error_rate'
     | 'adaptive_safety_rate';
   label: string;
   value: number | null;
-  unit: 'percent' | 'points';
+  unit: 'percent' | 'points' | 'count';
   status: ReleaseGateStatus;
   target: string;
   hardGate: boolean;
@@ -101,6 +102,7 @@ export type BuildReleaseGateInput = {
   retention7DayRate?: NumericOrNull;
   genericContentRate?: NumericOrNull;
   coverageReadinessRate?: NumericOrNull;
+  adaptiveAttemptCount?: NumericOrNull;
   adaptiveErrorRate?: NumericOrNull;
   adaptiveSafetyRate?: NumericOrNull;
   strictNoDataForHardGates?: boolean;
@@ -458,7 +460,7 @@ export const resolveAdaptiveRateForGates = (
   attemptCount: number,
 ): number | null => {
   if (rate != null) return rate;
-  if (attemptCount >= 0) return 100;
+  if (attemptCount > 0) return 100;
   return null;
 };
 
@@ -476,8 +478,10 @@ export const buildReleaseGateDashboard = (
   const retention7DayRate = normalizeNumeric(input.retention7DayRate);
   const genericContentRate = normalizeNumeric(input.genericContentRate);
   const coverageReadinessRate = normalizeNumeric(input.coverageReadinessRate);
+  const adaptiveAttemptCount = normalizeNumeric(input.adaptiveAttemptCount);
   const adaptiveErrorRate = normalizeNumeric(input.adaptiveErrorRate);
   const adaptiveSafetyRate = normalizeNumeric(input.adaptiveSafetyRate);
+  const hasAdaptiveAttempts = (adaptiveAttemptCount ?? 0) > 0;
 
   const gates: ReleaseGateResult[] = [
     {
@@ -581,6 +585,16 @@ export const buildReleaseGateDashboard = (
       isBlocker: false,
     },
     {
+      key: 'adaptive_telemetry_volume',
+      label: 'Adaptive telemetry volume',
+      value: adaptiveAttemptCount,
+      unit: 'count',
+      status: metricStatusForLowerBound(adaptiveAttemptCount, 1, 1),
+      target: '>= 1 attempt in lookback window',
+      hardGate: true,
+      isBlocker: false,
+    },
+    {
       key: 'adaptive_error_rate',
       label: 'Adaptive error rate',
       value: adaptiveErrorRate,
@@ -601,7 +615,13 @@ export const buildReleaseGateDashboard = (
       isBlocker: false,
     },
   ].map((gate) => {
-    const isMissingHardGate = gate.hardGate && gate.status === 'no_data' && strictNoDataForHardGates;
+    const shouldIgnoreNoDataBlock =
+      gate.key === 'adaptive_error_rate' && !hasAdaptiveAttempts;
+    const isMissingHardGate =
+      gate.hardGate &&
+      gate.status === 'no_data' &&
+      strictNoDataForHardGates &&
+      !shouldIgnoreNoDataBlock;
     const isBlocker = gate.hardGate && (gate.status === 'fail' || isMissingHardGate);
     return {
       ...gate,

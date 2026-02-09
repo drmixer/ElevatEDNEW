@@ -175,9 +175,11 @@ const computeSyntheticDiagnosticSummary = (
   };
 };
 
-const formatValue = (value: number | null, unit: 'percent' | 'points'): string => {
+const formatValue = (value: number | null, unit: 'percent' | 'points' | 'count'): string => {
   if (value == null) return 'no data';
-  return `${value}${unit === 'percent' ? '%' : ' pts'}`;
+  if (unit === 'percent') return `${value}%`;
+  if (unit === 'points') return `${value} pts`;
+  return `${value}`;
 };
 
 const main = async (): Promise<void> => {
@@ -414,6 +416,7 @@ const main = async (): Promise<void> => {
     ),
     genericContentRate: genericSummary.genericRate,
     coverageReadinessRate,
+    adaptiveAttemptCount: adaptiveSummary.attemptCount,
     adaptiveErrorRate: resolveAdaptiveRateForGates(
       adaptiveSummary.errorRate,
       adaptiveSummary.attemptCount,
