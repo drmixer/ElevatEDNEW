@@ -205,11 +205,13 @@ ElevatED should deliver:
       - `/Users/drmixer/code/ElevatEDNEW/.github/workflows/coverage-audits.yml`
       - `/Users/drmixer/code/ElevatEDNEW/docs/release-checklist.md`
       - `/Users/drmixer/code/ElevatEDNEW/docs/deployment-runbook.md`
-21. Remediated Coverage Audits timeout path for coverage rollup:
+21. Remediated Coverage Audits timeout paths for coverage rollup + gaps reports:
     - Updated `audit:coverage-rollup` query strategy from broad paginated scans to per-grade rollup queries against `coverage_dashboard_rollup`, avoiding statement-timeout failures on large remote datasets.
-    - Verified the updated command succeeds end-to-end against live Supabase data for Grades 3-8 without retries/timeouts.
+    - Updated `audit:coverage-gaps` loading strategy for both cell rows and rollups to query per grade/subject slices (instead of broad paginated `IN` scans), preventing statement-timeout failures in CI.
+    - Verified both updated commands succeed end-to-end against live Supabase data for Grades 3-8.
     - Files:
       - `/Users/drmixer/code/ElevatEDNEW/scripts/coverage_quick_rollup.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/scripts/report_coverage_gaps.ts`
 
 Validation run this session:
 - `npm run test -- src/lib/__tests__/questionQuality.test.ts server/__tests__/placementValidation.test.ts src/services/__tests__/lessonPracticeService.test.ts`
@@ -258,6 +260,8 @@ Validation run this session:
 - `npm run eval:release-gates:synthetic -- --lookback-days 7 --allow-missing-hard-gates` (completed with `PASS`; confirms synthetic alias remains usable for no-user rehearsal while isolated from live sign-off)
 - `npx eslint scripts/coverage_quick_rollup.ts` (passed)
 - `npm run audit:coverage-rollup` (passed after per-grade query fix; no statement-timeout failures)
+- `npx eslint scripts/report_coverage_gaps.ts` (passed)
+- `npm run audit:coverage-gaps` (passed after per-grade/subject query fix; no statement-timeout failures)
 
 ---
 
@@ -466,4 +470,4 @@ Expected per-chat output:
 - [x] Diagnostic completion hard gate validated in no-user mode via synthetic diagnostic cohort telemetry (`success_diagnostic_eligible` / `success_diagnostic_completed`), producing release-gate `PASS`.
 - [x] Release-gate telemetry mode isolation implemented across shared evaluation, CLI, and admin surfaces (`live` default, explicit `synthetic`/`all`) so synthetic rows cannot silently inflate live readiness.
 - [x] Live-mode release-gate sign-off path enforced in operations docs + CI workflow (`coverage-audits` now runs `eval:release-gates:live` and stores `release_gates_live.txt` artifact evidence).
-- [x] Coverage Audits rollup timeout remediated via per-grade `coverage_dashboard_rollup` query strategy in `audit:coverage-rollup`.
+- [x] Coverage Audits rollup/gaps timeout paths remediated via per-grade/subject query strategies in `audit:coverage-rollup` and `audit:coverage-gaps`.

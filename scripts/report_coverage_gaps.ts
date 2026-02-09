@@ -2,7 +2,7 @@ import process from 'node:process';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
+import { createServiceRoleClient } from './utils/supabase.js';
 
 type CoverageRow = {
   grade_band: string;
@@ -66,19 +66,24 @@ const loadCoverageCells = async (supabase: SupabaseClient): Promise<CoverageRow[
     'meets_external_baseline',
   ].join(',');
 
-  const data = await fetchAllPaginated<CoverageRow>(
-    (from, to) =>
-      supabase
+  const rows: CoverageRow[] = [];
+  for (const grade of TARGET_GRADES) {
+    for (const subject of TARGET_SUBJECTS) {
+      const { data, error } = await supabase
         .from('coverage_dashboard_cells')
         .select(selectColumns)
-        .in('grade_band', TARGET_GRADES)
-        .in('subject', TARGET_SUBJECTS)
-        .order('module_slug', { ascending: true })
-        .range(from, to),
-    { logLabel: 'coverage_dashboard_cells' },
-  );
-
-  return data as CoverageRow[];
+        .eq('grade_band', grade)
+        .eq('subject', subject)
+        .order('module_slug', { ascending: true });
+      if (error) {
+        throw new Error(
+          `Failed to load coverage dashboard cells for grade ${grade} ${subject}: ${error.message}`,
+        );
+      }
+      rows.push(...((data ?? []) as CoverageRow[]));
+    }
+  }
+  return rows;
 };
 
 const loadRollups = async (supabase: SupabaseClient): Promise<RollupRow[]> => {
@@ -93,20 +98,25 @@ const loadRollups = async (supabase: SupabaseClient): Promise<RollupRow[]> => {
     'modules_needing_attention',
   ].join(',');
 
-  const data = await fetchAllPaginated<RollupRow>(
-    (from, to) =>
-      supabase
+  const rows: RollupRow[] = [];
+  for (const grade of TARGET_GRADES) {
+    for (const subject of TARGET_SUBJECTS) {
+      const { data, error } = await supabase
         .from('coverage_dashboard_rollup')
         .select(selectColumns)
-        .in('grade_band', TARGET_GRADES)
-        .in('subject', TARGET_SUBJECTS)
+        .eq('grade_band', grade)
+        .eq('subject', subject)
         .order('grade_band', { ascending: true })
-        .order('subject', { ascending: true })
-        .range(from, to),
-    { logLabel: 'coverage_dashboard_rollup' },
-  );
-
-  return data as RollupRow[];
+        .order('subject', { ascending: true });
+      if (error) {
+        throw new Error(
+          `Failed to load coverage rollup for grade ${grade} ${subject}: ${error.message}`,
+        );
+      }
+      rows.push(...((data ?? []) as RollupRow[]));
+    }
+  }
+  return rows;
 };
 
 const buildGaps = (rows: CoverageRow[]): Gap[] => {
