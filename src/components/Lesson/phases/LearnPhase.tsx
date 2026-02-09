@@ -1110,7 +1110,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                         </div>
                                     )}
 
-                                    <div className="mt-3 text-base font-bold text-slate-900 line-clamp-2">
+                                    <div className="mt-3 text-base font-bold leading-snug text-slate-900 whitespace-normal break-words">
                                         {quickReviewContent.prompt}
                                     </div>
                                     <div className="mt-2 grid gap-2">
@@ -1138,7 +1138,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                                     ].join(' ')}
                                                 >
                                                     <span className="mr-2 text-slate-500">{String.fromCharCode(65 + idx)}.</span>
-                                                    <span className="line-clamp-2">{option}</span>
+                                                    <span className="block whitespace-normal break-words">{option}</span>
                                                 </button>
                                             );
                                         })}
@@ -1253,7 +1253,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                         </pre>
                                     </div>
                                 )}
-                                <div className="text-base md:text-lg font-bold text-slate-900 leading-snug line-clamp-2">
+                                <div className="text-base md:text-lg font-bold text-slate-900 leading-snug whitespace-normal break-words">
                                     {checkpointState.payload.question}
                                 </div>
                                 <div className="mt-3 grid gap-2">
@@ -1285,7 +1285,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                                     <span className="mr-2 text-slate-500">
                                                         {String.fromCharCode(65 + idx)}.
                                                     </span>
-                                                    <span className="line-clamp-2">{option}</span>
+                                                    <span className="block whitespace-normal break-words">{option}</span>
                                                 </button>
                                             );
                                         })}

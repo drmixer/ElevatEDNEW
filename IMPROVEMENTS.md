@@ -221,8 +221,15 @@ ElevatED should deliver:
       - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/evaluationHarness.test.ts`
       - `/Users/drmixer/code/ElevatEDNEW/scripts/evaluate_release_gates.ts`
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
+23. Completed Phase D/E follow-through item for checkpoint/practice comprehension hardening:
+    - Removed aggressive two-line clamping in active Learn/Practice checkpoint and quick-review prompts/options so students can read full question text.
+    - Updated challenge and standard practice prompt/option rendering to wrap long content (`whitespace-normal`, `break-words`) instead of truncating with ellipses.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/PracticePhase.tsx`
 
 Validation run this session:
+- `npx eslint src/components/Lesson/phases/LearnPhase.tsx src/components/Lesson/phases/PracticePhase.tsx` (passed)
 - `npm run test -- src/lib/__tests__/questionQuality.test.ts server/__tests__/placementValidation.test.ts src/services/__tests__/lessonPracticeService.test.ts`
 - `npm run test -- src/services/__tests__/assessmentService.adaptive.test.ts`
 - `npm run test -- src/lib/__tests__/pilotConditions.test.ts src/lib/__tests__/questionQuality.test.ts src/services/__tests__/lessonPracticeService.test.ts server/__tests__/placementValidation.test.ts`
@@ -489,7 +496,7 @@ Expected per-chat output:
 
 ## P3 (Phase D/E Follow-through)
 
-- [ ] Checkpoint/practice prompt-option truncation/comprehension hardening shipped in active student flow.
+- [x] Checkpoint/practice prompt-option truncation/comprehension hardening shipped in active student flow.
 - [ ] Checkpoint confusion/abandon telemetry added and surfaced for weekly grade/subject slicing.
 - [ ] Tutor boundary clarity event contract expanded to distinguish AI-direct vs deterministic fallback outcomes.
 - [ ] Parent recommendation rationale quality checks added for missing/weak "why now" explanations.

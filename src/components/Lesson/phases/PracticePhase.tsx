@@ -834,7 +834,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                         </div>
                                     )}
 
-                                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-5 leading-snug line-clamp-2">
+                                    <h3 className="mb-5 text-2xl font-bold leading-snug text-slate-900 whitespace-normal break-words md:text-3xl">
                                         {challengeQuestion.prompt}
                                     </h3>
 
@@ -890,7 +890,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                                     <div className="flex-1">
                                                         <span
                                                             className={`
-                              text-base md:text-lg font-semibold line-clamp-2
+                              text-base md:text-lg font-semibold whitespace-normal break-words
                               ${showCorrect
                                                                     ? 'text-emerald-900'
                                                                     : showIncorrect
@@ -964,7 +964,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                         </div>
                                     )}
 
-                                    <div className="mt-3 text-base font-bold text-slate-900 line-clamp-2">
+                                    <div className="mt-3 text-base font-bold leading-snug text-slate-900 whitespace-normal break-words">
                                         {quickReviewContent.prompt}
                                     </div>
                                     <div className="mt-2 grid gap-2">
@@ -992,7 +992,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                                     ].join(' ')}
                                                 >
                                                     <span className="mr-2 text-slate-500">{String.fromCharCode(65 + idx)}.</span>
-                                                    <span className="line-clamp-2">{option}</span>
+                                                    <span className="block whitespace-normal break-words">{option}</span>
                                                 </button>
                                             );
                                         })}
@@ -1031,7 +1031,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                 </div>
                             )}
                             {!showChallengeFlow && (
-                                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-5 leading-snug line-clamp-2">
+                                <h3 className="mb-5 text-2xl font-bold leading-snug text-slate-900 whitespace-normal break-words md:text-3xl">
                                 {currentQuestion?.prompt}
                                 </h3>
                             )}
@@ -1109,7 +1109,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                             <div className="flex-1">
                                                 <span
                                                     className={`
-                            text-base md:text-lg font-semibold line-clamp-2
+                            text-base md:text-lg font-semibold whitespace-normal break-words
                             ${showCorrect
                                                             ? 'text-emerald-900'
                                                             : showIncorrect
