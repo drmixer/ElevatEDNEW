@@ -475,7 +475,18 @@ export interface ParentCoachingSuggestion {
   timeMinutes: number;
   why: string;
   source: 'library' | 'fallback';
+  qualityStatus?: ParentSuggestionQualityStatus;
+  qualityIssues?: ParentSuggestionQualityIssue[];
 }
+
+export type ParentSuggestionQualityStatus = 'ok' | 'auto_repaired' | 'flagged';
+
+export type ParentSuggestionQualityIssue =
+  | 'missing_action'
+  | 'weak_action'
+  | 'missing_why_now'
+  | 'weak_why_now'
+  | 'missing_context_signal';
 
 export interface ParentChildSnapshot {
   id: string;
@@ -525,6 +536,11 @@ export interface ParentChildSnapshot {
     recommendation: string;
   }>;
   coachingSuggestions?: ParentCoachingSuggestion[];
+  coachingSuggestionQuality?: {
+    total: number;
+    autoRepaired: number;
+    flagged: number;
+  };
 }
 
 export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';

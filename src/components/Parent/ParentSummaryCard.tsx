@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
     CheckCircle2,
@@ -14,6 +14,7 @@ import {
 import { Link } from 'react-router-dom';
 import type { ParentChildSnapshot } from '../../types';
 import { formatSubjectLabel } from '../../lib/subjects';
+import { trackEvent } from '../../lib/analytics';
 
 interface ParentSummaryCardProps {
     children: ParentChildSnapshot[];
@@ -72,6 +73,35 @@ const ParentSummaryCard: React.FC<ParentSummaryCardProps> = ({
         return children.reduce((sum, child) => sum + (child.lessonsCompletedWeek ?? 0), 0);
     }, [children]);
 
+    const emittedQualityTelemetry = useRef<Set<string>>(new Set());
+
+    useEffect(() => {
+        children.forEach((child) => {
+            const suggestions = child.coachingSuggestions ?? [];
+            if (!suggestions.length) return;
+            const repaired = suggestions.filter((suggestion) => suggestion.qualityStatus === 'auto_repaired');
+            const flagged = suggestions.filter((suggestion) => suggestion.qualityStatus === 'flagged');
+            if (!repaired.length && !flagged.length) return;
+
+            const fingerprint = `${child.id}:${suggestions
+                .map((suggestion) => `${suggestion.id}:${suggestion.qualityStatus ?? 'ok'}`)
+                .join('|')}`;
+            if (emittedQualityTelemetry.current.has(fingerprint)) return;
+            emittedQualityTelemetry.current.add(fingerprint);
+
+            trackEvent('success_parent_recommendation_rationale_quality', {
+                surface: 'parent_summary_card',
+                childId: child.id,
+                suggestionTotal: suggestions.length,
+                autoRepairedCount: repaired.length,
+                flaggedCount: flagged.length,
+                autoRepairedSuggestionIds: repaired.map((suggestion) => suggestion.id),
+                flaggedSuggestionIds: flagged.map((suggestion) => suggestion.id),
+                issues: [...new Set(suggestions.flatMap((suggestion) => suggestion.qualityIssues ?? []))],
+            });
+        });
+    }, [children]);
+
     // Determine what each child needs
     const getChildStatus = (child: ParentChildSnapshot) => {
         const atRisk = child.subjectStatuses?.some(s => s.status === 'at_risk' || s.status === 'off_track');
@@ -128,6 +158,7 @@ const ParentSummaryCard: React.FC<ParentSummaryCardProps> = ({
             supportAction: topSupportAction?.action ?? null,
             supportWhy: topSupportAction?.why ?? null,
             supportMinutes: topSupportAction?.timeMinutes ?? null,
+            supportQualityStatus: topSupportAction?.qualityStatus ?? 'ok',
         };
     };
 
@@ -297,6 +328,13 @@ const ParentSummaryCard: React.FC<ParentSummaryCardProps> = ({
                                             ? ` (${status.supportMinutes} min)`
                                             : ''}
                                     </p>
+                                    {status.supportQualityStatus !== 'ok' && (
+                                        <p className="mt-1 text-[11px] text-slate-500">
+                                            {status.supportQualityStatus === 'auto_repaired'
+                                                ? 'Why-now rationale auto-tuned from this week’s learning signals.'
+                                                : 'Why-now rationale is running on limited recent signals and will improve after more activity.'}
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </motion.div>

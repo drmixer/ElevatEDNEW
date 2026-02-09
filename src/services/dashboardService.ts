@@ -45,7 +45,7 @@ import { applyLearningPreferencesToPlan, maxLessonsForSession } from '../lib/lea
 import { listPlanOptOuts } from './optOutService';
 import { STUDENT_AVATARS, isStudentAvatarUnlocked } from '../../shared/avatarManifests';
 import { computeSubjectStatuses } from '../lib/onTrack';
-import { buildCoachingSuggestions } from '../lib/parentSuggestions';
+import { buildCoachingSuggestions, summarizeCoachingSuggestionQuality } from '../lib/parentSuggestions';
 import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
 import {
   computeAdaptiveEvaluation,
@@ -3277,11 +3277,7 @@ export const fetchParentDashboardData = async (
               diagnosticCompletedAt,
             })
           : [];
-      const coachingSuggestions = buildCoachingSuggestions(child, {
-        max: 4,
-        seed: dashboardWeekSeed,
-        excludeIds: feedbackByStudent.get(child.id),
-      });
+      const excludedCoachingSuggestionIds = feedbackByStudent.get(child.id);
       const weeklyChange = weeklyChangeByChild.get(child.id) ?? {
         current: {
           lessons: child.lessonsCompletedWeek ?? 0,
@@ -3346,7 +3342,6 @@ export const fetchParentDashboardData = async (
         homeExtensions,
         learningPreferences,
         subjectStatuses,
-        coachingSuggestions,
         weeklyChange: {
           lessons: weeklyChange.current.lessons,
           minutes: weeklyChange.current.minutes,
@@ -3362,7 +3357,9 @@ export const fetchParentDashboardData = async (
       snapshot.coachingSuggestions = buildCoachingSuggestions(snapshot, {
         max: 4,
         seed: dashboardWeekSeed,
+        excludeIds: excludedCoachingSuggestionIds,
       });
+      snapshot.coachingSuggestionQuality = summarizeCoachingSuggestionQuality(snapshot.coachingSuggestions);
 
       const goalProgress = calculateChildGoalProgress(snapshot);
       if (goalProgress !== undefined) {

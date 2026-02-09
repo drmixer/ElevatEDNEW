@@ -248,8 +248,20 @@ ElevatED should deliver:
       - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
       - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
+26. Completed Phase D/E follow-through item for parent recommendation rationale quality checks:
+    - Added recommendation quality guardrails that enforce actionable next-step copy and concise "why now" rationale, with deterministic auto-repair for weak/missing rationale text.
+    - Added recommendation quality state (`ok`, `auto_repaired`, `flagged`) + issue tags and summary rollups for parent-child snapshots.
+    - Added parent summary telemetry event `success_parent_recommendation_rationale_quality` and lightweight UI visibility text when rationale is auto-repaired or flagged due to weak context signals.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/parentSuggestions.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Parent/ParentSummaryCard.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/lib/__tests__/parentSuggestions.test.ts`
 
 Validation run this session:
+- `npx eslint src/lib/parentSuggestions.ts src/components/Parent/ParentSummaryCard.tsx src/services/dashboardService.ts src/types/index.ts src/lib/__tests__/parentSuggestions.test.ts` (passed)
+- `npm run test -- src/lib/__tests__/parentSuggestions.test.ts src/services/__tests__/dashboardService.test.ts` (passed; 11 tests total)
 - `npx eslint src/components/Student/LearningAssistant.tsx src/services/dashboardService.ts src/components/Admin/AdminDashboard.tsx src/types/index.ts` (passed)
 - `npm run test -- src/services/__tests__/dashboardService.test.ts src/lib/__tests__/evaluationHarness.test.ts` (passed; 24 tests total)
 - `npx eslint src/components/Lesson/phases/LearnPhase.tsx src/services/dashboardService.ts src/components/Admin/AdminDashboard.tsx src/types/index.ts` (passed)
@@ -524,7 +536,7 @@ Expected per-chat output:
 - [x] Checkpoint/practice prompt-option truncation/comprehension hardening shipped in active student flow.
 - [x] Checkpoint confusion/abandon telemetry added and surfaced for weekly grade/subject slicing.
 - [x] Tutor boundary clarity event contract expanded to distinguish AI-direct vs deterministic fallback outcomes.
-- [ ] Parent recommendation rationale quality checks added for missing/weak "why now" explanations.
+- [x] Parent recommendation rationale quality checks added for missing/weak "why now" explanations.
 
 ## Phase B/C Measurement Follow-through
 
