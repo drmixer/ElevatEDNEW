@@ -7,6 +7,7 @@ import type {
   AdminDashboardMetrics,
   AdminGrowthPoint,
   AdminCheckpointMetrics,
+  AdminCheckpointRiskSlice,
   AdminSubjectPerformance,
   AdminTopStudent,
   AdminSuccessMetrics,
@@ -128,6 +129,12 @@ type AnalyticsAdaptiveEventRow = {
 };
 
 type AnalyticsDiagnosticEventRow = {
+  event_name: string | null;
+  student_id: string | null;
+  payload: Record<string, unknown> | null;
+};
+
+type AnalyticsCheckpointRiskEventRow = {
   event_name: string | null;
   student_id: string | null;
   payload: Record<string, unknown> | null;
@@ -939,6 +946,90 @@ const computeSyntheticDiagnosticSummary = (
   };
 };
 
+const computeCheckpointRiskSummary = (
+  rows: AnalyticsCheckpointRiskEventRow[],
+  telemetryMode: TelemetryMode,
+): {
+  confusionSignalCount: number;
+  abandonSignalCount: number;
+  slices: AdminCheckpointRiskSlice[];
+} => {
+  const bySlice = new Map<
+    string,
+    {
+      subject: Subject | 'unknown';
+      gradeBand: string;
+      confusionSignals: number;
+      abandonSignals: number;
+      students: Set<string>;
+    }
+  >();
+  let confusionSignalCount = 0;
+  let abandonSignalCount = 0;
+
+  rows.forEach((row) => {
+    const payload = row.payload ?? {};
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
+    if (telemetryMode === 'all' && payload.synthetic !== true) return;
+
+    const eventName = (row.event_name ?? '').trim().toLowerCase();
+    const isConfusion = eventName === 'success_checkpoint_confusion_signal';
+    const isAbandon = eventName === 'success_checkpoint_abandon_signal';
+    if (!isConfusion && !isAbandon) return;
+
+    const subjectRaw = typeof payload.subject === 'string' ? payload.subject : '';
+    const normalizedSubject = normalizeSubject(subjectRaw);
+    const subject = normalizedSubject ?? 'unknown';
+    const gradeBandRaw = typeof payload.gradeBand === 'string' ? payload.gradeBand.trim() : '';
+    const gradeBand = gradeBandRaw.length ? gradeBandRaw : 'Unknown';
+    const key = `${subject}::${gradeBand.toLowerCase()}`;
+    const entry = bySlice.get(key) ?? {
+      subject,
+      gradeBand,
+      confusionSignals: 0,
+      abandonSignals: 0,
+      students: new Set<string>(),
+    };
+
+    if (isConfusion) {
+      entry.confusionSignals += 1;
+      confusionSignalCount += 1;
+    } else if (isAbandon) {
+      entry.abandonSignals += 1;
+      abandonSignalCount += 1;
+    }
+
+    const studentId = resolveTelemetryStudentId(row.student_id, payload);
+    if (studentId) {
+      entry.students.add(studentId);
+    }
+
+    bySlice.set(key, entry);
+  });
+
+  const slices = Array.from(bySlice.values())
+    .map<AdminCheckpointRiskSlice>((entry) => ({
+      subject: entry.subject,
+      gradeBand: entry.gradeBand,
+      confusionSignals: entry.confusionSignals,
+      abandonSignals: entry.abandonSignals,
+      uniqueStudents: entry.students.size,
+    }))
+    .sort((a, b) => {
+      const totalA = a.confusionSignals + a.abandonSignals;
+      const totalB = b.confusionSignals + b.abandonSignals;
+      if (totalB !== totalA) return totalB - totalA;
+      if (b.confusionSignals !== a.confusionSignals) return b.confusionSignals - a.confusionSignals;
+      return b.uniqueStudents - a.uniqueStudents;
+    });
+
+  return {
+    confusionSignalCount,
+    abandonSignalCount,
+    slices,
+  };
+};
+
 const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   admin,
   metrics: {
@@ -997,6 +1088,33 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     adaptiveSafetyBlockCount: allowSyntheticDashboardData ? 29 : 0,
     adaptiveErrorRate: allowSyntheticDashboardData ? 9.4 : null,
     adaptiveSafetyRate: allowSyntheticDashboardData ? 8.1 : null,
+    checkpointConfusionSignalCount: allowSyntheticDashboardData ? 58 : 0,
+    checkpointAbandonSignalCount: allowSyntheticDashboardData ? 17 : 0,
+    checkpointRiskSlices: allowSyntheticDashboardData
+      ? [
+          {
+            subject: 'math',
+            gradeBand: '3',
+            confusionSignals: 21,
+            abandonSignals: 6,
+            uniqueStudents: 14,
+          },
+          {
+            subject: 'english',
+            gradeBand: '5',
+            confusionSignals: 13,
+            abandonSignals: 4,
+            uniqueStudents: 11,
+          },
+          {
+            subject: 'science',
+            gradeBand: '6',
+            confusionSignals: 9,
+            abandonSignals: 3,
+            uniqueStudents: 8,
+          },
+        ]
+      : [],
   },
   growthSeries: allowSyntheticDashboardData
     ? Array.from({ length: 8 }).map((_, index) => {
@@ -3260,6 +3378,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       { data: successRollupRow, error: successRollupError },
       { data: checkpointRows, error: checkpointError },
       { data: retentionCheckpointRows, error: retentionCheckpointError },
+      { data: checkpointRiskRows, error: checkpointRiskError },
       { data: adaptiveRows, error: adaptiveError },
       { data: questionQualityRows, error: questionQualityError },
     ] = await Promise.all([
@@ -3325,6 +3444,13 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         .limit(20000),
       supabase
         .from('analytics_events')
+        .select('event_name, student_id, payload')
+        .in('event_name', ['success_checkpoint_confusion_signal', 'success_checkpoint_abandon_signal'])
+        .gte('occurred_at', lookbackIso)
+        .order('occurred_at', { ascending: true })
+        .limit(20000),
+      supabase
+        .from('analytics_events')
         .select('occurred_at, payload')
         .eq('event_name', 'success_adaptive_tutor_outcome')
         .gte('occurred_at', lookbackIso)
@@ -3369,6 +3495,8 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       console.error('[Dashboard] Admin checkpoint telemetry fetch failed', checkpointError);
     if (retentionCheckpointError)
       console.error('[Dashboard] Admin retention telemetry fetch failed', retentionCheckpointError);
+    if (checkpointRiskError)
+      console.error('[Dashboard] Admin checkpoint risk telemetry fetch failed', checkpointRiskError);
     if (adaptiveError)
       console.error('[Dashboard] Admin adaptive telemetry fetch failed', adaptiveError);
     if (questionQualityError)
@@ -3484,6 +3612,11 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       { telemetryMode: adminReleaseGateTelemetryMode },
     );
 
+    const checkpointRiskSummary = computeCheckpointRiskSummary(
+      (checkpointRiskRows as AnalyticsCheckpointRiskEventRow[]) ?? [],
+      adminReleaseGateTelemetryMode,
+    );
+
     let questionSampleRows = (questionQualityRows as QuestionQualitySampleRow[]) ?? [];
     if (!questionSampleRows.length) {
       const { data: fallbackQualityRows, error: fallbackQualityError } = await supabase
@@ -3545,6 +3678,9 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         adaptiveSummary.safetyRate,
         adaptiveSummary.attemptCount,
       ),
+      checkpointConfusionSignalCount: checkpointRiskSummary.confusionSignalCount,
+      checkpointAbandonSignalCount: checkpointRiskSummary.abandonSignalCount,
+      checkpointRiskSlices: checkpointRiskSummary.slices,
     };
 
     const growthGrouped = new Map<string, { newStudents: number; activeStudents: number }>();

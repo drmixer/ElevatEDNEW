@@ -884,6 +884,14 @@ export interface AdminSuccessMetrics {
   alertResolutionHoursAvg: number | null;
 }
 
+export interface AdminCheckpointRiskSlice {
+  subject: Subject | 'unknown';
+  gradeBand: string;
+  confusionSignals: number;
+  abandonSignals: number;
+  uniqueStudents: number;
+}
+
 export interface AdminCheckpointMetrics {
   lookbackDays: number;
   telemetryMode: 'live' | 'synthetic' | 'all';
@@ -915,4 +923,7 @@ export interface AdminCheckpointMetrics {
   adaptiveSafetyBlockCount: number;
   adaptiveErrorRate: number | null;
   adaptiveSafetyRate: number | null;
+  checkpointConfusionSignalCount: number;
+  checkpointAbandonSignalCount: number;
+  checkpointRiskSlices: AdminCheckpointRiskSlice[];
 }

@@ -473,6 +473,10 @@ const AdminDashboard: React.FC = () => {
     successMetrics?.telemetryMode ?? checkpointMetrics?.telemetryMode ?? 'live';
   const releaseGateAdaptiveErrorRate = adaptiveRates.errorRate ?? checkpointMetrics?.adaptiveErrorRate ?? null;
   const releaseGateAdaptiveSafetyRate = adaptiveRates.safetyRate ?? checkpointMetrics?.adaptiveSafetyRate ?? null;
+  const checkpointRiskTopSlices = useMemo(
+    () => (checkpointMetrics?.checkpointRiskSlices ?? []).slice(0, 6),
+    [checkpointMetrics?.checkpointRiskSlices],
+  );
 
   const releaseGateSnapshot = useMemo(
     () =>
@@ -846,11 +850,17 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </div>
               {checkpointMetrics && (
-                <p className="mb-4 text-xs text-slate-600">
-                  Checkpoint telemetry volume: {checkpointMetrics.attemptCount} attempts (pilot{' '}
-                  {checkpointMetrics.pilotAttemptCount}, K-5 {checkpointMetrics.k5AttemptCount}) in the last{' '}
-                  {checkpointMetrics.lookbackDays} days [{checkpointMetrics.telemetryMode} mode].
-                </p>
+                <>
+                  <p className="mb-2 text-xs text-slate-600">
+                    Checkpoint telemetry volume: {checkpointMetrics.attemptCount} attempts (pilot{' '}
+                    {checkpointMetrics.pilotAttemptCount}, K-5 {checkpointMetrics.k5AttemptCount}) in the last{' '}
+                    {checkpointMetrics.lookbackDays} days [{checkpointMetrics.telemetryMode} mode].
+                  </p>
+                  <p className="mb-4 text-xs text-slate-600">
+                    Confusion signals: {checkpointMetrics.checkpointConfusionSignalCount} • Abandon signals:{' '}
+                    {checkpointMetrics.checkpointAbandonSignalCount}
+                  </p>
+                </>
               )}
 
               <div className="grid md:grid-cols-2 gap-3">
@@ -890,6 +900,37 @@ const AdminDashboard: React.FC = () => {
                       <li key={label}>{label}</li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {checkpointMetrics && checkpointRiskTopSlices.length > 0 && (
+                <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">
+                    Checkpoint Risk Slices (7d)
+                  </p>
+                  <div className="space-y-2">
+                    {checkpointRiskTopSlices.map((slice) => {
+                      const subjectLabel =
+                        slice.subject === 'social_studies'
+                          ? 'Social Studies'
+                          : slice.subject === 'unknown'
+                            ? 'Unknown'
+                            : `${slice.subject.charAt(0).toUpperCase()}${slice.subject.slice(1)}`;
+                      return (
+                        <div
+                          key={`${slice.subject}:${slice.gradeBand}`}
+                          className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs"
+                        >
+                          <span className="font-semibold text-slate-800">
+                            Grade {slice.gradeBand} • {subjectLabel}
+                          </span>
+                          <span className="text-amber-700">Confusion {slice.confusionSignals}</span>
+                          <span className="text-rose-700">Abandon {slice.abandonSignals}</span>
+                          <span className="text-slate-500">{slice.uniqueStudents} learners</span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </motion.div>

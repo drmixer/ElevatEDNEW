@@ -227,8 +227,21 @@ ElevatED should deliver:
     - Files:
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/PracticePhase.tsx`
+24. Completed Phase D/E follow-through item for checkpoint confusion/abandon instrumentation + admin slicing:
+    - Added explicit checkpoint risk telemetry events in Learn flow:
+      - `success_checkpoint_confusion_signal` (incorrect answers, blocked continue, quick-review shown, hint requests),
+      - `success_checkpoint_abandon_signal` (leaving section before passing checkpoint).
+    - Added admin checkpoint risk aggregation (7-day, telemetry-mode aware) with grade/subject slices and learner counts.
+    - Surfaced confusion/abandon totals and top risk slices in Admin release-gate panel.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Lesson/phases/LearnPhase.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
 
 Validation run this session:
+- `npx eslint src/components/Lesson/phases/LearnPhase.tsx src/services/dashboardService.ts src/components/Admin/AdminDashboard.tsx src/types/index.ts` (passed)
+- `npm run test -- src/services/__tests__/dashboardService.test.ts src/lib/__tests__/evaluationHarness.test.ts` (passed; 24 tests total)
 - `npx eslint src/components/Lesson/phases/LearnPhase.tsx src/components/Lesson/phases/PracticePhase.tsx` (passed)
 - `npm run test -- src/lib/__tests__/questionQuality.test.ts server/__tests__/placementValidation.test.ts src/services/__tests__/lessonPracticeService.test.ts`
 - `npm run test -- src/services/__tests__/assessmentService.adaptive.test.ts`
@@ -497,7 +510,7 @@ Expected per-chat output:
 ## P3 (Phase D/E Follow-through)
 
 - [x] Checkpoint/practice prompt-option truncation/comprehension hardening shipped in active student flow.
-- [ ] Checkpoint confusion/abandon telemetry added and surfaced for weekly grade/subject slicing.
+- [x] Checkpoint confusion/abandon telemetry added and surfaced for weekly grade/subject slicing.
 - [ ] Tutor boundary clarity event contract expanded to distinguish AI-direct vs deterministic fallback outcomes.
 - [ ] Parent recommendation rationale quality checks added for missing/weak "why now" explanations.
 

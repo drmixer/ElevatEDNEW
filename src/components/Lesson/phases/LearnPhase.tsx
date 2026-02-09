@@ -315,12 +315,59 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     );
 
     const hasCheckpointPassed = checkpointState.status === 'ready' && checkpointState.isCorrect === true;
+    const checkpointWrongAttempts = useMemo(
+        () => checkpointWrongAttemptsBySection.get(currentSectionIndex) ?? 0,
+        [checkpointWrongAttemptsBySection, currentSectionIndex],
+    );
+    const checkpointTelemetrySource = pilotTelemetryEnabled ? 'grade2_math_pilot' : 'k5_math_adaptive';
+
+    const trackCheckpointRiskSignal = useCallback(
+        (
+            eventName: 'success_checkpoint_confusion_signal' | 'success_checkpoint_abandon_signal',
+            reason: string,
+            extra?: Record<string, unknown>,
+        ) => {
+            if (!checkpointEnabled) return;
+            trackEvent(eventName, {
+                lessonId,
+                sectionIndex: currentSectionIndex,
+                intent: checkpointState.status === 'ready' ? checkpointState.intent : checkpointIntent,
+                topic: pilotTelemetryEnabled ? resolvedPilotTopic : (resolvedK5MathTopic ?? 'general'),
+                subject: subject ?? 'math',
+                gradeBand: gradeBand ?? null,
+                source: checkpointTelemetrySource,
+                checkpointStatus: checkpointState.status,
+                wrongAttempts: checkpointWrongAttempts,
+                reason,
+                ...extra,
+            });
+        },
+        [
+            checkpointEnabled,
+            checkpointIntent,
+            checkpointState,
+            checkpointTelemetrySource,
+            checkpointWrongAttempts,
+            currentSectionIndex,
+            gradeBand,
+            lessonId,
+            pilotTelemetryEnabled,
+            resolvedK5MathTopic,
+            resolvedPilotTopic,
+            subject,
+        ],
+    );
 
     // Show appropriate button label based on whether practice questions exist
     const lastSectionLabel = hasPracticeQuestions ? 'Continue to Practice' : 'Continue to Review';
 
     const handleContinue = () => {
-        if (checkpointEnabled && checkpointState.status !== 'error' && !hasCheckpointPassed) return;
+        if (checkpointEnabled && checkpointState.status !== 'error' && !hasCheckpointPassed) {
+            trackCheckpointRiskSignal('success_checkpoint_confusion_signal', 'continue_blocked_before_pass', {
+                trigger: 'continue',
+            });
+            return;
+        }
         if (isLastSection) {
             nextPhase();
         } else {
@@ -329,6 +376,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     };
 
     const handleBack = () => {
+        if (checkpointEnabled && checkpointState.status !== 'error' && !hasCheckpointPassed) {
+            trackCheckpointRiskSignal('success_checkpoint_abandon_signal', 'leave_section_before_pass', {
+                trigger: isFirstSection ? 'back_to_welcome' : 'back_to_previous_section',
+            });
+        }
         if (isFirstSection) {
             previousPhase();
         } else {
@@ -742,6 +794,10 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                     next.set(currentSectionIndex, count);
                     return next;
                 });
+                trackCheckpointRiskSignal('success_checkpoint_confusion_signal', 'incorrect_answer', {
+                    selectedIndex,
+                    wrongAttempts: checkpointWrongAttempts + 1,
+                });
             }
 
             if (pilotTelemetryEnabled) {
@@ -787,12 +843,9 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             resolvedK5MathTopic,
             resolvedPilotTopic,
             subject,
+            checkpointWrongAttempts,
+            trackCheckpointRiskSignal,
         ],
-    );
-
-    const checkpointWrongAttempts = useMemo(
-        () => checkpointWrongAttemptsBySection.get(currentSectionIndex) ?? 0,
-        [checkpointWrongAttemptsBySection, currentSectionIndex],
     );
 
     useEffect(() => {
@@ -830,6 +883,10 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 gradeBand: gradeBand ?? null,
             });
         }
+        trackCheckpointRiskSignal('success_checkpoint_confusion_signal', 'quick_review_shown', {
+            trigger: 'checkpoint_wrong_twice',
+            wrongAttempts: checkpointWrongAttempts,
+        });
     }, [
         checkpointEnabled,
         checkpointWrongAttempts,
@@ -842,6 +899,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         resolvedK5MathTopic,
         resolvedPilotTopic,
         subject,
+        trackCheckpointRiskSignal,
     ]);
 
     const handleQuickReviewAnswer = (selectedIndex: number) => {
@@ -903,9 +961,10 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
     const toggleCheckpointHint = () => {
         if (!checkpointEnabled) return;
         if (checkpointState.status !== 'ready') return;
+        const nextHintVisible = !isCheckpointHintShown;
         setCheckpointHintShownBySection((prev) => {
             const next = new Map(prev);
-            next.set(currentSectionIndex, !(prev.get(currentSectionIndex) ?? false));
+            next.set(currentSectionIndex, nextHintVisible);
             return next;
         });
         if (pilotTelemetryEnabled) {
@@ -927,6 +986,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 topic: resolvedK5MathTopic ?? 'general',
                 subject: subject ?? 'math',
                 gradeBand: gradeBand ?? null,
+            });
+        }
+        if (nextHintVisible) {
+            trackCheckpointRiskSignal('success_checkpoint_confusion_signal', 'deterministic_hint_requested', {
+                trigger: 'hint_button',
             });
         }
     };
@@ -964,6 +1028,9 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         }
 
         const { question, options } = checkpointState.payload;
+        trackCheckpointRiskSignal('success_checkpoint_confusion_signal', 'tutor_hint_requested', {
+            trigger: 'ask_tutor_hint',
+        });
         onAskTutor(
             [
                 `I'm stuck on a checkpoint question for "${currentSection.title}".`,
