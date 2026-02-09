@@ -6,6 +6,7 @@ import {
   computeRetentionEvaluation,
   resolveAdaptiveRateForGates,
   resolveRetentionRateForGates,
+  shouldIncludeTelemetryPayload,
   type AdaptiveTelemetryEvent,
   type CheckpointTelemetryEvent,
 } from '../evaluationHarness';
@@ -90,6 +91,27 @@ describe('computeCheckpointEvaluation', () => {
     expect(summary.attemptCount).toBe(1);
     expect(summary.firstAttemptCount).toBe(1);
     expect(summary.firstPassRate).toBe(100);
+  });
+
+  it('filters telemetry rows by requested mode', () => {
+    const events: CheckpointTelemetryEvent[] = [
+      {
+        studentId: 'live-student',
+        occurredAt: '2026-02-01T00:00:00.000Z',
+        eventName: 'success_k5_math_checkpoint_answered',
+        payload: { lessonId: 11, sectionIndex: 0, isCorrect: true },
+      },
+      {
+        studentId: 'synthetic-student',
+        occurredAt: '2026-02-01T00:01:00.000Z',
+        eventName: 'success_pilot_checkpoint_answered',
+        payload: { synthetic: true, lessonId: 22, sectionIndex: 0, isCorrect: true },
+      },
+    ];
+
+    expect(computeCheckpointEvaluation(events, { telemetryMode: 'live' }).attemptCount).toBe(1);
+    expect(computeCheckpointEvaluation(events, { telemetryMode: 'synthetic' }).attemptCount).toBe(1);
+    expect(computeCheckpointEvaluation(events, { telemetryMode: 'all' }).attemptCount).toBe(2);
   });
 });
 
@@ -214,6 +236,33 @@ describe('computeAdaptiveEvaluation', () => {
     expect(summary.safetyBlockCount).toBe(1);
     expect(summary.errorRate).toBe(25);
     expect(summary.safetyRate).toBe(25);
+  });
+
+  it('supports telemetry mode filtering', () => {
+    const events: AdaptiveTelemetryEvent[] = [
+      {
+        occurredAt: '2026-02-01T00:00:00.000Z',
+        payload: { outcome: 'success' },
+      },
+      {
+        occurredAt: '2026-02-01T00:01:00.000Z',
+        payload: { synthetic: true, outcome: 'error' },
+      },
+    ];
+
+    expect(computeAdaptiveEvaluation(events, { telemetryMode: 'live' }).attemptCount).toBe(1);
+    expect(computeAdaptiveEvaluation(events, { telemetryMode: 'synthetic' }).attemptCount).toBe(1);
+    expect(computeAdaptiveEvaluation(events, { telemetryMode: 'all' }).attemptCount).toBe(2);
+  });
+});
+
+describe('shouldIncludeTelemetryPayload', () => {
+  it('includes rows based on synthetic flag and telemetry mode', () => {
+    expect(shouldIncludeTelemetryPayload({}, 'live')).toBe(true);
+    expect(shouldIncludeTelemetryPayload({ synthetic: true }, 'live')).toBe(false);
+    expect(shouldIncludeTelemetryPayload({}, 'synthetic')).toBe(false);
+    expect(shouldIncludeTelemetryPayload({ synthetic: true }, 'synthetic')).toBe(true);
+    expect(shouldIncludeTelemetryPayload({ synthetic: true }, 'all')).toBe(true);
   });
 });
 

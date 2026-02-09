@@ -1,4 +1,9 @@
 type NumericOrNull = number | null | undefined;
+export type TelemetryMode = 'live' | 'synthetic' | 'all';
+
+type EvaluationModeOptions = {
+  telemetryMode?: TelemetryMode;
+};
 
 export type CheckpointTelemetryEvent = {
   studentId: string | null | undefined;
@@ -171,16 +176,39 @@ const metricStatusForUpperBound = (
   return 'fail';
 };
 
+const normalizeTelemetryMode = (mode: TelemetryMode | null | undefined): TelemetryMode => {
+  if (mode === 'live' || mode === 'synthetic' || mode === 'all') return mode;
+  return 'all';
+};
+
+const isSyntheticTelemetryPayload = (payload: Record<string, unknown>): boolean =>
+  parseBoolean(payload.synthetic) === true;
+
+export const shouldIncludeTelemetryPayload = (
+  payload: Record<string, unknown> | null | undefined,
+  mode: TelemetryMode | null | undefined,
+): boolean => {
+  const resolvedMode = normalizeTelemetryMode(mode);
+  if (resolvedMode === 'all') return true;
+
+  const synthetic = isSyntheticTelemetryPayload(payload ?? {});
+  if (resolvedMode === 'synthetic') return synthetic;
+  return !synthetic;
+};
+
 export const computeCheckpointEvaluation = (
   events: CheckpointTelemetryEvent[],
+  options?: EvaluationModeOptions,
 ): CheckpointEvaluationSummary => {
   const attemptsByCheckpoint = new Map<string, Array<{ ts: number; isCorrect: boolean }>>();
   let attemptCount = 0;
   let pilotAttemptCount = 0;
   let k5AttemptCount = 0;
+  const telemetryMode = normalizeTelemetryMode(options?.telemetryMode);
 
   events.forEach((event) => {
     const payload = event.payload ?? {};
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
     const studentId = resolveTelemetryStudentId(event.studentId, payload);
     const lessonId = parseFiniteNumber(payload.lessonId);
     const sectionIndex = parseFiniteNumber(payload.sectionIndex);
@@ -267,13 +295,16 @@ const parseAdaptiveOutcome = (payload: Record<string, unknown>): 'success' | 'er
 
 export const computeAdaptiveEvaluation = (
   events: AdaptiveTelemetryEvent[],
+  options?: EvaluationModeOptions,
 ): AdaptiveEvaluationSummary => {
   let attemptCount = 0;
   let errorCount = 0;
   let safetyBlockCount = 0;
+  const telemetryMode = normalizeTelemetryMode(options?.telemetryMode);
 
   events.forEach((event) => {
     const payload = event.payload ?? {};
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
     const occurredAt = Date.parse(event.occurredAt ?? '');
     if (!Number.isFinite(occurredAt)) return;
 
@@ -299,12 +330,15 @@ export const computeAdaptiveEvaluation = (
 
 export const computeRetentionEvaluation = (
   events: CheckpointTelemetryEvent[],
+  options?: EvaluationModeOptions,
 ): RetentionEvaluationSummary => {
   const attemptsByCheckpoint = new Map<string, Array<{ ts: number; isCorrect: boolean }>>();
   let maxTimestamp = Number.NEGATIVE_INFINITY;
+  const telemetryMode = normalizeTelemetryMode(options?.telemetryMode);
 
   events.forEach((event) => {
     const payload = event.payload ?? {};
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
     const studentId = resolveTelemetryStudentId(event.studentId, payload);
     const lessonId = parseFiniteNumber(payload.lessonId);
     const sectionIndex = parseFiniteNumber(payload.sectionIndex);

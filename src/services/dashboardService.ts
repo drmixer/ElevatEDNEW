@@ -52,12 +52,29 @@ import {
   computeRetentionEvaluation,
   resolveAdaptiveRateForGates,
   resolveRetentionRateForGates,
+  shouldIncludeTelemetryPayload,
+  type TelemetryMode,
 } from '../lib/evaluationHarness';
 
 const allowSyntheticDashboardData =
   typeof import.meta !== 'undefined' &&
   typeof import.meta.env !== 'undefined' &&
   (import.meta.env.DEV || import.meta.env.VITE_ALLOW_FAKE_DASHBOARD_DATA === 'true');
+
+const resolveAdminReleaseGateTelemetryMode = (): TelemetryMode => {
+  const configuredMode =
+    typeof import.meta !== 'undefined' &&
+    typeof import.meta.env !== 'undefined' &&
+    typeof import.meta.env.VITE_RELEASE_GATE_TELEMETRY_MODE === 'string'
+      ? import.meta.env.VITE_RELEASE_GATE_TELEMETRY_MODE.trim().toLowerCase()
+      : '';
+  if (configuredMode === 'synthetic' || configuredMode === 'all' || configuredMode === 'live') {
+    return configuredMode;
+  }
+  return 'live';
+};
+
+const adminReleaseGateTelemetryMode = resolveAdminReleaseGateTelemetryMode();
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 const RETENTION_HORIZON_DAYS = 7;
@@ -885,13 +902,15 @@ const resolveTelemetryStudentId = (
 
 const computeSyntheticDiagnosticSummary = (
   rows: AnalyticsDiagnosticEventRow[],
+  telemetryMode: TelemetryMode,
 ): { eligibleCount: number; completedCount: number; completionRate: number | null } => {
   const eligible = new Set<string>();
   const completed = new Set<string>();
 
   rows.forEach((row) => {
     const payload = row.payload ?? {};
-    if (payload.synthetic !== true) return;
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
+    if (telemetryMode === 'all' && payload.synthetic !== true) return;
     const studentId = resolveTelemetryStudentId(row.student_id, payload);
     if (!studentId) return;
     const eventName = (row.event_name ?? '').toLowerCase();
@@ -936,6 +955,7 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   },
   successMetrics: {
     lookbackDays: 7,
+    telemetryMode: adminReleaseGateTelemetryMode,
     diagnosticsCompleted: allowSyntheticDashboardData ? 1820 : 0,
     diagnosticsTotal: allowSyntheticDashboardData ? 2480 : 0,
     diagnosticCompletionRate: allowSyntheticDashboardData ? 73 : null,
@@ -948,6 +968,7 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   },
   checkpointMetrics: {
     lookbackDays: 7,
+    telemetryMode: adminReleaseGateTelemetryMode,
     attemptCount: allowSyntheticDashboardData ? 920 : 0,
     pilotAttemptCount: allowSyntheticDashboardData ? 430 : 0,
     k5AttemptCount: allowSyntheticDashboardData ? 490 : 0,
@@ -3385,17 +3406,21 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
 
     const syntheticDiagnosticSummary = computeSyntheticDiagnosticSummary(
       (diagnosticTelemetryRows as AnalyticsDiagnosticEventRow[]) ?? [],
+      adminReleaseGateTelemetryMode,
     );
+    const shouldUseSyntheticDiagnosticCohort =
+      adminReleaseGateTelemetryMode === 'synthetic' ||
+      (adminReleaseGateTelemetryMode === 'all' && syntheticDiagnosticSummary.eligibleCount > 0);
     const diagnosticsTotal =
-      syntheticDiagnosticSummary.eligibleCount > 0
+      shouldUseSyntheticDiagnosticCohort
         ? syntheticDiagnosticSummary.eligibleCount
         : baselineDiagnosticsTotal;
     const diagnosticsCompleted =
-      syntheticDiagnosticSummary.eligibleCount > 0
+      shouldUseSyntheticDiagnosticCohort
         ? syntheticDiagnosticSummary.completedCount
         : baselineDiagnosticsCompleted;
     const diagnosticCompletionRate =
-      syntheticDiagnosticSummary.eligibleCount > 0
+      shouldUseSyntheticDiagnosticCohort
         ? syntheticDiagnosticSummary.completionRate
         : baselineDiagnosticCompletionRate;
 
@@ -3419,6 +3444,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
 
     const successMetrics: AdminSuccessMetrics = {
       lookbackDays,
+      telemetryMode: adminReleaseGateTelemetryMode,
       diagnosticsCompleted,
       diagnosticsTotal,
       diagnosticCompletionRate,
@@ -3437,6 +3463,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         occurredAt: row.occurred_at,
         payload: row.payload,
       })),
+      { telemetryMode: adminReleaseGateTelemetryMode },
     );
 
     const retentionSummary = computeRetentionEvaluation(
@@ -3446,6 +3473,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         occurredAt: row.occurred_at,
         payload: row.payload,
       })),
+      { telemetryMode: adminReleaseGateTelemetryMode },
     );
 
     const adaptiveSummary = computeAdaptiveEvaluation(
@@ -3453,6 +3481,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         occurredAt: row.occurred_at,
         payload: row.payload,
       })),
+      { telemetryMode: adminReleaseGateTelemetryMode },
     );
 
     let questionSampleRows = (questionQualityRows as QuestionQualitySampleRow[]) ?? [];
@@ -3473,6 +3502,7 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
 
     const checkpointMetrics: AdminCheckpointMetrics = {
       lookbackDays,
+      telemetryMode: adminReleaseGateTelemetryMode,
       attemptCount: checkpointSummary.attemptCount,
       pilotAttemptCount: checkpointSummary.pilotAttemptCount,
       k5AttemptCount: checkpointSummary.k5AttemptCount,

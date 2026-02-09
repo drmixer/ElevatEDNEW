@@ -469,6 +469,8 @@ const AdminDashboard: React.FC = () => {
 
   const successMetrics = dashboard?.successMetrics ?? null;
   const checkpointMetrics = dashboard?.checkpointMetrics ?? null;
+  const releaseGateTelemetryMode =
+    successMetrics?.telemetryMode ?? checkpointMetrics?.telemetryMode ?? 'live';
   const releaseGateAdaptiveErrorRate = adaptiveRates.errorRate ?? checkpointMetrics?.adaptiveErrorRate ?? null;
   const releaseGateAdaptiveSafetyRate = adaptiveRates.safetyRate ?? checkpointMetrics?.adaptiveSafetyRate ?? null;
 
@@ -805,7 +807,8 @@ const AdminDashboard: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-bold text-gray-900">Release Gates</h3>
                   <p className="text-sm text-slate-600">
-                    Evaluation harness snapshot • last {releaseGateSnapshot.lookbackDays} days
+                    Evaluation harness snapshot • last {releaseGateSnapshot.lookbackDays} days • telemetry{' '}
+                    {releaseGateTelemetryMode}
                   </p>
                 </div>
                 <span
@@ -844,7 +847,7 @@ const AdminDashboard: React.FC = () => {
                 <p className="mb-4 text-xs text-slate-600">
                   Checkpoint telemetry volume: {checkpointMetrics.attemptCount} attempts (pilot{' '}
                   {checkpointMetrics.pilotAttemptCount}, K-5 {checkpointMetrics.k5AttemptCount}) in the last{' '}
-                  {checkpointMetrics.lookbackDays} days.
+                  {checkpointMetrics.lookbackDays} days [{checkpointMetrics.telemetryMode} mode].
                 </p>
               )}
 

@@ -8,8 +8,10 @@ import {
   computeRetentionEvaluation,
   resolveAdaptiveRateForGates,
   resolveRetentionRateForGates,
+  shouldIncludeTelemetryPayload,
   type AdaptiveTelemetryEvent,
   type CheckpointTelemetryEvent,
+  type TelemetryMode,
 } from '../src/lib/evaluationHarness.js';
 import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
 
@@ -19,6 +21,7 @@ const RETENTION_HORIZON_DAYS = 7;
 type CliOptions = {
   lookbackDays: number;
   strictNoDataForHardGates: boolean;
+  telemetryMode: TelemetryMode;
 };
 
 type QuestionQualitySampleRow = {
@@ -55,6 +58,7 @@ const parseArgs = (): CliOptions => {
   const options: CliOptions = {
     lookbackDays: 14,
     strictNoDataForHardGates: true,
+    telemetryMode: 'live',
   };
 
   for (let i = 0; i < args.length; i += 1) {
@@ -70,6 +74,15 @@ const parseArgs = (): CliOptions => {
     }
     if (arg === '--allow-missing-hard-gates') {
       options.strictNoDataForHardGates = false;
+      continue;
+    }
+    if (arg === '--telemetry-mode') {
+      const value = (args[i + 1] ?? '').trim().toLowerCase();
+      if (value !== 'live' && value !== 'synthetic' && value !== 'all') {
+        throw new Error('Expected telemetry mode after --telemetry-mode: live | synthetic | all');
+      }
+      options.telemetryMode = value;
+      i += 1;
       continue;
     }
     throw new Error(`Unknown argument: ${arg}`);
@@ -125,13 +138,15 @@ const resolveTelemetryStudentId = (
 
 const computeSyntheticDiagnosticSummary = (
   rows: DiagnosticTelemetryEvent[],
+  telemetryMode: TelemetryMode,
 ): DiagnosticTelemetrySummary => {
   const eligible = new Set<string>();
   const completed = new Set<string>();
 
   rows.forEach((row) => {
     const payload = row.payload ?? {};
-    if (payload.synthetic !== true) return;
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
+    if (telemetryMode === 'all' && payload.synthetic !== true) return;
     const studentId = resolveTelemetryStudentId(row.student_id, payload);
     if (!studentId) return;
     const eventName = (row.event_name ?? '').toLowerCase();
@@ -276,9 +291,13 @@ const main = async (): Promise<void> => {
 
   const syntheticDiagnosticSummary = computeSyntheticDiagnosticSummary(
     ((diagnosticsTelemetryResult.data ?? []) as DiagnosticTelemetryEvent[]) ?? [],
+    options.telemetryMode,
   );
+  const shouldUseSyntheticDiagnosticCohort =
+    options.telemetryMode === 'synthetic' ||
+    (options.telemetryMode === 'all' && syntheticDiagnosticSummary.eligibleCount > 0);
   const diagnosticCompletionRate =
-    syntheticDiagnosticSummary.eligibleCount > 0
+    shouldUseSyntheticDiagnosticCohort
       ? syntheticDiagnosticSummary.completionRate
       : baselineDiagnosticCompletionRate;
 
@@ -309,6 +328,7 @@ const main = async (): Promise<void> => {
       occurredAt: row.occurred_at,
       payload: row.payload,
     })),
+    { telemetryMode: options.telemetryMode },
   );
 
   const retentionSummary = computeRetentionEvaluation(
@@ -323,6 +343,7 @@ const main = async (): Promise<void> => {
       occurredAt: row.occurred_at,
       payload: row.payload,
     })),
+    { telemetryMode: options.telemetryMode },
   );
 
   const adaptiveSummary = computeAdaptiveEvaluation(
@@ -333,6 +354,7 @@ const main = async (): Promise<void> => {
       occurredAt: row.occurred_at,
       payload: row.payload,
     })),
+    { telemetryMode: options.telemetryMode },
   );
 
   let questionSampleRows = (questionQualityResult.data as QuestionQualitySampleRow[] | null) ?? [];
@@ -403,6 +425,7 @@ const main = async (): Promise<void> => {
   });
 
   console.log(`Release gate evaluation (lookback ${options.lookbackDays} days)`);
+  console.log(`Telemetry mode: ${options.telemetryMode}`);
   console.log(`Result: ${snapshot.releaseReady ? 'PASS' : 'FAIL'}`);
   console.log(
     `Counts: pass ${snapshot.passCount}, warn ${snapshot.warnCount}, fail ${snapshot.failCount}, no_data ${snapshot.noDataCount}, blockers ${snapshot.blockerCount}`,
@@ -416,6 +439,11 @@ const main = async (): Promise<void> => {
   console.log('');
   console.log(
     `Telemetry samples: checkpoints ${checkpointSummary.attemptCount} (pilot ${checkpointSummary.pilotAttemptCount}, k5 ${checkpointSummary.k5AttemptCount}), adaptive ${adaptiveSummary.attemptCount}, question_quality ${genericSummary.sampleCount}, coverage_rollup_rows ${coverageRows.length}`,
+  );
+  console.log(
+    `Diagnostic cohort source: ${
+      shouldUseSyntheticDiagnosticCohort ? 'synthetic_telemetry' : 'student_profiles_baseline'
+    }`,
   );
   console.log(
     `Retention coverage: 3d ${retentionSummary.observed3DayCount}/${retentionSummary.eligible3DayCount} (${formatValue(

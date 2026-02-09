@@ -359,7 +359,9 @@ const main = async (): Promise<void> => {
   }
 
   console.log(`Inserted ${rows.length} rows into analytics_events.`);
-  console.log('Run `npm run eval:release-gates -- --lookback-days 7 --allow-missing-hard-gates` to verify.');
+  console.log(
+    'Run `npm run eval:release-gates -- --lookback-days 7 --allow-missing-hard-gates --telemetry-mode synthetic` to verify.',
+  );
 };
 
 const invokedFromCli =

@@ -872,6 +872,7 @@ export interface AdminDashboardData {
 
 export interface AdminSuccessMetrics {
   lookbackDays: number;
+  telemetryMode: 'live' | 'synthetic' | 'all';
   diagnosticsCompleted: number;
   diagnosticsTotal: number;
   diagnosticCompletionRate: number | null;
@@ -885,6 +886,7 @@ export interface AdminSuccessMetrics {
 
 export interface AdminCheckpointMetrics {
   lookbackDays: number;
+  telemetryMode: 'live' | 'synthetic' | 'all';
   attemptCount: number;
   pilotAttemptCount: number;
   k5AttemptCount: number;

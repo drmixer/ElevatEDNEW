@@ -38,6 +38,8 @@
     "audit:traffic-report": "tsx scripts/report_high_traffic_modules.ts",
     "audit:practice": "tsx scripts/audit_practice_coverage.ts",
     "eval:release-gates": "tsx scripts/evaluate_release_gates.ts",
+    "eval:release-gates:live": "tsx scripts/evaluate_release_gates.ts --telemetry-mode live",
+    "eval:release-gates:synthetic": "tsx scripts/evaluate_release_gates.ts --telemetry-mode synthetic",
     "seed:synthetic-success-telemetry": "tsx scripts/seed_synthetic_success_telemetry.ts",
     "fix:generic-question-bank": "tsx scripts/remediate_generic_question_bank.ts",
     "audit:coaching-feedback": "tsx tools/report_coaching_feedback.ts",
