@@ -1030,6 +1030,90 @@ const computeCheckpointRiskSummary = (
   };
 };
 
+const normalizeTelemetryToken = (value: unknown): string | null => {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  return normalized.length ? normalized : null;
+};
+
+const parseTelemetryBoolean = (value: unknown): boolean | null => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') {
+    if (value === 1) return true;
+    if (value === 0) return false;
+    return null;
+  }
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  if (!normalized.length) return null;
+  if (['true', '1', 'yes', 'y'].includes(normalized)) return true;
+  if (['false', '0', 'no', 'n'].includes(normalized)) return false;
+  return null;
+};
+
+const parseAdaptiveOutcomeForBoundary = (
+  payload: Record<string, unknown>,
+): 'success' | 'error' | 'safety_block' | null => {
+  const explicitOutcome = normalizeTelemetryToken(payload.outcome);
+  if (explicitOutcome === 'success' || explicitOutcome === 'error' || explicitOutcome === 'safety_block') {
+    return explicitOutcome;
+  }
+  const fallbackStatus = parseTelemetryBoolean(payload.isCorrect);
+  if (fallbackStatus === true) return 'success';
+  if (fallbackStatus === false) return 'error';
+  return null;
+};
+
+const parseAdaptiveDeliveryMode = (
+  payload: Record<string, unknown>,
+): 'ai_direct' | 'deterministic_fallback' | 'unknown' => {
+  const explicitMode = normalizeTelemetryToken(payload.deliveryMode);
+  if (explicitMode === 'ai_direct' || explicitMode === 'deterministic_fallback') {
+    return explicitMode;
+  }
+  const fallbackSource = normalizeTelemetryToken(payload.fallbackSource);
+  if (fallbackSource) return 'deterministic_fallback';
+  const source = normalizeTelemetryToken(payload.source);
+  if (source === 'rules-engine' || source === 'deterministic') return 'deterministic_fallback';
+  if (source === 'openrouter' || source === 'ai') return 'ai_direct';
+  return 'unknown';
+};
+
+const computeAdaptiveDeliverySummary = (
+  rows: AnalyticsAdaptiveEventRow[],
+  telemetryMode: TelemetryMode,
+): {
+  aiDirectCount: number;
+  deterministicFallbackCount: number;
+  unknownBoundaryCount: number;
+} => {
+  let aiDirectCount = 0;
+  let deterministicFallbackCount = 0;
+  let unknownBoundaryCount = 0;
+
+  rows.forEach((row) => {
+    const payload = row.payload ?? {};
+    if (!shouldIncludeTelemetryPayload(payload, telemetryMode)) return;
+    if (telemetryMode === 'all' && payload.synthetic !== true) return;
+    if (!parseAdaptiveOutcomeForBoundary(payload)) return;
+
+    const mode = parseAdaptiveDeliveryMode(payload);
+    if (mode === 'ai_direct') {
+      aiDirectCount += 1;
+    } else if (mode === 'deterministic_fallback') {
+      deterministicFallbackCount += 1;
+    } else {
+      unknownBoundaryCount += 1;
+    }
+  });
+
+  return {
+    aiDirectCount,
+    deterministicFallbackCount,
+    unknownBoundaryCount,
+  };
+};
+
 const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
   admin,
   metrics: {
@@ -1088,6 +1172,9 @@ const fallbackAdminData = (admin: Admin): AdminDashboardData => ({
     adaptiveSafetyBlockCount: allowSyntheticDashboardData ? 29 : 0,
     adaptiveErrorRate: allowSyntheticDashboardData ? 9.4 : null,
     adaptiveSafetyRate: allowSyntheticDashboardData ? 8.1 : null,
+    adaptiveAiDirectCount: allowSyntheticDashboardData ? 302 : 0,
+    adaptiveDeterministicFallbackCount: allowSyntheticDashboardData ? 48 : 0,
+    adaptiveUnknownBoundaryCount: allowSyntheticDashboardData ? 10 : 0,
     checkpointConfusionSignalCount: allowSyntheticDashboardData ? 58 : 0,
     checkpointAbandonSignalCount: allowSyntheticDashboardData ? 17 : 0,
     checkpointRiskSlices: allowSyntheticDashboardData
@@ -3611,6 +3698,10 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
       })),
       { telemetryMode: adminReleaseGateTelemetryMode },
     );
+    const adaptiveDeliverySummary = computeAdaptiveDeliverySummary(
+      (adaptiveRows as AnalyticsAdaptiveEventRow[]) ?? [],
+      adminReleaseGateTelemetryMode,
+    );
 
     const checkpointRiskSummary = computeCheckpointRiskSummary(
       (checkpointRiskRows as AnalyticsCheckpointRiskEventRow[]) ?? [],
@@ -3678,6 +3769,9 @@ export const fetchAdminDashboardData = async (admin: Admin): Promise<AdminDashbo
         adaptiveSummary.safetyRate,
         adaptiveSummary.attemptCount,
       ),
+      adaptiveAiDirectCount: adaptiveDeliverySummary.aiDirectCount,
+      adaptiveDeterministicFallbackCount: adaptiveDeliverySummary.deterministicFallbackCount,
+      adaptiveUnknownBoundaryCount: adaptiveDeliverySummary.unknownBoundaryCount,
       checkpointConfusionSignalCount: checkpointRiskSummary.confusionSignalCount,
       checkpointAbandonSignalCount: checkpointRiskSummary.abandonSignalCount,
       checkpointRiskSlices: checkpointRiskSummary.slices,

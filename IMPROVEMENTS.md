@@ -238,8 +238,20 @@ ElevatED should deliver:
       - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
       - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
       - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
+25. Completed Phase D/E follow-through item for tutor boundary clarity event contract:
+    - Expanded `success_adaptive_tutor_outcome` payload contract in Learning Assistant to include explicit `deliveryMode`:
+      - `ai_direct` for direct model responses / model-side blocks,
+      - `deterministic_fallback` when rules-engine fallback content is served.
+    - Added admin adaptive boundary aggregation (AI-direct vs deterministic fallback vs unknown) and surfaced counts in release-gate telemetry summary.
+    - Files:
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Student/LearningAssistant.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/services/dashboardService.ts`
+      - `/Users/drmixer/code/ElevatEDNEW/src/components/Admin/AdminDashboard.tsx`
+      - `/Users/drmixer/code/ElevatEDNEW/src/types/index.ts`
 
 Validation run this session:
+- `npx eslint src/components/Student/LearningAssistant.tsx src/services/dashboardService.ts src/components/Admin/AdminDashboard.tsx src/types/index.ts` (passed)
+- `npm run test -- src/services/__tests__/dashboardService.test.ts src/lib/__tests__/evaluationHarness.test.ts` (passed; 24 tests total)
 - `npx eslint src/components/Lesson/phases/LearnPhase.tsx src/services/dashboardService.ts src/components/Admin/AdminDashboard.tsx src/types/index.ts` (passed)
 - `npm run test -- src/services/__tests__/dashboardService.test.ts src/lib/__tests__/evaluationHarness.test.ts` (passed; 24 tests total)
 - `npx eslint src/components/Lesson/phases/LearnPhase.tsx src/components/Lesson/phases/PracticePhase.tsx` (passed)
@@ -511,7 +523,7 @@ Expected per-chat output:
 
 - [x] Checkpoint/practice prompt-option truncation/comprehension hardening shipped in active student flow.
 - [x] Checkpoint confusion/abandon telemetry added and surfaced for weekly grade/subject slicing.
-- [ ] Tutor boundary clarity event contract expanded to distinguish AI-direct vs deterministic fallback outcomes.
+- [x] Tutor boundary clarity event contract expanded to distinguish AI-direct vs deterministic fallback outcomes.
 - [ ] Parent recommendation rationale quality checks added for missing/weak "why now" explanations.
 
 ## Phase B/C Measurement Follow-through

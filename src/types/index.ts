@@ -923,6 +923,9 @@ export interface AdminCheckpointMetrics {
   adaptiveSafetyBlockCount: number;
   adaptiveErrorRate: number | null;
   adaptiveSafetyRate: number | null;
+  adaptiveAiDirectCount: number;
+  adaptiveDeterministicFallbackCount: number;
+  adaptiveUnknownBoundaryCount: number;
   checkpointConfusionSignalCount: number;
   checkpointAbandonSignalCount: number;
   checkpointRiskSlices: AdminCheckpointRiskSlice[];

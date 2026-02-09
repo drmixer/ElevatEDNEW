@@ -49,6 +49,7 @@ const alternateExplanationTemplate = (subject?: Subject | string | null, focus?:
 
 type HintLevel = 'hint' | 'break_down' | 'another_way';
 type MessageMetadata = { source?: 'card' | 'free' | 'scaffold'; cardId?: string; hintLevel?: HintLevel };
+type AdaptiveTutorDeliveryMode = 'ai_direct' | 'deterministic_fallback';
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
@@ -693,6 +694,24 @@ const LearningAssistant: React.FC = () => {
         ? findCuratedAlternate(subjectTagLabel, conceptTagLabel)
         : null;
     const decoratedMessage = `${messageToSend}\n\n${modeInstruction}${hintLevelInstruction ? ` ${hintLevelInstruction}` : ''}`;
+    const conceptForTelemetry = conceptTagLabel ?? 'concept';
+    const subjectForTelemetry = lessonContext?.subject ?? null;
+
+    const trackAdaptiveTutorOutcome = (
+      outcome: 'success' | 'error' | 'safety_block',
+      deliveryMode: AdaptiveTutorDeliveryMode,
+      extra?: Record<string, unknown>,
+    ) => {
+      trackEvent('success_adaptive_tutor_outcome', {
+        studentId: student.id,
+        outcome,
+        deliveryMode,
+        source: deliveryMode === 'deterministic_fallback' ? 'rules-engine' : 'openrouter',
+        subject: subjectForTelemetry,
+        concept: conceptForTelemetry,
+        ...extra,
+      });
+    };
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -864,13 +883,8 @@ const LearningAssistant: React.FC = () => {
         concept: conceptTag,
         curated_alternate: Boolean(curatedAlternate),
       });
-      trackEvent('success_adaptive_tutor_outcome', {
-        studentId: student.id,
-        outcome: 'success',
-        source: 'openrouter',
+      trackAdaptiveTutorOutcome('success', 'ai_direct', {
         plan: response.plan ?? undefined,
-        subject: lessonContext?.subject ?? null,
-        concept: conceptTag,
       });
     } catch (err) {
       console.error('[LearningAssistant] AI response failed', err);
@@ -883,13 +897,9 @@ const LearningAssistant: React.FC = () => {
           studentId: student.id,
           plan: planUsage.plan,
         });
-        trackEvent('success_adaptive_tutor_outcome', {
-          studentId: student.id,
-          outcome: 'error',
-          source: 'openrouter',
+        trackAdaptiveTutorOutcome('error', 'ai_direct', {
           reason: 'limit_reached',
           plan: planUsage.plan,
-          subject: lessonContext?.subject ?? null,
         });
         return;
       }
@@ -905,13 +915,8 @@ const LearningAssistant: React.FC = () => {
           studentId: student.id,
           reason: 'safety_guardrail',
         });
-        trackEvent('success_adaptive_tutor_outcome', {
-          studentId: student.id,
-          outcome: 'safety_block',
-          source: 'openrouter',
+        trackAdaptiveTutorOutcome('safety_block', 'ai_direct', {
           reason: 'safety_guardrail',
-          subject: lessonContext?.subject ?? null,
-          concept: conceptTagLabel ?? 'concept',
         });
         return;
       }
@@ -933,14 +938,9 @@ const LearningAssistant: React.FC = () => {
         concept: conceptTagLabel ?? 'concept',
         curated_alternate: false,
       });
-      trackEvent('success_adaptive_tutor_outcome', {
-        studentId: student.id,
-        outcome: 'error',
-        source: 'openrouter',
+      trackAdaptiveTutorOutcome('error', 'deterministic_fallback', {
         fallbackSource: 'rules-engine',
         reason: 'assistant_error_fallback',
-        subject: lessonContext?.subject ?? null,
-        concept: conceptTagLabel ?? 'concept',
       });
     } finally {
       setIsTyping(false);

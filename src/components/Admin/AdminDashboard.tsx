@@ -860,6 +860,13 @@ const AdminDashboard: React.FC = () => {
                     Confusion signals: {checkpointMetrics.checkpointConfusionSignalCount} • Abandon signals:{' '}
                     {checkpointMetrics.checkpointAbandonSignalCount}
                   </p>
+                  <p className="mb-4 text-xs text-slate-600">
+                    Tutor boundary: AI-direct {checkpointMetrics.adaptiveAiDirectCount} • deterministic fallback{' '}
+                    {checkpointMetrics.adaptiveDeterministicFallbackCount}
+                    {checkpointMetrics.adaptiveUnknownBoundaryCount > 0
+                      ? ` • unknown ${checkpointMetrics.adaptiveUnknownBoundaryCount}`
+                      : ''}
+                  </p>
                 </>
               )}
 
