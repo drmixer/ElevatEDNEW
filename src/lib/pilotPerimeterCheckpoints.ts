@@ -33,6 +33,11 @@ const pick = <T,>(items: T[], rand: () => number): T => {
   return items[idx] as T;
 };
 
+const pickBySeed = <T,>(items: T[], seed: number): T => {
+  const idx = Math.abs(seed) % items.length;
+  return items[idx] as T;
+};
+
 const hasNumbers = (text: string): boolean => /\d/.test(text);
 
 const perimeterEqTotal = (text: string): { sum: string; total: number; unit: string } | null => {
@@ -134,7 +139,7 @@ const buildComputeFromDims = (dims: PerimeterDimensions, intent: PilotCheckpoint
   };
 };
 
-const buildDefine = (rand: () => number): PilotCheckpointPayload => {
+const buildDefine = (seed: number): PilotCheckpointPayload => {
   const variants: Array<{ question: string; options: string[]; correctIndex: number; explanation: string }> = [
     {
       question: 'What does perimeter measure?',
@@ -171,13 +176,61 @@ const buildDefine = (rand: () => number): PilotCheckpointPayload => {
     },
   ];
 
-  const chosen = pick(variants, rand);
+  const chosen = pickBySeed(variants, seed);
   return {
     question: chosen.question,
     options: chosen.options.slice(0, 4),
     correctIndex: chosen.correctIndex,
     explanation: chosen.explanation,
   };
+};
+
+const buildScenarioWithoutNumbers = (text: string, seed: number): PilotCheckpointPayload => {
+  const normalized = (text ?? '').toLowerCase();
+  const context =
+    normalized.includes('garden') || normalized.includes('flower bed') || normalized.includes('fence')
+      ? { object: 'garden', border: 'fence' }
+      : normalized.includes('frame')
+        ? { object: 'picture frame', border: normalized.includes('ribbon') ? 'ribbon' : 'border' }
+        : { object: 'shape', border: 'border' };
+
+  const variants: PilotCheckpointPayload[] = [
+    {
+      question: `If you put ${context.border} around a ${context.object}, what are you measuring?`,
+      options: [
+        'The distance around the outside',
+        'The space inside the shape',
+        'The number of corners',
+        'The weight of the shape',
+      ],
+      correctIndex: 0,
+      explanation: 'Perimeter tells the distance around the outside edge.',
+    },
+    {
+      question: `A student traces the outside edge of a shape with a finger. What is being traced?`,
+      options: [
+        'The perimeter',
+        'The area',
+        'The corners only',
+        'The center of the shape',
+      ],
+      correctIndex: 0,
+      explanation: 'Tracing around the outside shows the perimeter.',
+    },
+    {
+      question: `Which part of a shape do you measure when you find perimeter?`,
+      options: [
+        'All the outside sides',
+        'Only one side',
+        'The inside space',
+        'Only the corners',
+      ],
+      correctIndex: 0,
+      explanation: 'Perimeter is the total distance around the outside.',
+    },
+  ];
+
+  return pickBySeed(variants, seed);
 };
 
 export const getDeterministicPerimeterCheckpoint = (input: {
@@ -189,22 +242,23 @@ export const getDeterministicPerimeterCheckpoint = (input: {
   if (!text.trim()) return null;
 
   const rand = mulberry32(input.seed);
+  const dims = extractPerimeterDimensionsFromText(text);
+  const eq = perimeterEqTotal(text);
 
-  // Respect "answerable from section content": only compute/scenario when the section includes numbers.
+  // Respect "answerable from section content": compute needs numbers. Scenario can
+  // still be conceptual when the section frames perimeter in a real-world context.
   const effectiveIntent: PilotCheckpointIntent =
-    (input.intent === 'compute' || input.intent === 'scenario') && !hasNumbers(text) ? 'define' : input.intent;
+    input.intent === 'compute' && !hasNumbers(text) && !dims && !eq ? 'define' : input.intent;
 
   if (effectiveIntent === 'define') {
-    return buildDefine(rand);
+    return buildDefine(input.seed);
   }
 
-  const dims = extractPerimeterDimensionsFromText(text);
   if (dims) {
     return buildComputeFromDims(dims, effectiveIntent, rand);
   }
 
   // If we can't extract a shape but the section includes an explicit equation, ask about the total.
-  const eq = perimeterEqTotal(text);
   if (eq) {
     const unit = unitAbbrev(eq.unit);
     const total = eq.total;
@@ -226,7 +280,10 @@ export const getDeterministicPerimeterCheckpoint = (input: {
     };
   }
 
-  // Final fallback.
-  return buildDefine(rand);
-};
+  if (effectiveIntent === 'scenario') {
+    return buildScenarioWithoutNumbers(text, input.seed);
+  }
 
+  // Final fallback.
+  return buildDefine(input.seed);
+};

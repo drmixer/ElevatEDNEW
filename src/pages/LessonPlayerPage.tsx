@@ -28,6 +28,7 @@ import type { LessonPracticeQuestion, Subject } from '../types';
 import trackEvent from '../lib/analytics';
 import LearningAssistant from '../components/Student/LearningAssistant';
 import { useStudentEvent } from '../hooks/useStudentData';
+import { shufflePracticeOptions } from '../lib/answerOrder';
 import { parseLessonContent, consolidateSections } from '../lib/lessonContentParser';
 import ContentIssueReport from '../components/Lesson/ContentIssueReport';
 import { getPracticeQuestionVisual } from '../lib/lessonVisuals';
@@ -57,43 +58,6 @@ const PhaseFallback = () => (
         <Loader2 className="h-6 w-6 animate-spin text-brand-blue/60" />
     </div>
 );
-
-const mulberry32 = (seed: number) => {
-    let t = seed >>> 0;
-    return () => {
-        t += 0x6D2B79F5;
-        let x = Math.imul(t ^ (t >>> 15), 1 | t);
-        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
-        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
-    };
-};
-
-const shuffleWithCorrectIndex = (
-    options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }>,
-    seed: number,
-): { options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> } => {
-    const next = options.slice();
-    const correct = next.find((o) => o.isCorrect);
-    const wrongs = next.filter((o) => !o.isCorrect);
-    if (!correct || wrongs.length < 2) return { options: next };
-
-    const rand = mulberry32(seed);
-    for (let i = wrongs.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(rand() * (i + 1));
-        [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
-    }
-
-    const targetIndex = Math.abs(seed) % next.length;
-    const arranged: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> = new Array(next.length);
-    arranged[targetIndex] = correct;
-    let w = 0;
-    for (let i = 0; i < arranged.length; i += 1) {
-        if (i === targetIndex) continue;
-        arranged[i] = wrongs[w] ?? wrongs[0] ?? correct;
-        w += 1;
-    }
-    return { options: arranged };
-};
 
 const generatePerimeterPracticeQuestions = (input: {
     lessonId: number;
@@ -149,7 +113,7 @@ const generatePerimeterPracticeQuestions = (input: {
             ...item.wrong.map((text) => ({ text, isCorrect: false, feedback: 'Check by adding all the side lengths.' })),
         ];
 
-        const { options } = shuffleWithCorrectIndex(optionsRaw, input.lessonId * 1_000 + index);
+        const options = shufflePracticeOptions(optionsRaw, input.lessonId * 1_000 + index);
         const visual = getPracticeQuestionVisual({
             lessonTitle: input.lessonTitle,
             subject: input.subject,

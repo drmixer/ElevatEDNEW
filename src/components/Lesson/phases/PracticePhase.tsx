@@ -17,6 +17,7 @@ import {
 import { LessonCard, LessonCardBody, LessonCardFooter } from '../LessonCard';
 import { useLessonStepper } from '../LessonStepper';
 import type { LessonPracticeQuestion, LessonPracticeOption } from '../../../types';
+import { shufflePracticeOptions, shuffleStringsWithCorrectIndex } from '../../../lib/answerOrder';
 import trackEvent from '../../../lib/analytics';
 import { getPracticeQuestionVisual } from '../../../lib/lessonVisuals';
 import type { Grade2MathPilotTopic } from '../../../lib/pilotConditions';
@@ -73,39 +74,9 @@ type ChallengeState =
 
 type ShapeType = 'square' | 'rectangle' | 'triangle';
 
-const mulberry32 = (seed: number) => {
-    let t = seed >>> 0;
-    return () => {
-        t += 0x6D2B79F5;
-        let x = Math.imul(t ^ (t >>> 15), 1 | t);
-        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
-        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
-    };
-};
+const showAnswerDebug = import.meta.env.DEV;
 
-const arrangeOptionsWithCorrectAt = (options: LessonPracticeOption[], seed: number): LessonPracticeOption[] => {
-    const correct = options.find((o) => o.isCorrect);
-    const wrongs = options.filter((o) => !o.isCorrect);
-    if (!correct || wrongs.length < 2) return options;
-
-    const rand = mulberry32(seed);
-    const shuffledWrongs = wrongs.slice();
-    for (let i = shuffledWrongs.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(rand() * (i + 1));
-        [shuffledWrongs[i], shuffledWrongs[j]] = [shuffledWrongs[j], shuffledWrongs[i]];
-    }
-
-    const targetIndex = Math.abs(seed) % options.length;
-    const arranged: LessonPracticeOption[] = new Array(options.length);
-    arranged[targetIndex] = correct;
-    let w = 0;
-    for (let i = 0; i < arranged.length; i += 1) {
-        if (i === targetIndex) continue;
-        arranged[i] = shuffledWrongs[w] ?? shuffledWrongs[0] ?? correct;
-        w += 1;
-    }
-    return arranged;
-};
+const optionLetter = (index: number): string => String.fromCharCode(65 + index);
 
 const detectShapeFromText = (text: string | null | undefined): ShapeType | null => {
     const t = (text ?? '').toString().toLowerCase();
@@ -142,7 +113,19 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
     const [hintUsedByQuestion, setHintUsedByQuestion] = useState<Set<number>>(() => new Set());
     const [stepsShown, setStepsShown] = useState<Set<number>>(() => new Set());
 
-    const currentQuestion = questions[currentIndex];
+    const arrangedQuestions = useMemo(
+        () =>
+            questions.map((question, index) => ({
+                ...question,
+                options: shufflePracticeOptions(
+                    question.options,
+                    (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 100_000 + question.id + index,
+                ),
+            })),
+        [lessonId, questions],
+    );
+
+    const currentQuestion = arrangedQuestions[currentIndex];
     const resolvedPilotTopic = pilotTopic ?? 'perimeter';
     const nonMathTopic = useMemo(
         () =>
@@ -201,7 +184,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
 
     const masteryAttempts = useMemo(() => {
         const attempts: Array<{ isCorrect: boolean; usedHint: boolean }> = [];
-        questions.forEach((question) => {
+        arrangedQuestions.forEach((question) => {
             const state = questionStates.get(question.id);
             if (!state?.isAnswered) return;
             attempts.push({
@@ -210,44 +193,56 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
             });
         });
         return attempts;
-    }, [hintUsedByQuestion, questionStates, questions]);
+    }, [arrangedQuestions, hintUsedByQuestion, questionStates]);
 
     const masteryTrend = useMemo(
         () =>
             evaluateMasteryTrend({
                 attempts: masteryAttempts,
-                questionCount: questions.length,
+                questionCount: arrangedQuestions.length,
                 quickReviewShown: quickReview.isVisible,
                 quickReviewCorrect: quickReview.isCorrect,
             }),
-        [masteryAttempts, quickReview.isCorrect, quickReview.isVisible, questions.length],
+        [arrangedQuestions.length, masteryAttempts, quickReview.isCorrect, quickReview.isVisible],
     );
 
     const quickReviewContent = useMemo(() => {
-        if (pilotTelemetryEnabled) {
-            return getGrade2MathQuickReview({
+        const baseQuickReview = pilotTelemetryEnabled
+            ? getGrade2MathQuickReview({
                 topic: resolvedPilotTopic,
                 questionPrompt: currentQuestion?.prompt ?? '',
-            });
-        }
-        if (k5MathTopic) {
-            return getDeterministicK5MathQuickReview({
-                lessonId,
-                subject: subject ?? null,
-                gradeBand: gradeBand ?? null,
-                lessonTitle,
-                lessonContent,
-                questionPrompt: currentQuestion?.prompt ?? null,
-                topic: k5MathTopic,
-            });
-        }
-        return getDeterministicNonMathQuickReview({
-            subject: nonMathRemediationSubject ?? null,
-            lessonTitle,
-            lessonContent,
-            questionPrompt: currentQuestion?.prompt ?? null,
-        });
+            })
+            : k5MathTopic
+                ? getDeterministicK5MathQuickReview({
+                    lessonId,
+                    subject: subject ?? null,
+                    gradeBand: gradeBand ?? null,
+                    lessonTitle,
+                    lessonContent,
+                    questionPrompt: currentQuestion?.prompt ?? null,
+                    topic: k5MathTopic,
+                })
+                : getDeterministicNonMathQuickReview({
+                    subject: nonMathRemediationSubject ?? null,
+                    lessonTitle,
+                    lessonContent,
+                    questionPrompt: currentQuestion?.prompt ?? null,
+                });
+        if (!baseQuickReview) return null;
+
+        const shuffleSeed = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentIndex * 10 + 5;
+        const shuffled = shuffleStringsWithCorrectIndex(
+            baseQuickReview.options,
+            baseQuickReview.correctIndex,
+            shuffleSeed,
+        );
+        return {
+            ...baseQuickReview,
+            options: shuffled.options,
+            correctIndex: shuffled.correctIndex,
+        };
     }, [
+        currentIndex,
         currentQuestion?.prompt,
         gradeBand,
         k5MathTopic,
@@ -567,9 +562,13 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                     questionPrompt: currentQuestion?.prompt ?? null,
                 });
         if (!baseQuestion) return null;
-        const options = arrangeOptionsWithCorrectAt(baseQuestion.options, (lessonId ?? 0) * 100 + 17);
+        const options = shufflePracticeOptions(
+            baseQuestion.options,
+            (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentIndex * 10 + 17,
+        );
         return { ...baseQuestion, options };
     }, [
+        currentIndex,
         currentQuestion?.prompt,
         gradeBand,
         k5MathTopic,
@@ -738,7 +737,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                 Practice Question
                             </h2>
                             <p className="text-sm text-slate-500">
-                                Question {currentIndex + 1} of {questions.length}
+                                Question {currentIndex + 1} of {arrangedQuestions.length}
                             </p>
                         </div>
                         <div className="text-sm font-medium text-slate-600">
@@ -748,7 +747,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
 
                     {/* Progress dots */}
                     <div className="mt-3 flex items-center gap-1.5">
-                        {questions.map((q, index) => {
+                        {arrangedQuestions.map((q, index) => {
                             const state = questionStates.get(q.id);
                             return (
                                 <div
@@ -837,6 +836,11 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                     <h3 className="mb-5 text-2xl font-bold leading-snug text-slate-900 whitespace-normal break-words md:text-3xl">
                                         {challengeQuestion.prompt}
                                     </h3>
+                                    {showAnswerDebug && (
+                                        <div className="mb-3 text-xs font-medium uppercase tracking-wide text-amber-700">
+                                            Debug: correct answer {optionLetter(challengeQuestion.options.findIndex((option) => option.isCorrect))}
+                                        </div>
+                                    )}
 
                                     <div className="space-y-3">
                                         {challengeQuestion.options.map((option, index) => {
@@ -883,7 +887,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                                         ) : showIncorrect ? (
                                                             <XCircle className="h-5 w-5" />
                                                         ) : (
-                                                            String.fromCharCode(65 + index)
+                                                            optionLetter(index)
                                                         )}
                                                     </span>
 
@@ -967,6 +971,11 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                     <div className="mt-3 text-base font-bold leading-snug text-slate-900 whitespace-normal break-words">
                                         {quickReviewContent.prompt}
                                     </div>
+                                    {showAnswerDebug && (
+                                        <div className="mt-2 text-xs font-medium uppercase tracking-wide text-amber-700">
+                                            Debug: correct answer {optionLetter(quickReviewContent.correctIndex)}
+                                        </div>
+                                    )}
                                     <div className="mt-2 grid gap-2">
                                         {quickReviewContent.options.map((option, idx) => {
                                             const selected = quickReview.selectedIndex === idx;
@@ -991,7 +1000,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                                         showIncorrect ? 'border-rose-300 bg-rose-50 text-rose-900' : '',
                                                     ].join(' ')}
                                                 >
-                                                    <span className="mr-2 text-slate-500">{String.fromCharCode(65 + idx)}.</span>
+                                                    <span className="mr-2 text-slate-500">{optionLetter(idx)}.</span>
                                                     <span className="block whitespace-normal break-words">{option}</span>
                                                 </button>
                                             );
@@ -1034,6 +1043,11 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                 <h3 className="mb-5 text-2xl font-bold leading-snug text-slate-900 whitespace-normal break-words md:text-3xl">
                                 {currentQuestion?.prompt}
                                 </h3>
+                            )}
+                            {!showChallengeFlow && showAnswerDebug && currentQuestion && (
+                                <div className="mb-3 text-xs font-medium uppercase tracking-wide text-amber-700">
+                                    Debug: correct answer {optionLetter(currentQuestion.options.findIndex((option) => option.isCorrect))}
+                                </div>
                             )}
 
                             {/* Hint button (before answering) */}
@@ -1101,7 +1115,7 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
                                                 ) : showIncorrect ? (
                                                     <XCircle className="h-5 w-5" />
                                                 ) : (
-                                                    String.fromCharCode(65 + index)
+                                                    optionLetter(index)
                                                 )}
                                             </span>
 

@@ -21,41 +21,23 @@ const encodeSvgDataUrl = (svg: string): string =>
 const computeRectSize = (widthUnits: number, heightUnits: number) => {
   const safeW = Math.max(1, Math.min(999, widthUnits));
   const safeH = Math.max(1, Math.min(999, heightUnits));
-  const ratio = safeW / safeH;
-
-  // The SVG canvas is 520x220, with a title and labels. Keep the shape itself
-  // comfortably within the viewBox so tall rectangles don't get clipped.
   const maxWidth = 300;
   const maxHeight = 140;
-  const minWidth = 140;
+  const minWidth = 80;
   const minHeight = 90;
+  const maxScale = Math.min(maxWidth / safeW, maxHeight / safeH);
 
-  if (ratio >= 1) {
-    let width = maxWidth;
-    let height = Math.round(width / ratio);
-    if (height > maxHeight) {
-      height = maxHeight;
-      width = Math.round(height * ratio);
-    }
-    if (height < minHeight) {
-      height = minHeight;
-      width = Math.min(maxWidth, Math.round(height * ratio));
-    }
-    width = Math.max(1, Math.min(maxWidth, width));
-    height = Math.max(1, Math.min(maxHeight, height));
-    return { width, height };
+  let scale = maxScale;
+  let width = Math.round(safeW * scale);
+  let height = Math.round(safeH * scale);
+
+  if (width < minWidth && height < minHeight) {
+    const minScale = Math.max(minWidth / safeW, minHeight / safeH);
+    scale = Math.min(maxScale, minScale);
+    width = Math.round(safeW * scale);
+    height = Math.round(safeH * scale);
   }
 
-  let height = maxHeight;
-  let width = Math.round(height * ratio);
-  if (width > maxWidth) {
-    width = maxWidth;
-    height = Math.round(width / ratio);
-  }
-  if (width < minWidth) {
-    width = minWidth;
-    height = Math.min(maxHeight, Math.round(width / ratio));
-  }
   width = Math.max(1, Math.min(maxWidth, width));
   height = Math.max(1, Math.min(maxHeight, height));
   return { width, height };
@@ -419,8 +401,10 @@ const extractPerimeterDimensions = (
     }
   }
 
-  // Square: "each side ... 3 feet"
-  for (const squareSide of text.matchAll(/each\s+side.*?(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\b/gi)) {
+  // Square: "each side ... 3 feet", "sides that are each 3 feet", etc.
+  for (const squareSide of text.matchAll(
+    /square[^.]*?(?:each\s+side|sides?\s+(?:that\s+are\s+)?each)[^0-9]{0,20}(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\b/gi,
+  )) {
     const a = Number.parseInt(squareSide[1] ?? '', 10);
     const unit = (squareSide[2] ?? 'units').toLowerCase();
     if (Number.isFinite(a) && a > 0) {
@@ -438,16 +422,19 @@ const extractPerimeterDimensions = (
     }
   }
 
-  // Triangle: "A triangle has sides 2 feet, 3 feet, and 4 feet."
-  for (const triWords of text.matchAll(
-    /triangle[^.]*?sides?\s*(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)?[^0-9]+(\d+)\s*(?:\2)?[^0-9]+(\d+)\s*(?:\2)?/gi,
-  )) {
-    const a = Number.parseInt(triWords[1] ?? '', 10);
-    const b = Number.parseInt(triWords[3] ?? '', 10);
-    const c = Number.parseInt(triWords[4] ?? '', 10);
-    const unit = ((triWords[2] ?? 'units') as string).toLowerCase();
+  // Triangle: parse the first triangle sentence and use its first 3 side lengths.
+  for (const triSentence of text.matchAll(/triangle[^.]*/gi)) {
+    const sideMatches = Array.from(
+      (triSentence[0] ?? '').matchAll(/(\d+)\s*(feet|foot|ft|inches|inch|in|cm|m)\b/gi),
+    );
+    if (sideMatches.length < 3) continue;
+
+    const a = Number.parseInt(sideMatches[0]?.[1] ?? '', 10);
+    const b = Number.parseInt(sideMatches[1]?.[1] ?? '', 10);
+    const c = Number.parseInt(sideMatches[2]?.[1] ?? '', 10);
+    const unit = (sideMatches[0]?.[2] ?? 'units').toLowerCase();
     if (Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(c) && a > 0 && b > 0 && c > 0) {
-      pushCandidate(triWords.index, { shape: 'triangle', a, b, c, unit });
+      pushCandidate(triSentence.index, { shape: 'triangle', a, b, c, unit });
     }
   }
 

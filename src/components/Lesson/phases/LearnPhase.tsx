@@ -13,6 +13,8 @@ import { LessonCard, LessonCardBody, LessonCardFooter } from '../LessonCard';
 import { LessonNavigation } from '../LessonNavigation';
 import { useLessonStepper } from '../LessonStepper';
 import type { LessonSection } from '../../../types/lesson';
+import { shuffleStringsWithCorrectIndex } from '../../../lib/answerOrder';
+import { resolveCheckpointIntent } from '../../../lib/checkpointIntent';
 import getTutorResponse from '../../../services/getTutorResponse';
 import { extractPerimeterDimensionsFromText, getSectionVisual } from '../../../lib/lessonVisuals';
 import trackEvent from '../../../lib/analytics';
@@ -61,6 +63,10 @@ type QuickReviewState = {
     isCorrect: boolean | null;
 };
 
+const showAnswerDebug = import.meta.env.DEV;
+
+const optionLetter = (index: number): string => String.fromCharCode(65 + index);
+
 const getPilotCheckpointCacheKey = (lessonId: number | undefined, sectionIndex: number, intent: CheckpointIntent) => {
     const lid = typeof lessonId === 'number' && Number.isFinite(lessonId) ? lessonId : 'unknown';
     return `pilot_checkpoint_v2:${lid}:${sectionIndex}:${intent}`;
@@ -78,48 +84,6 @@ const extractJsonObject = (raw: string): string | null => {
     const end = raw.lastIndexOf('}');
     if (start === -1 || end === -1 || end <= start) return null;
     return raw.slice(start, end + 1);
-};
-
-const mulberry32 = (seed: number) => {
-    let t = seed >>> 0;
-    return () => {
-        t += 0x6D2B79F5;
-        let x = Math.imul(t ^ (t >>> 15), 1 | t);
-        x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
-        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
-    };
-};
-
-const shuffleWithCorrectIndex = (
-    options: string[],
-    correctIndex: number,
-    seed: number,
-): { options: string[]; correctIndex: number } => {
-    const safeOptions = options.map((o) => (o ?? '').toString().trim()).filter(Boolean);
-    if (safeOptions.length < 3) {
-        return { options: safeOptions, correctIndex: Math.max(0, Math.min(correctIndex, safeOptions.length - 1)) };
-    }
-
-    const correctText = safeOptions[Math.max(0, Math.min(correctIndex, safeOptions.length - 1))] ?? safeOptions[0] ?? '';
-    const wrongs = safeOptions.filter((_, idx) => idx !== correctIndex);
-
-    const rand = mulberry32(seed);
-    for (let i = wrongs.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(rand() * (i + 1));
-        [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
-    }
-
-    const targetIndex = Math.abs(seed) % safeOptions.length;
-    const arranged: string[] = new Array(safeOptions.length);
-    arranged[targetIndex] = correctText;
-    let w = 0;
-    for (let i = 0; i < arranged.length; i += 1) {
-        if (i === targetIndex) continue;
-        arranged[i] = wrongs[w] ?? wrongs[0] ?? '';
-        w += 1;
-    }
-
-    return { options: arranged, correctIndex: targetIndex };
 };
 
 const containsBannedGenericCoaching = (text: string): boolean => {
@@ -180,11 +144,6 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, [currentSectionIndex]);
 
-    const checkpointIntent: CheckpointIntent = useMemo(() => {
-        const intents: CheckpointIntent[] = ['define', 'compute', 'scenario'];
-        return intents[currentSectionIndex % intents.length] ?? 'define';
-    }, [currentSectionIndex]);
-
     const resolvedPilotTopic = useMemo(() => {
         if (pilotTopic) return pilotTopic;
         return getGrade2MathPilotTopic({ subject, gradeBand, lessonTitle });
@@ -207,6 +166,15 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
             lessonContent: currentSection?.content ?? '',
         });
     }, [currentSection?.content, gradeBand, lessonTitle, subject]);
+
+    const checkpointIntent: CheckpointIntent = useMemo(() => {
+        return resolveCheckpointIntent({
+            sections,
+            sectionIndex: currentSectionIndex,
+            topic: resolvedK5MathTopic,
+            lessonTitle: lessonTitle ?? null,
+        });
+    }, [currentSectionIndex, lessonTitle, resolvedK5MathTopic, sections]);
 
     const sectionVisual = useMemo(() => {
         if (!currentSection) return null;
@@ -293,21 +261,33 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
     const quickReviewContent = useMemo(() => {
         if (!checkpointEnabled) return null;
-        if (pilotTelemetryEnabled) {
-            return getGrade2MathQuickReview({
+        const baseQuickReview = pilotTelemetryEnabled
+            ? getGrade2MathQuickReview({
                 topic: resolvedPilotTopic ?? 'perimeter',
                 sectionContent: currentSection?.content ?? '',
+            })
+            : getDeterministicK5MathQuickReview({
+                lessonId,
+                subject: subject ?? null,
+                gradeBand: gradeBand ?? null,
+                lessonTitle: lessonTitle ?? null,
+                lessonContent: currentSection?.content ?? '',
+                topic: resolvedK5MathTopic,
             });
-        }
-        return getDeterministicK5MathQuickReview({
-            lessonId,
-            subject: subject ?? null,
-            gradeBand: gradeBand ?? null,
-            lessonTitle: lessonTitle ?? null,
-            lessonContent: currentSection?.content ?? '',
-            topic: resolvedK5MathTopic,
-        });
-    }, [checkpointEnabled, currentSection?.content, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, resolvedK5MathTopic, resolvedPilotTopic, subject]);
+        if (!baseQuickReview) return null;
+
+        const shuffleSeed = (Number.isFinite(lessonId) ? (lessonId as number) : 0) * 10_000 + currentSectionIndex * 10 + 7;
+        const shuffled = shuffleStringsWithCorrectIndex(
+            baseQuickReview.options,
+            baseQuickReview.correctIndex,
+            shuffleSeed,
+        );
+        return {
+            ...baseQuickReview,
+            options: shuffled.options,
+            correctIndex: shuffled.correctIndex,
+        };
+    }, [checkpointEnabled, currentSection?.content, currentSectionIndex, gradeBand, lessonId, lessonTitle, pilotTelemetryEnabled, resolvedK5MathTopic, resolvedPilotTopic, subject]);
 
     const isCheckpointHintShown = useMemo(
         () => checkpointHintShownBySection.get(currentSectionIndex) ?? false,
@@ -445,7 +425,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return;
             }
 
-            const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+            const shuffled = shuffleStringsWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
             const finalLocal: CheckpointPayload = {
                 ...local,
                 options: shuffled.options,
@@ -498,7 +478,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 return;
             }
 
-            const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+            const shuffled = shuffleStringsWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
             const finalLocal: CheckpointPayload = {
                 ...local,
                 options: shuffled.options,
@@ -662,7 +642,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 throw new Error('Invalid checkpoint payload');
             }
 
-            const shuffled = shuffleWithCorrectIndex(options, correctIndex, shuffleSeed);
+            const shuffled = shuffleStringsWithCorrectIndex(options, correctIndex, shuffleSeed);
             const finalPayload: CheckpointPayload = {
                 visual,
                 question,
@@ -704,7 +684,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                 seed: seedBase + intentOffset + 7,
             });
             if (local) {
-                const shuffled = shuffleWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
+                const shuffled = shuffleStringsWithCorrectIndex(local.options, local.correctIndex, shuffleSeed);
                 const finalLocal: CheckpointPayload = {
                     ...local,
                     options: shuffled.options,
@@ -1204,12 +1184,17 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                                         showIncorrect ? 'border-rose-300 bg-rose-50 text-rose-900' : '',
                                                     ].join(' ')}
                                                 >
-                                                    <span className="mr-2 text-slate-500">{String.fromCharCode(65 + idx)}.</span>
+                                                    <span className="mr-2 text-slate-500">{optionLetter(idx)}.</span>
                                                     <span className="block whitespace-normal break-words">{option}</span>
                                                 </button>
                                             );
                                         })}
                                     </div>
+                                    {showAnswerDebug && (
+                                        <div className="mt-2 text-xs font-medium uppercase tracking-wide text-amber-700">
+                                            Debug: correct answer {optionLetter(quickReviewContent.correctIndex)}
+                                        </div>
+                                    )}
 
                                     {quickReviewState.isCorrect === true && (
                                         <div className="mt-3 text-sm text-emerald-900">
@@ -1323,6 +1308,11 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                 <div className="text-base md:text-lg font-bold text-slate-900 leading-snug whitespace-normal break-words">
                                     {checkpointState.payload.question}
                                 </div>
+                                {showAnswerDebug && (
+                                    <div className="mt-2 text-xs font-medium uppercase tracking-wide text-amber-700">
+                                        Debug: correct answer {optionLetter(checkpointState.payload.correctIndex)}
+                                    </div>
+                                )}
                                 <div className="mt-3 grid gap-2">
                                         {checkpointState.payload.options.map((option, idx) => {
                                             const selected = checkpointState.selectedIndex === idx;
@@ -1350,7 +1340,7 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
                                                     ].join(' ')}
                                                 >
                                                     <span className="mr-2 text-slate-500">
-                                                        {String.fromCharCode(65 + idx)}.
+                                                        {optionLetter(idx)}.
                                                     </span>
                                                     <span className="block whitespace-normal break-words">{option}</span>
                                                 </button>

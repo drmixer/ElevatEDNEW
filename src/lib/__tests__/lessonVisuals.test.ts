@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { getPracticeQuestionVisual, getSectionVisual } from '../lessonVisuals';
+import { extractPerimeterDimensionsFromText, getPracticeQuestionVisual, getSectionVisual } from '../lessonVisuals';
+
+const decodeSvg = (dataUrl: string): string => decodeURIComponent(dataUrl.split(',')[1] ?? '');
 
 describe('lessonVisuals', () => {
   it('keeps deterministic perimeter visuals for math perimeter lessons', () => {
@@ -14,6 +16,48 @@ describe('lessonVisuals', () => {
     expect(visual).not.toBeNull();
     expect(visual?.alt).toContain('Rectangle');
     expect(visual?.svg.startsWith('data:image/svg+xml')).toBe(true);
+  });
+
+  it('extracts square and triangle dimensions from the lesson phrasing used in the pilot', () => {
+    expect(
+      extractPerimeterDimensionsFromText(
+        'Suppose a square sandbox has sides that are each 3 feet long. Add 3 + 3 + 3 + 3 to find the perimeter.',
+      ),
+    ).toEqual({
+      shape: 'square',
+      a: 3,
+      unit: 'feet',
+    });
+
+    expect(
+      extractPerimeterDimensionsFromText(
+        'Suppose a triangle has side lengths of 2 feet, 3 feet, and 4 feet. Add all the sides.',
+      ),
+    ).toEqual({
+      shape: 'triangle',
+      a: 2,
+      b: 3,
+      c: 4,
+      unit: 'feet',
+    });
+  });
+
+  it('preserves rectangle proportions in perimeter practice visuals', () => {
+    const visual = getPracticeQuestionVisual({
+      lessonTitle: 'Perimeter (intro) Launch Lesson',
+      subject: 'Mathematics',
+      gradeBand: '2',
+      prompt: 'A rectangle is 4 feet long and 2 feet wide. What is the perimeter?',
+    });
+    expect(visual?.alt).toContain('Rectangle');
+
+    const svg = decodeSvg(visual?.svg ?? '');
+    const rectMatch = svg.match(/<rect x="[^"]+" y="[^"]+" width="(\d+)" height="(\d+)"/);
+    expect(rectMatch).not.toBeNull();
+
+    const width = Number.parseInt(rectMatch?.[1] ?? '0', 10);
+    const height = Number.parseInt(rectMatch?.[2] ?? '0', 10);
+    expect(width).toBeLessThan(height);
   });
 
   it('returns generalized K-5 visuals for non-perimeter math topics', () => {

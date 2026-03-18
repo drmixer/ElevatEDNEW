@@ -1,4 +1,5 @@
 import type { LessonPracticeOption, LessonPracticeQuestion } from '../types';
+import { shufflePracticeOptions } from './answerOrder';
 import type { Grade2MathPilotTopic } from './pilotConditions';
 import { extractPerimeterDimensionsFromText, getPracticeQuestionVisual } from './lessonVisuals';
 import {
@@ -7,15 +8,6 @@ import {
   type PilotCheckpointPayload,
 } from './pilotPerimeterCheckpoints';
 import { getPerimeterQuickReview, type PilotQuickReview } from './pilotPerimeterQuickReview';
-
-type TopicPrompt = {
-  prompt: string;
-  correct: string;
-  wrong: string[];
-  explanation: string;
-  hint?: string;
-  steps?: string[];
-};
 
 const mulberry32 = (seed: number) => {
   let t = seed >>> 0;
@@ -27,31 +19,13 @@ const mulberry32 = (seed: number) => {
   };
 };
 
-const shuffleWithCorrectIndex = (
-  options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }>,
-  seed: number,
-): { options: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> } => {
-  const next = options.slice();
-  const correct = next.find((option) => option.isCorrect);
-  const wrongs = next.filter((option) => !option.isCorrect);
-  if (!correct || wrongs.length < 2) return { options: next };
-
-  const rand = mulberry32(seed);
-  for (let i = wrongs.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(rand() * (i + 1));
-    [wrongs[i], wrongs[j]] = [wrongs[j], wrongs[i]];
-  }
-
-  const targetIndex = Math.abs(seed) % next.length;
-  const arranged: Array<{ text: string; isCorrect: boolean; feedback?: string | null }> = new Array(next.length);
-  arranged[targetIndex] = correct;
-  let w = 0;
-  for (let i = 0; i < arranged.length; i += 1) {
-    if (i === targetIndex) continue;
-    arranged[i] = wrongs[w] ?? wrongs[0] ?? correct;
-    w += 1;
-  }
-  return { options: arranged };
+type TopicPrompt = {
+  prompt: string;
+  correct: string;
+  wrong: string[];
+  explanation: string;
+  hint?: string;
+  steps?: string[];
 };
 
 const extractPositiveIntegers = (text: string | null | undefined): number[] => {
@@ -245,7 +219,7 @@ export const generateGrade2MathPracticeQuestions = (input: {
       { text: item.correct, isCorrect: true, feedback: 'Correct.' },
       ...item.wrong.map((text) => ({ text, isCorrect: false, feedback: 'Try checking the meaning of the numbers and words.' })),
     ];
-    const { options } = shuffleWithCorrectIndex(optionsRaw, input.lessonId * 1_000 + index);
+    const options = shufflePracticeOptions(optionsRaw, input.lessonId * 1_000 + index);
     const visual = getPracticeQuestionVisual({
       lessonTitle: input.lessonTitle,
       subject: input.subject,
