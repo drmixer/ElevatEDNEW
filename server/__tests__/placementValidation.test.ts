@@ -21,6 +21,9 @@ describe('placementValidation', () => {
             bankQuestionId: 1,
             prompt: 'Pick one',
             type: 'multiple_choice',
+            strand: 'number_sense',
+            targetStandards: ['3.NBT.A.1'],
+            metadata: { placement_level: 3 },
             options: [
               { id: 11, text: 'Correct answer (on-grade).', isCorrect: true },
               { id: 12, text: 'Common misconception.', isCorrect: false },
@@ -38,6 +41,9 @@ describe('placementValidation', () => {
         bankQuestionId: 2,
         prompt: 'What is 1+1?',
         type: 'multiple_choice',
+        strand: 'number_sense',
+        targetStandards: ['1.OA.C.6'],
+        metadata: { placement_level: 3 },
         options: [
           { id: 21, text: ' 2 ', isCorrect: true },
           { id: 22, text: '2', isCorrect: false },
@@ -58,6 +64,9 @@ describe('placementValidation', () => {
           bankQuestionId: 3,
           prompt: 'Explain your reasoning.',
           type: 'essay',
+          strand: 'number_sense',
+          targetStandards: ['3.OA.A.1'],
+          metadata: { placement_level: 3 },
           options: [],
         },
       ]),
@@ -71,9 +80,28 @@ describe('placementValidation', () => {
           bankQuestionId: 4,
           prompt: 'Which of the following best describes ecosystems?',
           type: 'multiple_choice',
+          strand: 'reading',
+          targetStandards: ['RI.4.1'],
+          metadata: { placement_level: 4 },
           options: [
             { id: 41, text: 'A set of interactions between living and nonliving things', isCorrect: true },
             { id: 42, text: 'Something only scientists need to know', isCorrect: false },
+          ],
+        },
+      ]),
+    ).toThrow(HttpError);
+  });
+
+  it('rejects questions missing required placement metadata', () => {
+    expect(() =>
+      validatePlacementQuestions([
+        {
+          bankQuestionId: 5,
+          prompt: 'What is 6 x 7?',
+          type: 'multiple_choice',
+          options: [
+            { id: 51, text: '42', isCorrect: true },
+            { id: 52, text: '36', isCorrect: false },
           ],
         },
       ]),

@@ -4,7 +4,9 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
+import { normalizePlacementLevel, placementWindowForLevel, standardsFromValue } from './utils/placementMetadata.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type DiagnosticOption = {
@@ -172,10 +174,14 @@ const insertDiagnostic = async (
   subjectId: number | null,
   subjectKey: string,
 ): Promise<void> => {
+  const placementLevel = normalizePlacementLevel(config.grade_band);
   const metadata = {
     purpose: 'diagnostic',
     grade_band: config.grade_band,
     subject_key: subjectKey,
+    placement_level: placementLevel,
+    placement_window: placementWindowForLevel(placementLevel),
+    phase: 'subject_placement_v1',
     blueprint: config.blueprint,
   };
 
@@ -257,17 +263,21 @@ const insertDiagnostic = async (
       (sectionRows[0]?.id as number | undefined) ??
       null;
 
+    const standards = standardsFromValue(item.standard);
     const tags: string[] = [];
-    if (item.standard) tags.push(item.standard);
+    standards.forEach((standard) => tags.push(standard));
     if (item.strand) tags.push(item.strand);
 
     const questionMeta: Record<string, unknown> = {
       placement: item.placement ?? {},
       strand: item.strand,
       standard: item.standard,
+      standards,
       purpose: 'diagnostic',
       grade_band: config.grade_band,
       subject_key: subjectKey,
+      placement_level: placementLevel,
+      phase: 'subject_placement_v1',
     };
 
     const { data: questionRow, error: questionError } = await supabase
@@ -333,17 +343,43 @@ const insertDiagnostic = async (
 };
 
 const main = async () => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  if (rest.length > 0) {
+    throw new Error(`Unknown argument: ${rest[0]}`);
+  }
+
+  logWriteMode(apply, 'diagnostic assessments');
   const supabase = createServiceRoleClient();
   const subjects = await fetchSubjects(supabase);
 
   let totalSeeded = 0;
+  let totalDiagnostics = 0;
+  let totalItems = 0;
+  const loadedFiles: Array<{ filePath: string; entries: DiagnosticConfig[] }> = [];
 
   for (const filePath of DIAGNOSTIC_FILES) {
     const config = await loadStructuredFile<DiagnosticFile>(filePath);
     const entries = Object.values(config ?? {});
+    loadedFiles.push({ filePath, entries });
 
     if (!entries.length) {
       console.log(`No diagnostic definitions found in ${filePath}`);
+      continue;
+    }
+
+    totalDiagnostics += entries.length;
+    totalItems += entries.reduce((sum, entry) => sum + entry.items.length, 0);
+  }
+
+  if (!apply) {
+    console.log(
+      `Would replace ${totalDiagnostics} diagnostic assessments across ${loadedFiles.length} files (${totalItems} total items).`,
+    );
+    return;
+  }
+
+  for (const { filePath, entries } of loadedFiles) {
+    if (!entries.length) {
       continue;
     }
 

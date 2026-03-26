@@ -74,15 +74,18 @@ import {
 import type {
   CatalogAvatar,
   StudentPathEntry,
+  StudentSubjectPath,
   TutorPersona as CatalogTutorPersona,
 } from '../../services/onboardingService';
 import { describePathEntryReason, humanizeStandard } from '../../lib/pathReason';
 import {
   consumeAdaptiveFlash,
   studentPathQueryKey,
+  studentPathsQueryKey,
   studentDashboardQueryKey,
   studentStatsQueryKey,
   useStudentPath,
+  useStudentPaths,
   useStudentStats,
   type AdaptiveFlash,
 } from '../../hooks/useStudentData';
@@ -257,6 +260,70 @@ const pickDiagnosticFocus = (metadata: Record<string, unknown> | null | undefine
   return null;
 };
 
+const SubjectPlacementOverview: React.FC<{
+  paths: Array<{
+    subject: string | null;
+    state: {
+      expected_level?: number | null;
+      working_level?: number | null;
+      level_confidence?: number | null;
+    } | null;
+    path: { entries: StudentPathEntry[] } | null;
+  }>;
+}> = ({ paths }) => {
+  const visible = paths.filter((entry) => entry.subject && entry.state).slice(0, 2);
+  if (!visible.length) return null;
+
+  return (
+    <div className="rounded-3xl bg-white border border-slate-200 shadow-sm p-5">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-xs uppercase tracking-wide text-slate-500">Subject placement</p>
+          <h3 className="text-lg font-semibold text-slate-900">Starting points by subject</h3>
+        </div>
+        <div className="text-xs text-slate-500">Deterministic placement first</div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {visible.map((entry) => {
+          const subjectLabel = formatSubjectLabel(entry.subject);
+          const expected = entry.state?.expected_level ?? null;
+          const working = entry.state?.working_level ?? null;
+          const confidence = typeof entry.state?.level_confidence === 'number' ? entry.state.level_confidence : null;
+          const firstUpNext = entry.path?.entries?.[0] ?? null;
+          const meta = (firstUpNext?.metadata ?? {}) as Record<string, unknown>;
+          const nextTitle =
+            (meta.module_title as string | undefined) ??
+            (meta.module_slug as string | undefined) ??
+            'First module ready';
+
+          return (
+            <div key={entry.subject ?? subjectLabel} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">{subjectLabel}</p>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Expected level {expected ?? '—'} · Working level {working ?? '—'}
+                  </p>
+                </div>
+                <span className="text-[11px] rounded-full border border-slate-200 bg-white px-2 py-1 text-slate-600">
+                  {confidence != null ? `${Math.round(confidence * 100)}% confidence` : 'Placement saved'}
+                </span>
+              </div>
+              <p className="mt-3 text-xs text-slate-600">
+                {working != null && expected != null && working !== expected
+                  ? `Diagnostic moved ${subjectLabel} away from the starting prior.`
+                  : `Diagnostic confirmed the starting prior for ${subjectLabel}.`}
+              </p>
+              <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Up next</p>
+              <p className="text-sm text-slate-800">{nextTitle}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 const StudentDashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const student = (user as Student) ?? null;
@@ -369,6 +436,7 @@ const StudentDashboard: React.FC = () => {
     refresh: refreshStudentPath,
     path: studentPath,
   } = useStudentPath(student?.id);
+  const { paths: subjectPaths } = useStudentPaths(student?.id);
   const pathLoading = pathIsLoading || pathIsFetching;
 
   const {
@@ -1105,7 +1173,9 @@ const StudentDashboard: React.FC = () => {
   const activeCelebration = celebrationQueue[0] ?? null;
   const quickStats = dashboard?.quickStats;
 
-  const handleOnboardingComplete = async (result?: { pathEntries?: StudentPathEntry[] } | null) => {
+  const handleOnboardingComplete = async (
+    result?: { pathEntries?: StudentPathEntry[]; subjectPaths?: StudentSubjectPath[] } | null,
+  ) => {
     setActiveView('dashboard');
     setActiveTab('journey');
     if (result?.pathEntries?.length) {
@@ -1115,11 +1185,15 @@ const StudentDashboard: React.FC = () => {
         next: result.pathEntries[0] ?? null,
       });
     }
+    if (result?.subjectPaths) {
+      queryClient.setQueryData(studentPathsQueryKey(student?.id), result.subjectPaths);
+    }
     trackEvent('onboarding_completed', { studentId: student.id });
     await refreshUser().catch(() => undefined);
     await Promise.all([
       refetch({ throwOnError: false }),
       refreshStudentPath().catch(() => undefined),
+      queryClient.invalidateQueries({ queryKey: studentPathsQueryKey(student?.id) }).catch(() => undefined),
     ]);
   };
 
@@ -2722,6 +2796,12 @@ const StudentDashboard: React.FC = () => {
                 <div key={idx} className="h-20 rounded-xl bg-slate-100" />
               ))}
             </div>
+          </div>
+        )}
+
+        {!pathLoading && subjectPaths.length > 0 && (
+          <div className="mb-6">
+            <SubjectPlacementOverview paths={subjectPaths} />
           </div>
         )}
 

@@ -74,4 +74,28 @@ describe('selectPlacementAssessmentId', () => {
 
     expect(id).toBe(501);
   });
+
+  it('prefers an explicitly requested subject key over balanced core ordering', () => {
+    const id = selectPlacementAssessmentId(
+      [
+        { id: 601, module_id: null, metadata: { purpose: 'placement', grade_band: '6-8', subject_key: 'math' } },
+        { id: 602, module_id: null, metadata: { purpose: 'placement', grade_band: '6-8', subject_key: 'ela' } },
+      ],
+      { targetGradeBand: '6-8', subjectKey: 'ela' },
+    );
+
+    expect(id).toBe(602);
+  });
+
+  it('matches placement level when assessment metadata provides it', () => {
+    const id = selectPlacementAssessmentId(
+      [
+        { id: 701, module_id: null, metadata: { purpose: 'placement', grade_band: '6-8', subject_key: 'math', placement_level: 6 } },
+        { id: 702, module_id: null, metadata: { purpose: 'placement', grade_band: '6-8', subject_key: 'math', placement_level: 7 } },
+      ],
+      { targetGradeBand: '6-8', subjectKey: 'math', targetLevel: 7 },
+    );
+
+    expect(id).toBe(702);
+  });
 });

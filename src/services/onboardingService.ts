@@ -1,5 +1,7 @@
 import { authenticatedFetch, handleApiResponse } from '../lib/apiClient';
 
+export type SubjectPlacementKey = 'math' | 'english';
+
 export type PlacementOption = {
   id: number;
   text: string;
@@ -25,6 +27,8 @@ export type PlacementStartResponse = {
   attemptId: number;
   attemptNumber: number;
   gradeBand: string;
+  subject: string | null;
+  expectedLevel: number | null;
   resumeToken: string;
   items: PlacementItem[];
   existingResponses: Array<{ questionId: number; selectedOptionId: number | null; isCorrect: boolean | null }>;
@@ -54,6 +58,7 @@ export type StudentPathEntry = {
 export type StudentPath = {
   path: {
     id: number;
+    subject?: string | null;
     status: string;
     started_at: string;
     updated_at: string;
@@ -66,6 +71,32 @@ export type StudentPath = {
 type StudentPathApiResponse = {
   path: { path: StudentPath['path']; entries: StudentPathEntry[] } | null;
   next: StudentPathEntry | null;
+};
+
+export type StudentSubjectState = {
+  id: number;
+  student_id: string;
+  subject: string;
+  expected_level: number;
+  working_level: number | null;
+  level_confidence: number;
+  placement_status: string;
+  diagnostic_assessment_id: number | null;
+  diagnostic_attempt_id: number | null;
+  diagnostic_completed_at: string | null;
+  strand_scores: Record<string, unknown>;
+  weak_standard_codes: string[];
+  recommended_module_slugs: string[];
+  last_path_id: number | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StudentSubjectPath = {
+  subject: string | null;
+  state: StudentSubjectState | null;
+  path: { path: StudentPath['path']; entries: StudentPathEntry[] } | null;
 };
 
 export type StudentPreferences = {
@@ -97,6 +128,9 @@ export type TutorPersona = {
 };
 
 export const startPlacement = async (payload: {
+  subject?: SubjectPlacementKey | null;
+  ageYears?: number | null;
+  gradeLevel?: number | null;
   gradeBand?: string | null;
   fullName?: string | null;
   optInAi?: boolean;
@@ -130,6 +164,9 @@ export const submitPlacement = async (payload: {
   assessmentId: number;
   attemptId: number;
   responses: PlacementResponseInput[];
+  subject?: SubjectPlacementKey | null;
+  ageYears?: number | null;
+  gradeLevel?: number | null;
   gradeBand?: string | null;
   goalFocus?: string | null;
   fullName?: string | null;
@@ -142,6 +179,11 @@ export const submitPlacement = async (payload: {
   strandEstimates: Array<{ strand: string; correct: number; total: number; accuracyPct: number }>;
   score: number;
   masteryPct: number;
+  subject: string | null;
+  expectedLevel: number;
+  workingLevel: number;
+  levelConfidence: number;
+  subjectState: StudentSubjectState | null;
 }> => {
   const response = await authenticatedFetch('/api/v1/student/assessment/submit', {
     method: 'POST',
@@ -154,6 +196,11 @@ export const submitPlacement = async (payload: {
     strandEstimates: Array<{ strand: string; correct: number; total: number; accuracyPct: number }>;
     score: number;
     masteryPct: number;
+    subject: string | null;
+    expectedLevel: number;
+    workingLevel: number;
+    levelConfidence: number;
+    subjectState: StudentSubjectState | null;
   }>(response);
 };
 
@@ -168,6 +215,11 @@ export const fetchStudentPath = async (): Promise<StudentPath> => {
     entries: payload.path.entries ?? [],
     next: payload.next ?? null,
   };
+};
+
+export const fetchStudentPaths = async (): Promise<StudentSubjectPath[]> => {
+  const response = await authenticatedFetch('/api/v1/student/paths');
+  return handleApiResponse<{ paths: StudentSubjectPath[] }>(response).then((payload) => payload.paths ?? []);
 };
 
 export const fetchPreferences = async (): Promise<StudentPreferences> => {

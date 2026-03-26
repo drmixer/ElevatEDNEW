@@ -33,6 +33,13 @@ export type ParentOverview = {
     weekly_time_minutes: number;
     alerts: string[];
     struggle: boolean;
+    subject_placements: Array<{
+      subject: string;
+      expected_level: number;
+      working_level: number | null;
+      level_confidence: number;
+      diagnostic_completed_at: string | null;
+    }>;
     diagnostic_status?: 'not_started' | 'scheduled' | 'in_progress' | 'completed' | null;
     diagnostic_completed_at?: string | null;
   }>;

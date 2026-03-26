@@ -8,6 +8,8 @@ type AssessmentRow = {
 type PlacementSelectionOptions = {
   targetGradeBand: string;
   goalFocus?: string | null;
+  subjectKey?: string | null;
+  targetLevel?: number | null;
 };
 
 const normalizeKey = (value: string): string => value.trim().toLowerCase().replace(/[\s-]+/g, '_');
@@ -40,11 +42,25 @@ const getStringList = (metadata: Record<string, unknown>, key: string): string[]
   return raw.filter((item): item is string => typeof item === 'string' && item.trim().length);
 };
 
+const getNumber = (metadata: Record<string, unknown>, keys: string[]): number | null => {
+  for (const key of keys) {
+    const raw = metadata[key];
+    if (typeof raw === 'number' && Number.isFinite(raw)) return raw;
+    if (typeof raw === 'string' && raw.trim().length) {
+      const parsed = Number.parseInt(raw.trim(), 10);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+  }
+  return null;
+};
+
 export const selectPlacementAssessmentId = (rows: AssessmentRow[], options: PlacementSelectionOptions): number | null => {
   const coreOrder = ['math', 'ela', 'science'];
   const coreSet = new Set(coreOrder);
   const targetBandNormalized = options.targetGradeBand.toLowerCase();
-  const desiredSubjectKey = resolveFocusSubjectKey(options.goalFocus);
+  const desiredSubjectKey =
+    (options.subjectKey ? canonicalizeSubjectKey(options.subjectKey) : null) ??
+    resolveFocusSubjectKey(options.goalFocus);
 
   const gradeBandMatches = (targetBand: string, metadataBand: string): boolean => {
     const target = targetBand.trim().toLowerCase();
@@ -80,6 +96,27 @@ export const selectPlacementAssessmentId = (rows: AssessmentRow[], options: Plac
 
       const bandRaw = getString(metadata, ['grade_band', 'gradeBand', 'grade']);
       if (bandRaw && !gradeBandMatches(targetBandNormalized, bandRaw)) return null;
+
+      const placementLevel = getNumber(metadata, ['placement_level', 'placementLevel', 'target_level', 'targetLevel']);
+      if (options.targetLevel != null && placementLevel != null && placementLevel !== options.targetLevel) {
+        const window = metadata.placement_window;
+        const minLevel =
+          typeof (window as Record<string, unknown> | null | undefined)?.min_level === 'number'
+            ? (((window as Record<string, unknown>).min_level as number) ?? null)
+            : null;
+        const maxLevel =
+          typeof (window as Record<string, unknown> | null | undefined)?.max_level === 'number'
+            ? (((window as Record<string, unknown>).max_level as number) ?? null)
+            : null;
+        if (
+          minLevel == null ||
+          maxLevel == null ||
+          options.targetLevel < minLevel ||
+          options.targetLevel > maxLevel
+        ) {
+          return null;
+        }
+      }
 
       const subjectKeyRaw = getString(metadata, ['subject_key', 'subjectKey']);
       const subjectKey = subjectKeyRaw ? canonicalizeSubjectKey(subjectKeyRaw) : null;

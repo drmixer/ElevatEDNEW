@@ -13,6 +13,9 @@ export type PlacementQuestion = {
   prompt: string;
   type: string;
   options: PlacementQuestionOption[];
+  strand?: string | null;
+  targetStandards?: string[];
+  metadata?: Record<string, unknown> | null;
 };
 
 type InvalidReason = { bankQuestionId: number; reason: string };
@@ -100,6 +103,39 @@ export const validatePlacementQuestions = (
         return null;
       }
 
+      const targetStandards = Array.isArray(question.targetStandards)
+        ? question.targetStandards.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
+        : [];
+      if (!targetStandards.length) {
+        invalidReasons.push({ bankQuestionId: question.bankQuestionId, reason: 'missing_standard_codes' });
+        return null;
+      }
+
+      const placementLevel =
+        typeof question.metadata?.placement_level === 'number'
+          ? question.metadata.placement_level
+          : typeof question.metadata?.placementLevel === 'number'
+            ? question.metadata.placementLevel
+            : typeof question.metadata?.target_level === 'number'
+              ? question.metadata.target_level
+              : typeof question.metadata?.placement_level === 'string'
+                ? Number.parseInt(question.metadata.placement_level, 10)
+                : typeof question.metadata?.placementLevel === 'string'
+                  ? Number.parseInt(question.metadata.placementLevel, 10)
+                  : typeof question.metadata?.target_level === 'string'
+                    ? Number.parseInt(question.metadata.target_level, 10)
+                    : null;
+
+      if (!Number.isFinite(placementLevel)) {
+        invalidReasons.push({ bankQuestionId: question.bankQuestionId, reason: 'missing_placement_level' });
+        return null;
+      }
+
+      if (!question.strand || !question.strand.trim().length) {
+        invalidReasons.push({ bankQuestionId: question.bankQuestionId, reason: 'missing_strand' });
+        return null;
+      }
+
       const quality = assessAssessmentQuestionQuality({
         prompt: question.prompt,
         type: normalizedType,
@@ -116,7 +152,13 @@ export const validatePlacementQuestions = (
         return null;
       }
 
-      return { ...question, type: normalizedType, options: capped } satisfies PlacementQuestion;
+      return {
+        ...question,
+        type: normalizedType,
+        options: capped,
+        targetStandards,
+        metadata: question.metadata ?? {},
+      } satisfies PlacementQuestion;
     })
     .filter((question): question is PlacementQuestion => Boolean(question));
 

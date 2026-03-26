@@ -4,12 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import OnboardingFlow from './OnboardingFlow';
 
-const { refreshUserSpy, fetchPreferencesSpy, listAvatarsSpy, listTutorPersonasSpy, fetchStudentPathSpy } = vi.hoisted(() => ({
+const { refreshUserSpy, fetchPreferencesSpy, listAvatarsSpy, listTutorPersonasSpy, fetchStudentPathsSpy } = vi.hoisted(() => ({
   refreshUserSpy: vi.fn(),
   fetchPreferencesSpy: vi.fn(),
   listAvatarsSpy: vi.fn(),
   listTutorPersonasSpy: vi.fn(),
-  fetchStudentPathSpy: vi.fn(),
+  fetchStudentPathsSpy: vi.fn(),
 }));
 
 vi.mock('../../contexts/AuthContext', () => ({
@@ -27,7 +27,7 @@ vi.mock('../../services/onboardingService', () => ({
   fetchPreferences: fetchPreferencesSpy,
   listAvatars: listAvatarsSpy,
   listTutorPersonas: listTutorPersonasSpy,
-  fetchStudentPath: fetchStudentPathSpy,
+  fetchStudentPaths: fetchStudentPathsSpy,
   updatePreferences: vi.fn(),
   startPlacement: vi.fn(),
   savePlacementProgress: vi.fn(),
@@ -43,7 +43,7 @@ describe('OnboardingFlow', () => {
       tutor_persona_id: null,
     });
     listTutorPersonasSpy.mockResolvedValue([{ id: 'persona-1', name: 'Coach', tone: 'supportive' }]);
-    fetchStudentPathSpy.mockResolvedValue({ path: null, entries: [], next: null });
+    fetchStudentPathsSpy.mockResolvedValue([]);
     listAvatarsSpy.mockResolvedValue([
       { id: 'avatar-cat', name: 'Cat', image_url: 'https://example.com/cat.png', category: 'student', is_default: true, metadata: {} },
       {

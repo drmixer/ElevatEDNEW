@@ -2905,6 +2905,7 @@ const ParentDashboard: React.FC = () => {
                     const diagnosticLastRun = fullChild.diagnosticCompletedAt
                       ? `Last run ${new Date(fullChild.diagnosticCompletedAt).toLocaleDateString()} • plan calibrated`
                       : 'No diagnostic yet';
+                    const subjectPlacements = (child.subject_placements ?? []).filter((entry) => entry.working_level != null).slice(0, 2);
                     return (
                       <div
                         key={child.id}
@@ -2938,6 +2939,25 @@ const ParentDashboard: React.FC = () => {
                           <span>XP {child.xp_total}</span>
                           <span>{child.recent_events[0]?.event_type ?? 'recent activity'}</span>
                         </div>
+                        {subjectPlacements.length > 0 && (
+                          <div className="rounded-lg border border-slate-200 bg-white p-2">
+                            <div className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Placement</div>
+                            <div className="flex flex-wrap gap-2">
+                              {subjectPlacements.map((placement) => (
+                                <div
+                                  key={`${child.id}-${placement.subject}`}
+                                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700"
+                                >
+                                  <span className="font-semibold">{formatSubjectLabel(placement.subject)}</span>
+                                  <span>L{placement.working_level}</span>
+                                  <span className="text-slate-500">
+                                    from {placement.expected_level}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                         <div className="flex items-center justify-between text-[11px] text-slate-700 gap-2">
                           <div className="flex items-center gap-2 min-w-0">
                             <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border font-semibold ${diagnosticChipStyles}`}>

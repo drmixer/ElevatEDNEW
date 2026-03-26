@@ -11,6 +11,9 @@ import { validatePlacementQuestions } from './placementValidation.js';
 
 type PathBuildOptions = {
   gradeBand?: string | null;
+  subject?: string | null;
+  workingLevel?: number | null;
+  preferredModuleSlugs?: string[];
   goalFocus?: string | null;
   source?: string;
   limit?: number;
@@ -35,6 +38,8 @@ type PlacementStartResult = {
   attemptId: number;
   attemptNumber: number;
   gradeBand: string;
+  subject: string | null;
+  expectedLevel: number | null;
   resumeToken: string;
   items: PlacementQuestion[];
   existingResponses: Array<{ questionId: number; selectedOptionId: number | null; isCorrect: boolean | null }>;
@@ -67,10 +72,31 @@ export type PathEntry = {
 
 export type PathSummary = {
   id: number;
+  subject?: string | null;
   status: string;
   started_at: string;
   updated_at: string;
   metadata: Record<string, unknown> | null;
+};
+
+export type SubjectState = {
+  id: number;
+  student_id: string;
+  subject: string;
+  expected_level: number;
+  working_level: number | null;
+  level_confidence: number;
+  placement_status: string;
+  diagnostic_assessment_id: number | null;
+  diagnostic_attempt_id: number | null;
+  diagnostic_completed_at: string | null;
+  strand_scores: Record<string, unknown>;
+  weak_standard_codes: string[];
+  recommended_module_slugs: string[];
+  last_path_id: number | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
 };
 
 type QuestionBankRow = {
@@ -134,6 +160,60 @@ const gradeBandToLevel = (gradeBand?: string | null): number | null => {
   return Number.isFinite(numeric) ? numeric : null;
 };
 
+const clampWorkingLevel = (level: number | null | undefined): number | null => {
+  if (typeof level !== 'number' || !Number.isFinite(level)) return null;
+  return Math.max(3, Math.min(8, Math.round(level)));
+};
+
+const normalizeSubjectKey = (value: string | null | undefined): string | null => {
+  if (!value) return null;
+  const normalized = value.trim().toLowerCase().replace(/[\s-]+/g, '_');
+  if (!normalized) return null;
+  if (normalized === 'ela' || normalized === 'english_language_arts' || normalized === 'reading' || normalized === 'writing') {
+    return 'english';
+  }
+  if (normalized === 'mathematics') return 'math';
+  return normalized;
+};
+
+const subjectVariants = (subject: string | null | undefined): string[] => {
+  const normalized = normalizeSubjectKey(subject);
+  switch (normalized) {
+    case 'math':
+      return ['math', 'mathematics'];
+    case 'english':
+      return ['english', 'ela', 'english_language_arts', 'english language arts', 'reading_&_writing', 'reading & writing'];
+    default:
+      return normalized ? [normalized, normalized.replace(/_/g, ' ')] : [];
+  }
+};
+
+const subjectMatches = (candidate: string | null | undefined, subject: string | null | undefined): boolean => {
+  if (!subject) return true;
+  const candidateKey = normalizeSubjectKey(candidate);
+  return candidateKey != null && subjectVariants(subject).some((value) => normalizeSubjectKey(value) === candidateKey);
+};
+
+export const deriveExpectedLevel = (params: {
+  ageYears?: number | null;
+  gradeLevel?: number | null;
+  gradeBand?: string | null;
+}): number => {
+  const agePrior =
+    typeof params.ageYears === 'number' && Number.isFinite(params.ageYears)
+      ? clampWorkingLevel(params.ageYears - 5)
+      : null;
+  const gradePrior =
+    typeof params.gradeLevel === 'number' && Number.isFinite(params.gradeLevel)
+      ? clampWorkingLevel(params.gradeLevel)
+      : clampWorkingLevel(gradeBandToLevel(params.gradeBand ?? null));
+
+  if (agePrior != null && gradePrior != null) {
+    return clampWorkingLevel(Math.round((agePrior + gradePrior) / 2)) ?? 6;
+  }
+  return agePrior ?? gradePrior ?? 6;
+};
+
 const splitName = (fullName?: string | null): { first: string; last: string | null } => {
   if (!fullName) return { first: 'Student', last: null };
   const parts = fullName.trim().split(/\s+/);
@@ -146,11 +226,11 @@ const splitName = (fullName?: string | null): { first: string; last: string | nu
 const loadStudentProfile = async (
   supabase: SupabaseClient,
   studentId: string,
-): Promise<{ grade_level: number | null; grade_band: string | null; preferences: StudentPreferences }> => {
+): Promise<{ grade_level: number | null; grade_band: string | null; age_years: number | null; preferences: StudentPreferences }> => {
   const [profile, preferences] = await Promise.all([
     supabase
       .from('student_profiles')
-      .select('grade_level, grade_band')
+      .select('grade_level, grade_band, age_years')
       .eq('id', studentId)
       .maybeSingle(),
     getStudentPreferences(supabase, studentId),
@@ -163,6 +243,7 @@ const loadStudentProfile = async (
   return {
     grade_level: (profile.data?.grade_level as number | null | undefined) ?? null,
     grade_band: (profile.data?.grade_band as string | null | undefined) ?? null,
+    age_years: (profile.data?.age_years as number | null | undefined) ?? null,
     preferences,
   };
 };
@@ -171,7 +252,15 @@ export const ensureStudentProfileProvisioned = async (
   supabase: SupabaseClient,
   serviceSupabase: SupabaseClient | null,
   studentId: string,
-  options?: { gradeBand?: string | null; fullName?: string | null; optInAi?: boolean; avatarId?: string | null; tutorPersonaId?: string | null },
+  options?: {
+    gradeBand?: string | null;
+    gradeLevel?: number | null;
+    ageYears?: number | null;
+    fullName?: string | null;
+    optInAi?: boolean;
+    avatarId?: string | null;
+    tutorPersonaId?: string | null;
+  },
 ): Promise<void> => {
   const writer = serviceSupabase ?? supabase;
 
@@ -189,7 +278,15 @@ export const ensureStudentProfileProvisioned = async (
 
   const fullName = options?.fullName ?? ((profileRow?.full_name as string | null | undefined) ?? null);
   const { first, last } = splitName(fullName);
-  const gradeLevel = gradeBandToLevel(options?.gradeBand ?? null);
+  const gradeLevel =
+    typeof options?.gradeLevel === 'number' && Number.isFinite(options.gradeLevel)
+      ? Math.max(1, Math.min(12, Math.round(options.gradeLevel)))
+      : gradeBandToLevel(options?.gradeBand ?? null);
+  const ageYears =
+    typeof options?.ageYears === 'number' && Number.isFinite(options.ageYears)
+      ? Math.max(3, Math.min(20, Math.round(options.ageYears)))
+      : null;
+  const resolvedGradeBand = options?.gradeBand ?? (gradeLevel ? deriveGradeBand(gradeLevel, null) : null);
 
   if (!studentRow) {
     // Ensure a parent profile exists to satisfy the FK; for now, fall back to self-parenting if none exists.
@@ -218,8 +315,11 @@ export const ensureStudentProfileProvisioned = async (
       last_name: last,
       grade_level: gradeLevel,
     };
-    if (options?.gradeBand) {
-      insertPayload.grade_band = options.gradeBand;
+    if (resolvedGradeBand) {
+      insertPayload.grade_band = resolvedGradeBand;
+    }
+    if (ageYears != null) {
+      insertPayload.age_years = ageYears;
     }
 
     const { error: insertError } = await writer.from('student_profiles').insert(insertPayload);
@@ -228,12 +328,14 @@ export const ensureStudentProfileProvisioned = async (
     }
   } else {
     const updates: Record<string, unknown> = {};
-    if (options?.gradeBand) {
-      updates.grade_band = options.gradeBand;
-      const derivedLevel = gradeBandToLevel(options.gradeBand);
-      if (derivedLevel) {
-        updates.grade_level = derivedLevel;
-      }
+    if (resolvedGradeBand) {
+      updates.grade_band = resolvedGradeBand;
+    }
+    if (gradeLevel) {
+      updates.grade_level = gradeLevel;
+    }
+    if (ageYears != null) {
+      updates.age_years = ageYears;
     }
     if (Object.keys(updates).length > 0) {
       const { error: updateError } = await writer.from('student_profiles').update(updates).eq('id', studentId);
@@ -273,6 +375,8 @@ export const ensureStudentProfileProvisioned = async (
 const findPlacementAssessmentId = async (
   supabase: SupabaseClient,
   targetGradeBand: string,
+  subject?: string | null,
+  targetLevel?: number | null,
   goalFocus?: string | null,
 ): Promise<number | null> => {
   const { data, error } = await supabase
@@ -289,6 +393,8 @@ const findPlacementAssessmentId = async (
 
   const id = selectPlacementAssessmentId((data ?? []) as Array<{ id: number; module_id: number | null; created_at?: string | null; metadata: Record<string, unknown> | null }>, {
     targetGradeBand,
+    subjectKey: subject,
+    targetLevel,
     goalFocus,
   });
   return id;
@@ -443,6 +549,9 @@ export const startPlacementAssessment = async (
   studentId: string,
   options?: {
     gradeBand?: string | null;
+    gradeLevel?: number | null;
+    ageYears?: number | null;
+    subject?: string | null;
     fullName?: string | null;
     optInAi?: boolean;
     avatarId?: string | null;
@@ -452,6 +561,8 @@ export const startPlacementAssessment = async (
 ): Promise<PlacementStartResult> => {
   await ensureStudentProfileProvisioned(supabase, options?.serviceSupabase ?? null, studentId, {
     gradeBand: options?.gradeBand,
+    gradeLevel: options?.gradeLevel,
+    ageYears: options?.ageYears,
     fullName: options?.fullName,
     optInAi: options?.optInAi,
     avatarId: options?.avatarId ?? null,
@@ -460,11 +571,19 @@ export const startPlacementAssessment = async (
 
   const profile = await loadStudentProfile(supabase, studentId);
   const resolvedGradeBand = deriveGradeBand(profile.grade_level, options?.gradeBand ?? profile.grade_band);
+  const subject = normalizeSubjectKey(options?.subject ?? null);
+  const expectedLevel = deriveExpectedLevel({
+    ageYears: options?.ageYears ?? profile.age_years,
+    gradeLevel: options?.gradeLevel ?? profile.grade_level,
+    gradeBand: resolvedGradeBand,
+  });
 
   const contentClient = options?.serviceSupabase ?? supabase;
   const assessmentId = await findPlacementAssessmentId(
     contentClient,
     resolvedGradeBand,
+    subject,
+    expectedLevel,
     profile.preferences.goal_focus ?? null,
   );
   if (!assessmentId) {
@@ -595,6 +714,8 @@ export const startPlacementAssessment = async (
     attemptId,
     attemptNumber,
     gradeBand: resolvedGradeBand,
+    subject,
+    expectedLevel,
     resumeToken,
     items: questions,
     existingResponses,
@@ -638,6 +759,7 @@ const expandGradeBand = (gradeBand: string): string[] => {
 const fetchCanonicalSequence = async (
   supabase: SupabaseClient,
   gradeBand: string,
+  subject: string | null,
   limit: number,
   gradeLevel?: number | null,
 ): Promise<
@@ -646,27 +768,28 @@ const fetchCanonicalSequence = async (
     module_id: number | null;
     module_slug: string | null;
     module_title: string | null;
+    subject?: string | null;
     standard_codes: string[] | null;
   }>
 > => {
-  // First, try learning_sequences with the exact grade band (for backwards compatibility)
   const { data, error } = await supabase
     .from('learning_sequences')
-    .select('position, module_id, module_slug, module_title, standard_codes')
+    .select('position, module_id, module_slug, module_title, subject, standard_codes')
     .eq('grade_band', gradeBand)
-    .order('position', { ascending: true })
-    .limit(limit);
+    .order('position', { ascending: true });
 
   if (error) {
     throw new Error(`Unable to read learning sequences: ${error.message}`);
   }
 
-  if (data && data.length > 0) {
-    return data.map((row) => ({
+  const exactSequence = (data ?? []).filter((row) => subjectMatches(row.subject as string | null | undefined, subject));
+  if (exactSequence.length > 0) {
+    return exactSequence.slice(0, limit).map((row) => ({
       position: row.position as number,
       module_id: (row.module_id as number | null | undefined) ?? null,
       module_slug: (row.module_slug as string | null | undefined) ?? null,
       module_title: (row.module_title as string | null | undefined) ?? null,
+      subject: (row.subject as string | null | undefined) ?? null,
       standard_codes: (row.standard_codes as string[] | null | undefined) ?? null,
     }));
   }
@@ -688,16 +811,20 @@ const fetchCanonicalSequence = async (
     .select('id, slug, title, grade_band, subject')
     .in('grade_band', orderedGrades)
     .order('id', { ascending: true })
-    .limit(limit * 2); // Get extra to allow sorting
+    .limit(limit * 20);
 
   if (modulesError) {
     throw new Error(`Unable to read fallback modules: ${modulesError.message}`);
   }
 
-  if (modules && modules.length > 0) {
+  const subjectFilteredModules = (modules ?? []).filter((module) =>
+    subjectMatches(module.subject as string | null | undefined, subject),
+  );
+
+  if (subjectFilteredModules.length > 0) {
     // Sort to prioritize exact grade level, then by grade closeness
     const targetGrade = gradeLevel ?? gradeBandToLevel(gradeBand) ?? 5;
-    const sorted = [...modules].sort((a, b) => {
+    const sorted = [...subjectFilteredModules].sort((a, b) => {
       const aGrade = Number.parseInt(a.grade_band ?? '0', 10) || 0;
       const bGrade = Number.parseInt(b.grade_band ?? '0', 10) || 0;
       const aDist = Math.abs(aGrade - targetGrade);
@@ -710,6 +837,7 @@ const fetchCanonicalSequence = async (
       module_id: module.id as number,
       module_slug: (module.slug as string | null | undefined) ?? null,
       module_title: (module.title as string | null | undefined) ?? null,
+      subject: (module.subject as string | null | undefined) ?? null,
       standard_codes: [],
     }));
   }
@@ -718,15 +846,20 @@ const fetchCanonicalSequence = async (
   console.warn(`[learningPaths] No modules found for grade band ${gradeBand}, expanding search`);
   const { data: fallbackModules } = await supabase
     .from('modules')
-    .select('id, slug, title, grade_band')
+    .select('id, slug, title, grade_band, subject')
     .order('id', { ascending: true })
-    .limit(limit);
+    .limit(limit * 20);
 
-  return (fallbackModules ?? []).map((module, index) => ({
+  const broadFallback = (fallbackModules ?? []).filter((module) =>
+    subjectMatches(module.subject as string | null | undefined, subject),
+  );
+
+  return broadFallback.slice(0, limit).map((module, index) => ({
     position: index + 1,
     module_id: module.id as number,
     module_slug: (module.slug as string | null | undefined) ?? null,
     module_title: (module.title as string | null | undefined) ?? null,
+    subject: (module.subject as string | null | undefined) ?? null,
     standard_codes: [],
   }));
 };
@@ -738,13 +871,22 @@ export const buildStudentPath = async (
   options?: PathBuildOptions,
 ): Promise<{ pathId: number; entries: PathEntry[] }> => {
   const profile = await loadStudentProfile(supabase, studentId);
-  const gradeBand = deriveGradeBand(profile.grade_level, options?.gradeBand ?? profile.grade_band);
+  const subject = normalizeSubjectKey(options?.subject ?? null);
+  const gradeBand =
+    options?.workingLevel != null
+      ? String(options.workingLevel)
+      : deriveGradeBand(profile.grade_level, options?.gradeBand ?? profile.grade_band);
 
-  const { error: pauseError } = await supabase
+  let pauseQuery = supabase
     .from('student_paths')
     .update({ status: 'paused' })
     .eq('student_id', studentId)
     .eq('status', 'active');
+  if (subject) {
+    pauseQuery = pauseQuery.eq('subject', subject);
+  }
+
+  const { error: pauseError } = await pauseQuery;
 
   if (pauseError) {
     throw new Error(`Unable to pause existing paths: ${pauseError.message}`);
@@ -754,10 +896,13 @@ export const buildStudentPath = async (
     .from('student_paths')
     .insert({
       student_id: studentId,
+      subject,
       status: 'active',
       metadata: {
         source: options?.source ?? 'placement',
+        subject,
         grade_band: gradeBand,
+        working_level: options?.workingLevel ?? null,
         goal_focus: options?.goalFocus ?? profile.preferences.goal_focus ?? null,
         ...(options?.metadata ?? {}),
       },
@@ -769,7 +914,13 @@ export const buildStudentPath = async (
     throw new Error(`Unable to create learning path: ${pathError?.message ?? 'unknown error'}`);
   }
 
-  const sequence = await fetchCanonicalSequence(supabase, gradeBand, options?.limit ?? 12, profile.grade_level);
+  const sequence = await fetchCanonicalSequence(
+    supabase,
+    gradeBand,
+    subject,
+    options?.limit ?? 12,
+    options?.workingLevel ?? profile.grade_level,
+  );
 
   const entries = sequence.map((item, index) => ({
     path_id: pathRow.id as number,
@@ -783,6 +934,7 @@ export const buildStudentPath = async (
     metadata: {
       module_slug: item.module_slug,
       module_title: item.module_title,
+      subject: subject ?? normalizeSubjectKey(item.subject ?? null),
       source: options?.source ?? 'placement',
     },
   }));
@@ -810,6 +962,173 @@ export const buildStudentPath = async (
   };
 };
 
+const readPlacementLevel = (value: unknown): number | null => {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return clampWorkingLevel(value);
+  }
+  if (typeof value === 'string' && value.trim().length) {
+    const parsed = Number.parseInt(value.trim(), 10);
+    if (Number.isFinite(parsed)) {
+      return clampWorkingLevel(parsed);
+    }
+  }
+  return null;
+};
+
+const getQuestionPlacementLevel = (question: PlacementQuestion, fallbackLevel: number): number => {
+  const metadata = (question.metadata ?? {}) as Record<string, unknown>;
+  return (
+    readPlacementLevel(metadata.placement_level) ??
+    readPlacementLevel(metadata.placementLevel) ??
+    readPlacementLevel(metadata.target_level) ??
+    fallbackLevel
+  );
+};
+
+const getPreferredModuleSlugs = (
+  responsesForScoring: Array<{ question: PlacementQuestion; isCorrect: boolean }>,
+): string[] => {
+  const moduleWeights = new Map<string, number>();
+
+  const addWeight = (slug: string | null | undefined, weight: number) => {
+    if (!slug || !slug.trim().length) return;
+    moduleWeights.set(slug, (moduleWeights.get(slug) ?? 0) + weight);
+  };
+
+  responsesForScoring.forEach(({ question, isCorrect }) => {
+    const placement = ((question.metadata as Record<string, unknown> | null | undefined)?.placement ??
+      null) as Record<string, unknown> | null;
+    const key = isCorrect ? 'on_mastery' : 'on_miss';
+    const slugs = Array.isArray(placement?.[key]) ? (placement?.[key] as string[]) : [];
+    slugs.forEach((slug) => addWeight(slug, isCorrect ? 2 : 1));
+  });
+
+  return Array.from(moduleWeights.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([slug]) => slug)
+    .slice(0, 6);
+};
+
+export const deriveWorkingLevelEstimate = (params: {
+  responsesForScoring: Array<{ question: PlacementQuestion; isCorrect: boolean }>;
+  expectedLevel: number;
+}) => {
+  const levelBuckets = new Map<number, { correct: number; total: number }>();
+  const strandScores = new Map<string, { correct: number; total: number; standards: Set<string> }>();
+
+  params.responsesForScoring.forEach(({ question, isCorrect }) => {
+    const level = getQuestionPlacementLevel(question, params.expectedLevel);
+    const levelBucket = levelBuckets.get(level) ?? { correct: 0, total: 0 };
+    if (isCorrect) levelBucket.correct += 1;
+    levelBucket.total += 1;
+    levelBuckets.set(level, levelBucket);
+
+    const strand = question.strand ?? 'general';
+    const strandBucket = strandScores.get(strand) ?? { correct: 0, total: 0, standards: new Set<string>() };
+    if (isCorrect) strandBucket.correct += 1;
+    strandBucket.total += 1;
+    question.targetStandards.forEach((code) => strandBucket.standards.add(code));
+    strandScores.set(strand, strandBucket);
+  });
+
+  const testedLevels = Array.from(levelBuckets.entries())
+    .map(([level, stats]) => ({
+      level,
+      correct: stats.correct,
+      total: stats.total,
+      accuracyPct: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0,
+    }))
+    .sort((a, b) => a.level - b.level);
+
+  const passingLevels = testedLevels.filter((entry) => entry.total >= 2 && entry.accuracyPct >= 70);
+  const partialLevels = testedLevels.filter((entry) => entry.accuracyPct >= 50);
+
+  const workingLevel =
+    passingLevels.at(-1)?.level ??
+    partialLevels[0]?.level ??
+    testedLevels[0]?.level ??
+    params.expectedLevel;
+
+  let levelConfidence = 0.45;
+  const chosenLevel = testedLevels.find((entry) => entry.level === workingLevel) ?? null;
+  const higherLevel = testedLevels.find((entry) => entry.level > workingLevel) ?? null;
+  if (chosenLevel && chosenLevel.total >= 3 && chosenLevel.accuracyPct >= 80 && (!higherLevel || higherLevel.accuracyPct < 60)) {
+    levelConfidence = 0.85;
+  } else if (chosenLevel && chosenLevel.total >= 2 && chosenLevel.accuracyPct >= 70) {
+    levelConfidence = 0.65;
+  }
+
+  const strandEstimates: StrandEstimate[] = Array.from(strandScores.entries()).map(([strand, stats]) => ({
+    strand,
+    correct: stats.correct,
+    total: stats.total,
+    accuracyPct: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0,
+  }));
+
+  const weakStandardCodes = Array.from(strandScores.values())
+    .filter((stats) => stats.total > 0 && Math.round((stats.correct / stats.total) * 100) < 60)
+    .flatMap((stats) => Array.from(stats.standards))
+    .filter((code, index, list) => list.indexOf(code) === index)
+    .slice(0, MAX_STANDARDS_TRACKED * 2);
+
+  return {
+    workingLevel,
+    levelConfidence,
+    testedLevels,
+    strandEstimates,
+    weakStandardCodes,
+  };
+};
+
+const upsertStudentSubjectState = async (
+  supabase: SupabaseClient,
+  payload: {
+    studentId: string;
+    subject: string;
+    expectedLevel: number;
+    workingLevel: number;
+    levelConfidence: number;
+    diagnosticAssessmentId: number;
+    diagnosticAttemptId: number;
+    strandScores: StrandEstimate[];
+    weakStandardCodes: string[];
+    recommendedModuleSlugs: string[];
+    lastPathId: number | null;
+    metadata?: Record<string, unknown>;
+  },
+): Promise<SubjectState> => {
+  const row = {
+    student_id: payload.studentId,
+    subject: payload.subject,
+    expected_level: payload.expectedLevel,
+    working_level: payload.workingLevel,
+    level_confidence: payload.levelConfidence,
+    placement_status: 'completed',
+    diagnostic_assessment_id: payload.diagnosticAssessmentId,
+    diagnostic_attempt_id: payload.diagnosticAttemptId,
+    diagnostic_completed_at: new Date().toISOString(),
+    strand_scores: Object.fromEntries(
+      payload.strandScores.map((strand) => [strand.strand, { correct: strand.correct, total: strand.total, accuracyPct: strand.accuracyPct }]),
+    ),
+    weak_standard_codes: payload.weakStandardCodes,
+    recommended_module_slugs: payload.recommendedModuleSlugs,
+    last_path_id: payload.lastPathId,
+    metadata: payload.metadata ?? {},
+  };
+
+  const { data, error } = await supabase
+    .from('student_subject_state')
+    .upsert(row, { onConflict: 'student_id,subject' })
+    .select('*')
+    .maybeSingle();
+
+  if (error || !data) {
+    throw new Error(`Unable to persist student subject state: ${error?.message ?? 'unknown error'}`);
+  }
+
+  return data as SubjectState;
+};
+
 export const submitPlacementAssessment = async (
   supabase: SupabaseClient,
   studentId: string,
@@ -817,15 +1136,29 @@ export const submitPlacementAssessment = async (
     assessmentId: number;
     attemptId?: number | null;
     responses?: PlacementResponseInput[];
+    subject?: string | null;
     goalFocus?: string | null;
     gradeBand?: string | null;
+    gradeLevel?: number | null;
+    ageYears?: number | null;
     fullName?: string | null;
     optInAi?: boolean;
     avatarId?: string | null;
     tutorPersonaId?: string | null;
   },
   serviceSupabase?: SupabaseClient | null,
-): Promise<{ pathId: number; entries: PathEntry[]; strandEstimates: StrandEstimate[]; score: number; masteryPct: number }> => {
+): Promise<{
+  pathId: number;
+  entries: PathEntry[];
+  strandEstimates: StrandEstimate[];
+  score: number;
+  masteryPct: number;
+  subject: string | null;
+  expectedLevel: number;
+  workingLevel: number;
+  levelConfidence: number;
+  subjectState: SubjectState | null;
+}> => {
   if (!payload.assessmentId) {
     throw new Error('assessmentId is required to submit placement.');
   }
@@ -853,6 +1186,8 @@ export const submitPlacementAssessment = async (
 
   await ensureStudentProfileProvisioned(supabase, serviceSupabase ?? null, studentId, {
     gradeBand: payload.gradeBand,
+    gradeLevel: payload.gradeLevel,
+    ageYears: payload.ageYears,
     fullName: payload.fullName,
     optInAi: payload.optInAi,
     avatarId: payload.avatarId ?? null,
@@ -861,11 +1196,25 @@ export const submitPlacementAssessment = async (
 
   const profile = await loadStudentProfile(supabase, studentId);
   const resolvedGradeBand = deriveGradeBand(profile.grade_level, payload.gradeBand ?? profile.grade_band);
+  const expectedLevel = deriveExpectedLevel({
+    ageYears: payload.ageYears ?? profile.age_years,
+    gradeLevel: payload.gradeLevel ?? profile.grade_level,
+    gradeBand: resolvedGradeBand,
+  });
 
   const contentClient = serviceSupabase ?? supabase;
+  const { data: assessmentSnapshot } = await contentClient
+    .from('assessments')
+    .select('metadata')
+    .eq('id', payload.assessmentId)
+    .maybeSingle();
   const { questions } = await loadPlacementQuestions(contentClient, payload.assessmentId);
   const questionMap = new Map<number, PlacementQuestion>();
   questions.forEach((question) => questionMap.set(question.bankQuestionId, question));
+  const subject =
+    normalizeSubjectKey(payload.subject ?? null) ??
+    normalizeSubjectKey((assessmentSnapshot?.metadata as Record<string, unknown> | null | undefined)?.subject_key as string | undefined) ??
+    normalizeSubjectKey(payload.goalFocus ?? null);
 
   const responsePayload =
     payload.responses?.map((response) => {
@@ -926,20 +1275,12 @@ export const submitPlacementAssessment = async (
   );
   const masteryPct = totalWeight > 0 ? Math.round((earnedWeight / totalWeight) * 100) : 0;
 
-  const strandTotals = new Map<string, { correct: number; total: number }>();
-  responsesForScoring.forEach((entry) => {
-    const strand = entry.question.strand ?? 'general';
-    const current = strandTotals.get(strand) ?? { correct: 0, total: 0 };
-    if (entry.isCorrect) current.correct += 1;
-    current.total += 1;
-    strandTotals.set(strand, current);
+  const workingLevelEstimate = deriveWorkingLevelEstimate({
+    responsesForScoring,
+    expectedLevel,
   });
-  const strandEstimates: StrandEstimate[] = Array.from(strandTotals.entries()).map(([strand, stats]) => ({
-    strand,
-    correct: stats.correct,
-    total: stats.total,
-    accuracyPct: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0,
-  }));
+  const strandEstimates = workingLevelEstimate.strandEstimates;
+  const preferredModuleSlugs = getPreferredModuleSlugs(responsesForScoring);
 
   const attemptUpdate: Record<string, unknown> = {
     status: 'completed',
@@ -948,6 +1289,11 @@ export const submitPlacementAssessment = async (
     mastery_pct: masteryPct,
     metadata: {
       grade_band: resolvedGradeBand,
+      subject,
+      expected_level: expectedLevel,
+      working_level: workingLevelEstimate.workingLevel,
+      level_confidence: workingLevelEstimate.levelConfidence,
+      tested_levels: workingLevelEstimate.testedLevels,
       strand_estimates: strandEstimates,
       source: 'placement',
       goal_focus: payload.goalFocus ?? null,
@@ -972,7 +1318,11 @@ export const submitPlacementAssessment = async (
       payload: {
         assessment_id: payload.assessmentId,
         attempt_id: attemptId,
+        subject,
         score: masteryPct,
+        expected_level: expectedLevel,
+        working_level: workingLevelEstimate.workingLevel,
+        level_confidence: workingLevelEstimate.levelConfidence,
         strand_estimates: strandEstimates,
       },
       points_awarded: 0,
@@ -982,19 +1332,53 @@ export const submitPlacementAssessment = async (
   }
 
   const pathResult = await buildStudentPath(supabase, studentId, {
-    gradeBand: resolvedGradeBand,
+    gradeBand: subject ? String(workingLevelEstimate.workingLevel) : resolvedGradeBand,
+    subject,
+    workingLevel: subject ? workingLevelEstimate.workingLevel : null,
+    preferredModuleSlugs,
     goalFocus: payload.goalFocus,
     source: 'placement',
-    metadata: { assessment_id: payload.assessmentId, attempt_id: attemptId, strand_estimates: strandEstimates },
+    metadata: {
+      assessment_id: payload.assessmentId,
+      attempt_id: attemptId,
+      strand_estimates: strandEstimates,
+      expected_level: expectedLevel,
+      working_level: workingLevelEstimate.workingLevel,
+      level_confidence: workingLevelEstimate.levelConfidence,
+    },
   });
+
+  const subjectState =
+    subject != null
+      ? await upsertStudentSubjectState(supabase, {
+          studentId,
+          subject,
+          expectedLevel,
+          workingLevel: workingLevelEstimate.workingLevel,
+          levelConfidence: workingLevelEstimate.levelConfidence,
+          diagnosticAssessmentId: payload.assessmentId,
+          diagnosticAttemptId: attemptId,
+          strandScores: strandEstimates,
+          weakStandardCodes: workingLevelEstimate.weakStandardCodes,
+          recommendedModuleSlugs: preferredModuleSlugs,
+          lastPathId: pathResult.pathId,
+          metadata: {
+            grade_band: resolvedGradeBand,
+            tested_levels: workingLevelEstimate.testedLevels,
+            score: masteryPct,
+          },
+        })
+      : null;
 
   // Keep legacy learning_path field roughly aligned for downstream consumers that still read it.
   try {
     const summarizedPath = pathResult.entries.slice(0, 12).map((entry) => ({
+      subject,
       moduleSlug: (entry.metadata as Record<string, unknown> | null | undefined)?.module_slug ?? null,
       status: entry.status,
       type: entry.type,
       moduleTitle: (entry.metadata as Record<string, unknown> | null | undefined)?.module_title ?? null,
+      workingLevel: subject ? workingLevelEstimate.workingLevel : null,
     }));
     await supabase.from('student_profiles').update({ learning_path: summarizedPath }).eq('id', studentId);
   } catch (legacyError) {
@@ -1006,6 +1390,11 @@ export const submitPlacementAssessment = async (
     strandEstimates,
     score: masteryPct,
     masteryPct,
+    subject,
+    expectedLevel,
+    workingLevel: workingLevelEstimate.workingLevel,
+    levelConfidence: workingLevelEstimate.levelConfidence,
+    subjectState,
   };
 };
 
@@ -1366,14 +1755,20 @@ const updateAdaptiveState = (
 export const getStudentPath = async (
   supabase: SupabaseClient,
   studentId: string,
+  options?: { subject?: string | null },
 ): Promise<{ path: PathSummary; entries: PathEntry[] } | null> => {
-  const { data: pathRow, error: pathError } = await supabase
+  const subject = normalizeSubjectKey(options?.subject ?? null);
+  let pathQuery = supabase
     .from('student_paths')
-    .select('id, status, started_at, updated_at, metadata')
+    .select('id, subject, status, started_at, updated_at, metadata')
     .eq('student_id', studentId)
     .order('started_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .limit(1);
+  if (subject) {
+    pathQuery = pathQuery.eq('subject', subject);
+  }
+
+  const { data: pathRow, error: pathError } = await pathQuery.maybeSingle();
 
   if (pathError) {
     throw new Error(`Unable to load student path: ${pathError.message}`);
@@ -1396,6 +1791,7 @@ export const getStudentPath = async (
   return {
     path: {
       id: pathRow.id as number,
+      subject: (pathRow.subject as string | null | undefined) ?? null,
       status: pathRow.status as string,
       started_at: pathRow.started_at as string,
       updated_at: pathRow.updated_at as string,
@@ -1403,6 +1799,76 @@ export const getStudentPath = async (
     },
     entries: (entries as PathEntry[]) ?? [],
   };
+};
+
+export const getStudentSubjectStates = async (
+  supabase: SupabaseClient,
+  studentId: string,
+): Promise<SubjectState[]> => {
+  const { data, error } = await supabase
+    .from('student_subject_state')
+    .select('*')
+    .eq('student_id', studentId)
+    .order('subject', { ascending: true });
+
+  if (error) {
+    throw new Error(`Unable to load student subject state: ${error.message}`);
+  }
+
+  return ((data ?? []) as SubjectState[]).map((row) => ({
+    ...row,
+    subject: normalizeSubjectKey(row.subject) ?? row.subject,
+    weak_standard_codes: Array.isArray(row.weak_standard_codes) ? row.weak_standard_codes : [],
+    recommended_module_slugs: Array.isArray(row.recommended_module_slugs) ? row.recommended_module_slugs : [],
+    strand_scores: (row.strand_scores as Record<string, unknown> | null | undefined) ?? {},
+    metadata: (row.metadata as Record<string, unknown> | null | undefined) ?? {},
+  }));
+};
+
+export const getStudentPaths = async (
+  supabase: SupabaseClient,
+  studentId: string,
+): Promise<Array<{ subject: string | null; state: SubjectState | null; path: { path: PathSummary; entries: PathEntry[] } | null }>> => {
+  const [states, pathRows] = await Promise.all([
+    getStudentSubjectStates(supabase, studentId).catch(() => []),
+    supabase
+      .from('student_paths')
+      .select('id, subject')
+      .eq('student_id', studentId)
+      .order('started_at', { ascending: false }),
+  ]);
+
+  if (pathRows.error) {
+    throw new Error(`Unable to load student paths: ${pathRows.error.message}`);
+  }
+
+  const subjectSet = new Set<string>();
+  states.forEach((state) => subjectSet.add(state.subject));
+  (pathRows.data ?? []).forEach((row) => {
+    const subject = normalizeSubjectKey((row.subject as string | null | undefined) ?? null);
+    if (subject) subjectSet.add(subject);
+  });
+
+  const subjects = Array.from(subjectSet).sort();
+  const stateMap = new Map(states.map((state) => [state.subject, state] as const));
+
+  if (!subjects.length) {
+    return [
+      {
+        subject: null,
+        state: null,
+        path: await getStudentPath(supabase, studentId).catch(() => null),
+      },
+    ].filter((entry) => entry.path != null);
+  }
+
+  return Promise.all(
+    subjects.map(async (subject) => ({
+      subject,
+      state: stateMap.get(subject) ?? null,
+      path: await getStudentPath(supabase, studentId, { subject }).catch(() => null),
+    })),
+  );
 };
 
 export const selectNextEntry = async (
@@ -2110,6 +2576,13 @@ export const getParentOverview = async (
     weekly_time_minutes: number;
     alerts: string[];
     struggle: boolean;
+    subject_placements: Array<{
+      subject: string;
+      expected_level: number;
+      working_level: number | null;
+      level_confidence: number;
+      diagnostic_completed_at: string | null;
+    }>;
   }>;
 }> => {
   const { data: directChildren, error: directError } = await supabase
@@ -2142,7 +2615,7 @@ export const getParentOverview = async (
     return { children: [] };
   }
 
-  const [xpRows, recentEvents, insights] = await Promise.all([
+  const [xpRows, recentEvents, insights, subjectStates] = await Promise.all([
     supabase.from('xp_ledger').select('student_id, xp_total, streak_days').in('student_id', studentIds),
     supabase
       .from('student_events')
@@ -2169,6 +2642,10 @@ export const getParentOverview = async (
         };
       }),
     ),
+    supabase
+      .from('student_subject_state')
+      .select('student_id, subject, expected_level, working_level, level_confidence, diagnostic_completed_at')
+      .in('student_id', studentIds),
   ]);
 
   if (xpRows.error) {
@@ -2176,6 +2653,9 @@ export const getParentOverview = async (
   }
   if (recentEvents.error) {
     throw new Error(`Unable to read child events: ${recentEvents.error.message}`);
+  }
+  if (subjectStates.error) {
+    throw new Error(`Unable to read child subject state: ${subjectStates.error.message}`);
   }
 
   const xpMap = new Map<string, { xp_total: number; streak_days: number }>();
@@ -2211,6 +2691,29 @@ export const getParentOverview = async (
     insightMap.set(entry.studentId, { insight: entry.insight, path: entry.path });
   });
 
+  const subjectStateMap = new Map<
+    string,
+    Array<{
+      subject: string;
+      expected_level: number;
+      working_level: number | null;
+      level_confidence: number;
+      diagnostic_completed_at: string | null;
+    }>
+  >();
+  for (const row of subjectStates.data ?? []) {
+    const studentId = row.student_id as string;
+    const list = subjectStateMap.get(studentId) ?? [];
+    list.push({
+      subject: normalizeSubjectKey((row.subject as string | null | undefined) ?? null) ?? String(row.subject),
+      expected_level: (row.expected_level as number | null | undefined) ?? 0,
+      working_level: (row.working_level as number | null | undefined) ?? null,
+      level_confidence: (row.level_confidence as number | null | undefined) ?? 0,
+      diagnostic_completed_at: (row.diagnostic_completed_at as string | null | undefined) ?? null,
+    });
+    subjectStateMap.set(studentId, list);
+  }
+
   const children = studentIds.map((id) => {
     const profile = (directChildren ?? []).find((row) => row.id === id);
     const xp = xpMap.get(id) ?? { xp_total: 0, streak_days: 0 };
@@ -2234,6 +2737,7 @@ export const getParentOverview = async (
       weekly_time_minutes: insight?.insight.weeklyTimeMinutes ?? 0,
       alerts,
       struggle: insight?.insight.struggle ?? false,
+      subject_placements: (subjectStateMap.get(id) ?? []).sort((a, b) => a.subject.localeCompare(b.subject)),
     };
   });
 

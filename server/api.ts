@@ -68,6 +68,7 @@ import { getOpsSnapshot } from './opsMetrics.js';
 import {
   getParentOverview,
   getStudentPath,
+  getStudentPaths,
   getStudentStats,
   ensureStudentProfileProvisioned,
   savePlacementResponse,
@@ -1347,6 +1348,9 @@ export const createApiHandler = (context: ApiContext) => {
       return handleRoute(async () => {
         const body = await readValidatedJson<{
           gradeBand?: string | null;
+          gradeLevel?: number | null;
+          ageYears?: number | null;
+          subject?: string | null;
           fullName?: string | null;
           optInAi?: boolean;
           avatarId?: string | null;
@@ -1355,6 +1359,11 @@ export const createApiHandler = (context: ApiContext) => {
         const gradeBand = typeof body.gradeBand === 'string' ? body.gradeBand.trim() : null;
         const result = await startPlacementAssessment(supabase, actor.id, {
           gradeBand,
+          gradeLevel:
+            typeof body.gradeLevel === 'number' && Number.isFinite(body.gradeLevel) ? body.gradeLevel : null,
+          ageYears:
+            typeof body.ageYears === 'number' && Number.isFinite(body.ageYears) ? body.ageYears : null,
+          subject: typeof body.subject === 'string' ? body.subject.trim() : null,
           fullName: typeof body.fullName === 'string' ? body.fullName.trim() : null,
           optInAi: typeof body.optInAi === 'boolean' ? body.optInAi : undefined,
           avatarId: typeof body.avatarId === 'string' ? body.avatarId.trim() : null,
@@ -1374,8 +1383,11 @@ export const createApiHandler = (context: ApiContext) => {
           assessmentId?: number;
           attemptId?: number | null;
           responses?: Array<{ bankQuestionId?: number; optionId?: number | null; timeSpentSeconds?: number | null }>;
+          subject?: string | null;
           goalFocus?: string | null;
           gradeBand?: string | null;
+          gradeLevel?: number | null;
+          ageYears?: number | null;
           fullName?: string | null;
           optInAi?: boolean;
           avatarId?: string | null;
@@ -1415,8 +1427,13 @@ export const createApiHandler = (context: ApiContext) => {
             assessmentId: body.assessmentId,
             attemptId: typeof body.attemptId === 'number' ? body.attemptId : null,
             responses,
+            subject: typeof body.subject === 'string' ? body.subject : null,
             goalFocus: typeof body.goalFocus === 'string' ? body.goalFocus : null,
             gradeBand: typeof body.gradeBand === 'string' ? body.gradeBand : null,
+            gradeLevel:
+              typeof body.gradeLevel === 'number' && Number.isFinite(body.gradeLevel) ? body.gradeLevel : null,
+            ageYears:
+              typeof body.ageYears === 'number' && Number.isFinite(body.ageYears) ? body.ageYears : null,
             fullName: typeof body.fullName === 'string' ? body.fullName : null,
             optInAi: typeof body.optInAi === 'boolean' ? body.optInAi : undefined,
             avatarId: typeof body.avatarId === 'string' ? body.avatarId : null,
@@ -1480,6 +1497,16 @@ export const createApiHandler = (context: ApiContext) => {
         const pathResult = await getStudentPath(supabase, actor.id);
         const next = await selectNextEntry(supabase, actor.id);
         sendJson(res, 200, { path: pathResult, next }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/paths') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const paths = await getStudentPaths(supabase, actor.id);
+        sendJson(res, 200, { paths }, API_VERSION);
       }, { actorId: actor.id });
     }
 

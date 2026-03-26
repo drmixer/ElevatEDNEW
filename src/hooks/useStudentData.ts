@@ -3,9 +3,11 @@ import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tansta
 import {
   fetchPreferences,
   fetchStudentPath,
+  fetchStudentPaths,
   listTutorPersonas,
   type StudentPath,
   type StudentPreferences,
+  type StudentSubjectPath,
   type TutorPersona,
 } from '../services/onboardingService';
 import {
@@ -28,6 +30,7 @@ const parsePalette = (metadata?: Record<string, unknown> | null) => {
 };
 
 export const studentPathQueryKey = (studentId?: string | null) => ['student-path', studentId ?? 'unknown'];
+export const studentPathsQueryKey = (studentId?: string | null) => ['student-paths', studentId ?? 'unknown'];
 export const studentStatsQueryKey = (studentId?: string | null) => ['student-stats', studentId ?? 'unknown'];
 export const xpSummaryQueryKey = (studentId?: string | null) => ['xp-summary', studentId ?? 'unknown'];
 export const tutorPersonaQueryKey = (studentId?: string | null) => ['tutor-persona', studentId ?? 'unknown'];
@@ -159,6 +162,26 @@ export const useStudentPath = (studentId?: string | null) => {
   };
 };
 
+export const useStudentPaths = (studentId?: string | null) => {
+  const queryClient = useQueryClient();
+  const query = useQuery<StudentSubjectPath[]>({
+    queryKey: studentPathsQueryKey(studentId),
+    queryFn: fetchStudentPaths,
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
+  const refresh = useCallback(() => {
+    return queryClient.invalidateQueries({ queryKey: studentPathsQueryKey(studentId) });
+  }, [queryClient, studentId]);
+
+  return {
+    ...query,
+    paths: query.data ?? [],
+    refresh,
+  };
+};
+
 export const useStudentStats = (studentId?: string | null) =>
   useQuery<StudentStats>({
     queryKey: studentStatsQueryKey(studentId),
@@ -237,6 +260,7 @@ export const applyStudentEventResponse = (
       next: response.next ?? null,
     };
     queryClient.setQueryData(studentPathQueryKey(studentId), nextPath);
+    queryClient.invalidateQueries({ queryKey: studentPathsQueryKey(studentId) }).catch(() => undefined);
   }
 
   if (response.stats) {

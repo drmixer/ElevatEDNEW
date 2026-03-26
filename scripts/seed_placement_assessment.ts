@@ -4,7 +4,16 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
+import {
+  normalizePlacementLevel,
+  parsePlacementSubjectList,
+  placementSubjectLabel,
+  placementWindowForLevel,
+  standardsFromValue,
+  type PlacementSubjectKey,
+} from './utils/placementMetadata.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type DiagnosticOption = {
@@ -57,50 +66,43 @@ type SubjectRecord = {
   name: string;
 };
 
-const SUBJECT_LABELS: Record<string, string> = {
-  math: 'Mathematics',
-  ela: 'English Language Arts',
-  english: 'English Language Arts',
-  english_language_arts: 'English Language Arts',
-  science: 'Science',
-};
-
 const DEFAULT_FILE = path.resolve(process.cwd(), 'data/assessments/diagnostics_phase13.json');
 const DEFAULT_TARGET_GRADE_BAND = '6-8';
 const DEFAULT_SOURCE_GRADE = '7';
 const DEFAULT_ITEMS_PER_SUBJECT = 6;
+const DEFAULT_SUBJECTS: PlacementSubjectKey[] = ['math', 'ela'];
 
-const normalizeSubjectName = (subjectKey: string): string => {
-  const key = subjectKey.trim().toLowerCase().replace(/[\s-]+/g, '_');
-  return SUBJECT_LABELS[key] ?? subjectKey;
-};
+const normalizeSubjectName = (subjectKey: PlacementSubjectKey): string => placementSubjectLabel(subjectKey);
+const normalizeStrandKey = (value: string | null | undefined): string => value?.trim().toLowerCase() ?? '';
 
 const printHelp = () => {
   console.log(`
 seed_placement_assessment.ts
 
-Seeds a single mixed-subject placement assessment for onboarding (core subjects).
+Seeds subject-specific placement assessments for onboarding.
 
 Usage:
-  npx tsx scripts/seed_placement_assessment.ts [--file <path>] [--grade-band <band>] [--source-grade <6|7|8>]
-      [--items-per-subject <n>] [--overwrite]
+  npx tsx scripts/seed_placement_assessment.ts [--apply] [--file <path>] [--grade-band <band>] [--source-grade <6|7|8>]
+      [--items-per-subject <n>] [--subjects math,ela] [--overwrite]
 
 Defaults:
   --file              data/assessments/diagnostics_phase13.json
   --grade-band        6-8
   --source-grade      7
   --items-per-subject 6
+  --subjects          math,ela
   --overwrite         false
 `.trim());
 };
 
 const parseArgs = (argv: string[]) => {
+  const { apply, rest } = extractWriteMode(argv);
   const args = new Map<string, string | boolean>();
-  for (let i = 0; i < argv.length; i += 1) {
-    const token = argv[i];
+  for (let i = 0; i < rest.length; i += 1) {
+    const token = rest[i];
     if (!token?.startsWith('--')) continue;
     const key = token.slice(2);
-    const next = argv[i + 1];
+    const next = rest[i + 1];
     if (!next || next.startsWith('--')) {
       args.set(key, true);
       continue;
@@ -113,9 +115,40 @@ const parseArgs = (argv: string[]) => {
   const sourceGrade = (args.get('source-grade') as string | undefined) ?? DEFAULT_SOURCE_GRADE;
   const itemsPerSubjectRaw = (args.get('items-per-subject') as string | undefined) ?? String(DEFAULT_ITEMS_PER_SUBJECT);
   const itemsPerSubject = Number.parseInt(itemsPerSubjectRaw, 10);
+  const subjects = parsePlacementSubjectList((args.get('subjects') as string | undefined) ?? DEFAULT_SUBJECTS.join(','));
   const overwrite = Boolean(args.get('overwrite'));
   const help = Boolean(args.get('help')) || Boolean(args.get('h'));
-  return { file, gradeBand, sourceGrade, itemsPerSubject, overwrite, help };
+  return { apply, file, gradeBand, sourceGrade, itemsPerSubject, subjects, overwrite, help };
+};
+
+const fetchExistingPlacementAssessments = async (
+  supabase: SupabaseClient,
+  gradeBand: string,
+  subjectKey: PlacementSubjectKey,
+): Promise<Array<{ id: number; title: string | null }>> => {
+  const { data, error } = await supabase
+    .from('assessments')
+    .select('id, title, metadata')
+    .is('module_id', null)
+    .contains('metadata', { purpose: 'placement', grade_band: gradeBand });
+
+  if (error) {
+    throw new Error(`Failed to check existing placement assessments: ${error.message}`);
+  }
+
+  return (data ?? [])
+    .filter((row) => {
+      const metadata = (row.metadata as Record<string, unknown> | null | undefined) ?? null;
+      const directSubject = typeof metadata?.subject_key === 'string' ? metadata.subject_key.trim().toLowerCase() : null;
+      if (directSubject === subjectKey) return true;
+
+      if (!Array.isArray(metadata?.subjects)) return false;
+      return metadata.subjects.length === 1 && metadata.subjects[0] === subjectKey;
+    })
+    .map((row) => ({
+      id: row.id as number,
+      title: (row.title as string | null | undefined) ?? null,
+    }));
 };
 
 const fetchSubjects = async (supabase: SupabaseClient): Promise<Map<string, SubjectRecord>> => {
@@ -177,24 +210,18 @@ const pickItems = (config: DiagnosticConfig, targetCount: number): DiagnosticIte
 const deleteExistingPlacementAssessment = async (
   supabase: SupabaseClient,
   gradeBand: string,
+  subjectKey: PlacementSubjectKey,
   overwrite: boolean,
 ): Promise<void> => {
-  const { data: existing, error } = await supabase
-    .from('assessments')
-    .select('id, title, metadata')
-    .is('module_id', null)
-    .contains('metadata', { purpose: 'placement', grade_band: gradeBand });
-
-  if (error) {
-    throw new Error(`Failed to check existing placement assessments: ${error.message}`);
-  }
-
-  const existingIds = (existing ?? []).map((row) => row.id as number);
+  const existing = await fetchExistingPlacementAssessments(supabase, gradeBand, subjectKey);
+  const existingIds = existing.map((row) => row.id);
   if (!existingIds.length) return;
 
   if (!overwrite) {
-    const titles = (existing ?? []).map((row) => (row.title as string | null | undefined) ?? `id:${row.id}`).join(', ');
-    throw new Error(`Placement assessment already exists for grade band ${gradeBand} (${titles}). Re-run with --overwrite to replace.`);
+    const titles = existing.map((row) => row.title ?? `id:${row.id}`).join(', ');
+    throw new Error(
+      `${normalizeSubjectName(subjectKey)} placement assessment already exists for grade band ${gradeBand} (${titles}). Re-run with --overwrite to replace.`,
+    );
   }
 
   const { data: sections, error: sectionsError } = await supabase
@@ -257,13 +284,16 @@ const deleteExistingPlacementAssessment = async (
 };
 
 const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
+  apply: boolean;
   filePath: string;
   gradeBand: string;
   sourceGrade: string;
   itemsPerSubject: number;
+  subjects: PlacementSubjectKey[];
   overwrite: boolean;
 }): Promise<void> => {
-  const { filePath, gradeBand, sourceGrade, itemsPerSubject, overwrite } = options;
+  const { apply, filePath, gradeBand, sourceGrade, itemsPerSubject, subjects, overwrite } = options;
+  logWriteMode(apply, 'placement assessment rows');
   if (!Number.isFinite(itemsPerSubject) || itemsPerSubject < 4 || itemsPerSubject > 12) {
     throw new Error('items-per-subject must be between 4 and 12.');
   }
@@ -279,90 +309,101 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
     return config;
   };
 
-  const mathConfig = resolveConfig('math');
-  const elaConfig = resolveConfig('ela');
-  const scienceConfig = resolveConfig('science');
-
-  await deleteExistingPlacementAssessment(supabase, gradeBand, overwrite);
+  const subjectConfigs = new Map<PlacementSubjectKey, DiagnosticConfig>();
+  subjects.forEach((subjectKey) => {
+    subjectConfigs.set(subjectKey, resolveConfig(subjectKey));
+  });
 
   const subjectMap = await fetchSubjects(supabase);
-  const mathSubjectId = subjectMap.get(normalizeSubjectName(mathConfig.subject))?.id ?? null;
-  const elaSubjectId = subjectMap.get(normalizeSubjectName(elaConfig.subject))?.id ?? null;
-  const scienceSubjectId = subjectMap.get(normalizeSubjectName(scienceConfig.subject))?.id ?? null;
-
-  if (!mathSubjectId || !elaSubjectId || !scienceSubjectId) {
-    throw new Error('Missing subject rows (need Mathematics, English Language Arts, and Science in subjects table).');
-  }
+  const subjectIds = new Map<PlacementSubjectKey, number>();
+  subjectConfigs.forEach((config, subjectKey) => {
+    const subjectId = subjectMap.get(normalizeSubjectName(subjectKey))?.id ?? null;
+    if (!subjectId) {
+      throw new Error(`Missing subject row for ${normalizeSubjectName(subjectKey)} in subjects table.`);
+    }
+    subjectIds.set(subjectKey, subjectId);
+  });
 
   let blockedCount = 0;
   const blockedReasonCounts: Record<string, number> = {};
 
-  const { data: assessmentRow, error: assessmentError } = await supabase
-    .from('assessments')
-    .insert({
-      title: `Core Placement (Grade Band ${gradeBand})`,
-      description: 'A short, mixed-subject placement assessment covering core subjects.',
-      subject_id: null,
-      module_id: null,
-      is_adaptive: true,
-      estimated_duration_minutes: 15,
-      metadata: {
-        purpose: 'placement',
-        grade_band: gradeBand,
-        subjects: ['math', 'ela', 'science'],
-        source_diagnostic_grade: sourceGrade,
-        generated_by: 'seed_placement_assessment',
-        generated_at: new Date().toISOString(),
-      },
-    })
-    .select('id')
-    .single();
+  const collectValidItems = (payload: {
+    config: DiagnosticConfig;
+    subjectKey: 'math' | 'ela' | 'science';
+  }): DiagnosticItem[] => {
+    const { config, subjectKey } = payload;
+    const picked = pickItems(config, itemsPerSubject);
+    if (picked.length < 2) {
+      throw new Error(`Not enough items for ${subjectKey} to seed placement.`);
+    }
 
-  if (assessmentError || !assessmentRow?.id) {
-    throw new Error(`Failed to create placement assessment: ${assessmentError?.message ?? 'unknown error'}`);
-  }
+    const validItems: DiagnosticItem[] = [];
+    for (const item of picked) {
+      if (!item.prompt?.trim().length) {
+        throw new Error(`Item ${item.id} is missing a prompt.`);
+      }
+      if (!Array.isArray(item.options) || item.options.length < 2) {
+        throw new Error(`Item ${item.id} is missing options.`);
+      }
 
-  const assessmentId = assessmentRow.id as number;
+      const quality = assessAssessmentQuestionQuality({
+        prompt: item.prompt,
+        type: item.type ?? 'multiple_choice',
+        options: item.options.map((option) => ({
+          text: option.text,
+          isCorrect: option.isCorrect,
+        })),
+      });
+      if (quality.shouldBlock) {
+        blockedCount += 1;
+        incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
+        console.warn('[seed_placement_assessment] Blocking low-quality placement item', {
+          source: 'scripts/seed_placement_assessment.ts',
+          subjectKey,
+          itemId: item.id,
+          reasons: quality.reasons,
+        });
+        continue;
+      }
 
-  const { data: sectionRows, error: sectionError } = await supabase
-    .from('assessment_sections')
-    .insert([
-      {
-        assessment_id: assessmentId,
-        section_order: 1,
-        title: 'Mathematics',
-        instructions: 'Answer a few math questions to help personalize your path.',
-      },
-      {
-        assessment_id: assessmentId,
-        section_order: 2,
-        title: 'English Language Arts',
-        instructions: 'Answer a few reading and writing questions to help personalize your path.',
-      },
-      {
-        assessment_id: assessmentId,
-        section_order: 3,
-        title: 'Science',
-        instructions: 'Answer a few science questions to help personalize your path.',
-      },
-    ])
-    .select('id, title');
+      validItems.push(item);
+    }
 
-  if (sectionError || !sectionRows?.length) {
-    throw new Error(`Failed to create placement sections: ${sectionError?.message ?? 'unknown error'}`);
-  }
+    if (validItems.length < 2) {
+      throw new Error(`Quality gate left too few placement questions for ${subjectKey} (${validItems.length}).`);
+    }
 
-  const sectionIdByTitle = new Map<string, number>();
-  sectionRows.forEach((row) => {
-    sectionIdByTitle.set((row.title as string).toLowerCase(), row.id as number);
+    return validItems;
+  };
+
+  const validItemsBySubject = new Map<PlacementSubjectKey, DiagnosticItem[]>();
+  subjectConfigs.forEach((config, subjectKey) => {
+    validItemsBySubject.set(subjectKey, collectValidItems({ config, subjectKey }));
   });
+
+  if (!apply) {
+    for (const subjectKey of subjects) {
+      const existingAssessments = await fetchExistingPlacementAssessments(supabase, gradeBand, subjectKey);
+      if (existingAssessments.length) {
+        console.log(
+          `Would replace ${existingAssessments.length} existing ${subjectKey} placement assessment(s) for grade band ${gradeBand}.`,
+        );
+      }
+      console.log(
+        `Would seed ${normalizeSubjectName(subjectKey)} placement assessment with ${validItemsBySubject.get(subjectKey)?.length ?? 0} questions.`,
+      );
+    }
+    return;
+  }
 
   const insertQuestion = async (payload: {
     subjectId: number;
-    subjectKey: 'math' | 'ela' | 'science';
+    subjectKey: PlacementSubjectKey;
     item: DiagnosticItem;
   }): Promise<number> => {
     const { subjectId, subjectKey, item } = payload;
+    const placementLevel = normalizePlacementLevel(sourceGrade);
+    const standards = standardsFromValue(item.standard);
 
     const { data: questionRow, error: questionError } = await supabase
       .from('question_bank')
@@ -371,14 +412,18 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
         question_type: item.type ?? 'multiple_choice',
         prompt: item.prompt,
         difficulty: item.difficulty ?? 3,
-        tags: [item.standard, item.strand].filter((tag): tag is string => typeof tag === 'string' && tag.trim().length),
+        tags: [...standards, item.strand].filter((tag): tag is string => typeof tag === 'string' && tag.trim().length),
         metadata: {
           placement: item.placement ?? {},
           strand: item.strand,
           standard: item.standard,
+          standards,
           purpose: 'placement',
           grade_band: gradeBand,
           subject_key: subjectKey,
+          placement_level: placementLevel,
+          placement_window: placementWindowForLevel(placementLevel),
+          phase: 'subject_placement_v1',
           source_diagnostic_grade: sourceGrade,
           generated_by: 'seed_placement_assessment',
           generated_at: new Date().toISOString(),
@@ -413,84 +458,123 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
   };
 
   const seedSubject = async (payload: {
-    config: DiagnosticConfig;
     subjectId: number;
-    subjectKey: 'math' | 'ela' | 'science';
-    sectionTitle: string;
+    subjectKey: PlacementSubjectKey;
+    config: DiagnosticConfig;
+    validItems: DiagnosticItem[];
   }) => {
-    const { config, subjectId, subjectKey, sectionTitle } = payload;
-    const sectionId = sectionIdByTitle.get(sectionTitle.toLowerCase());
-    if (!sectionId) {
-      throw new Error(`Missing section id for ${sectionTitle}.`);
+    const { subjectId, subjectKey, config, validItems } = payload;
+    await deleteExistingPlacementAssessment(supabase, gradeBand, subjectKey, overwrite);
+
+    const placementLevel = normalizePlacementLevel(sourceGrade);
+    const assessmentTitle = `${normalizeSubjectName(subjectKey)} Placement (Grade Band ${gradeBand})`;
+    const { data: assessmentRow, error: assessmentError } = await supabase
+      .from('assessments')
+      .insert({
+        title: assessmentTitle,
+        description: `A short ${normalizeSubjectName(subjectKey).toLowerCase()} placement assessment for onboarding.`,
+        subject_id: subjectId,
+        module_id: null,
+        is_adaptive: true,
+        estimated_duration_minutes: Math.max(8, Math.min(20, validItems.length * 2)),
+        metadata: {
+          purpose: 'placement',
+          grade_band: gradeBand,
+          subject_key: subjectKey,
+          subjects: [subjectKey],
+          placement_level: placementLevel,
+          placement_window: placementWindowForLevel(placementLevel),
+          phase: 'subject_placement_v1',
+          source_diagnostic_grade: sourceGrade,
+          generated_by: 'seed_placement_assessment',
+          generated_at: new Date().toISOString(),
+        },
+      })
+      .select('id')
+      .single();
+
+    if (assessmentError || !assessmentRow?.id) {
+      throw new Error(
+        `Failed to create ${subjectKey} placement assessment: ${assessmentError?.message ?? 'unknown error'}`,
+      );
     }
 
-    const picked = pickItems(config, itemsPerSubject);
-    if (picked.length < 2) {
-      throw new Error(`Not enough items for ${subjectKey} to seed placement.`);
+    const sectionSource = config.blueprint.sections.filter((section) =>
+      validItems.some((item) => normalizeStrandKey(item.strand) === normalizeStrandKey(section.strand)),
+    );
+    const sectionInserts = (sectionSource.length ? sectionSource : config.blueprint.sections).map((section, index) => ({
+      assessment_id: assessmentRow.id as number,
+      section_order: index + 1,
+      title: section.strand,
+      instructions: `Answer a few ${normalizeSubjectName(subjectKey).toLowerCase()} questions to calibrate your starting level.`,
+    }));
+
+    const { data: sectionRows, error: sectionError } = await supabase
+      .from('assessment_sections')
+      .insert(sectionInserts)
+      .select('id, title');
+
+    if (sectionError || !sectionRows?.length) {
+      throw new Error(
+        `Failed to create ${subjectKey} placement sections: ${sectionError?.message ?? 'unknown error'}`,
+      );
     }
 
-    let questionOrder = 1;
+    const sectionIdByStrand = new Map<string, number>();
+    sectionRows.forEach((row) => {
+      sectionIdByStrand.set(normalizeStrandKey(row.title as string), row.id as number);
+    });
+
+    const questionOrderBySection = new Map<number, number>();
     let insertedForSubject = 0;
-    for (const item of picked) {
-      if (!item.prompt?.trim().length) {
-        throw new Error(`Item ${item.id} is missing a prompt.`);
+    for (const item of validItems) {
+      const sectionId = sectionIdByStrand.get(normalizeStrandKey(item.strand)) ?? sectionRows[0]?.id;
+      if (!sectionId) {
+        throw new Error(`Missing section id for ${subjectKey} placement assessment.`);
       }
-      if (!Array.isArray(item.options) || item.options.length < 2) {
-        throw new Error(`Item ${item.id} is missing options.`);
-      }
-
-      const quality = assessAssessmentQuestionQuality({
-        prompt: item.prompt,
-        type: item.type ?? 'multiple_choice',
-        options: item.options.map((option) => ({
-          text: option.text,
-          isCorrect: option.isCorrect,
-        })),
-      });
-      if (quality.shouldBlock) {
-        blockedCount += 1;
-        incrementQuestionQualityReasonCounts(blockedReasonCounts, quality.reasons);
-        console.warn('[seed_placement_assessment] Blocking low-quality placement item', {
-          source: 'scripts/seed_placement_assessment.ts',
-          subjectKey,
-          itemId: item.id,
-          reasons: quality.reasons,
-        });
-        continue;
-      }
-
       const questionId = await insertQuestion({ subjectId, subjectKey, item });
+      const nextQuestionOrder = (questionOrderBySection.get(sectionId as number) ?? 0) + 1;
+      questionOrderBySection.set(sectionId as number, nextQuestionOrder);
       const { error: linkError } = await supabase
         .from('assessment_questions')
         .insert({
-          section_id: sectionId,
+          section_id: sectionId as number,
           question_id: questionId,
-          question_order: questionOrder,
+          question_order: nextQuestionOrder,
           weight: 1.0,
-          metadata: { generated_by: 'seed_placement_assessment', subject_key: subjectKey },
+          metadata: {
+            generated_by: 'seed_placement_assessment',
+            subject_key: subjectKey,
+            standards: standardsFromValue(item.standard),
+            strand: item.strand,
+            placement_level: placementLevel,
+          },
         });
 
       if (linkError) {
         throw new Error(`Failed to link placement question ${item.id}: ${linkError.message}`);
       }
 
-      questionOrder += 1;
       insertedForSubject += 1;
     }
 
     if (insertedForSubject < 2) {
       throw new Error(`Quality gate left too few placement questions for ${subjectKey} (${insertedForSubject}).`);
     }
+
+    console.log(
+      `Seeded ${normalizeSubjectName(subjectKey)} placement assessment ${assessmentRow.id} for grade band ${gradeBand} (source grade ${sourceGrade}).`,
+    );
   };
 
-  await seedSubject({ config: mathConfig, subjectId: mathSubjectId, subjectKey: 'math', sectionTitle: 'Mathematics' });
-  await seedSubject({
-    config: elaConfig,
-    subjectId: elaSubjectId,
-    subjectKey: 'ela',
-    sectionTitle: 'English Language Arts',
-  });
-  await seedSubject({ config: scienceConfig, subjectId: scienceSubjectId, subjectKey: 'science', sectionTitle: 'Science' });
+  for (const subjectKey of subjects) {
+    await seedSubject({
+      subjectId: subjectIds.get(subjectKey) as number,
+      subjectKey,
+      config: subjectConfigs.get(subjectKey) as DiagnosticConfig,
+      validItems: validItemsBySubject.get(subjectKey) as DiagnosticItem[],
+    });
+  }
 
   if (blockedCount > 0) {
     console.warn('[seed_placement_assessment] Quality gate blocked placement items', {
@@ -499,8 +583,6 @@ const seedPlacementAssessment = async (supabase: SupabaseClient, options: {
       reasonCounts: blockedReasonCounts,
     });
   }
-
-  console.log(`Seeded placement assessment ${assessmentId} for grade band ${gradeBand} (source grade ${sourceGrade}).`);
 };
 
 export async function main(): Promise<void> {
@@ -512,10 +594,12 @@ export async function main(): Promise<void> {
 
   const supabase = createServiceRoleClient();
   await seedPlacementAssessment(supabase, {
+    apply: args.apply,
     filePath: args.file,
     gradeBand: args.gradeBand,
     sourceGrade: args.sourceGrade,
     itemsPerSubject: args.itemsPerSubject,
+    subjects: args.subjects,
     overwrite: args.overwrite,
   });
 }
