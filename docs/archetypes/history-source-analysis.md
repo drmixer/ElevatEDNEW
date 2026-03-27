@@ -3,10 +3,10 @@
 Purpose: define the authoritative archetype spec for history, civics, and social studies lessons that teach students to interpret sources, place evidence in context, and distinguish observation, fact, inference, and perspective.
 
 Status:
-- `Candidate`
+- `Approved`
 
 Primary exemplar:
-- none yet
+- lesson `331`, `Citizenship & Rights Launch Lesson`
 
 Related docs:
 - [lesson-archetypes.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-archetypes.md)
@@ -360,13 +360,13 @@ A lesson using this archetype is ready to be called gold when:
 ## 12. Current Exemplar Notes
 
 Current exemplar:
-- none yet
+- lesson `331`, `Citizenship & Rights Launch Lesson`
 
 Current reality:
-- no history or social studies guide lesson has been approved yet as the canonical source-analysis exemplar
-- this spec should still guide history, civics, and social studies rewrites before exemplar selection
+- lesson `331` is now the approved guide lesson for this archetype
+- this spec should guide sibling history, civics, and social studies rewrites using lesson `331` as the first concrete model
 
-The first approved exemplar should prove:
+This approved exemplar proves:
 - context and sourcing are explicit without becoming bloated
 - the lesson distinguishes evidence, fact, and inference clearly
 - maps, excerpts, charts, or documents do real teaching work

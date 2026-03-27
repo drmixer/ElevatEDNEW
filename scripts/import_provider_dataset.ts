@@ -15,6 +15,7 @@ import {
   findLessonForModule,
   resolveModules,
 } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type ModuleRecord = { id: number; slug: string };
 
@@ -49,25 +50,25 @@ type AssetInsert = {
 const DEFAULT_FILE = path.resolve(process.cwd(), 'data/provider_dataset.json');
 const BATCH_SIZE = 100;
 
-const parseArgs = (): { file: string; provider?: ImportProviderId; updateLessons: boolean } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string; provider?: ImportProviderId; updateLessons: boolean } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
   let file = DEFAULT_FILE;
   let provider: ImportProviderId | undefined;
   let updateLessons = false;
 
-  for (let i = 0; i < args.length; i += 1) {
-    const arg = args[i];
+  for (let i = 0; i < rest.length; i += 1) {
+    const arg = rest[i];
     switch (arg) {
       case '--file':
       case '--path': {
-        const next = args[i + 1];
+        const next = rest[i + 1];
         if (!next) throw new Error(`Expected value after ${arg}`);
         file = path.resolve(process.cwd(), next);
         i += 1;
         break;
       }
       case '--provider': {
-        const next = args[i + 1];
+        const next = rest[i + 1];
         if (!next) throw new Error('Expected provider id after --provider');
         if (!IMPORT_PROVIDER_MAP.has(next as ImportProviderId)) {
           throw new Error(`Unknown provider id ${next}`);
@@ -86,7 +87,7 @@ const parseArgs = (): { file: string; provider?: ImportProviderId; updateLessons
     }
   }
 
-  return { file, provider, updateLessons };
+  return { apply, file, provider, updateLessons };
 };
 
 const chunkArray = <T>(items: T[], size: number): T[][] => {
@@ -290,13 +291,30 @@ const importDataset = async (
 };
 
 const main = async () => {
-  const { file, provider: providerOverride, updateLessons } = parseArgs();
+  const { apply, file, provider: providerOverride, updateLessons } = parseArgs();
+  logWriteMode(apply, 'provider dataset rows');
   const payload = (await loadStructuredFile<unknown>(file)) as unknown;
   if (!isNormalizedProviderDataset(payload)) {
     throw new Error(`File ${file} is not a NormalizedProviderDataset`);
   }
 
   const providerId = providerOverride ?? payload.provider;
+  if (!apply) {
+    const lessonCount = payload.modules.reduce((count, module) => count + (module.lessons?.length ?? 0), 0);
+    const assetCount = payload.modules.reduce(
+      (count, module) =>
+        count +
+        (module.assets?.length ?? 0) +
+        (module.lessons?.reduce((sum, lesson) => sum + (lesson.assets?.length ?? 0), 0) ?? 0),
+      0,
+    );
+    console.log(
+      `Would import provider dataset ${providerId} from ${file}: ${lessonCount} lesson payload(s), ${assetCount} asset payload(s), updateLessons=${updateLessons}.`,
+    );
+    console.log('Dry run only. Re-run with --apply to write changes.');
+    return;
+  }
+
   const supabase = createServiceRoleClient();
   const { assetsInserted, lessonsCreated } = await importDataset(supabase, payload, providerId, updateLessons);
 

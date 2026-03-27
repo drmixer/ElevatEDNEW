@@ -5,6 +5,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type SkeletonModule = {
   grade: string;
@@ -127,8 +128,9 @@ const upsertModules = async (supabase: SupabaseClient, modules: ModuleInsert[]):
   }
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const args = rest;
   let file = DEFAULT_FILE;
 
   for (let i = 0; i < args.length; i += 1) {
@@ -145,12 +147,17 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'skeleton modules');
   const modules = buildModules(await loadSkeleton(file));
+  if (!apply) {
+    console.log(`Would upsert ${modules.length} modules from skeleton file ${file}`);
+    return;
+  }
 
   const supabase = createServiceRoleClient();
 

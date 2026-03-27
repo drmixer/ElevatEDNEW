@@ -1,6 +1,6 @@
 import process from 'node:process';
 
-import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { createServiceRoleClient, fetchAllPaginated, resolveModules } from './utils/supabase.js';
 
 type ModuleDetails = { id: number; slug: string; subject: string; grade_band: string };
 
@@ -61,14 +61,15 @@ const printTop = (label: string, map: Map<string, number>, limit = 10) => {
 
 const main = async () => {
   const supabase = createServiceRoleClient();
-  const { data, error } = await supabase
-    .from('question_bank')
-    .select('id, tags, metadata, difficulty');
-  if (error) {
-    throw new Error(`Failed to load questions: ${error.message}`);
-  }
-
-  const questions = (data ?? []) as QuestionRow[];
+  const questions = await fetchAllPaginated<QuestionRow>(
+    (from, to) =>
+      supabase
+        .from('question_bank')
+        .select('id, tags, metadata, difficulty')
+        .order('id', { ascending: true })
+        .range(from, to),
+    { logLabel: 'question_bank' },
+  );
   if (questions.length === 0) {
     console.log('No practice items found in question_bank.');
     return;

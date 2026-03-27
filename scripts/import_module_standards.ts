@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type ModuleStandardsInput =
   | string
@@ -231,8 +232,9 @@ const upsertModuleStandards = async (
   return inserted;
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const args = rest;
   let file = DEFAULT_FILE;
 
   for (let i = 0; i < args.length; i += 1) {
@@ -249,11 +251,12 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'module-standard mappings');
   const mappings = await loadModuleStandards(file);
   const entries = mappings.flatMap((record) => record.entries);
 
@@ -266,6 +269,11 @@ const main = async () => {
   const combinations = Array.from(
     new Map(entries.map((entry) => [`${entry.framework}::${entry.code}`, entry])).values(),
   ).map((entry) => ({ framework: entry.framework, code: entry.code }));
+
+  if (!apply) {
+    console.log(`Would upsert ${entries.length} module-standard mappings across ${mappings.length} modules from ${file}`);
+    return;
+  }
 
   const supabase = createServiceRoleClient();
   const modules = await resolveModules(supabase, moduleSlugs);

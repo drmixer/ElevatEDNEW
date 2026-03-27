@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessPracticeQuestionQuality } from '../shared/questionQuality.js';
 
 type PracticeOption = { text: string; isCorrect: boolean; feedback?: string | null };
@@ -182,14 +183,14 @@ const insertQuestion = async (
   return questionId;
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
   let file = DEFAULT_FILE;
 
-  for (let i = 0; i < args.length; i += 1) {
-    const arg = args[i];
+  for (let i = 0; i < rest.length; i += 1) {
+    const arg = rest[i];
     if (arg === '--file' || arg === '--path') {
-      const next = args[i + 1];
+      const next = rest[i + 1];
       if (!next) throw new Error(`Expected value after ${arg}`);
       file = path.resolve(process.cwd(), next);
       i += 1;
@@ -198,11 +199,12 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'practice questions');
   const raw = await loadStructuredFile<unknown>(file);
   const items = flattenPracticeDataset(raw).map(normalizeItem);
   if (!Array.isArray(items) || items.length === 0) {
@@ -220,6 +222,14 @@ const main = async () => {
     Array.from(new Set(Array.from(modules.values()).map((m) => m.id))),
   );
   const subjects = await fetchSubjects(supabase);
+
+  if (!apply) {
+    console.log(
+      `Would import ${items.length} authored practice items across ${moduleSlugs.length} module(s) from ${file}.`,
+    );
+    console.log('Dry run only. Re-run with --apply to write changes.');
+    return;
+  }
 
   let inserted = 0;
   for (const item of items) {

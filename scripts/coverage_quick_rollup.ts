@@ -17,6 +17,10 @@ type RollupRow = {
   modules_missing_external_resources: number;
 };
 
+type CoverageCellSubjectRow = {
+  subject: string;
+};
+
 const TARGET_GRADES = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 const parseArgs = (): string[] | null => {
@@ -64,17 +68,30 @@ const main = async (): Promise<void> => {
   const gradeList = grades ?? TARGET_GRADES;
   const data: RollupRow[] = [];
 
-  // Query one grade at a time to avoid broad view scans that can hit statement timeout in CI.
+  // Resolve subjects from cells first, then fetch the lighter rollup view one grade/subject at a time.
   for (const grade of gradeList) {
-    const { data: rows, error } = await supabase
-      .from('coverage_dashboard_rollup')
-      .select(selectColumns)
+    const { data: subjectRows, error: subjectError } = await supabase
+      .from('coverage_dashboard_cells')
+      .select('subject')
       .eq('grade_band', grade)
       .order('subject', { ascending: true });
-    if (error) {
-      throw new Error(`Failed to fetch coverage rollup for grade ${grade}: ${error.message}`);
+    if (subjectError) {
+      throw new Error(`Failed to resolve subjects for grade ${grade}: ${subjectError.message}`);
     }
-    data.push(...((rows ?? []) as RollupRow[]));
+
+    const subjects = Array.from(new Set(((subjectRows ?? []) as CoverageCellSubjectRow[]).map((row) => row.subject)));
+    for (const subject of subjects) {
+      const { data: rows, error } = await supabase
+        .from('coverage_dashboard_rollup')
+        .select(selectColumns)
+        .eq('grade_band', grade)
+        .eq('subject', subject)
+        .order('subject', { ascending: true });
+      if (error) {
+        throw new Error(`Failed to fetch coverage rollup for grade ${grade} ${subject}: ${error.message}`);
+      }
+      data.push(...((rows ?? []) as RollupRow[]));
+    }
   }
 
   data.sort((a, b) => {

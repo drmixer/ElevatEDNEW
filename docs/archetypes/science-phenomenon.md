@@ -3,10 +3,11 @@
 Purpose: define the authoritative archetype spec for science lessons that teach students to explain an observable phenomenon, system, or process by connecting evidence, models, and reasoning.
 
 Status:
-- `Candidate`
+- `Approved exemplar exists`
 
 Primary exemplar:
-- none yet
+- lesson `4648`
+- [lesson-4648-science-2026-03-25.md](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-4648-science-2026-03-25.md)
 
 Related docs:
 - [lesson-archetypes.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-archetypes.md)

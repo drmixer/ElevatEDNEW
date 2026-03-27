@@ -1,5 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+import process from 'node:process';
+
+import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
+const supabase = createServiceRoleClient();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _STUDENT_ID = '7534cea0-d6a2-4cac-bca9-cfb16df83039';
@@ -8,6 +11,11 @@ const PATH_ID = 4; // Created in previous run
 const SUBJECT_PRIORITY = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies', 'Electives'];
 
 async function rebuildPath() {
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    if (rest.length > 0) {
+        throw new Error(`Unknown argument: ${rest[0]}`);
+    }
+    logWriteMode(apply, 'student path entries');
     console.log('Adding entries to path 4 for test student (grade 7)...');
 
     // Get modules for grades 6, 7, 8
@@ -52,6 +60,11 @@ async function rebuildPath() {
         },
     }));
 
+    if (!apply) {
+        console.log(`Would insert ${entries.length} path entries into path ${PATH_ID}.`);
+        return;
+    }
+
     const { data: insertedEntries, error: entryError } = await supabase
         .from('student_path_entries')
         .insert(entries)
@@ -65,4 +78,7 @@ async function rebuildPath() {
     console.log(`\n✅ Created ${insertedEntries?.length || 0} path entries for test student`);
 }
 
-rebuildPath().catch(console.error);
+rebuildPath().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

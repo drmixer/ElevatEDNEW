@@ -1,0 +1,237 @@
+{
+  "6-study-skills-executive-functioning-plan-your-week-in-10-minutes": {
+    "title": "Study Planning Routine for Grade 6",
+    "subject": "Study Skills",
+    "grade": 6,
+    "standards": [
+      "SS.EF.6.1",
+      "SS.EF.6.2",
+      "SS.EF.6.3"
+    ],
+    "questions": [
+      {
+        "id": "6sspw001",
+        "prompt": "What should a student place on the calendar before adding study blocks?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "Fixed commitments such as practice, family plans, and rides",
+            "isCorrect": true
+          },
+          {
+            "text": "Every assignment for the whole month",
+            "isCorrect": false
+          },
+          {
+            "text": "Rewards for finishing the week",
+            "isCorrect": false
+          },
+          {
+            "text": "A two-hour study block every night",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The routine starts by mapping the times that are already committed so the plan fits the real week."
+      },
+      {
+        "id": "6sspw002",
+        "prompt": "Which choice best describes an anchor block?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "A protected study block for the hardest or highest-priority subject",
+            "isCorrect": true
+          },
+          {
+            "text": "A long break with no plan",
+            "isCorrect": false
+          },
+          {
+            "text": "Any class period during the school day",
+            "isCorrect": false
+          },
+          {
+            "text": "A list of missing assignments",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "An anchor block is the first study block placed on purpose so the most important work has a realistic home."
+      },
+      {
+        "id": "6sspw003",
+        "prompt": "Why does the lesson recommend short review blocks instead of one giant review session?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "Short review blocks are easier to fit into a real week and easier to keep",
+            "isCorrect": true
+          },
+          {
+            "text": "Short review blocks mean the work is unimportant",
+            "isCorrect": false
+          },
+          {
+            "text": "Students should never study for more than ten minutes",
+            "isCorrect": false
+          },
+          {
+            "text": "Review should only happen when there is no homework",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The routine aims for repeatable, realistic blocks that students can actually follow through on."
+      },
+      {
+        "id": "6sspw004",
+        "prompt": "A student has soccer on Monday, music lessons on Wednesday, and a family dinner on Friday. Which plan uses the routine well?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "Tuesday math anchor block, Thursday reading review, Saturday vocabulary review",
+            "isCorrect": true
+          },
+          {
+            "text": "Monday two-hour session right after soccer and nothing else all week",
+            "isCorrect": false
+          },
+          {
+            "text": "Wednesday study block during music lessons",
+            "isCorrect": false
+          },
+          {
+            "text": "Friday night giant session after the family dinner",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "A strong plan respects fixed commitments and spreads work across realistic open times."
+      },
+      {
+        "id": "6sspw005",
+        "prompt": "What should a student check before saying the weekly plan is final?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "Whether there are conflicts, overloaded days, or missing materials",
+            "isCorrect": true
+          },
+          {
+            "text": "Whether every block is exactly the same length",
+            "isCorrect": false
+          },
+          {
+            "text": "Whether a friend chose the same schedule",
+            "isCorrect": false
+          },
+          {
+            "text": "Whether every subject appears every day",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The checking step exists to catch problems before the week starts."
+      },
+      {
+        "id": "6sspw006",
+        "prompt": "If all three study blocks are stacked on one already busy evening, what is the best revision?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "Keep the anchor block and move the review blocks to other open times",
+            "isCorrect": true
+          },
+          {
+            "text": "Make the anchor block even longer so all the work fits",
+            "isCorrect": false
+          },
+          {
+            "text": "Delete the anchor block and leave only easy work",
+            "isCorrect": false
+          },
+          {
+            "text": "Leave the overloaded evening unchanged because the plan is already written",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Balanced plans are more realistic and easier to keep than one overloaded night."
+      },
+      {
+        "id": "6sspw007",
+        "prompt": "Explain why mapping fixed commitments first makes a weekly study plan stronger.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [],
+        "explanation": "Mapping fixed commitments first keeps the plan realistic because study blocks are placed around the time the student truly has available."
+      },
+      {
+        "id": "6sspw008",
+        "prompt": "A student misses one review block because of an unexpected appointment. What should they do next?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "standards": [
+          "SS.EF.6.1",
+          "SS.EF.6.2",
+          "SS.EF.6.3"
+        ],
+        "options": [
+          {
+            "text": "Move the short review block to the next realistic open time",
+            "isCorrect": true
+          },
+          {
+            "text": "Cancel the whole weekly plan",
+            "isCorrect": false
+          },
+          {
+            "text": "Add the missed work to an already overloaded night",
+            "isCorrect": false
+          },
+          {
+            "text": "Turn the review block into a giant two-hour makeup session by default",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "The routine should be adjusted when the week changes; one missed block does not mean the whole plan failed."
+      }
+    ]
+  }
+}

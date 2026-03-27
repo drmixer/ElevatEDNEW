@@ -113,10 +113,10 @@ class AiRequestError extends Error {
 }
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-// Keep the marketing assistant aligned with the tutor: OpenRouter + Mistral 7B Instruct (free).
-const PRIMARY_MODEL = 'mistralai/mistral-7b-instruct:free';
+// Standard default model across tutor flows: Gemini 2.5 Flash via OpenRouter.
+const PRIMARY_MODEL = process.env.OPENROUTER_PRIMARY_MODEL ?? process.env.OPENROUTER_MODEL ?? 'google/gemini-2.5-flash';
 // Use a different model as fallback to reduce correlated outages and rate limits.
-const FALLBACK_MODEL = 'google/gemini-2.0-flash-exp:free';
+const FALLBACK_MODEL = process.env.OPENROUTER_FALLBACK_MODEL ?? 'google/gemini-2.0-flash-exp:free';
 const DEFAULT_MODEL_TIMEOUT_MS = 12000;
 
 const MAX_PROMPT_CHARS = 1200;

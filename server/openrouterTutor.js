@@ -4,7 +4,7 @@
  */
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'mistralai/mistral-7b-instruct:free';
+const MODEL = process.env.OPENROUTER_MODEL ?? 'google/gemini-2.5-flash';
 const REQUEST_TIMEOUT_MS = 20000;
 
 const SYSTEM_PROMPT = [

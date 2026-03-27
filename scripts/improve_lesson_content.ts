@@ -18,12 +18,19 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 const supabase = createServiceRoleClient();
 
-// OpenRouter API (Fallback)
+// Gemini Developer API (preferred)
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+
+// OpenRouter API (fallback)
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY;
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash';
 
 // Quality lesson template for reference
 const QUALITY_LESSON_TEMPLATE = `
@@ -93,14 +100,15 @@ function parseArgs(): {
     dryRun: boolean;
     startFrom?: number;
 } {
-    const args = process.argv.slice(2);
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    const args = rest;
     const result: {
         grade?: string;
         subject?: string;
         limit?: number;
         dryRun: boolean;
         startFrom?: number;
-    } = { dryRun: false };
+    } = { dryRun: !apply };
 
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--grade' && args[i + 1]) {
@@ -296,7 +304,7 @@ IMPORTANT REQUIREMENTS:
 
 Write the complete improved lesson content now. Output ONLY the lesson content in markdown format, no preamble or explanation.`;
 
-    const response = await callOpenRouter(prompt);
+    const response = await callModel(prompt);
     return response;
 }
 
@@ -325,10 +333,9 @@ async function callOpenRouter(prompt: string, retries = 3): Promise<string> {
         throw new Error('Missing OPENROUTER_API_KEY environment variable');
     }
 
-    // Models to try - paid first, then free fallbacks
+    // Default to Gemini 2.5 Flash over OpenRouter, then fall back to cheaper/free variants.
     const modelsToTry = [
-        'openai/gpt-4o-mini',                    // Very cheap paid model
-        'anthropic/claude-3-haiku',              // Very cheap paid model
+        OPENROUTER_MODEL,
         'google/gemini-2.0-flash-exp:free',      // Free fallback
     ];
 
@@ -389,6 +396,85 @@ async function callOpenRouter(prompt: string, retries = 3): Promise<string> {
     throw new Error('All models and retries failed');
 }
 
+async function callGemini(prompt: string, retries = 3): Promise<string> {
+    if (!GEMINI_API_KEY) {
+        throw new Error('Missing GEMINI_API_KEY or GOOGLE_API_KEY environment variable');
+    }
+
+    const endpoint = `${GEMINI_ENDPOINT}/${GEMINI_MODEL}:generateContent`;
+
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': GEMINI_API_KEY,
+                },
+                body: JSON.stringify({
+                    contents: [
+                        {
+                            role: 'user',
+                            parts: [{ text: prompt }],
+                        },
+                    ],
+                    generationConfig: {
+                        temperature: 0.7,
+                        maxOutputTokens: 2500,
+                    },
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+            }
+
+            const data = await response.json() as {
+                candidates?: Array<{
+                    content?: {
+                        parts?: Array<{ text?: string }>;
+                    };
+                }>;
+            };
+
+            const content = (data.candidates || [])
+                .flatMap((candidate) => candidate.content?.parts || [])
+                .map((part) => part.text || '')
+                .join('')
+                .trim();
+
+            if (!content) {
+                throw new Error('Empty response from Gemini');
+            }
+
+            return content;
+        } catch (error) {
+            console.error(`  Gemini attempt ${attempt} failed:`, error);
+            if (attempt === retries) {
+                break;
+            }
+            await new Promise(r => setTimeout(r, 2000 * attempt));
+        }
+    }
+
+    throw new Error(`Gemini ${GEMINI_MODEL} failed after ${retries} attempts`);
+}
+
+async function callModel(prompt: string): Promise<string> {
+    if (GEMINI_API_KEY) {
+        return callGemini(prompt);
+    }
+
+    if (OPENROUTER_API_KEY) {
+        return callOpenRouter(prompt);
+    }
+
+    throw new Error(
+        'Missing model credentials. Set GEMINI_API_KEY/GOOGLE_API_KEY or OPENROUTER_API_KEY/VITE_OPENROUTER_API_KEY.',
+    );
+}
+
 async function updateLesson(lessonId: number, newContent: string): Promise<void> {
     const { error } = await supabase
         .from('lessons')
@@ -414,12 +500,13 @@ function saveProgress(lessonId: number, status: 'success' | 'error', message?: s
 
 async function main(): Promise<void> {
     const options = parseArgs();
+    logWriteMode(!options.dryRun, 'lesson content improvements');
 
     console.log('=== LESSON CONTENT IMPROVEMENT ===\n');
     console.log('Options:', options);
 
-    if (!OPENROUTER_API_KEY) {
-        console.error('ERROR: Missing OPENROUTER_API_KEY environment variable');
+    if (!GEMINI_API_KEY && !OPENROUTER_API_KEY) {
+        console.error('ERROR: Missing Gemini or OpenRouter API credentials');
         process.exit(1);
     }
 
@@ -465,7 +552,7 @@ async function main(): Promise<void> {
 
             stats.improved++;
 
-            // Rate limiting - 10s delay for paid OpenRouter models
+            // Rate limiting between model calls
             await new Promise(r => setTimeout(r, 10000));
 
         } catch (error) {

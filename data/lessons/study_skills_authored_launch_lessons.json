@@ -1,0 +1,32 @@
+{
+  "6-study-skills-executive-functioning-plan-your-week-in-10-minutes": {
+    "title": "Plan Your Week in 10 Minutes",
+    "summary": "Students learn a four-step weekly study-planning routine: map fixed commitments, place one anchor block for the hardest subject, add two short review blocks, and check whether the plan is realistic.",
+    "objectives": [
+      "Map fixed commitments before scheduling study time",
+      "Place one anchor block and two short review blocks in realistic spots",
+      "Check whether a weekly study plan is balanced and doable"
+    ],
+    "grade_band": "6",
+    "subject": "Study Skills",
+    "standards": [
+      "SS.EF.6.1",
+      "SS.EF.6.2",
+      "SS.EF.6.3"
+    ],
+    "outline": {
+      "hook": "Compare two students: one says, 'I'll study sometime this week,' while the other picks exact times before the week starts. Ask which student is more likely to follow through and why.",
+      "direct_instruction": "Teach the four-step routine. Step 1: map fixed commitments such as school, practice, rides, and family events. Step 2: place one anchor block for the hardest subject at a realistic time you can usually protect. Step 3: add two short review blocks for reading, vocabulary, or notes. Step 4: check the plan for conflicts, overloaded days, and missing materials. Emphasize that short, repeatable blocks work better than one giant session.",
+      "guided_practice": "Model a weekly schedule together. Mark fixed commitments first, then choose an anchor block and two review blocks. Discuss why some open times are better than others.",
+      "independent_practice": "Students build a simple weekly study plan using their own schedule or a provided sample week. They explain why their anchor block and review blocks are realistic.",
+      "check_for_understanding": "Can they distinguish fixed commitments from open time? Can they place an anchor block for a priority subject? Can they spot when a plan is overloaded or unrealistic?",
+      "exit_ticket": "Students name their anchor block and one thing they checked before finalizing the plan.",
+      "materials": [
+        "Weekly calendar template",
+        "Anchor block checklist",
+        "Sample student schedules",
+        "Reading or vocabulary review card"
+      ]
+    }
+  }
+}

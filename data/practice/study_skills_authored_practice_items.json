@@ -1,0 +1,160 @@
+{
+  "6-study-skills-executive-functioning-plan-your-week-in-10-minutes": [
+    {
+      "prompt": "What should you mark first when building a weekly study plan?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Fixed commitments like practice or family events", "isCorrect": true, "feedback": "Correct. The routine starts by mapping the times you already have to use." },
+        { "text": "Every subject you might want to study", "isCorrect": false, "feedback": "You choose study blocks after you see the real open time in your week." },
+        { "text": "The longest possible homework session", "isCorrect": false, "feedback": "Long sessions are not the first step and are often less realistic." },
+        { "text": "A reward for finishing all your work", "isCorrect": false, "feedback": "Rewards can help, but they are not the first move in the routine." }
+      ],
+      "explanation": "Map your fixed commitments first so you can plan around the week you actually have."
+    },
+    {
+      "prompt": "What is an anchor block in this lesson?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "The main study block you protect first for the hardest or most important subject", "isCorrect": true, "feedback": "Correct. The anchor block is the first study block you place on purpose." },
+        { "text": "A free period where you can do anything you want", "isCorrect": false, "feedback": "An anchor block has a clear academic job." },
+        { "text": "A long break after school every day", "isCorrect": false, "feedback": "The routine does not require a long daily break." },
+        { "text": "A class assignment that is already finished", "isCorrect": false, "feedback": "An anchor block is scheduled time, not finished work." }
+      ],
+      "explanation": "The anchor block is the main focused study time you place first."
+    },
+    {
+      "prompt": "Why are review blocks kept short in the routine?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Short review blocks are easier to fit into a real week and easier to keep", "isCorrect": true, "feedback": "Correct. Short, focused review blocks are realistic and repeatable." },
+        { "text": "Short blocks mean the work does not need attention", "isCorrect": false, "feedback": "Review work still matters, even if the block is short." },
+        { "text": "Students should never spend more than ten minutes studying", "isCorrect": false, "feedback": "The lesson recommends short review blocks, not a limit on all studying." },
+        { "text": "Review blocks only happen when all homework is finished", "isCorrect": false, "feedback": "Review blocks can be planned even when other work is still coming." }
+      ],
+      "explanation": "Short review blocks work because they are realistic and focused."
+    },
+    {
+      "prompt": "Which task fits best in a review block?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Rereading notes and quizzing yourself on vocabulary", "isCorrect": true, "feedback": "Correct. A review block is meant for short, focused follow-up work." },
+        { "text": "Starting a brand-new month-long project", "isCorrect": false, "feedback": "That task is too large for a short review block." },
+        { "text": "Waiting to see if homework appears later", "isCorrect": false, "feedback": "A review block should have a clear study job." },
+        { "text": "Packing every unfinished subject into one sitting", "isCorrect": false, "feedback": "That overloads the block instead of keeping it focused." }
+      ],
+      "explanation": "Review blocks work best for rereading, self-quizzing, and checking recent work."
+    },
+    {
+      "prompt": "A student has robotics on Monday, band on Wednesday, and a family dinner out on Friday. Which plan uses the routine best?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Tuesday 25-minute math anchor block, Thursday 15-minute reading review, Saturday 15-minute vocabulary review", "isCorrect": true, "feedback": "Correct. The plan protects one anchor block and spreads two short review blocks across open times." },
+        { "text": "Monday 60 minutes of math right after robotics, plus nothing else all week", "isCorrect": false, "feedback": "That depends on one heavy block at a poor time." },
+        { "text": "Wednesday 30 minutes of reading during band and Friday 30 minutes before dinner", "isCorrect": false, "feedback": "Those times conflict with fixed commitments." },
+        { "text": "Put all study tasks on Friday night after the dinner out", "isCorrect": false, "feedback": "That plan is overloaded and not realistic." }
+      ],
+      "explanation": "A strong plan respects fixed commitments, protects one anchor block, and spreads review."
+    },
+    {
+      "prompt": "What should you do if all three study blocks are packed onto one busy evening?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Keep one anchor block and move the review blocks to other open times", "isCorrect": true, "feedback": "Correct. The routine works better when the week is balanced." },
+        { "text": "Make the anchor block even longer so everything gets done at once", "isCorrect": false, "feedback": "A longer overloaded night usually makes the plan harder to keep." },
+        { "text": "Delete the anchor block and only leave easy tasks", "isCorrect": false, "feedback": "The anchor block protects the most important work." },
+        { "text": "Leave the rest of the week empty because the plan is already written", "isCorrect": false, "feedback": "The checking step is there so you can adjust the plan." }
+      ],
+      "explanation": "Balanced plans are easier to follow than one overloaded night."
+    },
+    {
+      "prompt": "What is the main reason to map fixed commitments before adding study blocks?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "It prevents you from planning study time on top of things you already have to do", "isCorrect": true, "feedback": "Correct. The routine begins with reality, not guessing." },
+        { "text": "It guarantees every day will have the same amount of homework", "isCorrect": false, "feedback": "The routine cannot control how much homework appears." },
+        { "text": "It removes the need to choose a priority subject", "isCorrect": false, "feedback": "You still need to decide what deserves the anchor block." },
+        { "text": "It means review blocks are no longer necessary", "isCorrect": false, "feedback": "Review blocks are still part of the routine." }
+      ],
+      "explanation": "Mapping fixed commitments first keeps the plan realistic and conflict-free."
+    },
+    {
+      "prompt": "Which choice is the strongest anchor block?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "A 25-minute math block on Tuesday right after snack, before anything else starts", "isCorrect": true, "feedback": "Correct. It is focused, protected, and placed in a real open time." },
+        { "text": "A two-hour block late Sunday night when you are already tired", "isCorrect": false, "feedback": "That is too long and poorly placed." },
+        { "text": "A block with no subject chosen yet", "isCorrect": false, "feedback": "An anchor block should protect a real priority subject." },
+        { "text": "A block that starts during soccer practice", "isCorrect": false, "feedback": "That conflicts with a fixed commitment." }
+      ],
+      "explanation": "A strong anchor block is realistic, protected, and tied to a priority subject."
+    },
+    {
+      "prompt": "What should you check before finalizing the weekly plan?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Whether the blocks conflict with commitments, overload one day, or need missing materials", "isCorrect": true, "feedback": "Correct. The checking step catches the biggest planning problems." },
+        { "text": "Whether every block is exactly the same length", "isCorrect": false, "feedback": "Blocks can be different lengths if the plan is still realistic." },
+        { "text": "Whether your friend uses the same schedule", "isCorrect": false, "feedback": "The routine should fit your week, not someone else's." },
+        { "text": "Whether you can finish the whole month tonight", "isCorrect": false, "feedback": "The routine is for one realistic week at a time." }
+      ],
+      "explanation": "Checking the plan helps you catch conflicts, overload, and missing materials."
+    },
+    {
+      "prompt": "A student misses Thursday's review block because of an unexpected appointment. What is the best response?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Move the short review block to the next realistic open time", "isCorrect": true, "feedback": "Correct. The routine should be adjusted, not abandoned." },
+        { "text": "Cancel the whole weekly plan immediately", "isCorrect": false, "feedback": "Missing one block does not ruin the rest of the plan." },
+        { "text": "Add the missed review block to an already overloaded night", "isCorrect": false, "feedback": "That creates a new problem instead of fixing the first one." },
+        { "text": "Turn the missed review into a two-hour weekend session by default", "isCorrect": false, "feedback": "The routine favors short, realistic moves, not giant makeup sessions." }
+      ],
+      "explanation": "If one block is missed, move it to another realistic slot instead of giving up."
+    },
+    {
+      "prompt": "Why does an anchor block help a student keep studying during the week?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "It protects the hardest or most important subject by giving it a real time before the week gets crowded", "isCorrect": true, "feedback": "Correct. The anchor block protects important work before other tasks take over the week." },
+        { "text": "It removes the need for any review blocks later in the week", "isCorrect": false, "feedback": "The routine still includes review blocks." },
+        { "text": "It guarantees every assignment will take the same amount of time", "isCorrect": false, "feedback": "An anchor block helps with planning, but it does not make all tasks equal." },
+        { "text": "It works only if the block is at least two hours long", "isCorrect": false, "feedback": "The lesson recommends a realistic block of about 20 to 30 minutes." }
+      ],
+      "explanation": "An anchor block helps because it protects the most important work at a real time in the week."
+    },
+    {
+      "prompt": "Which pair should a student check before saying a weekly study plan is ready?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": ["SS.EF.6.1", "SS.EF.6.2", "SS.EF.6.3"],
+      "options": [
+        { "text": "Whether any block conflicts with a commitment and whether one day is overloaded", "isCorrect": true, "feedback": "Correct. Those are two of the main checks in the routine." },
+        { "text": "Whether every block uses the same subject and the same length", "isCorrect": false, "feedback": "The routine does not require identical subjects or block lengths." },
+        { "text": "Whether a friend chose the same schedule and the same rewards", "isCorrect": false, "feedback": "The plan should fit the student's actual week, not match someone else's." },
+        { "text": "Whether the student can finish the whole month in one weekend", "isCorrect": false, "feedback": "The routine is about one realistic week at a time." }
+      ],
+      "explanation": "Before finalizing the plan, check for conflicts, overload, missing materials, and whether the plan is realistic."
+    }
+  ]
+}

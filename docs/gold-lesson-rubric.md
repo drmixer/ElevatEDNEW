@@ -6,6 +6,7 @@ Status:
 - Current elementary math guide lesson: `Perimeter (intro) Launch Lesson` (`lesson 1437`)
 - Current scope of this rubric: all lessons
 - Current strongest exemplar pattern: K-5 math
+- Current active improvement window: grades `3-8` across subjects
 
 ---
 
@@ -27,6 +28,10 @@ Use the same shell across the platform, but adapt the internal lesson pattern by
 - subject
 - task type
 - cognitive load
+
+Current operating priority:
+- focus lesson-improvement work first on grades `3-8`
+- keep the rubric universal, but do not spread active rewrite work evenly across every grade right now
 
 ---
 

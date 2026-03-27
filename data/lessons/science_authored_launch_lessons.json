@@ -1422,31 +1422,31 @@
     }
   },
   "6-science-earth-space-plate-tectonics": {
-    "title": "Launch Lesson: Earth Space Plate Tectonics",
-    "summary": "This lesson introduces Grade 6 students to earth space plate tectonics, focusing on key concepts and observable phenomena.",
+    "title": "Plate Tectonics (Earth & Space Science, Grade 6): Launch Lesson",
+    "summary": "Students use fossil, rock, and ocean-floor evidence to explain plate motion and connect plate boundaries to earthquakes, volcanoes, ridges, trenches, and mountain ranges.",
     "objectives": [
-      "Students will understand fundamental concepts of earth space plate tectonics",
-      "Students will observe and collect data related to earth space plate tectonics",
-      "Students will apply learning to new scenarios"
+      "Students will explain how multiple lines of evidence support plate motion.",
+      "Students will connect boundary types to the landforms and hazards they create.",
+      "Students will use evidence and reasoning to explain a plate-tectonics phenomenon."
     ],
     "grade_band": "Grade 6",
     "subject": "Science",
     "standards": [
-      "6-STD-001"
+      "MS-ESS2-2",
+      "MS-ESS2-3"
     ],
     "outline": {
-      "hook": "Start with an engaging phenomenon or question: 'How does earth space plate tectonics affect your daily life?' Show students a relevant video clip or image that sparks curiosity about the topic.",
-      "direct_instruction": "Explain key terms and concepts related to earth space plate tectonics. Use visual aids and demonstrations. Have students take notes on important vocabulary and examples. Connect new learning to prior knowledge.",
-      "guided_practice": "Work with students on a structured investigation or problem related to earth space plate tectonics. Provide guiding questions and allow students to make observations, predictions, and collect data with teacher support.",
-      "independent_practice": "Students complete worksheets or activities independently that apply the concepts from earth space plate tectonics. They may design simple experiments, answer analysis questions, or create visual representations of learning.",
-      "check_for_understanding": "Use quick formative assessments: ask think-pair-share questions about earth space plate tectonics, have students complete exit tickets, or conduct brief individual conferences to identify misconceptions.",
-      "exit_ticket": "Students answer: 'What is one key thing you learned about earth space plate tectonics today? How could you use this knowledge?'",
+      "hook": "Students begin with the pattern that earthquakes and volcanoes cluster in narrow belts rather than appearing randomly across Earth.",
+      "direct_instruction": "The lesson models how fossils, rock layers, coastlines, and ocean-floor age patterns support plate motion and how each boundary type creates a different surface pattern.",
+      "guided_practice": "Students interpret boundary evidence and explain which type of plate motion best matches trenches, ridges, mountain ranges, earthquakes, and volcanoes.",
+      "independent_practice": "Students apply claim-evidence-reasoning to new plate-tectonics examples and predict what type of boundary could create each pattern.",
+      "check_for_understanding": "Students identify the strongest evidence for plate motion and explain why a given observation supports convergent, divergent, or transform boundaries.",
+      "exit_ticket": "Students answer: 'Which evidence best shows that Earth's plates move, and how does it connect to a boundary pattern such as a ridge, trench, volcano chain, or earthquake zone?'",
       "materials": [
-        "Classroom materials related to earth space plate tectonics",
-        "Chart paper and markers",
-        "Science notebooks for note-taking",
-        "Visual aids and diagrams",
-        "Safety equipment if needed"
+        "World map or tectonic-plate map",
+        "Plate-boundary diagram or labeled map",
+        "Science notebooks for evidence notes",
+        "Projected examples of fossil, rock, and seafloor data"
       ]
     }
   },

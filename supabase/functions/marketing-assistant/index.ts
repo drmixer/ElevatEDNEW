@@ -1,5 +1,5 @@
 /**
- * Supabase Edge Function: Homepage marketing assistant using OpenRouter Mistral 7B Instruct.
+ * Supabase Edge Function: Homepage marketing assistant using Gemini 2.5 Flash via OpenRouter by default.
  */
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 
@@ -21,7 +21,7 @@ type MarketingResponse = {
 };
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'mistralai/mistral-7b-instruct:free';
+const MODEL = Deno.env.get('OPENROUTER_MODEL') ?? 'google/gemini-2.5-flash';
 const REQUEST_TIMEOUT_MS = 20000;
 const MAX_QUESTION_CHARS = 1200;
 
@@ -46,7 +46,7 @@ Pricing/Plans:
 - Free: $0/month for 1 learner; guided diagnostic; core subjects; up to 10 lessons/month; AI tutor access limited to 3 chats per day; basic progress for the last 30 days; weekly digest optional.
 - Plus: $6.99/month for the first student ($5.59/additional, 20% off; up to 4 seats); roughly 100 lessons/assignments per month; high AI tutor cap with fair-use guardrails; advanced analytics; weekly AI summaries/digest; exports/PDFs; alerts and saved practice sets.
 - Pro: $9.99/month for the first student ($7.99/additional, 20% off; up to 6 seats); unlimited lessons/assignments; AI tutor effectively unlimited (fair use); priority support; full analytics history with CSV exports; automation like weekly study plan refresh and priority access to new content.
-AI stack: OpenRouter + Mistral 7B Instruct (free tier) power both the marketing assistant and the in-product tutor.
+AI stack: Gemini 2.5 Flash is the standard default model for both the marketing assistant and the in-product tutor.
 Support: Encourage visitors to reach out through the site contact options for onboarding, billing, or family setup specifics.
 `.trim();
 

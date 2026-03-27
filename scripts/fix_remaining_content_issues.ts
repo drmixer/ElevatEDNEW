@@ -12,6 +12,7 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 const supabase = createServiceRoleClient();
 
@@ -250,6 +251,11 @@ function addExamples(content: string, title: string, subject: string, gradeBand:
 }
 
 async function main() {
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    if (rest.length > 0) {
+        throw new Error(`Unknown argument: ${rest[0]}`);
+    }
+    logWriteMode(apply, 'remaining content issue fixes');
     console.log('=== FIXING REMAINING CONTENT ISSUES ===\n');
 
     // Load audit report
@@ -305,7 +311,9 @@ async function main() {
 
         // Update if content changed
         if (content !== lesson.content) {
-            await updateLessonContent(lessonId, content);
+            if (apply) {
+                await updateLessonContent(lessonId, content);
+            }
             fixedCount++;
 
             if (fixedCount % 20 === 0) {
@@ -319,7 +327,7 @@ async function main() {
     console.log(`Lessons fixed: ${fixedCount}`);
     console.log(`Template content replaced: ${templateFixed}`);
     console.log(`Examples added: ${examplesAdded}`);
-    console.log('\n✅ Content fixes complete!');
+    console.log(apply ? '\n✅ Content fixes complete!' : '\nDry run complete. Re-run with --apply to write changes.');
 }
 
 main().catch((error) => {

@@ -55,6 +55,17 @@
     "notes":""
   },
   {
+    "grade":"6",
+    "subject":"Study Skills",
+    "strand":"Executive Functioning",
+    "topic":"Plan Your Week in 10 Minutes",
+    "subtopic":"",
+    "suggested_source_category":"Self-authored CC BY lessons; student-facing planning templates and checklists",
+    "example_source":"ElevatED Author Team",
+    "license_requirement":"CC BY \/ CC BY-SA \/ CC0 \/ Public Domain only (no NC\/ND)",
+    "notes":"Academic routine lesson focused on weekly study planning, realistic time blocking, and self-checking a simple plan."
+  },
+  {
     "grade":"2",
     "subject":"Electives",
     "strand":"Arts & Music",

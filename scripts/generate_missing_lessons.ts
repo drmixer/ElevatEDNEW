@@ -1,5 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+import 'dotenv/config';
+import process from 'node:process';
+
+import { createServiceRoleClient } from './utils/supabase.js';
+import { loadPublicLessonsByModuleIds, summarizePublicLessons } from './utils/lessonSeeding.js';
+const supabase = createServiceRoleClient();
 
 interface Module {
     id: number;
@@ -9,6 +13,25 @@ interface Module {
     strand: string | null;
     topic: string | null;
     slug: string;
+}
+
+function parseArgs(): { apply: boolean } {
+    const args = process.argv.slice(2);
+    let apply = false;
+
+    for (const arg of args) {
+        if (arg === '--apply') {
+            apply = true;
+            continue;
+        }
+        if (arg === '--dry-run') {
+            apply = false;
+            continue;
+        }
+        throw new Error(`Unknown argument: ${arg}`);
+    }
+
+    return { apply };
 }
 
 function generateLessonContent(mod: Module): string {
@@ -71,15 +94,19 @@ function generateLessonContent(mod: Module): string {
 }
 
 async function generateMissingLessons() {
-    console.log('Finding modules without lessons...\n');
+    const { apply } = parseArgs();
+    console.log(apply ? 'APPLY MODE: lesson rows will be written.' : 'DRY RUN MODE: no lesson rows will be written.');
+    console.log('Finding modules without public lessons...\n');
 
     const { data: modules } = await supabase.from('modules').select('id, title, subject, grade_band, strand, topic, slug');
-    const { data: lessons } = await supabase.from('lessons').select('module_id');
+    const publicLessonsByModule = await loadPublicLessonsByModuleIds(
+        supabase,
+        (modules || []).map((module) => module.id as number),
+    );
 
-    const moduleIdsWithLessons = new Set(lessons?.map(l => l.module_id) || []);
-    const missing: Module[] = modules?.filter(m => !moduleIdsWithLessons.has(m.id)) || [];
+    const missing: Module[] = modules?.filter(m => !publicLessonsByModule.has(m.id)) || [];
 
-    console.log(`Found ${missing.length} modules without lessons.\n`);
+    console.log(`Found ${missing.length} modules without public lessons.\n`);
 
     // Get all existing topics
     const { data: existingTopics } = await supabase.from('topics').select('id, name, subject_id');
@@ -97,9 +124,23 @@ async function generateMissingLessons() {
     }
 
     let created = 0;
+    let skipped = 0;
     let errors = 0;
 
     for (const mod of missing) {
+        const existingPublicLessons = publicLessonsByModule.get(mod.id) ?? [];
+        if (existingPublicLessons.length > 0) {
+            console.log(`⏭️ Skipping ${mod.title}: public lesson(s) already exist (${summarizePublicLessons(existingPublicLessons)})`);
+            skipped++;
+            continue;
+        }
+
+        if (!apply) {
+            console.log(`Would create: Grade ${mod.grade_band} - ${mod.title}`);
+            created++;
+            continue;
+        }
+
         const subjectId = subjectMap[mod.subject] || 13;
 
         // Try to find existing topic first
@@ -173,7 +214,20 @@ async function generateMissingLessons() {
 
     console.log(`\n=== SUMMARY ===`);
     console.log(`Created: ${created} lessons`);
+    console.log(`Skipped: ${skipped} modules`);
     console.log(`Errors: ${errors}`);
+    if (!apply) {
+        console.log('Dry run only. Re-run with --apply to write changes.');
+    }
 }
 
-generateMissingLessons();
+const invokedFromCli =
+    process.argv[1]?.includes('generate_missing_lessons.ts') ||
+    process.argv[1]?.includes('generate_missing_lessons.js');
+
+if (invokedFromCli) {
+    generateMissingLessons().catch((error: unknown) => {
+        console.error(error);
+        process.exitCode = 1;
+    });
+}

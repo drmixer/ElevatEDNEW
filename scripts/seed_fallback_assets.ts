@@ -7,6 +7,7 @@ import {
   fetchLessonsByModuleIds,
   fetchContentSourcesByName,
 } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type ModuleRow = {
   id: number;
@@ -179,6 +180,36 @@ const SUBJECT_TEMPLATES: Record<string, AssetTemplate[]> = {
       tags: ['social-studies', 'geography', 'reference'],
     },
   ],
+  'Study Skills': [
+    {
+      sourceName: 'CFPB',
+      url: 'https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-planning/',
+      title: 'CFPB Teen Planning Guide',
+      description: 'Goal-setting and planning prompts that help students break larger goals into actionable steps.',
+      tags: ['study-skills', 'planning', 'goal-setting'],
+    },
+    {
+      sourceName: 'CFPB',
+      url: 'https://files.consumerfinance.gov/f/201508_cfpb_goal-setting-tool.pdf',
+      title: 'CFPB Goal-Setting Tool',
+      description: 'A printable goal-setting organizer that supports planning, sequencing, and follow-through.',
+      tags: ['study-skills', 'planning', 'organizer'],
+    },
+    {
+      sourceName: 'CFPB',
+      url: 'https://www.consumerfinance.gov/consumer-tools/educator-tools/your-money-your-goals/toolkit/',
+      title: 'CFPB Your Money, Your Goals Toolkit',
+      description: 'Practical tools for setting goals, tracking tasks, and building repeatable planning routines.',
+      tags: ['study-skills', 'routines', 'goal-setting'],
+    },
+    {
+      sourceName: 'CFPB',
+      url: 'https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/teach/activities/learning-about-budgets/',
+      title: 'CFPB Learning About Budgets Activity',
+      description: 'A structured planning activity that helps students prioritize needs, wants, and realistic next steps.',
+      tags: ['study-skills', 'prioritization', 'planning'],
+    },
+  ],
 };
 
 const targetSubjects = Object.keys(SUBJECT_TEMPLATES);
@@ -220,7 +251,8 @@ const fetchAssetsPaged = async (supabaseClient: ReturnType<typeof createServiceR
   return rows;
 };
 
-const seedFallbackAssets = async (): Promise<void> => {
+const seedFallbackAssets = async (apply: boolean): Promise<void> => {
+  logWriteMode(apply, 'fallback assets');
   const supabase = createServiceRoleClient();
 
   const { data: modules, error: moduleError } = await supabase
@@ -342,6 +374,11 @@ const seedFallbackAssets = async (): Promise<void> => {
     return;
   }
 
+  if (!apply) {
+    console.log(`Would upsert ${assets.length} fallback assets across ${modulesNeedingAssets.length} modules.`);
+    return;
+  }
+
   const { error: insertError } = await supabase.from('assets').upsert(assets, { onConflict: 'module_id,url' });
   if (insertError) {
     throw new Error(`Failed to upsert fallback assets: ${insertError.message}`);
@@ -355,8 +392,14 @@ const invokedFromCli =
   process.argv[1]?.includes('seed_fallback_assets.js');
 
 if (invokedFromCli) {
-  seedFallbackAssets().catch((error: unknown) => {
-    console.error(error);
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  if (rest.length > 0) {
+    console.error(new Error(`Unknown argument: ${rest[0]}`));
     process.exitCode = 1;
-  });
+  } else {
+    seedFallbackAssets(apply).catch((error: unknown) => {
+      console.error(error);
+      process.exitCode = 1;
+    });
+  }
 }

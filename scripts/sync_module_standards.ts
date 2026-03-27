@@ -3,6 +3,7 @@ import process from 'node:process';
 
 import { loadModuleStandards } from './import_module_standards.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type NormalizedEntry = {
   moduleSlug: string;
@@ -142,14 +143,14 @@ const updateLessonMetadataStandards = async (
   return updated;
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
   let file = DEFAULT_FILE;
 
-  for (let i = 0; i < args.length; i += 1) {
-    const arg = args[i];
+  for (let i = 0; i < rest.length; i += 1) {
+    const arg = rest[i];
     if (arg === '--file' || arg === '--path') {
-      const next = args[i + 1];
+      const next = rest[i + 1];
       if (!next) throw new Error(`Expected value after ${arg}`);
       file = path.resolve(process.cwd(), next);
       i += 1;
@@ -158,11 +159,12 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async (): Promise<void> => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'module standards and lesson metadata');
   const mappings = (await loadModuleStandards(file)) as NormalizedEntry[];
   const entries = mappings.flatMap((record) => record.entries);
   if (entries.length === 0) {
@@ -195,6 +197,14 @@ const main = async (): Promise<void> => {
   }
 
   const standards = await fetchStandardIds(supabase, combos);
+
+  if (!apply) {
+    console.log(
+      `Would link ${entries.length} module-standard mapping row(s) across ${moduleSlugs.length} module(s) from ${file}.`,
+    );
+    console.log('Dry run only. Re-run with --apply to write changes.');
+    return;
+  }
 
   const inserted = await upsertModuleStandards(supabase, mappings, standards, modules);
 

@@ -14,6 +14,7 @@ import {
   resolveModules,
   updateLessonAttributionBlocks,
 } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type CuratedAssetEntry = {
   source: string;
@@ -121,6 +122,7 @@ const upsertAssets = async (supabase: SupabaseClient, assets: AssetInsert[]): Pr
 export const importCuratedAssets = async (
   supabase: SupabaseClient,
   mapping: CuratedMapping,
+  apply = false,
 ): Promise<number> => {
   const moduleKeys = Object.keys(mapping).filter((key) => !key.startsWith('lesson:'));
   const lessonKeys = Object.keys(mapping)
@@ -353,6 +355,10 @@ export const importCuratedAssets = async (
     return 0;
   }
 
+  if (!apply) {
+    return assets.length;
+  }
+
   await upsertAssets(supabase, assets);
 
   if (touchedLessons.size > 0) {
@@ -375,8 +381,9 @@ export const importCuratedAssets = async (
   return assets.length;
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const args = rest;
   let file = DEFAULT_MAPPING_FILE;
 
   for (let i = 0; i < args.length; i += 1) {
@@ -393,15 +400,16 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'curated assets');
   const mapping = (await loadStructuredFile<CuratedMapping>(file)) ?? {};
   const supabase = createServiceRoleClient();
-  const inserted = await importCuratedAssets(supabase, mapping);
-  console.log(`Upserted ${inserted} curated assets from ${file}`);
+  const inserted = await importCuratedAssets(supabase, mapping, apply);
+  console.log(apply ? `Upserted ${inserted} curated assets from ${file}` : `Would upsert ${inserted} curated assets from ${file}`);
 };
 
 const invokedFromCli =

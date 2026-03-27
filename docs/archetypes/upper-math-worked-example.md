@@ -6,7 +6,7 @@ Status:
 - `Candidate`
 
 Primary exemplar:
-- none yet
+- lesson `232`, `Similarity & Congruence` (approved on `2026-03-25`)
 
 Related docs:
 - [lesson-archetypes.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-archetypes.md)

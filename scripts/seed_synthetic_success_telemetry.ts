@@ -1,6 +1,7 @@
 import process from 'node:process';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -34,12 +35,13 @@ const parsePositiveInt = (value: string, name: string): number => {
 };
 
 const parseArgs = (): CliOptions => {
-  const args = process.argv.slice(2);
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const args = rest;
   const options: CliOptions = {
     lookbackDays: 7,
     seedTag: 'phase_bc_synthetic_v1',
     replaceExisting: true,
-    dryRun: false,
+    dryRun: !apply,
     retentionCohortSize: 10,
     recentCheckpointCohortSize: 10,
     adaptiveAttemptCount: 60,
@@ -325,6 +327,7 @@ const summarizeRows = (rows: AnalyticsInsertRow[]) => {
 
 const main = async (): Promise<void> => {
   const options = parseArgs();
+  logWriteMode(!options.dryRun, 'synthetic telemetry rows');
   const supabase = createServiceRoleClient();
   const rows = buildRows(options);
 

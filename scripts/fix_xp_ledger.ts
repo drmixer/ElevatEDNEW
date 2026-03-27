@@ -1,4 +1,7 @@
+import process from 'node:process';
+
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 /**
  * Fix missing xp_ledger rows for all students
@@ -7,6 +10,11 @@ import { createServiceRoleClient } from './utils/supabase.js';
  */
 
 async function main() {
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    if (rest.length > 0) {
+        throw new Error(`Unknown argument: ${rest[0]}`);
+    }
+    logWriteMode(apply, 'xp_ledger repairs');
     console.log('=== Fixing Missing xp_ledger Rows ===\n');
 
     const supabase = createServiceRoleClient();
@@ -49,20 +57,25 @@ async function main() {
         }
 
         // Create missing row
-        const { error: insertError } = await supabase
-            .from('xp_ledger')
-            .upsert({
-                student_id: student.id,
-                xp_total: 0,
-                streak_days: 0,
-                badge_ids: []
-            }, { onConflict: 'student_id' });
+        if (apply) {
+            const { error: insertError } = await supabase
+                .from('xp_ledger')
+                .upsert({
+                    student_id: student.id,
+                    xp_total: 0,
+                    streak_days: 0,
+                    badge_ids: []
+                }, { onConflict: 'student_id' });
 
-        if (insertError) {
-            console.error(`  ❌ Error creating for ${student.email}:`, insertError.message);
-            errors++;
+            if (insertError) {
+                console.error(`  ❌ Error creating for ${student.email}:`, insertError.message);
+                errors++;
+            } else {
+                console.log(`  ✅ ${student.email} - created xp_ledger`);
+                fixed++;
+            }
         } else {
-            console.log(`  ✅ ${student.email} - created xp_ledger`);
+            console.log(`  Would create xp_ledger for ${student.email}`);
             fixed++;
         }
     }
@@ -73,4 +86,7 @@ async function main() {
     console.log(`Errors: ${errors}`);
 }
 
-main().catch(console.error);
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

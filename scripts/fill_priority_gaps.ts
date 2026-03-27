@@ -3,6 +3,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessPracticeQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type TargetModule = {
@@ -959,7 +960,8 @@ const ensureExternalResource = async (
   console.log(`Added external resource for ${module.slug}.`);
 };
 
-const run = async (): Promise<void> => {
+const run = async (apply: boolean): Promise<void> => {
+  logWriteMode(apply, 'priority gap backfills');
   const supabase = createServiceRoleClient();
   const targets = TARGETS;
   const modules = await fetchModules(
@@ -967,6 +969,33 @@ const run = async (): Promise<void> => {
     targets.map((t) => t.slug),
   );
   const subjectIds = await fetchSubjectIds(supabase);
+
+  if (!apply) {
+    let actionableTargets = 0;
+    let missingModules = 0;
+    let missingSubjects = 0;
+
+    for (const target of targets) {
+      const module = modules.get(target.slug);
+      if (!module) {
+        missingModules += 1;
+        continue;
+      }
+
+      const subjectId = subjectIds.get(module.subject);
+      if (!subjectId) {
+        missingSubjects += 1;
+        continue;
+      }
+
+      actionableTargets += 1;
+    }
+
+    console.log(
+      `Would evaluate ${actionableTargets} target modules for practice, assessment, and external-resource backfill (${missingModules} missing modules, ${missingSubjects} missing subject ids).`,
+    );
+    return;
+  }
 
   for (const target of targets) {
     const module = modules.get(target.slug);
@@ -994,8 +1023,14 @@ const invokedFromCli =
   process.argv[1]?.includes('fill_priority_gaps.ts') || process.argv[1]?.includes('fill_priority_gaps.js');
 
 if (invokedFromCli) {
-  run().catch((error: unknown) => {
-    console.error(error);
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  if (rest.length > 0) {
+    console.error(new Error(`Unknown argument: ${rest[0]}`));
     process.exitCode = 1;
-  });
+  } else {
+    run(apply).catch((error: unknown) => {
+      console.error(error);
+      process.exitCode = 1;
+    });
+  }
 }

@@ -15,16 +15,8 @@ import { assessPracticeQuestionQuality } from '../shared/questionQuality.js';
 
 const supabase = createServiceRoleClient();
 
-// Practice data files to process
-const PRACTICE_FILES = [
-    'authored_practice_items.json',
-    'ela_authored_practice_items.json',
-    'science_authored_practice_items.json',
-    'arts_music_authored_practice_items.json',
-    'cs_authored_practice_items.json',
-    'health_pe_authored_practice_items.json',
-    'financial_literacy_authored_practice_items.json',
-];
+const PRACTICE_DIRECTORY = path.join(process.cwd(), 'data', 'practice');
+const PRACTICE_FILE_SUFFIX = 'authored_practice_items.json';
 
 interface PracticeOption {
     text: string;
@@ -241,6 +233,7 @@ async function createQuestion(
     item: PracticeItem,
     skillIds: number[],
     subjectId: number | null,
+    sourceFile: string,
     dryRun: boolean
 ): Promise<number | null> {
     if (dryRun) return 1; // Return dummy ID for dry run
@@ -285,6 +278,7 @@ async function createQuestion(
                 seeded_at: new Date().toISOString(),
                 moduleSlug: item.moduleSlug,
                 standards: item.standards || [],
+                source_of_truth_file: sourceFile,
             },
         })
         .select('id')
@@ -333,7 +327,8 @@ async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
     blockedGeneric: number;
     errors: number;
 }> {
-    const filepath = path.join(process.cwd(), 'data', 'practice', filename);
+    const filepath = path.join(PRACTICE_DIRECTORY, filename);
+    const sourceFile = path.relative(process.cwd(), filepath);
 
     if (!fs.existsSync(filepath)) {
         console.warn(`File not found: ${filepath}`);
@@ -427,7 +422,7 @@ async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
         // Create the question
         if (skillIds.length > 0) {
             const subjectId = subjectCache.get(subjectName)?.id || null;
-            const questionId = await createQuestion(item, skillIds, subjectId, dryRun);
+            const questionId = await createQuestion(item, skillIds, subjectId, sourceFile, dryRun);
             if (questionId) {
                 questionsCreated++;
             } else {
@@ -437,6 +432,17 @@ async function processPracticeFile(filename: string, dryRun: boolean): Promise<{
     }
 
     return { questionsCreated, skillsLinked, blockedGeneric, errors };
+}
+
+function discoverPracticeFiles(): string[] {
+    if (!fs.existsSync(PRACTICE_DIRECTORY)) {
+        return [];
+    }
+
+    return fs
+        .readdirSync(PRACTICE_DIRECTORY)
+        .filter((filename) => filename.endsWith(PRACTICE_FILE_SUFFIX))
+        .sort();
 }
 
 async function main() {
@@ -463,7 +469,15 @@ async function main() {
     let totalBlockedGeneric = 0;
     let totalErrors = 0;
 
-    for (const filename of PRACTICE_FILES) {
+    const practiceFiles = discoverPracticeFiles();
+    if (practiceFiles.length === 0) {
+        console.log(`No practice source files found in ${PRACTICE_DIRECTORY}`);
+        return;
+    }
+
+    console.log(`Discovered ${practiceFiles.length} practice source file(s): ${practiceFiles.join(', ')}\n`);
+
+    for (const filename of practiceFiles) {
         console.log(`Processing ${filename}...`);
         const result = await processPracticeFile(filename, dryRun);
 

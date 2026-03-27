@@ -17709,362 +17709,450 @@
   ],
   "6-science-earth-space-plate-tectonics": [
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 1",
+      "prompt": "Which observation best supports the idea that continents now separated by oceans were once connected?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "evidence",
+        "continents",
+        "fossils"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "Matching fossils and rock layers appear on both sides of the Atlantic Ocean.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Matching fossils and rock patterns are strong evidence that the continents were once joined."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "Different continents have different weather today.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Different weather does not show that continents used to touch."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "All continents have beaches somewhere along their coasts.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Beaches do not explain past plate motion."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "Some continents are larger than others.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Size differences are not evidence that continents moved."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 2",
+      "prompt": "Why do many earthquakes and volcanoes happen in long belts instead of being spread randomly across Earth?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-2"
+      ],
+      "tags": [
+        "phenomenon",
+        "plate-boundaries"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "They usually form near plate boundaries where plates interact.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Plate interactions concentrate earthquakes and volcanoes near boundaries."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "They only happen where the weather changes quickly.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Weather does not control tectonic patterns."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "They happen only on islands in the Pacific Ocean.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Many occur around the Pacific, but they also happen in other boundary zones."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "They form wherever Earth's crust is oldest.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Age alone does not explain the narrow boundary pattern."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 3",
+      "prompt": "Which ocean-floor pattern is strongest evidence for seafloor spreading at a mid-ocean ridge?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "seafloor-spreading",
+        "evidence"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "Rocks closest to the ridge are youngest, and rocks get older farther away on both sides.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "That age pattern fits new crust forming at the ridge and moving outward."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "The deepest parts of the ocean are always next to the ridge.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Mid-ocean ridges are elevated, not the deepest parts."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "All ocean-floor rocks have the same age.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "If all rocks were the same age, it would not support spreading."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "No earthquakes happen near the ridge.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Earthquakes can occur near spreading centers."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 4",
+      "prompt": "At a convergent boundary where an oceanic plate meets a continental plate, what usually happens?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "convergent",
+        "subduction"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "The denser oceanic plate sinks beneath the continental plate.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Oceanic crust is usually denser, so it subducts beneath continental crust."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "The plates move apart and form a ridge.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That describes a divergent boundary."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "The plates slide past each other without changing elevation.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That describes a transform boundary."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "Both plates stop moving completely.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Plate boundaries are active because plates continue to move."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 5",
+      "prompt": "Which landform is most strongly linked to a divergent plate boundary?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "divergent",
+        "landforms"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "A mid-ocean ridge where new crust forms",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Divergent boundaries create ridges and rift zones as plates move apart."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "A deep trench beside a continent",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Deep trenches usually form at convergent subduction zones."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "A chain of folded mountains from plate collision",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Folded mountain ranges are more closely tied to convergent motion."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "A fault where plates grind sideways past each other",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Sideways motion is a transform pattern."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 6",
+      "prompt": "What hazard is most common along a transform boundary?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-2"
+      ],
+      "tags": [
+        "transform",
+        "earthquakes"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "Earthquakes caused by built-up stress being released",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Transform boundaries often produce earthquakes as plates lock and then slip."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "New crust forming at a ridge",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That is a divergent-boundary pattern."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "A wide line of volcanic islands from magma rising through a subducting slab",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Volcanic arcs are more typical of convergent subduction zones."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "No major geologic activity at all",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Transform boundaries are active and can produce powerful earthquakes."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 7",
+      "prompt": "A student says matching coastlines alone prove that plates move. Which added evidence would make the explanation much stronger?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "evidence",
+        "reasoning"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "Matching fossils and mountain belts on continents now separated by oceans",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Multiple lines of related evidence make the continental-connection claim much stronger."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "A list of countries located on each continent today",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Modern country borders do not support plate-tectonics reasoning."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "A photo showing that some coastlines have beaches",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Beaches do not explain why continents may once have fit together."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "A weather report from both continents on the same day",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Weather is short-term and unrelated to ancient plate motion."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 8",
+      "prompt": "Scientists observe a deep trench offshore, frequent earthquakes, and a chain of volcanoes along a continent. Which boundary best fits that evidence?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "convergent",
+        "evidence",
+        "andes"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "A convergent boundary where an oceanic plate subducts beneath a continental plate",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "That combination of trench, quakes, and volcanoes is classic subduction-zone evidence."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "A divergent boundary where plates are moving apart on the ocean floor",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Divergent boundaries form ridges, not deep trenches plus volcanic arcs on a continent."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "A transform boundary where plates only slide sideways",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Transform boundaries often cause earthquakes but do not usually create trenches and volcanic arcs together."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "A hotspot far from any plate boundary",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A hotspot can make volcanoes, but it does not explain the trench and quake pattern."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 9",
+      "prompt": "Why does the west coast of South America have both many earthquakes and the Andes volcanoes?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-2",
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "andes",
+        "subduction",
+        "reasoning"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "An oceanic plate is subducting beneath a continental plate, causing stress and melting.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Subduction explains both earthquake stress and volcano formation along the Andes."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "A divergent boundary is pulling the continent apart and making a ridge on land.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That would not explain the trench-and-volcano arc pattern."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "Transform motion creates volcanoes whenever plates slide sideways.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Transform motion commonly causes earthquakes, not large volcanic arcs."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "Winds from the Pacific Ocean push the crust upward into mountains.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Surface winds do not drive tectonic plates."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 10",
+      "prompt": "Which statement correctly connects evidence to an explanation about plate motion?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "claim-evidence-reasoning"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "Because rocks near a mid-ocean ridge are youngest, scientists infer that new crust forms there and then moves outward.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "That option uses evidence and then explains what the evidence means."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "Because ridges are underwater, they must be unimportant to plate motion.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Being underwater does not make a feature unimportant."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "Because continents have beaches, they must have once been joined.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That is not relevant evidence for continental motion."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "Because earthquakes happen, plate boundaries can never be identified.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Earthquake patterns actually help scientists identify boundaries."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 11",
+      "prompt": "Which claim is best supported by finding the same ancient plant fossils in South America and Africa?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "fossils",
+        "continents"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "The continents were once connected and later moved apart.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Matching land-fossil evidence supports the idea of past continental connection."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "Plants can easily grow across a wide ocean without transport.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That is a much weaker explanation for matching fossils."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "Fossils always form at transform boundaries.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Fossils are not limited to transform boundaries."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "Continents never change position after they form.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "The fossil evidence points in the opposite direction."
         }
       ]
     },
     {
-      "prompt": "[Grade 6] Earth Space Plate Tectonics Practice Item 12",
+      "prompt": "A long crack valley is forming as a continent slowly pulls apart. Which boundary type best explains this pattern?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "skills": [
+        "plate_tectonics_evidence"
+      ],
       "standards": [
-        "6-STD-001"
+        "MS-ESS2-3"
+      ],
+      "tags": [
+        "divergent",
+        "prediction",
+        "rift"
       ],
       "options": [
         {
-          "text": "Correct answer",
+          "text": "A divergent boundary forming a rift zone",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Continental rifts form where plates pull apart."
         },
         {
-          "text": "Incorrect answer A",
+          "text": "A convergent boundary forming a trench",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Convergent boundaries push together instead of pulling apart."
         },
         {
-          "text": "Incorrect answer B",
+          "text": "A transform boundary with only sideways motion",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Sideways sliding does not usually create a widening rift valley."
         },
         {
-          "text": "Incorrect answer C",
+          "text": "A hotspot with no plate motion involved",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A hotspot can create volcanoes, but it does not best explain a continent splitting apart."
         }
       ]
     }

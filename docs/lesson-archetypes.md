@@ -156,7 +156,7 @@ Visual expectations:
 - used when diagrams/tables/graphs actually help
 
 Current exemplar:
-- none yet
+- lesson `331`, `Citizenship & Rights Launch Lesson`
 
 Spec:
 - [upper-math-worked-example.md](/Users/drmixer/code/ElevatEDNEW/docs/archetypes/upper-math-worked-example.md)
@@ -249,7 +249,7 @@ Spec:
 ### 5. History / Social Studies Source Analysis
 
 Status:
-- `Candidate`
+- `Approved`
 
 Best fit:
 - Social Studies / History / Civics
@@ -290,7 +290,7 @@ Spec:
 ### 6. Study Skills / Metacognitive Routine
 
 Status:
-- `Candidate`
+- `Approved exemplar exists`
 
 Best fit:
 - Study skills
@@ -323,7 +323,7 @@ Visual expectations:
 - checklists, routine cards, or organizers over decorative images
 
 Current exemplar:
-- none yet
+- lesson `4901`, `Plan Your Week in 10 Minutes`
 
 Spec:
 - [study-skills-routine.md](/Users/drmixer/code/ElevatEDNEW/docs/archetypes/study-skills-routine.md)
@@ -331,7 +331,7 @@ Spec:
 ### 7. Specials / Applied Concept Lesson
 
 Status:
-- `Future`
+- `Approved exemplar exists`
 
 Best fit:
 - arts
@@ -352,7 +352,7 @@ Likely teaching shape:
 - summary
 
 Current exemplar:
-- none yet
+- lesson `648`, `Intro: Music Theory (intro)`
 
 Spec:
 - [applied-concept.md](/Users/drmixer/code/ElevatEDNEW/docs/archetypes/applied-concept.md)
@@ -412,9 +412,10 @@ The current catalog is now fully backed by per-archetype spec docs.
 
 The next documentation work should be:
 
-1. approve exemplar lessons for the non-math and upper-math archetypes using [lesson-exemplar-approval.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-exemplar-approval.md) and [lesson-exemplar-coverage.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-exemplar-coverage.md)
-2. wire archetype tags and audit statuses into lesson metadata and script outputs
-3. make the audit and rewrite scripts follow the operational flow in [lesson-audit-pipeline.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-audit-pipeline.md) and [lesson-rewrite-pipeline.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-rewrite-pipeline.md)
+1. use [grades-3-8-exemplar-shortlist.md](/Users/drmixer/code/ElevatEDNEW/docs/grades-3-8-exemplar-shortlist.md) and [grades-3-8-content-plan.md](/Users/drmixer/code/ElevatEDNEW/docs/grades-3-8-content-plan.md) as the concrete approval order for the active grades `3-8` push
+2. approve exemplar lessons for the grades `3-8` lanes in that order using [lesson-exemplar-approval.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-exemplar-approval.md) and [lesson-exemplar-coverage.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-exemplar-coverage.md)
+3. wire archetype tags and audit statuses into lesson metadata and script outputs
+4. make the audit and rewrite scripts follow the operational flow in [lesson-audit-pipeline.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-audit-pipeline.md) and [lesson-rewrite-pipeline.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-rewrite-pipeline.md)
 
 That is enough to move from "archetype library exists" to "archetype library governs real rewrite operations."
 

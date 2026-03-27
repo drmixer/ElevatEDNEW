@@ -1,4 +1,4 @@
-import { authenticatedFetch } from './apiClient';
+import { getAccessTokenIfPresent, handleApiResponse } from './apiClient';
 
 type AnalyticsPayload = Record<string, unknown> | undefined;
 
@@ -58,19 +58,36 @@ const scheduleFlush = () => {
   }, FLUSH_INTERVAL_MS);
 };
 
+const canRetryAnalyticsError = (error: unknown) => {
+  if (!(error instanceof Error)) return true;
+  return !/authentication required/i.test(error.message);
+};
+
 const flushAnalytics = async () => {
   if (flushing || pending.length === 0) return;
   flushing = true;
 
   const batch = pending.splice(0, MAX_BATCH_SIZE);
   try {
-    await authenticatedFetch(ANALYTICS_ENDPOINT, {
+    const token = await getAccessTokenIfPresent();
+    if (!token) {
+      return;
+    }
+
+    const response = await fetch(ANALYTICS_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      keepalive: true,
       body: JSON.stringify({ events: batch }),
     });
+    await handleApiResponse<{ ok: boolean; inserted: number }>(response);
   } catch (error) {
-    pending.unshift(...batch);
+    if (canRetryAnalyticsError(error)) {
+      pending.unshift(...batch);
+    }
     if (import.meta.env.DEV) {
       console.warn('[analytics] failed to persist events', error);
     }

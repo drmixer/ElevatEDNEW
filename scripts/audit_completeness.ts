@@ -1,6 +1,6 @@
 import process from 'node:process';
 
-import { createServiceRoleClient } from './utils/supabase.js';
+import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
 
 type ModuleRecord = {
   id: number;
@@ -34,44 +34,62 @@ const fetchModules = async () => {
   const supabase = createServiceRoleClient();
   const [
     { data: modules, error: moduleError },
-    { data: lessons, error: lessonError },
-    { data: assets, error: assetError },
-    { data: assessments, error: assessmentError },
-    { data: moduleStandards, error: moduleStandardError },
+    lessons,
+    assets,
+    assessments,
+    moduleStandards,
   ] =
     await Promise.all([
       supabase.from('modules').select('id, slug, title'),
-      supabase.from('lessons').select('id, module_id, visibility'),
-      supabase.from('assets').select('id, module_id'),
-      supabase
-        .from('assessments')
-        .select('id, module_id')
-        .contains('metadata', { purpose: 'baseline' }),
-      supabase.from('module_standards').select('id, module_id, standard_id'),
+      fetchAllPaginated<LessonRecord>(
+        (from, to) =>
+          supabase
+            .from('lessons')
+            .select('id, module_id, visibility')
+            .order('id', { ascending: true })
+            .range(from, to),
+        { logLabel: 'lessons' },
+      ),
+      fetchAllPaginated<AssetRecord>(
+        (from, to) =>
+          supabase
+            .from('assets')
+            .select('id, module_id')
+            .order('id', { ascending: true })
+            .range(from, to),
+        { logLabel: 'assets' },
+      ),
+      fetchAllPaginated<AssessmentRecord>(
+        (from, to) =>
+          supabase
+            .from('assessments')
+            .select('id, module_id')
+            .contains('metadata', { purpose: 'baseline' })
+            .order('id', { ascending: true })
+            .range(from, to),
+        { logLabel: 'baseline assessments' },
+      ),
+      fetchAllPaginated<ModuleStandardRecord>(
+        (from, to) =>
+          supabase
+            .from('module_standards')
+            .select('id, module_id, standard_id')
+            .order('id', { ascending: true })
+            .range(from, to),
+        { logLabel: 'module_standards' },
+      ),
     ]);
 
   if (moduleError) {
     throw new Error(`Failed to fetch modules: ${moduleError.message}`);
   }
-  if (lessonError) {
-    throw new Error(`Failed to fetch lessons: ${lessonError.message}`);
-  }
-  if (assetError) {
-    throw new Error(`Failed to fetch assets: ${assetError.message}`);
-  }
-  if (assessmentError) {
-    throw new Error(`Failed to fetch assessments: ${assessmentError.message}`);
-  }
-  if (moduleStandardError) {
-    throw new Error(`Failed to fetch module standards: ${moduleStandardError.message}`);
-  }
 
   return {
     modules: (modules ?? []) as ModuleRecord[],
-    lessons: (lessons ?? []) as LessonRecord[],
-    assets: (assets ?? []) as AssetRecord[],
-    assessments: (assessments ?? []) as AssessmentRecord[],
-    moduleStandards: (moduleStandards ?? []) as ModuleStandardRecord[],
+    lessons,
+    assets,
+    assessments,
+    moduleStandards,
   };
 };
 

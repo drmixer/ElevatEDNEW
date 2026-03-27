@@ -15,6 +15,7 @@ import {
   resolveModules,
   updateLessonAttributionBlocks,
 } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type ExternalResourceRow = {
   moduleSlug: string;
@@ -173,14 +174,14 @@ const resolveLicense = (rawLicense: string | null, fallback: string): string => 
   return assertLicenseAllowed(fallbackBase);
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
   let file = DEFAULT_FILE;
 
-  for (let i = 0; i < args.length; i += 1) {
-    const arg = args[i];
+  for (let i = 0; i < rest.length; i += 1) {
+    const arg = rest[i];
     if (arg === '--file' || arg === '--path') {
-      const next = args[i + 1];
+      const next = rest[i + 1];
       if (!next) throw new Error(`Expected value after ${arg}`);
       file = path.resolve(process.cwd(), next);
       i += 1;
@@ -189,11 +190,12 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'external resources and attribution updates');
   const rows = (await loadInput(file)).map(normalizeRow);
   if (rows.length === 0) {
     console.log(`No external resources found in ${file}`);
@@ -281,6 +283,14 @@ const main = async () => {
       },
       tags: row.tags ?? [],
     });
+  }
+
+  if (!apply) {
+    console.log(
+      `Would import ${assets.length} external resource(s) from ${file} and update ${touchedLessons.size} lesson attribution block(s).`,
+    );
+    console.log('Dry run only. Re-run with --apply to write changes.');
+    return;
   }
 
   for (const chunk of chunkArray(assets, BATCH_SIZE)) {

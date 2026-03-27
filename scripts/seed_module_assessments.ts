@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 
@@ -5,6 +6,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type QuizOption = {
@@ -34,6 +36,11 @@ type QuizDefinition = {
 };
 
 type QuizConfig = Record<string, QuizDefinition>;
+type QuizConfigEntry = {
+  quiz: QuizDefinition;
+  file: string;
+  priority: number;
+};
 
 type ModuleRecord = {
   id: number;
@@ -49,6 +56,30 @@ type SubjectRecord = {
 };
 
 const DEFAULT_FILE = path.resolve(process.cwd(), 'data/assessments/module_quizzes.json');
+const ASSESSMENT_DIRECTORY = path.resolve(process.cwd(), 'data/assessments');
+const MODULE_QUIZ_FILE_TOKEN = 'module_quizzes';
+
+const discoverQuizFiles = async (): Promise<string[]> => {
+  const entries = await fs.readdir(ASSESSMENT_DIRECTORY, { withFileTypes: true });
+
+  return entries
+    .filter(
+      (entry) =>
+        entry.isFile() &&
+        entry.name.endsWith('.json') &&
+        entry.name.includes(MODULE_QUIZ_FILE_TOKEN),
+    )
+    .map((entry) => path.join(ASSESSMENT_DIRECTORY, entry.name))
+    .sort();
+};
+
+const quizFilePriority = (filePath: string): number => {
+  const name = path.basename(filePath).toLowerCase();
+  if (name.includes('topup')) return 30;
+  if (name.includes('authored')) return 20;
+  if (name.includes('beta')) return 10;
+  return 0;
+};
 
 const ensureQuestionsValid = (moduleSlug: string, quiz: QuizDefinition): void => {
   if (!Array.isArray(quiz.questions) || quiz.questions.length === 0) {
@@ -129,6 +160,24 @@ const fetchSubjects = async (supabase: SupabaseClient): Promise<Map<string, Subj
     }
   }
   return map;
+};
+
+const resolveModulesInChunks = async (
+  supabase: SupabaseClient,
+  moduleSlugs: string[],
+): Promise<Map<string, { id: number; slug: string }>> => {
+  const resolved = new Map<string, { id: number; slug: string }>();
+  const chunkSize = 150;
+
+  for (let i = 0; i < moduleSlugs.length; i += chunkSize) {
+    const chunk = moduleSlugs.slice(i, i + chunkSize);
+    const partial = await resolveModules(supabase, chunk);
+    for (const [key, value] of partial.entries()) {
+      resolved.set(key, value);
+    }
+  }
+
+  return resolved;
 };
 
 const deleteExistingBaseline = async (
@@ -360,40 +409,72 @@ const insertAssessment = async (
   }
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
-  let file = DEFAULT_FILE;
+const parseArgs = async (): Promise<{ apply: boolean; files: string[] }> => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const files: string[] = [];
+  let useAll = false;
 
-  for (let i = 0; i < args.length; i += 1) {
-    const arg = args[i];
-    if (arg === '--file' || arg === '--path') {
-      const next = args[i + 1];
+  for (let i = 0; i < rest.length; i += 1) {
+    const arg = rest[i];
+    if (arg === '--all') {
+      useAll = true;
+    } else if (arg === '--file' || arg === '--path') {
+      const next = rest[i + 1];
       if (!next) {
         throw new Error(`Expected value after ${arg}`);
       }
-      file = path.resolve(process.cwd(), next);
+      files.push(path.resolve(process.cwd(), next));
       i += 1;
     } else {
       throw new Error(`Unknown argument: ${arg}`);
     }
   }
 
-  return { file };
+  if (useAll) {
+    if (files.length > 0) {
+      throw new Error('Use either --all or --file/--path, not both.');
+    }
+    const discovered = await discoverQuizFiles();
+    if (discovered.length === 0) {
+      throw new Error(`No module quiz files found in ${ASSESSMENT_DIRECTORY}`);
+    }
+    return { apply, files: discovered };
+  }
+
+  return { apply, files: files.length > 0 ? files : [DEFAULT_FILE] };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
-  const config = (await loadStructuredFile<QuizConfig>(file)) ?? {};
+  const { apply, files } = await parseArgs();
+  logWriteMode(apply, 'module assessments');
+  const configEntries = new Map<string, QuizConfigEntry>();
 
-  const entries = Object.entries(config);
+  for (const file of files) {
+    const partial = (await loadStructuredFile<QuizConfig>(file)) ?? {};
+    const priority = quizFilePriority(file);
+    for (const [moduleSlug, quiz] of Object.entries(partial)) {
+      const existing = configEntries.get(moduleSlug);
+      if (existing && existing.priority > priority) {
+        continue;
+      }
+      if (existing && existing.priority === priority) {
+        throw new Error(
+          `Duplicate quiz definition for module ${moduleSlug} found in ${existing.file} and ${file}`,
+        );
+      }
+      configEntries.set(moduleSlug, { quiz, file, priority });
+    }
+  }
+
+  const entries = Array.from(configEntries.entries()).map(([moduleSlug, entry]) => [moduleSlug, entry.quiz] as const);
   if (entries.length === 0) {
-    console.log(`No module quiz definitions found in ${file}`);
+    console.log(`No module quiz definitions found in ${files.join(', ')}`);
     return;
   }
 
   const moduleSlugs = entries.map(([slug]) => slug);
   const supabase = createServiceRoleClient();
-  const moduleMap = await resolveModules(supabase, moduleSlugs);
+  const moduleMap = await resolveModulesInChunks(supabase, moduleSlugs);
 
   const moduleIds = Array.from(new Set(Array.from(moduleMap.values()).map((record) => record.id)));
 
@@ -402,6 +483,15 @@ const main = async () => {
   hydratedModules.forEach((module) => moduleMetadata.set(module.id, module));
 
   const subjects = await fetchSubjects(supabase);
+
+  if (!apply) {
+    const questionCount = entries.reduce((count, [, quiz]) => count + quiz.questions.length, 0);
+    console.log(
+      `Would seed ${entries.length} baseline quiz definition(s) with ${questionCount} total question(s) from ${files.length} file(s).`,
+    );
+    console.log('Dry run only. Re-run with --apply to write changes.');
+    return;
+  }
 
   for (const [moduleSlug, quiz] of entries) {
     ensureQuestionsValid(moduleSlug, quiz);

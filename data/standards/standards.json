@@ -26,5 +26,26 @@
     "description": "Use ratio and rate reasoning to solve real-world and mathematical problems, including solving unit rate problems and converting measurement units.",
     "subject": "Mathematics",
     "grade_band": "6"
+  },
+  {
+    "framework": "Study Skills",
+    "code": "SS.EF.6.1",
+    "description": "Map fixed commitments before scheduling study blocks so a weekly plan begins with the real constraints of the week.",
+    "subject": "Study Skills",
+    "grade_band": "6"
+  },
+  {
+    "framework": "Study Skills",
+    "code": "SS.EF.6.2",
+    "description": "Protect one anchor block for the highest-priority subject and add short review blocks that are realistic for the student to keep.",
+    "subject": "Study Skills",
+    "grade_band": "6"
+  },
+  {
+    "framework": "Study Skills",
+    "code": "SS.EF.6.3",
+    "description": "Check a weekly study plan for conflicts, overloaded days, and missing materials before treating it as final.",
+    "subject": "Study Skills",
+    "grade_band": "6"
   }
 ]

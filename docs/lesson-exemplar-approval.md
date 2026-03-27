@@ -191,13 +191,30 @@ This record should be enough for a future reviewer to understand why the lesson 
 
 ## 11. Current Practice
 
-Current approved exemplar:
+Current approved exemplars:
 - lesson `1437`
 - [Perimeter (intro) Launch Lesson](/Users/drmixer/code/ElevatEDNEW/docs/perimeter-launch-gold.md)
+- lesson `232`
+- [Similarity & Congruence](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-232-upper-math-rereview-2026-03-25.md)
+- lesson `148`
+- [Science/Tech Articles (open-licensed)](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-148-ela-rereview-2026-03-25.md)
+- lesson `4648`
+- [Plate Tectonics (Earth & Space Science, Grade 6): Grade 6 Launch Lesson](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-4648-science-2026-03-25.md)
+- lesson `331`
+- [Citizenship & Rights Launch Lesson](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-331-history-rereview-2026-03-25.md)
+- lesson `4901`
+- [Plan Your Week in 10 Minutes](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-4901-study-skills-2026-03-25.md)
+- lesson `648`
+- [Intro: Music Theory (intro)](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-648-applied-concept-2026-03-25.md)
 
 Current expectation:
 - the perimeter lesson remains the guide exemplar for `K-5 Math Concept / Procedure`
-- other archetypes still need approved exemplars before they can be treated as rewrite targets
+- lesson `232` now serves as the guide exemplar for `Upper Math Worked Example`
+- lesson `148` now serves as the guide exemplar for `ELA Reading / Analysis`
+- lesson `4648` now serves as the guide exemplar for `Science Phenomenon / Evidence`
+- lesson `331` now serves as the guide exemplar for `History / Social Studies Source Analysis`
+- lesson `4901` now serves as the guide exemplar for `Study Skills / Metacognitive Routine`
+- lesson `648` now serves as the guide exemplar for `Specials / Applied Concept Lesson`
 
 This is the approval bar to use now:
 - if the lesson cannot be safely copied by the next writer, it is not yet an exemplar

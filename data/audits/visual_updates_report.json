@@ -1,6 +1,417 @@
 {
-  "timestamp": "2025-12-27T07:13:33.424Z",
-  "mode": "commit",
+  "timestamp": "2026-03-25T22:54:54.547Z",
+  "mode": "dry-run",
   "totalProcessed": 300,
-  "updated": []
+  "updated": [
+    {
+      "id": 179,
+      "title": "Coordinate Plane (Quadrant I)",
+      "image": "transformations"
+    },
+    {
+      "id": 148,
+      "title": "Science/Tech Articles (open-licensed)",
+      "image": "area_perimeter"
+    },
+    {
+      "id": 215,
+      "title": "Scatterplots & Correlation",
+      "image": "story_structure"
+    },
+    {
+      "id": 309,
+      "title": "Launch Lesson: Earth And Space Astronomy Stars Galaxies",
+      "image": "solar_system"
+    },
+    {
+      "id": 166,
+      "title": "Area/Perimeter",
+      "image": "transformations"
+    },
+    {
+      "id": 171,
+      "title": "Fractions (concepts, equivalence)",
+      "image": "fractions"
+    },
+    {
+      "id": 181,
+      "title": "Volume",
+      "image": "transformations"
+    },
+    {
+      "id": 188,
+      "title": "Intro Probability (experimental)",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 234,
+      "title": "Volume & Surface Area",
+      "image": "transformations"
+    },
+    {
+      "id": 219,
+      "title": "Similarity & Congruence",
+      "image": "transformations"
+    },
+    {
+      "id": 191,
+      "title": "Area/Perimeter",
+      "image": "transformations"
+    },
+    {
+      "id": 204,
+      "title": "Coordinate Geometry",
+      "image": "transformations"
+    },
+    {
+      "id": 206,
+      "title": "Similarity & Congruence",
+      "image": "transformations"
+    },
+    {
+      "id": 212,
+      "title": "Percent & Rates",
+      "image": "fractions"
+    },
+    {
+      "id": 231,
+      "title": "Pythagorean Theorem",
+      "image": "transformations"
+    },
+    {
+      "id": 195,
+      "title": "Decimals (intro)",
+      "image": "fractions"
+    },
+    {
+      "id": 193,
+      "title": "Transformations (intro)",
+      "image": "transformations"
+    },
+    {
+      "id": 230,
+      "title": "Coordinate Geometry",
+      "image": "transformations"
+    },
+    {
+      "id": 125,
+      "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics",
+      "image": "story_structure"
+    },
+    {
+      "id": 196,
+      "title": "Fractions (concepts, equivalence)",
+      "image": "fractions"
+    },
+    {
+      "id": 225,
+      "title": "Percent & Rates",
+      "image": "fractions"
+    },
+    {
+      "id": 1891,
+      "title": "Advanced Programming: Objects, Error Handling, and Real Problems",
+      "image": "coordinate_plane"
+    },
+    {
+      "id": 238,
+      "title": "Percent & Rates",
+      "image": "fractions"
+    },
+    {
+      "id": 1866,
+      "title": "Discovering How to Draw and Paint",
+      "image": "area_perimeter"
+    },
+    {
+      "id": 126,
+      "title": "Biographies (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 178,
+      "title": "Area/Perimeter",
+      "image": "transformations"
+    },
+    {
+      "id": 245,
+      "title": "Launch Lesson: Engineering Practices Prototypes And Iteration",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 255,
+      "title": "Launch Lesson: Earth And Space Weather And Climate",
+      "image": "water_cycle"
+    },
+    {
+      "id": 205,
+      "title": "Pythagorean Theorem",
+      "image": "transformations"
+    },
+    {
+      "id": 237,
+      "title": "Integers & Rational Numbers",
+      "image": "fractions"
+    },
+    {
+      "id": 519,
+      "title": "Launch Lesson: Earth And Space Solar System Relative Scale",
+      "image": "solar_system"
+    },
+    {
+      "id": 311,
+      "title": "Launch Lesson: Earth And Space Plate Tectonics",
+      "image": "solar_system"
+    },
+    {
+      "id": 134,
+      "title": "Nonfiction Articles (open-licensed)",
+      "image": "story_structure"
+    },
+    {
+      "id": 386,
+      "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics",
+      "image": "story_structure"
+    },
+    {
+      "id": 217,
+      "title": "Coordinate Geometry",
+      "image": "transformations"
+    },
+    {
+      "id": 192,
+      "title": "Coordinate Plane (Quadrant I)",
+      "image": "transformations"
+    },
+    {
+      "id": 447,
+      "title": "Bar/Line Plots",
+      "image": "area_perimeter"
+    },
+    {
+      "id": 314,
+      "title": "Launch Lesson: Engineering Practices Modeling And Optimization",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 4648,
+      "title": "Plate Tectonics (Earth & Space Science, Grade 6): Grade 6 Launch Lesson",
+      "image": "area_perimeter"
+    },
+    {
+      "id": 170,
+      "title": "Decimals (intro)",
+      "image": "fractions"
+    },
+    {
+      "id": 280,
+      "title": "Launch Lesson: Earth And Space Earth History",
+      "image": "solar_system"
+    },
+    {
+      "id": 1858,
+      "title": "Mastering Artistic Techniques and Expression",
+      "image": "water_cycle"
+    },
+    {
+      "id": 218,
+      "title": "Pythagorean Theorem",
+      "image": "transformations"
+    },
+    {
+      "id": 224,
+      "title": "Integers & Rational Numbers",
+      "image": "fractions"
+    },
+    {
+      "id": 1852,
+      "title": "Understanding Data and Creating Visualizations",
+      "image": "fractions"
+    },
+    {
+      "id": 1903,
+      "title": "Credit, Loans, and Building Your Financial Identity",
+      "image": "multiplication"
+    },
+    {
+      "id": 232,
+      "title": "Similarity & Congruence",
+      "image": "transformations"
+    },
+    {
+      "id": 226,
+      "title": "Ratios & Proportional Reasoning",
+      "image": "fractions"
+    },
+    {
+      "id": 161,
+      "title": "Bar/Line Plots",
+      "image": "area_perimeter"
+    },
+    {
+      "id": 229,
+      "title": "Two-way Tables",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 165,
+      "title": "Angles & Lines",
+      "image": "transformations"
+    },
+    {
+      "id": 183,
+      "title": "Fractions (concepts, equivalence)",
+      "image": "fractions"
+    },
+    {
+      "id": 149,
+      "title": "Novellas/Short Novels (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 221,
+      "title": "Volume & Surface Area",
+      "image": "transformations"
+    },
+    {
+      "id": 373,
+      "title": "Chapter Books (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 375,
+      "title": "Short Stories (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 135,
+      "title": "Chapter Books (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 397,
+      "title": "Novellas/Short Novels (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 261,
+      "title": "Launch Lesson: Life Science Human Body Systems Intro",
+      "image": "plant_lifecycle"
+    },
+    {
+      "id": 266,
+      "title": "Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere",
+      "image": "solar_system"
+    },
+    {
+      "id": 163,
+      "title": "Intro Probability (experimental)",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 137,
+      "title": "Short Stories (PD)",
+      "image": "story_structure"
+    },
+    {
+      "id": 177,
+      "title": "Mean/Median/Mode",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 187,
+      "title": "Interpreting Tables/Charts",
+      "image": "water_cycle"
+    },
+    {
+      "id": 276,
+      "title": "Launch Lesson: Physical Science Forces Balanced Unbalanced",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 283,
+      "title": "Launch Lesson: Engineering Practices Modeling And Optimization",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 216,
+      "title": "Two-way Tables",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 194,
+      "title": "Volume",
+      "image": "transformations"
+    },
+    {
+      "id": 288,
+      "title": "Launch Lesson: Life Science Genetics And Heredity",
+      "image": "plant_lifecycle"
+    },
+    {
+      "id": 301,
+      "title": "Launch Lesson: Life Science Cells And Organelles",
+      "image": "plant_lifecycle"
+    },
+    {
+      "id": 167,
+      "title": "Coordinate Plane (Quadrant I)",
+      "image": "transformations"
+    },
+    {
+      "id": 223,
+      "title": "Functions (intro)",
+      "image": "fractions"
+    },
+    {
+      "id": 227,
+      "title": "Probability Rules",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 474,
+      "title": "Ratios & Proportional Reasoning",
+      "image": "fractions"
+    },
+    {
+      "id": 236,
+      "title": "Functions (intro)",
+      "image": "fractions"
+    },
+    {
+      "id": 240,
+      "title": "Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere",
+      "image": "solar_system"
+    },
+    {
+      "id": 176,
+      "title": "Intro Probability (experimental)",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 259,
+      "title": "Launch Lesson: Life Science Ecosystems And Food Webs",
+      "image": "plant_lifecycle"
+    },
+    {
+      "id": 268,
+      "title": "Launch Lesson: Earth And Space Solar System Relative Scale",
+      "image": "solar_system"
+    },
+    {
+      "id": 298,
+      "title": "Launch Lesson: Engineering Practices Data Driven Design",
+      "image": "sentence_structure"
+    },
+    {
+      "id": 317,
+      "title": "Launch Lesson: Life Science Evolution And Natural Selection",
+      "image": "plant_lifecycle"
+    },
+    {
+      "id": 211,
+      "title": "Integers & Rational Numbers",
+      "image": "fractions"
+    }
+  ]
 }

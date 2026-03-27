@@ -1,5 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+import process from 'node:process';
+
+import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
+const supabase = createServiceRoleClient();
 
 const STUDENT_ID = '7534cea0-d6a2-4cac-bca9-cfb16df83039';
 const GRADE_LEVEL = 7;
@@ -8,6 +11,11 @@ const GRADE_LEVEL = 7;
 const SUBJECT_PRIORITY = ['Mathematics', 'English Language Arts', 'Science', 'Social Studies', 'Electives'];
 
 async function rebuildPath() {
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    if (rest.length > 0) {
+        throw new Error(`Unknown argument: ${rest[0]}`);
+    }
+    logWriteMode(apply, 'test student learning path rows');
     console.log('Rebuilding learning path for test student...');
 
     // Get modules for grades 6, 7, 8 (student is grade 7)
@@ -45,6 +53,11 @@ async function rebuildPath() {
     pathModules.forEach((m, i) => {
         console.log(`  ${i + 1}. ${m.title} (${m.subject}, Grade ${m.grade_band})`);
     });
+
+    if (!apply) {
+        console.log(`Would replace student_learning_path for ${STUDENT_ID} with ${pathModules.length} entries.`);
+        return;
+    }
 
     // Delete existing path entries
     const { error: deleteError } = await supabase
@@ -85,4 +98,7 @@ async function rebuildPath() {
     console.log(`\n✅ Created ${insertedData?.length || 0} path entries for test student`);
 }
 
-rebuildPath().catch(console.error);
+rebuildPath().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

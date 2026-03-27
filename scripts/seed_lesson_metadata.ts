@@ -1,6 +1,7 @@
 import process from 'node:process';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type ModuleRow = {
   id: number;
@@ -441,6 +442,8 @@ const fetchModuleStandards = async (
 };
 
 const seedLessonMetadata = async (): Promise<void> => {
+  const { apply } = extractWriteMode(process.argv.slice(2));
+  logWriteMode(apply, 'lesson metadata updates');
   const supabase = createServiceRoleClient();
   const modules = await fetchModules(supabase);
   if (modules.length === 0) {
@@ -454,6 +457,7 @@ const seedLessonMetadata = async (): Promise<void> => {
 
   let updated = 0;
   const missingLessons: string[] = [];
+  let wouldUpdate = 0;
 
   for (const module of modules) {
     const lessons = lessonsByModule.get(module.id) ?? [];
@@ -464,6 +468,10 @@ const seedLessonMetadata = async (): Promise<void> => {
 
     for (const lesson of lessons) {
       const metadata = buildMetadata(lesson, module, moduleStandards);
+      if (!apply) {
+        wouldUpdate += 1;
+        continue;
+      }
       const { error } = await supabase.from('lessons').update({ metadata }).eq('id', lesson.id);
       if (error) {
         throw new Error(`Failed to update lesson ${lesson.id} (${module.slug}): ${error.message}`);
@@ -472,9 +480,12 @@ const seedLessonMetadata = async (): Promise<void> => {
     }
   }
 
-  console.log(`Updated metadata for ${updated} lessons.`);
+  console.log(apply ? `Updated metadata for ${updated} lessons.` : `Would update metadata for ${wouldUpdate} lessons.`);
   if (missingLessons.length > 0) {
     console.warn(`Modules without lessons: ${missingLessons.join(', ')}`);
+  }
+  if (!apply) {
+    console.log('Dry run only. Re-run with --apply to write changes.');
   }
 };
 

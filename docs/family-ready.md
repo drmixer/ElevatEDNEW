@@ -1,5 +1,8 @@
 # Family-Ready (Phase 0)
 
+Related adaptive foundation doc:
+- [adaptive-foundation-plan.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-foundation-plan.md)
+
 ## Scope & intent
 - Grades 3–8 Math, 3–8 ELA, and 6–8 Science.
 - Goal: define what “family-ready” means for the learner and the parent so we can validate activation, weekly value, and clear on-track signals before widening scope or adding new subjects.
@@ -20,7 +23,7 @@
 
 ## Definition of “family-ready”
 - Child success criteria (per subject in scope):
-  - Completes an age-appropriate diagnostic in the first session (≤10 minutes Math/ELA, ≤12 minutes Science) and sees a recommended path with at least 3 prioritized modules tied to grade/subject.
+  - Completes an age-informed, subject-specific diagnostic in the first session (≤10 minutes Math/ELA, ≤12 minutes Science), receives a working-level estimate for that subject, and sees a recommended path with at least 3 prioritized modules tied to that subject and level.
   - Can launch the first recommended lesson in ≤2 clicks after diagnostic completion; lesson loads with streak/progress states carried forward.
   - Receives clear guidance on “what’s next” (next lesson + optional practice) and short feedback when struggling (tutor hint or alternate path).
   - Progress, streaks, and mastery checkpoints are saved to the student profile and reflect in the child dashboard within seconds.
@@ -31,10 +34,10 @@
   - Receives weekly updates that explain progress and risks in plain language (email + dashboard cards).
 
 ## Child flow (signup → consent → diagnostic → recommended path)
-- Signup: child signs in via parent-created profile or self-starts with a parent email/phone invite; grade/subject preferences captured up front.
+- Signup: child signs in via parent-created profile or self-starts with a parent email/phone invite; age, current grade, and subject preferences captured up front.
 - Consent: if under 13 or without a linked guardian, block diagnostics until a parent approves via `/parent` (leveraging COPPA/FERPA stance in `docs/compliance.md`); show read-only preview only.
-- Diagnostic: auto-launch subject-specific diagnostic for the selected grade (Math/ELA 3–8; Science 6–8). Allow pause/resume; cap duration as above.
-- Recommended path: immediately render the prioritized module list (3–5 items) plus the first lesson start CTA. Store diagnostic summary so the path persists across sessions.
+- Diagnostic: auto-launch subject-specific diagnostic near the student’s expected level prior (Math/ELA 3–8; Science 6–8). Allow pause/resume; cap duration as above.
+- Recommended path: immediately render the prioritized module list (3–5 items) plus the first lesson start CTA. Store subject-level diagnostic summary so the path persists across sessions.
 - First lesson: start the top recommendation; log session start, checkpoints, and completion. Upon finish, refresh path with next-best items or practice.
 
 ## Parent goals and on-track definition

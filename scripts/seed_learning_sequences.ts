@@ -3,6 +3,7 @@ import process from 'node:process';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient, resolveModules } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type CanonicalSequenceEntry = {
   position: number;
@@ -68,6 +69,8 @@ const buildPayload = (
 };
 
 const main = async () => {
+  const { apply } = extractWriteMode(process.argv.slice(2));
+  logWriteMode(apply, 'learning sequence rows');
   const data = await loadStructuredFile<CanonicalPath[]>(DEFAULT_FILE);
   if (!data || !Array.isArray(data) || data.length === 0) {
     throw new Error(`No canonical sequences found in ${DEFAULT_FILE}`);
@@ -78,6 +81,12 @@ const main = async () => {
   const moduleMap = await resolveModules(supabase, slugs);
 
   const payload = buildPayload(data, moduleMap);
+
+  if (!apply) {
+    console.log(`Would seed ${payload.length} learning sequence entries from ${DEFAULT_FILE}.`);
+    console.log('Dry run only. Re-run with --apply to write changes.');
+    return;
+  }
 
   const { error: upsertError } = await supabase.from('learning_sequences').upsert(payload, {
     onConflict: 'grade_band,subject,position',

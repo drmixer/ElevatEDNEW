@@ -1,0 +1,962 @@
+{
+  "3-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights",
+    "summary": "Students use a kid-friendly rights poster and a short First Amendment paraphrase to distinguish a right, a rule, and a responsibility.",
+    "objectives": [
+      "Identify one right named in a civic source",
+      "Explain how a responsibility helps protect rights in a community",
+      "Use a detail from a short source to support an answer"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-civics-and-government-citizenship-and-rights.md",
+    "outline": {
+      "hook": "Show two cards: one names a right such as speaking respectfully, and one names a school rule such as walking in the hallway. Ask students how the cards are different.",
+      "direct_instruction": "Introduce rights as protections people have and responsibilities as actions that help a community work. Read a short paraphrase of the First Amendment and model how to notice what the source says directly.",
+      "guided_practice": "Read a simple citizenship poster together. Sort examples into rights, rules, and responsibilities. Ask which words in the source helped students decide.",
+      "independent_practice": "Students read a short school-community scenario and explain which right is involved and what responsibility would help protect it.",
+      "check_for_understanding": "Can students name a right from the source, tell how it differs from a rule, and point to the evidence they used?",
+      "exit_ticket": "Students complete the sentence: One right I noticed was ____, and one responsibility connected to it is ____."
+    }
+  },
+  "3-social-studies-civics-and-government-local-state-government": {
+    "title": "Local/State Government",
+    "summary": "Students use a town-services chart and a state map to learn which problems are handled locally and which are handled by state government.",
+    "objectives": [
+      "Identify a job of local government",
+      "Identify a job of state government",
+      "Use details from a chart or map to justify an answer"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-civics-and-government-local-state-government.md",
+    "outline": {
+      "hook": "Ask who fixes a neighborhood stop sign and who helps run state parks. Let students guess before showing a local-versus-state services chart.",
+      "direct_instruction": "Explain that local government handles community needs close to home, while state government makes decisions for the whole state. Model how to read headings and symbols in a services chart and state map.",
+      "guided_practice": "Work through a chart with examples such as schools, roads, parks, and libraries. Discuss which level of government fits each example and why.",
+      "independent_practice": "Students sort community problems into local or state categories and cite one chart detail or map clue for each answer.",
+      "check_for_understanding": "Can students explain why a job belongs to local or state government instead of only naming a category?",
+      "exit_ticket": "Students answer: A problem local government can solve is ____. A problem state government can solve is ____."
+    }
+  },
+  "3-social-studies-economics-and-financial-literacy-markets-intro": {
+    "title": "Markets (intro)",
+    "summary": "Students read a farmers market price board and notice how people buy and sell goods in a market.",
+    "objectives": [
+      "Explain what a market is",
+      "Identify buyers and sellers in a simple source",
+      "Use a price list to answer basic questions"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-economics-and-financial-literacy-markets-intro.md",
+    "outline": {
+      "hook": "Show a picture of a farmers market with a sign listing apple, bread, and flower prices. Ask what people are doing in the picture.",
+      "direct_instruction": "Define a market as a place where buyers and sellers exchange goods or services. Model how to read a price board and notice who is selling and who is buying.",
+      "guided_practice": "Use the market sign to answer questions such as which item costs more and what a family could buy with a set amount of money.",
+      "independent_practice": "Students read a new mini price list and explain what is being sold, who might buy it, and how the source helped them decide.",
+      "check_for_understanding": "Can students explain how a market helps buyers and sellers instead of only naming prices?",
+      "exit_ticket": "Students write one sentence explaining what a market is and name one thing a buyer and seller each do there."
+    }
+  },
+  "3-social-studies-economics-and-financial-literacy-producers-consumers": {
+    "title": "Producers/Consumers",
+    "summary": "Students use a product label, receipt, and picture cards to tell the difference between a producer and a consumer.",
+    "objectives": [
+      "Define producer and consumer",
+      "Identify producers and consumers in a simple scenario",
+      "Use clues from a label or receipt to explain an answer"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-economics-and-financial-literacy-producers-consumers.md",
+    "outline": {
+      "hook": "Hold up a loaf of bread and a store receipt. Ask who helped make the bread and who bought it.",
+      "direct_instruction": "Teach that producers make or provide goods and services, while consumers buy or use them. Model how a label and receipt show clues about both roles.",
+      "guided_practice": "Sort picture cards of bakers, cashiers, families, and shoppers into producer and consumer groups. Ask students what evidence supports each choice.",
+      "independent_practice": "Students read a short shopping scene and identify the producers and consumers involved in the exchange.",
+      "check_for_understanding": "Can students explain why one person counts as a producer and another as a consumer in the same situation?",
+      "exit_ticket": "Students complete: A producer is ____. A consumer is ____. In my example, the evidence was ____."
+    }
+  },
+  "3-social-studies-us-history-exploration-to-civil-war": {
+    "title": "Exploration to Civil War",
+    "summary": "Students use a timeline and map to build a simple understanding of major events from exploration through the Civil War.",
+    "objectives": [
+      "Place key events in chronological order",
+      "Use a map or timeline to answer a historical question",
+      "Explain one cause-and-effect relationship from the period"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-us-history-exploration-to-civil-war.md",
+    "outline": {
+      "hook": "Show a timeline with four stops: exploration, colonies, independence, and Civil War. Ask which event came first and how students know.",
+      "direct_instruction": "Model how historians read timelines from left to right and maps for place clues. Introduce the idea that events happened in sequence and sometimes caused later conflicts.",
+      "guided_practice": "Read a simple map-timeline pair together. Identify where colonies formed and which major event came before the Civil War.",
+      "independent_practice": "Students answer questions using the source pair, such as which event happened earlier and what change happened over time.",
+      "check_for_understanding": "Can students use the timeline for evidence instead of guessing from memory alone?",
+      "exit_ticket": "Students write one event that came before the Civil War and one clue from the timeline or map that helped them."
+    }
+  },
+  "3-social-studies-us-history-industrialization-and-immigration": {
+    "title": "Industrialization & Immigration",
+    "summary": "Students use a historical photo and an arrival checklist to learn how factories and immigration changed life in the United States.",
+    "objectives": [
+      "Describe one change caused by industrialization",
+      "Describe one challenge or opportunity connected to immigration",
+      "Use details from a photo or document to support an answer"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-us-history-industrialization-and-immigration.md",
+    "outline": {
+      "hook": "Show a photo of a crowded city street or factory scene and ask what students notice about work, travel, and buildings.",
+      "direct_instruction": "Explain that industrialization increased factory production and changed where people worked and lived. Introduce immigration as people moving to a new country for safety, work, or opportunity.",
+      "guided_practice": "Study the photo and a simple arrival card together. Separate direct observations from inferences about why people moved or how cities changed.",
+      "independent_practice": "Students write a short explanation of one way work or city life changed, using a detail from one of the sources.",
+      "check_for_understanding": "Can students point to evidence in the source before making a claim about life in this period?",
+      "exit_ticket": "Students complete: One change I noticed was ____. The source detail that showed it was ____."
+    }
+  },
+  "3-social-studies-world-history-and-geography-ancient-civilizations": {
+    "title": "Ancient Civilizations",
+    "summary": "Students use an artifact card and a map to learn how historians study ancient civilizations through evidence.",
+    "objectives": [
+      "Identify what an artifact can tell us about a civilization",
+      "Use a map to locate an ancient civilization",
+      "Make a simple inference from source evidence"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-world-history-and-geography-ancient-civilizations.md",
+    "outline": {
+      "hook": "Show a picture of an ancient tool or pot and ask what students can learn from an object without anyone telling the full story.",
+      "direct_instruction": "Explain that historians study artifacts and maps to learn how people lived. Model how to notice what the artifact directly shows and what can reasonably be inferred.",
+      "guided_practice": "Examine an artifact card and a map together. Discuss what the object may have been used for and where the civilization lived.",
+      "independent_practice": "Students answer questions about a second artifact or monument image, using one map clue and one artifact detail.",
+      "check_for_understanding": "Can students separate what the source shows from what they infer about daily life?",
+      "exit_ticket": "Students write: This artifact suggests ____, because I noticed ____."
+    }
+  },
+  "3-social-studies-world-history-and-geography-world-regions-physical-human": {
+    "title": "World Regions (physical/human)",
+    "summary": "Students read a simple world map with landforms and people-made features to compare physical and human characteristics of regions.",
+    "objectives": [
+      "Distinguish physical features from human features",
+      "Use map symbols and labels to answer questions",
+      "Describe one way people adapt to a region"
+    ],
+    "grade_band": "Grade 3",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/3-social-studies-world-history-and-geography-world-regions-physical-human.md",
+    "outline": {
+      "hook": "Show a world map with mountains, rivers, roads, and cities. Ask which features were made by nature and which were made by people.",
+      "direct_instruction": "Teach physical features as land and water forms and human features as places or structures people create. Model reading the legend and labels before answering questions.",
+      "guided_practice": "Use a regional map together to identify a river, a mountain range, a city, and a road. Discuss how people live differently depending on these features.",
+      "independent_practice": "Students read a new map and explain one physical feature, one human feature, and one way the two connect.",
+      "check_for_understanding": "Can students use evidence from the map instead of personal guesses about the region?",
+      "exit_ticket": "Students name one physical feature and one human feature from the map and explain how they are different."
+    }
+  },
+  "4-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights",
+    "summary": "Students use a short First Amendment excerpt and a civic scenario chart to explain how rights and responsibilities work together in a democracy.",
+    "objectives": [
+      "Identify what a civic source says about a right",
+      "Explain how responsibilities help protect rights",
+      "Support a claim with evidence from a short document"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-civics-and-government-citizenship-and-rights.md",
+    "outline": {
+      "hook": "Ask whether everyone can say anything at any time, then show a short First Amendment excerpt and a classroom-discussion scenario.",
+      "direct_instruction": "Model sourcing the excerpt by naming the document and purpose. Explain that rights protect freedoms, while responsibilities help people use those freedoms safely and fairly.",
+      "guided_practice": "Read the source and match it to civic scenarios involving speech, religion, and petition. Discuss which source phrases support each match.",
+      "independent_practice": "Students read a new community scenario and write a short claim about the right involved, using one source detail as evidence.",
+      "check_for_understanding": "Can students connect a specific right to a scenario and explain the responsibility that keeps the community functioning?",
+      "exit_ticket": "Students answer: The source protects the right to ____. A responsibility connected to that right is ____."
+    }
+  },
+  "4-social-studies-civics-and-government-local-state-government": {
+    "title": "Local/State Government",
+    "summary": "Students use a powers chart and a state map to compare decisions made by local government and by state government.",
+    "objectives": [
+      "Compare responsibilities of local and state government",
+      "Use a chart to classify examples correctly",
+      "Explain why one level of government fits a problem better than the other"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-civics-and-government-local-state-government.md",
+    "outline": {
+      "hook": "Present two problems: repairing a city playground and setting statewide driver's license rules. Ask which one sounds local and which sounds state-level.",
+      "direct_instruction": "Teach students to use headings and categories in a powers chart. Model how place, scale, and number of people affected can help decide which level of government acts.",
+      "guided_practice": "Analyze a chart of local and state responsibilities together. Compare how each level serves people in different ways.",
+      "independent_practice": "Students read four civic problems, classify them as local or state, and justify their answers with chart evidence.",
+      "check_for_understanding": "Can students explain their reasoning instead of only naming the correct level?",
+      "exit_ticket": "Students write one example of a local government job and one example of a state government job, including one reason for each."
+    }
+  },
+  "4-social-studies-economics-and-financial-literacy-markets-intro": {
+    "title": "Markets (intro)",
+    "summary": "Students read a market price table and a short news blurb to explain how markets respond when buyers and sellers meet.",
+    "objectives": [
+      "Describe how buyers and sellers interact in a market",
+      "Use a table to compare prices and quantities",
+      "Explain how a market source helps answer an economic question"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-economics-and-financial-literacy-markets-intro.md",
+    "outline": {
+      "hook": "Show a table of fruit prices before and after a rainy week and ask why one item might now cost more.",
+      "direct_instruction": "Review markets as places where buying and selling happen. Model how to read a market table and connect changes in price to what the source suggests about supply or demand.",
+      "guided_practice": "Examine the table and short market blurb together. Identify direct observations first, then discuss what those details may mean.",
+      "independent_practice": "Students analyze a second market example and explain what buyers and sellers might do based on the source.",
+      "check_for_understanding": "Can students use numbers and source details to support an economic explanation?",
+      "exit_ticket": "Students answer: One thing I observed in the market source was ____. That matters because ____."
+    }
+  },
+  "4-social-studies-economics-and-financial-literacy-producers-consumers": {
+    "title": "Producers/Consumers",
+    "summary": "Students use a supply-chain card set and a receipt to trace how goods move from producers to consumers.",
+    "objectives": [
+      "Identify producers and consumers in a chain of exchange",
+      "Explain how a good moves from creation to purchase",
+      "Use source details to support an economic explanation"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-economics-and-financial-literacy-producers-consumers.md",
+    "outline": {
+      "hook": "Ask how a T-shirt reaches a store shelf. Show a tag, shipping label, and receipt to start the investigation.",
+      "direct_instruction": "Teach that producers may grow, build, transport, or sell goods before consumers buy them. Model how to read source clues that show each step in the chain.",
+      "guided_practice": "Put card-set events in order together and discuss which people are acting as producers and which as consumers.",
+      "independent_practice": "Students trace a new product from producer to consumer and explain one part of the path using evidence from the source cards.",
+      "check_for_understanding": "Can students explain how roles connect across a sequence rather than treating each role separately?",
+      "exit_ticket": "Students complete: In this chain, the producer was ____, the consumer was ____, and the evidence was ____."
+    }
+  },
+  "4-social-studies-us-history-exploration-to-civil-war": {
+    "title": "Exploration to Civil War",
+    "summary": "Students use a map, timeline, and short diary excerpt to explain how expansion and conflict changed the United States before the Civil War.",
+    "objectives": [
+      "Use chronology to place major events in order",
+      "Identify one historical change shown in a map or source",
+      "Support a simple cause-and-effect claim with evidence"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-us-history-exploration-to-civil-war.md",
+    "outline": {
+      "hook": "Show an early United States map beside a later one and ask what changed over time.",
+      "direct_instruction": "Model how to read a map for territorial change and a timeline for sequence. Introduce the idea that land expansion and disagreements about power and slavery increased conflict.",
+      "guided_practice": "Read the paired sources together and identify what is directly shown, what changed, and what students can infer from that change.",
+      "independent_practice": "Students write a short explanation of one event or change that helped lead toward the Civil War, citing one timeline or map detail.",
+      "check_for_understanding": "Can students distinguish between a direct observation from the map and an inference about its impact?",
+      "exit_ticket": "Students answer: One change over time was ____. I know because the source showed ____."
+    }
+  },
+  "4-social-studies-us-history-industrialization-and-immigration": {
+    "title": "Industrialization & Immigration",
+    "summary": "Students examine a factory photo and an immigration checkpoint document to explain how work and migration reshaped American cities.",
+    "objectives": [
+      "Describe one feature of industrial work",
+      "Describe one reason people immigrated",
+      "Use evidence from a visual or document to support a historical claim"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-us-history-industrialization-and-immigration.md",
+    "outline": {
+      "hook": "Display a factory photo and ask what clues show this is a different kind of workplace from a farm.",
+      "direct_instruction": "Explain industrialization as a shift toward machine-based production and immigration as movement to a new country for opportunity or safety. Model sourcing the photo and document.",
+      "guided_practice": "Identify direct details in the sources such as crowding, machines, luggage, signs, and checkpoints. Discuss what those observations suggest.",
+      "independent_practice": "Students write a short response explaining how industrialization or immigration changed daily life, using one source detail.",
+      "check_for_understanding": "Can students support a claim about change with actual evidence instead of only background knowledge?",
+      "exit_ticket": "Students complete: This source suggests that life was changing because ____."
+    }
+  },
+  "4-social-studies-world-history-and-geography-ancient-civilizations": {
+    "title": "Ancient Civilizations",
+    "summary": "Students use a map and two artifact images to explain how location and evidence help historians study ancient civilizations.",
+    "objectives": [
+      "Locate an ancient civilization on a map",
+      "Describe what an artifact reveals about daily life",
+      "Use source evidence to make a supported inference"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-world-history-and-geography-ancient-civilizations.md",
+    "outline": {
+      "hook": "Show a picture of a clay tablet and ask how one object can help historians learn about a whole civilization.",
+      "direct_instruction": "Teach students to look for place clues on a map and use artifact features as evidence of work, trade, writing, or belief. Model the difference between observation and inference.",
+      "guided_practice": "Study a river-valley map and artifact cards together. Discuss why location near water mattered and what the artifacts suggest about civilization life.",
+      "independent_practice": "Students analyze a second artifact and write a supported inference about the people who used it.",
+      "check_for_understanding": "Can students use both map context and artifact evidence in the same explanation?",
+      "exit_ticket": "Students answer: This artifact helps me infer that ____ because I noticed ____."
+    }
+  },
+  "4-social-studies-world-history-and-geography-world-regions-physical-human": {
+    "title": "World Regions (physical/human)",
+    "summary": "Students use a thematic map and a settlement chart to compare physical and human characteristics of world regions.",
+    "objectives": [
+      "Identify physical and human features in a region",
+      "Explain how physical features affect where people live",
+      "Use map evidence to compare regions"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/4-social-studies-world-history-and-geography-world-regions-physical-human.md",
+    "outline": {
+      "hook": "Ask why many cities grow near rivers or coasts, then show a map where settlements cluster around water.",
+      "direct_instruction": "Review how physical features shape movement, farming, and settlement. Model reading a thematic map and using a chart to compare regions.",
+      "guided_practice": "Analyze a map and settlement chart together. Identify one pattern students can see directly and one reasonable interpretation.",
+      "independent_practice": "Students compare two regions using source evidence about climate, landforms, and human activity.",
+      "check_for_understanding": "Can students explain how a physical feature influences a human feature with evidence from the map?",
+      "exit_ticket": "Students complete: In this region, people likely live near ____ because the map shows ____."
+    }
+  },
+  "5-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights",
+    "summary": "Students use a Bill of Rights excerpt and a petition scenario to explain how civic rights are protected and practiced.",
+    "objectives": [
+      "Identify a right protected in a founding document",
+      "Explain how citizens can use rights responsibly",
+      "Support a civic claim with source evidence"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-civics-and-government-citizenship-and-rights.md",
+    "outline": {
+      "hook": "Pose the question: How can people disagree with a government decision without losing their rights? Introduce a short petition scenario.",
+      "direct_instruction": "Source a Bill of Rights excerpt and model how to connect document language to a modern civic situation. Emphasize claim, evidence, and reasoning.",
+      "guided_practice": "Read the source together and match it to petition, assembly, speech, and press scenarios. Discuss which words from the document matter most.",
+      "independent_practice": "Students write a short paragraph explaining which right is involved in a civic scenario and what responsibility should guide its use.",
+      "check_for_understanding": "Can students support their claim with exact source details rather than broad opinions about fairness?",
+      "exit_ticket": "Students answer: The right in this case is ____. My evidence is ____. A responsible action would be ____."
+    }
+  },
+  "5-social-studies-civics-and-government-local-state-government": {
+    "title": "Local/State Government",
+    "summary": "Students use a powers chart and a sample budget problem to compare how local and state governments make decisions.",
+    "objectives": [
+      "Compare the responsibilities of local and state government",
+      "Use a chart to classify government actions",
+      "Explain which level of government should address a specific issue"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-civics-and-government-local-state-government.md",
+    "outline": {
+      "hook": "Ask whether fixing a city bus route and funding statewide highways should be decided by the same government level.",
+      "direct_instruction": "Explain that local and state governments have different scopes, budgets, and responsibilities. Model how to read a powers chart and use evidence from a public-spending scenario.",
+      "guided_practice": "Compare several examples together and discuss which level is best positioned to act and why.",
+      "independent_practice": "Students read a short civic problem and defend whether local or state government should lead the response, using source evidence.",
+      "check_for_understanding": "Can students explain how scale and responsibility shape government action?",
+      "exit_ticket": "Students write one issue for local government and one for state government, with one source-based reason for each."
+    }
+  },
+  "5-social-studies-economics-and-financial-literacy-markets-intro": {
+    "title": "Markets (intro)",
+    "summary": "Students use a market table and a short article about changing prices to explain how markets react when conditions change.",
+    "objectives": [
+      "Explain how buyers and sellers influence a market",
+      "Interpret a simple market table",
+      "Use source evidence to explain a price change"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-economics-and-financial-literacy-markets-intro.md",
+    "outline": {
+      "hook": "Show a before-and-after price table for strawberries and ask what may have caused the difference.",
+      "direct_instruction": "Review markets as systems where buyers and sellers meet. Model how to connect evidence from a table and article to a claim about why a price changed.",
+      "guided_practice": "Read the paired sources together, first noting direct observations, then building a simple explanation.",
+      "independent_practice": "Students analyze a second market example and write a short response about what the source suggests happened.",
+      "check_for_understanding": "Can students use both numeric and written evidence in the same explanation?",
+      "exit_ticket": "Students answer: The price changed because ____. I know because the source showed ____."
+    }
+  },
+  "5-social-studies-economics-and-financial-literacy-producers-consumers": {
+    "title": "Producers/Consumers",
+    "summary": "Students use an advertisement, product tag, and receipt to explain how producers and consumers affect each other.",
+    "objectives": [
+      "Identify producer and consumer roles in a market exchange",
+      "Explain how producers try to attract consumers",
+      "Support an economic claim with source evidence"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-economics-and-financial-literacy-producers-consumers.md",
+    "outline": {
+      "hook": "Show a cereal advertisement beside a store receipt and ask which source was made to convince someone to buy.",
+      "direct_instruction": "Model how to source an advertisement for purpose and audience. Explain how producers create, market, and sell goods while consumers decide what to buy.",
+      "guided_practice": "Analyze the sources together and discuss how producer choices may affect consumer behavior.",
+      "independent_practice": "Students explain how one source shows a producer's goal and how a consumer responds, using details from the evidence.",
+      "check_for_understanding": "Can students explain the relationship between producer decisions and consumer choices?",
+      "exit_ticket": "Students complete: The producer wanted consumers to ____. I know because ____."
+    }
+  },
+  "5-social-studies-us-history-exploration-to-civil-war": {
+    "title": "Exploration to Civil War",
+    "summary": "Students use a map, timeline, and short source set to explain how expansion, conflict, and sectional differences led toward the Civil War.",
+    "objectives": [
+      "Place key events in order and context",
+      "Identify one cause of growing sectional conflict",
+      "Use evidence from multiple sources to support a claim"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-us-history-exploration-to-civil-war.md",
+    "outline": {
+      "hook": "Show a westward-expansion map and ask why adding land could create political conflict.",
+      "direct_instruction": "Model how to combine a timeline, map, and short excerpt to understand cause and effect. Explain that the same event can matter differently to different groups.",
+      "guided_practice": "Work through the source set together and identify one direct observation from each source before building an explanation.",
+      "independent_practice": "Students write a short claim about a cause of sectional conflict and support it with evidence from at least two sources.",
+      "check_for_understanding": "Can students use source evidence to connect expansion and disagreement instead of treating events as isolated facts?",
+      "exit_ticket": "Students answer: One cause of conflict was ____. My evidence is ____ and ____."
+    }
+  },
+  "5-social-studies-us-history-industrialization-and-immigration": {
+    "title": "Industrialization & Immigration",
+    "summary": "Students use a photo, short testimony, and arrival record to explain how industrial growth and immigration changed cities and work.",
+    "objectives": [
+      "Describe one major change caused by industrialization",
+      "Explain one reason immigrants came to the United States",
+      "Support a historical interpretation with source evidence"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-us-history-industrialization-and-immigration.md",
+    "outline": {
+      "hook": "Ask whether a growing city offered only opportunity or also created new problems. Display a city-tenement or factory image.",
+      "direct_instruction": "Model sourcing a photo and short testimony. Explain how industrial growth created jobs, crowded cities, and difficult working conditions for many families.",
+      "guided_practice": "Read the sources together, separating direct observation from inference and discussing perspective.",
+      "independent_practice": "Students explain one opportunity and one challenge from the period, citing at least one source detail.",
+      "check_for_understanding": "Can students account for source perspective instead of assuming one source tells the whole story?",
+      "exit_ticket": "Students write: This source suggests that industrialization or immigration changed life by ____."
+    }
+  },
+  "5-social-studies-world-history-and-geography-ancient-civilizations": {
+    "title": "Ancient Civilizations",
+    "summary": "Students compare maps and artifacts to explain how environment, belief, and innovation shaped ancient civilizations.",
+    "objectives": [
+      "Use map evidence to explain why civilizations developed in certain places",
+      "Compare what different artifacts reveal about society",
+      "Support a historical inference with source evidence"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-world-history-and-geography-ancient-civilizations.md",
+    "outline": {
+      "hook": "Show artifacts from two ancient civilizations and ask what students can infer about work, writing, or belief from each object.",
+      "direct_instruction": "Model how to compare artifact evidence and map context. Emphasize that historians build claims from patterns across multiple sources.",
+      "guided_practice": "Study a river-valley map and artifact pair together. Discuss how environment may have supported farming, trade, or settlement.",
+      "independent_practice": "Students compare two sources and write a short claim about how one civilization adapted or organized life.",
+      "check_for_understanding": "Can students use source comparison rather than only listing facts about a civilization?",
+      "exit_ticket": "Students answer: I infer that this civilization valued ____ because the sources show ____."
+    }
+  },
+  "5-social-studies-world-history-and-geography-world-regions-physical-human": {
+    "title": "World Regions (physical/human)",
+    "summary": "Students use physical and human geography maps to explain how landforms, climate, and human activity shape world regions.",
+    "objectives": [
+      "Interpret physical and human geography maps together",
+      "Explain how geography influences settlement and activity",
+      "Use map evidence to compare regions"
+    ],
+    "grade_band": "Grade 5",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/5-social-studies-world-history-and-geography-world-regions-physical-human.md",
+    "outline": {
+      "hook": "Show two maps of the same region, one physical and one human, and ask why people often build cities in certain places.",
+      "direct_instruction": "Model comparing map types and using them for a claim about movement, farming, trade, or settlement. Emphasize evidence before explanation.",
+      "guided_practice": "Analyze the paired maps together and identify one physical feature and one human pattern that seem connected.",
+      "independent_practice": "Students compare two world regions and explain how geography affects how people live in each place.",
+      "check_for_understanding": "Can students point to map evidence when explaining why people settled or traveled in a region?",
+      "exit_ticket": "Students write: In this region, geography matters because ____."
+    }
+  },
+  "6-social-studies-civics-and-government-elections-and-civic-participation": {
+    "title": "Elections & Civic Participation",
+    "summary": "Students analyze a sample ballot and voter-turnout chart to explain how elections work and why participation matters.",
+    "objectives": [
+      "Identify what a ballot and turnout chart directly show",
+      "Explain one reason civic participation matters",
+      "Support a claim with evidence from an election source"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-civics-and-government-elections-and-civic-participation.md",
+    "outline": {
+      "hook": "Show a sample ballot and ask what information a voter needs before making a choice.",
+      "direct_instruction": "Model sourcing a ballot and turnout chart, noticing office names, measures, and participation patterns. Explain that civic participation includes voting and other actions that shape public life.",
+      "guided_practice": "Read the sources together and separate direct observations from interpretations about participation.",
+      "independent_practice": "Students explain why turnout matters in a democracy, using one detail from the chart or ballot.",
+      "check_for_understanding": "Can students move from source observation to a supported civic claim without drifting into unsupported opinion?",
+      "exit_ticket": "Students complete: One thing the election source shows is ____. This matters because ____."
+    }
+  },
+  "6-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "title": "US Constitution & Federalism",
+    "summary": "Students analyze a short constitutional excerpt and a powers chart to explain how federalism divides power.",
+    "objectives": [
+      "Identify powers described in a constitutional source",
+      "Explain the idea of shared and separate powers",
+      "Use source evidence to justify a federalism claim"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-civics-and-government-us-constitution-and-federalism.md",
+    "outline": {
+      "hook": "Ask who should decide school requirements, the national government or the states, then introduce a constitutional powers chart.",
+      "direct_instruction": "Model sourcing a constitutional excerpt and using a powers chart to distinguish federal, state, and shared powers. Explain why federalism exists.",
+      "guided_practice": "Work through examples together and cite chart evidence for each level of government.",
+      "independent_practice": "Students analyze a new issue and explain which level of government has the strongest role, using source evidence.",
+      "check_for_understanding": "Can students explain how the chart supports their claim instead of only naming a level of government?",
+      "exit_ticket": "Students answer: Federalism means ____. One source detail that shows this is ____."
+    }
+  },
+  "6-social-studies-economics-and-financial-literacy-personal-finance-basics": {
+    "title": "Personal Finance Basics",
+    "summary": "Students analyze a simple weekly budget and spending log to explain needs, wants, saving, and trade-offs.",
+    "objectives": [
+      "Read a basic budget source",
+      "Distinguish needs from wants in a spending plan",
+      "Use evidence from a budget to explain a financial choice"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-economics-and-financial-literacy-personal-finance-basics.md",
+    "outline": {
+      "hook": "Show a weekly budget with cash in and planned spending out. Ask which items students would protect first if money ran short.",
+      "direct_instruction": "Model reading the budget categories and identifying needs, wants, and savings choices. Explain that financial decisions involve trade-offs.",
+      "guided_practice": "Use the spending log together to decide which choices match the budget and which create problems.",
+      "independent_practice": "Students explain one smart revision to the budget and support it with evidence from the source.",
+      "check_for_understanding": "Can students use the numbers and categories in the budget to justify a recommendation?",
+      "exit_ticket": "Students write: I would change ____ in this budget because ____."
+    }
+  },
+  "6-social-studies-economics-and-financial-literacy-supply-demand-intro": {
+    "title": "Supply/Demand (intro)",
+    "summary": "Students analyze a price-and-quantity chart to explain how supply and demand can affect market outcomes.",
+    "objectives": [
+      "Describe what supply and demand mean in a source-based context",
+      "Interpret a basic market chart",
+      "Use evidence from the chart to explain a price change"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-economics-and-financial-literacy-supply-demand-intro.md",
+    "outline": {
+      "hook": "Ask why concert tickets might cost more when many people want them and only a few are available.",
+      "direct_instruction": "Model how to read a simple chart showing quantity and price. Explain supply as how much sellers offer and demand as how much buyers want.",
+      "guided_practice": "Read the chart together and identify what students can directly observe before building an interpretation.",
+      "independent_practice": "Students explain a market change using one chart detail and one sentence about supply or demand.",
+      "check_for_understanding": "Can students connect evidence from the chart to the correct economic idea?",
+      "exit_ticket": "Students complete: The price changed because ____. My evidence is ____."
+    }
+  },
+  "6-social-studies-us-history-postwar-to-present": {
+    "title": "Postwar to Present",
+    "summary": "Students analyze a timeline and public message source to explain how life in the United States changed after World War II.",
+    "objectives": [
+      "Place key postwar developments in order",
+      "Identify one theme of change in a public message source",
+      "Support a continuity-or-change claim with evidence"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-us-history-postwar-to-present.md",
+    "outline": {
+      "hook": "Show a postwar advertisement or public image and ask what it suggests about hopes or priorities in the period.",
+      "direct_instruction": "Model sourcing the image and reading a timeline for major developments such as suburban growth, Cold War tension, or rights movements.",
+      "guided_practice": "Analyze the paired sources together and identify one direct observation and one supported inference.",
+      "independent_practice": "Students explain one way the postwar period changed American life, using evidence from the source set.",
+      "check_for_understanding": "Can students use timeline context to interpret the public message source accurately?",
+      "exit_ticket": "Students answer: One important change after World War II was ____. The source detail that supports this is ____."
+    }
+  },
+  "6-social-studies-us-history-reconstruction-to-wwii": {
+    "title": "Reconstruction to WWII",
+    "summary": "Students analyze a timeline and historical document excerpt to explain how the United States changed from Reconstruction through World War II.",
+    "objectives": [
+      "Identify a major development from Reconstruction to WWII",
+      "Use source evidence to explain change over time",
+      "Support a claim with a document detail and timeline context"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-us-history-reconstruction-to-wwii.md",
+    "outline": {
+      "hook": "Ask how one country could experience constitutional change, industrial growth, and global war in the same broad era.",
+      "direct_instruction": "Model how to read the period as a sequence of linked changes. Source the excerpt and explain how document evidence fits into the larger timeline.",
+      "guided_practice": "Work through the sources together and identify a turning point students can support with evidence.",
+      "independent_practice": "Students write a short explanation of one major change in this era and support it with the source set.",
+      "check_for_understanding": "Can students connect a document detail to a broader historical development?",
+      "exit_ticket": "Students write: A turning point in this era was ____. I know because ____."
+    }
+  },
+  "6-social-studies-world-history-and-geography-global-interactions": {
+    "title": "Global Interactions",
+    "summary": "Students analyze a trade-route map and short case study to explain how ideas, goods, and people move across regions.",
+    "objectives": [
+      "Interpret a map of global interaction",
+      "Explain one effect of movement between regions",
+      "Use source evidence to support a claim about exchange"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-world-history-and-geography-global-interactions.md",
+    "outline": {
+      "hook": "Show a trade-route map and ask what might travel along the same route besides products.",
+      "direct_instruction": "Teach students to look for direction, connection points, and regions on the map. Explain that interactions can spread goods, ideas, technologies, and disease.",
+      "guided_practice": "Analyze the map and case study together, separating direct observations from inferences about effects.",
+      "independent_practice": "Students explain one effect of global interaction using evidence from the map or case study.",
+      "check_for_understanding": "Can students support their claim with actual route or source details?",
+      "exit_ticket": "Students complete: This interaction changed regions by ____."
+    }
+  },
+  "6-social-studies-world-history-and-geography-medieval-to-early-modern": {
+    "title": "Medieval to Early Modern",
+    "summary": "Students analyze a map and short source excerpt to explain how trade, belief, and power changed during the medieval and early modern periods.",
+    "objectives": [
+      "Use map evidence to identify a historical connection",
+      "Interpret a short source in context",
+      "Support a claim about change over time with evidence"
+    ],
+    "grade_band": "Grade 6",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/6-social-studies-world-history-and-geography-medieval-to-early-modern.md",
+    "outline": {
+      "hook": "Display a Silk Road or Mediterranean trade map and ask how connected regions might influence one another.",
+      "direct_instruction": "Model sourcing a short historical excerpt and pairing it with a map for context. Explain how trade, faith, and political power shaped the era.",
+      "guided_practice": "Read the sources together and identify one direct observation from each before building an interpretation.",
+      "independent_practice": "Students write a short claim about how contact between regions changed societies in this era, using evidence from the map or text.",
+      "check_for_understanding": "Can students ground their historical claim in source evidence instead of broad summary alone?",
+      "exit_ticket": "Students answer: One important connection in this era was ____. The evidence is ____."
+    }
+  },
+  "7-social-studies-civics-and-government-elections-and-civic-participation": {
+    "title": "Elections & Civic Participation",
+    "summary": "Students analyze a voter-turnout chart, issue summary, and sample ballot to explain how civic participation shapes representation.",
+    "objectives": [
+      "Interpret what election sources directly show",
+      "Explain how participation affects representation",
+      "Support a civic argument with chart or document evidence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-civics-and-government-elections-and-civic-participation.md",
+    "outline": {
+      "hook": "Ask whether an election result tells the whole story if turnout is low, then show a turnout chart beside the result.",
+      "direct_instruction": "Model sourcing the ballot and turnout chart and discussing what each source can and cannot prove. Explain how participation shapes whose voices are represented.",
+      "guided_practice": "Read the sources together and distinguish direct observation, inference, and opinion.",
+      "independent_practice": "Students write a short claim about why participation matters and support it with evidence from the election sources.",
+      "check_for_understanding": "Can students use turnout evidence carefully without making unsupported assumptions about voter motives?",
+      "exit_ticket": "Students complete: Participation matters because ____. My best evidence is ____."
+    }
+  },
+  "7-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "title": "US Constitution & Federalism",
+    "summary": "Students analyze constitutional excerpts and a federal-state powers chart to explain how federalism can create both balance and conflict.",
+    "objectives": [
+      "Identify powers assigned to different levels of government",
+      "Explain how federalism structures decision-making",
+      "Use constitutional evidence to support a claim"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-civics-and-government-us-constitution-and-federalism.md",
+    "outline": {
+      "hook": "Present a current-style issue such as disaster response or school policy and ask which level of government should lead.",
+      "direct_instruction": "Source the constitutional excerpt and powers chart. Model how to distinguish enumerated, reserved, and shared powers and how those categories affect real disputes.",
+      "guided_practice": "Analyze several examples together and support each answer with chart or document evidence.",
+      "independent_practice": "Students argue which level of government has the strongest role in a new case and justify the claim with source evidence.",
+      "check_for_understanding": "Can students explain why the Constitution creates overlap in some cases rather than assuming every power is separate?",
+      "exit_ticket": "Students write: Federalism creates balance because ____."
+    }
+  },
+  "7-social-studies-economics-and-financial-literacy-personal-finance-basics": {
+    "title": "Personal Finance Basics",
+    "summary": "Students analyze a paycheck, budget, and savings goal to explain how personal finance choices involve trade-offs and planning.",
+    "objectives": [
+      "Interpret a basic pay or budget source",
+      "Explain how saving and spending choices affect goals",
+      "Support a financial recommendation with evidence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-economics-and-financial-literacy-personal-finance-basics.md",
+    "outline": {
+      "hook": "Show a sample paycheck and ask why the amount earned is not always the same as the amount available to spend.",
+      "direct_instruction": "Model how to read the paycheck and budget lines. Explain trade-offs, savings goals, and why financial planning depends on evidence, not impulse.",
+      "guided_practice": "Work through a sample budget together and identify where the plan supports or harms a savings goal.",
+      "independent_practice": "Students write a short recommendation for how to revise the budget, using the source for evidence.",
+      "check_for_understanding": "Can students justify a budgeting choice with numeric evidence and a clear reason?",
+      "exit_ticket": "Students answer: To reach the savings goal, I would change ____ because ____."
+    }
+  },
+  "7-social-studies-economics-and-financial-literacy-supply-demand-intro": {
+    "title": "Supply/Demand (intro)",
+    "summary": "Students analyze a market graph and short scenario to explain how changes in supply or demand affect price and quantity.",
+    "objectives": [
+      "Interpret what a market graph directly shows",
+      "Explain whether a scenario changes supply or demand",
+      "Support an economic explanation with evidence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-economics-and-financial-literacy-supply-demand-intro.md",
+    "outline": {
+      "hook": "Ask why snow shovels can become expensive before a big storm and which part of the market likely changed.",
+      "direct_instruction": "Model how to read a simple supply-demand graph and pair it with a scenario. Emphasize evidence from the graph before explanation.",
+      "guided_practice": "Analyze the graph and scenario together, identifying the direct pattern and the most likely explanation.",
+      "independent_practice": "Students explain a second market case with one graph detail and one source-based reason.",
+      "check_for_understanding": "Can students avoid mixing up what the graph shows with what they infer caused it?",
+      "exit_ticket": "Students complete: This scenario changed ____, and I know because ____."
+    }
+  },
+  "7-social-studies-us-history-postwar-to-present": {
+    "title": "Postwar to Present",
+    "summary": "Students analyze a timeline and public argument source to explain how postwar change affected rights, policy, and daily life.",
+    "objectives": [
+      "Identify a major postwar development in context",
+      "Interpret a public message source for perspective and purpose",
+      "Support a claim about continuity or change with evidence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-us-history-postwar-to-present.md",
+    "outline": {
+      "hook": "Show a public speech excerpt or poster from the period and ask whose perspective it represents.",
+      "direct_instruction": "Model sourcing the message and using a timeline to place it in context. Emphasize observation, perspective, and supported inference.",
+      "guided_practice": "Work through the paired sources together and discuss what the source directly says, what it suggests, and why the context matters.",
+      "independent_practice": "Students explain one way the postwar era changed public life, using evidence from the timeline and message source.",
+      "check_for_understanding": "Can students connect source perspective to broader historical change without overgeneralizing?",
+      "exit_ticket": "Students answer: This source reflects change in ____ because ____."
+    }
+  },
+  "7-social-studies-us-history-reconstruction-to-wwii": {
+    "title": "Reconstruction to WWII",
+    "summary": "Students analyze a timeline, political cartoon, and short document excerpt to explain key tensions from Reconstruction through World War II.",
+    "objectives": [
+      "Interpret a source from within its historical context",
+      "Explain one major tension or turning point from the era",
+      "Support a historical claim with evidence from multiple sources"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-us-history-reconstruction-to-wwii.md",
+    "outline": {
+      "hook": "Show a political cartoon from the era and ask what problem or debate it seems to highlight.",
+      "direct_instruction": "Model sourcing the cartoon and document, then using the timeline to place the issue in context. Emphasize that source perspective shapes meaning.",
+      "guided_practice": "Analyze what the sources directly show and what conclusions students can responsibly draw.",
+      "independent_practice": "Students write a short claim about a turning point or tension in the era and support it with evidence from at least two sources.",
+      "check_for_understanding": "Can students use context to interpret a political cartoon instead of reading it only literally?",
+      "exit_ticket": "Students complete: A major tension in this era was ____. My evidence is ____."
+    }
+  },
+  "7-social-studies-world-history-and-geography-global-interactions": {
+    "title": "Global Interactions",
+    "summary": "Students analyze a migration or trade map and supporting source to explain how global interactions spread change across regions.",
+    "objectives": [
+      "Interpret a source showing regional interaction",
+      "Explain one consequence of global exchange",
+      "Support a claim about interaction with evidence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-world-history-and-geography-global-interactions.md",
+    "outline": {
+      "hook": "Ask how an invention, belief, or disease can travel farther than the people who first created or encountered it.",
+      "direct_instruction": "Model how to read a map of movement and pair it with a short case-study source. Emphasize evidence, context, and consequence.",
+      "guided_practice": "Analyze the sources together and discuss one positive and one negative effect students can support with evidence.",
+      "independent_practice": "Students explain one major effect of global interaction using details from the map and source.",
+      "check_for_understanding": "Can students trace an interaction across regions with evidence instead of vague summary?",
+      "exit_ticket": "Students write: This interaction mattered because ____."
+    }
+  },
+  "7-social-studies-world-history-and-geography-medieval-to-early-modern": {
+    "title": "Medieval to Early Modern",
+    "summary": "Students analyze a map and document excerpt to explain how trade, reform, and state power reshaped societies from the medieval to early modern era.",
+    "objectives": [
+      "Interpret a historical map or document in context",
+      "Explain one major transformation from the era",
+      "Support a claim about change with evidence"
+    ],
+    "grade_band": "Grade 7",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/7-social-studies-world-history-and-geography-medieval-to-early-modern.md",
+    "outline": {
+      "hook": "Show a map of trade or political boundaries and ask what it reveals about power and connection in the era.",
+      "direct_instruction": "Model sourcing the document and using the map for context. Explain that trade, belief, and political centralization all changed societies over time.",
+      "guided_practice": "Read the source pair together and identify one direct observation from each before building an interpretation.",
+      "independent_practice": "Students write a short response explaining one transformation in the era with evidence from the map or document.",
+      "check_for_understanding": "Can students connect a specific source detail to a broader historical transformation?",
+      "exit_ticket": "Students answer: One important transformation was ____. The evidence is ____."
+    }
+  },
+  "8-social-studies-civics-and-government-elections-and-civic-participation": {
+    "title": "Elections & Civic Participation",
+    "summary": "Students analyze a turnout chart, campaign message, and ballot source to explain how participation, information, and persuasion affect democratic decision-making.",
+    "objectives": [
+      "Interpret election sources for evidence and purpose",
+      "Explain how participation shapes democratic outcomes",
+      "Support a civic claim with multiple sources"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-civics-and-government-elections-and-civic-participation.md",
+    "outline": {
+      "hook": "Ask whether a campaign message and a turnout chart tell the same story about an election, then display both sources.",
+      "direct_instruction": "Model sourcing the campaign message for purpose and audience and the turnout chart for direct evidence. Explain how information, persuasion, and participation all affect representation.",
+      "guided_practice": "Analyze the sources together and distinguish observation, inference, and evaluation carefully.",
+      "independent_practice": "Students write a short claim about why participation matters in elections and support it with evidence from two sources.",
+      "check_for_understanding": "Can students account for source purpose without confusing persuasion with factual evidence?",
+      "exit_ticket": "Students complete: In a democracy, participation matters because ____. My evidence is ____."
+    }
+  },
+  "8-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "title": "US Constitution & Federalism",
+    "summary": "Students analyze constitutional text and a federal-state powers case to explain how federalism distributes authority and creates debate.",
+    "objectives": [
+      "Interpret constitutional evidence about government power",
+      "Explain how federalism can balance and complicate decision-making",
+      "Support a constitutional claim with source evidence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-civics-and-government-us-constitution-and-federalism.md",
+    "outline": {
+      "hook": "Present a modern-style policy conflict and ask why the Constitution does not always produce a simple one-level answer.",
+      "direct_instruction": "Source the constitutional text and case summary. Model how to use the sources to explain why authority may be shared, disputed, or limited.",
+      "guided_practice": "Work through the case together and identify which source details support different interpretations.",
+      "independent_practice": "Students argue which level of government has the stronger claim in a new scenario and justify the answer with source evidence.",
+      "check_for_understanding": "Can students explain constitutional reasoning with evidence instead of defaulting to opinion about what should happen?",
+      "exit_ticket": "Students answer: Federalism creates debate when ____. One source detail that supports this is ____."
+    }
+  },
+  "8-social-studies-economics-and-financial-literacy-personal-finance-basics": {
+    "title": "Personal Finance Basics",
+    "summary": "Students analyze a budget, bank-fee table, and savings goal to explain how financial choices affect long-term outcomes.",
+    "objectives": [
+      "Interpret multiple personal-finance sources",
+      "Explain how fees, spending, and saving affect a plan",
+      "Support a financial recommendation with evidence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-economics-and-financial-literacy-personal-finance-basics.md",
+    "outline": {
+      "hook": "Show two banking choices with different fees and ask how a small difference can matter over time.",
+      "direct_instruction": "Model how to read a budget and fee table together. Explain that strong financial decisions come from comparing evidence and thinking about long-term goals.",
+      "guided_practice": "Analyze the sources together and identify which plan better supports the stated goal and why.",
+      "independent_practice": "Students recommend a financial choice and support it with details from the sources.",
+      "check_for_understanding": "Can students connect short-term spending choices to long-term outcomes using evidence?",
+      "exit_ticket": "Students write: The better financial choice is ____, because ____."
+    }
+  },
+  "8-social-studies-economics-and-financial-literacy-supply-demand-intro": {
+    "title": "Supply/Demand (intro)",
+    "summary": "Students analyze a market graph and policy or event scenario to explain how supply and demand influence outcomes in real markets.",
+    "objectives": [
+      "Interpret a market graph in context",
+      "Explain how a scenario affects supply or demand",
+      "Support an economic claim with graph evidence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-economics-and-financial-literacy-supply-demand-intro.md",
+    "outline": {
+      "hook": "Ask why a shortage or policy change can alter prices quickly even when the product itself stays the same.",
+      "direct_instruction": "Model how to read the graph for direct evidence and then connect that evidence to the scenario. Emphasize careful explanation rather than memorized vocabulary alone.",
+      "guided_practice": "Analyze one graph-scenario pair together and discuss both the direct pattern and the likely cause.",
+      "independent_practice": "Students explain a second market case with evidence from the graph and scenario.",
+      "check_for_understanding": "Can students use graph evidence precisely instead of offering a generic explanation about prices?",
+      "exit_ticket": "Students answer: This market changed because ____. My evidence is ____."
+    }
+  },
+  "8-social-studies-us-history-postwar-to-present": {
+    "title": "Postwar to Present",
+    "summary": "Students analyze a timeline and argument source to explain how policy, rights, and public debate shaped the United States from the postwar era to the present.",
+    "objectives": [
+      "Interpret a postwar source for perspective and purpose",
+      "Explain one major change or continuity from the era",
+      "Support a historical claim with evidence from multiple sources"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-us-history-postwar-to-present.md",
+    "outline": {
+      "hook": "Display a protest poster, speech excerpt, or public announcement and ask what issue seems urgent to the source creator.",
+      "direct_instruction": "Model sourcing the argument source and using the timeline to place it in context. Emphasize perspective, purpose, and evidence-based interpretation.",
+      "guided_practice": "Analyze what the source directly says, what it implies, and which timeline details help explain why it was created.",
+      "independent_practice": "Students write a short claim about one major postwar development and support it with evidence from the source set.",
+      "check_for_understanding": "Can students connect source perspective to historical change without ignoring limits or bias?",
+      "exit_ticket": "Students complete: This source matters because it reveals ____ about the postwar era."
+    }
+  },
+  "8-social-studies-us-history-reconstruction-to-wwii": {
+    "title": "Reconstruction to WWII",
+    "summary": "Students analyze a timeline, public message source, and short document to explain how the United States changed from Reconstruction through World War II.",
+    "objectives": [
+      "Identify a major turning point in the era",
+      "Interpret source evidence in historical context",
+      "Support a claim about change and continuity with evidence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-us-history-reconstruction-to-wwii.md",
+    "outline": {
+      "hook": "Ask how one era can include both expanded rights and serious inequality, then display a source that reflects one side of that tension.",
+      "direct_instruction": "Model using the timeline for context and the document for evidence. Emphasize that historians must account for perspective, purpose, and historical limits.",
+      "guided_practice": "Read the source set together and identify one direct observation, one reasonable inference, and one supported claim.",
+      "independent_practice": "Students explain one major turning point or tension from the era using evidence from the document and timeline.",
+      "check_for_understanding": "Can students build a disciplined claim instead of summarizing the era too broadly?",
+      "exit_ticket": "Students write: A key turning point in this era was ____. My evidence is ____."
+    }
+  },
+  "8-social-studies-world-history-and-geography-global-interactions": {
+    "title": "Global Interactions",
+    "summary": "Students analyze a map and short case study to explain how globalization connects regions through trade, migration, and shared problems.",
+    "objectives": [
+      "Interpret source evidence about global interaction",
+      "Explain one consequence of globalization",
+      "Support a claim with map or document evidence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-world-history-and-geography-global-interactions.md",
+    "outline": {
+      "hook": "Show a product journey map or migration route and ask how one decision in one region can affect people in another.",
+      "direct_instruction": "Model how to use the map for direct evidence and the case study for context and consequence. Emphasize that global interactions can create both opportunity and tension.",
+      "guided_practice": "Analyze the sources together and identify one direct effect and one broader implication students can support.",
+      "independent_practice": "Students write a short explanation of one way globalization connects regions, using source evidence.",
+      "check_for_understanding": "Can students support their globalization claim with concrete evidence instead of broad slogans?",
+      "exit_ticket": "Students answer: This global interaction mattered because ____."
+    }
+  },
+  "8-social-studies-world-history-and-geography-medieval-to-early-modern": {
+    "title": "Medieval to Early Modern",
+    "summary": "Students analyze a map and historical excerpt to explain how trade, reform, and expanding state power transformed societies from the medieval to early modern era.",
+    "objectives": [
+      "Interpret historical evidence from the era in context",
+      "Explain one major transformation from medieval to early modern times",
+      "Support a claim with map and document evidence"
+    ],
+    "grade_band": "Grade 8",
+    "subject": "Social Studies",
+    "content_markdown_file": "authored/social_studies/8-social-studies-world-history-and-geography-medieval-to-early-modern.md",
+    "outline": {
+      "hook": "Show changing political or trade maps and ask what they suggest about growing state power and wider connections.",
+      "direct_instruction": "Model sourcing the excerpt and pairing it with the map to explain context. Emphasize how reform, trade, and state-building changed societies over time.",
+      "guided_practice": "Read the source pair together and distinguish what each source directly shows from what students infer about larger change.",
+      "independent_practice": "Students argue for one major transformation in the era and support it with evidence from both sources.",
+      "check_for_understanding": "Can students build a supported interpretation from multiple sources instead of treating the era as one simple story?",
+      "exit_ticket": "Students complete: One transformation in this era was ____. The evidence is ____ and ____."
+    }
+  }
+}

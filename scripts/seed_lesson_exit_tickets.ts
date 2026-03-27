@@ -3,6 +3,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type ModuleRow = {
@@ -313,7 +314,8 @@ const insertAssessment = async (
   }
 };
 
-const seedExitTickets = async () => {
+const seedExitTickets = async (apply: boolean) => {
+  logWriteMode(apply, 'lesson exit tickets');
   const supabase = createServiceRoleClient();
   const subjectMap = await fetchSubjects(supabase);
   const modules = await fetchModules(supabase);
@@ -355,9 +357,11 @@ const seedExitTickets = async () => {
       continue;
     }
 
-    await deleteExistingExitTicket(supabase, module.id, lesson.slug);
-    const questionId = await insertQuestion(supabase, subject.id, module, lesson, question);
-    await insertAssessment(supabase, subject.id, module, lesson, questionId);
+    if (apply) {
+      await deleteExistingExitTicket(supabase, module.id, lesson.slug);
+      const questionId = await insertQuestion(supabase, subject.id, module, lesson, question);
+      await insertAssessment(supabase, subject.id, module, lesson, questionId);
+    }
     seeded += 1;
   }
 
@@ -369,7 +373,7 @@ const seedExitTickets = async () => {
     });
   }
 
-  console.log(`Seeded ${seeded} lesson exit tickets.`);
+  console.log(apply ? `Seeded ${seeded} lesson exit tickets.` : `Would reseed ${seeded} lesson exit tickets.`);
 };
 
 const invokedFromCli =
@@ -377,8 +381,14 @@ const invokedFromCli =
   process.argv[1]?.includes('seed_lesson_exit_tickets.js');
 
 if (invokedFromCli) {
-  seedExitTickets().catch((error: unknown) => {
-    console.error(error);
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  if (rest.length > 0) {
+    console.error(new Error(`Unknown argument: ${rest[0]}`));
     process.exitCode = 1;
-  });
+  } else {
+    seedExitTickets(apply).catch((error: unknown) => {
+      console.error(error);
+      process.exitCode = 1;
+    });
+  }
 }

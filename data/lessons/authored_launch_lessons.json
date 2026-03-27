@@ -2478,5 +2478,35 @@
         "Practice worksheets"
       ]
     }
+  },
+  "4-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights Launch Lesson",
+    "summary": "Analyze a real First Amendment excerpt to identify protected rights, separate observation from inference, and connect a civic action to evidence from the source.",
+    "objectives": [
+      "Identify who created a civic source, when it was written, and why it matters",
+      "Use details from the First Amendment to explain what rights it protects",
+      "Separate direct observations from reasonable inferences",
+      "Support a civic claim with evidence from the source"
+    ],
+    "grade_band": "Grade 4",
+    "subject": "Social Studies",
+    "standards": [
+      "Civ.3-5",
+      "Hist.3-5"
+    ],
+    "outline": {
+      "hook": "Ask students whether a school should be allowed to stop people from sharing opinions, gathering peacefully, or asking leaders for change. Introduce the First Amendment as a real source that helps answer that question.",
+      "direct_instruction": "Model how to source the First Amendment, identify what it directly says about speech, assembly, and petition, and distinguish observation from inference when explaining why the amendment was written.",
+      "guided_practice": "Read the source excerpt together. Highlight the protected rights, discuss what those words mean in student-friendly language, and connect a modern civic action to the exact phrase in the source.",
+      "independent_practice": "Students answer source-analysis questions and use a claim-evidence-reasoning frame to explain which First Amendment right fits a given civic scenario.",
+      "check_for_understanding": "Ask students to identify one direct observation from the amendment, one reasonable inference, and one phrase that supports a civic claim.",
+      "exit_ticket": "Students complete the sentence: 'The First Amendment protects ___ because the source says ___.'",
+      "materials": [
+        "Short First Amendment excerpt",
+        "Observation versus inference chart",
+        "Claim-evidence-reasoning sentence frame",
+        "Civic scenario cards"
+      ]
+    }
   }
 }

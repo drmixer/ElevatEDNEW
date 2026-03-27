@@ -27875,362 +27875,429 @@
   ],
   "8-mathematics-geometry-and-measurement-similarity-and-congruence": [
     {
-      "prompt": "Practice question 1 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Triangle A has vertices (1, 2), (4, 2), and (1, 5). Triangle B has vertices (5, 2), (8, 2), and (5, 5). Which statement explains why the triangles are congruent?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "Each vertex moves 4 units to the right, so a translation maps Triangle A onto Triangle B. A translation is a rigid transformation, so the triangles are congruent.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
-        "8.G.A.4"
+        "8.G.A.2",
+        "8.G.A.3"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "A translation moves every vertex 4 units to the right, and translations preserve lengths and angles.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. The same translation maps each point in Triangle A to the matching point in Triangle B."
         },
         {
-          "text": "Option B",
+          "text": "A dilation with scale factor 4 makes Triangle A match Triangle B.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A dilation changes size, but these triangles stay the same size."
         },
         {
-          "text": "Option C",
+          "text": "The triangles are similar because their side lengths double.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "The coordinates show a slide, not a doubling of side lengths."
         },
         {
-          "text": "Option D",
+          "text": "A reflection across the x-axis maps Triangle A onto Triangle B.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Reflecting across the x-axis would change the y-values, which does not happen here."
         }
       ]
     },
     {
-      "prompt": "Practice question 2 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Which transformation can change the size of a figure while keeping its shape the same?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "A dilation multiplies every distance from the center by the same scale factor. That changes size while preserving shape.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
+        "8.G.A.3",
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "A dilation",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Dilations change size by a scale factor."
         },
         {
-          "text": "Option B",
+          "text": "A translation",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A translation slides a figure without changing its size."
         },
         {
-          "text": "Option C",
+          "text": "A rotation",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A rotation turns a figure but keeps lengths the same."
         },
         {
-          "text": "Option D",
+          "text": "A reflection",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A reflection flips a figure across a line, but it does not resize it."
         }
       ]
     },
     {
-      "prompt": "Practice question 3 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Triangle P has side lengths 3, 4, and 5. Triangle Q has side lengths 6, 8, and 10. What is the scale factor from Triangle P to Triangle Q?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "The matching side ratios are 6/3, 8/4, and 10/5. Each ratio equals 2, so the scale factor from Triangle P to Triangle Q is 2.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "2",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Every side in Triangle Q is 2 times the matching side in Triangle P."
         },
         {
-          "text": "Option B",
+          "text": "1/2",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "1/2 would be the scale factor from Triangle Q back to Triangle P."
         },
         {
-          "text": "Option C",
+          "text": "3",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Check the ratio of corresponding sides: 6/3 equals 2, not 3."
         },
         {
-          "text": "Option D",
+          "text": "5",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "The scale factor compares matching sides, not the largest side by itself."
         }
       ]
     },
     {
-      "prompt": "Practice question 4 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Two triangles have side lengths 4, 6, 8 and 6, 9, 12. Which conclusion is correct?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "The ratios 6/4, 9/6, and 12/8 are all equal to 1.5. Equal corresponding ratios show the triangles are similar.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "The triangles are similar with scale factor 1.5.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Each corresponding side is multiplied by 1.5."
         },
         {
-          "text": "Option B",
+          "text": "The triangles are congruent because all three ratios match.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Matching ratios show similarity, not congruence, because the side lengths are not equal."
         },
         {
-          "text": "Option C",
+          "text": "The triangles are not related because none of the side lengths are equal.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Figures can still be similar even when the side lengths are not exactly equal."
         },
         {
-          "text": "Option D",
+          "text": "The triangles are similar with scale factor 3.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "The common ratio is 1.5, not 3."
         }
       ]
     },
     {
-      "prompt": "Practice question 5 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Which statement must be true if two figures are congruent?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "Congruent figures have exactly equal corresponding side lengths and angle measures. They can be moved by rigid transformations and still match perfectly.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
-        "8.G.A.4"
+        "8.G.A.2",
+        "8.G.A.3"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "Corresponding sides and corresponding angles are equal.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Congruent figures match in both size and shape."
         },
         {
-          "text": "Option B",
+          "text": "The figures have the same shape, but one may be a larger version of the other.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "That describes similarity, not congruence."
         },
         {
-          "text": "Option C",
+          "text": "Only the angles must match; the side lengths can have any ratio.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Congruent figures need equal side lengths as well."
         },
         {
-          "text": "Option D",
+          "text": "A dilation is always needed to map one figure onto the other.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Dilations change size, so they are not required for congruent figures."
         }
       ]
     },
     {
-      "prompt": "Practice question 6 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "A triangle is dilated from the origin so that point (2, 1) moves to (6, 3). What is the scale factor?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "Both coordinates are multiplied by 3: 2 becomes 6 and 1 becomes 3. That means the dilation has scale factor 3.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
+        "8.G.A.3",
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "3",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Each coordinate is multiplied by 3."
         },
         {
-          "text": "Option B",
+          "text": "2",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Check both coordinates: 2 to 6 is a factor of 3."
         },
         {
-          "text": "Option C",
+          "text": "1/3",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "1/3 would shrink the figure instead of enlarging it."
         },
         {
-          "text": "Option D",
+          "text": "4",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A factor of 4 would send (2, 1) to (8, 4), not (6, 3)."
         }
       ]
     },
     {
-      "prompt": "Practice question 7 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Triangles R and S have side lengths 5, 7, 9 and 10, 14, 19. Why are they not similar?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "If the triangles were similar, every matching side ratio would be equal. Here 10/5 = 2 and 14/7 = 2, but 19/9 is not 2, so the ratios are not constant.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "The third side ratio is not equal to the first two ratios.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Similar figures need the same ratio for every pair of corresponding sides."
         },
         {
-          "text": "Option B",
+          "text": "The first triangle has odd side lengths, so it cannot be similar to another triangle.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Odd or even side lengths do not determine similarity."
         },
         {
-          "text": "Option C",
+          "text": "The triangles are congruent, not similar, because two side pairs double.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Congruent triangles would have equal side lengths, not doubled side lengths."
         },
         {
-          "text": "Option D",
+          "text": "The perimeter ratio matters more than the side ratios.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Similarity is checked by comparing corresponding side ratios directly."
         }
       ]
     },
     {
-      "prompt": "Practice question 8 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "To test whether triangles ABC and DEF are similar, which set of ratios compares corresponding sides in a consistent order?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "You must compare matching sides in the same order. Using AB/DE, BC/EF, and AC/DF keeps the correspondence consistent across all three ratios.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "AB/DE, BC/EF, AC/DF",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Each ratio compares matching sides in the same relative positions."
         },
         {
-          "text": "Option B",
+          "text": "AB/EF, BC/DE, AC/DF",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Those ratios mix the correspondence, so they do not test a single scale factor."
         },
         {
-          "text": "Option C",
+          "text": "AB/BC, DE/EF, AC/DF",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "The first two ratios compare sides within the same triangle instead of matching the two triangles."
         },
         {
-          "text": "Option D",
+          "text": "AB/DF, BC/EF, AC/DE",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "The side pairings are inconsistent, so the ratios would not represent one scale factor."
         }
       ]
     },
     {
-      "prompt": "Practice question 9 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "A student says, \"These triangles are congruent because one can be dilated by a scale factor of 2 to match the other.\" What is the best correction?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "explanation": "A dilation changes size, so it cannot prove congruence. If one triangle needs a dilation to match the other, the triangles may be similar instead.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
+        "8.G.A.3",
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "A dilation can show similarity, but congruence requires rigid transformations that keep size the same.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Congruence uses translations, rotations, and reflections because they preserve size."
         },
         {
-          "text": "Option B",
+          "text": "The statement is correct because any transformation proves congruence.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Not every transformation preserves size, so not every transformation proves congruence."
         },
         {
-          "text": "Option C",
+          "text": "A dilation of 2 proves both congruence and similarity at the same time.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A scale factor other than 1 changes the size, so it cannot prove congruence."
         },
         {
-          "text": "Option D",
+          "text": "Congruence is decided only by angle measures, not by transformations.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Transformations are one valid way to justify congruence because they show side lengths and angles are preserved."
         }
       ]
     },
     {
-      "prompt": "Practice question 10 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "A square is reflected across a line and then translated. How is the image related to the original square?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "explanation": "A reflection and a translation are both rigid transformations. Rigid transformations preserve lengths and angles, so the image is congruent to the original figure.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
-        "8.G.A.4"
+        "8.G.A.2",
+        "8.G.A.3"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "The image is congruent to the original because both transformations preserve size and shape.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Reflections and translations are rigid transformations."
         },
         {
-          "text": "Option B",
+          "text": "The image is only similar because the orientation changed.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Changing orientation does not change size, so the figure can still be congruent."
         },
         {
-          "text": "Option C",
+          "text": "The image is larger because two transformations were used.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Using more than one rigid transformation does not enlarge the figure."
         },
         {
-          "text": "Option D",
+          "text": "The relationship cannot be determined without a scale factor.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "No scale factor is needed because rigid transformations already preserve the figure's size."
         }
       ]
     },
     {
-      "prompt": "Practice question 11 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "Triangle M has side lengths 8, 12, and 18. Triangle N has side lengths 4, 6, and 9. What is the scale factor from Triangle M to Triangle N?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "explanation": "Each side of Triangle N is half the matching side of Triangle M: 4/8 = 1/2, 6/12 = 1/2, and 9/18 = 1/2. So the scale factor from M to N is 1/2.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "1/2",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Each side in Triangle N is half the matching side in Triangle M."
         },
         {
-          "text": "Option B",
+          "text": "2",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "2 would be the scale factor from Triangle N to Triangle M, not the other way around."
         },
         {
-          "text": "Option C",
+          "text": "3/2",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Check the ratio 4/8. It simplifies to 1/2, not 3/2."
         },
         {
-          "text": "Option D",
+          "text": "9/8",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A scale factor should be the same for every corresponding side, not just one random fraction."
         }
       ]
     },
     {
-      "prompt": "Practice question 12 for Similarity & Congruence.",
+      "lessonSlug": "8-mathematics-geometry-and-measurement-similarity-and-congruence-launch",
+      "prompt": "One polygon is mapped to another by a dilation with scale factor 1/2 and then a translation. Which relationship is guaranteed?",
       "type": "multiple_choice",
       "difficulty": 3,
+      "explanation": "The dilation changes the size of the figure, and the translation repositions it. Because the scale factor is 1/2 instead of 1, the figures are similar, not congruent.",
+      "skills": [
+        "similarity_and_congruence"
+      ],
       "standards": [
+        "8.G.A.3",
         "8.G.A.4"
       ],
       "options": [
         {
-          "text": "Option A",
+          "text": "The figures are similar because the dilation keeps shape but changes size.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. A dilation with scale factor 1/2 preserves shape but changes size."
         },
         {
-          "text": "Option B",
+          "text": "The figures are congruent because the translation restores the original size.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "A translation can move a figure, but it does not undo the size change from the dilation."
         },
         {
-          "text": "Option C",
+          "text": "The figures are neither similar nor congruent because two transformations were used.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Using more than one transformation is allowed; the key question is whether size changes."
         },
         {
-          "text": "Option D",
+          "text": "The figures must have equal side lengths because they share the same orientation after the translation.",
           "isCorrect": false,
-          "feedback": "Not quite."
+          "feedback": "Equal orientation does not imply equal side lengths."
         }
       ]
     }
@@ -30765,6 +30832,433 @@
           "text": "Option D",
           "isCorrect": false,
           "feedback": "Not quite."
+        }
+      ]
+    }
+  ],
+  "4-social-studies-civics-and-government-citizenship-and-rights": [
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which statement is the best direct observation from the First Amendment source in the lesson?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "explanation": "A direct observation repeats something the source clearly says. The amendment directly names speech, the press, assembly, and petitions.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5",
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "The source says people have rights related to speech, the press, peaceful assembly, and petitions.",
+          "isCorrect": true,
+          "feedback": "Correct. That statement comes directly from the words of the amendment."
+        },
+        {
+          "text": "The source proves that every person in 1791 was treated equally.",
+          "isCorrect": false,
+          "feedback": "That claim goes beyond what the source directly says."
+        },
+        {
+          "text": "The source shows that newspapers were more important than people.",
+          "isCorrect": false,
+          "feedback": "The amendment protects the press, but it does not rank it above people."
+        },
+        {
+          "text": "The source means citizens never disagreed with their leaders.",
+          "isCorrect": false,
+          "feedback": "The source protects disagreement. It does not say disagreement never happened."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Why is the First Amendment a primary source for this lesson?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "explanation": "A primary source is an original document from the time being studied. The First Amendment is the actual wording added to the Bill of Rights in 1791.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "It is the original wording of an important law written at the time it was created.",
+          "isCorrect": true,
+          "feedback": "Correct. The amendment itself is the original source, not a later summary."
+        },
+        {
+          "text": "It was written by a textbook company to explain history to students.",
+          "isCorrect": false,
+          "feedback": "That would describe a secondary source, not a primary source."
+        },
+        {
+          "text": "It was created many years later by a reporter who had an opinion about rights.",
+          "isCorrect": false,
+          "feedback": "A later report would not be the original source."
+        },
+        {
+          "text": "It is a worksheet that asks students to think about citizenship.",
+          "isCorrect": false,
+          "feedback": "A worksheet can use a source, but it is not the original source itself."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which right from the First Amendment best matches people gathering peacefully in a park to ask for cleaner water?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "explanation": "The right to assemble protects people gathering together peacefully for a civic reason.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5"
+      ],
+      "options": [
+        {
+          "text": "The right to assemble peacefully",
+          "isCorrect": true,
+          "feedback": "Correct. Gathering together peacefully fits the right to assemble."
+        },
+        {
+          "text": "The right to keep all government meetings secret",
+          "isCorrect": false,
+          "feedback": "The amendment does not give people a right to hide government meetings."
+        },
+        {
+          "text": "The right to ignore every law they dislike",
+          "isCorrect": false,
+          "feedback": "The source protects civic freedoms, not the right to ignore all laws."
+        },
+        {
+          "text": "The right to vote at any age",
+          "isCorrect": false,
+          "feedback": "Voting rights are important, but that is not the right described in this scenario."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which sentence is the best reasonable inference from the First Amendment source?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "A good inference grows from the evidence in the source. Protecting speech, assembly, and petitions suggests the writers thought citizens needed safe ways to speak up and ask for change.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5",
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "The writers believed citizens should have protected ways to speak up and ask the government to fix problems.",
+          "isCorrect": true,
+          "feedback": "Correct. That idea is supported by the rights named in the amendment."
+        },
+        {
+          "text": "The writers wanted people to agree with the government all the time.",
+          "isCorrect": false,
+          "feedback": "The protected rights suggest the opposite."
+        },
+        {
+          "text": "The writers thought newspapers should replace the government.",
+          "isCorrect": false,
+          "feedback": "The source protects the press, but it does not say the press should replace government."
+        },
+        {
+          "text": "The writers cared only about people who worked in government buildings.",
+          "isCorrect": false,
+          "feedback": "The source protects rights of the people, not only government workers."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "A class writes a letter asking the city council to add a crosswalk near the school. Which phrase from the source is the strongest evidence for their action?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "The best evidence is the exact phrase about petitioning the government, because the students are making a formal request for change.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5",
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "\"the right of the people peaceably to assemble, and to petition the Government for a redress of grievances\"",
+          "isCorrect": true,
+          "feedback": "Correct. That phrase directly supports asking leaders to solve a problem."
+        },
+        {
+          "text": "\"Congress shall make no law\"",
+          "isCorrect": false,
+          "feedback": "That phrase matters, but it is too broad to be the strongest evidence for the class's action."
+        },
+        {
+          "text": "\"freedom of the press\"",
+          "isCorrect": false,
+          "feedback": "Freedom of the press fits publishing news, not a direct request to leaders."
+        },
+        {
+          "text": "\"abridging the freedom of speech\"",
+          "isCorrect": false,
+          "feedback": "Speech is related, but the petition phrase matches the scenario more exactly."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Why is the statement \"The amendment names speech, assembly, and petitions\" an observation instead of an inference?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "An observation comes directly from the words in the source. This statement simply lists rights the amendment clearly names.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "Because it repeats what the source directly says without adding a new conclusion.",
+          "isCorrect": true,
+          "feedback": "Correct. Observations stay close to the exact wording of the source."
+        },
+        {
+          "text": "Because it guesses what the writers hoped would happen hundreds of years later.",
+          "isCorrect": false,
+          "feedback": "That would be an inference, not a direct observation."
+        },
+        {
+          "text": "Because it explains whether the government always followed the rule fairly.",
+          "isCorrect": false,
+          "feedback": "That would require other evidence, not just a direct reading of the source."
+        },
+        {
+          "text": "Because it proves every person had the same experience in 1791.",
+          "isCorrect": false,
+          "feedback": "The source alone cannot prove that larger claim."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which question best shows source analysis instead of broad opinion sharing?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "Source analysis asks about who made the source, what it says, and what evidence supports an interpretation.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "Which words in the First Amendment support the idea that citizens may ask leaders to fix a problem?",
+          "isCorrect": true,
+          "feedback": "Correct. That question asks for evidence from the source."
+        },
+        {
+          "text": "Do you personally like old documents more than new ones?",
+          "isCorrect": false,
+          "feedback": "That is an opinion question, not a source-analysis question."
+        },
+        {
+          "text": "Is the First Amendment the longest law ever written?",
+          "isCorrect": false,
+          "feedback": "That question is not the main source-analysis move from the lesson."
+        },
+        {
+          "text": "Would every student rather skip social studies today?",
+          "isCorrect": false,
+          "feedback": "That question does not analyze the source at all."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which action is the best example of using freedom of the press?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "explanation": "Freedom of the press protects publishing information and opinions in newspapers and similar media.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5"
+      ],
+      "options": [
+        {
+          "text": "Publishing an article in the local paper about playground safety",
+          "isCorrect": true,
+          "feedback": "Correct. Publishing news or opinions connects to freedom of the press."
+        },
+        {
+          "text": "Whispering to a friend during lunch",
+          "isCorrect": false,
+          "feedback": "That is speech, but it is not the press."
+        },
+        {
+          "text": "Standing in a peaceful group outside city hall",
+          "isCorrect": false,
+          "feedback": "That action fits assembly more closely."
+        },
+        {
+          "text": "Signing a request to change a school rule",
+          "isCorrect": false,
+          "feedback": "That action fits petition more closely."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "What is one limit of using only the First Amendment as a source?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "explanation": "The amendment tells us what rule was written, but one source alone does not show every person's real experience or whether the rule was always applied fairly.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "It tells what the law said, but we need more sources to know how people actually experienced those rights.",
+          "isCorrect": true,
+          "feedback": "Correct. One civic source can show the rule, but other sources help explain real-life experience."
+        },
+        {
+          "text": "It is useless because all primary sources are untrustworthy.",
+          "isCorrect": false,
+          "feedback": "Primary sources are useful, but they do have limits."
+        },
+        {
+          "text": "It cannot tell us anything about government at all.",
+          "isCorrect": false,
+          "feedback": "It tells us a great deal about government limits and civic rights."
+        },
+        {
+          "text": "It proves that no other source is ever needed in social studies.",
+          "isCorrect": false,
+          "feedback": "Historians usually compare multiple sources."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which response best uses claim, evidence, and reasoning?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "explanation": "A strong response states a claim, quotes or paraphrases evidence from the source, and explains how the evidence supports the claim.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5",
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "Students can ask the mayor for a crosswalk because the First Amendment protects the right to petition the government, which means people may make a formal request for change.",
+          "isCorrect": true,
+          "feedback": "Correct. This response states a claim, uses evidence from the source, and explains the connection."
+        },
+        {
+          "text": "A crosswalk is a good idea because streets are busy.",
+          "isCorrect": false,
+          "feedback": "That answer may be reasonable, but it does not use evidence from the source."
+        },
+        {
+          "text": "The amendment is old, so it must be important.",
+          "isCorrect": false,
+          "feedback": "Age alone is not enough evidence for the claim."
+        },
+        {
+          "text": "People should always get whatever they ask the government to do.",
+          "isCorrect": false,
+          "feedback": "The source protects petitions, but it does not guarantee every request will be granted."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "Which pair correctly matches one observation and one inference from the First Amendment lesson?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "A correct answer should separate what the source directly says from a reasonable conclusion based on that evidence.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "Observation: The amendment protects speech and petitions. Inference: The writers thought citizens needed protected ways to speak up and request change.",
+          "isCorrect": true,
+          "feedback": "Correct. The first sentence comes directly from the source, and the second sentence is a reasonable inference from that evidence."
+        },
+        {
+          "text": "Observation: The amendment solved every unfair problem in the country. Inference: The source mentions speech.",
+          "isCorrect": false,
+          "feedback": "The first sentence is not a direct observation from the source."
+        },
+        {
+          "text": "Observation: Everyone in 1791 experienced rights in exactly the same way. Inference: The source names the press.",
+          "isCorrect": false,
+          "feedback": "The first sentence goes beyond what the source directly says."
+        },
+        {
+          "text": "Observation: The amendment replaced the government. Inference: Newspapers are always correct.",
+          "isCorrect": false,
+          "feedback": "Neither statement is supported by the source."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "4-social-studies-civics-and-government-citizenship-and-rights-launch",
+      "prompt": "A group of students wants to change a school rule they think is unfair. Which answer best matches the right to the source evidence?",
+      "type": "multiple_choice",
+      "difficulty": 3,
+      "explanation": "The strongest answer should identify the right involved, quote or paraphrase the matching phrase from the amendment, and explain why it fits the scenario.",
+      "skills": [
+        "citizenship_rights_source_analysis"
+      ],
+      "standards": [
+        "Civ.3-5",
+        "Hist.3-5"
+      ],
+      "options": [
+        {
+          "text": "The students are using the right to petition because the source protects the right to petition the government, which fits asking leaders to change a rule.",
+          "isCorrect": true,
+          "feedback": "Correct. This answer names the right, cites the evidence, and explains the match."
+        },
+        {
+          "text": "The students are using freedom of the press because every request to a leader counts as publishing a newspaper story.",
+          "isCorrect": false,
+          "feedback": "The scenario is about making a request, not publishing through the press."
+        },
+        {
+          "text": "The students have no First Amendment connection because school rules can never be discussed.",
+          "isCorrect": false,
+          "feedback": "That answer ignores the source's protection for speech and petitions."
+        },
+        {
+          "text": "The students are voting in a national election because they want a new rule.",
+          "isCorrect": false,
+          "feedback": "The scenario is about petitioning for change, not voting in an election."
         }
       ]
     }

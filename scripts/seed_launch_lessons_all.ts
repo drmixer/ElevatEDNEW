@@ -2,6 +2,7 @@ import process from 'node:process';
 
 import composeAttribution from './utils/attribution.js';
 import { createServiceRoleClient, fetchContentSourcesByName } from './utils/supabase.js';
+import { loadPublicLessonsByModuleIds, summarizePublicLessons } from './utils/lessonSeeding.js';
 
 type ModuleRow = {
   id: number;
@@ -321,9 +322,30 @@ const ensureTopicId = async (
   return upserted.id as number;
 };
 
+const parseArgs = (): { apply: boolean } => {
+  const args = process.argv.slice(2);
+  let apply = false;
+
+  for (const arg of args) {
+    if (arg === '--apply') {
+      apply = true;
+      continue;
+    }
+    if (arg === '--dry-run') {
+      apply = false;
+      continue;
+    }
+    throw new Error(`Unknown argument: ${arg}`);
+  }
+
+  return { apply };
+};
+
 const seedLaunchLessons = async (): Promise<void> => {
+  const { apply } = parseArgs();
   const supabase = createServiceRoleClient();
   const subjectCache = new Map<string, number>();
+  console.log(apply ? 'APPLY MODE: lesson rows will be written.' : 'DRY RUN MODE: no lesson rows will be written.');
 
   const { data: modules, error: modulesError } = await supabase
     .from('modules')
@@ -343,26 +365,51 @@ const seedLaunchLessons = async (): Promise<void> => {
     return;
   }
 
-  const sources = await fetchContentSourcesByName(supabase, ['ElevatED Author Team']);
-  const authorSource = sources.get('ElevatED Author Team');
-  if (!authorSource) {
-    throw new Error('Content source "ElevatED Author Team" not found. Seed content_sources first.');
+  const publicLessonsByModule = await loadPublicLessonsByModuleIds(
+    supabase,
+    moduleRows.map((module) => module.id),
+  );
+
+  let attribution = '';
+  if (apply) {
+    const sources = await fetchContentSourcesByName(supabase, ['ElevatED Author Team']);
+    const authorSource = sources.get('ElevatED Author Team');
+    if (!authorSource) {
+      throw new Error('Content source "ElevatED Author Team" not found. Seed content_sources first.');
+    }
+
+    attribution = composeAttribution({
+      sourceName: authorSource.name,
+      license: authorSource.license,
+      license_url: authorSource.license_url ?? undefined,
+      attribution_text: authorSource.attribution_text ?? undefined,
+    });
   }
 
-  const attribution = composeAttribution({
-    sourceName: authorSource.name,
-    license: authorSource.license,
-    license_url: authorSource.license_url ?? undefined,
-    attribution_text: authorSource.attribution_text ?? undefined,
-  });
-
   let insertedCount = 0;
+  let skippedCount = 0;
 
   for (const module of moduleRows) {
+    const existingPublicLessons = publicLessonsByModule.get(module.id) ?? [];
+    if (existingPublicLessons.length > 0) {
+      console.log(
+        `Skipped ${module.slug} because public lesson(s) already exist: ${summarizePublicLessons(existingPublicLessons)}`,
+      );
+      skippedCount += 1;
+      continue;
+    }
+
     const lessonSlug = buildLessonSlug(module.slug);
+    const { content, duration } = buildLessonMarkdown(module);
+
+    if (!apply) {
+      console.log(`Would seed ${lessonSlug}`);
+      insertedCount += 1;
+      continue;
+    }
+
     const subjectId = await ensureSubjectId(supabase, subjectCache, module.subject);
     const topicId = await ensureTopicId(supabase, subjectId, module);
-    const { content, duration } = buildLessonMarkdown(module);
 
     const { error: insertError } = await supabase
       .from('lessons')
@@ -396,6 +443,10 @@ const seedLaunchLessons = async (): Promise<void> => {
   }
 
   console.log(`Inserted ${insertedCount} launch lessons across ${moduleRows.length} modules.`);
+  console.log(`Skipped ${skippedCount} modules because a public lesson already exists.`);
+  if (!apply) {
+    console.log('Dry run only. Re-run with --apply to write changes.');
+  }
 };
 
 const invokedFromCli =

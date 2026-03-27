@@ -3,6 +3,7 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessPracticeQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
 
 type CoverageCell = {
@@ -463,7 +464,9 @@ const ensureExternal = async (supabase: SupabaseClient, cell: CoverageCell) => {
 };
 
 const main = async () => {
-  const args = process.argv.slice(2);
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  logWriteMode(apply, 'coverage gap backfills');
+  const args = rest;
   let gradeBands: string[] | null = null;
 
   for (let i = 0; i < args.length; i += 1) {
@@ -490,11 +493,32 @@ const main = async () => {
 
   // Use module-level de-duplication to avoid repeating per-standard rows.
   const seenModules = new Set<number>();
+  const uniqueCells: CoverageCell[] = [];
 
   for (const cell of coverage) {
     if (seenModules.has(cell.module_id)) continue;
     seenModules.add(cell.module_id);
+    uniqueCells.push(cell);
+  }
 
+  if (!apply) {
+    let practiceModules = 0;
+    let assessmentModules = 0;
+    let externalModules = 0;
+
+    for (const cell of uniqueCells) {
+      if (!cell.meets_practice_baseline) practiceModules += 1;
+      if (!cell.meets_assessment_baseline) assessmentModules += 1;
+      if (!cell.meets_external_baseline) externalModules += 1;
+    }
+
+    console.log(
+      `Would backfill ${uniqueCells.length} modules (${practiceModules} practice, ${assessmentModules} assessments, ${externalModules} external resources).`,
+    );
+    return;
+  }
+
+  for (const cell of uniqueCells) {
     const subjectId = subjectIdCache.get(cell.subject)?.id;
     if (!subjectId) {
       console.warn(`Subject id missing for ${cell.subject}, skipping ${cell.module_slug}.`);

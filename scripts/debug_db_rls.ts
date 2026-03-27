@@ -1,4 +1,7 @@
+import process from 'node:process';
+
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 /**
  * Debug script to check database tables and RLS policies for student dashboard issues
@@ -7,6 +10,11 @@ import { createServiceRoleClient } from './utils/supabase.js';
  */
 
 async function main() {
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    if (rest.length > 0) {
+        throw new Error(`Unknown argument: ${rest[0]}`);
+    }
+    logWriteMode(apply, 'debug xp_ledger repairs');
     console.log('=== ElevatED Database & RLS Debug Script ===\n');
 
     const supabase = createServiceRoleClient();
@@ -72,21 +80,25 @@ async function main() {
         console.error('❌ xp_ledger error:', xpError.message);
     } else if (!xpLedger) {
         console.log('⚠️ No xp_ledger row found - this could cause 500 on /student/stats');
-        console.log('   Attempting to create default xp_ledger row...');
-
-        const { error: insertError } = await supabase
-            .from('xp_ledger')
-            .upsert({
-                student_id: testStudent.id,
-                xp_total: 0,
-                streak_days: 0,
-                badge_ids: []
-            }, { onConflict: 'student_id' });
-
-        if (insertError) {
-            console.error('❌ Failed to create xp_ledger:', insertError.message);
+        if (!apply) {
+            console.log('   Would create default xp_ledger row (dry run).');
         } else {
-            console.log('✅ Created default xp_ledger row');
+            console.log('   Attempting to create default xp_ledger row...');
+
+            const { error: insertError } = await supabase
+                .from('xp_ledger')
+                .upsert({
+                    student_id: testStudent.id,
+                    xp_total: 0,
+                    streak_days: 0,
+                    badge_ids: []
+                }, { onConflict: 'student_id' });
+
+            if (insertError) {
+                console.error('❌ Failed to create xp_ledger:', insertError.message);
+            } else {
+                console.log('✅ Created default xp_ledger row');
+            }
         }
     } else {
         console.log('✅ xp_ledger found:', JSON.stringify(xpLedger, null, 2));
@@ -247,4 +259,7 @@ async function main() {
     console.log('\n✅ Debug script complete.');
 }
 
-main().catch(console.error);
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

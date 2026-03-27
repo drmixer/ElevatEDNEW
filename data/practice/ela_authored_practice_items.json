@@ -12343,374 +12343,437 @@
   ],
   "7-english-language-arts-reading-informational-science-tech-articles-open-licensed": [
     {
-      "prompt": "What is nonfiction?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which sentence best states the central idea of the article about Carter Middle School's roof test?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "The article's main point is that the reflective roof coating may help reduce heat and energy use, but the school still needs more data before reaching a final conclusion.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
         "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.8"
       ],
       "options": [
         {
-          "text": "Writing about real events and facts",
+          "text": "A reflective roof coating may help the school, but more evidence is still needed before making a final claim.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. This answer includes both the early result and the caution from Paragraph 3."
         },
         {
-          "text": "Made-up stories only",
+          "text": "Middle school classrooms should always use fans in the afternoon.",
           "isCorrect": false,
-          "feedback": "Nonfiction is factual."
+          "feedback": "The article mentions fans as part of the problem, not as the main point."
         },
         {
-          "text": "Poetry only",
+          "text": "Engineers are the only people who can understand temperature data.",
           "isCorrect": false,
-          "feedback": "Poetry can be fiction or nonfiction."
+          "feedback": "The article includes an engineer, but that is not the central idea."
         },
         {
-          "text": "Fake news",
+          "text": "All school roofs should be painted white immediately.",
           "isCorrect": false,
-          "feedback": "Nonfiction is truthful."
+          "feedback": "That claim is much stronger than what the article actually says."
         }
       ]
     },
     {
-      "prompt": "What types of nonfiction articles are there?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which detail from Paragraph 2 gives the strongest direct evidence that the coating may have helped?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "The most direct evidence is the measured comparison showing that rooms under the coated roof were cooler than rooms under the untreated roof.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
+        "CCSS.ELA-LITERACY.RI.7.1",
         "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.8"
       ],
       "options": [
         {
-          "text": "News, science, history, biography, and how-to",
+          "text": "Rooms under the coated section averaged 4 degrees cooler than rooms under the untreated roof.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. This detail reports the strongest measured result from the experiment."
         },
         {
-          "text": "Only news",
+          "text": "The district covered one section of the roof with a pale reflective coating.",
           "isCorrect": false,
-          "feedback": "Many types exist."
+          "feedback": "That detail explains the setup, but it does not show the result."
         },
         {
-          "text": "Only fiction",
+          "text": "Teachers closed the blinds during the hottest weeks.",
           "isCorrect": false,
-          "feedback": "These are nonfiction types."
+          "feedback": "That detail describes the heat problem, not the outcome of the test."
         },
         {
-          "text": "Only entertainment",
+          "text": "Dr. Lena Ortiz reviewed the district's measurements.",
           "isCorrect": false,
-          "feedback": "Nonfiction serves many purposes."
+          "feedback": "That detail adds credibility, but it does not directly measure the effect of the coating."
         }
       ]
     },
     {
-      "prompt": "How do authors make nonfiction engaging?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Why does the article include the phrase \"According to temperature logs collected at 1:00 p.m. and 3:00 p.m.\"?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "This phrase shows that the author is using recorded data and telling readers when the measurements were taken. That makes the report more specific and credible.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.1",
+        "CCSS.ELA-LITERACY.RI.7.8"
       ],
       "options": [
         {
-          "text": "Using interesting details, examples, and clear explanations",
+          "text": "It shows the results came from specific recorded measurements, not a vague guess.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. Specific timing and measurement details make the article sound more reliable."
         },
         {
-          "text": "By lying",
+          "text": "It proves the roof coating solved every heat problem in the building.",
           "isCorrect": false,
-          "feedback": "Nonfiction stays truthful."
+          "feedback": "The article does not prove that broad claim."
         },
         {
-          "text": "By using only big words",
+          "text": "It shows the school tested the roof for many years.",
           "isCorrect": false,
-          "feedback": "Clarity is important."
+          "feedback": "The article says the test lasted six weeks, not many years."
         },
         {
-          "text": "By boring readers",
+          "text": "It suggests the measurements were based on student opinions.",
           "isCorrect": false,
-          "feedback": "Good writing engages."
+          "feedback": "Temperature logs are records, not opinions."
         }
       ]
     },
     {
-      "prompt": "What is a fact vs. an opinion?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which detail from Paragraph 3 most improves the article's credibility?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "The article becomes more credible when it includes a named expert who reviews the data and warns against overclaiming. Careful limits often make a source more trustworthy.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
+      "standards": [
+        "CCSS.ELA-LITERACY.RI.7.2",
+        "CCSS.ELA-LITERACY.RI.7.8"
+      ],
+      "options": [
+        {
+          "text": "A named engineer reviewed the measurements and warned that one short test is not enough for a final decision.",
+          "isCorrect": true,
+          "feedback": "Correct. A named expert and a careful warning both strengthen the article's credibility."
+        },
+        {
+          "text": "The author uses the phrase \"look promising.\"",
+          "isCorrect": false,
+          "feedback": "That phrase matters, but by itself it is not the strongest credibility clue."
+        },
+        {
+          "text": "The roof coating is pale and reflective.",
+          "isCorrect": false,
+          "feedback": "That describes the coating, not why the report should be trusted."
+        },
+        {
+          "text": "Teachers closed the blinds during the hottest weeks.",
+          "isCorrect": false,
+          "feedback": "That detail adds context about the heat, but it does not do the most to establish credibility."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which claim is too strong for the evidence in the article?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "The article says the early results are promising, but it also says one short test is not enough to prove the coating solves every heat problem.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
+      "standards": [
+        "CCSS.ELA-LITERACY.RI.7.2",
+        "CCSS.ELA-LITERACY.RI.7.8"
+      ],
+      "options": [
+        {
+          "text": "The cool-roof coating definitely solves the school's heat problem once and for all.",
+          "isCorrect": true,
+          "feedback": "Correct. That claim ignores the warning that the school still needs more data."
+        },
+        {
+          "text": "The early results suggest the coating may help reduce temperature.",
+          "isCorrect": false,
+          "feedback": "That claim matches the cautious wording of the article."
+        },
+        {
+          "text": "The school compared a coated roof section with an untreated roof section.",
+          "isCorrect": false,
+          "feedback": "That statement is supported by the article's description of the setup."
+        },
+        {
+          "text": "An engineer reviewed the school's measurements before a final decision should be made.",
+          "isCorrect": false,
+          "feedback": "That statement fits the article's careful conclusion."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which sentence from the article shows the author is being careful rather than overconfident?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "The clearest caution comes when the engineer warns that one short test cannot prove the coating solves every heat problem.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.1",
+        "CCSS.ELA-LITERACY.RI.7.8"
       ],
       "options": [
         {
-          "text": "A fact is true and can be proven; an opinion is a belief",
+          "text": "She warned that one short test cannot prove the coating solves every heat problem.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. That sentence limits the claim instead of exaggerating it."
         },
         {
-          "text": "They are the same",
+          "text": "Last August, classrooms at Carter Middle School reached 87 degrees by early afternoon.",
           "isCorrect": false,
-          "feedback": "They differ importantly."
+          "feedback": "That sentence explains the problem, but it is not the clearest example of careful caution."
         },
         {
-          "text": "All nonfiction is only facts",
+          "text": "Workers covered one section of the roof with a pale reflective coating.",
           "isCorrect": false,
-          "feedback": "Nonfiction can include both."
+          "feedback": "That sentence explains the method, not the author's caution."
         },
         {
-          "text": "Opinions are more important",
+          "text": "Electricity use in the cooler hallway also dropped by about 8 percent.",
           "isCorrect": false,
-          "feedback": "Both matter in context."
+          "feedback": "That sentence reports a result, not the limit of the evidence."
         }
       ]
     },
     {
-      "prompt": "Why should nonfiction articles cite sources?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "A student writes, \"The article is about roofs.\" Why is that answer incomplete?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "That answer names only the topic. A central idea must explain the author's main point about what happened and what the evidence suggests.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
         "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.8"
       ],
       "options": [
         {
-          "text": "To show where information comes from and prove accuracy",
+          "text": "It gives only the topic, not the article's full point about the test results and the need for more evidence.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. A central idea needs to include what the author is saying about the topic."
         },
         {
-          "text": "They should not cite sources",
+          "text": "It is too long to be a central idea.",
           "isCorrect": false,
-          "feedback": "Citations are important."
+          "feedback": "The problem is not length. The problem is that the answer is too broad."
         },
         {
-          "text": "To make articles longer",
+          "text": "It uses a noun instead of a verb.",
           "isCorrect": false,
-          "feedback": "That is not the purpose."
+          "feedback": "Grammar is not the main issue here."
         },
         {
-          "text": "To confuse readers",
+          "text": "It should have included the name of the engineer only.",
           "isCorrect": false,
-          "feedback": "Citations clarify."
+          "feedback": "The answer needs the article's idea, not just one person's name."
         }
       ]
     },
     {
-      "prompt": "What is the main purpose of a news article?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which response best uses evidence from the article to support a claim?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "A strong evidence-based response states a claim, cites a specific detail, and explains what that detail shows.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
+      "standards": [
+        "CCSS.ELA-LITERACY.RI.7.1",
+        "CCSS.ELA-LITERACY.RI.7.2",
+        "CCSS.ELA-LITERACY.RI.7.8"
+      ],
+      "options": [
+        {
+          "text": "The test may have worked because Paragraph 2 says rooms under the coated roof averaged 4 degrees cooler, which shows a measured change.",
+          "isCorrect": true,
+          "feedback": "Correct. This answer includes a claim, a detail from the text, and an explanation."
+        },
+        {
+          "text": "I think cool roofs are awesome, and schools should use them everywhere.",
+          "isCorrect": false,
+          "feedback": "That answer gives an opinion without using evidence from the article."
+        },
+        {
+          "text": "The article has three paragraphs and an engineer in it.",
+          "isCorrect": false,
+          "feedback": "Those details are listed, but they are not used to support a clear claim."
+        },
+        {
+          "text": "The roof test happened at a school, so the article must be correct.",
+          "isCorrect": false,
+          "feedback": "Location alone does not prove the article's claim."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which detail is useful background, but not the strongest proof that the roof coating helped?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "explanation": "The setup detail matters for context, but the strongest proof comes from the measured comparison in Paragraph 2.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
+      "standards": [
+        "CCSS.ELA-LITERACY.RI.7.1",
+        "CCSS.ELA-LITERACY.RI.7.2",
+        "CCSS.ELA-LITERACY.RI.7.8"
+      ],
+      "options": [
+        {
+          "text": "The district covered one section of the roof with a pale reflective coating.",
+          "isCorrect": true,
+          "feedback": "Correct. That detail explains what the school did, but it does not prove the result."
+        },
+        {
+          "text": "Rooms under the coated section averaged 4 degrees cooler than rooms under the untreated roof.",
+          "isCorrect": false,
+          "feedback": "That is the strongest direct proof, not just background."
+        },
+        {
+          "text": "Electricity use in the cooler hallway also dropped by about 8 percent.",
+          "isCorrect": false,
+          "feedback": "That detail is also evidence of an effect, not just setup."
+        },
+        {
+          "text": "Dr. Lena Ortiz reviewed the district's measurements.",
+          "isCorrect": false,
+          "feedback": "That detail supports credibility rather than background setup."
+        }
+      ]
+    },
+    {
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "In Paragraph 3, what does the word \"promising\" suggest about the results?",
       "type": "multiple_choice",
       "difficulty": 1,
+      "explanation": "\"Promising\" suggests the early results look encouraging, but the evidence is not complete enough for certainty.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.1",
+        "CCSS.ELA-LITERACY.RI.7.4"
       ],
       "options": [
         {
-          "text": "To report current events objectively",
+          "text": "The early evidence looks encouraging, but the article is still cautious.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. The word points to hope, but not certainty."
         },
         {
-          "text": "To entertain only",
+          "text": "The experiment was a complete success, so no more data is needed.",
           "isCorrect": false,
-          "feedback": "News is informative."
+          "feedback": "That answer ignores the warning that the school needs more evidence."
         },
         {
-          "text": "To express opinions",
+          "text": "The engineer thinks the roof coating failed badly.",
           "isCorrect": false,
-          "feedback": "News should be objective."
+          "feedback": "The article does not say the test failed."
         },
         {
-          "text": "To tell made-up stories",
+          "text": "The measurements in Paragraph 2 were incorrect.",
           "isCorrect": false,
-          "feedback": "News reports real events."
+          "feedback": "The word \"promising\" does not suggest the data was wrong."
         }
       ]
     },
     {
-      "prompt": "How do good nonfiction writers avoid bias?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Why does the author include Dr. Lena Ortiz in the article?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "The author includes a named engineer to show that someone with expertise reviewed the data and to add a careful outside perspective.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
+        "CCSS.ELA-LITERACY.RI.7.3",
+        "CCSS.ELA-LITERACY.RI.7.8"
       ],
       "options": [
         {
-          "text": "By presenting facts accurately and showing multiple perspectives",
+          "text": "To add an expert review that helps readers judge the trustworthiness of the results.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. A named expert helps readers evaluate credibility."
         },
         {
-          "text": "By only sharing one viewpoint",
+          "text": "To replace the temperature data with a personal story.",
           "isCorrect": false,
-          "feedback": "Multiple perspectives help avoid bias."
+          "feedback": "The article keeps the data and adds expert review."
         },
         {
-          "text": "By lying about facts",
+          "text": "To prove the coating solved every heat problem in the building.",
           "isCorrect": false,
-          "feedback": "That increases bias."
+          "feedback": "Dr. Ortiz does the opposite. She warns against that claim."
         },
         {
-          "text": "Bias cannot be avoided",
+          "text": "To show that the article is fiction instead of informational text.",
           "isCorrect": false,
-          "feedback": "Writers can minimize it."
+          "feedback": "A named expert supports informational writing, not fiction."
         }
       ]
     },
     {
-      "prompt": "What is a headline in an article?",
-      "type": "multiple_choice",
-      "difficulty": 1,
-      "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
-      ],
-      "options": [
-        {
-          "text": "The main title that summarizes the story",
-          "isCorrect": true,
-          "feedback": "Correct!"
-        },
-        {
-          "text": "The last sentence",
-          "isCorrect": false,
-          "feedback": "Headlines come first."
-        },
-        {
-          "text": "A side note",
-          "isCorrect": false,
-          "feedback": "Headlines are prominent."
-        },
-        {
-          "text": "Not important",
-          "isCorrect": false,
-          "feedback": "Headlines are key."
-        }
-      ]
-    },
-    {
-      "prompt": "How do you identify reliable sources for nonfiction?",
+      "lessonSlug": "7-english-language-arts-reading-informational-science-tech-articles-open-licensed-launch",
+      "prompt": "Which statement best explains how Paragraph 1 and Paragraph 2 work together?",
       "type": "multiple_choice",
       "difficulty": 2,
+      "explanation": "Paragraph 1 introduces the heat problem and the test setup. Paragraph 2 then reports the measured results of that test.",
+      "skills": [
+        "science_tech_article_analysis"
+      ],
       "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
+        "CCSS.ELA-LITERACY.RI.7.3",
         "CCSS.ELA-LITERACY.RI.7.5"
       ],
       "options": [
         {
-          "text": "Look for credible authors, citations, and reputable publishers",
+          "text": "Paragraph 1 sets up the problem and experiment, and Paragraph 2 reports the results of the comparison.",
           "isCorrect": true,
-          "feedback": "Correct!"
+          "feedback": "Correct. The article moves logically from problem and setup to evidence."
         },
         {
-          "text": "Any website is reliable",
+          "text": "Paragraph 1 gives the final conclusion, and Paragraph 2 repeats it with no new information.",
           "isCorrect": false,
-          "feedback": "Sources vary in reliability."
+          "feedback": "Paragraph 2 adds the measured evidence, so it is not just repetition."
         },
         {
-          "text": "Only old sources are good",
+          "text": "Paragraph 1 explains source credibility, and Paragraph 2 introduces the main problem.",
           "isCorrect": false,
-          "feedback": "Recency and reliability both matter."
+          "feedback": "The paragraph roles are reversed in that answer."
         },
         {
-          "text": "You cannot tell",
+          "text": "Paragraph 1 and Paragraph 2 both focus only on the engineer's opinion.",
           "isCorrect": false,
-          "feedback": "You can evaluate reliability."
-        }
-      ]
-    },
-    {
-      "prompt": "What does it mean to fact-check?",
-      "type": "multiple_choice",
-      "difficulty": 1,
-      "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
-      ],
-      "options": [
-        {
-          "text": "To verify that claims are true using reliable sources",
-          "isCorrect": true,
-          "feedback": "Correct!"
-        },
-        {
-          "text": "To assume everything is true",
-          "isCorrect": false,
-          "feedback": "Fact-checking verifies."
-        },
-        {
-          "text": "To make things up",
-          "isCorrect": false,
-          "feedback": "Fact-checking is research."
-        },
-        {
-          "text": "To ignore sources",
-          "isCorrect": false,
-          "feedback": "Fact-checking uses sources."
-        }
-      ]
-    },
-    {
-      "prompt": "What is a feature article?",
-      "type": "multiple_choice",
-      "difficulty": 2,
-      "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
-      ],
-      "options": [
-        {
-          "text": "A longer nonfiction story that explores a topic in depth",
-          "isCorrect": true,
-          "feedback": "Correct!"
-        },
-        {
-          "text": "Only a news report",
-          "isCorrect": false,
-          "feedback": "Feature articles are longer."
-        },
-        {
-          "text": "A made-up story",
-          "isCorrect": false,
-          "feedback": "Features are nonfiction."
-        },
-        {
-          "text": "Only about sports",
-          "isCorrect": false,
-          "feedback": "Many topics for features."
-        }
-      ]
-    },
-    {
-      "prompt": "Why is organization important in nonfiction writing?",
-      "type": "multiple_choice",
-      "difficulty": 2,
-      "standards": [
-        "CCSS.ELA-LITERACY.RI.7.2",
-        "CCSS.ELA-LITERACY.RI.7.5"
-      ],
-      "options": [
-        {
-          "text": "It helps readers understand information clearly and logically",
-          "isCorrect": true,
-          "feedback": "Correct!"
-        },
-        {
-          "text": "Organization does not matter",
-          "isCorrect": false,
-          "feedback": "It matters greatly."
-        },
-        {
-          "text": "To make reading harder",
-          "isCorrect": false,
-          "feedback": "Organization aids understanding."
-        },
-        {
-          "text": "Only for very long texts",
-          "isCorrect": false,
-          "feedback": "All writing benefits from organization."
+          "feedback": "The engineer does not appear until Paragraph 3."
         }
       ]
     }

@@ -2,6 +2,14 @@
 
 A concrete, phaseable plan to align the platform to the desired experience: personalized onboarding + adaptive learning + XP/rewards + parent visibility + avatar/tutor personalization.
 
+Related execution doc:
+- [adaptive-foundation-plan.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-foundation-plan.md)
+
+Note:
+- use this file for the broad product roadmap
+- use [adaptive-foundation-plan.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-foundation-plan.md) for the practical sequencing of age-aware onboarding, subject-by-subject placement, per-subject path state, and deterministic adaptive foundations
+- when these docs conflict on adaptive implementation order, prefer the adaptive foundation plan
+
 ---
 
 ## Phase 0: Foundations (data + services)
@@ -11,16 +19,17 @@ A concrete, phaseable plan to align the platform to the desired experience: pers
 
 ## Phase 1: Onboarding & Placement (make new students land on a personalized path)
 - **UI flow**
-  - Step 1: create/confirm account, collect name and grade_band, toggle AI opt-in.
+  - Step 1: create/confirm account, collect name, age, and current grade or grade_band, toggle AI opt-in.
   - Step 2: optional picks — avatar + tutor persona from catalogs (persist defaults if skipped).
-  - Step 3: placement assessment launcher with resume support (save partial progress).
+  - Step 3: subject-specific placement assessment launcher with resume support (save partial progress).
 - **Backend**
-  - `assessment/start`: return assessment id, items, and a token to resume.
-  - `assessment/submit`: store responses, compute strand-level estimates, write a diagnostic event.
-  - `PathBuilder`: generate `student_paths` + ordered `student_path_entries` immediately after submit.
+  - `assessment/start`: return subject assessment id, items, and a token to resume.
+  - `assessment/submit`: store responses, compute strand-level estimates, and write per-subject level estimates plus a diagnostic event.
+  - `PathBuilder`: generate subject-aware `student_paths` + ordered `student_path_entries` immediately after submit.
   - Ensure student row is created/linked on first login and preferences are written.
 - **Acceptance criteria**
   - A brand-new student finishes placement and immediately sees an “Up Next” list from their generated path.
+  - Math and ELA can resolve to different working levels for the same student.
   - Avatar/persona choices are persisted and retrievable.
 
 ---

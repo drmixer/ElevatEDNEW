@@ -3,6 +3,7 @@ import process from 'node:process';
 
 import { loadModuleStandards } from './import_module_standards.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { loadPublicLessonsByModuleIds, summarizePublicLessons } from './utils/lessonSeeding.js';
 
 type CoverageRow = {
   module_id: number;
@@ -146,13 +147,18 @@ const buildLessonContent = (module: ModuleRow): string => {
   return lines.join('\n\n').trim();
 };
 
-const main = async (): Promise<void> => {
+const parseArgs = (): { apply: boolean; gradeBands: string[] | null } => {
   const args = process.argv.slice(2);
+  let apply = false;
   let gradeBands: string[] | null = null;
 
   for (let i = 0; i < args.length; i += 1) {
     const arg = args[i];
-    if (arg === '--grades' || arg === '--grade-bands') {
+    if (arg === '--apply') {
+      apply = true;
+    } else if (arg === '--dry-run') {
+      apply = false;
+    } else if (arg === '--grades' || arg === '--grade-bands') {
       const next = args[i + 1];
       if (!next) throw new Error(`Expected comma-separated grades after ${arg}`);
       gradeBands = next
@@ -164,6 +170,13 @@ const main = async (): Promise<void> => {
       throw new Error(`Unknown argument: ${arg}`);
     }
   }
+
+  return { apply, gradeBands };
+};
+
+const main = async (): Promise<void> => {
+  const { apply, gradeBands } = parseArgs();
+  console.log(apply ? 'APPLY MODE: lesson rows will be written.' : 'DRY RUN MODE: no lesson rows will be written.');
 
   const supabase = createServiceRoleClient();
 
@@ -223,6 +236,11 @@ const main = async (): Promise<void> => {
       title: m.title as string,
     })) ?? [];
 
+  const publicLessonsByModule = await loadPublicLessonsByModuleIds(
+    supabase,
+    modules.map((module) => module.module_id),
+  );
+
   const subjectCache = new Map<string, number>();
   const mappings = await loadModuleStandards('mappings/module_standards_k12.json');
   const standardsBySlug = new Map<string, string[]>();
@@ -235,8 +253,24 @@ const main = async (): Promise<void> => {
 
   let inserted = 0;
   let refreshed = 0;
+  let skippedBecausePublicExists = 0;
 
   for (const module of modules ?? []) {
+    const existingPublicLessons = publicLessonsByModule.get(module.module_id) ?? [];
+    if (existingPublicLessons.length > 0) {
+      console.log(
+        `Skipped ${module.module_slug} because public lesson(s) already exist: ${summarizePublicLessons(existingPublicLessons)}`,
+      );
+      skippedBecausePublicExists += 1;
+      continue;
+    }
+
+    if (!apply) {
+      console.log(`Would seed or refresh intro lesson for ${module.module_slug}`);
+      inserted += 1;
+      continue;
+    }
+
     const subjectId = await ensureSubjectId(supabase, subjectCache, module.subject as string);
     const topicId = await ensureTopicId(supabase, subjectId, module);
     const lessonSlug = `intro-${module.module_slug}`;
@@ -397,8 +431,11 @@ const main = async (): Promise<void> => {
   }
 
   console.log(
-    `Processed ${modules.length} modules (grades ${gradeBands?.join(',') ?? 'all'}): inserted ${inserted}, refreshed ${refreshed}, skipped ${modules.length - inserted - refreshed}.`,
+    `Processed ${modules.length} modules (grades ${gradeBands?.join(',') ?? 'all'}): inserted ${inserted}, refreshed ${refreshed}, skipped ${modules.length - inserted - refreshed}, skipped_with_public ${skippedBecausePublicExists}.`,
   );
+  if (!apply) {
+    console.log('Dry run only. Re-run with --apply to write changes.');
+  }
 };
 
 const invokedFromCli =

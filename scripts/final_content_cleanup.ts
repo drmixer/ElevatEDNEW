@@ -11,6 +11,7 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 const supabase = createServiceRoleClient();
 
@@ -262,6 +263,11 @@ function getLessonData(title: string, grade: number): LessonData {
 }
 
 async function main() {
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    if (rest.length > 0) {
+        throw new Error(`Unknown argument: ${rest[0]}`);
+    }
+    logWriteMode(apply, 'final content cleanup updates');
     console.log('=== FINAL CONTENT CLEANUP ===\n');
 
     // Load audit report
@@ -325,22 +331,27 @@ async function main() {
             // Generate new content
             const newContent = generateLessonContent(lesson);
 
-            const { error: updateError } = await supabase
-                .from('lessons')
-                .update({
-                    content: newContent,
-                    metadata: {
-                        last_updated: new Date().toISOString(),
-                        updated_by: 'final_content_cleanup'
-                    }
-                })
-                .eq('id', lesson.id);
-
-            if (updateError) {
-                console.error(`Failed to update lesson ${lesson.id}: ${updateError.message}`);
-            } else {
+            if (!apply) {
                 fixedCount++;
-                console.log(`✓ Fixed lesson ${lesson.id}: ${lesson.title}`);
+                console.log(`Would fix lesson ${lesson.id}: ${lesson.title}`);
+            } else {
+                const { error: updateError } = await supabase
+                    .from('lessons')
+                    .update({
+                        content: newContent,
+                        metadata: {
+                            last_updated: new Date().toISOString(),
+                            updated_by: 'final_content_cleanup'
+                        }
+                    })
+                    .eq('id', lesson.id);
+
+                if (updateError) {
+                    console.error(`Failed to update lesson ${lesson.id}: ${updateError.message}`);
+                } else {
+                    fixedCount++;
+                    console.log(`✓ Fixed lesson ${lesson.id}: ${lesson.title}`);
+                }
             }
         }
     }

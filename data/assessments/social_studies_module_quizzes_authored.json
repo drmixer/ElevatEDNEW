@@ -1,0 +1,2594 @@
+{
+  "3-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3sscr001",
+        "prompt": "Which example best shows a right instead of a rule or responsibility?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Being allowed to share your opinion respectfully", "isCorrect": true },
+          { "text": "Walking quietly in the hallway", "isCorrect": false },
+          { "text": "Cleaning up your desk space", "isCorrect": false },
+          { "text": "Returning a library book on time", "isCorrect": false }
+        ],
+        "explanation": "A right is a protected freedom. The other choices are rules or responsibilities that help a community function."
+      },
+      {
+        "id": "3sscr002",
+        "prompt": "Why do responsibilities matter when people use their rights?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Responsibilities help people use rights in ways that keep the community fair and safe", "isCorrect": true },
+          { "text": "Responsibilities take rights away from everyone", "isCorrect": false },
+          { "text": "Responsibilities only matter for adults", "isCorrect": false },
+          { "text": "Responsibilities mean rules never change", "isCorrect": false }
+        ],
+        "explanation": "Rights and responsibilities work together. Responsibilities help protect the rights of other people too."
+      },
+      {
+        "id": "3sscr003",
+        "prompt": "A student wants to share an idea at a class meeting. Which action shows responsible citizenship?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Speaking respectfully and listening when others speak", "isCorrect": true },
+          { "text": "Shouting over anyone who disagrees", "isCorrect": false },
+          { "text": "Ignoring all class rules", "isCorrect": false },
+          { "text": "Tearing up the sign-up sheet", "isCorrect": false }
+        ],
+        "explanation": "Responsible citizenship means using rights in a way that respects the rights of others."
+      },
+      {
+        "id": "3sscr004",
+        "prompt": "Explain the difference between a right and a responsibility in one or two sentences.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "A right is a protected freedom people have. A responsibility is an action people should take to help the community work well and protect the rights of others."
+      }
+    ]
+  },
+  "3-social-studies-civics-and-government-local-state-government": {
+    "title": "Local and State Government for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3sslg001",
+        "prompt": "Which job is most likely handled by local government?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Repairing a broken playground in town", "isCorrect": true },
+          { "text": "Making rules for the entire state park system", "isCorrect": false },
+          { "text": "Printing the state constitution", "isCorrect": false },
+          { "text": "Running all state highways", "isCorrect": false }
+        ],
+        "explanation": "Local government handles community problems close to home, such as town parks and neighborhood spaces."
+      },
+      {
+        "id": "3sslg002",
+        "prompt": "Which job is most likely handled by state government?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Managing services that affect the whole state", "isCorrect": true },
+          { "text": "Choosing a classroom line leader", "isCorrect": false },
+          { "text": "Cleaning one neighborhood sidewalk", "isCorrect": false },
+          { "text": "Closing the local library for one hour", "isCorrect": false }
+        ],
+        "explanation": "State government makes decisions and runs services that affect people across the entire state."
+      },
+      {
+        "id": "3sslg003",
+        "prompt": "A stop sign near school falls down. Which level of government should people contact first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Local government", "isCorrect": true },
+          { "text": "State government", "isCorrect": false },
+          { "text": "A different country", "isCorrect": false },
+          { "text": "No government at all", "isCorrect": false }
+        ],
+        "explanation": "A broken stop sign is a community problem that local government usually handles first."
+      },
+      {
+        "id": "3sslg004",
+        "prompt": "Why do communities need both local and state government?",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Communities need local government for nearby problems and services, and state government for larger decisions that affect the whole state."
+      }
+    ]
+  },
+  "4-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4sscr001",
+        "prompt": "Which freedom is protected by the First Amendment?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Freedom of speech", "isCorrect": true },
+          { "text": "Freedom to skip every law", "isCorrect": false },
+          { "text": "Freedom to take other people's property", "isCorrect": false },
+          { "text": "Freedom to stop others from speaking", "isCorrect": false }
+        ],
+        "explanation": "The First Amendment protects freedoms such as speech, press, religion, assembly, and petition."
+      },
+      {
+        "id": "4sscr002",
+        "prompt": "Why is respectful discussion an important responsibility in a democracy?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It allows people to use their rights while protecting the rights of others", "isCorrect": true },
+          { "text": "It means only one person gets to speak", "isCorrect": false },
+          { "text": "It removes the need for civic rules", "isCorrect": false },
+          { "text": "It proves that rights are unimportant", "isCorrect": false }
+        ],
+        "explanation": "Democracy depends on people expressing ideas while respecting the participation and safety of others."
+      },
+      {
+        "id": "4sscr003",
+        "prompt": "A group of students writes a letter asking for a safer crosswalk near school. Which right are they using?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "The right to petition and speak to leaders about a concern", "isCorrect": true },
+          { "text": "The right to ignore all community rules", "isCorrect": false },
+          { "text": "The right to choose every government law by themselves", "isCorrect": false },
+          { "text": "The right to stop other people from sharing ideas", "isCorrect": false }
+        ],
+        "explanation": "Writing leaders about a public concern is a form of civic participation connected to petitioning and speaking."
+      },
+      {
+        "id": "4sscr004",
+        "prompt": "Use one sentence to explain how a responsibility can protect a right.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Responsibilities such as listening respectfully or following fair procedures help protect everyone's rights, not just one person's."
+      }
+    ]
+  },
+  "4-social-studies-civics-and-government-local-state-government": {
+    "title": "Local and State Government for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4sslg001",
+        "prompt": "Which example best shows state government at work?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Setting rules that affect people across the whole state", "isCorrect": true },
+          { "text": "Fixing one broken streetlight in a neighborhood", "isCorrect": false },
+          { "text": "Choosing the music for a school assembly", "isCorrect": false },
+          { "text": "Opening a class meeting", "isCorrect": false }
+        ],
+        "explanation": "State government addresses issues that affect people across the state rather than one local neighborhood."
+      },
+      {
+        "id": "4sslg002",
+        "prompt": "Why do local governments exist?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "To solve community problems close to where people live", "isCorrect": true },
+          { "text": "To replace all state governments", "isCorrect": false },
+          { "text": "To make every rule for the entire country", "isCorrect": false },
+          { "text": "To run only private businesses", "isCorrect": false }
+        ],
+        "explanation": "Local governments respond to nearby needs such as roads, libraries, trash collection, and community safety."
+      },
+      {
+        "id": "4sslg003",
+        "prompt": "A city needs a new public bus route inside town. Which level of government is most directly involved?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Local government", "isCorrect": true },
+          { "text": "State government only", "isCorrect": false },
+          { "text": "Another state's government", "isCorrect": false },
+          { "text": "No level of government", "isCorrect": false }
+        ],
+        "explanation": "A new bus route inside one town is usually a local issue because it serves one community directly."
+      },
+      {
+        "id": "4sslg004",
+        "prompt": "Explain one difference between local and state government responsibilities.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Local government handles nearby community services, while state government handles broader issues and services for the entire state."
+      }
+    ]
+  },
+  "5-social-studies-civics-and-government-citizenship-and-rights": {
+    "title": "Citizenship & Rights for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5sscr001",
+        "prompt": "Which statement best explains the purpose of the Bill of Rights?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It protects important freedoms and limits what government can do to them", "isCorrect": true },
+          { "text": "It lists every school rule in the country", "isCorrect": false },
+          { "text": "It gives government unlimited power", "isCorrect": false },
+          { "text": "It ends the need for citizen participation", "isCorrect": false }
+        ],
+        "explanation": "The Bill of Rights protects key freedoms and helps prevent government from taking them away unfairly."
+      },
+      {
+        "id": "5sscr002",
+        "prompt": "Why is petitioning leaders considered a civic right?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It gives citizens a peaceful way to ask government to solve problems or change policies", "isCorrect": true },
+          { "text": "It lets one group make laws without anyone else", "isCorrect": false },
+          { "text": "It replaces all elections", "isCorrect": false },
+          { "text": "It only matters in private businesses", "isCorrect": false }
+        ],
+        "explanation": "Petitioning is a civic action that allows people to communicate concerns and requests to leaders."
+      },
+      {
+        "id": "5sscr003",
+        "prompt": "A student group wants to hold a peaceful rally about cleaner parks. Which combination best shows rights and responsibilities working together?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "They organize the rally peacefully and follow safety rules for the shared public space", "isCorrect": true },
+          { "text": "They stop other groups from using the space at all", "isCorrect": false },
+          { "text": "They damage signs to get attention", "isCorrect": false },
+          { "text": "They ignore every rule because rights matter more than responsibilities", "isCorrect": false }
+        ],
+        "explanation": "Rights can be exercised strongly and peacefully while still respecting public safety and the rights of others."
+      },
+      {
+        "id": "5sscr004",
+        "prompt": "Explain how a right and a responsibility can work together in a democracy.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "In a democracy, rights protect freedom, and responsibilities guide people to use those freedoms in ways that support fairness, safety, and the rights of others."
+      }
+    ]
+  },
+  "5-social-studies-civics-and-government-local-state-government": {
+    "title": "Local and State Government for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5sslg001",
+        "prompt": "Which question is most likely answered by state government instead of local government?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How should a statewide law apply across many communities?", "isCorrect": true },
+          { "text": "When should the neighborhood park close tonight?", "isCorrect": false },
+          { "text": "Which street needs a new stop sign?", "isCorrect": false },
+          { "text": "Where should one town place recycling bins?", "isCorrect": false }
+        ],
+        "explanation": "State government focuses on laws and systems that affect people across many communities in the state."
+      },
+      {
+        "id": "5sslg002",
+        "prompt": "Why do local governments make many decisions about community services?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "They are closest to the day-to-day needs of the people in the community", "isCorrect": true },
+          { "text": "They control all national laws", "isCorrect": false },
+          { "text": "They never cooperate with state government", "isCorrect": false },
+          { "text": "They only work with private businesses", "isCorrect": false }
+        ],
+        "explanation": "Local governments can respond directly to nearby services and issues because they are closely connected to the community."
+      },
+      {
+        "id": "5sslg003",
+        "prompt": "A state is deciding graduation requirements for every public school district. Which level of government is taking the lead?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "State government", "isCorrect": true },
+          { "text": "Local government only", "isCorrect": false },
+          { "text": "A neighborhood association", "isCorrect": false },
+          { "text": "No level of government", "isCorrect": false }
+        ],
+        "explanation": "Graduation requirements that apply statewide are typically handled at the state level because they affect all districts in the state."
+      },
+      {
+        "id": "5sslg004",
+        "prompt": "Explain why some issues are better handled locally while others are handled by the state.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Local issues are often handled close to home because communities know their direct needs, while state government handles larger issues that require one policy or system across the whole state."
+      }
+    ]
+  },
+  "6-social-studies-civics-and-government-elections-and-civic-participation": {
+    "title": "Elections & Civic Participation for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6ssec001",
+        "prompt": "What does a ballot do in an election?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It records choices about candidates or public questions", "isCorrect": true },
+          { "text": "It replaces all campaign information", "isCorrect": false },
+          { "text": "It guarantees every candidate will win equally", "isCorrect": false },
+          { "text": "It ends civic participation after voting day", "isCorrect": false }
+        ],
+        "explanation": "A ballot is the tool voters use to record decisions about offices, candidates, or public measures."
+      },
+      {
+        "id": "6ssec002",
+        "prompt": "Why does voter turnout matter?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Turnout helps show how many eligible people actually took part in the decision", "isCorrect": true },
+          { "text": "Turnout decides which laws are secret", "isCorrect": false },
+          { "text": "Turnout means only one opinion is allowed", "isCorrect": false },
+          { "text": "Turnout removes the need for ballots", "isCorrect": false }
+        ],
+        "explanation": "Turnout matters because it reflects participation and helps people understand how widely the decision represents the community."
+      },
+      {
+        "id": "6ssec003",
+        "prompt": "Which action is an example of civic participation even if a person is too young to vote?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Researching an issue and writing a respectful letter to a local official", "isCorrect": true },
+          { "text": "Ignoring community problems because only adults matter", "isCorrect": false },
+          { "text": "Spreading false information about a candidate", "isCorrect": false },
+          { "text": "Damaging campaign signs", "isCorrect": false }
+        ],
+        "explanation": "Civic participation includes informed action such as learning about issues and communicating with leaders respectfully."
+      },
+      {
+        "id": "6ssec004",
+        "prompt": "Explain one reason participation matters in a democracy.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Participation matters because democracy works best when people take part, share concerns, and help ensure decisions represent the community."
+      }
+    ]
+  },
+  "6-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "title": "US Constitution & Federalism for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6sscf001",
+        "prompt": "What is federalism?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A system that divides power between national and state governments", "isCorrect": true },
+          { "text": "A system where one city controls every law", "isCorrect": false },
+          { "text": "A system with no written rules", "isCorrect": false },
+          { "text": "A system where only courts have power", "isCorrect": false }
+        ],
+        "explanation": "Federalism divides authority across levels of government so power is not held in only one place."
+      },
+      {
+        "id": "6sscf002",
+        "prompt": "Which example best fits a state government power?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Setting some rules for schools and public services inside the state", "isCorrect": true },
+          { "text": "Declaring war on another country", "isCorrect": false },
+          { "text": "Printing national money", "isCorrect": false },
+          { "text": "Making treaties with foreign countries", "isCorrect": false }
+        ],
+        "explanation": "States have their own responsibilities, including many areas of education and public services inside the state."
+      },
+      {
+        "id": "6sscf003",
+        "prompt": "Why does the Constitution divide power instead of giving all power to one level of government?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Dividing power creates balance and prevents one level from controlling everything", "isCorrect": true },
+          { "text": "Dividing power means laws never exist", "isCorrect": false },
+          { "text": "Dividing power lets states ignore the Constitution", "isCorrect": false },
+          { "text": "Dividing power guarantees there will never be disagreement", "isCorrect": false }
+        ],
+        "explanation": "Federalism was designed to create balance and reduce the risk of too much authority in one place."
+      },
+      {
+        "id": "6sscf004",
+        "prompt": "Explain one way federal and state governments can both matter in solving a problem.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Some problems require shared action. For example, national laws may set broad rules while states carry out services and policies in their own communities."
+      }
+    ]
+  },
+  "7-social-studies-civics-and-government-elections-and-civic-participation": {
+    "title": "Elections & Civic Participation for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7ssec001",
+        "prompt": "What can a voter-turnout chart show that an election winner alone cannot show?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How many eligible people actually participated in the election", "isCorrect": true },
+          { "text": "The private thoughts of every voter", "isCorrect": false },
+          { "text": "Which campaign speech was most exciting", "isCorrect": false },
+          { "text": "The exact future laws the winner will pass", "isCorrect": false }
+        ],
+        "explanation": "Turnout charts show participation levels, which election results alone do not fully explain."
+      },
+      {
+        "id": "7ssec002",
+        "prompt": "Why is it important to study information about issues before voting or taking civic action?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Informed participation leads to stronger decisions and stronger civic arguments", "isCorrect": true },
+          { "text": "Information makes civic participation unnecessary", "isCorrect": false },
+          { "text": "Only leaders are allowed to know the facts", "isCorrect": false },
+          { "text": "Citizens should always choose without evidence", "isCorrect": false }
+        ],
+        "explanation": "Civic participation is stronger when people evaluate evidence and understand the issues involved."
+      },
+      {
+        "id": "7ssec003",
+        "prompt": "Which action best shows responsible civic participation?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Comparing reliable sources before supporting a position", "isCorrect": true },
+          { "text": "Sharing a rumor because it helps your side", "isCorrect": false },
+          { "text": "Ignoring evidence that disagrees with you", "isCorrect": false },
+          { "text": "Trying to stop other people from voting", "isCorrect": false }
+        ],
+        "explanation": "Responsible participation depends on evaluating evidence and engaging fairly rather than spreading misinformation."
+      },
+      {
+        "id": "7ssec004",
+        "prompt": "Explain how participation and information work together in a democracy.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Participation matters, but informed participation matters more because democratic decisions improve when people act on evidence and understanding instead of rumor."
+      }
+    ]
+  },
+  "7-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "title": "US Constitution & Federalism for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7sscf001",
+        "prompt": "Which idea best explains reserved powers?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Powers kept by the states instead of given to the national government", "isCorrect": true },
+          { "text": "Powers only foreign governments hold", "isCorrect": false },
+          { "text": "Powers no government is allowed to use", "isCorrect": false },
+          { "text": "Powers that belong only to one city", "isCorrect": false }
+        ],
+        "explanation": "Reserved powers are powers the Constitution leaves to the states."
+      },
+      {
+        "id": "7sscf002",
+        "prompt": "Which example best shows a shared power in federalism?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Both national and state governments collecting certain taxes", "isCorrect": true },
+          { "text": "Only one classroom deciding national law", "isCorrect": false },
+          { "text": "A foreign nation controlling state elections", "isCorrect": false },
+          { "text": "No government being allowed to make rules", "isCorrect": false }
+        ],
+        "explanation": "Some powers are shared, meaning both levels of government can act in those areas."
+      },
+      {
+        "id": "7sscf003",
+        "prompt": "Why can federalism create disagreement even when the Constitution sets rules?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because people may disagree about which level of government has the stronger role in a specific case", "isCorrect": true },
+          { "text": "Because the Constitution says no laws may ever be interpreted", "isCorrect": false },
+          { "text": "Because only states are allowed to read the Constitution", "isCorrect": false },
+          { "text": "Because federalism means government never acts", "isCorrect": false }
+        ],
+        "explanation": "Federalism often requires interpretation because real issues do not always fit perfectly into one category."
+      },
+      {
+        "id": "7sscf004",
+        "prompt": "Explain one benefit of dividing power between levels of government.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Dividing power can create balance, prevent too much control in one place, and allow different levels of government to respond to different kinds of problems."
+      }
+    ]
+  },
+  "8-social-studies-civics-and-government-elections-and-civic-participation": {
+    "title": "Elections & Civic Participation for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8ssec001",
+        "prompt": "Why should a voter compare a campaign message with other evidence before deciding what to support?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because campaign messages are persuasive sources and should be checked against additional information", "isCorrect": true },
+          { "text": "Because campaign messages are never allowed in democracy", "isCorrect": false },
+          { "text": "Because turnout data makes all campaign messages useless", "isCorrect": false },
+          { "text": "Because persuasion and evidence always mean the same thing", "isCorrect": false }
+        ],
+        "explanation": "Campaign messages are designed to persuade, so informed citizens compare them with other sources and evidence."
+      },
+      {
+        "id": "8ssec002",
+        "prompt": "What does a turnout chart help citizens evaluate?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How widely people participated in the democratic process", "isCorrect": true },
+          { "text": "Which candidate had the best speech style", "isCorrect": false },
+          { "text": "The private identity of every voter", "isCorrect": false },
+          { "text": "Whether campaigning should be abolished", "isCorrect": false }
+        ],
+        "explanation": "Turnout charts show participation levels, which can help people think about representation and civic engagement."
+      },
+      {
+        "id": "8ssec003",
+        "prompt": "Which action best demonstrates evidence-based civic participation?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Using reliable information to compare positions before supporting a proposal", "isCorrect": true },
+          { "text": "Repeating a claim because it sounds dramatic", "isCorrect": false },
+          { "text": "Ignoring all sources that need fact-checking", "isCorrect": false },
+          { "text": "Trying to silence people who ask questions", "isCorrect": false }
+        ],
+        "explanation": "Evidence-based civic participation depends on comparing positions, checking sources, and making reasoned judgments."
+      },
+      {
+        "id": "8ssec004",
+        "prompt": "Explain why persuasion and participation are both important parts of elections.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Persuasion shapes how candidates and groups present ideas, while participation determines how many people help decide the outcome. Democracy depends on both informed judgment and active involvement."
+      }
+    ]
+  },
+  "8-social-studies-civics-and-government-us-constitution-and-federalism": {
+    "title": "US Constitution & Federalism for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8sscf001",
+        "prompt": "What is one reason the Constitution divides power between federal and state governments?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "To balance authority and limit the chance that one level controls everything", "isCorrect": true },
+          { "text": "To make every decision take place in one city", "isCorrect": false },
+          { "text": "To prevent states from having any role at all", "isCorrect": false },
+          { "text": "To avoid the need for written laws", "isCorrect": false }
+        ],
+        "explanation": "Dividing power is part of the Constitution's design for balance and limited government."
+      },
+      {
+        "id": "8sscf002",
+        "prompt": "Which source would be most useful for deciding whether a power belongs to the federal government, the states, or both?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A constitutional excerpt paired with a powers chart", "isCorrect": true },
+          { "text": "A random advertisement", "isCorrect": false },
+          { "text": "A menu from a restaurant", "isCorrect": false },
+          { "text": "A weather forecast with no government information", "isCorrect": false }
+        ],
+        "explanation": "A constitutional excerpt and powers chart provide direct evidence about government authority."
+      },
+      {
+        "id": "8sscf003",
+        "prompt": "Why do federalism disputes often reach courts or public debate?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because real problems can raise questions about which level of government has the stronger constitutional role", "isCorrect": true },
+          { "text": "Because the Constitution has no rules about power", "isCorrect": false },
+          { "text": "Because only local governments may interpret laws", "isCorrect": false },
+          { "text": "Because state and federal governments never cooperate", "isCorrect": false }
+        ],
+        "explanation": "Federalism disputes happen because many issues involve overlapping responsibilities and require interpretation."
+      },
+      {
+        "id": "8sscf004",
+        "prompt": "Explain one challenge and one benefit of federalism.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "A benefit of federalism is balance and flexibility across different levels of government. A challenge is that disputes can arise over which level has the stronger authority in a specific situation."
+      }
+    ]
+  },
+  "3-social-studies-economics-and-financial-literacy-markets-intro": {
+    "title": "Markets (Intro) for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3ssmi001",
+        "prompt": "What is a market?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A place where people buy and sell goods or services", "isCorrect": true },
+          { "text": "Only a building where laws are written", "isCorrect": false },
+          { "text": "A job that only farmers do", "isCorrect": false },
+          { "text": "A machine that prints money", "isCorrect": false }
+        ],
+        "explanation": "Markets are places or systems where buyers and sellers exchange goods and services."
+      },
+      {
+        "id": "3ssmi002",
+        "prompt": "Which example best shows a buyer in a market?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A family paying for apples at a grocery store", "isCorrect": true },
+          { "text": "A farmer planting seeds in a field", "isCorrect": false },
+          { "text": "A librarian shelving books", "isCorrect": false },
+          { "text": "A bus driver stopping at a corner", "isCorrect": false }
+        ],
+        "explanation": "A buyer is the person who pays for a good or service in a market exchange."
+      },
+      {
+        "id": "3ssmi003",
+        "prompt": "Why do communities benefit from markets?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Markets help people get what they need by connecting buyers and sellers", "isCorrect": true },
+          { "text": "Markets make every person buy the same thing", "isCorrect": false },
+          { "text": "Markets remove the need for workers", "isCorrect": false },
+          { "text": "Markets only help one person at a time", "isCorrect": false }
+        ],
+        "explanation": "Markets help communities exchange goods and services so people can meet needs and wants."
+      },
+      {
+        "id": "3ssmi004",
+        "prompt": "Explain in one sentence how a market helps people in a community.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "A market helps people by giving them a place or system to buy and sell goods and services."
+      }
+    ]
+  },
+  "3-social-studies-economics-and-financial-literacy-producers-consumers": {
+    "title": "Producers and Consumers for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3sspc001",
+        "prompt": "Who is a producer?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A person or business that makes or provides goods or services", "isCorrect": true },
+          { "text": "A person who only buys items", "isCorrect": false },
+          { "text": "A person who counts election votes", "isCorrect": false },
+          { "text": "A person who never uses money", "isCorrect": false }
+        ],
+        "explanation": "Producers make goods or provide services for others."
+      },
+      {
+        "id": "3sspc002",
+        "prompt": "Which example best shows a consumer?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A student buying lunch in the cafeteria", "isCorrect": true },
+          { "text": "A baker making bread to sell", "isCorrect": false },
+          { "text": "A mechanic fixing cars for customers", "isCorrect": false },
+          { "text": "A farmer growing vegetables", "isCorrect": false }
+        ],
+        "explanation": "Consumers use or buy goods and services."
+      },
+      {
+        "id": "3sspc003",
+        "prompt": "How do producers and consumers depend on each other?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Producers provide goods or services, and consumers choose to buy and use them", "isCorrect": true },
+          { "text": "Consumers make every good by themselves", "isCorrect": false },
+          { "text": "Producers never need buyers", "isCorrect": false },
+          { "text": "They do not affect each other at all", "isCorrect": false }
+        ],
+        "explanation": "Markets work because producers offer goods and services and consumers decide what to buy."
+      },
+      {
+        "id": "3sspc004",
+        "prompt": "Describe one way a producer and a consumer interact in daily life.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "A producer offers a good or service, and a consumer buys or uses it."
+      }
+    ]
+  },
+  "4-social-studies-economics-and-financial-literacy-markets-intro": {
+    "title": "Markets (Intro) for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4ssmi001",
+        "prompt": "Which statement best explains what happens in a market?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Buyers and sellers exchange goods and services", "isCorrect": true },
+          { "text": "Only governments make choices", "isCorrect": false },
+          { "text": "People trade without using any values or prices", "isCorrect": false },
+          { "text": "Only producers are allowed to participate", "isCorrect": false }
+        ],
+        "explanation": "Markets bring together buyers and sellers to exchange goods and services."
+      },
+      {
+        "id": "4ssmi002",
+        "prompt": "Why do prices matter in a market?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Prices help buyers and sellers decide whether an exchange makes sense", "isCorrect": true },
+          { "text": "Prices make all goods identical", "isCorrect": false },
+          { "text": "Prices remove the need for choices", "isCorrect": false },
+          { "text": "Prices only matter to the government", "isCorrect": false }
+        ],
+        "explanation": "Prices help people compare value, costs, and choices in a market."
+      },
+      {
+        "id": "4ssmi003",
+        "prompt": "A store lowers the price of notebooks before school starts. Which market idea does this show?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Sellers can adjust prices to attract buyers", "isCorrect": true },
+          { "text": "Markets do not change over time", "isCorrect": false },
+          { "text": "Buyers never compare options", "isCorrect": false },
+          { "text": "Only one store can sell notebooks", "isCorrect": false }
+        ],
+        "explanation": "Sellers often adjust prices in response to demand, competition, or timing."
+      },
+      {
+        "id": "4ssmi004",
+        "prompt": "Explain how a buyer and seller both make choices in a market.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Buyers decide whether a price is worth paying, and sellers decide what to offer and what price to set."
+      }
+    ]
+  },
+  "4-social-studies-economics-and-financial-literacy-producers-consumers": {
+    "title": "Producers and Consumers for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4sspc001",
+        "prompt": "Which example is a producer providing a service?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A barber cutting hair for customers", "isCorrect": true },
+          { "text": "A child buying a snack", "isCorrect": false },
+          { "text": "A family shopping for shoes", "isCorrect": false },
+          { "text": "A class borrowing library books", "isCorrect": false }
+        ],
+        "explanation": "Services are actions people do for others, and the barber is providing one."
+      },
+      {
+        "id": "4sspc002",
+        "prompt": "What do consumers do in an economy?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "They buy or use goods and services", "isCorrect": true },
+          { "text": "They write all business laws", "isCorrect": false },
+          { "text": "They only produce raw materials", "isCorrect": false },
+          { "text": "They stop markets from changing", "isCorrect": false }
+        ],
+        "explanation": "Consumers are the people who choose and use goods and services."
+      },
+      {
+        "id": "4sspc003",
+        "prompt": "Why is it useful to understand whether someone is acting as a producer or consumer?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "It shows the different roles people play in economic exchanges", "isCorrect": true },
+          { "text": "It proves one role is always more important", "isCorrect": false },
+          { "text": "It means a person can never do both", "isCorrect": false },
+          { "text": "It removes the need to make choices", "isCorrect": false }
+        ],
+        "explanation": "People can act in different roles, and understanding those roles helps explain how economies work."
+      },
+      {
+        "id": "4sspc004",
+        "prompt": "Give one example of a producer and one example of a consumer.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "A producer makes goods or provides services, and a consumer buys or uses them."
+      }
+    ]
+  },
+  "5-social-studies-economics-and-financial-literacy-markets-intro": {
+    "title": "Markets (Intro) for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5ssmi001",
+        "prompt": "Which statement best describes a competitive market?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Different sellers offer similar goods or services and buyers compare choices", "isCorrect": true },
+          { "text": "Only one buyer is allowed to participate", "isCorrect": false },
+          { "text": "No one uses prices to make decisions", "isCorrect": false },
+          { "text": "All exchanges happen without goods or services", "isCorrect": false }
+        ],
+        "explanation": "Competition means buyers often have choices among sellers, and sellers respond to those choices."
+      },
+      {
+        "id": "5ssmi002",
+        "prompt": "How can competition affect prices or quality?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It can push sellers to improve quality or offer better prices", "isCorrect": true },
+          { "text": "It guarantees all sellers are identical", "isCorrect": false },
+          { "text": "It ends consumer choice", "isCorrect": false },
+          { "text": "It prevents new businesses from opening", "isCorrect": false }
+        ],
+        "explanation": "Competition often encourages sellers to attract customers with price, service, or quality."
+      },
+      {
+        "id": "5ssmi003",
+        "prompt": "A family compares prices at three stores before buying a backpack. Which market idea does this show?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Consumers make choices by comparing options in a market", "isCorrect": true },
+          { "text": "Sellers control every decision buyers make", "isCorrect": false },
+          { "text": "Markets work only for food", "isCorrect": false },
+          { "text": "Competition has no effect on buyers", "isCorrect": false }
+        ],
+        "explanation": "Comparing prices and options is a core part of how consumers participate in markets."
+      },
+      {
+        "id": "5ssmi004",
+        "prompt": "Explain one benefit of having more than one seller in a market.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "More than one seller can give buyers more choice and encourage better prices or quality."
+      }
+    ]
+  },
+  "5-social-studies-economics-and-financial-literacy-producers-consumers": {
+    "title": "Producers and Consumers for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5sspc001",
+        "prompt": "Why are producers important in an economy?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "They create the goods and services people want and need", "isCorrect": true },
+          { "text": "They stop consumers from making choices", "isCorrect": false },
+          { "text": "They only work when no one buys anything", "isCorrect": false },
+          { "text": "They replace all community jobs", "isCorrect": false }
+        ],
+        "explanation": "Producers supply what consumers use, so they are essential to economic activity."
+      },
+      {
+        "id": "5sspc002",
+        "prompt": "Which example shows the same person acting as both a producer and a consumer?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A baker sells bread at work and buys groceries after work", "isCorrect": true },
+          { "text": "A student only reads a textbook", "isCorrect": false },
+          { "text": "A tree grows apples in an orchard", "isCorrect": false },
+          { "text": "A road sign stands near a school", "isCorrect": false }
+        ],
+        "explanation": "People can produce goods or services in one situation and consume different goods or services in another."
+      },
+      {
+        "id": "5sspc003",
+        "prompt": "How does consumer demand influence producers?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Producers often respond by making more of what consumers want", "isCorrect": true },
+          { "text": "Demand makes producers ignore customers", "isCorrect": false },
+          { "text": "Demand means prices never change", "isCorrect": false },
+          { "text": "Demand removes the need for services", "isCorrect": false }
+        ],
+        "explanation": "Producers watch what people want to buy and often adjust production in response."
+      },
+      {
+        "id": "5sspc004",
+        "prompt": "Explain how producers and consumers influence each other in a market.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Consumers choose what to buy, and producers respond by deciding what to make or offer."
+      }
+    ]
+  },
+  "6-social-studies-economics-and-financial-literacy-personal-finance-basics": {
+    "title": "Personal Finance Basics for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6sspf001",
+        "prompt": "Which choice is the clearest example of a need rather than a want?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Paying for basic groceries", "isCorrect": true },
+          { "text": "Buying the newest video game", "isCorrect": false },
+          { "text": "Collecting a second pair of headphones", "isCorrect": false },
+          { "text": "Ordering a dessert after every meal", "isCorrect": false }
+        ],
+        "explanation": "Needs are essentials for daily life, while wants are things people would like but do not require."
+      },
+      {
+        "id": "6sspf002",
+        "prompt": "Why is a budget useful?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It helps people plan income and expenses so they can make informed choices", "isCorrect": true },
+          { "text": "It guarantees people can buy everything they want", "isCorrect": false },
+          { "text": "It removes all financial risk forever", "isCorrect": false },
+          { "text": "It only matters for businesses, not individuals", "isCorrect": false }
+        ],
+        "explanation": "A budget helps people match spending plans to the money they have."
+      },
+      {
+        "id": "6sspf003",
+        "prompt": "A student earns $20 and plans to save $8 before spending the rest. What personal finance habit does this show?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Setting a savings goal before making purchases", "isCorrect": true },
+          { "text": "Ignoring income limits", "isCorrect": false },
+          { "text": "Spending without a plan", "isCorrect": false },
+          { "text": "Borrowing more than needed", "isCorrect": false }
+        ],
+        "explanation": "Saving first is a deliberate budgeting strategy that helps people work toward goals."
+      },
+      {
+        "id": "6sspf004",
+        "prompt": "Explain why people often need to choose between different wants when making a budget.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Budgets are limited, so people have to prioritize and decide which wants matter most after covering needs and savings goals."
+      }
+    ]
+  },
+  "6-social-studies-economics-and-financial-literacy-supply-demand-intro": {
+    "title": "Supply and Demand (Intro) for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6sssd001",
+        "prompt": "What does demand describe?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How much of a good or service consumers want to buy", "isCorrect": true },
+          { "text": "How many laws the government passes", "isCorrect": false },
+          { "text": "How often a factory closes", "isCorrect": false },
+          { "text": "How much money a student saves in a notebook", "isCorrect": false }
+        ],
+        "explanation": "Demand is about the amount consumers want and are willing to buy."
+      },
+      {
+        "id": "6sssd002",
+        "prompt": "What does supply describe?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How much of a good or service producers are willing to offer", "isCorrect": true },
+          { "text": "How many classes a school day has", "isCorrect": false },
+          { "text": "How many votes a candidate receives", "isCorrect": false },
+          { "text": "How often consumers shop for fun", "isCorrect": false }
+        ],
+        "explanation": "Supply is the amount producers are able and willing to provide."
+      },
+      {
+        "id": "6sssd003",
+        "prompt": "If many people suddenly want concert tickets but only a few tickets remain, what is most likely to happen?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "The price may rise because demand is high and supply is limited", "isCorrect": true },
+          { "text": "The tickets become worthless immediately", "isCorrect": false },
+          { "text": "Supply grows automatically without any seller response", "isCorrect": false },
+          { "text": "Demand disappears at the same moment", "isCorrect": false }
+        ],
+        "explanation": "When demand is high and supply is low, prices often increase."
+      },
+      {
+        "id": "6sssd004",
+        "prompt": "Explain how supply and demand can affect price.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Prices often rise when demand is strong and supply is limited, and they may fall when supply is high and demand is weaker."
+      }
+    ]
+  },
+  "7-social-studies-economics-and-financial-literacy-personal-finance-basics": {
+    "title": "Personal Finance Basics for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7sspf001",
+        "prompt": "Why is tracking expenses an important personal finance habit?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It helps people see where money is going and make better spending decisions", "isCorrect": true },
+          { "text": "It makes earning income unnecessary", "isCorrect": false },
+          { "text": "It guarantees that prices never rise", "isCorrect": false },
+          { "text": "It only matters for banks", "isCorrect": false }
+        ],
+        "explanation": "Tracking expenses gives people information they can use to budget and adjust habits."
+      },
+      {
+        "id": "7sspf002",
+        "prompt": "Which choice best shows delayed gratification?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Saving money now for a larger goal later", "isCorrect": true },
+          { "text": "Spending every dollar as soon as it is earned", "isCorrect": false },
+          { "text": "Ignoring prices when shopping", "isCorrect": false },
+          { "text": "Refusing to make a plan", "isCorrect": false }
+        ],
+        "explanation": "Delayed gratification means waiting to spend so you can reach a bigger or more important goal."
+      },
+      {
+        "id": "7sspf003",
+        "prompt": "A teen compares two phone plans and chooses the cheaper option so more money can go into savings. What financial skill does this show?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Evaluating tradeoffs and prioritizing a savings goal", "isCorrect": true },
+          { "text": "Ignoring opportunity cost", "isCorrect": false },
+          { "text": "Spending without a budget", "isCorrect": false },
+          { "text": "Assuming every option has the same cost", "isCorrect": false }
+        ],
+        "explanation": "Personal finance requires comparing options and deciding which choice best supports a goal."
+      },
+      {
+        "id": "7sspf004",
+        "prompt": "Explain why saving and budgeting usually work better together than separately.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "A budget creates a plan for spending, and saving makes sure part of that plan supports future goals or emergencies."
+      }
+    ]
+  },
+  "7-social-studies-economics-and-financial-literacy-supply-demand-intro": {
+    "title": "Supply and Demand (Intro) for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7sssd001",
+        "prompt": "Which situation best illustrates an increase in demand?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "More buyers want the same popular sneakers than before", "isCorrect": true },
+          { "text": "A factory makes more sneakers", "isCorrect": false },
+          { "text": "A store closes early one day", "isCorrect": false },
+          { "text": "A school changes its lunch schedule", "isCorrect": false }
+        ],
+        "explanation": "Demand increases when more consumers want to buy a good or service."
+      },
+      {
+        "id": "7sssd002",
+        "prompt": "Which situation best illustrates an increase in supply?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A company produces more bicycles for stores to sell", "isCorrect": true },
+          { "text": "More customers arrive wanting bicycles", "isCorrect": false },
+          { "text": "A buyer compares two prices", "isCorrect": false },
+          { "text": "A family saves money for a bike", "isCorrect": false }
+        ],
+        "explanation": "Supply increases when producers make more goods available for sale."
+      },
+      {
+        "id": "7sssd003",
+        "prompt": "Why might prices fall when supply increases but demand stays about the same?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Sellers may lower prices to encourage more buyers when more goods are available", "isCorrect": true },
+          { "text": "Consumers stop caring about value", "isCorrect": false },
+          { "text": "Supply and demand never affect price", "isCorrect": false },
+          { "text": "Governments automatically ban lower prices", "isCorrect": false }
+        ],
+        "explanation": "When more goods are available than before, sellers may cut prices to attract buyers."
+      },
+      {
+        "id": "7sssd004",
+        "prompt": "Explain what can happen to price when supply and demand change in opposite directions.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Prices often rise when demand goes up and supply goes down, and they may fall when supply goes up and demand goes down."
+      }
+    ]
+  },
+  "8-social-studies-economics-and-financial-literacy-personal-finance-basics": {
+    "title": "Personal Finance Basics for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8sspf001",
+        "prompt": "What is opportunity cost in personal finance?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "The value of the next-best choice you give up when you spend money one way", "isCorrect": true },
+          { "text": "A fee charged only by a bank", "isCorrect": false },
+          { "text": "The amount of income a person earns in a year", "isCorrect": false },
+          { "text": "A list of prices in a store", "isCorrect": false }
+        ],
+        "explanation": "Opportunity cost means that choosing one option means giving up another possible use of your resources."
+      },
+      {
+        "id": "8sspf002",
+        "prompt": "Why is an emergency fund useful?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It helps people handle unexpected expenses without disrupting every other goal", "isCorrect": true },
+          { "text": "It makes budgeting unnecessary", "isCorrect": false },
+          { "text": "It guarantees income will always increase", "isCorrect": false },
+          { "text": "It only matters after retirement", "isCorrect": false }
+        ],
+        "explanation": "Emergency savings can provide stability when unexpected costs appear."
+      },
+      {
+        "id": "8sspf003",
+        "prompt": "A student chooses to keep part of each paycheck for savings instead of spending it all on entertainment. Which concept best fits this decision?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Balancing present wants with future financial goals", "isCorrect": true },
+          { "text": "Ignoring opportunity cost completely", "isCorrect": false },
+          { "text": "Assuming savings has no purpose", "isCorrect": false },
+          { "text": "Avoiding all financial choices", "isCorrect": false }
+        ],
+        "explanation": "Strong personal finance decisions often balance short-term enjoyment with long-term stability."
+      },
+      {
+        "id": "8sspf004",
+        "prompt": "Explain why financial goals can make budgeting decisions clearer.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Financial goals help people decide which expenses matter most and which purchases should wait or be reduced."
+      }
+    ]
+  },
+  "8-social-studies-economics-and-financial-literacy-supply-demand-intro": {
+    "title": "Supply and Demand (Intro) for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8sssd001",
+        "prompt": "Which example best shows a demand shift rather than a supply shift?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A new trend causes many more people to want electric scooters", "isCorrect": true },
+          { "text": "A factory opens and produces more scooters", "isCorrect": false },
+          { "text": "A shipping company improves delivery time", "isCorrect": false },
+          { "text": "A store receives a new warehouse", "isCorrect": false }
+        ],
+        "explanation": "A demand shift changes how much consumers want to buy, while a supply shift changes how much producers can offer."
+      },
+      {
+        "id": "8sssd002",
+        "prompt": "Which example best shows a supply shift?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A drought reduces the amount of wheat farmers can grow", "isCorrect": true },
+          { "text": "Shoppers suddenly prefer a different cereal", "isCorrect": false },
+          { "text": "Students compare menu prices at lunch", "isCorrect": false },
+          { "text": "More people want concert tickets", "isCorrect": false }
+        ],
+        "explanation": "A supply shift happens when producers can offer more or less of a good."
+      },
+      {
+        "id": "8sssd003",
+        "prompt": "Why can equilibrium price change after a supply or demand shift?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because the balance point between what buyers want and what sellers offer changes", "isCorrect": true },
+          { "text": "Because markets always keep the same price", "isCorrect": false },
+          { "text": "Because consumers stop making choices", "isCorrect": false },
+          { "text": "Because laws eliminate all price signals", "isCorrect": false }
+        ],
+        "explanation": "When supply or demand shifts, the price at which the market balances can change too."
+      },
+      {
+        "id": "8sssd004",
+        "prompt": "Explain how supply and demand together help determine price in a market.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Price reflects the interaction between how much buyers want and how much sellers can provide, so changes in either can move the market price."
+      }
+    ]
+  },
+  "3-social-studies-us-history-exploration-to-civil-war": {
+    "title": "Exploration to Civil War for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3ssue001",
+        "prompt": "Which statement best describes exploration?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "People travel to learn about places, resources, or routes", "isCorrect": true },
+          { "text": "People vote in a school election", "isCorrect": false },
+          { "text": "Factories make goods for sale", "isCorrect": false },
+          { "text": "Families balance a budget", "isCorrect": false }
+        ],
+        "explanation": "Exploration involves traveling and gathering information about new places and routes."
+      },
+      {
+        "id": "3ssue002",
+        "prompt": "Why is it important to remember that Indigenous peoples already lived in North America before European exploration?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because the land was home to many communities with their own histories and cultures", "isCorrect": true },
+          { "text": "Because no one lived there before explorers", "isCorrect": false },
+          { "text": "Because only explorers created communities", "isCorrect": false },
+          { "text": "Because history begins only with colonists", "isCorrect": false }
+        ],
+        "explanation": "U.S. history includes Indigenous communities whose histories began long before European arrival."
+      },
+      {
+        "id": "3ssue003",
+        "prompt": "What made the Civil War a major event in U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "It was a conflict that deeply affected the country and its future", "isCorrect": true },
+          { "text": "It was a small disagreement about one playground", "isCorrect": false },
+          { "text": "It only involved countries outside the United States", "isCorrect": false },
+          { "text": "It ended the need for government", "isCorrect": false }
+        ],
+        "explanation": "The Civil War was a major national conflict with long-lasting effects on the United States."
+      },
+      {
+        "id": "3ssue004",
+        "prompt": "Name one reason events from exploration to the Civil War still matter today.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "These events shaped where people lived, how communities changed, and how the nation developed."
+      }
+    ]
+  },
+  "3-social-studies-us-history-industrialization-and-immigration": {
+    "title": "Industrialization and Immigration for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3ssui001",
+        "prompt": "What does industrialization mean?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "More goods are made with machines and factories", "isCorrect": true },
+          { "text": "People stop making all goods", "isCorrect": false },
+          { "text": "Governments end all transportation", "isCorrect": false },
+          { "text": "Families move without any jobs", "isCorrect": false }
+        ],
+        "explanation": "Industrialization refers to the growth of factories and machine-based production."
+      },
+      {
+        "id": "3ssui002",
+        "prompt": "What is immigration?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Moving to a new country to live", "isCorrect": true },
+          { "text": "Opening a new factory machine", "isCorrect": false },
+          { "text": "Voting in a national election", "isCorrect": false },
+          { "text": "Selling goods in a market", "isCorrect": false }
+        ],
+        "explanation": "Immigration happens when people move into a new country to live there."
+      },
+      {
+        "id": "3ssui003",
+        "prompt": "How were industrialization and immigration connected?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Growing cities and factories created work that attracted many newcomers", "isCorrect": true },
+          { "text": "Factories made travel impossible", "isCorrect": false },
+          { "text": "Immigration ended city growth", "isCorrect": false },
+          { "text": "They happened in completely different countries only", "isCorrect": false }
+        ],
+        "explanation": "As industries grew, many immigrants came seeking jobs and new opportunities."
+      },
+      {
+        "id": "3ssui004",
+        "prompt": "Explain one way immigration changed communities during industrialization.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Immigration helped cities grow and brought new cultures, languages, skills, and traditions to communities."
+      }
+    ]
+  },
+  "4-social-studies-us-history-exploration-to-civil-war": {
+    "title": "Exploration to Civil War for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4ssue001",
+        "prompt": "Why did European powers support exploration to North America?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "They wanted routes, resources, land, and influence", "isCorrect": true },
+          { "text": "They wanted to close all trade", "isCorrect": false },
+          { "text": "They wanted to stop sailing forever", "isCorrect": false },
+          { "text": "They wanted every community to stay unchanged", "isCorrect": false }
+        ],
+        "explanation": "Exploration was often driven by goals involving trade, land, resources, and power."
+      },
+      {
+        "id": "4ssue002",
+        "prompt": "Which idea is most important when studying colonization?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Colonization changed life for settlers and Indigenous peoples in different ways", "isCorrect": true },
+          { "text": "Only one group experienced change", "isCorrect": false },
+          { "text": "Colonization had no long-term effects", "isCorrect": false },
+          { "text": "Every colony was exactly the same", "isCorrect": false }
+        ],
+        "explanation": "Colonization affected different communities differently and had lasting consequences."
+      },
+      {
+        "id": "4ssue003",
+        "prompt": "Why is the Civil War often taught as a turning point in U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because it reshaped the nation and changed the future of the United States", "isCorrect": true },
+          { "text": "Because it only changed one city's schedule", "isCorrect": false },
+          { "text": "Because it ended the need for laws", "isCorrect": false },
+          { "text": "Because it had no connection to national issues", "isCorrect": false }
+        ],
+        "explanation": "The Civil War is a turning point because it transformed the country politically and socially."
+      },
+      {
+        "id": "4ssue004",
+        "prompt": "Explain one way colonization or the Civil War changed the United States.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Examples include changes in land control, communities, government power, or the nation's future direction."
+      }
+    ]
+  },
+  "4-social-studies-us-history-industrialization-and-immigration": {
+    "title": "Industrialization and Immigration for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4ssui001",
+        "prompt": "Which development is most closely linked to industrialization?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "The growth of factories and machine production", "isCorrect": true },
+          { "text": "The end of all city life", "isCorrect": false },
+          { "text": "The closing of transportation routes", "isCorrect": false },
+          { "text": "The disappearance of jobs", "isCorrect": false }
+        ],
+        "explanation": "Industrialization involves factories, machines, and large-scale production."
+      },
+      {
+        "id": "4ssui002",
+        "prompt": "Why did many immigrants come to the United States during industrialization?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "To find opportunities such as jobs and new lives", "isCorrect": true },
+          { "text": "To avoid all cities and work", "isCorrect": false },
+          { "text": "To end immigration entirely", "isCorrect": false },
+          { "text": "To shut down markets", "isCorrect": false }
+        ],
+        "explanation": "Many immigrants were drawn by economic opportunities and the hope of building a new future."
+      },
+      {
+        "id": "4ssui003",
+        "prompt": "What is one effect of industrialization on cities?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Cities often grew as more workers and businesses gathered there", "isCorrect": true },
+          { "text": "Cities became empty because factories moved away from people", "isCorrect": false },
+          { "text": "Transportation stopped expanding", "isCorrect": false },
+          { "text": "All people worked the same job", "isCorrect": false }
+        ],
+        "explanation": "Industrialization often increased city populations because factories and jobs were concentrated there."
+      },
+      {
+        "id": "4ssui004",
+        "prompt": "Explain how immigration helped shape industrial cities.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Immigrants added labor, culture, businesses, and community life to growing industrial cities."
+      }
+    ]
+  },
+  "5-social-studies-us-history-exploration-to-civil-war": {
+    "title": "Exploration to Civil War for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5ssue001",
+        "prompt": "Which factor helped drive European exploration and colonization in North America?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "The search for wealth, trade, land, and power", "isCorrect": true },
+          { "text": "A wish to avoid all resources", "isCorrect": false },
+          { "text": "A plan to keep maps empty", "isCorrect": false },
+          { "text": "An agreement to stop all settlement", "isCorrect": false }
+        ],
+        "explanation": "Exploration and colonization were often tied to economic and political goals."
+      },
+      {
+        "id": "5ssue002",
+        "prompt": "Why is it important to include multiple perspectives when studying early U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because different groups experienced events such as colonization in very different ways", "isCorrect": true },
+          { "text": "Because history only belongs to one group", "isCorrect": false },
+          { "text": "Because evidence does not matter", "isCorrect": false },
+          { "text": "Because all communities had the same goals", "isCorrect": false }
+        ],
+        "explanation": "Historical understanding improves when students examine how events affected different groups."
+      },
+      {
+        "id": "5ssue003",
+        "prompt": "Why was the Civil War a defining event in U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "It determined major questions about the nation and changed the country's future", "isCorrect": true },
+          { "text": "It was only a disagreement over one local rule", "isCorrect": false },
+          { "text": "It had no effect on national life", "isCorrect": false },
+          { "text": "It happened before the colonies existed", "isCorrect": false }
+        ],
+        "explanation": "The Civil War shaped the nation's political development and had major consequences across the country."
+      },
+      {
+        "id": "5ssue004",
+        "prompt": "Explain one reason the period from exploration to the Civil War is essential to understanding the United States.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "This period explains how the country expanded, changed, and faced major conflicts that still matter today."
+      }
+    ]
+  },
+  "5-social-studies-us-history-industrialization-and-immigration": {
+    "title": "Industrialization and Immigration for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5ssui001",
+        "prompt": "How did industrialization change production in the United States?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "More goods were produced in factories using machines", "isCorrect": true },
+          { "text": "Production stopped completely", "isCorrect": false },
+          { "text": "All goods were made by one worker at home", "isCorrect": false },
+          { "text": "Transportation became unimportant", "isCorrect": false }
+        ],
+        "explanation": "Industrialization increased machine-based factory production and changed how goods were made."
+      },
+      {
+        "id": "5ssui002",
+        "prompt": "Which factor best explains why immigration increased during industrialization?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Expanding industries created jobs and opportunities in growing cities", "isCorrect": true },
+          { "text": "Factories closed and ended work", "isCorrect": false },
+          { "text": "Transportation routes disappeared", "isCorrect": false },
+          { "text": "Governments ended all migration", "isCorrect": false }
+        ],
+        "explanation": "Industrial growth created demand for workers, drawing many immigrants to the United States."
+      },
+      {
+        "id": "5ssui003",
+        "prompt": "What challenge often came with rapid industrialization and immigration?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Cities sometimes faced overcrowding and difficult working conditions", "isCorrect": true },
+          { "text": "Communities stopped growing", "isCorrect": false },
+          { "text": "No one needed housing or transportation", "isCorrect": false },
+          { "text": "Every worker had the same experience", "isCorrect": false }
+        ],
+        "explanation": "Rapid city growth often created crowding, labor challenges, and pressure on services."
+      },
+      {
+        "id": "5ssui004",
+        "prompt": "Explain one way immigration influenced American culture during industrialization.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Immigrants brought languages, foods, customs, labor, and community traditions that shaped American life."
+      }
+    ]
+  },
+  "6-social-studies-us-history-postwar-to-present": {
+    "title": "Postwar to Present for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6ssup001",
+        "prompt": "What does the term postwar mean in U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "The period after a major war ends", "isCorrect": true },
+          { "text": "The years before colonies formed", "isCorrect": false },
+          { "text": "The time when no laws existed", "isCorrect": false },
+          { "text": "A market where goods are exchanged", "isCorrect": false }
+        ],
+        "explanation": "Postwar refers to what happens in a society after a major war."
+      },
+      {
+        "id": "6ssup002",
+        "prompt": "Which topic fits a study of U.S. history from postwar to the present?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How the country changed socially, politically, and economically after major wars", "isCorrect": true },
+          { "text": "How ancient river civilizations farmed", "isCorrect": false },
+          { "text": "How medieval castles were built", "isCorrect": false },
+          { "text": "How explorers crossed the Atlantic before colonization", "isCorrect": false }
+        ],
+        "explanation": "Postwar to present history focuses on modern changes and developments in the United States."
+      },
+      {
+        "id": "6ssup003",
+        "prompt": "Why is this period often studied through change over time?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because technology, civil rights, politics, and culture shifted in major ways", "isCorrect": true },
+          { "text": "Because nothing changed after the war", "isCorrect": false },
+          { "text": "Because evidence from this period does not exist", "isCorrect": false },
+          { "text": "Because all Americans had the same experience", "isCorrect": false }
+        ],
+        "explanation": "The postwar era includes many important developments that historians analyze over time."
+      },
+      {
+        "id": "6ssup004",
+        "prompt": "Explain one reason modern U.S. history matters to people today.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Modern history helps explain current institutions, debates, technologies, and social changes."
+      }
+    ]
+  },
+  "6-social-studies-us-history-reconstruction-to-wwii": {
+    "title": "Reconstruction to WWII for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6ssur001",
+        "prompt": "What was Reconstruction?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "The period after the Civil War when the nation worked to rebuild and redefine the country", "isCorrect": true },
+          { "text": "The time when ancient civilizations first formed", "isCorrect": false },
+          { "text": "A plan for setting prices in markets", "isCorrect": false },
+          { "text": "A world geography unit about continents", "isCorrect": false }
+        ],
+        "explanation": "Reconstruction was the period after the Civil War focused on rebuilding and major national questions."
+      },
+      {
+        "id": "6ssur002",
+        "prompt": "Why is the era from Reconstruction to World War II often grouped together in U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It includes major changes in industry, reform, government, and global involvement", "isCorrect": true },
+          { "text": "It only covers one city", "isCorrect": false },
+          { "text": "It has no connection to world events", "isCorrect": false },
+          { "text": "It happens before the United States existed", "isCorrect": false }
+        ],
+        "explanation": "This era includes rapid changes that shaped the modern United States."
+      },
+      {
+        "id": "6ssur003",
+        "prompt": "Which historical thinking skill is most useful when studying Reconstruction through WWII?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Analyzing how one event or movement led to later changes", "isCorrect": true },
+          { "text": "Ignoring evidence from different decades", "isCorrect": false },
+          { "text": "Assuming all events were unrelated", "isCorrect": false },
+          { "text": "Reading only one sentence about the whole era", "isCorrect": false }
+        ],
+        "explanation": "Cause-and-effect analysis helps students understand how changes in one period influenced the next."
+      },
+      {
+        "id": "6ssur004",
+        "prompt": "Explain one major type of change the United States experienced between Reconstruction and WWII.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Possible changes include industrial growth, political reform, expanded national power, or social transformation."
+      }
+    ]
+  },
+  "7-social-studies-us-history-postwar-to-present": {
+    "title": "Postwar to Present for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7ssup001",
+        "prompt": "Which theme is central to studying U.S. history from postwar to the present?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How the nation changed during the modern era", "isCorrect": true },
+          { "text": "How ancient empires rose along rivers", "isCorrect": false },
+          { "text": "How colonial charters were first written", "isCorrect": false },
+          { "text": "How medieval kingdoms used feudalism", "isCorrect": false }
+        ],
+        "explanation": "The postwar to present period focuses on modern developments in U.S. society, politics, and the economy."
+      },
+      {
+        "id": "7ssup002",
+        "prompt": "Why do historians compare life in different decades when studying modern U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "To trace continuity and change over time", "isCorrect": true },
+          { "text": "To prove nothing changed", "isCorrect": false },
+          { "text": "To avoid using evidence", "isCorrect": false },
+          { "text": "To treat every decade as identical", "isCorrect": false }
+        ],
+        "explanation": "Comparing decades helps historians identify what changed and what stayed the same."
+      },
+      {
+        "id": "7ssup003",
+        "prompt": "Which example best fits a postwar-to-present topic?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "The impact of technological and social change on everyday life", "isCorrect": true },
+          { "text": "The founding of the first English colonies", "isCorrect": false },
+          { "text": "Ancient trade along the Nile River", "isCorrect": false },
+          { "text": "The early spread of agriculture in Mesopotamia", "isCorrect": false }
+        ],
+        "explanation": "Modern U.S. history often focuses on technology, policy, culture, and social movements."
+      },
+      {
+        "id": "7ssup004",
+        "prompt": "Explain one reason people study recent U.S. history differently from more distant periods.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Recent history often includes more direct evidence, media, and connections to issues people still experience today."
+      }
+    ]
+  },
+  "7-social-studies-us-history-reconstruction-to-wwii": {
+    "title": "Reconstruction to WWII for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7ssur001",
+        "prompt": "Why is Reconstruction a key starting point for this era of U.S. history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It followed the Civil War and raised major questions about rebuilding and rights", "isCorrect": true },
+          { "text": "It happened before the American Revolution", "isCorrect": false },
+          { "text": "It was mainly a world geography event", "isCorrect": false },
+          { "text": "It ended industrial growth immediately", "isCorrect": false }
+        ],
+        "explanation": "Reconstruction is a major starting point because it shaped the nation's next phase after the Civil War."
+      },
+      {
+        "id": "7ssur002",
+        "prompt": "Which theme belongs in a study of Reconstruction to WWII?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Industrial growth, reform movements, and expanding U.S. involvement in world affairs", "isCorrect": true },
+          { "text": "Only the lives of medieval knights", "isCorrect": false },
+          { "text": "Only exploration across the Atlantic in the 1400s", "isCorrect": false },
+          { "text": "Only the geography of South America", "isCorrect": false }
+        ],
+        "explanation": "This era includes industrial, political, social, and global developments that shaped the United States."
+      },
+      {
+        "id": "7ssur003",
+        "prompt": "Why is chronology important when studying this period?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "It helps students see how one development built on or reacted to earlier events", "isCorrect": true },
+          { "text": "It proves all events happened at once", "isCorrect": false },
+          { "text": "It makes evidence unnecessary", "isCorrect": false },
+          { "text": "It removes all cause-and-effect relationships", "isCorrect": false }
+        ],
+        "explanation": "Chronology matters because later events are often shaped by what happened earlier."
+      },
+      {
+        "id": "7ssur004",
+        "prompt": "Explain one broad change that took place in the United States between Reconstruction and WWII.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Possible responses include changes in industry, reform, citizenship, government, or foreign policy."
+      }
+    ]
+  },
+  "8-social-studies-us-history-postwar-to-present": {
+    "title": "Postwar to Present for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8ssup001",
+        "prompt": "Which historical question best fits a study of the United States from postwar to the present?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How did political, economic, social, and technological developments reshape the nation after major wars?", "isCorrect": true },
+          { "text": "How were the first farming villages built in ancient Mesopotamia?", "isCorrect": false },
+          { "text": "How did colonists first settle Jamestown?", "isCorrect": false },
+          { "text": "How did feudal lords organize medieval Europe?", "isCorrect": false }
+        ],
+        "explanation": "Modern U.S. history focuses on major changes that reshaped national life after wars."
+      },
+      {
+        "id": "8ssup002",
+        "prompt": "Why do historians often study this period through themes such as civil rights, technology, and foreign policy?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because these themes help organize major developments across many decades", "isCorrect": true },
+          { "text": "Because chronology no longer matters at all", "isCorrect": false },
+          { "text": "Because the period includes no social change", "isCorrect": false },
+          { "text": "Because only one event explains everything", "isCorrect": false }
+        ],
+        "explanation": "Themes allow students to track change over time in connected areas of public life."
+      },
+      {
+        "id": "8ssup003",
+        "prompt": "Which skill is most useful when evaluating a claim about a recent historical event?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Comparing multiple sources and checking evidence before drawing conclusions", "isCorrect": true },
+          { "text": "Accepting the first opinion you hear", "isCorrect": false },
+          { "text": "Ignoring context and dates", "isCorrect": false },
+          { "text": "Using only fictional examples", "isCorrect": false }
+        ],
+        "explanation": "Modern history often has abundant and conflicting sources, so evidence evaluation is essential."
+      },
+      {
+        "id": "8ssup004",
+        "prompt": "Explain one way studying postwar U.S. history can help people understand current events.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "It helps people connect present-day issues to earlier policy choices, social movements, or technological changes."
+      }
+    ]
+  },
+  "8-social-studies-us-history-reconstruction-to-wwii": {
+    "title": "Reconstruction to WWII for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8ssur001",
+        "prompt": "Why is the period from Reconstruction to WWII often seen as foundational to the modern United States?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because it included major changes in rights, industry, reform, and global power", "isCorrect": true },
+          { "text": "Because it contained no important conflicts or debates", "isCorrect": false },
+          { "text": "Because it only involved one local community", "isCorrect": false },
+          { "text": "Because it happened before the Civil War", "isCorrect": false }
+        ],
+        "explanation": "This era laid much of the groundwork for modern U.S. institutions and conflicts."
+      },
+      {
+        "id": "8ssur002",
+        "prompt": "Which historical thinking question best fits this period?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How did changes after the Civil War lead into industrial growth, reform, and world conflict?", "isCorrect": true },
+          { "text": "How did geography alone explain every event?", "isCorrect": false },
+          { "text": "How did all decades remain exactly the same?", "isCorrect": false },
+          { "text": "How did medieval empires shape Reconstruction directly?", "isCorrect": false }
+        ],
+        "explanation": "The period is often studied as a sequence of connected developments rather than isolated events."
+      },
+      {
+        "id": "8ssur003",
+        "prompt": "Why is comparing reform efforts across different decades useful in this era?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "It shows how Americans repeatedly tried to solve social, political, and economic problems", "isCorrect": true },
+          { "text": "It proves reform never changes anything", "isCorrect": false },
+          { "text": "It means people stopped disagreeing", "isCorrect": false },
+          { "text": "It removes the need for context", "isCorrect": false }
+        ],
+        "explanation": "Reform movements are easier to understand when students compare goals, methods, and outcomes over time."
+      },
+      {
+        "id": "8ssur004",
+        "prompt": "Explain one reason this era is important for understanding the twentieth-century United States.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "It helps explain how the nation developed modern institutions, policies, social conflicts, and international roles."
+      }
+    ]
+  },
+  "3-social-studies-world-history-and-geography-ancient-civilizations": {
+    "title": "Ancient Civilizations for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3ssac001",
+        "prompt": "What is a civilization?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A large organized society with systems such as leadership, work, and culture", "isCorrect": true },
+          { "text": "Only a single family living in one house", "isCorrect": false },
+          { "text": "A weather event that lasts one day", "isCorrect": false },
+          { "text": "A type of market price", "isCorrect": false }
+        ],
+        "explanation": "Civilizations are organized societies with systems that help people live and work together."
+      },
+      {
+        "id": "3ssac002",
+        "prompt": "Why did many ancient civilizations grow near rivers?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Rivers provided water, transportation, and fertile land", "isCorrect": true },
+          { "text": "Rivers made farming impossible", "isCorrect": false },
+          { "text": "Rivers stopped people from building communities", "isCorrect": false },
+          { "text": "Rivers removed the need for resources", "isCorrect": false }
+        ],
+        "explanation": "Rivers supported farming, travel, and settlement, so many civilizations formed nearby."
+      },
+      {
+        "id": "3ssac003",
+        "prompt": "What can artifacts help people learn about ancient civilizations?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "How people lived, worked, and believed", "isCorrect": true },
+          { "text": "Only today's weather", "isCorrect": false },
+          { "text": "Nothing about the past", "isCorrect": false },
+          { "text": "Only the names of modern cities", "isCorrect": false }
+        ],
+        "explanation": "Artifacts are clues that help historians understand daily life and culture in the past."
+      },
+      {
+        "id": "3ssac004",
+        "prompt": "Explain one reason people study ancient civilizations.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Studying ancient civilizations helps people understand how early societies solved problems and shaped later history."
+      }
+    ]
+  },
+  "3-social-studies-world-history-and-geography-world-regions-physical-human": {
+    "title": "World Regions (Physical and Human) for Grade 3",
+    "subject": "Social Studies",
+    "grade": 3,
+    "questions": [
+      {
+        "id": "3sswr001",
+        "prompt": "Which is an example of a physical feature?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A mountain range", "isCorrect": true },
+          { "text": "A school building", "isCorrect": false },
+          { "text": "A highway exit sign", "isCorrect": false },
+          { "text": "A shopping mall", "isCorrect": false }
+        ],
+        "explanation": "Physical features are natural parts of Earth's surface, such as mountains, rivers, and plains."
+      },
+      {
+        "id": "3sswr002",
+        "prompt": "Which is an example of a human feature?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A bridge built across a river", "isCorrect": true },
+          { "text": "A desert", "isCorrect": false },
+          { "text": "A canyon", "isCorrect": false },
+          { "text": "An island", "isCorrect": false }
+        ],
+        "explanation": "Human features are built or changed by people, such as roads, cities, and bridges."
+      },
+      {
+        "id": "3sswr003",
+        "prompt": "Why do people study world regions?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "To understand how places are alike or different in land, climate, and people", "isCorrect": true },
+          { "text": "To prove all places are exactly the same", "isCorrect": false },
+          { "text": "To stop using maps", "isCorrect": false },
+          { "text": "To avoid learning about cultures", "isCorrect": false }
+        ],
+        "explanation": "World regions can be compared using physical and human characteristics."
+      },
+      {
+        "id": "3sswr004",
+        "prompt": "Explain how a physical feature can affect where people live.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Physical features such as rivers, mountains, and climate can influence settlement, farming, and travel."
+      }
+    ]
+  },
+  "4-social-studies-world-history-and-geography-ancient-civilizations": {
+    "title": "Ancient Civilizations for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4ssac001",
+        "prompt": "Which characteristic is common in ancient civilizations?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Organized government and shared systems for living together", "isCorrect": true },
+          { "text": "No communities larger than one family", "isCorrect": false },
+          { "text": "No farming or trade of any kind", "isCorrect": false },
+          { "text": "No recordkeeping or culture", "isCorrect": false }
+        ],
+        "explanation": "Ancient civilizations often developed organized systems such as governments, economies, and cultural traditions."
+      },
+      {
+        "id": "4ssac002",
+        "prompt": "Why were rivers so important to many ancient civilizations?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "They supported farming, transportation, and settlement", "isCorrect": true },
+          { "text": "They prevented any travel", "isCorrect": false },
+          { "text": "They made trade impossible", "isCorrect": false },
+          { "text": "They only mattered for weather reports", "isCorrect": false }
+        ],
+        "explanation": "Rivers made it easier to grow food, move goods, and support large populations."
+      },
+      {
+        "id": "4ssac003",
+        "prompt": "How can historians learn about people in ancient civilizations?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "By studying artifacts, ruins, and written records", "isCorrect": true },
+          { "text": "By ignoring evidence from the past", "isCorrect": false },
+          { "text": "By using only modern advertisements", "isCorrect": false },
+          { "text": "By assuming all civilizations were identical", "isCorrect": false }
+        ],
+        "explanation": "Artifacts and records help historians reconstruct how earlier societies functioned."
+      },
+      {
+        "id": "4ssac004",
+        "prompt": "Explain one way geography influenced an ancient civilization.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Geography affected food supply, transportation, trade, defense, and where people settled."
+      }
+    ]
+  },
+  "4-social-studies-world-history-and-geography-world-regions-physical-human": {
+    "title": "World Regions (Physical and Human) for Grade 4",
+    "subject": "Social Studies",
+    "grade": 4,
+    "questions": [
+      {
+        "id": "4sswr001",
+        "prompt": "What is a region in geography?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "An area that shares certain characteristics", "isCorrect": true },
+          { "text": "A single street corner only", "isCorrect": false },
+          { "text": "A kind of government election", "isCorrect": false },
+          { "text": "A list of prices in a store", "isCorrect": false }
+        ],
+        "explanation": "Regions are areas grouped by shared features such as landforms, climate, culture, or economy."
+      },
+      {
+        "id": "4sswr002",
+        "prompt": "Why do geographers compare physical and human features?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "To understand how nature and people shape places together", "isCorrect": true },
+          { "text": "To show that maps are unnecessary", "isCorrect": false },
+          { "text": "To prove human activity never affects the land", "isCorrect": false },
+          { "text": "To make every region identical", "isCorrect": false }
+        ],
+        "explanation": "Places are shaped by both natural features and human choices."
+      },
+      {
+        "id": "4sswr003",
+        "prompt": "A city forms where a river meets the ocean. Which idea does this best illustrate?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Physical features can influence where human features develop", "isCorrect": true },
+          { "text": "Human features always ignore geography", "isCorrect": false },
+          { "text": "Regions never change over time", "isCorrect": false },
+          { "text": "Oceans and rivers are human-made", "isCorrect": false }
+        ],
+        "explanation": "Natural geography often affects where people build cities, roads, and ports."
+      },
+      {
+        "id": "4sswr004",
+        "prompt": "Explain one way human activity can change a region.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Human activity can change regions by building cities, roads, dams, farms, or other structures."
+      }
+    ]
+  },
+  "5-social-studies-world-history-and-geography-ancient-civilizations": {
+    "title": "Ancient Civilizations for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5ssac001",
+        "prompt": "Why do historians often compare ancient civilizations?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "To see how different societies solved common problems in different ways", "isCorrect": true },
+          { "text": "To prove only one civilization matters", "isCorrect": false },
+          { "text": "To ignore geography and culture", "isCorrect": false },
+          { "text": "To avoid using evidence", "isCorrect": false }
+        ],
+        "explanation": "Comparing civilizations helps students analyze similarities and differences in how societies developed."
+      },
+      {
+        "id": "5ssac002",
+        "prompt": "Which factor most often helped ancient civilizations grow?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Reliable access to water and food", "isCorrect": true },
+          { "text": "A lack of any trade routes", "isCorrect": false },
+          { "text": "The absence of leadership systems", "isCorrect": false },
+          { "text": "No interaction with nearby groups", "isCorrect": false }
+        ],
+        "explanation": "Access to water and food supported large populations and long-term settlement."
+      },
+      {
+        "id": "5ssac003",
+        "prompt": "What can written records add to what artifacts tell us about an ancient civilization?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "They can reveal laws, beliefs, accounts, and other direct evidence of ideas", "isCorrect": true },
+          { "text": "They replace the need to study artifacts at all", "isCorrect": false },
+          { "text": "They only describe today's world", "isCorrect": false },
+          { "text": "They make geography irrelevant", "isCorrect": false }
+        ],
+        "explanation": "Written records provide additional evidence about how people governed, traded, and thought."
+      },
+      {
+        "id": "5ssac004",
+        "prompt": "Explain one reason ancient civilizations still influence the world today.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Ancient civilizations influenced later systems of government, writing, engineering, culture, and trade."
+      }
+    ]
+  },
+  "5-social-studies-world-history-and-geography-world-regions-physical-human": {
+    "title": "World Regions (Physical and Human) for Grade 5",
+    "subject": "Social Studies",
+    "grade": 5,
+    "questions": [
+      {
+        "id": "5sswr001",
+        "prompt": "Which statement best explains why geographers divide the world into regions?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Regions help people study places by grouping shared characteristics", "isCorrect": true },
+          { "text": "Regions mean all places within them are identical", "isCorrect": false },
+          { "text": "Regions remove the need for maps and data", "isCorrect": false },
+          { "text": "Regions only describe weather and nothing else", "isCorrect": false }
+        ],
+        "explanation": "Regions are useful because they organize geographic study around shared traits."
+      },
+      {
+        "id": "5sswr002",
+        "prompt": "Which pair shows one physical feature and one human feature?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A desert and a highway", "isCorrect": true },
+          { "text": "A mountain and a river", "isCorrect": false },
+          { "text": "A school and a city", "isCorrect": false },
+          { "text": "A canyon and a forest", "isCorrect": false }
+        ],
+        "explanation": "A desert is physical, while a highway is a human-built feature."
+      },
+      {
+        "id": "5sswr003",
+        "prompt": "Why is it important to study both physical and human geography together?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because people adapt to natural conditions and also reshape places over time", "isCorrect": true },
+          { "text": "Because human choices never affect land", "isCorrect": false },
+          { "text": "Because physical geography cannot be observed", "isCorrect": false },
+          { "text": "Because only cities matter in geography", "isCorrect": false }
+        ],
+        "explanation": "Geography involves interactions between the environment and human decisions."
+      },
+      {
+        "id": "5sswr004",
+        "prompt": "Explain how climate or landforms might influence life in a region.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Climate and landforms can influence settlement, farming, transportation, work, and daily life."
+      }
+    ]
+  },
+  "6-social-studies-world-history-and-geography-global-interactions": {
+    "title": "Global Interactions for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6ssgi001",
+        "prompt": "What are global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Ways people, goods, ideas, and events connect across different parts of the world", "isCorrect": true },
+          { "text": "Only local events inside one neighborhood", "isCorrect": false },
+          { "text": "Only weather changes within one state", "isCorrect": false },
+          { "text": "A rule used only in one classroom", "isCorrect": false }
+        ],
+        "explanation": "Global interactions involve connections that cross regions and countries."
+      },
+      {
+        "id": "6ssgi002",
+        "prompt": "Which example best shows a global interaction?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A product is designed in one country, made in another, and sold around the world", "isCorrect": true },
+          { "text": "A student sharpens one pencil", "isCorrect": false },
+          { "text": "A city repaints one crosswalk", "isCorrect": false },
+          { "text": "A family changes dinner plans", "isCorrect": false }
+        ],
+        "explanation": "Global interactions often involve trade, communication, migration, or cultural exchange across borders."
+      },
+      {
+        "id": "6ssgi003",
+        "prompt": "Why does geography matter when studying global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Routes, distance, resources, and location affect how places connect", "isCorrect": true },
+          { "text": "Geography has no effect on trade or movement", "isCorrect": false },
+          { "text": "All places are equally connected in the same way", "isCorrect": false },
+          { "text": "Location only matters in ancient history", "isCorrect": false }
+        ],
+        "explanation": "Geography influences transportation, communication, and exchange across the world."
+      },
+      {
+        "id": "6ssgi004",
+        "prompt": "Explain one way global interactions can change communities.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Global interactions can change communities through trade, migration, new ideas, new technologies, or cultural exchange."
+      }
+    ]
+  },
+  "6-social-studies-world-history-and-geography-medieval-to-early-modern": {
+    "title": "Medieval to Early Modern for Grade 6",
+    "subject": "Social Studies",
+    "grade": 6,
+    "questions": [
+      {
+        "id": "6ssmm001",
+        "prompt": "What does medieval refer to in world history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "A historical period between ancient times and the early modern era", "isCorrect": true },
+          { "text": "The years after World War II", "isCorrect": false },
+          { "text": "The first farming villages in prehistory", "isCorrect": false },
+          { "text": "A type of modern government budget", "isCorrect": false }
+        ],
+        "explanation": "The medieval period is a broad era of world history that came after ancient civilizations."
+      },
+      {
+        "id": "6ssmm002",
+        "prompt": "Why do historians connect the medieval and early modern eras?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because changes in trade, belief systems, technology, and power linked the two periods", "isCorrect": true },
+          { "text": "Because nothing changed between them", "isCorrect": false },
+          { "text": "Because they only took place in one city", "isCorrect": false },
+          { "text": "Because geography disappeared as a factor", "isCorrect": false }
+        ],
+        "explanation": "The transition to the early modern era involved connected developments across societies."
+      },
+      {
+        "id": "6ssmm003",
+        "prompt": "Which question best fits a study of the medieval to early modern period?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "How did expanding trade and new ideas transform societies over time?", "isCorrect": true },
+          { "text": "How did one classroom schedule affect one school day?", "isCorrect": false },
+          { "text": "How did modern phones change communication?", "isCorrect": false },
+          { "text": "How did Reconstruction shape the United States?", "isCorrect": false }
+        ],
+        "explanation": "This period is often studied through broad changes in trade, culture, technology, and power."
+      },
+      {
+        "id": "6ssmm004",
+        "prompt": "Explain one major kind of change that took place from medieval to early modern times.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Possible changes include trade growth, political shifts, new technologies, cultural exchange, or changing belief systems."
+      }
+    ]
+  },
+  "7-social-studies-world-history-and-geography-global-interactions": {
+    "title": "Global Interactions for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7ssgi001",
+        "prompt": "Which idea best defines global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Connections among people and places through trade, migration, communication, and culture", "isCorrect": true },
+          { "text": "Only events inside one town", "isCorrect": false },
+          { "text": "Only physical geography with no human activity", "isCorrect": false },
+          { "text": "Only ancient farming methods", "isCorrect": false }
+        ],
+        "explanation": "Global interactions describe how places influence one another across regions and nations."
+      },
+      {
+        "id": "7ssgi002",
+        "prompt": "Why do historians and geographers study networks when analyzing global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because networks show how ideas, goods, people, and information move", "isCorrect": true },
+          { "text": "Because networks prove distance never matters", "isCorrect": false },
+          { "text": "Because networks remove the need for evidence", "isCorrect": false },
+          { "text": "Because networks only exist in one era", "isCorrect": false }
+        ],
+        "explanation": "Networks help explain patterns of connection across the world."
+      },
+      {
+        "id": "7ssgi003",
+        "prompt": "Which example best shows both benefits and challenges of global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Trade spreads useful goods and ideas but can also create competition or dependence", "isCorrect": true },
+          { "text": "Global connections always affect every place in exactly the same way", "isCorrect": false },
+          { "text": "Migration has no effect on culture", "isCorrect": false },
+          { "text": "Communication networks do not influence decisions", "isCorrect": false }
+        ],
+        "explanation": "Global interactions can create opportunities while also producing tensions or unequal effects."
+      },
+      {
+        "id": "7ssgi004",
+        "prompt": "Explain one way technology can increase global interaction.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Technology can speed communication, transportation, trade, and access to information across long distances."
+      }
+    ]
+  },
+  "7-social-studies-world-history-and-geography-medieval-to-early-modern": {
+    "title": "Medieval to Early Modern for Grade 7",
+    "subject": "Social Studies",
+    "grade": 7,
+    "questions": [
+      {
+        "id": "7ssmm001",
+        "prompt": "Which theme is central to studying the medieval to early modern era?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "How societies changed through trade, belief systems, politics, and technology", "isCorrect": true },
+          { "text": "How all regions stayed exactly the same", "isCorrect": false },
+          { "text": "How only one culture mattered", "isCorrect": false },
+          { "text": "How the United States developed after World War II", "isCorrect": false }
+        ],
+        "explanation": "The era is often studied through transformations in connected historical systems."
+      },
+      {
+        "id": "7ssmm002",
+        "prompt": "Why is chronology useful when studying medieval to early modern history?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "It helps show how earlier developments influenced later change", "isCorrect": true },
+          { "text": "It proves every event happened at once", "isCorrect": false },
+          { "text": "It makes sources unnecessary", "isCorrect": false },
+          { "text": "It removes the need to compare regions", "isCorrect": false }
+        ],
+        "explanation": "Chronology helps students understand sequence, cause, and effect."
+      },
+      {
+        "id": "7ssmm003",
+        "prompt": "Which example best fits this era of world history?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Expanding trade routes and new exchanges of ideas across regions", "isCorrect": true },
+          { "text": "The civil rights movement in the modern United States", "isCorrect": false },
+          { "text": "Ancient river valley settlement before writing", "isCorrect": false },
+          { "text": "A present-day school budget meeting", "isCorrect": false }
+        ],
+        "explanation": "Medieval and early modern history includes growing interregional connections and changing institutions."
+      },
+      {
+        "id": "7ssmm004",
+        "prompt": "Explain one reason this era is important for understanding later world history.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "This era helps explain how later political systems, global trade, and cultural exchanges developed."
+      }
+    ]
+  },
+  "8-social-studies-world-history-and-geography-global-interactions": {
+    "title": "Global Interactions for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8ssgi001",
+        "prompt": "Which statement best captures the idea of global interaction?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Events in one place can influence people, economies, and cultures far beyond that location", "isCorrect": true },
+          { "text": "Countries develop with no contact from others", "isCorrect": false },
+          { "text": "Only geography matters, not human action", "isCorrect": false },
+          { "text": "Connections between regions always produce the same outcome", "isCorrect": false }
+        ],
+        "explanation": "Global interaction emphasizes interdependence and influence across regions."
+      },
+      {
+        "id": "8ssgi002",
+        "prompt": "Why is it important to evaluate both positive and negative effects of global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because trade, migration, and communication can create opportunities while also producing conflict or inequality", "isCorrect": true },
+          { "text": "Because global interactions only cause harm", "isCorrect": false },
+          { "text": "Because global interactions only create benefits", "isCorrect": false },
+          { "text": "Because evidence does not matter when studying connections", "isCorrect": false }
+        ],
+        "explanation": "Global interactions often have mixed effects depending on perspective and context."
+      },
+      {
+        "id": "8ssgi003",
+        "prompt": "Which question would best guide a source-based study of global interactions?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "How did networks of exchange spread goods, ideas, and power across regions?", "isCorrect": true },
+          { "text": "How did one person avoid every connection with others?", "isCorrect": false },
+          { "text": "How did maps make history unnecessary?", "isCorrect": false },
+          { "text": "How did one cafeteria menu explain world history?", "isCorrect": false }
+        ],
+        "explanation": "A strong historical question focuses on evidence about networks and their effects."
+      },
+      {
+        "id": "8ssgi004",
+        "prompt": "Explain one way global interactions can shape identity or culture.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "Global interactions can introduce new foods, languages, beliefs, technologies, and cultural practices that influence communities."
+      }
+    ]
+  },
+  "8-social-studies-world-history-and-geography-medieval-to-early-modern": {
+    "title": "Medieval to Early Modern for Grade 8",
+    "subject": "Social Studies",
+    "grade": 8,
+    "questions": [
+      {
+        "id": "8ssmm001",
+        "prompt": "Why do historians often frame the medieval to early modern period as a transition?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Because important changes in power, trade, knowledge, and contact reshaped societies", "isCorrect": true },
+          { "text": "Because nothing significant changed at all", "isCorrect": false },
+          { "text": "Because only one region experienced history", "isCorrect": false },
+          { "text": "Because modern life already existed in the same form", "isCorrect": false }
+        ],
+        "explanation": "The period is seen as a transition because it connects older systems with new global developments."
+      },
+      {
+        "id": "8ssmm002",
+        "prompt": "Which analytical skill is most useful when studying this period?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "options": [
+          { "text": "Tracing change over time across multiple regions", "isCorrect": true },
+          { "text": "Ignoring source differences", "isCorrect": false },
+          { "text": "Assuming all societies changed for the same reason", "isCorrect": false },
+          { "text": "Looking only at one isolated event", "isCorrect": false }
+        ],
+        "explanation": "This era is best understood by tracking change and comparison across societies."
+      },
+      {
+        "id": "8ssmm003",
+        "prompt": "Why is interregional exchange important to understanding the early modern world?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "options": [
+          { "text": "Because growing contact spread goods, ideas, diseases, and power in transformative ways", "isCorrect": true },
+          { "text": "Because regions stopped affecting one another", "isCorrect": false },
+          { "text": "Because exchange only mattered in one kingdom", "isCorrect": false },
+          { "text": "Because geography no longer influenced events", "isCorrect": false }
+        ],
+        "explanation": "Interregional exchange is central because it helps explain large-scale historical change."
+      },
+      {
+        "id": "8ssmm004",
+        "prompt": "Explain one reason the medieval to early modern era is important for understanding the modern world.",
+        "type": "short_answer",
+        "difficulty": 2,
+        "options": [],
+        "explanation": "It helps explain how global trade, states, cultural exchange, and modern institutions developed over time."
+      }
+    ]
+  }
+}

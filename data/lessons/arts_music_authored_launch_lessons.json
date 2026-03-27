@@ -235,12 +235,12 @@
   },
   "6-electives-arts-and-music-music-theory-intro": {
     "title": "Building Blocks of Musical Sound: Introduction to Theory",
-    "summary": "Students discover how notes combine into chords and chords combine into progressions that create meaning. They learn basic harmonic function and begin analyzing music's structure.",
+    "summary": "Students use the C major scale to build simple triads and explain why some short chord progressions sound finished while others sound unfinished.",
     "objectives": [
-      "Understand how major and minor scales are constructed",
-      "Build and identify major and minor triads",
-      "Recognize primary chord functions (tonic, dominant, subdominant)",
-      "Analyze basic chord progressions and cadences"
+      "Use the C major scale to build simple triads",
+      "Identify tonic, subdominant, and dominant chords in C major",
+      "Explain why I-IV-V-I sounds more complete than stopping on V",
+      "Apply chord-function ideas to choose a settled ending for a short progression"
     ],
     "grade_band": "6",
     "subject": "Arts & Music",
@@ -250,20 +250,19 @@
       "MU.CN.11.1"
     ],
     "outline": {
-      "hook": "Play a chord progression (I-IV-V-I) and ask: 'Did that feel complete at the end? What if I stopped on the fifth chord?' Explain that chords have personalities and pull toward resolution, like tension and release.",
-      "direct_instruction": "Build a C major scale together: C-D-E-F-G-A-B-C (whole-half-whole-whole-whole-whole-half pattern). Show how every third note creates a chord: C-E-G (C major), D-F-A (D minor), etc. Teach that major chords sound happy; minor chords sound sad. Explain harmonic function: I (home), V (wants to go home), IV (reflective). Play examples of I-V-I cadence. Show how chord progressions create movement and emotion.",
-      "guided_practice": "Build chords together on instrument or keyboard. Identify major/minor by ear. Practice finding Roman numeral chords in a key. Analyze simple progressions in familiar songs.",
-      "independent_practice": "Complete theory worksheets building chords, identifying intervals, and analyzing progressions. Play or sing simple chord progressions. Compose a short 4-chord progression using primary chords.",
-      "check_for_understanding": "Ask students to build a triad. Have them explain major vs. minor. Can they identify which chord is the dominant?",
-      "exit_ticket": "Students play or sing a I-IV-V-I progression.",
+      "hook": "Play or display two short endings, C-F-G and C-F-G-C, and ask which one sounds more complete. Introduce the idea that chords have jobs that make a progression feel settled or unfinished.",
+      "direct_instruction": "Build the C major scale together, then show how taking every other note creates triads such as C-E-G, F-A-C, and G-B-D. Explain the jobs of tonic (home), subdominant (move away), and dominant (pull back home). Compare a progression that stops on G with one that returns to C so students can hear or visualize the difference in resolution.",
+      "guided_practice": "Students build C, F, and G triads with cards, keyboard notes, or labeled staff positions. As a class, identify which chord in a short progression sounds like home and which chord creates the strongest pull back.",
+      "independent_practice": "Students analyze or create a short four-chord pattern for a class announcement, choosing whether they want the ending to sound finished or unfinished. They label the progression with chord names or Roman numerals and explain their ending choice.",
+      "check_for_understanding": "Ask students to identify the tonic chord in C major, build a triad by taking every other note, and explain why a progression ending on G sounds less settled than one ending on C.",
+      "exit_ticket": "Students decide whether a short progression sounds finished or unfinished and name the chord that makes them think so.",
       "materials": [
         "Keyboard or piano",
-        "Staff paper",
-        "Theory worksheets",
-        "Chord chart",
-        "Songs with clear chord progressions",
-        "Chord building materials (blocks, cards)",
-        "Audio examples of cadences"
+        "Chord cards or note tiles",
+        "Staff paper or whiteboard staff",
+        "Chord chart for C, F, and G",
+        "Short audio or teacher-played examples of simple progressions",
+        "Student response sheet for progression analysis"
       ]
     }
   },

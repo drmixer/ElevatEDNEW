@@ -14,6 +14,7 @@ import {
   findLessonForModule,
   updateLessonAttributionBlocks,
 } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 export type FederalMappingValue =
   | string
@@ -114,6 +115,7 @@ const upsertAssets = async (supabase: SupabaseClient, assets: AssetInsert[]): Pr
 export const importFederalMapping = async (
   supabase: SupabaseClient,
   mapping: FederalMapping,
+  apply = false,
 ): Promise<number> => {
   const moduleKeys = Object.keys(mapping);
   if (moduleKeys.length === 0) {
@@ -240,6 +242,10 @@ export const importFederalMapping = async (
     return 0;
   }
 
+  if (!apply) {
+    return assets.length;
+  }
+
   await upsertAssets(supabase, assets);
   if (touchedLessons.size > 0) {
     const updates = new Map<number, string>();
@@ -262,8 +268,9 @@ export const importFederalMapping = async (
   return assets.length;
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const args = rest;
   let file = DEFAULT_MAPPING_FILE;
 
   for (let i = 0; i < args.length; i += 1) {
@@ -280,15 +287,20 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'federal public-domain assets');
   const mapping = (await loadStructuredFile<FederalMapping>(file)) ?? {};
   const supabase = createServiceRoleClient();
-  const inserted = await importFederalMapping(supabase, mapping);
-  console.log(`Upserted ${inserted} federal public-domain assets from ${file}`);
+  const inserted = await importFederalMapping(supabase, mapping, apply);
+  console.log(
+    apply
+      ? `Upserted ${inserted} federal public-domain assets from ${file}`
+      : `Would upsert ${inserted} federal public-domain assets from ${file}`,
+  );
 };
 
 const invokedFromCli =

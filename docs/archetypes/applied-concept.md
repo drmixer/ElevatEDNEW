@@ -3,10 +3,11 @@
 Purpose: define the authoritative archetype spec for specials and applied-domain lessons that teach a concrete concept, skill, or practice through a short explanation, a model or demonstration, and guided application.
 
 Status:
-- `Future`
+- `Approved exemplar exists`
 
 Primary exemplar:
-- none yet
+- lesson `648`
+- [lesson-648-applied-concept-2026-03-25.md](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-648-applied-concept-2026-03-25.md)
 
 Related docs:
 - [lesson-archetypes.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-archetypes.md)
@@ -358,13 +359,13 @@ A lesson using this archetype is ready to be called gold when:
 ## 12. Current Exemplar Notes
 
 Current exemplar:
-- none yet
+- lesson `648`, `Intro: Music Theory (intro)`
 
 Current reality:
-- no specials/applied-concept guide lesson has been approved yet as the canonical exemplar
-- this spec should still guide arts, music, health, PE, CS, and similar rewrites before exemplar selection
+- lesson `648` is now the approved guide exemplar for this archetype
+- this spec should still guide arts, music, health, PE, CS, and similar rewrites around the same concrete-skill pattern
 
-The first approved exemplar should prove:
+This approved exemplar shows the pattern that future lessons should copy:
 - the lesson centers a real skill, technique, or routine
 - examples and visuals do actual instructional work
 - the student can transfer the move to a bounded application

@@ -13,6 +13,7 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 const supabase = createServiceRoleClient();
 
@@ -441,16 +442,14 @@ function insertImageIntoContent(content: string, imageUrl: string, altText: stri
 }
 
 async function main() {
-    const args = process.argv.slice(2);
-    const dryRun = args.includes('--dry-run');
-    const commit = args.includes('--commit');
-
-    if (!dryRun && !commit) {
-        console.log('Usage:');
-        console.log('  npx tsx scripts/add_lesson_visuals.ts --dry-run');
-        console.log('  npx tsx scripts/add_lesson_visuals.ts --commit');
-        return;
+    const { apply, rest } = extractWriteMode(process.argv.slice(2));
+    const commit = apply || rest.includes('--commit');
+    const dryRun = !commit;
+    const unknownArgs = rest.filter(arg => arg !== '--commit');
+    if (unknownArgs.length > 0) {
+        throw new Error(`Unknown argument: ${unknownArgs[0]}`);
     }
+    logWriteMode(commit, 'lesson visuals');
 
     console.log(`=== ADD VISUAL RESOURCES TO LESSONS ===`);
     console.log(`Mode: ${dryRun ? 'DRY RUN (no changes)' : 'COMMIT'}\n`);

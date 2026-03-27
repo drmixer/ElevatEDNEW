@@ -999,12 +999,12 @@
   },
   "7-english-language-arts-reading-informational-science-tech-articles-open-licensed": {
     "title": "Science/Tech Articles (open-licensed)",
-    "summary": "Learn to read and understand informational articles. Discover how authors present facts, explain concepts, and help readers learn about the world.",
+    "summary": "Read a science article closely, identify its central idea, choose the strongest supporting evidence, and evaluate whether the source sounds credible.",
     "objectives": [
-      "Identify main ideas and supporting details in articles",
-      "Distinguish between facts and opinions",
-      "Understand how articles are organized",
-      "Evaluate the credibility of sources"
+      "Identify the central idea of an informational article",
+      "Choose details that best support the article's main claim",
+      "Explain why a source seems credible using evidence from the text",
+      "Use a claim-evidence-explanation response frame"
     ],
     "grade_band": "Grade 7",
     "subject": "English Language Arts",
@@ -1013,17 +1013,17 @@
       "CCSS.ELA-LITERACY.RI.7.5"
     ],
     "outline": {
-      "hook": "Bring in an interesting article about a topic students care about (animals, space, sports, technology). Read the headline and ask: 'What do you think this article is about? What will you learn?'",
-      "direct_instruction": "Explain that nonfiction articles present facts about real topics. Show how articles have headlines, introductions, body paragraphs with details, and conclusions. Point out signal words (because, however, as a result) that help readers understand relationships.",
-      "guided_practice": "Read an article together. Highlight the main idea in one paragraph. Identify 2-3 supporting details. Discuss: Is this information fact or opinion? How can we verify it?",
-      "independent_practice": "Students read a new article. They identify the main idea and list supporting details. They circle one fact they learned and one question they still have.",
-      "check_for_understanding": "Ask: 'What is the main point?' 'How do you know this information is trustworthy?' Have students explain their reasoning.",
-      "exit_ticket": "Students write the main idea of the article in one sentence and name one source they could check to verify the information.",
+      "hook": "Introduce a short article about a school testing a reflective roof coating to keep classrooms cooler. Ask students what evidence would convince them the idea actually worked.",
+      "direct_instruction": "Model the difference between topic and central idea. Show how to read for specific evidence, notice source-credibility clues, and separate measured results from broad conclusions.",
+      "guided_practice": "Read the article excerpt together. Track the problem, the measured results, and the expert caution. Identify which detail best supports the central idea and why.",
+      "independent_practice": "Students answer text-dependent questions about the article, using a claim-evidence-explanation frame to justify their answers.",
+      "check_for_understanding": "Ask students to explain which detail is the strongest evidence, which sentence sounds most credible, and why a broad claim would be too strong for the article.",
+      "exit_ticket": "Students write one sentence stating the central idea and one sentence citing a detail that best supports it.",
       "materials": [
-        "Age-appropriate informational articles",
-        "Main idea and detail organizer",
-        "Fact/opinion chart",
-        "Credibility checklist"
+        "Short informational article excerpt",
+        "Central idea and evidence tracker",
+        "Credibility checklist",
+        "Claim-evidence-explanation sentence frame"
       ]
     }
   },

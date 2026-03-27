@@ -13,7 +13,7 @@ import {
   type CheckpointTelemetryEvent,
   type TelemetryMode,
 } from '../src/lib/evaluationHarness.js';
-import { createServiceRoleClient, fetchAllPaginated } from './utils/supabase.js';
+import { createServiceRoleClient } from './utils/supabase.js';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const RETENTION_HORIZON_DAYS = 7;
@@ -375,18 +375,24 @@ const main = async (): Promise<void> => {
 
   const genericSummary = computeGenericContentSummary(questionSampleRows);
 
-  const coverageRows = await fetchAllPaginated<CoverageRollupRow>(
-    (from, to) =>
-      supabase
+  const coverageRows: CoverageRollupRow[] = [];
+  for (const grade of TARGET_GRADES) {
+    for (const subject of TARGET_SUBJECTS) {
+      const { data, error } = await supabase
         .from('coverage_dashboard_rollup')
         .select('grade_band, subject, modules, modules_needing_attention')
-        .in('grade_band', TARGET_GRADES)
-        .in('subject', TARGET_SUBJECTS)
+        .eq('grade_band', grade)
+        .eq('subject', subject)
         .order('grade_band', { ascending: true })
-        .order('subject', { ascending: true })
-        .range(from, to),
-    { logLabel: 'coverage_dashboard_rollup' },
-  );
+        .order('subject', { ascending: true });
+
+      if (error) {
+        throw new Error(`Failed to load coverage rollup for grade ${grade} ${subject}: ${error.message}`);
+      }
+
+      coverageRows.push(...((data ?? []) as CoverageRollupRow[]));
+    }
+  }
 
   const totalModules = coverageRows.reduce((sum, row) => sum + (row.modules ?? 0), 0);
   const fullyCoveredModules = coverageRows.reduce(

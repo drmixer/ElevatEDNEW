@@ -15,6 +15,7 @@ Related docs:
 
 Primary implementation references:
 - [seed_lesson_metadata.ts](/Users/drmixer/code/ElevatEDNEW/scripts/seed_lesson_metadata.ts)
+- [resolve_duplicate_public_lessons.ts](/Users/drmixer/code/ElevatEDNEW/scripts/resolve_duplicate_public_lessons.ts)
 - [improve_lesson_content.ts](/Users/drmixer/code/ElevatEDNEW/scripts/improve_lesson_content.ts)
 - [cleanup_content_issues.ts](/Users/drmixer/code/ElevatEDNEW/scripts/cleanup_content_issues.ts)
 - [final_content_cleanup.ts](/Users/drmixer/code/ElevatEDNEW/scripts/final_content_cleanup.ts)
@@ -86,6 +87,22 @@ Future target:
 ## 4. Step 2: Choose The Rewrite Lane
 
 Not every lesson needs the same level of rewrite.
+
+### Lane 0. Canonical Resolution
+
+Use when a module has competing public lessons and the rewrite target is not yet stable.
+
+Current script examples:
+- [resolve_duplicate_public_lessons.ts](/Users/drmixer/code/ElevatEDNEW/scripts/resolve_duplicate_public_lessons.ts)
+
+Typical problems:
+- multiple public lessons in the same module
+- stale generated siblings still competing with authored or curated rows
+- temporary `intro-*` scaffolds still public after a stronger source-of-truth lesson exists
+
+Operational rule:
+- fallback seeders such as `seed_lessons`, `seed_launch_lessons_all`, `generate_missing_lessons`, and `seed_intro_lessons_missing` should only create public lessons when the module does not already have a public lesson
+- these seeders should default to dry-run and require `--apply` for live writes; package-level `seed:*` aliases may pass `--apply` explicitly when write behavior is intended
 
 ### Lane A. Deterministic Cleanup
 

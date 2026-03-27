@@ -1,6 +1,7 @@
 import process from 'node:process';
 
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type ModuleRow = {
   id: number;
@@ -261,7 +262,8 @@ const upsertModuleStandards = async (
   }
 };
 
-const seedModuleStandards = async (): Promise<void> => {
+const seedModuleStandards = async (apply: boolean): Promise<void> => {
+  logWriteMode(apply, 'auto module-standard links');
   const supabase = createServiceRoleClient();
   const [modules, standardsMap] = await Promise.all([fetchModules(supabase), fetchStandards(supabase)]);
 
@@ -279,11 +281,13 @@ const seedModuleStandards = async (): Promise<void> => {
       continue;
     }
 
-    await upsertModuleStandards(supabase, module, ids);
+    if (apply) {
+      await upsertModuleStandards(supabase, module, ids);
+    }
     linked += ids.length;
   }
 
-  console.log(`Linked ${linked} module-standard pairs.`);
+  console.log(apply ? `Linked ${linked} module-standard pairs.` : `Would link ${linked} module-standard pairs.`);
   if (missing.length > 0) {
     console.warn(`Modules without resolvable standards (${missing.length}):`);
     missing.slice(0, 10).forEach((slug) => console.warn(`- ${slug}`));
@@ -296,8 +300,14 @@ const invokedFromCli =
   process.argv[1]?.includes('seed_module_standards_auto.js');
 
 if (invokedFromCli) {
-  seedModuleStandards().catch((error: unknown) => {
-    console.error(error);
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  if (rest.length > 0) {
+    console.error(new Error(`Unknown argument: ${rest[0]}`));
     process.exitCode = 1;
-  });
+  } else {
+    seedModuleStandards(apply).catch((error: unknown) => {
+      console.error(error);
+      process.exitCode = 1;
+    });
+  }
 }

@@ -1,0 +1,19 @@
+{
+  "6-study-skills-executive-functioning-plan-your-week-in-10-minutes": {
+    "framework": "Study Skills",
+    "standards": [
+      {
+        "framework": "Study Skills",
+        "code": "SS.EF.6.1"
+      },
+      {
+        "framework": "Study Skills",
+        "code": "SS.EF.6.2"
+      },
+      {
+        "framework": "Study Skills",
+        "code": "SS.EF.6.3"
+      }
+    ]
+  }
+}

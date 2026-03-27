@@ -1,5 +1,5 @@
 /**
- * Supabase Edge Function: Multi-turn K–12 AI tutoring via OpenRouter Mixtral.
+ * Supabase Edge Function: Multi-turn K–12 AI tutoring via OpenRouter with Gemini 2.5 Flash as the default model.
  * Maintains per-student conversation history in-memory for the lifetime of the function instance.
  */
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
@@ -28,8 +28,8 @@ type TutoringResponse = {
 };
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-// OpenRouter model: Mistral 7B Instruct (free tier)
-const MODEL = 'mistralai/mistral-7b-instruct:free';
+// Standard default model across tutor flows.
+const MODEL = Deno.env.get('OPENROUTER_MODEL') ?? 'google/gemini-2.5-flash';
 const REQUEST_TIMEOUT_MS = 20000;
 
 const SYSTEM_PROMPT = [

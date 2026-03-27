@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import composeAttribution from './utils/attribution.js';
 import { assertLicenseAllowed } from './utils/license.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { loadPublicLessonsByModuleIds, summarizePublicLessons } from './utils/lessonSeeding.js';
 
 type ModuleRow = {
   id: number;
@@ -545,6 +546,25 @@ const prepareAssets = (
   };
 };
 
+const parseArgs = (): { apply: boolean } => {
+  const args = process.argv.slice(2);
+  let apply = false;
+
+  for (const arg of args) {
+    if (arg === '--apply') {
+      apply = true;
+      continue;
+    }
+    if (arg === '--dry-run') {
+      apply = false;
+      continue;
+    }
+    throw new Error(`Unknown argument: ${arg}`);
+  }
+
+  return { apply };
+};
+
 const upsertLesson = async (
   supabase: SupabaseClient,
   module: ModuleRow,
@@ -612,8 +632,10 @@ const upsertAssets = async (supabase: SupabaseClient, assets: SeedAsset[]): Prom
 };
 
 const seedLessons = async (): Promise<void> => {
+  const { apply } = parseArgs();
   const supabase = createServiceRoleClient();
   const subjectCache = new Map<string, number>();
+  console.log(apply ? 'APPLY MODE: lesson rows will be written.' : 'DRY RUN MODE: no lesson rows will be written.');
 
   const { data: modules, error: modulesError } = await supabase
     .from('modules')
@@ -634,10 +656,31 @@ const seedLessons = async (): Promise<void> => {
     return;
   }
 
-  const contentSources = await ensureContentSources(supabase, CONTENT_SOURCE_DEFINITIONS);
+  const publicLessonsByModule = await loadPublicLessonsByModuleIds(
+    supabase,
+    selectedModules.map((module) => module.id),
+  );
+
+  const contentSources = apply ? await ensureContentSources(supabase, CONTENT_SOURCE_DEFINITIONS) : new Map();
   let seededCount = 0;
+  let skippedCount = 0;
 
   for (const module of selectedModules) {
+    const existingPublicLessons = publicLessonsByModule.get(module.id) ?? [];
+    if (existingPublicLessons.length > 0) {
+      console.log(
+        `Skipped ${module.slug} because public lesson(s) already exist: ${summarizePublicLessons(existingPublicLessons)}`,
+      );
+      skippedCount += 1;
+      continue;
+    }
+
+    if (!apply) {
+      console.log(`Would seed ${module.slug}`);
+      seededCount += 1;
+      continue;
+    }
+
     const metadata = normalizeMetadata(module.metadata);
     const subjectId = await ensureSubjectId(supabase, subjectCache, module.subject);
     const topicId = await ensureTopicId(supabase, subjectId, module, metadata);
@@ -658,6 +701,10 @@ const seedLessons = async (): Promise<void> => {
   }
 
   console.log(`Seeded ${seededCount} representative lessons across ${selectedModules.length} subject-grade combinations.`);
+  console.log(`Skipped ${skippedCount} modules because a public lesson already exists.`);
+  if (!apply) {
+    console.log('Dry run only. Re-run with --apply to write changes.');
+  }
 };
 
 const invokedFromCli =

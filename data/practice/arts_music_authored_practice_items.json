@@ -2199,7 +2199,7 @@
   ],
   "6-electives-arts-and-music-music-theory-intro": [
     {
-      "prompt": "What are the three notes in a C major triad?",
+      "prompt": "Which three notes make a C major triad?",
       "type": "multiple_choice",
       "difficulty": 1,
       "standards": [
@@ -2225,7 +2225,7 @@
       ]
     },
     {
-      "prompt": "What interval is created between C and G?",
+      "prompt": "When building a triad from a scale, what pattern do you use?",
       "type": "multiple_choice",
       "difficulty": 1,
       "standards": [
@@ -2233,25 +2233,25 @@
       ],
       "options": [
         {
-          "text": "A perfect fifth",
+          "text": "Take every other note",
           "isCorrect": true
         },
         {
-          "text": "A major third",
+          "text": "Take every note in order",
           "isCorrect": false
         },
         {
-          "text": "A perfect fourth",
+          "text": "Repeat the same note three times",
           "isCorrect": false
         },
         {
-          "text": "An octave",
+          "text": "Choose only the highest notes",
           "isCorrect": false
         }
       ]
     },
     {
-      "prompt": "In a major scale, how many whole steps occur between the root and the octave?",
+      "prompt": "In the key of C major, which chord acts like the tonic or home chord?",
       "type": "multiple_choice",
       "difficulty": 1,
       "standards": [
@@ -2259,181 +2259,25 @@
       ],
       "options": [
         {
-          "text": "Six whole steps (plus one half step)",
+          "text": "C major",
           "isCorrect": true
         },
         {
-          "text": "Eight whole steps",
+          "text": "F major",
           "isCorrect": false
         },
         {
-          "text": "Four whole steps",
+          "text": "G major",
           "isCorrect": false
         },
-        {
-          "text": "No steps",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "prompt": "What chord symbol represents a major triad built on the tonic?",
-      "type": "multiple_choice",
-      "difficulty": 1,
-      "standards": [
-        "MU.CR.2.1"
-      ],
-      "options": [
-        {
-          "text": "I (Roman numeral)",
-          "isCorrect": true
-        },
-        {
-          "text": "V",
-          "isCorrect": false
-        },
-        {
-          "text": "IV",
-          "isCorrect": false
-        },
-        {
-          "text": "vi",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "prompt": "How does a minor triad differ from a major triad?",
-      "type": "multiple_choice",
-      "difficulty": 2,
-      "standards": [
-        "MU.RE.8.1"
-      ],
-      "options": [
-        {
-          "text": "The third is flatted (lowered by a half step)",
-          "isCorrect": true
-        },
-        {
-          "text": "The fifth is changed",
-          "isCorrect": false
-        },
-        {
-          "text": "Minor chords have no third",
-          "isCorrect": false
-        },
-        {
-          "text": "There is no difference",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "prompt": "Which chord progression creates a strong sense of resolution?",
-      "type": "multiple_choice",
-      "difficulty": 2,
-      "standards": [
-        "MU.CN.11.1"
-      ],
-      "options": [
-        {
-          "text": "V to I (dominant to tonic)",
-          "isCorrect": true
-        },
-        {
-          "text": "I to IV",
-          "isCorrect": false
-        },
-        {
-          "text": "vi to iii",
-          "isCorrect": false
-        },
-        {
-          "text": "ii to V",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "prompt": "What is the Roman numeral for the dominant chord in a major key?",
-      "type": "multiple_choice",
-      "difficulty": 1,
-      "standards": [
-        "MU.CR.2.1"
-      ],
-      "options": [
-        {
-          "text": "V",
-          "isCorrect": true
-        },
-        {
-          "text": "IV",
-          "isCorrect": false
-        },
-        {
-          "text": "vi",
-          "isCorrect": false
-        },
-        {
-          "text": "ii",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "prompt": "How many half steps are in a perfect fifth?",
-      "type": "multiple_choice",
-      "difficulty": 2,
-      "standards": [
-        "MU.RE.8.1"
-      ],
-      "options": [
-        {
-          "text": "Seven half steps",
-          "isCorrect": true
-        },
-        {
-          "text": "Five half steps",
-          "isCorrect": false
-        },
-        {
-          "text": "Four half steps",
-          "isCorrect": false
-        },
-        {
-          "text": "Twelve half steps",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "prompt": "What is the relative minor key to C major?",
-      "type": "multiple_choice",
-      "difficulty": 2,
-      "standards": [
-        "MU.CN.11.1"
-      ],
-      "options": [
         {
           "text": "A minor",
-          "isCorrect": true
-        },
-        {
-          "text": "D minor",
-          "isCorrect": false
-        },
-        {
-          "text": "E minor",
-          "isCorrect": false
-        },
-        {
-          "text": "G minor",
           "isCorrect": false
         }
       ]
     },
     {
-      "prompt": "In what order do the notes of a C major scale appear?",
+      "prompt": "Which chord in C major usually creates the strongest pull back toward home?",
       "type": "multiple_choice",
       "difficulty": 1,
       "standards": [
@@ -2441,25 +2285,25 @@
       ],
       "options": [
         {
-          "text": "C, D, E, F, G, A, B, C",
+          "text": "G major",
           "isCorrect": true
         },
         {
-          "text": "C, D, E, F, G, A, B-flat, C",
+          "text": "C major",
           "isCorrect": false
         },
         {
-          "text": "C, C#, D, D#, E, F, F#, G",
+          "text": "IV",
           "isCorrect": false
         },
         {
-          "text": "A, B, C, D, E, F, G, A",
+          "text": "A minor",
           "isCorrect": false
         }
       ]
     },
     {
-      "prompt": "What does it mean when two voices move in parallel fifths?",
+      "prompt": "Which progression from the lesson sounds the most finished?",
       "type": "multiple_choice",
       "difficulty": 2,
       "standards": [
@@ -2467,25 +2311,25 @@
       ],
       "options": [
         {
-          "text": "They move at the same time in the same interval relationship",
+          "text": "C-F-G-C",
           "isCorrect": true
         },
         {
-          "text": "They move in opposite directions",
+          "text": "C-F-G",
           "isCorrect": false
         },
         {
-          "text": "One voice is silent",
+          "text": "F-G",
           "isCorrect": false
         },
         {
-          "text": "They sing the same note",
+          "text": "G-F-C",
           "isCorrect": false
         }
       ]
     },
     {
-      "prompt": "How are chord inversions labeled in harmonic analysis?",
+      "prompt": "Why does a progression that ends on G major often sound unfinished in the key of C?",
       "type": "multiple_choice",
       "difficulty": 2,
       "standards": [
@@ -2493,19 +2337,175 @@
       ],
       "options": [
         {
-          "text": "Root position, first inversion (6), second inversion (6/4)",
+          "text": "G major is the dominant and usually points back to C major",
           "isCorrect": true
         },
         {
-          "text": "Only root position matters",
+          "text": "G major can only be used in minor songs",
           "isCorrect": false
         },
         {
-          "text": "They have no labels",
+          "text": "G major is always louder than other chords",
           "isCorrect": false
         },
         {
-          "text": "Using the lowest note letter only",
+          "text": "G major contains only two notes",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which three notes make an F major triad?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "F, A, C",
+          "isCorrect": true
+        },
+        {
+          "text": "F, G, A",
+          "isCorrect": false
+        },
+        {
+          "text": "F, B, D",
+          "isCorrect": false
+        },
+        {
+          "text": "E, G, B",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "If the middle note of a major triad is lowered by a half step, what kind of chord do you get?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "A minor triad",
+          "isCorrect": true
+        },
+        {
+          "text": "A rhythm pattern",
+          "isCorrect": false
+        },
+        {
+          "text": "A scale with eight notes",
+          "isCorrect": false
+        },
+        {
+          "text": "A dominant seventh chord",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which chord in C major best fits the subdominant job?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.1"
+      ],
+      "options": [
+        {
+          "text": "F major",
+          "isCorrect": true
+        },
+        {
+          "text": "C major",
+          "isCorrect": false
+        },
+        {
+          "text": "G major",
+          "isCorrect": false
+        },
+        {
+          "text": "B diminished",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "A student wants a short announcement jingle to sound calm and complete at the end. Which last chord is the best choice after C-F-G?",
+      "type": "multiple_choice",
+      "difficulty": 1,
+      "standards": [
+        "MU.CR.2.1"
+      ],
+      "options": [
+        {
+          "text": "C major",
+          "isCorrect": true
+        },
+        {
+          "text": "G major",
+          "isCorrect": false
+        },
+        {
+          "text": "F major",
+          "isCorrect": false
+        },
+        {
+          "text": "Any chord will sound equally settled",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which Roman numeral pattern matches the chord sequence C-F-G-C?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.RE.8.1"
+      ],
+      "options": [
+        {
+          "text": "I-IV-V-I",
+          "isCorrect": true
+        },
+        {
+          "text": "V-I-IV-I",
+          "isCorrect": false
+        },
+        {
+          "text": "I-V-IV-V",
+          "isCorrect": false
+        },
+        {
+          "text": "IV-I-V-I",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "prompt": "What is a progression in music theory?",
+      "type": "multiple_choice",
+      "difficulty": 2,
+      "standards": [
+        "MU.CN.11.1"
+      ],
+      "options": [
+        {
+          "text": "A sequence of chords played in order",
+          "isCorrect": true
+        },
+        {
+          "text": "A single note repeated with no change",
+          "isCorrect": false
+        },
+        {
+          "text": "A way to count rests only",
+          "isCorrect": false
+        },
+        {
+          "text": "A type of instrument",
           "isCorrect": false
         }
       ]

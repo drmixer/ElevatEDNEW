@@ -3,10 +3,11 @@
 Purpose: define the authoritative archetype spec for study-skills lessons that teach students a repeatable routine for planning, monitoring, checking, or reflecting on their work.
 
 Status:
-- `Candidate`
+- `Approved exemplar exists`
 
 Primary exemplar:
-- none yet
+- lesson `4901`, `Plan Your Week in 10 Minutes` (approved on `2026-03-25`)
+- [lesson-4901-study-skills-2026-03-25.md](/Users/drmixer/code/ElevatEDNEW/docs/exemplar-reviews/lesson-4901-study-skills-2026-03-25.md)
 
 Related docs:
 - [lesson-archetypes.md](/Users/drmixer/code/ElevatEDNEW/docs/lesson-archetypes.md)
@@ -339,13 +340,13 @@ A lesson using this archetype is ready to be called gold when:
 ## 12. Current Exemplar Notes
 
 Current exemplar:
-- none yet
+- lesson `4901`, `Plan Your Week in 10 Minutes`
 
 Current reality:
-- no study-skills guide lesson has been approved yet as the canonical routine exemplar
-- this spec should still guide study-skills and metacognitive rewrites before exemplar selection
+- lesson `4901` is now the approved guide exemplar for this archetype
+- this spec should still govern future study-skills and metacognitive rewrites
 
-The first approved exemplar should prove:
+This approved exemplar shows:
 - the routine is simple enough to use in the player
 - the steps are concrete, not motivational filler
 - the lesson makes the student choose the next action

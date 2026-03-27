@@ -7,6 +7,7 @@ import { parse } from 'csv-parse/sync';
 
 import { loadStructuredFile } from './utils/files.js';
 import { createServiceRoleClient } from './utils/supabase.js';
+import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 
 type StandardInput = {
   framework: string;
@@ -141,8 +142,9 @@ const upsertStandards = async (supabase: SupabaseClient, standards: StandardUpse
   return inserted;
 };
 
-const parseArgs = (): { file: string } => {
-  const args = process.argv.slice(2);
+const parseArgs = (): { apply: boolean; file: string } => {
+  const { apply, rest } = extractWriteMode(process.argv.slice(2));
+  const args = rest;
   let file = DEFAULT_FILE;
 
   for (let i = 0; i < args.length; i += 1) {
@@ -159,11 +161,12 @@ const parseArgs = (): { file: string } => {
     }
   }
 
-  return { file };
+  return { apply, file };
 };
 
 const main = async () => {
-  const { file } = parseArgs();
+  const { apply, file } = parseArgs();
+  logWriteMode(apply, 'standards');
   const inputs = await loadStandardsFile(file);
   if (inputs.length === 0) {
     console.log(`No standards found in ${file}`);
@@ -171,6 +174,10 @@ const main = async () => {
   }
 
   const normalized = inputs.map(normalizeStandard);
+  if (!apply) {
+    console.log(`Would upsert ${normalized.length} standards from ${file}`);
+    return;
+  }
   const supabase = createServiceRoleClient();
   const inserted = await upsertStandards(supabase, normalized);
 
