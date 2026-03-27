@@ -19,6 +19,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchParentDashboardData } from '../../services/dashboardService';
 import { updateLearningPreferences } from '../../services/profileService';
+import { fetchParentOverview, type ParentOverview } from '../../services/statsService';
 import { formatSubjectLabel } from '../../lib/subjects';
 import type { Parent, ParentChildSnapshot, LearningPreferences, Subject } from '../../types';
 import SubjectStatusCards from './SubjectStatusCards';
@@ -91,9 +92,10 @@ const Header: React.FC<HeaderProps> = ({ parentName, hasNotifications }) => {
 
 interface ChildCardProps {
     child: ParentChildSnapshot;
+    subjectPlacements?: ParentOverview['children'][number]['subject_placements'];
 }
 
-const ChildCard: React.FC<ChildCardProps> = ({ child }) => {
+const ChildCard: React.FC<ChildCardProps> = ({ child, subjectPlacements = [] }) => {
     // Calculate average mastery across all subjects
     const avgMastery = useMemo(() => {
         if (!child.masteryBySubject?.length) return null;
@@ -191,6 +193,29 @@ const ChildCard: React.FC<ChildCardProps> = ({ child }) => {
                     </span>
                 )}
             </div>
+
+            {subjectPlacements.length > 0 && (
+                <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-2">
+                        Placement
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {subjectPlacements
+                            .filter((placement) => placement.working_level != null)
+                            .slice(0, 2)
+                            .map((placement) => (
+                                <span
+                                    key={`${child.id}-${placement.subject}`}
+                                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-700"
+                                >
+                                    <span className="font-semibold">{formatSubjectLabel(placement.subject)}</span>
+                                    <span>L{placement.working_level}</span>
+                                    <span className="text-slate-500">from {placement.expected_level}</span>
+                                </span>
+                            ))}
+                    </div>
+                </div>
+            )}
         </motion.div>
     );
 };
@@ -417,6 +442,13 @@ const ParentDashboardSimplified: React.FC = () => {
         staleTime: 1000 * 60 * 5,
     });
 
+    const { data: overview } = useQuery({
+        queryKey: ['parent-overview', parent?.id],
+        queryFn: () => fetchParentOverview(),
+        enabled: Boolean(parent),
+        staleTime: 1000 * 60 * 2,
+    });
+
     // Count actionable alerts
     const alertCount = useMemo(() => {
         if (!dashboard?.alerts) return 0;
@@ -460,6 +492,10 @@ const ParentDashboardSimplified: React.FC = () => {
         setShowOnboarding(false);
     }, [parent?.id]);
 
+    const overviewByChildId = useMemo(
+        () => new Map((overview?.children ?? []).map((child) => [child.id, child])),
+        [overview?.children],
+    );
     // Loading state
     if (isLoading && !dashboard) {
         return (
@@ -537,7 +573,10 @@ const ParentDashboardSimplified: React.FC = () => {
                                         className={`cursor-pointer transition-all ${selectedChildId === child.id ? 'md:col-span-2' : ''
                                             }`}
                                     >
-                                        <ChildCard child={child} />
+                                        <ChildCard
+                                            child={child}
+                                            subjectPlacements={overviewByChildId.get(child.id)?.subject_placements ?? []}
+                                        />
                                     </div>
                                 ))}
                         </div>
