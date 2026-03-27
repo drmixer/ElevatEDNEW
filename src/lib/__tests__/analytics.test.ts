@@ -1,39 +1,28 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const authenticatedFetchMock = vi.fn();
+const fetchMock = vi.fn();
+const getAccessTokenIfPresentMock = vi.fn();
 const handleApiResponseMock = vi.fn();
-const getSessionMock = vi.fn();
 
 vi.mock('../apiClient', () => ({
-  authenticatedFetch: authenticatedFetchMock,
+  getAccessTokenIfPresent: getAccessTokenIfPresentMock,
   handleApiResponse: handleApiResponseMock,
-}));
-
-vi.mock('../supabaseClient', () => ({
-  default: {
-    auth: {
-      getSession: getSessionMock,
-    },
-  },
-  supabase: {
-    auth: {
-      getSession: getSessionMock,
-    },
-  },
 }));
 
 describe('analytics', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.useFakeTimers();
-    authenticatedFetchMock.mockReset();
+    vi.stubGlobal('fetch', fetchMock);
+    fetchMock.mockReset();
+    getAccessTokenIfPresentMock.mockReset();
     handleApiResponseMock.mockReset();
-    getSessionMock.mockReset();
   });
 
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
@@ -44,7 +33,8 @@ describe('analytics', () => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    authenticatedFetchMock
+    getAccessTokenIfPresentMock.mockResolvedValue('token-123');
+    fetchMock
       .mockResolvedValueOnce(errorResponse)
       .mockResolvedValueOnce(okResponse);
     handleApiResponseMock.mockRejectedValueOnce(new Error('server error')).mockResolvedValueOnce({
@@ -57,19 +47,24 @@ describe('analytics', () => {
     trackEvent('success_checkpoint_tested', { lessonId: 42 });
 
     await vi.advanceTimersByTimeAsync(2000);
-    expect(authenticatedFetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
 
     await vi.advanceTimersByTimeAsync(2000);
-    expect(authenticatedFetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
 
-    const firstBody = JSON.parse(String(authenticatedFetchMock.mock.calls[0]?.[1]?.body));
-    const secondBody = JSON.parse(String(authenticatedFetchMock.mock.calls[1]?.[1]?.body));
+    const firstBody = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+    const secondBody = JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body));
 
     expect(firstBody).toEqual(secondBody);
     expect(firstBody.events).toHaveLength(1);
-    expect(authenticatedFetchMock.mock.calls[0]?.[1]).toMatchObject({
+    expect(fetchMock.mock.calls[0]?.[0]).toBe('/api/v1/analytics/event');
+    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
       method: 'POST',
       keepalive: true,
+      headers: {
+        Authorization: 'Bearer token-123',
+        'Content-Type': 'application/json',
+      },
     });
   });
 
@@ -79,6 +74,7 @@ describe('analytics', () => {
     trackEvent('lesson_opened', { lessonId: 7 });
     await vi.advanceTimersByTimeAsync(2500);
 
-    expect(authenticatedFetchMock).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(getAccessTokenIfPresentMock).not.toHaveBeenCalled();
   });
 });
