@@ -1,6 +1,6 @@
 import React, { Suspense, useState, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { EntitlementsProvider } from './contexts/EntitlementsContext';
 import LandingPage from './components/Landing/LandingPage';
@@ -13,6 +13,7 @@ import type { UserRole } from './types';
 
 const StudentDashboard = lazy(() => import('./components/Student/StudentDashboard'));
 const StudentDashboardSimplified = lazy(() => import('./components/Student/StudentDashboardSimplified'));
+const OnboardingFlow = lazy(() => import('./components/Student/OnboardingFlow'));
 const ParentDashboard = lazy(() => import('./components/Parent/ParentDashboard'));
 const ParentDashboardSimplified = lazy(() => import('./components/Parent/ParentDashboardSimplified'));
 const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard'));
@@ -66,6 +67,12 @@ const ProtectedRoute: React.FC<{ children: React.ReactElement; allowedRoles: Use
   }
 
   return children;
+};
+
+const StudentOnboardingRoute: React.FC = () => {
+  const navigate = useNavigate();
+
+  return <OnboardingFlow onComplete={() => navigate('/student', { replace: true })} />;
 };
 
 const AppContent: React.FC = () => {
@@ -124,6 +131,18 @@ const AppContent: React.FC = () => {
                 <DashboardContainer transitionKey="student">
                   <Suspense fallback={<DashboardRouteSkeleton role="student" />}>
                     {USE_SIMPLIFIED_DASHBOARDS ? <StudentDashboardSimplified /> : <StudentDashboard />}
+                  </Suspense>
+                </DashboardContainer>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/onboarding"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <DashboardContainer transitionKey="student-onboarding">
+                  <Suspense fallback={<DashboardRouteSkeleton role="student" />}>
+                    <StudentOnboardingRoute />
                   </Suspense>
                 </DashboardContainer>
               </ProtectedRoute>
