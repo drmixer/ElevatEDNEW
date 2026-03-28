@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import type { AuthChangeEvent, Session, User as SupabaseAuthUser } from '@supabase/supabase-js';
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import supabase from '../lib/supabaseClient';
 import type { Subject, User, UserRole } from '../types';
@@ -31,6 +32,8 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
 }
 
+type SessionHydrationResult = 'loaded' | 'timed_out' | 'stale';
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
@@ -46,57 +49,157 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const isMountedRef = useRef(true);
   const refreshRetryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inFlightProfileLoadsRef = useRef(new Map<string, Promise<User>>());
+  const inFlightSessionHydrationsRef = useRef(new Map<string, Promise<SessionHydrationResult>>());
+  const loadedSessionKeyRef = useRef<string | null>(null);
 
   useEffect(
-    () => () => {
-      isMountedRef.current = false;
-      if (refreshRetryRef.current) {
-        clearTimeout(refreshRetryRef.current);
-      }
+    () => {
+      isMountedRef.current = true;
+      return () => {
+        isMountedRef.current = false;
+        if (refreshRetryRef.current) {
+          clearTimeout(refreshRetryRef.current);
+        }
+      };
     },
     [],
   );
 
   const safeSetUser = useCallback((next: User | null) => {
+    if (!isMountedRef.current) return;
     setUser(next);
   }, []);
 
   const safeSetLoading = useCallback((next: boolean) => {
+    if (!isMountedRef.current) return;
     setLoading(next);
   }, []);
 
+  const resetSessionTracking = useCallback(() => {
+    loadedSessionKeyRef.current = null;
+    inFlightSessionHydrationsRef.current.clear();
+  }, []);
+
+  const handleSignedOut = useCallback(() => {
+    resetSessionTracking();
+    safeSetUser(null);
+  }, [resetSessionTracking, safeSetUser]);
+
+  const getSessionKey = useCallback((session: Session | null | undefined) => {
+    const userId = session?.user?.id;
+    if (!userId) return null;
+    return session.access_token ? `${userId}:${session.access_token}` : userId;
+  }, []);
+
   const loadProfile = useCallback(async (userId: string) => {
-    try {
-      const profile = await fetchUserProfile(userId);
-      safeSetUser(profile);
-    } catch (error) {
-      console.error('[Auth] Failed to load profile', error);
-      safeSetUser(null);
-      throw error;
+    const existingLoad = inFlightProfileLoadsRef.current.get(userId);
+    if (existingLoad) {
+      return existingLoad;
     }
+
+    const profileLoad = fetchUserProfile(userId)
+      .then((profile) => {
+        safeSetUser(profile);
+        return profile;
+      })
+      .catch((error) => {
+        console.error('[Auth] Failed to load profile', error);
+        safeSetUser(null);
+        throw error;
+      })
+      .finally(() => {
+        if (inFlightProfileLoadsRef.current.get(userId) === profileLoad) {
+          inFlightProfileLoadsRef.current.delete(userId);
+        }
+      });
+
+    inFlightProfileLoadsRef.current.set(userId, profileLoad);
+    return profileLoad;
   }, [safeSetUser]);
 
+  const hydrateSession = useCallback(async (
+    session: Session | null | undefined,
+    timeoutMs = 4000,
+  ): Promise<SessionHydrationResult> => {
+    const sessionUser = session?.user;
+    if (!sessionUser?.id) {
+      handleSignedOut();
+      return 'stale';
+    }
+
+    const sessionKey = getSessionKey(session);
+    if (sessionKey && loadedSessionKeyRef.current === sessionKey) {
+      return 'loaded';
+    }
+
+    if (sessionKey) {
+      const existingHydration = inFlightSessionHydrationsRef.current.get(sessionKey);
+      if (existingHydration) {
+        return existingHydration;
+      }
+    }
+
+    const hydrationPromise = withTimeout(loadProfile(sessionUser.id), timeoutMs)
+      .then((profileResult) => {
+        if (!isMountedRef.current) {
+          return 'stale';
+        }
+
+        if (profileResult.timedOut) {
+          return 'timed_out';
+        }
+
+        if (sessionKey) {
+          loadedSessionKeyRef.current = sessionKey;
+        }
+
+        return 'loaded';
+      })
+      .finally(() => {
+        if (sessionKey && inFlightSessionHydrationsRef.current.get(sessionKey) === hydrationPromise) {
+          inFlightSessionHydrationsRef.current.delete(sessionKey);
+        }
+      });
+
+    if (sessionKey) {
+      inFlightSessionHydrationsRef.current.set(sessionKey, hydrationPromise);
+    }
+
+    return hydrationPromise;
+  }, [getSessionKey, handleSignedOut, loadProfile]);
+
   const scheduleSilentRefresh = useCallback(() => {
-    if (refreshRetryRef.current) return;
+    if (!isMountedRef.current || refreshRetryRef.current) return;
     refreshRetryRef.current = setTimeout(async () => {
       refreshRetryRef.current = null;
+      if (!isMountedRef.current) return;
       try {
         const sessionResult = await withTimeout(supabase.auth.getSession(), 6000);
+        if (!isMountedRef.current) return;
         if (sessionResult.timedOut) {
           console.warn('[Auth] Silent session refresh timed out; will wait for the next auth event.');
           return;
         }
         const nextSession = sessionResult.value.data.session;
         if (nextSession?.user) {
-          await loadProfile(nextSession.user.id);
+          await hydrateSession(nextSession, 4000);
         }
       } catch (error) {
         console.warn('[Auth] Silent session refresh failed', error);
       }
     }, 800);
-  }, [loadProfile]);
+  }, [hydrateSession]);
 
   useEffect(() => {
+    const shouldHydrateFromAuthEvent = (
+      event: AuthChangeEvent,
+      sessionUser: SupabaseAuthUser | null | undefined,
+    ) => {
+      if (!sessionUser) return false;
+      return event === 'INITIAL_SESSION' || event === 'USER_UPDATED';
+    };
+
     const initialise = async () => {
       console.log('[Auth] Initialising...');
       safeSetLoading(true);
@@ -107,7 +210,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (sessionResult.timedOut) {
           console.warn('[Auth] Session lookup timed out; continuing without cached session');
-          safeSetUser(null);
+          handleSignedOut();
           scheduleSilentRefresh();
           return;
         }
@@ -116,18 +219,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (error) {
           console.error('[Auth] Failed to get session', error);
-          safeSetUser(null);
+          handleSignedOut();
           scheduleSilentRefresh();
           return;
         }
 
         if (session?.user) {
           console.log('[Auth] Found user, loading profile...');
-          const profileResult = await withTimeout(loadProfile(session.user.id), 4000);
-          if (profileResult.timedOut) {
+          const hydrationResult = await hydrateSession(session, 4000);
+          if (hydrationResult === 'timed_out' && isMountedRef.current) {
             console.warn('[Auth] Profile load timed out; signing out to clear stale session');
-            safeSetUser(null);
-            // Sign out to clear potentially corrupt session
+            handleSignedOut();
             try {
               await supabase.auth.signOut();
             } catch (signOutError) {
@@ -136,11 +238,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         } else {
           console.log('[Auth] No user found');
-          safeSetUser(null);
+          handleSignedOut();
         }
       } catch (unhandledError) {
         console.error('[Auth] Unexpected error during session restore', unhandledError);
-        safeSetUser(null);
+        handleSignedOut();
         scheduleSilentRefresh();
       } finally {
         console.log('[Auth] Setting loading to false');
@@ -148,29 +250,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
 
-    // initialise(); // Removed duplicate call, let the auth state change handler handle it or ensure single execution
     initialise();
 
-    const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        try {
-          const profileResult = await withTimeout(loadProfile(session.user.id), 4000);
-          if (profileResult.timedOut) {
-            console.warn('[Auth] Profile load timed out during auth state change');
-            scheduleSilentRefresh();
-          }
-        } catch {
+    const { data: subscription } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT' || !session?.user) {
+        handleSignedOut();
+        return;
+      }
+
+      if (!shouldHydrateFromAuthEvent(event, session.user)) {
+        return;
+      }
+
+      try {
+        const hydrationResult = await hydrateSession(session, 4000);
+        if (hydrationResult === 'timed_out' && isMountedRef.current) {
+          console.warn(`[Auth] Profile load timed out during auth state change (${event})`);
           scheduleSilentRefresh();
         }
-      } else {
-        safeSetUser(null);
+      } catch {
+        if (isMountedRef.current) {
+          scheduleSilentRefresh();
+        }
       }
     });
 
     return () => {
       subscription?.subscription.unsubscribe();
     };
-  }, [loadProfile, safeSetLoading, safeSetUser, scheduleSilentRefresh]);
+  }, [handleSignedOut, hydrateSession, safeSetLoading, scheduleSilentRefresh]);
 
   const login = async (email: string, password: string) => {
     safeSetLoading(true);
@@ -189,22 +297,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw notConfirmedError;
       }
 
-      if (error || !data.user) {
+      if (error || !data.user || !data.session) {
         recordReliabilityCheckpoint('auth_login', 'error', { reason: error?.message ?? 'missing_user' });
         throw error ?? new Error('Supabase did not return a user session.');
       }
 
-      await loadProfile(data.user.id);
+      const hydrationResult = await hydrateSession(data.session, 4000);
+      if (hydrationResult === 'timed_out') {
+        throw new Error('Profile load timed out during login.');
+      }
+
       recordReliabilityCheckpoint('auth_login', 'success', { userId: data.user.id });
     } catch (error) {
       console.error('[Auth] Login failed', error);
       const code = (error as { code?: string } | null)?.code;
       if (code === 'email_not_confirmed') {
-        safeSetUser(null);
+        handleSignedOut();
         throw error;
       }
       recordReliabilityCheckpoint('auth_login', 'error', { error });
-      safeSetUser(null);
+      handleSignedOut();
       if (error instanceof Error) {
         throw error;
       }
@@ -271,12 +383,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (!data.session || !data.user) {
-        safeSetUser(null);
+        handleSignedOut();
         recordReliabilityCheckpoint('auth_register', 'error', { reason: 'pending_email_confirmation' });
         throw new Error('Sign-up successful. Please check your email to confirm your account.');
       }
 
-      // Persist grade and learning preferences onto the student profile so adaptive paths can start immediately.
       if (role === 'student') {
         const focusSubject = options?.focusSubject ?? 'balanced';
         const learningStyle = {
@@ -293,7 +404,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .eq('id', data.user.id);
       }
 
-      await loadProfile(data.user.id);
+      const hydrationResult = await hydrateSession(data.session, 4000);
+      if (hydrationResult === 'timed_out') {
+        throw new Error('Profile load timed out during registration.');
+      }
+
       recordReliabilityCheckpoint('auth_register', 'success', {
         userId: data.user.id,
         role,
@@ -303,7 +418,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('[Auth] Registration failed', error);
       recordReliabilityCheckpoint('auth_register', 'error', { error });
-      safeSetUser(null);
+      handleSignedOut();
       if (error instanceof Error) {
         throw error;
       }
@@ -314,7 +429,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
-    safeSetUser(null);
+    handleSignedOut();
     supabase.auth.signOut().catch((error) => {
       console.error('[Auth] Logout failed', error);
     });
@@ -338,7 +453,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (data.user) {
         await loadProfile(data.user.id);
+        return;
       }
+
+      handleSignedOut();
     } catch (error) {
       console.error('[Auth] Failed to refresh user', error);
     }

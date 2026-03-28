@@ -12,6 +12,7 @@
     "test": "vitest",
     "test:watch": "vitest watch",
     "test:e2e": "playwright test",
+    "test:e2e:auth-reload": "playwright test tests/e2e/auth-reload-timeout.spec.ts",
     "import:oer": "tsx tools/importers/oer/index.ts",
     "db:migrate": "supabase migration up",
     "seed:skeleton": "tsx scripts/import_skeleton.ts --apply",
