@@ -12,6 +12,7 @@ import {
   loadDiagnosticAssessment,
   recordAssessmentResponse,
 } from '../../services/assessmentService';
+import trackEvent from '../../lib/analytics';
 
 interface AssessmentFlowProps {
   onComplete: (result?: AssessmentResult | null) => void;
@@ -105,6 +106,16 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
         grade: student.grade,
         subject: preferredSubject,
       });
+      trackEvent('success_diagnostic_eligible', {
+        studentId: student.id,
+        assessmentId: loaded.assessmentId,
+        attemptId: loaded.attemptId,
+        attemptNumber: loaded.attemptNumber,
+        subject: loaded.subject ?? preferredSubject,
+        gradeBand: student.grade ?? null,
+        questionCount: loaded.questions.length,
+        source: 'assessment_flow',
+      });
       const seededAnswers = seedExistingResponses(loaded);
       setAssessment(loaded);
       setAnswers(seededAnswers);
@@ -122,11 +133,11 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
     }
   };
 
-  const moveToNextQuestion = useCallback(async (isCorrect?: boolean) => {
+  const moveToNextQuestion = useCallback(async (nextAnswers: AssessmentAnswer[], isCorrect?: boolean) => {
     if (!assessment) return;
 
     // Show encouragement briefly
-    setEncouragementMessage(getEncouragementMessage(answers.length));
+    setEncouragementMessage(getEncouragementMessage(nextAnswers.length));
     setLastAnswerCorrect(isCorrect ?? null);
     setShowEncouragement(true);
 
@@ -147,9 +158,20 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
       const summary = await finalizeAssessmentAttempt({
         studentId: student!.id,
         assessment,
-        answers,
+        answers: nextAnswers,
         startedAt: startTime ?? new Date(),
         grade: student?.grade,
+      });
+      trackEvent('success_diagnostic_completed', {
+        studentId: student!.id,
+        assessmentId: assessment.assessmentId,
+        attemptId: assessment.attemptId,
+        score: summary.score,
+        correct: summary.correct,
+        total: summary.total,
+        subject: assessment.subject,
+        gradeBand: student?.grade ?? null,
+        source: 'assessment_flow',
       });
       setResult(summary);
       setCurrentStep('results');
@@ -158,7 +180,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
       setQuestionStart(Date.now());
       // Difficulty adaptation happens server-side
     }
-  }, [assessment, answers, currentQuestionIndex, skippedQuestions, startTime, student]);
+  }, [assessment, currentQuestionIndex, skippedQuestions, startTime, student]);
 
   const handleAnswer = async (option: AssessmentOption) => {
     if (!student || !assessment) return;
@@ -200,7 +222,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onComplete }) => {
       const updatedAnswers = [...answers, newAnswer];
       setAnswers(updatedAnswers);
 
-      await moveToNextQuestion(isCorrect);
+      await moveToNextQuestion(updatedAnswers, isCorrect);
     } catch (err) {
       console.error('[assessment] failed to handle answer', err);
       setError('We couldn\'t save that answer. Please try again.');

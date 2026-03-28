@@ -1404,14 +1404,9 @@ const StudentDashboard: React.FC = () => {
       setUpNextUpdatedAt(Date.now());
       void refreshStudentPath().catch(() => undefined);
       trackEvent('upnext_refresh_after_diagnostic', { studentId: student.id });
-      trackEvent('success_diagnostic_completed', {
-        studentId: student.id,
-        date: todayKey,
-        weekStart: weekStartKey,
-      });
     }
     prevDiagnosticStatus.current = diagnosticStatus;
-  }, [diagnosticStatus, refreshStudentPath, student?.id, todayKey, weekStartKey]);
+  }, [diagnosticStatus, refreshStudentPath, student?.id]);
 
   useEffect(() => {
     if (!student?.id) return;
