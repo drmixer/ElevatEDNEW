@@ -63,7 +63,8 @@ const PLACEHOLDER_PATTERNS = [
     /PLACEHOLDER/i,
     /Lorem ipsum/i,
     /\[INSERT.*\]/i,
-    /\{.*\}/,  // Template variables
+    /\{\{[^}]+\}\}/, // Mustache-style template variables
+    /\{[A-Z][A-Z0-9_ -]{1,40}\}/, // Simple uppercase token placeholders like {TITLE}
 ];
 
 // Template content patterns
