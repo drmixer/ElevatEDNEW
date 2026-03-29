@@ -1,11 +1,953 @@
 {
-  "timestamp": "2025-12-19T08:04:51.480Z",
-  "totalLessons": 1190,
-  "issueCount": 0,
-  "issuesByType": {},
-  "issuesBySeverity": {},
-  "issuesBySubject": {},
-  "issuesByGrade": {},
-  "issues": [],
-  "lessonsNeedingReview": []
+  "timestamp": "2026-03-29T10:39:16.540Z",
+  "totalLessons": 1191,
+  "issueCount": 92,
+  "issuesByType": {
+    "structure_issue": 90,
+    "placeholder_vocabulary": 2
+  },
+  "issuesBySeverity": {
+    "medium": 90,
+    "high": 2
+  },
+  "issuesBySubject": {
+    "Social Studies": 25,
+    "Mathematics": 37,
+    "English Language Arts": 13,
+    "Electives": 17
+  },
+  "issuesByGrade": {
+    "3": 23,
+    "4": 22,
+    "5": 21,
+    "6": 6,
+    "7": 10,
+    "8": 8,
+    "11": 1,
+    "12": 1
+  },
+  "issues": [
+    {
+      "lessonId": 327,
+      "lessonTitle": "Exploration to Civil War",
+      "gradeBand": "3",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 179,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 614,
+      "lessonTitle": "Industrialization & Immigration",
+      "gradeBand": "5",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 357,
+      "lessonTitle": "Reconstruction to WWII",
+      "gradeBand": "7",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1246,
+      "lessonTitle": "Primary Sources (PD) Launch Lesson",
+      "gradeBand": "12",
+      "subject": "English Language Arts",
+      "issueType": "placeholder_vocabulary",
+      "severity": "high",
+      "details": "Placeholder text found: \"placeholder\""
+    },
+    {
+      "lessonId": 431,
+      "lessonTitle": "Place Value (thousands/millions)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 169,
+      "lessonTitle": "Volume",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 171,
+      "lessonTitle": "Fractions (concepts, equivalence)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 181,
+      "lessonTitle": "Volume",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 182,
+      "lessonTitle": "Decimals (intro)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1922,
+      "lessonTitle": "Lifetime Fitness: Genetics, Goals, and Sustainability",
+      "gradeBand": "8",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 131,
+      "lessonTitle": "Presentations, Summaries",
+      "gradeBand": "4",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 188,
+      "lessonTitle": "Intro Probability (experimental)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 189,
+      "lessonTitle": "Mean/Median/Mode",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 186,
+      "lessonTitle": "Rounding & Estimation",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 185,
+      "lessonTitle": "Place Value (thousands/millions)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 197,
+      "lessonTitle": "Multiplication/Division",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 195,
+      "lessonTitle": "Decimals (intro)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 193,
+      "lessonTitle": "Transformations (intro)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 168,
+      "lessonTitle": "Transformations (intro)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 350,
+      "lessonTitle": "Reconstruction to WWII",
+      "gradeBand": "6",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 196,
+      "lessonTitle": "Fractions (concepts, equivalence)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1866,
+      "lessonTitle": "Discovering How to Draw and Paint",
+      "gradeBand": "3",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1868,
+      "lessonTitle": "Techniques That Make Art Come Alive",
+      "gradeBand": "4",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 376,
+      "lessonTitle": "Presentations, Summaries",
+      "gradeBand": "3",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 127,
+      "lessonTitle": "Nonfiction Articles (open-licensed)",
+      "gradeBand": "4",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 326,
+      "lessonTitle": "Producers/Consumers",
+      "gradeBand": "3",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 147,
+      "lessonTitle": "Historical Documents (PD)",
+      "gradeBand": "7",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 607,
+      "lessonTitle": "Ancient Civilizations",
+      "gradeBand": "4",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 337,
+      "lessonTitle": "World Regions (physical/human)",
+      "gradeBand": "4",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 348,
+      "lessonTitle": "Supply/Demand (intro)",
+      "gradeBand": "6",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1918,
+      "lessonTitle": "Creating Your Personal Fitness Plan",
+      "gradeBand": "6",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 359,
+      "lessonTitle": "Medieval to Early Modern",
+      "gradeBand": "7",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 173,
+      "lessonTitle": "Rounding & Estimation",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 366,
+      "lessonTitle": "Global Interactions",
+      "gradeBand": "8",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 134,
+      "lessonTitle": "Nonfiction Articles (open-licensed)",
+      "gradeBand": "5",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1915,
+      "lessonTitle": "Balanced Meals, Physical Fitness, and Wellness",
+      "gradeBand": "4",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 594,
+      "lessonTitle": "Local/State Government",
+      "gradeBand": "3",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 334,
+      "lessonTitle": "Producers/Consumers",
+      "gradeBand": "4",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 340,
+      "lessonTitle": "Markets (intro)",
+      "gradeBand": "5",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 351,
+      "lessonTitle": "Global Interactions",
+      "gradeBand": "6",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 352,
+      "lessonTitle": "Medieval to Early Modern",
+      "gradeBand": "6",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1373,
+      "lessonTitle": "Confidence Intervals & Hypothesis Tests (intro HS Stats) Launch Lesson",
+      "gradeBand": "11",
+      "subject": "Mathematics",
+      "issueType": "placeholder_vocabulary",
+      "severity": "high",
+      "details": "Placeholder text found: \"{CI}\""
+    },
+    {
+      "lessonId": 180,
+      "lessonTitle": "Transformations (intro)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 192,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 447,
+      "lessonTitle": "Bar/Line Plots",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 342,
+      "lessonTitle": "Exploration to Civil War",
+      "gradeBand": "5",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 358,
+      "lessonTitle": "Global Interactions",
+      "gradeBand": "7",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 170,
+      "lessonTitle": "Decimals (intro)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1867,
+      "lessonTitle": "Learning to Read Music Notes",
+      "gradeBand": "3",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1858,
+      "lessonTitle": "Mastering Artistic Techniques and Expression",
+      "gradeBand": "5",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1904,
+      "lessonTitle": "Advanced Budgeting and Long-Term Financial Goals",
+      "gradeBand": "7",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1870,
+      "lessonTitle": "Critical Perspectives: Art, Power, and Identity",
+      "gradeBand": "8",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 161,
+      "lessonTitle": "Bar/Line Plots",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 150,
+      "lessonTitle": "Poetry & Drama (PD)",
+      "gradeBand": "7",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1917,
+      "lessonTitle": "Body Systems: How Your Body Works",
+      "gradeBand": "6",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1919,
+      "lessonTitle": "Advanced Body Systems: Integration and Disease Prevention",
+      "gradeBand": "7",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1920,
+      "lessonTitle": "Advanced Training: Progression, Variety, and Performance",
+      "gradeBand": "7",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 356,
+      "lessonTitle": "Postwar to Present",
+      "gradeBand": "7",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1921,
+      "lessonTitle": "Chronic Disease, Lifestyle, and Personal Health Planning",
+      "gradeBand": "8",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 164,
+      "lessonTitle": "Mean/Median/Mode",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 154,
+      "lessonTitle": "Science/Tech Articles (open-licensed)",
+      "gradeBand": "8",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 174,
+      "lessonTitle": "Bar/Line Plots",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 336,
+      "lessonTitle": "Industrialization & Immigration",
+      "gradeBand": "4",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 183,
+      "lessonTitle": "Fractions (concepts, equivalence)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 184,
+      "lessonTitle": "Multiplication/Division",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 328,
+      "lessonTitle": "Industrialization & Immigration",
+      "gradeBand": "3",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 329,
+      "lessonTitle": "Ancient Civilizations",
+      "gradeBand": "3",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 43,
+      "lessonTitle": "Drawing/Painting Techniques Launch Lesson",
+      "gradeBand": "4",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 362,
+      "lessonTitle": "Personal Finance Basics",
+      "gradeBand": "8",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 365,
+      "lessonTitle": "Reconstruction to WWII",
+      "gradeBand": "8",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 640,
+      "lessonTitle": "Medieval to Early Modern",
+      "gradeBand": "8",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 343,
+      "lessonTitle": "Ancient Civilizations",
+      "gradeBand": "5",
+      "subject": "Social Studies",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 372,
+      "lessonTitle": "Nonfiction Articles (open-licensed)",
+      "gradeBand": "3",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 373,
+      "lessonTitle": "Chapter Books (PD)",
+      "gradeBand": "3",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 135,
+      "lessonTitle": "Chapter Books (PD)",
+      "gradeBand": "5",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 163,
+      "lessonTitle": "Intro Probability (experimental)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 177,
+      "lessonTitle": "Mean/Median/Mode",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 187,
+      "lessonTitle": "Interpreting Tables/Charts",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 194,
+      "lessonTitle": "Volume",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 198,
+      "lessonTitle": "Place Value (thousands/millions)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 128,
+      "lessonTitle": "Chapter Books (PD)",
+      "gradeBand": "4",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 138,
+      "lessonTitle": "Presentations, Summaries",
+      "gradeBand": "5",
+      "subject": "English Language Arts",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 167,
+      "lessonTitle": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 175,
+      "lessonTitle": "Interpreting Tables/Charts",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1882,
+      "lessonTitle": "Getting Started with Block-Based Programming",
+      "gradeBand": "3",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 199,
+      "lessonTitle": "Rounding & Estimation",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1856,
+      "lessonTitle": "Modern and Contemporary Art: Revolution and Reflection",
+      "gradeBand": "7",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 1916,
+      "lessonTitle": "Nutrients, Physical Training, and Food Safety",
+      "gradeBand": "5",
+      "subject": "Electives",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 162,
+      "lessonTitle": "Interpreting Tables/Charts",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 176,
+      "lessonTitle": "Intro Probability (experimental)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    },
+    {
+      "lessonId": 172,
+      "lessonTitle": "Multiplication/Division",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "issueType": "structure_issue",
+      "severity": "medium",
+      "details": "No examples found in content"
+    }
+  ],
+  "lessonsNeedingReview": [
+    327,
+    179,
+    614,
+    357,
+    1246,
+    431,
+    169,
+    171,
+    181,
+    182,
+    1922,
+    131,
+    188,
+    189,
+    186,
+    185,
+    197,
+    195,
+    193,
+    168,
+    350,
+    196,
+    1866,
+    1868,
+    376,
+    127,
+    326,
+    147,
+    607,
+    337,
+    348,
+    1918,
+    359,
+    173,
+    366,
+    134,
+    1915,
+    594,
+    334,
+    340,
+    351,
+    352,
+    1373,
+    180,
+    192,
+    447,
+    342,
+    358,
+    170,
+    1867,
+    1858,
+    1904,
+    1870,
+    161,
+    150,
+    1917,
+    1919,
+    1920,
+    356,
+    1921,
+    164,
+    154,
+    174,
+    336,
+    183,
+    184,
+    328,
+    329,
+    43,
+    362,
+    365,
+    640,
+    343,
+    372,
+    373,
+    135,
+    163,
+    177,
+    187,
+    194,
+    198,
+    128,
+    138,
+    167,
+    175,
+    1882,
+    199,
+    1856,
+    1916,
+    162,
+    176,
+    172
+  ]
 }
