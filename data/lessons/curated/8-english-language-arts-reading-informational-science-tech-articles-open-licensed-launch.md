@@ -64,6 +64,8 @@ Why is this evidence strong?
 
 A weaker piece of support is "grounds crews also reported fewer muddy patches near walkways." That detail is useful, but it is less central because the main argument focuses on water savings, not walkway conditions.
 
+For example, the 18 percent reduction is stronger evidence than the muddy-patches detail because it directly measures the result the article is trying to prove.
+
 This is how strong readers evaluate evidence:
 
 - Does the detail match the exact claim?

@@ -77,6 +77,8 @@ Why do these lines matter?
 - The repetition around "high" slows the moment down.
 - The final line turns the scene into a larger idea about courage and silence.
 
+For example, the phrase "just high enough" makes the raised hand feel small but still powerful enough to change the room.
+
 The poem suggests that speaking up does not have to look heroic to matter.
 
 ## How the Drama Scene Builds Meaning

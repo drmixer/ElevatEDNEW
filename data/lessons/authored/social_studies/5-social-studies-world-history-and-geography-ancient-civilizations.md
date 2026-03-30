@@ -52,6 +52,8 @@ Reasonable inference:
 - Civilizations often developed where geography supported farming or exchange.
 - Artifacts reveal how people organized daily life and important ideas.
 
+For example, a writing tablet found in a river valley city suggests that geography supported a large society with trade and recordkeeping.
+
 Students should compare sources instead of listing unrelated facts.
 
 ## Why Comparison Strengthens History

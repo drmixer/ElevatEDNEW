@@ -52,6 +52,8 @@ Reasonable inference:
 - If people lived near a river, water may have helped with farming or travel.
 - If an artifact is carefully decorated, it may have been important in daily life or belief.
 
+For example, a grain pot found near a river settlement suggests people depended on farming and food storage.
+
 Students should separate what the source shows directly from what the source only suggests.
 
 ## Why Historians Use More Than One Source

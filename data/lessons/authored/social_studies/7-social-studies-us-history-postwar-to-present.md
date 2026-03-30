@@ -52,6 +52,8 @@ Reasonable interpretation:
 
 - The source reflects a real debate from the period and helps explain how Americans argued about postwar life.
 
+For example, if the timeline shows civil rights activism and the public argument source debates equality or security, students can connect one source to a larger national argument.
+
 The strongest claims connect source language to broader historical context instead of treating the source as a universal statement for the entire country.
 
 ## Summary

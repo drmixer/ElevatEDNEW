@@ -52,6 +52,8 @@ Reasonable explanation:
 
 - Physical geography influences where people build communities and what activities they can do there.
 
+For example, a river may support nearby towns and farms, while a mountain barrier may leave fewer settlements on the other side.
+
 Students should use both the map and the chart instead of relying on only one source.
 
 ## Why Comparison Matters

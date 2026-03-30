@@ -54,6 +54,8 @@ Reasonable conclusion:
 - Repairing a playground or library roof is usually a local government job.
 - Managing a statewide park system or statewide road rules fits state government better.
 
+For example, fixing one town's library roof is local because it serves a nearby community, while setting rules for state parks is statewide because many communities use them.
+
 Students should explain why, not just name a category. The best answers use words like `close to home`, `whole state`, or `many communities`.
 
 ## Why the Two Levels Matter

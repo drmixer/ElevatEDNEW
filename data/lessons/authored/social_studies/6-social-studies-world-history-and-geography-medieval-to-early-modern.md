@@ -47,6 +47,8 @@ Reasonable claim:
 
 - Expanding connections helped reshape societies during the move from medieval to early modern times.
 
+For example, if the map shows trade routes crossing the Mediterranean and the excerpt describes merchants or rulers responding to that trade, students can explain how connections changed power and daily life.
+
 The strongest answers use the map for structure and the excerpt for detail or perspective.
 
 ## Summary

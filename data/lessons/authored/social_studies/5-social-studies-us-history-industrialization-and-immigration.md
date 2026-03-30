@@ -52,6 +52,8 @@ Reasonable interpretation:
 - Industrialization created opportunity, but it also produced hard conditions.
 - Immigration brought people seeking work, safety, or a better future.
 
+For example, a testimony about long hours alongside an arrival record from another country suggests that cities offered opportunity while still demanding difficult work.
+
 Students should remember that one testimony shows one perspective. It is useful evidence, but not the whole story by itself.
 
 ## Why Historians Compare Different Sources

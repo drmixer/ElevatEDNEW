@@ -58,6 +58,8 @@ Reasonable claim:
 
 - The sources together show one major tension in how Americans responded to political and social change.
 
+For example, if a political cartoon criticizes inequality and a document names the related policy debate, students can explain one major tension in the era with evidence from both sources.
+
 Students should not rely on the cartoon alone. The best explanations compare the visual source to the written one and then place both in time.
 
 ## Summary

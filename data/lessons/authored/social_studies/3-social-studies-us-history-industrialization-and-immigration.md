@@ -52,6 +52,8 @@ Reasonable explanation:
 - Industrialization changed how and where many people worked.
 - Immigration added new people and experiences to American cities.
 
+For example, a crowded factory photo plus an arrival card from a new immigrant suggests cities were adding workers while factory life was changing.
+
 Not supported:
 
 - "Every immigrant had the same experience."

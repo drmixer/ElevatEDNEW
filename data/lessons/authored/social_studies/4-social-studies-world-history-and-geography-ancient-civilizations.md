@@ -52,6 +52,8 @@ Reasonable inference:
 - Access to water supported farming, travel, or trade.
 - The artifacts suggest that the civilization had systems for work, storage, or communication.
 
+For example, a writing tablet near a river city suggests that access to water supported a large society with systems for recordkeeping and trade.
+
 Students should explain how the map and artifacts support each other.
 
 ## Why Historians Compare Sources

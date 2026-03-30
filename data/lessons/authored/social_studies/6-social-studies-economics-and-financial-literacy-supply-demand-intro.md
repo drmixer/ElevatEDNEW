@@ -48,6 +48,8 @@ Reasonable explanation:
 
 - a limited supply and strong demand may be pushing the price upward
 
+For example, when tickets drop from 100 to 10 while the price rises from `$20` to `$50`, limited supply with strong demand is a reasonable explanation.
+
 Unsupported claim:
 
 - "The seller is being unfair."

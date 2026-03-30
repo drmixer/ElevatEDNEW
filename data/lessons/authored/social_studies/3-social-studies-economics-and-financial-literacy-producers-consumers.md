@@ -52,6 +52,8 @@ Reasonable explanation:
 - The bakery acts as a producer because it made the bread.
 - The shopper acts as a consumer because that person bought the bread.
 
+For example, the bakery name on the bread label points to the producer, while the total on the receipt points to the consumer who bought it.
+
 Students should use source details instead of guessing from background knowledge alone.
 
 ## Why the Roles Are Different

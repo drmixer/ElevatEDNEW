@@ -55,6 +55,8 @@ Reasonable recommendation:
 
 - Choose the lower-fee option because repeated charges would weaken the savings goal.
 
+For example, if one bank charges an `$8` monthly fee and the budget only leaves `$20` for savings, that fee would take a large share of the money meant for the goal.
+
 This recommendation is stronger than simply saying one bank is "better." It is tied directly to the evidence in the sources.
 
 ## Summary

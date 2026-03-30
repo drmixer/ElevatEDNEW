@@ -52,6 +52,8 @@ Reasonable cause-and-effect idea:
 
 - As the country grew and changed, new disagreements also grew.
 
+For example, if the timeline shows colonies first, independence next, and the Civil War later, students can explain that national growth came before the later conflict.
+
 Students should not try to explain every conflict from one map. The goal is to use the timeline and map together to support a simple historical idea.
 
 ## Why Time Order Matters

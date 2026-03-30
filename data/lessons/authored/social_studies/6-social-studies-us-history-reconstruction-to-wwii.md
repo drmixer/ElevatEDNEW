@@ -54,6 +54,8 @@ Reasonable claim:
 
 - The document reflects a larger turning point in how Americans responded to industrial or political change.
 
+For example, if a reform speech appears during the era of industrial expansion on the timeline, students can infer that rapid growth created new demands for change.
+
 Students should avoid making claims that are too broad for the evidence. One source may show a problem or argument, but the timeline is what helps explain how that issue fits the larger era.
 
 ## Why This Era Matters

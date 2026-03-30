@@ -52,6 +52,8 @@ Reasonable explanation:
 
 - When fewer strawberries reached the market but buyers still wanted them, the price rose.
 
+For example, if the table shows fewer strawberry boxes this week and the article explains storm damage, a higher price makes sense as a market response.
+
 Students should use both numeric and written evidence in the same answer.
 
 ## Why Economic Claims Need Sources

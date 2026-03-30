@@ -45,6 +45,8 @@ Reasonable claim:
 
 - Networks of exchange helped reshape societies by spreading something important across regions.
 
+For example, if the map shows migration routes and the supporting source describes new labor patterns or cultural change, students can explain one consequence of the network with evidence.
+
 The strongest claims recognize that consequences may be mixed. The same network can spread opportunity and hardship at the same time.
 
 ## Summary

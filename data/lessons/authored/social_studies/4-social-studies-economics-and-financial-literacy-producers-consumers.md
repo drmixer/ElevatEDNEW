@@ -53,6 +53,8 @@ Reasonable explanation:
 - Producers include the people and businesses that make, ship, or sell the product.
 - The consumer is the person who buys the product at the end of the exchange.
 
+For example, cotton growers, shirt shippers, and store sellers all act as producers in different steps, while the person on the receipt is the consumer at the end.
+
 Students should explain how the roles connect instead of treating them as separate vocabulary words.
 
 ## Why the Chain Matters

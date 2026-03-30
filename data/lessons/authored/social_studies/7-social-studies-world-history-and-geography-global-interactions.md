@@ -45,6 +45,8 @@ Reasonable claim:
 
 - Global interaction changed societies by spreading something important across regional boundaries.
 
+For example, if the map shows repeated trade contact and the supporting source describes a technology or belief moving with merchants, students can explain how exchange reshaped more than one region.
+
 Students should be prepared to explain both positive and negative effects if the evidence supports them.
 
 ## Summary

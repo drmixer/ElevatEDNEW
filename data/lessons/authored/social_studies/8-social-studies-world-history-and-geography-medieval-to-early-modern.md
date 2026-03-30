@@ -45,6 +45,8 @@ Reasonable claim:
 
 - The era was transformed by changing networks, beliefs, or state power.
 
+For example, if a map shows stronger trade links and the document describes a ruler or reformer responding to those links, students can explain one transformation of the era with evidence.
+
 The strongest claims connect the written evidence to the geographic pattern instead of treating each source as separate information.
 
 ## Summary

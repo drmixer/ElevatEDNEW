@@ -15,7 +15,7 @@
     ],
     "outline": {
       "hook": "Show a bar plot of favorite ice cream flavors. Ask: 'How can we tell which flavor is most popular?' Discuss how the height of bars helps us compare.",
-      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. Demonstrate creating a bar plot by counting votes for 3 favorite fruits. Show line plots use X marks to display measurements. Create a line plot of student heights together as a class.",
+      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. For example, if 6 students choose apples and 4 choose bananas, the apple bar is 2 units taller. Show that line plots use X marks to display measurements. For example, if pencil lengths are 5, 5, 6, and 7 inches, place two X marks above 5, one above 6, and one above 7.",
       "guided_practice": "In pairs, students create a bar plot showing classroom pet preferences. Then they make a line plot of coin flip results from 10 trials. Check for understanding by asking questions about the plots.",
       "independent_practice": "Students survey classmates about favorite pizza toppings and create their own bar plot. They then measure pencil lengths and make a line plot of the data.",
       "check_for_understanding": "Ask: 'How many more people chose pepperoni over cheese?' 'Which measurement appears most often?' Have students explain their reasoning.",
@@ -45,7 +45,7 @@
     ],
     "outline": {
       "hook": "Show a simple table of classroom supplies. Ask: 'How many pencils do we have?' 'Do we have more pens or erasers?' Let students practice finding information.",
-      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. Demonstrate with a food preferences table: find Emma's favorite by locating her row.",
+      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. For example, if the row for Mia and the column for apples meet at 3, Mia chose 3 apples. In a chart, compare values by reading labels and amounts carefully.",
       "guided_practice": "Students work with a class weather table. Together, find the warmest day, coldest day, and which days were similar. Do addition and subtraction with table data.",
       "independent_practice": "Students receive a table of sports participation. They answer guided questions: 'Who plays soccer?' 'How many more basketball players than tennis?' 'What's the total?'",
       "check_for_understanding": "Have students verbally explain how to find specific pieces of information in a table. Ask them to create their own simple table.",
@@ -73,7 +73,7 @@
     ],
     "outline": {
       "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "direct_instruction": "Explain that probability is about how likely something is to happen. For example, a coin has two possible outcomes, but 10 flips might still give 6 heads and 4 tails. Show dice rolls or spinner spins and record every outcome so students can compare what happened to what they expected.",
       "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
       "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
       "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
@@ -89,12 +89,12 @@
   },
   "3-mathematics-data-and-probability-statistics-mean-median-mode": {
     "title": "Mean/Median/Mode",
-    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "summary": "Find the mean, median, and mode of a data set. Compare how each measure describes the center or most common value.",
     "objectives": [
-      "Conduct simple probability experiments",
-      "Record experimental outcomes accurately",
-      "Compare frequencies of events",
-      "Predict outcomes based on experimental data"
+      "Find the mean by adding and dividing",
+      "Find the median by ordering data",
+      "Identify the mode as the most common value",
+      "Compare which measure best describes a set of data"
     ],
     "grade_band": "Grade 3",
     "subject": "Mathematics",
@@ -102,18 +102,18 @@
       "3.MD.B.3"
     ],
     "outline": {
-      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
-      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
-      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
-      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
-      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "hook": "Write 3, 5, 5, 8, 9 on the board. Ask: 'Which number shows up most?' 'Which number is in the middle?' 'What happens if we share the total equally?'",
+      "direct_instruction": "Mean is the equal share: add the numbers and divide by how many numbers there are. Median is the middle number after putting the data in order. Mode is the value that appears most often. For example, in 2, 4, 4, 6, 9, the mode is 4, the median is 4, and the mean is 25 divided by 5, which equals 5.",
+      "guided_practice": "Order small data sets together and find mean, median, and mode step by step. For example, use 6, 7, 7, 10: the mode is 7, the median is 7, and the mean is 30 divided by 4, which equals 7.5.",
+      "independent_practice": "Students solve 3-4 short data sets by finding mean, median, and mode. They explain which measure best describes a set such as daily step counts or quiz scores.",
+      "check_for_understanding": "Ask: 'Why do we put the numbers in order before finding the median?' 'Can a data set have more than one mode?' 'Which measure uses every number in the set?'",
+      "exit_ticket": "Students find at least two of the three measures for one short data set and explain how they found them.",
       "materials": [
-        "Coins",
-        "Dice",
-        "Spinners",
+        "Data cards",
+        "Number strips",
+        "Counters",
         "Recording sheets",
-        "Tally chart templates"
+        "Whiteboard or chart paper"
       ]
     }
   },
@@ -191,7 +191,7 @@
     ],
     "outline": {
       "hook": "Show a coordinate plane with one point plotted. Ask: 'Where is this point?' Explain the x-axis (left-right) and y-axis (up-down).",
-      "direct_instruction": "Ordered pair (x, y) tells location. Start at origin (0, 0). Move right (positive x) or left (negative x). Move up (positive y) or down (negative y).",
+      "direct_instruction": "An ordered pair (x, y) tells location. Start at the origin (0, 0), move right along the x-axis, then move up along the y-axis. In Quadrant I, both numbers are positive. For example, (2, 3) means move 2 right and 3 up.",
       "guided_practice": "Plot points together: (2, 3), (4, 1), (1, 4). Name the coordinates of points already plotted. Play a game finding treasure at coordinates.",
       "independent_practice": "Students plot 5-8 given points on graph paper. Then name the coordinates of points you show them. Create their own shape using coordinates.",
       "check_for_understanding": "Ask: 'What are the coordinates of that point?' 'Is (3, 2) the same as (2, 3)?' Have them explain why order matters.",
@@ -220,7 +220,7 @@
     ],
     "outline": {
       "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
-      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "direct_instruction": "Translation means slide a shape without turning or flipping it. Rotation means turn a shape around a point. Reflection means flip a shape over a line. For example, sliding a square 3 units right changes its position but not its size or shape.",
       "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
       "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
       "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
@@ -249,7 +249,7 @@
     ],
     "outline": {
       "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
-      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count, or multiply length \u00d7 width \u00d7 height. For example, a prism that is 2 cubes long, 3 cubes wide, and 4 cubes tall has 2 \u00d7 3 \u00d7 4 = 24 cubic units.",
       "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
       "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
       "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
@@ -278,7 +278,7 @@
     ],
     "outline": {
       "hook": "Show a dollar bill and a dime. Explain: a dime is 0.1 dollars, or 1/10. Connect to decimal notation.",
-      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions. 0.5 = 5/10 = 1/2.",
+      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions after the point. For example, 0.3 means 3 tenths and 0.25 means 25 hundredths. 0.5 = 5/10 = 1/2.",
       "guided_practice": "Shade decimal grids to represent 0.3, 0.25, etc. Write decimals and fractions that match. Compare decimals: is 0.5 bigger than 0.3?",
       "independent_practice": "Students write decimals for shaded grids. Compare decimal numbers. Use decimals to record measurements and money amounts.",
       "check_for_understanding": "Ask: 'What is 0.7 as a fraction?' 'Is 0.25 the same as 1/4?' Have them explain.",
@@ -307,7 +307,7 @@
     ],
     "outline": {
       "hook": "Divide a pizza into equal slices. Ask: 'How many slices is the whole pizza?' 'If I eat 2 slices out of 8, what fraction did I eat?'",
-      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total.",
+      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total. For example, 3/4 means 3 of 4 equal parts.",
       "guided_practice": "Shade fraction models to represent 1/2, 1/3, 1/4, etc. Show equivalent fractions (1/2 = 2/4). Compare 1/2 and 1/3.",
       "independent_practice": "Students shade models for given fractions. Find equivalent fractions. Compare fractions with same denominators.",
       "check_for_understanding": "Ask: 'Is 1/2 bigger than 1/3?' 'Are 2/4 and 1/2 the same?' Have them explain their reasoning.",
@@ -322,12 +322,12 @@
   },
   "3-mathematics-number-and-operations-multiplication-division": {
     "title": "Multiplication/Division",
-    "summary": "Understand multiplication as repeated addition and equal groups. Master facts and multi-digit multiplication.",
+    "summary": "Understand multiplication and division as equal groups, arrays, and related operations. Solve problems by connecting multiplication facts and division facts.",
     "objectives": [
-      "Represent multiplication as equal groups or arrays",
-      "Understand the commutative property",
-      "Memorize multiplication facts",
-      "Solve multiplication word problems"
+      "Represent multiplication and division with equal groups or arrays",
+      "Use related multiplication and division facts",
+      "Solve multiplication and division word problems",
+      "Explain answers with drawings or equations"
     ],
     "grade_band": "Grade 3",
     "subject": "Mathematics",
@@ -336,11 +336,11 @@
     ],
     "outline": {
       "hook": "Show 3 bags with 4 apples each. Ask: 'How many total?' Introduce: 3 \u00d7 4 = 12.",
-      "direct_instruction": "Multiplication is repeated addition. 3 \u00d7 4 means 4 + 4 + 4. Arrays show rows and columns. 3 rows of 4 = 3 \u00d7 4 = 12.",
-      "guided_practice": "Create arrays with objects or drawings. Write multiplication sentences. Skip count by 2s, 5s, 10s.",
-      "independent_practice": "Students create arrays for given multiplications. Solve word problems involving equal groups.",
-      "check_for_understanding": "Ask: 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' (Yes!) Have them draw arrays to prove it.",
-      "exit_ticket": "Students draw an array or groups to match a multiplication sentence.",
+      "direct_instruction": "Multiplication is repeated addition. For example, 3 \u00d7 4 means 4 + 4 + 4 = 12. Division splits a total into equal groups. For example, 12 \u00f7 3 = 4 means 12 objects shared into 3 equal groups gives 4 in each group. Arrays can model both operations.",
+      "guided_practice": "Create arrays with objects or drawings. Write multiplication and matching division sentences. For example, a 3-by-4 array shows both 3 \u00d7 4 = 12 and 12 \u00f7 3 = 4.",
+      "independent_practice": "Students create arrays or equal-group drawings for given facts. They solve word problems involving multiplication and division and write an equation to match each story.",
+      "check_for_understanding": "Ask: 'How does 3 \u00d7 4 = 12 help you solve 12 \u00f7 3?' 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' Have them draw arrays to explain.",
+      "exit_ticket": "Students draw an array or equal groups to match one multiplication or division sentence.",
       "materials": [
         "Objects (counters, beans, blocks)",
         "Grid paper for arrays",
@@ -365,7 +365,7 @@
     ],
     "outline": {
       "hook": "Write 345. Ask: 'What does the 4 represent?' (40) 'The 3?' (300) Discuss how the same digit means different amounts.",
-      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands. Show with place value blocks or charts.",
+      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands, and beyond. Show with place value blocks or charts. For example, in 4,582, the 4 means 4 thousands, the 5 means 5 hundreds, and the 8 means 8 tens.",
       "guided_practice": "Write numbers in expanded form: 234 = 200 + 30 + 4. Compare numbers using place value. Round to nearest 10 or 100.",
       "independent_practice": "Students identify place values in numbers. Write numbers in expanded form. Compare numbers and round.",
       "check_for_understanding": "Ask: 'What is 5 in 5,432?' (5 thousands, or 5,000) 'Is 234 or 324 bigger?'",
@@ -394,7 +394,7 @@
     ],
     "outline": {
       "hook": "Ask: 'Is 48 closer to 40 or 50?' Show a number line. Round 48 to 50. Explain using a number line.",
-      "direct_instruction": "Look at the digit to the right of the place you're rounding to. If 5 or more, round up. If less than 5, round down.",
+      "direct_instruction": "Look at the digit to the right of the place you are rounding to. If it is 5 or more, round up. If it is less than 5, round down. For example, 47 rounds to 50 because it is closer to 50 than 40.",
       "guided_practice": "Round several numbers together: 23 to nearest 10, 156 to nearest 100. Use number lines.",
       "independent_practice": "Students round 8-10 numbers to specified place values. Estimate sums by rounding first.",
       "check_for_understanding": "Ask: 'What is 67 rounded to the nearest 10?' 'Is that reasonable?' Have them explain their thinking.",
@@ -422,7 +422,7 @@
     ],
     "outline": {
       "hook": "Show a bar plot of favorite ice cream flavors. Ask: 'How can we tell which flavor is most popular?' Discuss how the height of bars helps us compare.",
-      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. Demonstrate creating a bar plot by counting votes for 3 favorite fruits. Show line plots use X marks to display measurements. Create a line plot of student heights together as a class.",
+      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. For example, if 6 students choose apples and 4 choose bananas, the apple bar is 2 units taller. Show that line plots use X marks to display measurements. For example, if pencil lengths are 5, 5, 6, and 7 inches, place two X marks above 5, one above 6, and one above 7.",
       "guided_practice": "In pairs, students create a bar plot showing classroom pet preferences. Then they make a line plot of coin flip results from 10 trials. Check for understanding by asking questions about the plots.",
       "independent_practice": "Students survey classmates about favorite pizza toppings and create their own bar plot. They then measure pencil lengths and make a line plot of the data.",
       "check_for_understanding": "Ask: 'How many more people chose pepperoni over cheese?' 'Which measurement appears most often?' Have students explain their reasoning.",
@@ -452,7 +452,7 @@
     ],
     "outline": {
       "hook": "Show a simple table of classroom supplies. Ask: 'How many pencils do we have?' 'Do we have more pens or erasers?' Let students practice finding information.",
-      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. Demonstrate with a food preferences table: find Emma's favorite by locating her row.",
+      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. For example, if the row for Mia and the column for apples meet at 3, Mia chose 3 apples. In a chart, compare values by reading labels and amounts carefully.",
       "guided_practice": "Students work with a class weather table. Together, find the warmest day, coldest day, and which days were similar. Do addition and subtraction with table data.",
       "independent_practice": "Students receive a table of sports participation. They answer guided questions: 'Who plays soccer?' 'How many more basketball players than tennis?' 'What's the total?'",
       "check_for_understanding": "Have students verbally explain how to find specific pieces of information in a table. Ask them to create their own simple table.",
@@ -480,7 +480,7 @@
     ],
     "outline": {
       "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "direct_instruction": "Explain that probability is about how likely something is to happen. For example, a coin has two possible outcomes, but 10 flips might still give 6 heads and 4 tails. Show dice rolls or spinner spins and record every outcome so students can compare what happened to what they expected.",
       "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
       "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
       "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
@@ -496,12 +496,12 @@
   },
   "4-mathematics-data-and-probability-statistics-mean-median-mode": {
     "title": "Mean/Median/Mode",
-    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "summary": "Find the mean, median, and mode of a data set. Compare how each measure describes the center or most common value.",
     "objectives": [
-      "Conduct simple probability experiments",
-      "Record experimental outcomes accurately",
-      "Compare frequencies of events",
-      "Predict outcomes based on experimental data"
+      "Find the mean by adding and dividing",
+      "Find the median by ordering data",
+      "Identify the mode as the most common value",
+      "Compare which measure best describes a set of data"
     ],
     "grade_band": "Grade 4",
     "subject": "Mathematics",
@@ -509,18 +509,18 @@
       "4.MD.B.4"
     ],
     "outline": {
-      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
-      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
-      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
-      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
-      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "hook": "Write 3, 5, 5, 8, 9 on the board. Ask: 'Which number shows up most?' 'Which number is in the middle?' 'What happens if we share the total equally?'",
+      "direct_instruction": "Mean is the equal share: add the numbers and divide by how many numbers there are. Median is the middle number after putting the data in order. Mode is the value that appears most often. For example, in 2, 4, 4, 6, 9, the mode is 4, the median is 4, and the mean is 25 divided by 5, which equals 5.",
+      "guided_practice": "Order small data sets together and find mean, median, and mode step by step. For example, use 6, 7, 7, 10: the mode is 7, the median is 7, and the mean is 30 divided by 4, which equals 7.5.",
+      "independent_practice": "Students solve 3-4 short data sets by finding mean, median, and mode. They explain which measure best describes a set such as daily step counts or quiz scores.",
+      "check_for_understanding": "Ask: 'Why do we put the numbers in order before finding the median?' 'Can a data set have more than one mode?' 'Which measure uses every number in the set?'",
+      "exit_ticket": "Students find at least two of the three measures for one short data set and explain how they found them.",
       "materials": [
-        "Coins",
-        "Dice",
-        "Spinners",
+        "Data cards",
+        "Number strips",
+        "Counters",
         "Recording sheets",
-        "Tally chart templates"
+        "Whiteboard or chart paper"
       ]
     }
   },
@@ -598,7 +598,7 @@
     ],
     "outline": {
       "hook": "Show a coordinate plane with one point plotted. Ask: 'Where is this point?' Explain the x-axis (left-right) and y-axis (up-down).",
-      "direct_instruction": "Ordered pair (x, y) tells location. Start at origin (0, 0). Move right (positive x) or left (negative x). Move up (positive y) or down (negative y).",
+      "direct_instruction": "An ordered pair (x, y) tells location. Start at the origin (0, 0), move right along the x-axis, then move up along the y-axis. In Quadrant I, both numbers are positive. For example, (2, 3) means move 2 right and 3 up.",
       "guided_practice": "Plot points together: (2, 3), (4, 1), (1, 4). Name the coordinates of points already plotted. Play a game finding treasure at coordinates.",
       "independent_practice": "Students plot 5-8 given points on graph paper. Then name the coordinates of points you show them. Create their own shape using coordinates.",
       "check_for_understanding": "Ask: 'What are the coordinates of that point?' 'Is (3, 2) the same as (2, 3)?' Have them explain why order matters.",
@@ -627,7 +627,7 @@
     ],
     "outline": {
       "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
-      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "direct_instruction": "Translation means slide a shape without turning or flipping it. Rotation means turn a shape around a point. Reflection means flip a shape over a line. For example, sliding a square 3 units right changes its position but not its size or shape.",
       "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
       "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
       "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
@@ -656,7 +656,7 @@
     ],
     "outline": {
       "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
-      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count, or multiply length \u00d7 width \u00d7 height. For example, a prism that is 2 cubes long, 3 cubes wide, and 4 cubes tall has 2 \u00d7 3 \u00d7 4 = 24 cubic units.",
       "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
       "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
       "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
@@ -685,7 +685,7 @@
     ],
     "outline": {
       "hook": "Show a dollar bill and a dime. Explain: a dime is 0.1 dollars, or 1/10. Connect to decimal notation.",
-      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions. 0.5 = 5/10 = 1/2.",
+      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions after the point. For example, 0.3 means 3 tenths and 0.25 means 25 hundredths. 0.5 = 5/10 = 1/2.",
       "guided_practice": "Shade decimal grids to represent 0.3, 0.25, etc. Write decimals and fractions that match. Compare decimals: is 0.5 bigger than 0.3?",
       "independent_practice": "Students write decimals for shaded grids. Compare decimal numbers. Use decimals to record measurements and money amounts.",
       "check_for_understanding": "Ask: 'What is 0.7 as a fraction?' 'Is 0.25 the same as 1/4?' Have them explain.",
@@ -714,7 +714,7 @@
     ],
     "outline": {
       "hook": "Divide a pizza into equal slices. Ask: 'How many slices is the whole pizza?' 'If I eat 2 slices out of 8, what fraction did I eat?'",
-      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total.",
+      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total. For example, 3/4 means 3 of 4 equal parts.",
       "guided_practice": "Shade fraction models to represent 1/2, 1/3, 1/4, etc. Show equivalent fractions (1/2 = 2/4). Compare 1/2 and 1/3.",
       "independent_practice": "Students shade models for given fractions. Find equivalent fractions. Compare fractions with same denominators.",
       "check_for_understanding": "Ask: 'Is 1/2 bigger than 1/3?' 'Are 2/4 and 1/2 the same?' Have them explain their reasoning.",
@@ -729,12 +729,12 @@
   },
   "4-mathematics-number-and-operations-multiplication-division": {
     "title": "Multiplication/Division",
-    "summary": "Understand multiplication as repeated addition and equal groups. Master facts and multi-digit multiplication.",
+    "summary": "Understand multiplication and division as equal groups, arrays, and related operations. Solve problems by connecting multiplication facts and division facts.",
     "objectives": [
-      "Represent multiplication as equal groups or arrays",
-      "Understand the commutative property",
-      "Memorize multiplication facts",
-      "Solve multiplication word problems"
+      "Represent multiplication and division with equal groups or arrays",
+      "Use related multiplication and division facts",
+      "Solve multiplication and division word problems",
+      "Explain answers with drawings or equations"
     ],
     "grade_band": "Grade 4",
     "subject": "Mathematics",
@@ -743,11 +743,11 @@
     ],
     "outline": {
       "hook": "Show 3 bags with 4 apples each. Ask: 'How many total?' Introduce: 3 \u00d7 4 = 12.",
-      "direct_instruction": "Multiplication is repeated addition. 3 \u00d7 4 means 4 + 4 + 4. Arrays show rows and columns. 3 rows of 4 = 3 \u00d7 4 = 12.",
-      "guided_practice": "Create arrays with objects or drawings. Write multiplication sentences. Skip count by 2s, 5s, 10s.",
-      "independent_practice": "Students create arrays for given multiplications. Solve word problems involving equal groups.",
-      "check_for_understanding": "Ask: 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' (Yes!) Have them draw arrays to prove it.",
-      "exit_ticket": "Students draw an array or groups to match a multiplication sentence.",
+      "direct_instruction": "Multiplication is repeated addition. For example, 3 \u00d7 4 means 4 + 4 + 4 = 12. Division splits a total into equal groups. For example, 12 \u00f7 3 = 4 means 12 objects shared into 3 equal groups gives 4 in each group. Arrays can model both operations.",
+      "guided_practice": "Create arrays with objects or drawings. Write multiplication and matching division sentences. For example, a 3-by-4 array shows both 3 \u00d7 4 = 12 and 12 \u00f7 3 = 4.",
+      "independent_practice": "Students create arrays or equal-group drawings for given facts. They solve word problems involving multiplication and division and write an equation to match each story.",
+      "check_for_understanding": "Ask: 'How does 3 \u00d7 4 = 12 help you solve 12 \u00f7 3?' 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' Have them draw arrays to explain.",
+      "exit_ticket": "Students draw an array or equal groups to match one multiplication or division sentence.",
       "materials": [
         "Objects (counters, beans, blocks)",
         "Grid paper for arrays",
@@ -772,7 +772,7 @@
     ],
     "outline": {
       "hook": "Write 345. Ask: 'What does the 4 represent?' (40) 'The 3?' (300) Discuss how the same digit means different amounts.",
-      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands. Show with place value blocks or charts.",
+      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands, and beyond. Show with place value blocks or charts. For example, in 4,582, the 4 means 4 thousands, the 5 means 5 hundreds, and the 8 means 8 tens.",
       "guided_practice": "Write numbers in expanded form: 234 = 200 + 30 + 4. Compare numbers using place value. Round to nearest 10 or 100.",
       "independent_practice": "Students identify place values in numbers. Write numbers in expanded form. Compare numbers and round.",
       "check_for_understanding": "Ask: 'What is 5 in 5,432?' (5 thousands, or 5,000) 'Is 234 or 324 bigger?'",
@@ -801,7 +801,7 @@
     ],
     "outline": {
       "hook": "Ask: 'Is 48 closer to 40 or 50?' Show a number line. Round 48 to 50. Explain using a number line.",
-      "direct_instruction": "Look at the digit to the right of the place you're rounding to. If 5 or more, round up. If less than 5, round down.",
+      "direct_instruction": "Look at the digit to the right of the place you are rounding to. If it is 5 or more, round up. If it is less than 5, round down. For example, 47 rounds to 50 because it is closer to 50 than 40.",
       "guided_practice": "Round several numbers together: 23 to nearest 10, 156 to nearest 100. Use number lines.",
       "independent_practice": "Students round 8-10 numbers to specified place values. Estimate sums by rounding first.",
       "check_for_understanding": "Ask: 'What is 67 rounded to the nearest 10?' 'Is that reasonable?' Have them explain their thinking.",
@@ -829,7 +829,7 @@
     ],
     "outline": {
       "hook": "Show a bar plot of favorite ice cream flavors. Ask: 'How can we tell which flavor is most popular?' Discuss how the height of bars helps us compare.",
-      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. Demonstrate creating a bar plot by counting votes for 3 favorite fruits. Show line plots use X marks to display measurements. Create a line plot of student heights together as a class.",
+      "direct_instruction": "Explain that bar plots use rectangular bars to show data for categories. For example, if 6 students choose apples and 4 choose bananas, the apple bar is 2 units taller. Show that line plots use X marks to display measurements. For example, if pencil lengths are 5, 5, 6, and 7 inches, place two X marks above 5, one above 6, and one above 7.",
       "guided_practice": "In pairs, students create a bar plot showing classroom pet preferences. Then they make a line plot of coin flip results from 10 trials. Check for understanding by asking questions about the plots.",
       "independent_practice": "Students survey classmates about favorite pizza toppings and create their own bar plot. They then measure pencil lengths and make a line plot of the data.",
       "check_for_understanding": "Ask: 'How many more people chose pepperoni over cheese?' 'Which measurement appears most often?' Have students explain their reasoning.",
@@ -859,7 +859,7 @@
     ],
     "outline": {
       "hook": "Show a simple table of classroom supplies. Ask: 'How many pencils do we have?' 'Do we have more pens or erasers?' Let students practice finding information.",
-      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. Demonstrate with a food preferences table: find Emma's favorite by locating her row.",
+      "direct_instruction": "Explain table structure: rows are horizontal, columns are vertical. Show how to find data by matching row and column. For example, if the row for Mia and the column for apples meet at 3, Mia chose 3 apples. In a chart, compare values by reading labels and amounts carefully.",
       "guided_practice": "Students work with a class weather table. Together, find the warmest day, coldest day, and which days were similar. Do addition and subtraction with table data.",
       "independent_practice": "Students receive a table of sports participation. They answer guided questions: 'Who plays soccer?' 'How many more basketball players than tennis?' 'What's the total?'",
       "check_for_understanding": "Have students verbally explain how to find specific pieces of information in a table. Ask them to create their own simple table.",
@@ -887,7 +887,7 @@
     ],
     "outline": {
       "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
+      "direct_instruction": "Explain that probability is about how likely something is to happen. For example, a coin has two possible outcomes, but 10 flips might still give 6 heads and 4 tails. Show dice rolls or spinner spins and record every outcome so students can compare what happened to what they expected.",
       "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
       "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
       "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
@@ -903,12 +903,12 @@
   },
   "5-mathematics-data-and-probability-statistics-mean-median-mode": {
     "title": "Mean/Median/Mode",
-    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "summary": "Find the mean, median, and mode of a data set. Compare how each measure describes the center or most common value.",
     "objectives": [
-      "Conduct simple probability experiments",
-      "Record experimental outcomes accurately",
-      "Compare frequencies of events",
-      "Predict outcomes based on experimental data"
+      "Find the mean by adding and dividing",
+      "Find the median by ordering data",
+      "Identify the mode as the most common value",
+      "Compare which measure best describes a set of data"
     ],
     "grade_band": "Grade 5",
     "subject": "Mathematics",
@@ -916,18 +916,18 @@
       "5.MD.B.2"
     ],
     "outline": {
-      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
-      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
-      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
-      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
-      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "hook": "Write 3, 5, 5, 8, 9 on the board. Ask: 'Which number shows up most?' 'Which number is in the middle?' 'What happens if we share the total equally?'",
+      "direct_instruction": "Mean is the equal share: add the numbers and divide by how many numbers there are. Median is the middle number after putting the data in order. Mode is the value that appears most often. For example, in 2, 4, 4, 6, 9, the mode is 4, the median is 4, and the mean is 25 divided by 5, which equals 5.",
+      "guided_practice": "Order small data sets together and find mean, median, and mode step by step. For example, use 6, 7, 7, 10: the mode is 7, the median is 7, and the mean is 30 divided by 4, which equals 7.5.",
+      "independent_practice": "Students solve 3-4 short data sets by finding mean, median, and mode. They explain which measure best describes a set such as daily step counts or quiz scores.",
+      "check_for_understanding": "Ask: 'Why do we put the numbers in order before finding the median?' 'Can a data set have more than one mode?' 'Which measure uses every number in the set?'",
+      "exit_ticket": "Students find at least two of the three measures for one short data set and explain how they found them.",
       "materials": [
-        "Coins",
-        "Dice",
-        "Spinners",
+        "Data cards",
+        "Number strips",
+        "Counters",
         "Recording sheets",
-        "Tally chart templates"
+        "Whiteboard or chart paper"
       ]
     }
   },
@@ -1005,7 +1005,7 @@
     ],
     "outline": {
       "hook": "Show a coordinate plane with one point plotted. Ask: 'Where is this point?' Explain the x-axis (left-right) and y-axis (up-down).",
-      "direct_instruction": "Ordered pair (x, y) tells location. Start at origin (0, 0). Move right (positive x) or left (negative x). Move up (positive y) or down (negative y).",
+      "direct_instruction": "An ordered pair (x, y) tells location. Start at the origin (0, 0), move right along the x-axis, then move up along the y-axis. In Quadrant I, both numbers are positive. For example, (2, 3) means move 2 right and 3 up.",
       "guided_practice": "Plot points together: (2, 3), (4, 1), (1, 4). Name the coordinates of points already plotted. Play a game finding treasure at coordinates.",
       "independent_practice": "Students plot 5-8 given points on graph paper. Then name the coordinates of points you show them. Create their own shape using coordinates.",
       "check_for_understanding": "Ask: 'What are the coordinates of that point?' 'Is (3, 2) the same as (2, 3)?' Have them explain why order matters.",
@@ -1034,7 +1034,7 @@
     ],
     "outline": {
       "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
-      "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
+      "direct_instruction": "Translation means slide a shape without turning or flipping it. Rotation means turn a shape around a point. Reflection means flip a shape over a line. For example, sliding a square 3 units right changes its position but not its size or shape.",
       "guided_practice": "Using cut-out shapes and mirrors, demonstrate each transformation. Have students copy and predict what happens.",
       "independent_practice": "Students perform transformations on grid paper. Draw a triangle, then show it translated right, rotated 90\u00b0, and reflected.",
       "check_for_understanding": "Ask: 'If I translate a square, is it still a square?' 'How is a reflection different from a rotation?'",
@@ -1063,7 +1063,7 @@
     ],
     "outline": {
       "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
-      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",
+      "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count, or multiply length \u00d7 width \u00d7 height. For example, a prism that is 2 cubes long, 3 cubes wide, and 4 cubes tall has 2 \u00d7 3 \u00d7 4 = 24 cubic units.",
       "guided_practice": "Build rectangular prisms with cubes and count the volume together. Try different dimensions. See how volume changes.",
       "independent_practice": "Students build 3-4 different rectangular prisms and calculate volume by counting cubes and by formula.",
       "check_for_understanding": "Ask: 'If I double the height, what happens to volume?' Have them test.",
@@ -1092,7 +1092,7 @@
     ],
     "outline": {
       "hook": "Show a dollar bill and a dime. Explain: a dime is 0.1 dollars, or 1/10. Connect to decimal notation.",
-      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions. 0.5 = 5/10 = 1/2.",
+      "direct_instruction": "The decimal point separates whole numbers from parts. Tenths place is one position after the point. Hundredths is two positions after the point. For example, 0.3 means 3 tenths and 0.25 means 25 hundredths. 0.5 = 5/10 = 1/2.",
       "guided_practice": "Shade decimal grids to represent 0.3, 0.25, etc. Write decimals and fractions that match. Compare decimals: is 0.5 bigger than 0.3?",
       "independent_practice": "Students write decimals for shaded grids. Compare decimal numbers. Use decimals to record measurements and money amounts.",
       "check_for_understanding": "Ask: 'What is 0.7 as a fraction?' 'Is 0.25 the same as 1/4?' Have them explain.",
@@ -1121,7 +1121,7 @@
     ],
     "outline": {
       "hook": "Divide a pizza into equal slices. Ask: 'How many slices is the whole pizza?' 'If I eat 2 slices out of 8, what fraction did I eat?'",
-      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total.",
+      "direct_instruction": "A fraction names equal parts of a whole. Numerator (top) tells how many parts. Denominator (bottom) tells how many equal parts total. For example, 3/4 means 3 of 4 equal parts.",
       "guided_practice": "Shade fraction models to represent 1/2, 1/3, 1/4, etc. Show equivalent fractions (1/2 = 2/4). Compare 1/2 and 1/3.",
       "independent_practice": "Students shade models for given fractions. Find equivalent fractions. Compare fractions with same denominators.",
       "check_for_understanding": "Ask: 'Is 1/2 bigger than 1/3?' 'Are 2/4 and 1/2 the same?' Have them explain their reasoning.",
@@ -1136,12 +1136,12 @@
   },
   "5-mathematics-number-and-operations-multiplication-division": {
     "title": "Multiplication/Division",
-    "summary": "Understand multiplication as repeated addition and equal groups. Master facts and multi-digit multiplication.",
+    "summary": "Understand multiplication and division as equal groups, arrays, and related operations. Solve problems by connecting multiplication facts and division facts.",
     "objectives": [
-      "Represent multiplication as equal groups or arrays",
-      "Understand the commutative property",
-      "Memorize multiplication facts",
-      "Solve multiplication word problems"
+      "Represent multiplication and division with equal groups or arrays",
+      "Use related multiplication and division facts",
+      "Solve multiplication and division word problems",
+      "Explain answers with drawings or equations"
     ],
     "grade_band": "Grade 5",
     "subject": "Mathematics",
@@ -1150,11 +1150,11 @@
     ],
     "outline": {
       "hook": "Show 3 bags with 4 apples each. Ask: 'How many total?' Introduce: 3 \u00d7 4 = 12.",
-      "direct_instruction": "Multiplication is repeated addition. 3 \u00d7 4 means 4 + 4 + 4. Arrays show rows and columns. 3 rows of 4 = 3 \u00d7 4 = 12.",
-      "guided_practice": "Create arrays with objects or drawings. Write multiplication sentences. Skip count by 2s, 5s, 10s.",
-      "independent_practice": "Students create arrays for given multiplications. Solve word problems involving equal groups.",
-      "check_for_understanding": "Ask: 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' (Yes!) Have them draw arrays to prove it.",
-      "exit_ticket": "Students draw an array or groups to match a multiplication sentence.",
+      "direct_instruction": "Multiplication is repeated addition. For example, 3 \u00d7 4 means 4 + 4 + 4 = 12. Division splits a total into equal groups. For example, 12 \u00f7 3 = 4 means 12 objects shared into 3 equal groups gives 4 in each group. Arrays can model both operations.",
+      "guided_practice": "Create arrays with objects or drawings. Write multiplication and matching division sentences. For example, a 3-by-4 array shows both 3 \u00d7 4 = 12 and 12 \u00f7 3 = 4.",
+      "independent_practice": "Students create arrays or equal-group drawings for given facts. They solve word problems involving multiplication and division and write an equation to match each story.",
+      "check_for_understanding": "Ask: 'How does 3 \u00d7 4 = 12 help you solve 12 \u00f7 3?' 'Is 3 \u00d7 4 the same as 4 \u00d7 3?' Have them draw arrays to explain.",
+      "exit_ticket": "Students draw an array or equal groups to match one multiplication or division sentence.",
       "materials": [
         "Objects (counters, beans, blocks)",
         "Grid paper for arrays",
@@ -1179,7 +1179,7 @@
     ],
     "outline": {
       "hook": "Write 345. Ask: 'What does the 4 represent?' (40) 'The 3?' (300) Discuss how the same digit means different amounts.",
-      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands. Show with place value blocks or charts.",
+      "direct_instruction": "Each place is 10 times the place to its right. Ones, tens, hundreds, thousands, and beyond. Show with place value blocks or charts. For example, in 4,582, the 4 means 4 thousands, the 5 means 5 hundreds, and the 8 means 8 tens.",
       "guided_practice": "Write numbers in expanded form: 234 = 200 + 30 + 4. Compare numbers using place value. Round to nearest 10 or 100.",
       "independent_practice": "Students identify place values in numbers. Write numbers in expanded form. Compare numbers and round.",
       "check_for_understanding": "Ask: 'What is 5 in 5,432?' (5 thousands, or 5,000) 'Is 234 or 324 bigger?'",
@@ -1208,7 +1208,7 @@
     ],
     "outline": {
       "hook": "Ask: 'Is 48 closer to 40 or 50?' Show a number line. Round 48 to 50. Explain using a number line.",
-      "direct_instruction": "Look at the digit to the right of the place you're rounding to. If 5 or more, round up. If less than 5, round down.",
+      "direct_instruction": "Look at the digit to the right of the place you are rounding to. If it is 5 or more, round up. If it is less than 5, round down. For example, 47 rounds to 50 because it is closer to 50 than 40.",
       "guided_practice": "Round several numbers together: 23 to nearest 10, 156 to nearest 100. Use number lines.",
       "independent_practice": "Students round 8-10 numbers to specified place values. Estimate sums by rounding first.",
       "check_for_understanding": "Ask: 'What is 67 rounded to the nearest 10?' 'Is that reasonable?' Have them explain their thinking.",
@@ -1603,12 +1603,12 @@
   },
   "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
     "title": "Ratios & Proportional Reasoning",
-    "summary": "Explore the concepts and skills of Ratios & Proportional Reasoning. Develop understanding and apply learning to new situations.",
+    "summary": "Compare quantities with ratios, equivalent ratios, and unit rates in contexts such as recipes, prices, maps, and classroom surveys.",
     "objectives": [
-      "Understand key concepts in Ratios & Proportional Reasoning",
-      "Apply skills from Ratios & Proportional Reasoning to solve problems",
-      "Communicate reasoning about Ratios & Proportional Reasoning",
-      "Build fluency and confidence with Ratios & Proportional Reasoning"
+      "Interpret what a ratio compares and keep quantities in the correct order",
+      "Use tables, scale factors, and double number lines to build equivalent ratios",
+      "Find and explain unit rates in real-world situations",
+      "Decide whether a ratio relationship is proportional and justify the reasoning"
     ],
     "grade_band": "Grade 6",
     "subject": "Mathematics",
@@ -1616,17 +1616,17 @@
       "6.RP.A.1"
     ],
     "outline": {
-      "hook": "Start with a real-world connection or interesting question related to the topic.",
-      "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
-      "guided_practice": "Work through problems together as a class. Guide students through the steps.",
-      "independent_practice": "Students practice skills with your support. Gradually release responsibility.",
-      "check_for_understanding": "Ask questions to gauge student understanding. Adjust as needed.",
-      "exit_ticket": "Students demonstrate one key skill from the lesson.",
+      "hook": "Show two snack mix recipes: 2 cups pretzels to 3 cups cereal and 4 cups pretzels to 6 cups cereal. Ask whether the recipes would taste the same and what each ratio is comparing.",
+      "direct_instruction": "Define a ratio as a comparison of two quantities with labels attached. Model equivalent ratios by scaling both parts of 2:3 to make 4:6 and 6:9. For example, if 3 notebooks cost $9, then the unit rate is $3 per notebook, which helps predict that 5 notebooks would cost $15.",
+      "guided_practice": "Build a ratio table and a double number line for a recipe that uses 2 cups juice for every 5 cups water. Work together to find matching amounts for 4 cups juice, 6 cups juice, and 1 cup juice, and discuss which method makes the structure easiest to see.",
+      "independent_practice": "Students solve ratio problems about maps, classroom surveys, and prices. Include one problem where they scale a ratio, one where they find a unit rate, and one where they explain whether two tables represent a proportional relationship.",
+      "check_for_understanding": "Ask students to explain why 4:6 and 6:9 are equivalent but 4:7 is not. Have them describe the multiplicative pattern rather than only the additive change.",
+      "exit_ticket": "A trail map uses 1 inch to represent 4 miles. Students determine how many miles 3 inches represents and write one sentence explaining why the relationship is proportional.",
       "materials": [
-        "Teaching materials specific to the topic",
-        "Visual aids",
-        "Manipulatives if appropriate",
-        "Practice worksheets"
+        "Ratio tables",
+        "Double number line handouts",
+        "Recipe cards or pictures",
+        "Practice problems with prices and map scales"
       ]
     }
   },
@@ -2071,12 +2071,12 @@
   },
   "8-mathematics-data-and-probability-statistics-probability-rules": {
     "title": "Probability Rules",
-    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "summary": "Analyze compound events by organizing sample spaces, counting favorable outcomes, and using complements when that strategy is more efficient.",
     "objectives": [
-      "Conduct simple probability experiments",
-      "Record experimental outcomes accurately",
-      "Compare frequencies of events",
-      "Predict outcomes based on experimental data"
+      "Represent compound events with lists, tables, or organized sample spaces",
+      "Calculate probabilities of compound events from total and favorable outcomes",
+      "Use the complement rule for events such as not, at least one, or everything except",
+      "Explain why an answer is reasonable based on the structure of the sample space"
     ],
     "grade_band": "Grade 8",
     "subject": "Mathematics",
@@ -2084,18 +2084,18 @@
       "8.SP.A.4"
     ],
     "outline": {
-      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
-      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
-      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
-      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
-      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "hook": "Ask students to predict the chance of flipping heads and then rolling a number greater than 4. Let them estimate first, then discuss why a compound event needs an organized list of outcomes.",
+      "direct_instruction": "Model compound probability with a sample space. For example, if a coin is flipped and a number cube is rolled, there are 12 equally likely outcomes. The event heads and a number greater than 4 has 2 favorable outcomes, so the probability is 2/12 or 1/6. Then show how the complement rule can find the probability of not getting a sum of 7 when rolling two number cubes.",
+      "guided_practice": "Create a table for rolling two number cubes and identify all combinations that make sums of 6, 7, and 8. Compare a direct count to a complement strategy and discuss which method is more efficient for each question.",
+      "independent_practice": "Students solve compound-event tasks involving coins, number cubes, cards, and spinners. Include one item that uses an organized sample space, one that uses a table, and one that uses the complement of an event such as at least one success.",
+      "check_for_understanding": "Ask why the probability of a sum of 7 on two number cubes is 6/36 instead of 6/12. Listen for students to name the full sample space and not just the number of possible sums.",
+      "exit_ticket": "Students answer: A fair coin is flipped twice. What is the probability of getting at least one head? They must solve it and state whether they used direct counting or a complement.",
       "materials": [
         "Coins",
-        "Dice",
+        "Number cubes",
         "Spinners",
-        "Recording sheets",
-        "Tally chart templates"
+        "Sample space organizers",
+        "Probability task cards"
       ]
     }
   },
@@ -2131,12 +2131,12 @@
   },
   "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
     "title": "Scatterplots & Correlation",
-    "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "summary": "Interpret scatterplots by describing association, identifying outliers, drawing informal lines of fit, and using trends to make reasonable predictions.",
     "objectives": [
-      "Conduct simple probability experiments",
-      "Record experimental outcomes accurately",
-      "Compare frequencies of events",
-      "Predict outcomes based on experimental data"
+      "Describe the direction and strength of association shown in a scatterplot",
+      "Identify outliers and explain how they affect the overall interpretation",
+      "Draw an informal line of fit that represents the center of a data pattern",
+      "Use a line of fit to make predictions and judge whether the prediction is reasonable"
     ],
     "grade_band": "Grade 8",
     "subject": "Mathematics",
@@ -2144,18 +2144,18 @@
       "8.SP.A.2"
     ],
     "outline": {
-      "hook": "Flip a coin together 10 times. Record heads and tails on the board. Ask: 'Will we get more heads or tails?' Why do we get different amounts each time?",
-      "direct_instruction": "Explain that probability is about likelihood. Even though a coin has two sides, we might not get exactly equal results. Show dice rolls or spinner spins. Record every outcome.",
-      "guided_practice": "In small groups, students flip coins 20 times and record results. Roll dice and make tally marks. Compare group results. Discuss why results differ.",
-      "independent_practice": "Students choose an experiment (coin, dice, or spinner) and conduct 15-20 trials. They create a chart or table showing their results.",
-      "check_for_understanding": "Ask: 'What happened most often?' 'If you did this again, would you expect the same result?' Have them explain their thinking.",
-      "exit_ticket": "Students draw a simple tally chart from their experiment and write one observation about what happened.",
+      "hook": "Display a scatterplot showing hours studied and quiz scores. Ask what students notice first: whether the points rise or fall, whether they stay close together, and whether any point looks unusual.",
+      "direct_instruction": "Teach students to read direction, strength, and outliers before making predictions. For example, if points like (1, 58), (2, 64), (3, 70), and (4, 76) rise from left to right, the scatterplot shows a positive association. Model how an informal line of fit should pass through the center of the data with a similar amount of scatter above and below the line.",
+      "guided_practice": "Work through a scatterplot of practice time and performance score. Students describe the correlation, sketch a reasonable line of fit, and predict the score for a nearby x-value such as 6 hours of practice. Discuss why predictions inside the data range are usually stronger than predictions far outside it.",
+      "independent_practice": "Students analyze several scatterplots about science data, sports data, and classroom surveys. For each graph, they identify the association, note any outlier, and use a line of fit to make one reasonable prediction.",
+      "check_for_understanding": "Ask students to compare two scatterplots and explain which one shows the stronger positive association. Require them to reference how tightly the points cluster around an imagined line.",
+      "exit_ticket": "Students examine a small scatterplot and answer two questions: What type of association is shown, and what prediction would you make for a new x-value near the existing data?",
       "materials": [
-        "Coins",
-        "Dice",
-        "Spinners",
-        "Recording sheets",
-        "Tally chart templates"
+        "Scatterplot handouts",
+        "Graph paper",
+        "Rulers",
+        "Colored pencils",
+        "Data cards for line-of-fit practice"
       ]
     }
   },

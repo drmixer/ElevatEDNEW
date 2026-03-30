@@ -52,6 +52,8 @@ Reasonable claim:
 
 - The sources together show one major turning point or tension in how Americans responded to national change.
 
+For example, if the timeline shows economic crisis and the public message source urges one response to it, students can explain how that moment became a turning point in national policy.
+
 Students should support the claim with at least one detail from two different sources, then use the timeline to explain why the issue mattered in that moment.
 
 ## Summary

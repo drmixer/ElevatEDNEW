@@ -51,6 +51,8 @@ Reasonable claim:
 
 - Expansion increased sectional conflict because each new territory raised questions about power and slavery.
 
+For example, if a map shows new western territory and a source set shows leaders arguing about slavery there, students can explain how expansion deepened sectional conflict.
+
 Students should support that claim with at least one map or timeline detail and one written-source detail.
 
 ## Why Context Matters

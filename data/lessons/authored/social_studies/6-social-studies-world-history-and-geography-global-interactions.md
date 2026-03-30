@@ -54,6 +54,8 @@ Reasonable inference:
 
 - The route helped regions influence one another over time.
 
+For example, if the map links Asia, Africa, and Europe and the case study tracks a traded good moving across those routes, students can explain how one network changed several regions.
+
 The sources do not prove that every effect was positive. Some interactions spread wealth or knowledge, while others spread conflict or disease. Good source analysis recognizes both possibilities.
 
 ## Summary

@@ -52,6 +52,8 @@ Reasonable inference:
 - Industrial growth created demand for workers.
 - Immigration brought new people into those changing cities.
 
+For example, a factory photo with crowded machines and a checkpoint record showing new arrivals together suggest that growing industries needed more workers.
+
 Students should not assume every person had the same experience. The sources show patterns, not every individual story.
 
 ## Why Perspective Matters

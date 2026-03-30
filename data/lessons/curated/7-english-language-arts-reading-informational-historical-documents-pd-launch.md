@@ -67,6 +67,8 @@ The strongest details for that purpose appear in Paragraphs 2 and 3:
 
 Those details matter because the writer is not just warning people. The writer is trying to make the rules seem necessary and fair.
 
+For example, the line about protecting the school kitchen, clinic, and public pump shows exactly which shared services the writer wants the audience to value and protect.
+
 ## Model Analysis: Best Evidence
 Suppose the question is:
 
