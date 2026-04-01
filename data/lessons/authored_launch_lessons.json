@@ -179,6 +179,7 @@
   "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i": {
     "title": "Coordinate Plane (Quadrant I)",
     "summary": "Plot points on a coordinate plane using ordered pairs. Move and identify locations using coordinates.",
+    "content_markdown_file": "curated/3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i-launch.md",
     "objectives": [
       "Understand ordered pairs (x, y)",
       "Plot points on a coordinate plane",
@@ -208,6 +209,7 @@
   "3-mathematics-geometry-and-measurement-transformations-intro": {
     "title": "Transformations (intro)",
     "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "content_markdown_file": "curated/3-mathematics-geometry-and-measurement-transformations-intro-launch.md",
     "objectives": [
       "Identify rotations, reflections, and translations",
       "Perform transformations on shapes",
@@ -237,6 +239,7 @@
   "3-mathematics-geometry-and-measurement-volume": {
     "title": "Volume",
     "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "content_markdown_file": "curated/3-mathematics-geometry-and-measurement-volume-launch.md",
     "objectives": [
       "Understand volume as cubic units",
       "Count unit cubes to find volume",
@@ -295,6 +298,7 @@
   "3-mathematics-number-and-operations-fractions-concepts-equivalence": {
     "title": "Fractions (concepts, equivalence)",
     "summary": "Explore parts of a whole. Understand unit fractions, equal shares, and equivalent fractions.",
+    "content_markdown_file": "curated/3-mathematics-number-and-operations-fractions-concepts-equivalence-launch.md",
     "objectives": [
       "Understand fractions as equal parts",
       "Read and write fractions",
@@ -587,6 +591,7 @@
   "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i": {
     "title": "Coordinate Plane (Quadrant I)",
     "summary": "Plot points on a coordinate plane using ordered pairs. Move and identify locations using coordinates.",
+    "content_markdown_file": "curated/4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i-launch.md",
     "objectives": [
       "Understand ordered pairs (x, y)",
       "Plot points on a coordinate plane",
@@ -616,6 +621,7 @@
   "4-mathematics-geometry-and-measurement-transformations-intro": {
     "title": "Transformations (intro)",
     "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "content_markdown_file": "curated/4-mathematics-geometry-and-measurement-transformations-intro-launch.md",
     "objectives": [
       "Identify rotations, reflections, and translations",
       "Perform transformations on shapes",
@@ -645,6 +651,7 @@
   "4-mathematics-geometry-and-measurement-volume": {
     "title": "Volume",
     "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "content_markdown_file": "curated/4-mathematics-geometry-and-measurement-volume-launch.md",
     "objectives": [
       "Understand volume as cubic units",
       "Count unit cubes to find volume",
@@ -703,6 +710,7 @@
   "4-mathematics-number-and-operations-fractions-concepts-equivalence": {
     "title": "Fractions (concepts, equivalence)",
     "summary": "Explore parts of a whole. Understand unit fractions, equal shares, and equivalent fractions.",
+    "content_markdown_file": "curated/4-mathematics-number-and-operations-fractions-concepts-equivalence-launch.md",
     "objectives": [
       "Understand fractions as equal parts",
       "Read and write fractions",
@@ -996,6 +1004,7 @@
   "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i": {
     "title": "Coordinate Plane (Quadrant I)",
     "summary": "Plot points on a coordinate plane using ordered pairs. Move and identify locations using coordinates.",
+    "content_markdown_file": "curated/5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i-launch.md",
     "objectives": [
       "Understand ordered pairs (x, y)",
       "Plot points on a coordinate plane",
@@ -1025,6 +1034,7 @@
   "5-mathematics-geometry-and-measurement-transformations-intro": {
     "title": "Transformations (intro)",
     "summary": "Explore rotations, reflections, and translations. Discover how shapes move and change in the plane.",
+    "content_markdown_file": "curated/5-mathematics-geometry-and-measurement-transformations-intro-launch.md",
     "objectives": [
       "Identify rotations, reflections, and translations",
       "Perform transformations on shapes",
@@ -1054,6 +1064,7 @@
   "5-mathematics-geometry-and-measurement-volume": {
     "title": "Volume",
     "summary": "Measure how much space objects take up. Calculate volume of rectangular prisms using unit cubes and formulas.",
+    "content_markdown_file": "curated/5-mathematics-geometry-and-measurement-volume-launch.md",
     "objectives": [
       "Understand volume as cubic units",
       "Count unit cubes to find volume",
@@ -1112,6 +1123,7 @@
   "5-mathematics-number-and-operations-fractions-concepts-equivalence": {
     "title": "Fractions (concepts, equivalence)",
     "summary": "Explore parts of a whole. Understand unit fractions, equal shares, and equivalent fractions.",
+    "content_markdown_file": "curated/5-mathematics-number-and-operations-fractions-concepts-equivalence-launch.md",
     "objectives": [
       "Understand fractions as equal parts",
       "Read and write fractions",

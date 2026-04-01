@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-03-30T22:33:04.687Z",
+  "timestamp": "2026-04-01T09:23:40.915Z",
   "totalLessons": 1191,
   "byPriority": {
-    "high": 975,
-    "medium": 204,
+    "high": 973,
+    "medium": 206,
     "low": 12
   },
   "bySubject": {
     "Mathematics": {
       "count": 349,
-      "avgPriority": 17.8
+      "avgPriority": 17.5
     },
     "Science": {
       "count": 292,
@@ -859,37 +859,6 @@
       ]
     },
     {
-      "id": 168,
-      "title": "Transformations (intro)",
-      "gradeBand": "3",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Transformations (intro)",
-      "contentLength": 1483,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 16,
-      "interactiveScore": 6,
-      "videoScore": 4,
-      "overallPriority": 26,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "angle",
-        "rotation"
-      ]
-    },
-    {
       "id": 848,
       "title": "Intro: Perimeter (intro) (Grade 2)",
       "gradeBand": "2",
@@ -948,68 +917,6 @@
         "coordinate",
         "degree",
         "pattern"
-      ]
-    },
-    {
-      "id": 180,
-      "title": "Transformations (intro)",
-      "gradeBand": "4",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Transformations (intro)",
-      "contentLength": 1483,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 16,
-      "interactiveScore": 6,
-      "videoScore": 4,
-      "overallPriority": 26,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "angle",
-        "rotation"
-      ]
-    },
-    {
-      "id": 193,
-      "title": "Transformations (intro)",
-      "gradeBand": "5",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Transformations (intro)",
-      "contentLength": 1483,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 16,
-      "interactiveScore": 6,
-      "videoScore": 4,
-      "overallPriority": 26,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "angle",
-        "rotation"
       ]
     },
     {
@@ -2525,96 +2432,6 @@
       ]
     },
     {
-      "id": 183,
-      "title": "Fractions (concepts, equivalence)",
-      "gradeBand": "4",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Fractions (concepts, equivalence)",
-      "contentLength": 1439,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 4,
-      "videoScore": 2,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "circle",
-        "chart",
-        "fraction",
-        "divide",
-        "model"
-      ]
-    },
-    {
-      "id": 196,
-      "title": "Fractions (concepts, equivalence)",
-      "gradeBand": "5",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Fractions (concepts, equivalence)",
-      "contentLength": 1439,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 4,
-      "videoScore": 2,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "circle",
-        "chart",
-        "fraction",
-        "divide",
-        "model"
-      ]
-    },
-    {
-      "id": 171,
-      "title": "Fractions (concepts, equivalence)",
-      "gradeBand": "3",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Fractions (concepts, equivalence)",
-      "contentLength": 1439,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 4,
-      "videoScore": 2,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "circle",
-        "chart",
-        "fraction",
-        "divide",
-        "model"
-      ]
-    },
-    {
       "id": 1416,
       "title": "2D/3D Shapes & Attributes Launch Lesson",
       "gradeBand": "1",
@@ -3862,35 +3679,6 @@
       ]
     },
     {
-      "id": 179,
-      "title": "Coordinate Plane (Quadrant I)",
-      "gradeBand": "4",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Coordinate Plane (Quadrant I)",
-      "contentLength": 1540,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "graph",
-        "plot",
-        "coordinate"
-      ]
-    },
-    {
       "id": 650,
       "title": "Intro: CS Principles, Data Structures (intro), Web Dev Basics (Grade 11)",
       "gradeBand": "11",
@@ -4272,64 +4060,6 @@
         "triangle",
         "rectangle",
         "angle"
-      ]
-    },
-    {
-      "id": 192,
-      "title": "Coordinate Plane (Quadrant I)",
-      "gradeBand": "5",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Coordinate Plane (Quadrant I)",
-      "contentLength": 1540,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "graph",
-        "plot",
-        "coordinate"
-      ]
-    },
-    {
-      "id": 167,
-      "title": "Coordinate Plane (Quadrant I)",
-      "gradeBand": "3",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Coordinate Plane (Quadrant I)",
-      "contentLength": 1540,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "graph",
-        "plot",
-        "coordinate"
       ]
     },
     {
@@ -4972,6 +4702,35 @@
         "pattern",
         "model",
         "visual"
+      ]
+    },
+    {
+      "id": 192,
+      "title": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "5",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Coordinate Plane (Quadrant I)",
+      "contentLength": 2164,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 18,
+      "interactiveScore": 1,
+      "videoScore": 1,
+      "overallPriority": 20,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "rectangle",
+        "polygon",
+        "graph"
       ]
     },
     {
@@ -5875,6 +5634,34 @@
       ]
     },
     {
+      "id": 180,
+      "title": "Transformations (intro)",
+      "gradeBand": "4",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Transformations (intro)",
+      "contentLength": 1966,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 17,
+      "interactiveScore": 1,
+      "videoScore": 1,
+      "overallPriority": 19,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "triangle",
+        "rectangle",
+        "angle"
+      ]
+    },
+    {
       "id": 1573,
       "title": "Astronomy/Astrophysics (intro) Launch Lesson",
       "gradeBand": "11",
@@ -5899,6 +5686,36 @@
       "conceptsForVisuals": [
         "pattern",
         "model"
+      ]
+    },
+    {
+      "id": 167,
+      "title": "Coordinate Plane (Quadrant I)",
+      "gradeBand": "3",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Coordinate Plane (Quadrant I)",
+      "contentLength": 2273,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 17,
+      "interactiveScore": 1,
+      "videoScore": 1,
+      "overallPriority": 19,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram",
+        "graphing examples",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "rectangle",
+        "graph",
+        "plot"
       ]
     },
     {
@@ -6906,34 +6723,6 @@
       ]
     },
     {
-      "id": 194,
-      "title": "Volume",
-      "gradeBand": "5",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume",
-      "contentLength": 1391,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 10,
-      "interactiveScore": 6,
-      "videoScore": 2,
-      "overallPriority": 18,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "volume",
-        "model"
-      ]
-    },
-    {
       "id": 1714,
       "title": "Chemistry: Stoichiometry/Equilibrium/Acids-Bases Launch Lesson",
       "gradeBand": "12",
@@ -6988,62 +6777,6 @@
         "plot",
         "pattern",
         "diagram"
-      ]
-    },
-    {
-      "id": 169,
-      "title": "Volume",
-      "gradeBand": "3",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume",
-      "contentLength": 1391,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 10,
-      "interactiveScore": 6,
-      "videoScore": 2,
-      "overallPriority": 18,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "volume",
-        "model"
-      ]
-    },
-    {
-      "id": 181,
-      "title": "Volume",
-      "gradeBand": "4",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume",
-      "contentLength": 1391,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 10,
-      "interactiveScore": 6,
-      "videoScore": 2,
-      "overallPriority": 18,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "volume",
-        "model"
       ]
     },
     {
@@ -9026,6 +8759,264 @@
       ],
       "conceptsForVisuals": [
         "shape"
+      ]
+    },
+    {
+      "id": 812,
+      "title": "Intro: Thematic/AP-style depth (PD docs) (Grade 12)",
+      "gradeBand": "12",
+      "subject": "Social Studies",
+      "strand": "US History",
+      "topic": "Thematic/AP-style depth (PD docs)",
+      "contentLength": 4461,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 9,
+      "interactiveScore": 4,
+      "videoScore": 4,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "geometric shapes diagram",
+        "process diagram",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "shape",
+        "visual"
+      ]
+    },
+    {
+      "id": 1489,
+      "title": "Exponential/Logarithmic Functions Launch Lesson",
+      "gradeBand": "11",
+      "subject": "Mathematics",
+      "strand": "Number & Operations",
+      "topic": "Exponential/Logarithmic Functions",
+      "contentLength": 4201,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 3,
+      "interactiveScore": 10,
+      "videoScore": 4,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "interactive tool",
+        "practice simulation",
+        "video demonstration"
+      ],
+      "conceptsForVisuals": [
+        "model"
+      ]
+    },
+    {
+      "id": 1718,
+      "title": "Waves & Optics Launch Lesson",
+      "gradeBand": "12",
+      "subject": "Science",
+      "strand": "Physical Science",
+      "topic": "Waves & Optics",
+      "contentLength": 2678,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": false,
+      "visualScore": 5,
+      "interactiveScore": 6,
+      "videoScore": 6,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration"
+      ],
+      "conceptsForVisuals": [
+        "pattern",
+        "diagram",
+        "model"
+      ]
+    },
+    {
+      "id": 682,
+      "title": "Intro: Modeling & Applications (Grade 10)",
+      "gradeBand": "10",
+      "subject": "Mathematics",
+      "strand": "Algebra (HS pathways)",
+      "topic": "Modeling & Applications",
+      "contentLength": 3576,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": false,
+      "visualScore": 7,
+      "interactiveScore": 4,
+      "videoScore": 6,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "divide",
+        "model",
+        "visual"
+      ]
+    },
+    {
+      "id": 56,
+      "title": "Studio Art, Design, Music Composition/Performance Launch Lesson",
+      "gradeBand": "9",
+      "subject": "Electives",
+      "strand": "Arts & Music",
+      "topic": "Studio Art, Design, Music Composition/Performance",
+      "contentLength": 4032,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": true,
+      "visualScore": 5,
+      "interactiveScore": 10,
+      "videoScore": 2,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "graphing examples",
+        "process diagram"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "visual"
+      ]
+    },
+    {
+      "id": 774,
+      "title": "Intro: Confidence Intervals & Hypothesis Tests (intro HS Stats) (Grade 11)",
+      "gradeBand": "11",
+      "subject": "Mathematics",
+      "strand": "Data & Probability / Statistics",
+      "topic": "Confidence Intervals & Hypothesis Tests (intro HS Stats)",
+      "contentLength": 5255,
+      "hasImages": true,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 7,
+      "interactiveScore": 6,
+      "videoScore": 4,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration"
+      ],
+      "conceptsForVisuals": [
+        "portion",
+        "angle",
+        "degree"
+      ]
+    },
+    {
+      "id": 1705,
+      "title": "Mechanics Launch Lesson",
+      "gradeBand": "10",
+      "subject": "Science",
+      "strand": "Physical Science",
+      "topic": "Mechanics",
+      "contentLength": 2460,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": false,
+      "visualScore": 5,
+      "interactiveScore": 6,
+      "videoScore": 6,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration"
+      ],
+      "conceptsForVisuals": [
+        "pattern",
+        "diagram",
+        "model"
+      ]
+    },
+    {
+      "id": 777,
+      "title": "Intro: Conic Sections (Grade 11)",
+      "gradeBand": "11",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Conic Sections",
+      "contentLength": 4196,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": false,
+      "visualScore": 9,
+      "interactiveScore": 4,
+      "videoScore": 4,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "shape",
+        "circle",
+        "angle",
+        "model",
+        "visual"
+      ]
+    },
+    {
+      "id": 745,
+      "title": "Intro: Waves & Optics (Grade 10)",
+      "gradeBand": "10",
+      "subject": "Science",
+      "strand": "Physical Science",
+      "topic": "Waves & Optics",
+      "contentLength": 4367,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": false,
+      "visualScore": 9,
+      "interactiveScore": 4,
+      "videoScore": 4,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "fraction visual model",
+        "process diagram"
+      ],
+      "conceptsForVisuals": [
+        "fraction",
+        "angle",
+        "model",
+        "visual"
       ]
     }
   ],

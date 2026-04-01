@@ -1,0 +1,35 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="360" fill="#F7F3E9"/>
+  <text x="40" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#1F3A5F">Rectangular Prism Built from Unit Cubes</text>
+  <text x="40" y="84" font-family="Arial, sans-serif" font-size="18" fill="#335C81">Count layers or multiply length × width × height.</text>
+
+  <polygon points="180,120 360,120 440,170 260,170" fill="#DCEAF7" stroke="#335C81" stroke-width="3"/>
+  <polygon points="180,120 260,170 260,290 180,240" fill="#C7DBEF" stroke="#335C81" stroke-width="3"/>
+  <polygon points="260,170 440,170 440,290 260,290" fill="#EAF3FB" stroke="#335C81" stroke-width="3"/>
+
+  <g stroke="#7AA6C9" stroke-width="1.5">
+    <line x1="220" y1="120" x2="300" y2="170"/>
+    <line x1="260" y1="120" x2="340" y2="170"/>
+    <line x1="300" y1="120" x2="380" y2="170"/>
+    <line x1="180" y1="150" x2="360" y2="150"/>
+    <line x1="180" y1="180" x2="260" y2="230"/>
+    <line x1="180" y1="210" x2="260" y2="260"/>
+    <line x1="300" y1="170" x2="300" y2="290"/>
+    <line x1="340" y1="170" x2="340" y2="290"/>
+    <line x1="380" y1="170" x2="380" y2="290"/>
+    <line x1="260" y1="210" x2="440" y2="210"/>
+    <line x1="260" y1="250" x2="440" y2="250"/>
+  </g>
+
+  <line x1="180" y1="308" x2="260" y2="308" stroke="#C26D42" stroke-width="4"/>
+  <line x1="460" y1="170" x2="460" y2="290" stroke="#C26D42" stroke-width="4"/>
+  <line x1="360" y1="102" x2="440" y2="152" stroke="#C26D42" stroke-width="4"/>
+
+  <text x="206" y="335" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#C26D42">length = 4 cubes</text>
+  <text x="480" y="238" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#C26D42">height = 3 cubes</text>
+  <text x="445" y="140" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#C26D42">width = 2 cubes</text>
+
+  <rect x="40" y="268" width="98" height="52" rx="10" fill="#FFF8E7" stroke="#C26D42" stroke-width="2"/>
+  <text x="58" y="300" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#C26D42">4 × 2 × 3</text>
+  <text x="68" y="325" font-family="Arial, sans-serif" font-size="18" fill="#7B4B2A">24 cubes</text>
+</svg>
