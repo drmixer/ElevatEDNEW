@@ -18,6 +18,17 @@ In this lesson, focus on three questions:
 2. Do those relative frequencies look similar or different across groups?
 3. Does the table suggest an association between the two variables?
 
+## Visual Model
+![Two-way table showing rows, columns, and totals](/images/lessons/math/two_way_table.svg)
+
+This model helps students see how counts turn into row and column relative frequencies.
+
+## Interactive Follow-Up
+Students can organize survey counts and compare relative frequencies in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another explanation can review a statistics video set in the [Khan Academy statistics unit](https://www.khanacademy.org/math/statistics-probability).
+
 ## Key Vocabulary
 **Two-way table**: A table that organizes data for two categorical variables.
 

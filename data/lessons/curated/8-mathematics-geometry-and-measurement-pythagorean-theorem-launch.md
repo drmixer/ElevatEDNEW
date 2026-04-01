@@ -16,6 +16,17 @@ Each of these can create a right triangle. When that happens, the Pythagorean Th
 
 The theorem is not just a formula to memorize. It is a way to reason about right triangles. Your job is to first recognize the triangle, then decide which side is missing, then solve carefully.
 
+## Visual Model
+![Visual proof of the Pythagorean Theorem](/images/lessons/math/pythagorean_theorem.svg)
+
+This visual helps students see how the areas on the legs connect to the area on the hypotenuse.
+
+## Interactive Follow-Up
+Students can test right triangles and side lengths in the [Desmos Geometry tool](https://www.desmos.com/geometry).
+
+## Video Follow-Up
+Students who need another explanation can review a Pythagorean Theorem video set in the [Khan Academy right triangles unit](https://www.khanacademy.org/math/geometry/hs-geo-right-triangles).
+
 ## Key Vocabulary
 **Right triangle**: A triangle with one `90` degree angle.
 

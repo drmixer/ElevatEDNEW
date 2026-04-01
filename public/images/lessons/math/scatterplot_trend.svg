@@ -1,0 +1,21 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="360" fill="#F6F4EC"/>
+  <text x="38" y="48" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#1F3A5F">Scatterplot With Positive Trend</text>
+  <text x="38" y="78" font-family="Arial, sans-serif" font-size="18" fill="#456B8C">Each point shows one paired data value.</text>
+  <line x1="90" y1="300" x2="560" y2="300" stroke="#335C81" stroke-width="3"/>
+  <line x1="90" y1="300" x2="90" y2="100" stroke="#335C81" stroke-width="3"/>
+  <text x="560" y="328" font-family="Arial, sans-serif" font-size="18" fill="#335C81">x</text>
+  <text x="68" y="112" font-family="Arial, sans-serif" font-size="18" fill="#335C81">y</text>
+  <line x1="120" y1="275" x2="520" y2="145" stroke="#C26D42" stroke-width="4" stroke-dasharray="8 6"/>
+  <g fill="#5B8DB8">
+    <circle cx="135" cy="270" r="8"/>
+    <circle cx="185" cy="245" r="8"/>
+    <circle cx="238" cy="232" r="8"/>
+    <circle cx="296" cy="205" r="8"/>
+    <circle cx="352" cy="188" r="8"/>
+    <circle cx="410" cy="170" r="8"/>
+    <circle cx="470" cy="148" r="8"/>
+  </g>
+  <circle cx="528" cy="230" r="8" fill="#B25555"/>
+  <text x="495" y="252" font-family="Arial, sans-serif" font-size="18" fill="#B25555">possible outlier</text>
+</svg>

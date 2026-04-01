@@ -22,6 +22,17 @@ In this lesson, focus on three questions:
 2. Does the overall pattern seem to rise, fall, or stay mixed?
 3. What can I say from the data without guessing beyond the graph?
 
+## Visual Model
+![Scatterplot with trend and possible outlier](/images/lessons/math/scatterplot_trend.svg)
+
+This graph gives students a concrete example of how single points form an overall trend.
+
+## Interactive Follow-Up
+Students can plot paired data and test trends in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another model can review a scatterplot video set in the [Khan Academy scatterplots unit](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
+
 ## Key Vocabulary
 **Scatterplot**: A graph that shows pairs of numerical data as points.
 

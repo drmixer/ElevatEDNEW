@@ -16,6 +16,17 @@ In this lesson, focus on three questions:
 2. How do I find probability from equally likely outcomes?
 3. Why can experimental results differ from the expected probability?
 
+## Visual Model
+![Probability spinner and number outcomes](/images/lessons/math/probability.svg)
+
+This visual helps students connect favorable outcomes, total outcomes, and the probability scale from impossible to certain.
+
+## Interactive Follow-Up
+Students can test random events and compare experimental results in the [Mathigon Probability course](https://mathigon.org/course/probability).
+
+## Video Follow-Up
+Students who need another explanation can review a probability video set in the [Khan Academy probability unit](https://www.khanacademy.org/math/statistics-probability/probability-library).
+
 ## Key Vocabulary
 **Probability**: A number from `0` to `1` that describes how likely an event is.
 

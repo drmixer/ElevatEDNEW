@@ -20,6 +20,17 @@ In this lesson, ask:
 2. Is it easier to count the event directly or through its complement?
 3. How do I explain what the probability means in context?
 
+## Visual Model
+![Probability spinner and number outcomes](/images/lessons/math/probability.svg)
+
+Students can use a visual model like this one to organize compound events before counting favorable outcomes.
+
+## Interactive Follow-Up
+Students can test sample spaces and repeated trials in the [Mathigon Probability course](https://mathigon.org/course/probability).
+
+## Video Follow-Up
+Students who need another explanation can review a compound-probability video set in the [Khan Academy probability unit](https://www.khanacademy.org/math/statistics-probability/probability-library).
+
 ## Key Vocabulary
 **Compound event**: An event that combines two or more simple events.
 

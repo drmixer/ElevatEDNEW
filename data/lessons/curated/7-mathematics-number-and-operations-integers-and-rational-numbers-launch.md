@@ -23,6 +23,17 @@ In this lesson, focus on three questions:
 2. How do sign rules work in multiplication and division?
 3. How can I interpret the result in context?
 
+## Visual Model
+![Number line showing integer positions](/images/lessons/math/number_line.svg)
+
+A number line helps students see direction, distance from zero, and why adding a negative moves left.
+
+## Interactive Follow-Up
+Students can test signed-number operations in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another explanation can review an integers video set in the [Khan Academy negative numbers unit](https://www.khanacademy.org/math/cc-seventh-grade-math/negative-numbers-topic).
+
 ## Key Vocabulary
 **Integer**: A whole number, its opposite, or `0`.
 

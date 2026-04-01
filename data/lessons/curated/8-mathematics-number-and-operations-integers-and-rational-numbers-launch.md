@@ -21,6 +21,17 @@ In this lesson, focus on three questions:
 2. How can decimal form help me identify a rational number?
 3. How can I compare and use rational numbers precisely?
 
+## Visual Model
+![Number line showing integer positions](/images/lessons/math/number_line.svg)
+
+This visual helps students place integers and rational numbers on one number line and compare distance from zero.
+
+## Interactive Follow-Up
+Students can test rational-number representations in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another explanation can review a rational-numbers video set in the [Khan Academy rational numbers unit](https://www.khanacademy.org/math/cc-eighth-grade-math/cc-8th-numbers-operations).
+
 ## Key Vocabulary
 **Integer**: A whole number, its opposite, or `0`.
 

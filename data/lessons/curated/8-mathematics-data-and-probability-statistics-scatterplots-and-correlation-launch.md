@@ -16,6 +16,17 @@ In this lesson, focus on three questions:
 2. What line of fit would represent the data reasonably well?
 3. Are there any outliers that affect the interpretation?
 
+## Visual Model
+![Scatterplot with trend and possible outlier](/images/lessons/math/scatterplot_trend.svg)
+
+This graph gives students a concrete example of a clustered trend line and an outlier that changes interpretation.
+
+## Interactive Follow-Up
+Students can plot data and sketch lines of fit in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another walkthrough can review a scatterplot video set in the [Khan Academy scatterplots unit](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
+
 ## Key Vocabulary
 **Scatterplot**: A graph of paired numerical data.
 

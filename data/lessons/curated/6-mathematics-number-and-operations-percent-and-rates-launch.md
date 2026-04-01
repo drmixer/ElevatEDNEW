@@ -26,6 +26,17 @@ In this lesson, focus on three questions:
 2. How do I find a part of a whole using percent?
 3. How can a unit rate help me compare choices?
 
+## Visual Model
+![Percent and fraction representations](/images/lessons/math/decimals_fractions_percentages.svg)
+
+This visual helps students connect percent, decimal, and fraction forms of the same comparison.
+
+## Interactive Follow-Up
+Students can model percent and rate relationships in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another explanation can review a percent video set in the [Khan Academy percents unit](https://www.khanacademy.org/math/cc-sixth-grade-math/percent-word-problems).
+
 ## Key Vocabulary
 **Percent**: A rate out of `100`.
 

@@ -22,6 +22,17 @@ In this lesson, focus on three questions:
 2. How strong does the pattern appear?
 3. What predictions are reasonable, and what predictions go too far beyond the data?
 
+## Visual Model
+![Scatterplot with trend and possible outlier](/images/lessons/math/scatterplot_trend.svg)
+
+This image helps students compare direction, strength, and outliers in one graph.
+
+## Interactive Follow-Up
+Students can plot data and test trend lines in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another model can review a scatterplot video set in the [Khan Academy scatterplots unit](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
+
 ## Key Vocabulary
 **Scatterplot**: A graph showing paired numerical data as points.
 

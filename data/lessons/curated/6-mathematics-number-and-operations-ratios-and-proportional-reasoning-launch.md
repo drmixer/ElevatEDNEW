@@ -16,6 +16,17 @@ In this lesson, focus on three questions:
 2. How can I scale the ratio without changing its meaning?
 3. When is a unit rate the fastest way to solve the problem?
 
+## Visual Model
+![Bar models showing equal parts and comparisons](/images/lessons/math/bar_models.svg)
+
+Students can use a visual comparison like this one to keep the two quantities in order and see equivalent scaling.
+
+## Interactive Follow-Up
+Students can build ratio tables and compare unit rates in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another model can review a ratio video set in the [Khan Academy ratios unit](https://www.khanacademy.org/math/cc-sixth-grade-math/ratios-topic).
+
 ## Key Vocabulary
 **Ratio**: A comparison of two quantities, such as `3 to 5`, `3:5`, or `3/5`.
 

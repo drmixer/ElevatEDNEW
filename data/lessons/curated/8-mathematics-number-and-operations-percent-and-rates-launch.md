@@ -21,6 +21,17 @@ In this lesson, focus on three questions:
 2. What quantities are being compared?
 3. How can I use equations or tables to interpret the rate correctly?
 
+## Visual Model
+![Percent and fraction representations](/images/lessons/math/decimals_fractions_percentages.svg)
+
+This visual helps students connect percent change to equivalent decimal and fraction representations.
+
+## Interactive Follow-Up
+Students can compare rate-of-change and percent-change models in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another walkthrough can review a percent-change video set in the [Khan Academy percent and rate unit](https://www.khanacademy.org/math/cc-eighth-grade-math).
+
 ## Key Vocabulary
 **Percent change**: The amount of increase or decrease compared to the original value.
 

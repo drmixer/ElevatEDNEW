@@ -22,6 +22,17 @@ In this lesson, focus on three questions:
 2. How do I compute row and column relative frequencies?
 3. When is a proportion more useful than a raw count?
 
+## Visual Model
+![Two-way table showing rows, columns, and totals](/images/lessons/math/two_way_table.svg)
+
+This visual helps students track the structure of the table before they calculate relative frequencies.
+
+## Interactive Follow-Up
+Students can build and compare table data in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another explanation can review a data-table video set in the [Khan Academy statistics unit](https://www.khanacademy.org/math/statistics-probability).
+
 ## Key Vocabulary
 **Two-way table**: A table that organizes data by two categories.
 

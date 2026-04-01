@@ -26,6 +26,17 @@ In this lesson, focus on three questions:
 2. How do I find totals from the table?
 3. How do I answer questions without mixing up part totals and whole totals?
 
+## Visual Model
+![Two-way table showing rows, columns, and totals](/images/lessons/math/two_way_table.svg)
+
+Students can use this model to identify row totals, column totals, and the grand total before solving questions.
+
+## Interactive Follow-Up
+Students can organize survey counts and compare categories in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another explanation can review a table-and-data video set in the [Khan Academy statistics unit](https://www.khanacademy.org/math/statistics-probability).
+
 ## Key Vocabulary
 **Two-way table**: A table that organizes data using two different categories.
 

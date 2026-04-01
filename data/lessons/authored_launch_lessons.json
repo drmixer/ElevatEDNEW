@@ -1239,6 +1239,7 @@
   "6-mathematics-data-and-probability-statistics-probability-rules": {
     "title": "Probability Rules",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/6-mathematics-data-and-probability-statistics-probability-rules-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -1299,6 +1300,7 @@
   "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
     "title": "Scatterplots & Correlation",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/6-mathematics-data-and-probability-statistics-scatterplots-and-correlation-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -1329,6 +1331,7 @@
   "6-mathematics-data-and-probability-statistics-two-way-tables": {
     "title": "Two-way Tables",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/6-mathematics-data-and-probability-statistics-two-way-tables-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -1592,6 +1595,7 @@
   "6-mathematics-number-and-operations-percent-and-rates": {
     "title": "Percent & Rates",
     "summary": "Explore the concepts and skills of Percent & Rates. Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/6-mathematics-number-and-operations-percent-and-rates-launch.md",
     "objectives": [
       "Understand key concepts in Percent & Rates",
       "Apply skills from Percent & Rates to solve problems",
@@ -1621,6 +1625,7 @@
   "6-mathematics-number-and-operations-ratios-and-proportional-reasoning": {
     "title": "Ratios & Proportional Reasoning",
     "summary": "Compare quantities with ratios, equivalent ratios, and unit rates in contexts such as recipes, prices, maps, and classroom surveys.",
+    "content_markdown_file": "curated/6-mathematics-number-and-operations-ratios-and-proportional-reasoning-launch.md",
     "objectives": [
       "Interpret what a ratio compares and keep quantities in the correct order",
       "Use tables, scale factors, and double number lines to build equivalent ratios",
@@ -1650,6 +1655,7 @@
   "6-mathematics-number-operations-ratios-proportional-reasoning": {
     "title": "Ratios and Proportional Reasoning (Grade 6)",
     "summary": "Explore the concepts and skills of Ratios and Proportional Reasoning (Grade 6). Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/6-mathematics-number-operations-ratios-proportional-reasoning-launch.md",
     "objectives": [
       "Understand key concepts in Ratios and Proportional Reasoning (Grade 6)",
       "Apply skills from Ratios and Proportional Reasoning (Grade 6) to solve problems",
@@ -1679,6 +1685,7 @@
   "7-mathematics-data-and-probability-statistics-probability-rules": {
     "title": "Probability Rules",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/7-mathematics-data-and-probability-statistics-probability-rules-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -1739,6 +1746,7 @@
   "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
     "title": "Scatterplots & Correlation",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/7-mathematics-data-and-probability-statistics-scatterplots-and-correlation-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -1769,6 +1777,7 @@
   "7-mathematics-data-and-probability-statistics-two-way-tables": {
     "title": "Two-way Tables",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/7-mathematics-data-and-probability-statistics-two-way-tables-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -2002,6 +2011,7 @@
   "7-mathematics-number-and-operations-integers-and-rational-numbers": {
     "title": "Integers & Rational Numbers",
     "summary": "Explore the concepts and skills of Integers & Rational Numbers. Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/7-mathematics-number-and-operations-integers-and-rational-numbers-launch.md",
     "objectives": [
       "Understand key concepts in Integers & Rational Numbers",
       "Apply skills from Integers & Rational Numbers to solve problems",
@@ -2031,6 +2041,7 @@
   "7-mathematics-number-and-operations-percent-and-rates": {
     "title": "Percent & Rates",
     "summary": "Explore the concepts and skills of Percent & Rates. Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/7-mathematics-number-and-operations-percent-and-rates-launch.md",
     "objectives": [
       "Understand key concepts in Percent & Rates",
       "Apply skills from Percent & Rates to solve problems",
@@ -2089,6 +2100,7 @@
   "8-mathematics-data-and-probability-statistics-probability-rules": {
     "title": "Probability Rules",
     "summary": "Analyze compound events by organizing sample spaces, counting favorable outcomes, and using complements when that strategy is more efficient.",
+    "content_markdown_file": "curated/8-mathematics-data-and-probability-statistics-probability-rules-launch.md",
     "objectives": [
       "Represent compound events with lists, tables, or organized sample spaces",
       "Calculate probabilities of compound events from total and favorable outcomes",
@@ -2149,6 +2161,7 @@
   "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation": {
     "title": "Scatterplots & Correlation",
     "summary": "Interpret scatterplots by describing association, identifying outliers, drawing informal lines of fit, and using trends to make reasonable predictions.",
+    "content_markdown_file": "curated/8-mathematics-data-and-probability-statistics-scatterplots-and-correlation-launch.md",
     "objectives": [
       "Describe the direction and strength of association shown in a scatterplot",
       "Identify outliers and explain how they affect the overall interpretation",
@@ -2179,6 +2192,7 @@
   "8-mathematics-data-and-probability-statistics-two-way-tables": {
     "title": "Two-way Tables",
     "summary": "Conduct experiments to explore probability. Record and compare outcomes from flipping coins, rolling dice, and using spinners.",
+    "content_markdown_file": "curated/8-mathematics-data-and-probability-statistics-two-way-tables-launch.md",
     "objectives": [
       "Conduct simple probability experiments",
       "Record experimental outcomes accurately",
@@ -2239,6 +2253,7 @@
   "8-mathematics-geometry-and-measurement-pythagorean-theorem": {
     "title": "Pythagorean Theorem",
     "summary": "Explore the concepts and skills of Pythagorean Theorem. Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/8-mathematics-geometry-and-measurement-pythagorean-theorem-launch.md",
     "objectives": [
       "Understand key concepts in Pythagorean Theorem",
       "Apply skills from Pythagorean Theorem to solve problems",
@@ -2413,6 +2428,7 @@
   "8-mathematics-number-and-operations-integers-and-rational-numbers": {
     "title": "Integers & Rational Numbers",
     "summary": "Explore the concepts and skills of Integers & Rational Numbers. Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/8-mathematics-number-and-operations-integers-and-rational-numbers-launch.md",
     "objectives": [
       "Understand key concepts in Integers & Rational Numbers",
       "Apply skills from Integers & Rational Numbers to solve problems",
@@ -2442,6 +2458,7 @@
   "8-mathematics-number-and-operations-percent-and-rates": {
     "title": "Percent & Rates",
     "summary": "Explore the concepts and skills of Percent & Rates. Develop understanding and apply learning to new situations.",
+    "content_markdown_file": "curated/8-mathematics-number-and-operations-percent-and-rates-launch.md",
     "objectives": [
       "Understand key concepts in Percent & Rates",
       "Apply skills from Percent & Rates to solve problems",

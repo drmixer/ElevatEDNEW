@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T09:23:40.915Z",
+  "timestamp": "2026-04-01T09:57:07.575Z",
   "totalLessons": 1191,
   "byPriority": {
     "high": 973,
@@ -9,7 +9,7 @@
   "bySubject": {
     "Mathematics": {
       "count": 349,
-      "avgPriority": 17.5
+      "avgPriority": 17.3
     },
     "Science": {
       "count": 292,
@@ -1104,34 +1104,6 @@
         "rectangle",
         "angle",
         "rotation"
-      ]
-    },
-    {
-      "id": 231,
-      "title": "Pythagorean Theorem",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Pythagorean Theorem",
-      "contentLength": 5111,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 21,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 25,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "triangle",
-        "rectangle",
-        "coordinate",
-        "angle"
       ]
     },
     {
@@ -2373,34 +2345,6 @@
       ]
     },
     {
-      "id": 237,
-      "title": "Integers & Rational Numbers",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Integers & Rational Numbers",
-      "contentLength": 5147,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 19,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "number line",
-        "fraction",
-        "divide",
-        "part of",
-        "pattern"
-      ]
-    },
-    {
       "id": 936,
       "title": "Intro: Exponential/Logarithmic Functions (Grade 9)",
       "gradeBand": "9",
@@ -2519,36 +2463,6 @@
         "graph",
         "plot",
         "coordinate"
-      ]
-    },
-    {
-      "id": 79,
-      "title": "Ratios & Proportional Reasoning Launch Lesson",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Ratios & Proportional Reasoning",
-      "contentLength": 2170,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 15,
-      "interactiveScore": 4,
-      "videoScore": 4,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration",
-        "educational map"
-      ],
-      "conceptsForVisuals": [
-        "number line",
-        "portion",
-        "pattern",
-        "model"
       ]
     },
     {
@@ -2887,36 +2801,6 @@
       ]
     },
     {
-      "id": 474,
-      "title": "Ratios & Proportional Reasoning",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Ratios & Proportional Reasoning",
-      "contentLength": 2170,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 15,
-      "interactiveScore": 4,
-      "videoScore": 4,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration",
-        "educational map"
-      ],
-      "conceptsForVisuals": [
-        "number line",
-        "portion",
-        "pattern",
-        "model"
-      ]
-    },
-    {
       "id": 928,
       "title": "Intro: Normal Distribution (Grade 9)",
       "gradeBand": "9",
@@ -3098,36 +2982,6 @@
         "triangle",
         "rectangle",
         "portion"
-      ]
-    },
-    {
-      "id": 212,
-      "title": "Percent & Rates",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Percent & Rates",
-      "contentLength": 4496,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 14,
-      "interactiveScore": 4,
-      "videoScore": 4,
-      "overallPriority": 22,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "fraction",
-        "divide",
-        "portion",
-        "part of"
       ]
     },
     {
@@ -3440,34 +3294,6 @@
       ]
     },
     {
-      "id": 229,
-      "title": "Two-way Tables",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Data & Probability / Statistics",
-      "topic": "Two-way Tables",
-      "contentLength": 5720,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 18,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 22,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "chart",
-        "fraction",
-        "divide",
-        "portion",
-        "pattern"
-      ]
-    },
-    {
       "id": 1360,
       "title": "Linear/Quadratic Functions Launch Lesson",
       "gradeBand": "9",
@@ -3528,35 +3354,6 @@
         "graph",
         "number line",
         "fraction"
-      ]
-    },
-    {
-      "id": 367,
-      "title": "Ratios and Proportional Reasoning (Grade 6)",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": null,
-      "topic": null,
-      "contentLength": 5767,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 16,
-      "interactiveScore": 2,
-      "videoScore": 4,
-      "overallPriority": 22,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "video demonstration",
-        "fraction visual model",
-        "educational map"
-      ],
-      "conceptsForVisuals": [
-        "fraction",
-        "divide",
-        "portion",
-        "pattern"
       ]
     },
     {
@@ -4244,35 +4041,6 @@
       ]
     },
     {
-      "id": 224,
-      "title": "Integers & Rational Numbers",
-      "gradeBand": "7",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Integers & Rational Numbers",
-      "contentLength": 4788,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "fraction visual model",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "graph",
-        "number line",
-        "fraction",
-        "divide",
-        "pattern"
-      ]
-    },
-    {
       "id": 1472,
       "title": "Trigonometry (right/units) Launch Lesson",
       "gradeBand": "9",
@@ -4391,6 +4159,34 @@
         "plot",
         "pattern",
         "diagram"
+      ]
+    },
+    {
+      "id": 231,
+      "title": "Pythagorean Theorem",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Pythagorean Theorem",
+      "contentLength": 5666,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 16,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 20,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "triangle",
+        "rectangle",
+        "coordinate",
+        "angle"
       ]
     },
     {
@@ -6579,60 +6375,6 @@
       ]
     },
     {
-      "id": 80,
-      "title": "Scatterplots & Correlation Launch Lesson",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Data & Probability / Statistics",
-      "topic": "Scatterplots & Correlation",
-      "contentLength": 2369,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 14,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 18,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "graph",
-        "plot",
-        "pattern",
-        "model"
-      ]
-    },
-    {
-      "id": 491,
-      "title": "Scatterplots & Correlation",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Data & Probability / Statistics",
-      "topic": "Scatterplots & Correlation",
-      "contentLength": 2369,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 14,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 18,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "graph",
-        "plot",
-        "pattern",
-        "model"
-      ]
-    },
-    {
       "id": 1350,
       "title": "Linear/Quadratic Functions Launch Lesson",
       "gradeBand": "11",
@@ -6720,6 +6462,35 @@
         "pattern",
         "diagram",
         "visual"
+      ]
+    },
+    {
+      "id": 237,
+      "title": "Integers & Rational Numbers",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "strand": "Number & Operations",
+      "topic": "Integers & Rational Numbers",
+      "contentLength": 5730,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 14,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 18,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "fraction visual model",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "number line",
+        "fraction",
+        "divide",
+        "part of"
       ]
     },
     {
@@ -7103,6 +6874,35 @@
       ]
     },
     {
+      "id": 229,
+      "title": "Two-way Tables",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "strand": "Data & Probability / Statistics",
+      "topic": "Two-way Tables",
+      "contentLength": 6272,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 14,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 18,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "fraction visual model",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "chart",
+        "fraction",
+        "divide",
+        "portion"
+      ]
+    },
+    {
       "id": 808,
       "title": "Intro: CS Principles, Data Structures (intro), Web Dev Basics (Grade 12)",
       "gradeBand": "12",
@@ -7251,33 +7051,6 @@
         "plot",
         "sequence",
         "model"
-      ]
-    },
-    {
-      "id": 216,
-      "title": "Two-way Tables",
-      "gradeBand": "7",
-      "subject": "Mathematics",
-      "strand": "Data & Probability / Statistics",
-      "topic": "Two-way Tables",
-      "contentLength": 4481,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 14,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 18,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "fraction",
-        "divide",
-        "portion",
-        "part of"
       ]
     },
     {
@@ -7656,33 +7429,6 @@
       ]
     },
     {
-      "id": 202,
-      "title": "Scatterplots & Correlation",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Data & Probability / Statistics",
-      "topic": "Scatterplots & Correlation",
-      "contentLength": 4608,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 15,
-      "interactiveScore": 0,
-      "videoScore": 2,
-      "overallPriority": 17,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "graph",
-        "plot",
-        "coordinate",
-        "pattern"
-      ]
-    },
-    {
       "id": 791,
       "title": "Intro: Climate Science (Grade 11)",
       "gradeBand": "11",
@@ -7740,6 +7486,37 @@
         "plot",
         "coordinate",
         "model"
+      ]
+    },
+    {
+      "id": 212,
+      "title": "Percent & Rates",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Number & Operations",
+      "topic": "Percent & Rates",
+      "contentLength": 5057,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 12,
+      "interactiveScore": 4,
+      "videoScore": 1,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "fraction visual model",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "fraction",
+        "divide",
+        "portion",
+        "part of"
       ]
     },
     {
@@ -8051,32 +7828,6 @@
       ]
     },
     {
-      "id": 3259,
-      "title": "Probability Rules Launch Lesson",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Data & Probability / Statistics",
-      "topic": "Probability Rules",
-      "contentLength": 2263,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 5,
-      "interactiveScore": 6,
-      "videoScore": 6,
-      "overallPriority": 17,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "video demonstration"
-      ],
-      "conceptsForVisuals": [
-        "model"
-      ]
-    },
-    {
       "id": 1332,
       "title": "Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review Launch Lesson",
       "gradeBand": "11",
@@ -8158,6 +7909,36 @@
       "conceptsForVisuals": [
         "chart",
         "visual"
+      ]
+    },
+    {
+      "id": 79,
+      "title": "Ratios & Proportional Reasoning Launch Lesson",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Number & Operations",
+      "topic": "Ratios & Proportional Reasoning",
+      "contentLength": 6297,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 13,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "fraction visual model",
+        "graphing examples",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "fraction",
+        "divide",
+        "portion",
+        "pattern"
       ]
     },
     {
@@ -8902,6 +8683,36 @@
       ]
     },
     {
+      "id": 367,
+      "title": "Ratios and Proportional Reasoning (Grade 6)",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": null,
+      "topic": null,
+      "contentLength": 6316,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 13,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "fraction visual model",
+        "graphing examples",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "fraction",
+        "divide",
+        "portion",
+        "pattern"
+      ]
+    },
+    {
       "id": 774,
       "title": "Intro: Confidence Intervals & Hypothesis Tests (intro HS Stats) (Grade 11)",
       "gradeBand": "11",
@@ -8989,6 +8800,37 @@
       ]
     },
     {
+      "id": 216,
+      "title": "Two-way Tables",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "strand": "Data & Probability / Statistics",
+      "topic": "Two-way Tables",
+      "contentLength": 5022,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 12,
+      "interactiveScore": 4,
+      "videoScore": 1,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "fraction visual model",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "fraction",
+        "divide",
+        "portion",
+        "part of"
+      ]
+    },
+    {
       "id": 745,
       "title": "Intro: Waves & Optics (Grade 10)",
       "gradeBand": "10",
@@ -9017,6 +8859,175 @@
         "angle",
         "model",
         "visual"
+      ]
+    },
+    {
+      "id": 959,
+      "title": "Intro: Thermodynamics (Grade 9)",
+      "gradeBand": "9",
+      "subject": "Science",
+      "strand": "Physical Science",
+      "topic": "Thermodynamics",
+      "contentLength": 4057,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 9,
+      "interactiveScore": 4,
+      "videoScore": 4,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "geometric shapes diagram",
+        "process diagram"
+      ],
+      "conceptsForVisuals": [
+        "shape"
+      ]
+    },
+    {
+      "id": 474,
+      "title": "Ratios & Proportional Reasoning",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Number & Operations",
+      "topic": "Ratios & Proportional Reasoning",
+      "contentLength": 6296,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 13,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "fraction visual model",
+        "graphing examples",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "fraction",
+        "divide",
+        "portion",
+        "pattern"
+      ]
+    },
+    {
+      "id": 208,
+      "title": "Volume & Surface Area",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Volume & Surface Area",
+      "contentLength": 4232,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 13,
+      "interactiveScore": 2,
+      "videoScore": 2,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "divide",
+        "area",
+        "volume"
+      ]
+    },
+    {
+      "id": 64,
+      "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics Launch Lesson",
+      "gradeBand": "4",
+      "subject": "English Language Arts",
+      "strand": "Writing & Grammar",
+      "topic": "Paragraphs, Narratives, Expository Writing, Grammar Basics",
+      "contentLength": 4081,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 5,
+      "interactiveScore": 4,
+      "videoScore": 8,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "graphing examples",
+        "process diagram"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "plot"
+      ]
+    },
+    {
+      "id": 789,
+      "title": "Intro: Trigonometric Identities (Grade 11)",
+      "gradeBand": "11",
+      "subject": "Mathematics",
+      "strand": "Precalculus/Calculus (advanced HS)",
+      "topic": "Trigonometric Identities",
+      "contentLength": 4194,
+      "hasImages": true,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 7,
+      "interactiveScore": 8,
+      "videoScore": 2,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "shape",
+        "triangle",
+        "angle",
+        "visual"
+      ]
+    },
+    {
+      "id": 4597,
+      "title": "Markets (intro): Grade 5 Launch Lesson",
+      "gradeBand": "5",
+      "subject": "Social Studies",
+      "strand": "Economics & Financial Literacy",
+      "topic": "Markets (intro)",
+      "contentLength": 2184,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": false,
+      "visualScore": 4,
+      "interactiveScore": 6,
+      "videoScore": 6,
+      "overallPriority": 16,
+      "recommendedResources": [
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "graph",
+        "model"
       ]
     }
   ],

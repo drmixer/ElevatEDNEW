@@ -20,6 +20,17 @@ In this lesson, focus on three questions:
 2. How is experimental probability different from theoretical probability?
 3. What does a probability predict over many trials?
 
+## Visual Model
+![Probability spinner and number outcomes](/images/lessons/math/probability.svg)
+
+Students can use this model to connect sample spaces, favorable outcomes, and numerical probabilities.
+
+## Interactive Follow-Up
+Students can test repeated trials and compare results in the [Mathigon Probability course](https://mathigon.org/course/probability).
+
+## Video Follow-Up
+Students who need another explanation can review a probability video set in the [Khan Academy probability unit](https://www.khanacademy.org/math/statistics-probability/probability-library).
+
 ## Key Vocabulary
 **Sample space**: The complete list of all possible outcomes.
 

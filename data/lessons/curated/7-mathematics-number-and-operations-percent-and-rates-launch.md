@@ -23,6 +23,17 @@ In this lesson, focus on three questions:
 2. Do I need the part, the whole, or the remaining amount?
 3. How can a unit rate help me compare options fairly?
 
+## Visual Model
+![Percent and fraction representations](/images/lessons/math/decimals_fractions_percentages.svg)
+
+Students can use this visual to connect sale-price and percent-change problems back to a rate out of `100`.
+
+## Interactive Follow-Up
+Students can compare percent and rate problems in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
+
+## Video Follow-Up
+Students who need another walkthrough can review a percent video set in the [Khan Academy percents unit](https://www.khanacademy.org/math/cc-seventh-grade-math/cc-7th-rates-and-percentages).
+
 ## Key Vocabulary
 **Percent**: A rate out of `100`.
 
