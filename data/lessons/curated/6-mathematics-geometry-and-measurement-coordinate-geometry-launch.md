@@ -18,6 +18,14 @@ In this lesson, focus on three questions:
 2. How do coordinates describe a polygon?
 3. How can I find horizontal and vertical lengths from the coordinates?
 
+## Visual Model
+![Coordinate plane showing plotted example points](/images/lessons/math/coordinate_plane.svg)
+
+Students can use a coordinate-plane diagram like this to track horizontal movement first and vertical movement second before they draw a polygon.
+
+## Interactive Follow-Up
+Students can plot points and test segments in the [Desmos Graphing Calculator](https://www.desmos.com/calculator) to confirm how shared `x`-values and shared `y`-values create vertical and horizontal sides.
+
 ## Key Vocabulary
 **Coordinate plane**: A grid formed by a horizontal axis and a vertical axis.
 

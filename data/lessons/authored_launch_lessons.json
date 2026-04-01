@@ -149,6 +149,7 @@
   "3-mathematics-geometry-and-measurement-area-perimeter": {
     "title": "Area/Perimeter",
     "summary": "Understand the difference between area and perimeter. Measure and calculate these for rectangles, squares, and other shapes.",
+    "content_markdown_file": "curated/3-mathematics-geometry-and-measurement-area-perimeter-launch.md",
     "objectives": [
       "Calculate perimeter by adding all sides",
       "Calculate area by multiplying length and width",
@@ -556,6 +557,7 @@
   "4-mathematics-geometry-and-measurement-area-perimeter": {
     "title": "Area/Perimeter",
     "summary": "Understand the difference between area and perimeter. Measure and calculate these for rectangles, squares, and other shapes.",
+    "content_markdown_file": "curated/4-mathematics-geometry-and-measurement-area-perimeter-launch.md",
     "objectives": [
       "Calculate perimeter by adding all sides",
       "Calculate area by multiplying length and width",
@@ -816,6 +818,7 @@
   "5-mathematics-data-and-probability-statistics-bar-line-plots": {
     "title": "Bar/Line Plots",
     "summary": "Explore how to organize and display data using bar plots and line plots. Learn to interpret visual representations of information.",
+    "content_markdown_file": "curated/5-mathematics-data-and-probability-statistics-bar-line-plots-launch.md",
     "objectives": [
       "Create bar plots to display categorical data",
       "Create line plots to display measurement data",
@@ -963,6 +966,7 @@
   "5-mathematics-geometry-and-measurement-area-perimeter": {
     "title": "Area/Perimeter",
     "summary": "Understand the difference between area and perimeter. Measure and calculate these for rectangles, squares, and other shapes.",
+    "content_markdown_file": "curated/5-mathematics-geometry-and-measurement-area-perimeter-launch.md",
     "objectives": [
       "Calculate perimeter by adding all sides",
       "Calculate area by multiplying length and width",
@@ -1441,6 +1445,7 @@
     "standards": [
       "6.G.A.3"
     ],
+    "content_markdown_file": "curated/6-mathematics-geometry-and-measurement-transformations-and-symmetry-launch.md",
     "outline": {
       "hook": "Show a shape. Flip it (reflection). Rotate it (turn). Slide it (translation). Ask: 'What changed? What stayed the same?'",
       "direct_instruction": "Translation: slide a shape without rotating or flipping. Rotation: turn a shape around a point. Reflection: flip a shape over a line.",
@@ -2203,6 +2208,7 @@
     "standards": [
       "8.G.A.3"
     ],
+    "content_markdown_file": "curated/8-mathematics-geometry-and-measurement-coordinate-geometry-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",

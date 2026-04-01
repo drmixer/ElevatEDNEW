@@ -20,6 +20,14 @@ This lesson is about recognizing that structure and using it carefully. Before s
 2. Which side is the hypotenuse?
 3. Which two side lengths are known?
 
+## Visual Model
+![Visual proof of the Pythagorean Theorem](/images/lessons/math/pythagorean_theorem.svg)
+
+This diagram helps students see that the squares built on the legs and hypotenuse represent areas, not just side labels.
+
+## Interactive Follow-Up
+Students can build and drag right triangles in the [Desmos Geometry tool](https://www.desmos.com/geometry) to test which side is the hypotenuse and how the side lengths change.
+
 ## Key Vocabulary
 **Right triangle**: A triangle with one `90` degree angle.
 

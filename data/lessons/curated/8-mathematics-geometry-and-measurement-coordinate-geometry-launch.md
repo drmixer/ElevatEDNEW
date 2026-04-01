@@ -22,6 +22,17 @@ In this lesson, focus on three questions:
 2. How can I find the image of a point or figure?
 3. What properties stay the same after the transformation?
 
+## Visual Model
+![Coordinate plane showing plotted points in multiple quadrants](/images/lessons/math/coordinate_plane.svg)
+
+Students can use a labeled coordinate grid like this one to compare the original figure and its image after a translation, reflection, or rotation.
+
+## Interactive Follow-Up
+Students can test coordinate rules, graph image points, and compare figures in the [Desmos Geometry tool](https://www.desmos.com/geometry).
+
+## Video Follow-Up
+Students who need a slower walkthrough can review a coordinate-transformation video collection in the [Khan Academy transformations unit](https://www.khanacademy.org/math/geometry-home/transformations).
+
 ## Key Vocabulary
 **Transformation**: A change in a figure's position or orientation on the plane.
 

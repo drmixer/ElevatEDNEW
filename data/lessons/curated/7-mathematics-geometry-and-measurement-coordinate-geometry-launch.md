@@ -18,6 +18,14 @@ In this lesson, focus on three questions:
 2. How do I use a scale factor to compare drawing lengths and actual lengths?
 3. How do I avoid confusing the drawing measurement with the real measurement?
 
+## Visual Model
+![Coordinate plane showing plotted example points](/images/lessons/math/coordinate_plane.svg)
+
+Students can use a coordinate grid like this to see the drawing measurement clearly before they apply the scale factor.
+
+## Interactive Follow-Up
+Students can build rectangles and segments in the [Desmos Graphing Calculator](https://www.desmos.com/calculator) to compare drawing lengths with scaled real lengths.
+
 ## Key Vocabulary
 **Scale drawing**: A drawing in which all lengths are proportional to the actual figure.
 

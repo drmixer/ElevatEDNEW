@@ -18,6 +18,17 @@ As you read, focus on three questions:
 2. Why do rigid motions preserve lengths and angles?
 3. How does symmetry show that a figure maps onto itself under a reflection or rotation?
 
+## Visual Model
+![Diagram showing rotation, reflection, translation, and dilation](/images/lessons/math/geometry_transformations.svg)
+
+This visual helps students connect formal coordinate rules to the actual motion each transformation represents.
+
+## Interactive Follow-Up
+Students can test translations, reflections, and rotations on the [Desmos Geometry tool](https://www.desmos.com/geometry) and compare those rigid motions with a dilation that changes size.
+
+## Video Follow-Up
+Students who need a slower walkthrough can review a short rigid-motion video set in the [Khan Academy transformations unit](https://www.khanacademy.org/math/geometry-home/transformations).
+
 ## Key Vocabulary
 **Rigid motion**: A transformation that preserves size and shape.
 

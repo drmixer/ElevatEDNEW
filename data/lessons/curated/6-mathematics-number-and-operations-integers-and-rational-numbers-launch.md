@@ -23,6 +23,14 @@ In this lesson, focus on three questions:
 2. How do opposites and absolute value help describe location on a number line?
 3. How can I compare and order rational numbers accurately?
 
+## Visual Model
+![Number line showing integers from negative to positive values](/images/lessons/math/number_line.svg)
+
+A number line is the most useful visual for this lesson because students can compare distance from `0`, direction, and order at the same time.
+
+## Interactive Follow-Up
+Students can place and compare values with the [Desmos Graphing Calculator](https://www.desmos.com/calculator) by graphing points on a horizontal number line and checking which numbers fall farther left or right.
+
 ## Key Vocabulary
 **Integer**: A whole number, its opposite, or `0`.
 

@@ -23,6 +23,17 @@ In this lesson, focus on three questions:
 2. What does the constant of proportionality mean?
 3. How can proportional reasoning solve geometry and real-world problems?
 
+## Visual Model
+![Coordinate plane showing plotted points in multiple quadrants](/images/lessons/math/coordinate_plane.svg)
+
+Students can use a graph like this to compare a proportional relationship that passes through the origin with a non-proportional pattern that does not.
+
+## Interactive Follow-Up
+Students can graph tables, equations, and scale-drawing situations in the [Desmos Graphing Calculator](https://www.desmos.com/calculator) to test whether the relationship stays proportional.
+
+## Video Follow-Up
+Students who need another explanation can watch a proportional-relationships video set in the [Khan Academy proportional relationships unit](https://www.khanacademy.org/math/cc-eighth-grade-math/cc-8th-linear-equations-functions).
+
 ## Key Vocabulary
 **Ratio**: A comparison of two quantities.
 

@@ -24,6 +24,17 @@ As you read, focus on three questions:
 2. What parts of the figure stay the same?
 3. Does the figure have a line that divides it into matching halves?
 
+## Visual Model
+![Diagram showing rotation, reflection, translation, and dilation](/images/lessons/math/geometry_transformations.svg)
+
+This visual gives students a concrete way to compare a slide, a flip, and a turn before they describe the transformation in words.
+
+## Interactive Follow-Up
+Students can move shapes, test reflections, and compare rotations in the [Desmos Geometry tool](https://www.desmos.com/geometry).
+
+## Video Follow-Up
+Students who need another model can watch a short transformations video set in the [Khan Academy transformations unit](https://www.khanacademy.org/math/geometry-home/transformations).
+
 ## Key Vocabulary
 **Transformation**: A movement of a figure on the plane.
 

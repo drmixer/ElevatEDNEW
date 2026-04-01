@@ -23,6 +23,14 @@ In this lesson, focus on three ideas:
 2. What does the constant of proportionality mean in context?
 3. Which representation helps me solve the problem most efficiently?
 
+## Visual Model
+![Coordinate plane showing plotted points in multiple quadrants](/images/lessons/math/coordinate_plane.svg)
+
+A graph helps students see that proportional relationships form a straight line through the origin, while non-proportional relationships break that pattern.
+
+## Interactive Follow-Up
+Students can graph proportional and non-proportional tables in the [Desmos Graphing Calculator](https://www.desmos.com/calculator) and compare whether the points lie on a line that passes through `(0, 0)`.
+
 ## Key Vocabulary
 **Proportional relationship**: A relationship in which two quantities keep the same multiplicative comparison.
 

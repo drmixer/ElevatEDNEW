@@ -22,6 +22,14 @@ The theorem is useful when:
 
 The hardest part is often not the arithmetic. It is identifying the triangle correctly and labeling the hypotenuse before solving.
 
+## Visual Model
+![Visual proof of the Pythagorean Theorem](/images/lessons/math/pythagorean_theorem.svg)
+
+This visual supports the idea that the theorem compares areas built on the triangle's sides, not just three disconnected numbers.
+
+## Interactive Follow-Up
+Students can build and drag right triangles in the [Desmos Geometry tool](https://www.desmos.com/geometry) to test how leg lengths and the hypotenuse change together.
+
 ## Key Vocabulary
 **Right triangle**: A triangle with one `90` degree angle.
 

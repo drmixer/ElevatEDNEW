@@ -15,6 +15,14 @@ As you read, focus on two questions:
 1. Does the transformation keep the size the same?
 2. Do the corresponding side lengths match exactly or change by one constant ratio?
 
+## Visual Model
+![2D and 3D geometric shapes with labeled properties](/images/lessons/math/geometric_shapes.svg)
+
+Students can use a visual figure set like this to mark matching vertices, corresponding sides, and scale changes before they justify similarity or congruence.
+
+## Interactive Follow-Up
+Students can test rigid motions and dilations in the [Desmos Geometry tool](https://www.desmos.com/geometry) to compare what keeps a figure congruent and what creates a similar figure instead.
+
 ## Key Vocabulary
 **Congruent**: Figures that have the same shape and the same size.
 

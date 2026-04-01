@@ -17,6 +17,14 @@ As you read, focus on two questions:
 1. Are the matching side lengths equal or proportional?
 2. If the figures are similar, what is the scale factor?
 
+## Visual Model
+![2D and 3D geometric shapes with labeled properties](/images/lessons/math/geometric_shapes.svg)
+
+This kind of diagram gives students a place to mark corresponding sides before they calculate a scale factor.
+
+## Interactive Follow-Up
+Students can enlarge and reduce figures with the [Desmos Geometry tool](https://www.desmos.com/geometry) to see how a dilation preserves shape while changing side lengths by one constant multiplier.
+
 ## Key Vocabulary
 **Congruent**: Figures that have the same shape and the same size.
 

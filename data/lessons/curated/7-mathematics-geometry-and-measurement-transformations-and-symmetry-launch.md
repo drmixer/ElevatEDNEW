@@ -18,6 +18,17 @@ As you read, focus on three questions:
 2. Why do these transformations preserve side lengths and angles?
 3. How can symmetry help reveal matching parts?
 
+## Visual Model
+![Diagram showing rotation, reflection, translation, and dilation](/images/lessons/math/geometry_transformations.svg)
+
+This diagram gives students a concrete reference for naming a move before they try to describe a sequence of transformations.
+
+## Interactive Follow-Up
+Students can drag vertices and test rigid motions in the [Desmos Geometry tool](https://www.desmos.com/geometry) to see which moves preserve congruence and which change size.
+
+## Video Follow-Up
+Students who need another worked model can watch a short transformations video set in the [Khan Academy transformations unit](https://www.khanacademy.org/math/geometry-home/transformations).
+
 ## Key Vocabulary
 **Translation**: A slide that moves every point the same distance and direction.
 

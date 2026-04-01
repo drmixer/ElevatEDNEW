@@ -19,6 +19,14 @@ As you read, focus on two questions:
 1. Do the matching sides have the same lengths?
 2. Do the matching angles have the same measures?
 
+## Visual Model
+![2D and 3D geometric shapes with labeled properties](/images/lessons/math/geometric_shapes.svg)
+
+Use a labeled shape diagram to point to corresponding sides and angles before students decide whether figures are congruent or only similar.
+
+## Interactive Follow-Up
+Students can test size-preserving and size-changing moves with the [Desmos Geometry tool](https://www.desmos.com/geometry) by dragging shapes and comparing whether matching side lengths stay equal.
+
 ## Key Vocabulary
 **Congruent**: Figures that have the same shape and the same size.
 
