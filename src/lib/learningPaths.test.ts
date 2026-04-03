@@ -102,4 +102,28 @@ describe('buildBlendedLearningPath', () => {
     expect(socialStudiesEntry?.themeGrade).toBe(8);
     expect(socialStudiesEntry?.accessibilityLevel).toBe(6);
   });
+
+  it('adds an extra slot for the subject showing stable support pressure from live signals', () => {
+    const path = buildBlendedLearningPath({
+      nominalGrade: 6,
+      placements: [
+        { subject: 'math', expectedLevel: 6, workingLevel: 6 },
+        { subject: 'english', expectedLevel: 6, workingLevel: 6 },
+      ],
+      signals: [
+        { subject: 'math', recentAccuracy: 58, supportPressure: 0.72, masteryTrend: 'support', evidenceCount: 4 },
+        { subject: 'english', recentAccuracy: 88, stretchReadiness: 0.8, masteryTrend: 'stretch', evidenceCount: 4 },
+      ],
+      limit: 5,
+    });
+
+    expect(path).toHaveLength(5);
+    expect(path.map((item) => item.subject)).toEqual([
+      'math',
+      'math',
+      'english',
+      'science',
+      'social_studies',
+    ]);
+  });
 });

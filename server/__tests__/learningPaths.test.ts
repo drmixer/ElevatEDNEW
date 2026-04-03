@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { deriveExpectedLevel, deriveWorkingLevelEstimate } from '../learningPaths.js';
+import {
+  buildSubjectSignalSnapshot,
+  deriveExpectedLevel,
+  deriveWorkingLevelEstimate,
+  hasStableSignalCluster,
+} from '../learningPaths.js';
 
 describe('learningPaths placement helpers', () => {
   it('derives expected level from age and grade with clamping', () => {
@@ -110,5 +115,121 @@ describe('learningPaths placement helpers', () => {
     expect(estimate.levelConfidence).toBe(0.65);
     expect(estimate.weakStandardCodes).toContain('7.G.A.1');
     expect(estimate.strandEstimates.find((entry) => entry.strand === 'ratios')?.accuracyPct).toBe(100);
+  });
+
+  it('marks a core subject for support when live accuracy and mastery stay low', () => {
+    const signal = buildSubjectSignalSnapshot({
+      subject: 'math',
+      state: {
+        id: 1,
+        student_id: 'student-1',
+        subject: 'math',
+        expected_level: 6,
+        working_level: 4,
+        level_confidence: 0.7,
+        placement_status: 'completed',
+        diagnostic_assessment_id: 10,
+        diagnostic_attempt_id: 20,
+        diagnostic_completed_at: '2026-04-01T00:00:00.000Z',
+        strand_scores: {},
+        weak_standard_codes: ['6.NS.A.1'],
+        recommended_module_slugs: [],
+        last_path_id: 3,
+        metadata: {},
+        created_at: '2026-04-01T00:00:00.000Z',
+        updated_at: '2026-04-01T00:00:00.000Z',
+      },
+      masteryPct: 59,
+      events: [
+        {
+          subject: 'math',
+          eventType: 'practice_answered',
+          createdAt: '2026-04-03T09:00:00.000Z',
+          accuracy: 0,
+          standards: ['6.NS.A.1'],
+          completionSignal: false,
+          signalDirection: 'support',
+        },
+        {
+          subject: 'math',
+          eventType: 'quiz_submitted',
+          createdAt: '2026-04-03T08:30:00.000Z',
+          accuracy: 0.58,
+          standards: ['6.NS.A.1'],
+          completionSignal: false,
+          signalDirection: 'support',
+        },
+      ],
+    });
+
+    expect(signal.masteryTrend).toBe('support');
+    expect(signal.supportPressure).toBeGreaterThanOrEqual(0.65);
+    expect(signal.stretchReadiness).toBeLessThan(0.4);
+  });
+
+  it('requires three aligned signals before practice-only replanning', () => {
+    expect(
+      hasStableSignalCluster([
+        {
+          subject: 'english',
+          eventType: 'practice_answered',
+          createdAt: '2026-04-03T11:00:00.000Z',
+          accuracy: 1,
+          standards: ['RI.5.1'],
+          completionSignal: false,
+          signalDirection: 'stretch',
+        },
+        {
+          subject: 'english',
+          eventType: 'practice_answered',
+          createdAt: '2026-04-03T10:55:00.000Z',
+          accuracy: 1,
+          standards: ['RI.5.1'],
+          completionSignal: false,
+          signalDirection: 'stretch',
+        },
+        {
+          subject: 'english',
+          eventType: 'quiz_submitted',
+          createdAt: '2026-04-03T10:50:00.000Z',
+          accuracy: 0.92,
+          standards: ['RI.5.1'],
+          completionSignal: false,
+          signalDirection: 'stretch',
+        },
+      ]),
+    ).toBe('stretch');
+
+    expect(
+      hasStableSignalCluster([
+        {
+          subject: 'english',
+          eventType: 'practice_answered',
+          createdAt: '2026-04-03T11:00:00.000Z',
+          accuracy: 1,
+          standards: ['RI.5.1'],
+          completionSignal: false,
+          signalDirection: 'stretch',
+        },
+        {
+          subject: 'english',
+          eventType: 'practice_answered',
+          createdAt: '2026-04-03T10:55:00.000Z',
+          accuracy: 0,
+          standards: ['RI.5.1'],
+          completionSignal: false,
+          signalDirection: 'support',
+        },
+        {
+          subject: 'english',
+          eventType: 'quiz_submitted',
+          createdAt: '2026-04-03T10:50:00.000Z',
+          accuracy: 0.92,
+          standards: ['RI.5.1'],
+          completionSignal: false,
+          signalDirection: 'stretch',
+        },
+      ]),
+    ).toBeNull();
   });
 });

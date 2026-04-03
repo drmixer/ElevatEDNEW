@@ -8,7 +8,7 @@ import { captureServerException, raiseAlert } from './monitoring.js';
 import { HttpError } from './httpError.js';
 import { selectPlacementAssessmentId } from './placementSelection.js';
 import { validatePlacementQuestions } from './placementValidation.js';
-import { parseProfileLearningPath, projectProfileLearningPathEntries } from './learningPathProjection.js';
+import { parseProfileLearningPath, projectProfileLearningPathEntries, type ProfileLearningPathItem } from './learningPathProjection.js';
 
 type PathBuildOptions = {
   gradeBand?: string | null;
@@ -119,11 +119,46 @@ type AdaptiveAttempt = {
   accuracy: number | null;
 };
 
+type SubjectMasteryAggregate = {
+  subject: string | null;
+  mastery: number | null;
+};
+
+type LiveSubjectEvent = {
+  subject: string;
+  eventType: string;
+  createdAt: string;
+  accuracy: number | null;
+  standards: string[];
+  completionSignal: boolean;
+  signalDirection: 'support' | 'stretch' | 'steady';
+};
+
+export type SubjectSignalSnapshot = {
+  subject: string;
+  recentAccuracy: number | null;
+  masteryPct: number | null;
+  masteryTrend: 'support' | 'steady' | 'stretch';
+  supportPressure: number;
+  stretchReadiness: number;
+  evidenceCount: number;
+  lessonSignals: number;
+  weakStandards: string[];
+  lastReplannedAt: string | null;
+};
+
 let TARGET_ACCURACY_BAND = { min: 0.65, max: 0.8 };
 const MAX_ADAPTIVE_ATTEMPTS = 24;
 const MAX_STANDARDS_TRACKED = 4;
 let MAX_REMEDIATION_INSERTS = 2;
 let MAX_PENDING_PRACTICE = 3;
+const CORE_PROFILE_SUBJECTS = ['math', 'english'] as const;
+const CONTEXTUAL_PROFILE_SUBJECTS = ['science', 'social_studies'] as const;
+const PROFILE_BLEND_SIGNAL_KEY = 'profile_blend_signal';
+const PROFILE_REPLAN_STABLE_SIGNAL_COUNT = 3;
+const PROFILE_REPLAN_DEBOUNCE_MS = 5 * 60 * 1000;
+const PROFILE_REPLAN_EVENT_SAMPLE = 60;
+const PROFILE_LEARNING_PATH_LIMIT = 8;
 const syncAdaptiveConfig = async (supabase: SupabaseClient | null) => {
   try {
     const config = await getRuntimeConfig(supabase ?? null);
@@ -1710,6 +1745,591 @@ const chooseAdaptiveNext = (entries: PathEntry[]): PathEntry | null => {
     })[0];
 };
 
+const normalizeRatio = (value: number | null | undefined): number | null => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  if (value > 1) return Math.max(0, Math.min(1, value / 100));
+  return Math.max(0, Math.min(1, value));
+};
+
+const normalizePct = (value: number | null | undefined): number | null => {
+  const ratio = normalizeRatio(value);
+  return ratio == null ? null : Math.round(ratio * 1000) / 10;
+};
+
+const readProfileBlendSignal = (
+  metadata: Record<string, unknown> | null | undefined,
+): { lastReplannedAt: string | null } => {
+  const signal = ((metadata?.[PROFILE_BLEND_SIGNAL_KEY] as Record<string, unknown> | null | undefined) ?? {}) as Record<
+    string,
+    unknown
+  >;
+  return {
+    lastReplannedAt: typeof signal.last_replanned_at === 'string' ? signal.last_replanned_at : null,
+  };
+};
+
+const resolveEventSubject = (
+  payload: Record<string, unknown> | null | undefined,
+  moduleSubjectLookup?: Map<number, string>,
+): string | null => {
+  const record = (payload ?? {}) as Record<string, unknown>;
+  const explicitSubject = normalizeSubjectKey(record.subject as string | null | undefined);
+  if (explicitSubject) return explicitSubject;
+  const moduleId = typeof record.module_id === 'number' && Number.isFinite(record.module_id) ? record.module_id : null;
+  if (moduleId == null) return null;
+  return normalizeSubjectKey(moduleSubjectLookup?.get(moduleId) ?? null);
+};
+
+const mapEventRowToLiveSubjectEvent = (
+  row: { event_type?: string; payload?: Record<string, unknown> | null; created_at?: string | null },
+  moduleSubjectLookup: Map<number, string>,
+): LiveSubjectEvent | null => {
+  const payload = (row.payload ?? {}) as Record<string, unknown>;
+  const eventType = (row.event_type ?? '').toLowerCase();
+  const subject = resolveEventSubject(payload, moduleSubjectLookup);
+  if (!eventType || !subject) return null;
+
+  const createdAt = (row.created_at as string | null | undefined) ?? new Date().toISOString();
+
+  if (eventType === 'lesson_completed') {
+    return {
+      subject,
+      eventType,
+      createdAt,
+      accuracy: null,
+      standards: normalizeStandards(payload.standards ?? []),
+      completionSignal: true,
+      signalDirection: 'steady',
+    };
+  }
+
+  if (eventType === 'practice_answered') {
+    const accuracy = payload.correct === true ? 1 : 0;
+    return {
+      subject,
+      eventType,
+      createdAt,
+      accuracy,
+      standards: normalizeStandards(payload.standards ?? payload.standard_codes ?? []),
+      completionSignal: false,
+      signalDirection: accuracy < TARGET_ACCURACY_BAND.min ? 'support' : 'stretch',
+    };
+  }
+
+  if (eventType === 'quiz_submitted') {
+    const accuracy = normalizeRatio(payload.score as number | null | undefined);
+    if (accuracy == null) return null;
+    return {
+      subject,
+      eventType,
+      createdAt,
+      accuracy,
+      standards: normalizeStandards(payload.standard_breakdown ?? payload.standards ?? []),
+      completionSignal: false,
+      signalDirection:
+        accuracy < TARGET_ACCURACY_BAND.min
+          ? 'support'
+          : accuracy > TARGET_ACCURACY_BAND.max
+            ? 'stretch'
+            : 'steady',
+    };
+  }
+
+  return null;
+};
+
+export const hasStableSignalCluster = (events: LiveSubjectEvent[]): 'support' | 'stretch' | null => {
+  const directional = events
+    .filter((event) => event.signalDirection !== 'steady')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, PROFILE_REPLAN_STABLE_SIGNAL_COUNT);
+
+  if (directional.length < PROFILE_REPLAN_STABLE_SIGNAL_COUNT) return null;
+
+  const direction = directional[0]?.signalDirection;
+  if (direction !== 'support' && direction !== 'stretch') return null;
+  if (directional.some((event) => event.signalDirection !== direction)) return null;
+
+  const standardsPresent = directional.every((event) => event.standards.length > 0);
+  if (!standardsPresent) return direction;
+
+  const sharedStandards = directional.slice(1).reduce(
+    (shared, event) => shared.filter((code) => event.standards.includes(code)),
+    directional[0]?.standards.slice() ?? [],
+  );
+  return sharedStandards.length > 0 ? direction : null;
+};
+
+export const buildSubjectSignalSnapshot = (params: {
+  subject: string;
+  state?: SubjectState | null;
+  masteryPct?: number | null;
+  events?: LiveSubjectEvent[];
+}): SubjectSignalSnapshot => {
+  const { subject } = params;
+  const state = params.state ?? null;
+  const events = (params.events ?? [])
+    .filter((event) => event.subject === subject)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 8);
+
+  const accuracySamples = events
+    .map((event) => event.accuracy)
+    .filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
+  const recentAccuracy =
+    accuracySamples.length > 0
+      ? Math.round(((accuracySamples.reduce((sum, value) => sum + value, 0) / accuracySamples.length) * 1000)) / 10
+      : null;
+  const masteryPct = normalizePct(params.masteryPct ?? null);
+  const supportSignals = events.filter((event) => event.signalDirection === 'support').length;
+  const stretchSignals = events.filter((event) => event.signalDirection === 'stretch').length;
+  const lessonSignals = events.filter((event) => event.completionSignal).length;
+  const levelGap =
+    state?.expected_level != null && state.working_level != null
+      ? Math.max(0, state.expected_level - state.working_level)
+      : 0;
+
+  let supportPressure = 0;
+  if (levelGap >= 2) supportPressure += 0.35;
+  else if (levelGap === 1) supportPressure += 0.18;
+
+  if (masteryPct != null) {
+    if (masteryPct < 65) supportPressure += 0.35;
+    else if (masteryPct < 75) supportPressure += 0.2;
+    else if (masteryPct >= 85) supportPressure -= 0.08;
+  }
+
+  if (recentAccuracy != null) {
+    if (recentAccuracy < 65) supportPressure += 0.35;
+    else if (recentAccuracy < 75) supportPressure += 0.18;
+    else if (recentAccuracy >= 85) supportPressure -= 0.1;
+  }
+
+  if (supportSignals >= 2) supportPressure += 0.2;
+  if ((state?.weak_standard_codes?.length ?? 0) > 0) supportPressure += 0.08;
+  if (stretchSignals >= 2) supportPressure -= 0.08;
+  supportPressure = Math.max(0, Math.min(1, supportPressure));
+
+  let stretchReadiness = 0;
+  if (levelGap === 0) stretchReadiness += 0.18;
+
+  if (masteryPct != null) {
+    if (masteryPct >= 85) stretchReadiness += 0.35;
+    else if (masteryPct >= 78) stretchReadiness += 0.2;
+  }
+
+  if (recentAccuracy != null) {
+    if (recentAccuracy >= 85) stretchReadiness += 0.35;
+    else if (recentAccuracy >= 78) stretchReadiness += 0.2;
+    else if (recentAccuracy < 65) stretchReadiness -= 0.15;
+  }
+
+  if (stretchSignals >= 2) stretchReadiness += 0.18;
+  if (supportSignals >= 2) stretchReadiness -= 0.18;
+  stretchReadiness = Math.max(0, Math.min(1, stretchReadiness));
+
+  const masteryTrend =
+    supportPressure >= 0.65 ? 'support' : stretchReadiness >= 0.65 ? 'stretch' : 'steady';
+
+  return {
+    subject,
+    recentAccuracy,
+    masteryPct,
+    masteryTrend,
+    supportPressure: Math.round(supportPressure * 1000) / 1000,
+    stretchReadiness: Math.round(stretchReadiness * 1000) / 1000,
+    evidenceCount: accuracySamples.length,
+    lessonSignals,
+    weakStandards: state?.weak_standard_codes ?? [],
+    lastReplannedAt: readProfileBlendSignal(state?.metadata).lastReplannedAt,
+  };
+};
+
+const buildProfileSubjectWeight = (
+  state: SubjectState | null | undefined,
+  signal: SubjectSignalSnapshot | null | undefined,
+): number => {
+  let weight =
+    state?.expected_level != null && state.working_level != null && state.expected_level - state.working_level >= 2
+      ? 2
+      : 1;
+  if (!signal) return weight;
+  if (signal.masteryTrend === 'support' || signal.supportPressure >= 0.6) {
+    weight = 2;
+  }
+  if (signal.masteryTrend === 'stretch' && signal.supportPressure < 0.55 && signal.stretchReadiness >= 0.75) {
+    weight = 1;
+  }
+  return Math.max(1, Math.min(2, weight));
+};
+
+const orderSubjectPathEntries = (
+  entries: PathEntry[],
+  signal: SubjectSignalSnapshot | null | undefined,
+): PathEntry[] => {
+  const supportPriority = signal?.supportPressure ?? 0;
+  const stretchPriority = signal?.stretchReadiness ?? 0;
+
+  const priorityForEntry = (entry: PathEntry): number => {
+    const metadata = (entry.metadata ?? {}) as Record<string, unknown>;
+    const reason = (metadata.reason as string | null | undefined) ?? '';
+    const remediation = reason === 'remediation' || entry.type === 'review';
+    const stretch = reason === 'stretch' || entry.type === 'practice';
+    const inProgress = entry.status === 'in_progress';
+
+    if (supportPriority >= 0.6) {
+      if (remediation) return 0;
+      if (inProgress) return 1;
+      return 2;
+    }
+
+    if (stretchPriority >= 0.65) {
+      if (inProgress) return 0;
+      if (stretch) return 1;
+      if (remediation) return 3;
+      return 2;
+    }
+
+    if (inProgress) return 0;
+    return remediation ? 1 : 2;
+  };
+
+  return entries
+    .slice()
+    .sort((a, b) => priorityForEntry(a) - priorityForEntry(b) || a.position - b.position);
+};
+
+const pathEntryToProfileItem = (entry: PathEntry, subject: string): ProfileLearningPathItem => {
+  const metadata = (entry.metadata ?? {}) as Record<string, unknown>;
+  const moduleSlug = typeof metadata.module_slug === 'string' ? metadata.module_slug : undefined;
+  const moduleTitle =
+    typeof metadata.module_title === 'string' && metadata.module_title.trim().length > 0
+      ? metadata.module_title
+      : entry.type === 'review'
+        ? 'Targeted review'
+        : 'Next lesson';
+  const reason =
+    (metadata.reason as string | null | undefined) ?? (entry.type === 'review' ? 'remediation' : 'personalized_path');
+  const targetDifficulty =
+    typeof metadata.target_difficulty === 'number' && Number.isFinite(metadata.target_difficulty)
+      ? metadata.target_difficulty
+      : 15;
+
+  return {
+    id: entry.lesson_id != null ? String(entry.lesson_id) : moduleSlug ?? `path-entry-${entry.id}`,
+    subject,
+    topic: moduleTitle,
+    concept: reason,
+    difficulty: targetDifficulty,
+    status: entry.status === 'completed' ? 'completed' : entry.status === 'in_progress' ? 'in_progress' : 'not_started',
+    xpReward: 60,
+    moduleSlug,
+    standardCodes: entry.target_standard_codes ?? [],
+    pathSource: reason === 'remediation' || reason === 'stretch' ? 'adaptive_recommendation' : 'subject_placement',
+  };
+};
+
+const buildFallbackProfileItems = async (params: {
+  supabase: SupabaseClient;
+  subject: string;
+  state?: SubjectState | null;
+  profile: { grade_level: number | null; grade_band: string | null };
+  limit: number;
+}): Promise<ProfileLearningPathItem[]> => {
+  const { supabase, subject, state, profile, limit } = params;
+  const targetGradeBand =
+    state?.working_level != null
+      ? String(state.working_level)
+      : deriveGradeBand(profile.grade_level, profile.grade_band);
+  const sequence = await fetchCanonicalSequence(
+    supabase,
+    targetGradeBand,
+    subject,
+    limit,
+    state?.working_level ?? profile.grade_level,
+  );
+
+  return sequence.map((entry, index) => ({
+    id: entry.module_slug ?? `${subject}-${index + 1}`,
+    subject,
+    topic: entry.module_title ?? 'Next lesson',
+    concept: 'personalized_path',
+    difficulty: 15,
+    status: 'not_started',
+    xpReward: 60,
+    moduleSlug: entry.module_slug ?? undefined,
+    standardCodes: entry.standard_codes ?? [],
+    pathSource: 'subject_placement',
+  }));
+};
+
+const buildContextualProfileItems = async (params: {
+  supabase: SupabaseClient;
+  subject: string;
+  nominalGrade: number;
+  accessibilityLevel: number | null;
+  limit: number;
+}): Promise<ProfileLearningPathItem[]> => {
+  const { supabase, subject, nominalGrade, accessibilityLevel, limit } = params;
+  const sequence = await fetchCanonicalSequence(supabase, String(nominalGrade), subject, limit, nominalGrade);
+  return sequence.map((entry, index) => ({
+    id: entry.module_slug ?? `${subject}-context-${index + 1}`,
+    subject,
+    topic: entry.module_title ?? 'Cross-subject support',
+    concept: 'cross_subject_access',
+    difficulty: 15,
+    status: 'not_started',
+    xpReward: 60,
+    moduleSlug: entry.module_slug ?? undefined,
+    standardCodes: entry.standard_codes ?? [],
+    pathSource: 'cross_subject_access',
+    accessibilityLevel: accessibilityLevel ?? undefined,
+    themeGrade: nominalGrade,
+  }));
+};
+
+const interleaveProfileLearningPath = (params: {
+  coreQueues: Array<{ subject: string; weight: number; entries: ProfileLearningPathItem[] }>;
+  contextualQueues: Array<{ subject: string; entries: ProfileLearningPathItem[] }>;
+  limit: number;
+}): ProfileLearningPathItem[] => {
+  const viableCoreQueues = params.coreQueues.filter((queue) => queue.entries.length > 0);
+  const viableContextualQueues = params.contextualQueues.filter((queue) => queue.entries.length > 0);
+  const cursors = new Map<string, number>();
+
+  [...viableCoreQueues, ...viableContextualQueues].forEach((queue) => {
+    cursors.set(queue.subject, 0);
+  });
+
+  const result: ProfileLearningPathItem[] = [];
+  while (result.length < params.limit) {
+    let added = false;
+
+    for (const queue of viableCoreQueues) {
+      for (let slot = 0; slot < queue.weight && result.length < params.limit; slot += 1) {
+        const cursor = cursors.get(queue.subject) ?? 0;
+        const next = queue.entries[cursor];
+        if (!next) break;
+        result.push(next);
+        cursors.set(queue.subject, cursor + 1);
+        added = true;
+      }
+    }
+
+    for (const queue of viableContextualQueues) {
+      if (result.length >= params.limit) break;
+      const cursor = cursors.get(queue.subject) ?? 0;
+      const next = queue.entries[cursor];
+      if (!next) continue;
+      result.push(next);
+      cursors.set(queue.subject, cursor + 1);
+      added = true;
+    }
+
+    if (!added) break;
+  }
+
+  return result.slice(0, params.limit);
+};
+
+const replanBlendedLearningPath = async (
+  supabase: SupabaseClient,
+  studentId: string,
+  event: { eventType: string; payload?: Record<string, unknown> | null },
+): Promise<void> => {
+  const [profile, states, eventRows, masteryRows] = await Promise.all([
+    loadStudentProfile(supabase, studentId),
+    getStudentSubjectStates(supabase, studentId).catch(() => []),
+    supabase
+      .from('student_events')
+      .select('event_type, payload, created_at')
+      .eq('student_id', studentId)
+      .in('event_type', ['practice_answered', 'quiz_submitted', 'lesson_completed'])
+      .order('created_at', { ascending: false })
+      .limit(PROFILE_REPLAN_EVENT_SAMPLE),
+    supabase
+      .from('student_mastery_by_subject')
+      .select('subject, mastery')
+      .eq('student_id', studentId),
+  ]);
+
+  if (eventRows.error) {
+    throw new Error(`Unable to load recent learning events for replanning: ${eventRows.error.message}`);
+  }
+  if (masteryRows.error) {
+    console.warn('[adaptive] Unable to load subject mastery for replanning', masteryRows.error);
+  }
+
+  const rawEvents = (eventRows.data ?? []) as Array<{ event_type?: string; payload?: Record<string, unknown> | null; created_at?: string | null }>;
+  const moduleIds = Array.from(
+    new Set(
+      rawEvents
+        .map((row) => {
+          const payload = (row.payload ?? {}) as Record<string, unknown>;
+          return typeof payload.module_id === 'number' && Number.isFinite(payload.module_id) ? payload.module_id : null;
+        })
+        .filter((value): value is number => value != null),
+    ),
+  );
+
+  const moduleSubjectLookup = new Map<number, string>();
+  if (moduleIds.length > 0) {
+    const { data: moduleRows, error: moduleError } = await supabase
+      .from('modules')
+      .select('id, subject')
+      .in('id', moduleIds);
+    if (moduleError) {
+      console.warn('[adaptive] Unable to resolve module subjects for replanning', moduleError);
+    } else {
+      (moduleRows ?? []).forEach((row) => {
+        if (typeof row.id === 'number' && typeof row.subject === 'string') {
+          moduleSubjectLookup.set(row.id, row.subject);
+        }
+      });
+    }
+  }
+
+  const liveEvents = rawEvents
+    .map((row) => mapEventRowToLiveSubjectEvent(row, moduleSubjectLookup))
+    .filter((row): row is LiveSubjectEvent => Boolean(row));
+  const stateMap = new Map(states.map((state) => [state.subject, state] as const));
+  const masteryMap = new Map<string, number | null>();
+  ((masteryRows.data ?? []) as SubjectMasteryAggregate[]).forEach((row) => {
+    const subject = normalizeSubjectKey(row.subject ?? null);
+    if (subject) masteryMap.set(subject, normalizePct(row.mastery ?? null));
+  });
+
+  const trackedSubjects = new Set<string>([...CORE_PROFILE_SUBJECTS]);
+  states.forEach((state) => trackedSubjects.add(state.subject));
+  liveEvents.forEach((row) => trackedSubjects.add(row.subject));
+
+  const subjectSignals = Array.from(trackedSubjects).map((subject) =>
+    buildSubjectSignalSnapshot({
+      subject,
+      state: stateMap.get(subject) ?? null,
+      masteryPct: masteryMap.get(subject) ?? null,
+      events: liveEvents,
+    }),
+  );
+  const signalMap = new Map(subjectSignals.map((signal) => [signal.subject, signal] as const));
+
+  const triggerSubject = resolveEventSubject(event.payload ?? {}, moduleSubjectLookup);
+  const triggerSignal = triggerSubject ? signalMap.get(triggerSubject) ?? null : null;
+  const stableDirection =
+    triggerSubject && triggerSignal?.lastReplannedAt
+      ? hasStableSignalCluster(
+          liveEvents.filter(
+            (row) =>
+              row.subject === triggerSubject &&
+              new Date(row.createdAt).getTime() > new Date(triggerSignal.lastReplannedAt as string).getTime(),
+          ),
+        )
+      : triggerSubject
+        ? hasStableSignalCluster(liveEvents.filter((row) => row.subject === triggerSubject))
+        : null;
+
+  const recentlyReplanned =
+    triggerSignal?.lastReplannedAt != null &&
+    Date.now() - new Date(triggerSignal.lastReplannedAt).getTime() < PROFILE_REPLAN_DEBOUNCE_MS;
+  const shouldReplan =
+    event.eventType === 'lesson_completed'
+      ? true
+      : !recentlyReplanned && stableDirection != null;
+
+  if (!shouldReplan) {
+    return;
+  }
+
+  const corePaths = await Promise.all(
+    CORE_PROFILE_SUBJECTS.map(async (subject) => ({
+      subject,
+      path: await getStoredStudentPath(supabase, studentId, { subject }).catch(() => null),
+    })),
+  );
+
+  const coreQueues = await Promise.all(
+    corePaths.map(async ({ subject, path }) => {
+      const subjectState = stateMap.get(subject) ?? null;
+      const signal = signalMap.get(subject) ?? null;
+      const pendingEntries = path?.entries.filter((entry) => entry.status !== 'completed') ?? [];
+      const prioritizedEntries = orderSubjectPathEntries(pendingEntries, signal).map((entry) =>
+        pathEntryToProfileItem(entry, subject),
+      );
+      const fallbackEntries =
+        prioritizedEntries.length > 0
+          ? prioritizedEntries
+          : await buildFallbackProfileItems({
+              supabase,
+              subject,
+              state: subjectState,
+              profile,
+              limit: PROFILE_LEARNING_PATH_LIMIT,
+            });
+      return {
+        subject,
+        weight: buildProfileSubjectWeight(subjectState, signal),
+        entries: fallbackEntries,
+      };
+    }),
+  );
+
+  const nominalGrade = profile.grade_level ?? gradeBandToLevel(profile.grade_band);
+  const englishAccessibility =
+    stateMap.get('english')?.working_level ?? profile.grade_level ?? gradeBandToLevel(profile.grade_band);
+  const contextualQueues =
+    nominalGrade != null
+      ? await Promise.all(
+          CONTEXTUAL_PROFILE_SUBJECTS.map(async (subject) => ({
+            subject,
+            entries: await buildContextualProfileItems({
+              supabase,
+              subject,
+              nominalGrade,
+              accessibilityLevel: englishAccessibility,
+              limit: 2,
+            }),
+          })),
+        )
+      : [];
+
+  const learningPath = interleaveProfileLearningPath({
+    coreQueues,
+    contextualQueues,
+    limit: PROFILE_LEARNING_PATH_LIMIT,
+  });
+
+  if (!learningPath.length) {
+    return;
+  }
+
+  await supabase.from('student_profiles').update({ learning_path: learningPath }).eq('id', studentId);
+
+  const replannedAt = new Date().toISOString();
+  await Promise.all(
+    states.map(async (state) => {
+      const signal = signalMap.get(state.subject);
+      if (!signal) return;
+      const nextMetadata = {
+        ...(state.metadata ?? {}),
+        [PROFILE_BLEND_SIGNAL_KEY]: {
+          recent_accuracy: signal.recentAccuracy,
+          mastery_pct: signal.masteryPct,
+          mastery_trend: signal.masteryTrend,
+          support_pressure: signal.supportPressure,
+          stretch_readiness: signal.stretchReadiness,
+          evidence_count: signal.evidenceCount,
+          lesson_signals: signal.lessonSignals,
+          weak_standards: signal.weakStandards,
+          last_replanned_at: replannedAt,
+          trigger_subject: triggerSubject,
+          trigger_event_type: event.eventType,
+        },
+      };
+      await supabase.from('student_subject_state').update({ metadata: nextMetadata }).eq('id', state.id);
+    }),
+  );
+};
+
 const updateAdaptiveState = (
   state: { currentDifficulty: number; difficultyStreak: number },
   latestAttempt: AdaptiveAttempt | null,
@@ -2119,6 +2739,16 @@ export const applyAdaptiveEvent = async (
     if (inserted) {
       workingEntries.push(inserted);
     }
+  }
+
+  try {
+    await replanBlendedLearningPath(supabase, studentId, {
+      eventType: event.eventType,
+      payload,
+    });
+  } catch (replanError) {
+    console.warn('[adaptive] Unable to replan blended profile path', replanError);
+    captureServerException(replanError, { stage: 'adaptive_profile_replan', studentId, eventType: event.eventType });
   }
 
   const refreshedStoredPath = await getStoredStudentPath(supabase, studentId);

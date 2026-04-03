@@ -100,10 +100,52 @@ export type SubjectPlacementSnapshot = {
   preferredModules?: string[];
 };
 
-const buildSubjectWeight = (placement?: SubjectPlacementSnapshot | null): number => {
-  if (!placement) return 1;
-  if (placement.expectedLevel == null || placement.workingLevel == null) return 1;
-  return placement.expectedLevel - placement.workingLevel >= 2 ? 2 : 1;
+export type SubjectSignalSnapshot = {
+  subject: Subject;
+  recentAccuracy?: number | null;
+  supportPressure?: number | null;
+  stretchReadiness?: number | null;
+  masteryTrend?: 'support' | 'steady' | 'stretch' | null;
+  evidenceCount?: number | null;
+};
+
+const normalizeSignalRatio = (value: number | null | undefined): number | null => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  if (value > 1) return Math.max(0, Math.min(1, value / 100));
+  return Math.max(0, Math.min(1, value));
+};
+
+const buildSubjectWeight = (
+  placement?: SubjectPlacementSnapshot | null,
+  signal?: SubjectSignalSnapshot | null,
+): number => {
+  let weight = 1;
+  if (placement?.expectedLevel != null && placement.workingLevel != null && placement.expectedLevel - placement.workingLevel >= 2) {
+    weight = 2;
+  }
+
+  const supportPressure = normalizeSignalRatio(signal?.supportPressure);
+  const stretchReadiness = normalizeSignalRatio(signal?.stretchReadiness);
+  const recentAccuracy = normalizeSignalRatio(signal?.recentAccuracy);
+  const evidenceCount =
+    typeof signal?.evidenceCount === 'number' && Number.isFinite(signal.evidenceCount)
+      ? Math.max(0, Math.round(signal.evidenceCount))
+      : 0;
+
+  if (signal?.masteryTrend === 'support') {
+    weight = 2;
+  }
+  if (supportPressure != null && supportPressure >= 0.6) {
+    weight = 2;
+  }
+  if (recentAccuracy != null && evidenceCount >= 3 && recentAccuracy <= 0.67) {
+    weight = 2;
+  }
+  if (signal?.masteryTrend === 'stretch' && supportPressure != null && supportPressure < 0.55 && stretchReadiness != null && stretchReadiness >= 0.75) {
+    weight = 1;
+  }
+
+  return Math.max(1, Math.min(2, weight));
 };
 
 const parseNumericGrade = (grade: number | string | null | undefined): number | null => {
@@ -131,13 +173,20 @@ const annotateCrossSubjectAccess = (
 export const buildBlendedLearningPath = (params: {
   nominalGrade: number | string | null | undefined;
   placements?: SubjectPlacementSnapshot[];
+  signals?: SubjectSignalSnapshot[];
   limit?: number;
 }): LearningPathItem[] => {
-  const { nominalGrade, placements = [], limit = 8 } = params;
+  const { nominalGrade, placements = [], signals = [], limit = 8 } = params;
   const placementMap = new Map<Subject, SubjectPlacementSnapshot>();
   placements.forEach((placement) => {
     if (CORE_PLANNER_SUBJECTS.includes(placement.subject) || CONTEXTUAL_SUPPORT_SUBJECTS.includes(placement.subject)) {
       placementMap.set(placement.subject, placement);
+    }
+  });
+  const signalMap = new Map<Subject, SubjectSignalSnapshot>();
+  signals.forEach((signal) => {
+    if (CORE_PLANNER_SUBJECTS.includes(signal.subject)) {
+      signalMap.set(signal.subject, signal);
     }
   });
 
@@ -151,7 +200,7 @@ export const buildBlendedLearningPath = (params: {
     if (targetGrade == null) return { subject, weight: 0, entries: [] as LearningPathItem[] };
     return {
       subject,
-      weight: buildSubjectWeight(placement),
+      weight: buildSubjectWeight(placement, signalMap.get(subject) ?? null),
       entries: buildCanonicalLearningPath({
         grade: targetGrade,
         subject,
