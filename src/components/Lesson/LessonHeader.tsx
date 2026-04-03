@@ -12,7 +12,7 @@ import { LessonProgressBarCompact } from './LessonProgressBar';
 interface LessonHeaderProps {
     title: string;
     subject: string;
-    gradeBand: string;
+    gradeBand?: string | null;
     moduleId?: number;
     moduleTitle?: string;
     estimatedMinutes?: number | null;
@@ -62,9 +62,11 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
                                 <BookOpen className="h-3 w-3" />
                                 {subject}
                             </span>
-                            <span className="text-xs font-medium text-slate-500">
-                                {gradeBand}
-                            </span>
+                            {gradeBand ? (
+                                <span className="text-xs font-medium text-slate-500">
+                                    {gradeBand}
+                                </span>
+                            ) : null}
                         </div>
 
                         {/* Title */}

@@ -492,7 +492,7 @@ const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
                                     {parentGoals ? (
                                         <p>Your parent set a goal of {parentGoals.weeklyLessons || 5} lessons per week.</p>
                                     ) : (
-                                        <p>Based on the recommended pace for your grade level.</p>
+                                        <p>Based on the recommended pace for your current path.</p>
                                     )}
                                     {focusSubject !== 'balanced' && (
                                         <p className="mt-1">

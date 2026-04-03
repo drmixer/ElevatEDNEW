@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useAuth } from '../contexts/AuthContext';
 import { formatSubjectLabel, normalizeSubject } from '../lib/subjects';
 
 import { fetchModuleAssessment, fetchModuleDetail, fetchRecommendations } from '../services/catalogService';
@@ -24,8 +25,10 @@ const formatMinutes = (value: number | null): string =>
 const MARKDOWN_PLUGINS = [remarkGfm];
 
 const ModulePage: React.FC = () => {
+  const { user } = useAuth();
   const params = useParams<{ id: string }>();
   const moduleId = Number.parseInt(params.id ?? '', 10);
+  const hideGradeLabels = user?.role === 'student';
   const [lastScore, setLastScore] = useState<number>(80);
   const [quizOpen, setQuizOpen] = useState<boolean>(false);
   const [expandedLessonId, setExpandedLessonId] = useState<number | null>(null);
@@ -131,7 +134,7 @@ const ModulePage: React.FC = () => {
       <header className="bg-white border-b border-slate-200 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col gap-4">
           <div className="text-sm text-brand-blue uppercase tracking-wide font-semibold">
-            {subjectLabel ?? core.subject} · Grade {core.gradeBand}
+            {hideGradeLabels ? (subjectLabel ?? core.subject) : `${subjectLabel ?? core.subject} · Grade ${core.gradeBand}`}
           </div>
           <h1 className="text-3xl font-bold text-slate-900">{pageTitle}</h1>
           <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
@@ -530,9 +533,11 @@ const ModulePage: React.FC = () => {
                     key={recommendation.id}
                     className="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col gap-2"
                   >
-                    <div className="text-xs text-slate-500 uppercase tracking-wide">
-                      Grade {recommendation.gradeBand}
-                    </div>
+                    {!hideGradeLabels ? (
+                      <div className="text-xs text-slate-500 uppercase tracking-wide">
+                        Grade {recommendation.gradeBand}
+                      </div>
+                    ) : null}
                     <div className="text-base font-semibold text-slate-900">{recommendation.title}</div>
                     <div className="text-xs text-slate-500">{recommendation.reason}</div>
                     {recommendation.fallback && (
@@ -606,7 +611,9 @@ const ModulePage: React.FC = () => {
             <h2 className="text-lg font-semibold text-slate-900">Module snapshot</h2>
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
               <li><span className="font-semibold text-slate-700">Subject:</span> {subjectLabel}</li>
-              <li><span className="font-semibold text-slate-700">Grade band:</span> {core.gradeBand}</li>
+              {!hideGradeLabels ? (
+                <li><span className="font-semibold text-slate-700">Grade band:</span> {core.gradeBand}</li>
+              ) : null}
               <li><span className="font-semibold text-slate-700">Lessons:</span> {lessons.length}</li>
               <li>
                 <span className="font-semibold text-slate-700">Open track lessons:</span> {openTrackLessonCount}

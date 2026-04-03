@@ -148,6 +148,7 @@ const LessonContent: React.FC<{
     pilotTopic: Grade2MathPilotTopic | null;
     nonMathRemediationSubject: NonMathRemediationSubject | null;
     practiceQuestions: LessonPracticeQuestion[];
+    hideGradeLabels: boolean;
     onAnswerSubmit: (questionId: number, optionId: number, isCorrect: boolean) => void;
     onAskTutor?: (context: string) => void;
     onSectionComplete?: (sectionIndex: number) => void;
@@ -157,6 +158,7 @@ const LessonContent: React.FC<{
     pilotTopic,
     nonMathRemediationSubject,
     practiceQuestions,
+    hideGradeLabels,
     onAnswerSubmit,
     onAskTutor,
     onSectionComplete,
@@ -207,7 +209,7 @@ const LessonContent: React.FC<{
                             <WelcomePhase
                                 title={parsedContent.welcome.title}
                                 subject={parsedContent.welcome.subject}
-                                gradeBand={parsedContent.welcome.gradeBand}
+                                gradeBand={hideGradeLabels ? null : parsedContent.welcome.gradeBand}
                                 objectives={parsedContent.welcome.objectives}
                                 estimatedMinutes={parsedContent.welcome.estimatedMinutes}
                                 hook={parsedContent.welcome.hook}
@@ -278,6 +280,7 @@ const LessonPlayerPage: React.FC = () => {
     const location = useLocation();
     const { user } = useAuth();
     const lessonId = Number.parseInt(params.id ?? '', 10);
+    const hideGradeLabels = user?.role === 'student';
 
     const studentId = user?.role === 'student' ? user.id : null;
 
@@ -686,7 +689,7 @@ const LessonPlayerPage: React.FC = () => {
                             <LessonHeader
                                 title={lessonDetail.lesson.title}
                                 subject={lessonDetail.module.subject}
-                                gradeBand={lessonDetail.module.gradeBand}
+                                gradeBand={hideGradeLabels ? null : lessonDetail.module.gradeBand}
                             />
 
                             {lessonReasonCard && (
@@ -757,6 +760,7 @@ const LessonPlayerPage: React.FC = () => {
                             pilotTopic={grade2MathPilotTopic}
                             nonMathRemediationSubject={nonMathRemediationSubject}
                             practiceQuestions={practiceQuestions}
+                            hideGradeLabels={hideGradeLabels}
                             onAnswerSubmit={handleAnswerSubmit}
                             onAskTutor={studentId ? handleAskTutor : undefined}
                             onSectionComplete={handleSectionComplete}

@@ -4264,9 +4264,6 @@ const StudentDashboard: React.FC = () => {
                       >
                         <div className="flex items-center justify-between text-xs text-gray-500">
                           <span className="font-semibold text-brand-blue">{module.duration}</span>
-                          <span className="px-2 py-1 rounded-full bg-brand-light-teal/60 text-brand-teal font-semibold">
-                            Grades {module.gradeBand}
-                          </span>
                         </div>
                         <h4 className="font-semibold text-gray-900 mt-2">{module.title}</h4>
                         <p className="text-xs text-gray-600 line-clamp-3 mt-1">{module.description}</p>

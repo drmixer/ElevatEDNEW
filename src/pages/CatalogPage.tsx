@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 
+import { useAuth } from '../contexts/AuthContext';
 import { fetchCatalogModules } from '../services/catalogService';
 import type { CatalogFilters, CatalogModule, Subject } from '../types';
 import { formatSubjectLabel, normalizeSubject, SUBJECTS } from '../lib/subjects';
@@ -30,7 +31,10 @@ const createDefaultFilters = (): CatalogFilters => ({
 
 const pageSize = 12;
 
-const ModuleCard: React.FC<{ module: CatalogModule }> = ({ module }) => {
+const ModuleCard: React.FC<{ module: CatalogModule; hideGradeLabels?: boolean }> = ({
+  module,
+  hideGradeLabels = false,
+}) => {
   const normalizedSubject = normalizeSubject(module.subject);
   const subjectLabel = normalizedSubject ? formatSubjectLabel(normalizedSubject) : module.subject;
 
@@ -41,9 +45,11 @@ const ModuleCard: React.FC<{ module: CatalogModule }> = ({ module }) => {
           <span className="inline-flex items-center px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue font-semibold">
             {subjectLabel}
           </span>
-          <span className="px-3 py-1 rounded-full bg-brand-light-teal/40 text-brand-teal text-xs font-semibold">
-            Grade {module.gradeBand}
-          </span>
+          {!hideGradeLabels ? (
+            <span className="px-3 py-1 rounded-full bg-brand-light-teal/40 text-brand-teal text-xs font-semibold">
+              Grade {module.gradeBand}
+            </span>
+          ) : null}
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">{module.title}</h3>
         <p className="text-sm text-gray-600 line-clamp-3 mb-3">
@@ -76,7 +82,12 @@ const ModuleCard: React.FC<{ module: CatalogModule }> = ({ module }) => {
 };
 
 const CatalogPage: React.FC = () => {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
+  const hideGradeLabels = user?.role === 'student';
+  const visibleSortOptions = hideGradeLabels
+    ? SORT_OPTIONS.filter((option) => option.value !== 'grade-asc' && option.value !== 'grade-desc')
+    : SORT_OPTIONS;
 
   type CatalogFilterCache = {
     filters: CatalogFilters;
@@ -111,6 +122,23 @@ const CatalogPage: React.FC = () => {
     cachedState?.searchTerm ?? cachedState?.filters.search ?? searchParam ?? '',
   );
   const [standardInput, setStandardInput] = useState('');
+
+  useEffect(() => {
+    if (!hideGradeLabels) return;
+    setFilters((previous) => {
+      const nextSort =
+        previous.sort === 'grade-asc' || previous.sort === 'grade-desc' ? 'featured' : previous.sort;
+      if (previous.grade == null && nextSort === previous.sort) {
+        return previous;
+      }
+      return {
+        ...previous,
+        grade: undefined,
+        sort: nextSort,
+        page: 1,
+      };
+    });
+  }, [hideGradeLabels]);
 
   useEffect(() => {
     queryClient.setQueryData(['catalog-filters'], {
@@ -241,8 +269,9 @@ const CatalogPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-6">
           <h1 className="text-4xl font-bold mb-4">Curriculum Catalog</h1>
           <p className="max-w-2xl text-lg opacity-90">
-            Explore ElevatED&apos;s open-licensed modules across subjects and grade bands. Filter
-            by subject focus, grade level, or topic to curate learning pathways in minutes.
+            {hideGradeLabels
+              ? 'Explore ElevatED modules by subject focus and topic to build a learning path that fits.'
+              : 'Explore ElevatED&apos;s open-licensed modules across subjects and grade bands. Filter by subject focus, grade level, or topic to curate learning pathways in minutes.'}
           </p>
         </div>
       </section>
@@ -280,7 +309,7 @@ const CatalogPage: React.FC = () => {
               })}
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className={`grid grid-cols-1 gap-4 ${hideGradeLabels ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
                 Subject
@@ -301,23 +330,25 @@ const CatalogPage: React.FC = () => {
               </select>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-                Grade
-              </label>
-              <select
-                value={filters.grade ?? ''}
-                onChange={(event) => handleTextFilterChange('grade', event.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
-              >
-                <option value="">All grades</option>
-                {GRADE_OPTIONS.map((grade) => (
-                  <option key={grade} value={grade}>
-                    {grade}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {!hideGradeLabels ? (
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                  Grade
+                </label>
+                <select
+                  value={filters.grade ?? ''}
+                  onChange={(event) => handleTextFilterChange('grade', event.target.value)}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                >
+                  <option value="">All grades</option>
+                  {GRADE_OPTIONS.map((grade) => (
+                    <option key={grade} value={grade}>
+                      {grade}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
 
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
@@ -445,7 +476,7 @@ const CatalogPage: React.FC = () => {
                   onChange={(event) => handleSortChange(event.target.value)}
                   className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
                 >
-                  {SORT_OPTIONS.map((option) => (
+                  {visibleSortOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -470,7 +501,7 @@ const CatalogPage: React.FC = () => {
             <>
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {modules.map((module) => (
-                  <ModuleCard key={module.id} module={module} />
+                  <ModuleCard key={module.id} module={module} hideGradeLabels={hideGradeLabels} />
                 ))}
               </div>
               <div className="mt-8 flex items-center justify-between">

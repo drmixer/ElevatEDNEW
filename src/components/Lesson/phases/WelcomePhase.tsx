@@ -14,7 +14,7 @@ import useReducedMotion from '../../../hooks/useReducedMotion';
 interface WelcomePhaseProps {
     title: string;
     subject: string;
-    gradeBand: string;
+    gradeBand?: string | null;
     objectives: string[];
     estimatedMinutes: number | null;
     hook?: string;
@@ -42,7 +42,7 @@ export const WelcomePhase: React.FC<WelcomePhaseProps> = ({
                     className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-1.5 text-sm font-semibold text-white mb-4"
                 >
                     <Sparkles className="h-4 w-4" aria-hidden="true" />
-                    {subject} • {gradeBand}
+                    {gradeBand ? `${subject} • ${gradeBand}` : subject}
                 </motion.div>
 
                 {/* Title */}
