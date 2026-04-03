@@ -169,6 +169,42 @@ describe('buildReleaseGateDashboard', () => {
     expect(result.blockers).toContain('Adaptive telemetry volume');
     expect(result.blockers).not.toContain('Adaptive error rate');
   });
+
+  it('does not block soft launch when adaptive telemetry is still sparse', () => {
+    const result = buildReleaseGateDashboard({
+      lookbackDays: 14,
+      releaseMode: 'soft_launch',
+      diagnosticCompletionRate: 90,
+      coverageReadinessRate: 82,
+      genericContentRate: 0,
+      adaptiveAttemptCount: 0,
+      adaptiveErrorRate: null,
+      strictNoDataForHardGates: true,
+    });
+
+    expect(result.releaseMode).toBe('soft_launch');
+    expect(result.releaseReady).toBe(true);
+    expect(result.blockers).not.toContain('Adaptive telemetry volume');
+    expect(result.blockers).not.toContain('Adaptive error rate');
+    expect(result.gates.find((gate) => gate.key === 'adaptive_telemetry_volume')?.hardGate).toBe(false);
+    expect(result.gates.find((gate) => gate.key === 'adaptive_error_rate')?.hardGate).toBe(false);
+  });
+
+  it('still blocks soft launch when core readiness gates fail', () => {
+    const result = buildReleaseGateDashboard({
+      lookbackDays: 14,
+      releaseMode: 'soft_launch',
+      diagnosticCompletionRate: 90,
+      coverageReadinessRate: 68,
+      genericContentRate: 0,
+      adaptiveAttemptCount: 0,
+      adaptiveErrorRate: null,
+      strictNoDataForHardGates: true,
+    });
+
+    expect(result.releaseReady).toBe(false);
+    expect(result.blockers).toContain('Coverage readiness');
+  });
 });
 
 describe('computeRetentionEvaluation', () => {

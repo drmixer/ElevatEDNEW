@@ -1,5 +1,6 @@
 type NumericOrNull = number | null | undefined;
 export type TelemetryMode = 'live' | 'synthetic' | 'all';
+export type ReleaseGateMode = 'production' | 'soft_launch';
 
 type EvaluationModeOptions = {
   telemetryMode?: TelemetryMode;
@@ -79,6 +80,7 @@ export type ReleaseGateResult = {
 
 export type ReleaseGateDashboard = {
   lookbackDays: number;
+  releaseMode: ReleaseGateMode;
   generatedAt: string;
   releaseReady: boolean;
   passCount: number;
@@ -92,6 +94,7 @@ export type ReleaseGateDashboard = {
 
 export type BuildReleaseGateInput = {
   lookbackDays: number;
+  releaseMode?: ReleaseGateMode;
   learningGainPoints?: NumericOrNull;
   dailyPlanCompletionRate?: NumericOrNull;
   diagnosticCompletionRate?: NumericOrNull;
@@ -468,6 +471,7 @@ export const buildReleaseGateDashboard = (
   input: BuildReleaseGateInput,
 ): ReleaseGateDashboard => {
   const strictNoDataForHardGates = Boolean(input.strictNoDataForHardGates);
+  const releaseMode: ReleaseGateMode = input.releaseMode === 'soft_launch' ? 'soft_launch' : 'production';
   const learningGainPoints = normalizeNumeric(input.learningGainPoints);
   const dailyPlanCompletionRate = normalizeNumeric(input.dailyPlanCompletionRate);
   const diagnosticCompletionRate = normalizeNumeric(input.diagnosticCompletionRate);
@@ -591,7 +595,7 @@ export const buildReleaseGateDashboard = (
       unit: 'count',
       status: metricStatusForLowerBound(adaptiveAttemptCount, 1, 1),
       target: '>= 1 attempt in lookback window',
-      hardGate: true,
+      hardGate: releaseMode === 'production',
       isBlocker: false,
     },
     {
@@ -601,7 +605,7 @@ export const buildReleaseGateDashboard = (
       unit: 'percent',
       status: metricStatusForUpperBound(adaptiveErrorRate, 12, 18),
       target: '<= 12% (warn <= 18%)',
-      hardGate: true,
+      hardGate: releaseMode === 'production',
       isBlocker: false,
     },
     {
@@ -638,6 +642,7 @@ export const buildReleaseGateDashboard = (
 
   return {
     lookbackDays: input.lookbackDays,
+    releaseMode,
     generatedAt: new Date().toISOString(),
     releaseReady: blockers.length === 0,
     passCount,

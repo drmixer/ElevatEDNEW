@@ -11,6 +11,7 @@ import {
   shouldIncludeTelemetryPayload,
   type AdaptiveTelemetryEvent,
   type CheckpointTelemetryEvent,
+  type ReleaseGateMode,
   type TelemetryMode,
 } from '../src/lib/evaluationHarness.js';
 import { createServiceRoleClient } from './utils/supabase.js';
@@ -22,6 +23,7 @@ type CliOptions = {
   lookbackDays: number;
   strictNoDataForHardGates: boolean;
   telemetryMode: TelemetryMode;
+  releaseMode: ReleaseGateMode;
 };
 
 type QuestionQualitySampleRow = {
@@ -59,6 +61,7 @@ const parseArgs = (): CliOptions => {
     lookbackDays: 14,
     strictNoDataForHardGates: true,
     telemetryMode: 'live',
+    releaseMode: 'production',
   };
 
   for (let i = 0; i < args.length; i += 1) {
@@ -82,6 +85,15 @@ const parseArgs = (): CliOptions => {
         throw new Error('Expected telemetry mode after --telemetry-mode: live | synthetic | all');
       }
       options.telemetryMode = value;
+      i += 1;
+      continue;
+    }
+    if (arg === '--release-mode') {
+      const value = (args[i + 1] ?? '').trim().toLowerCase();
+      if (value !== 'production' && value !== 'soft_launch') {
+        throw new Error('Expected release mode after --release-mode: production | soft_launch');
+      }
+      options.releaseMode = value;
       i += 1;
       continue;
     }
@@ -403,6 +415,7 @@ const main = async (): Promise<void> => {
 
   const snapshot = buildReleaseGateDashboard({
     lookbackDays: options.lookbackDays,
+    releaseMode: options.releaseMode,
     strictNoDataForHardGates: options.strictNoDataForHardGates,
     learningGainPoints,
     dailyPlanCompletionRate,
@@ -434,6 +447,7 @@ const main = async (): Promise<void> => {
   });
 
   console.log(`Release gate evaluation (lookback ${options.lookbackDays} days)`);
+  console.log(`Release mode: ${options.releaseMode}`);
   console.log(`Telemetry mode: ${options.telemetryMode}`);
   console.log(`Result: ${snapshot.releaseReady ? 'PASS' : 'FAIL'}`);
   console.log(
