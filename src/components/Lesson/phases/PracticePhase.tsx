@@ -15,7 +15,7 @@ import {
     ListOrdered,
 } from 'lucide-react';
 import { LessonCard, LessonCardBody, LessonCardFooter } from '../LessonCard';
-import { useLessonStepper } from '../LessonStepper';
+import { useLessonStepper } from '../LessonStepperContext';
 import type { LessonPracticeQuestion, LessonPracticeOption } from '../../../types';
 import { shufflePracticeOptions, shuffleStringsWithCorrectIndex } from '../../../lib/answerOrder';
 import trackEvent from '../../../lib/analytics';

@@ -17,7 +17,7 @@ import {
     Sparkles,
 } from 'lucide-react';
 import { LessonCardPadded } from '../LessonCard';
-import { useLessonStepper } from '../LessonStepper';
+import { useLessonStepper } from '../LessonStepperContext';
 import { ReflectionPrompt } from '../ReflectionPrompt';
 
 interface CompletPhaseProps {
@@ -257,4 +257,3 @@ export const CompletePhase: React.FC<CompletPhaseProps> = ({
 };
 
 export default CompletePhase;
-

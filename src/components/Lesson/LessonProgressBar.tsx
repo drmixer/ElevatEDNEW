@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { useLessonStepper } from './LessonStepper';
+import { useLessonStepper } from './LessonStepperContext';
 import type { LessonPhase } from '../../types/lesson';
 import { LESSON_PHASES, PHASE_LABELS } from '../../types/lesson';
 

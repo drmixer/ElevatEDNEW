@@ -359,6 +359,3 @@ const StudyModeSelector: React.FC<StudyModeSelectorProps> = ({
 };
 
 export default StudyModeSelector;
-
-// Export helper for checking stored mode
-export { getStoredMode, storeMode };

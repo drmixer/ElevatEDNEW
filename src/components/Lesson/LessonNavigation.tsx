@@ -7,7 +7,7 @@
 import React from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLessonStepper } from './LessonStepper';
+import { useLessonStepper } from './LessonStepperContext';
 
 interface LessonNavigationProps {
     className?: string;

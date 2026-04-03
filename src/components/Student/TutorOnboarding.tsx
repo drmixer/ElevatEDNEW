@@ -644,23 +644,3 @@ const TutorOnboarding: React.FC<TutorOnboardingProps> = ({
 };
 
 export default TutorOnboarding;
-
-// ============================================================================
-// Helper: Check if onboarding should be shown
-// ============================================================================
-
-export const shouldShowTutorOnboarding = (studentId: string): boolean => {
-    if (typeof window === 'undefined') return false;
-    const done = localStorage.getItem(`tutor-onboarding-done-${studentId}`);
-    return !done;
-};
-
-export const markTutorOnboardingDone = (studentId: string): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(`tutor-onboarding-done-${studentId}`, 'true');
-};
-
-export const resetTutorOnboarding = (studentId: string): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem(`tutor-onboarding-done-${studentId}`);
-};

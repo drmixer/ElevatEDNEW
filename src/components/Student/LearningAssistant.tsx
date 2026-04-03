@@ -15,6 +15,15 @@ import { findCuratedAlternate } from '../../data/curatedAlternates';
 import { TUTOR_GUARDRAILS } from '../../lib/tutorTones';
 
 const defaultPalette = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
+const defaultStudentLearningPreferences = {
+  sessionLength: 'standard' as const,
+  focusSubject: 'balanced' as const,
+  focusIntensity: 'balanced' as const,
+  allowTutor: true,
+  tutorLessonOnly: false,
+  chatMode: 'free' as const,
+  chatModeLocked: false,
+};
 
 const resolvePalette = (metadata?: Record<string, unknown> | null) => {
   const palette = (metadata?.palette as { background?: string; accent?: string; text?: string } | undefined) ?? undefined;
@@ -73,30 +82,17 @@ const LearningAssistant: React.FC = () => {
     strengths: [],
     weaknesses: [],
     learningPath: [],
-    learningPreferences: {
-      sessionLength: 'standard',
-      focusSubject: 'balanced',
-      focusIntensity: 'balanced',
-      allowTutor: true,
-      tutorLessonOnly: false,
-      chatMode: 'free',
-      chatModeLocked: false,
-    },
+    learningPreferences: defaultStudentLearningPreferences,
     assessmentCompleted: false,
   };
 
   // Ensure student has required properties with safe defaults
-  const studentStrengths = student.strengths ?? [];
-  const studentWeaknesses = student.weaknesses ?? [];
-  const studentLearningPreferences = student.learningPreferences ?? {
-    sessionLength: 'standard' as const,
-    focusSubject: 'balanced' as const,
-    focusIntensity: 'balanced' as const,
-    allowTutor: true,
-    tutorLessonOnly: false,
-    chatMode: 'free' as const,
-    chatModeLocked: false,
-  };
+  const studentStrengths = useMemo(() => student.strengths ?? [], [student.strengths]);
+  const studentWeaknesses = useMemo(() => student.weaknesses ?? [], [student.weaknesses]);
+  const studentLearningPreferences = useMemo(
+    () => student.learningPreferences ?? defaultStudentLearningPreferences,
+    [student.learningPreferences],
+  );
 
   // All hooks must be called unconditionally
   const { persona: tutorPersona } = useTutorPersona(actualStudent?.id);

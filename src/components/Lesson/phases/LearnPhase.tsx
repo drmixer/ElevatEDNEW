@@ -11,7 +11,7 @@ import remarkGfm from 'remark-gfm';
 import { BookOpen, Bot, CheckCircle2, Loader2, XCircle } from 'lucide-react';
 import { LessonCard, LessonCardBody, LessonCardFooter } from '../LessonCard';
 import { LessonNavigation } from '../LessonNavigation';
-import { useLessonStepper } from '../LessonStepper';
+import { useLessonStepper } from '../LessonStepperContext';
 import type { LessonSection } from '../../../types/lesson';
 import { shuffleStringsWithCorrectIndex } from '../../../lib/answerOrder';
 import { resolveCheckpointIntent } from '../../../lib/checkpointIntent';

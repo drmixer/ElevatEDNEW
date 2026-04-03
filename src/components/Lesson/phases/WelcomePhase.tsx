@@ -8,7 +8,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Target, Clock, Sparkles, PlayCircle } from 'lucide-react';
 import { LessonCardPadded } from '../LessonCard';
-import { useLessonStepper } from '../LessonStepper';
+import { useLessonStepper } from '../LessonStepperContext';
 import useReducedMotion from '../../../hooks/useReducedMotion';
 
 interface WelcomePhaseProps {

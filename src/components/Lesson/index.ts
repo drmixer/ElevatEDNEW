@@ -5,7 +5,8 @@
  */
 
 // Core stepper
-export { LessonStepperProvider, useLessonStepper } from './LessonStepper';
+export { LessonStepperProvider } from './LessonStepper';
+export { useLessonStepper } from './LessonStepperContext';
 
 // UI components
 export { LessonProgressBar, LessonProgressBarCompact } from './LessonProgressBar';

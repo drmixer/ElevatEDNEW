@@ -128,8 +128,6 @@ const CELEBRATION_CONFIG: Record<
     },
 };
 
-const STREAK_MILESTONES = [7, 14, 30, 60, 100];
-
 // Storage key for seen celebrations
 const SEEN_STORAGE_KEY = 'elevated_celebrations_seen';
 
@@ -480,6 +478,3 @@ const CelebrationSystem: React.FC<CelebrationSystemProps> = ({
 };
 
 export default CelebrationSystem;
-
-// Export helpers
-export { STREAK_MILESTONES, getSeenCelebrations, markCelebrationSeen };

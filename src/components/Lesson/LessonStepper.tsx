@@ -5,14 +5,14 @@
  * Uses React Context to provide state and actions to child components.
  */
 
-import React, { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import type {
     LessonPhase,
     LessonStepperState,
-    LessonStepperContextValue,
 } from '../../types/lesson';
 import { LESSON_PHASES } from '../../types/lesson';
 import recordReliabilityCheckpoint from '../../lib/reliability';
+import { LessonStepperContext } from './LessonStepperContext';
 
 // Initial state
 const initialState: LessonStepperState = {
@@ -21,9 +21,6 @@ const initialState: LessonStepperState = {
     completedPhases: [],
     practiceScore: { correct: 0, total: 0 },
 };
-
-// Context
-const LessonStepperContext = createContext<LessonStepperContextValue | null>(null);
 
 export interface LessonStepperProviderProps {
     children: React.ReactNode;
@@ -377,15 +374,6 @@ export const LessonStepperProvider: React.FC<LessonStepperProviderProps> = ({
             {children}
         </LessonStepperContext.Provider>
     );
-};
-
-// Hook to use stepper context
-export const useLessonStepper = (): LessonStepperContextValue => {
-    const context = useContext(LessonStepperContext);
-    if (!context) {
-        throw new Error('useLessonStepper must be used within a LessonStepperProvider');
-    }
-    return context;
 };
 
 export default LessonStepperProvider;
