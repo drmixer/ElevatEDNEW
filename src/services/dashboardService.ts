@@ -1344,7 +1344,7 @@ const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
       moduleSlug: item.moduleSlug ?? item.id,
       suggestionReason:
         item.pathSource === 'cross_subject_access'
-          ? `From your learning path (${item.subject === 'science' ? 'grade-level science with reading support' : 'cross-subject support'})`
+          ? `From your learning path (${item.subject === 'science' ? 'science with tuned reading support' : 'cross-subject support'})`
           : item.concept
             ? `From your learning path (${item.concept.replace(/_/g, ' ')})`
             : 'From your learning path',

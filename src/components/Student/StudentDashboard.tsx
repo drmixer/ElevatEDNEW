@@ -294,9 +294,7 @@ const SubjectPlacementOverview: React.FC<{
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-semibold text-slate-900">{subjectLabel}</p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Expected level {expected ?? '—'} · Working level {working ?? '—'}
-                  </p>
+                  <p className="text-xs text-slate-500 mt-1">Personalized starting path saved</p>
                 </div>
                 <span className="text-[11px] rounded-full border border-slate-200 bg-white px-2 py-1 text-slate-600">
                   {confidence != null ? `${Math.round(confidence * 100)}% confidence` : 'Placement saved'}
@@ -701,10 +699,10 @@ const StudentDashboard: React.FC = () => {
       const isPriorityCatchUp = gap >= 2;
       const readingSupportLabel =
         item.pathSource === 'cross_subject_access' && item.accessibilityLevel != null
-          ? `Reading support L${item.accessibilityLevel}`
+          ? 'Reading support tuned'
           : null;
       const themeGradeLabel =
-        item.pathSource === 'cross_subject_access' && item.themeGrade != null ? `Grade ${item.themeGrade} theme` : null;
+        item.pathSource === 'cross_subject_access' && item.themeGrade != null ? 'On-theme' : null;
 
       if (isPriorityCatchUp) {
         return {
@@ -719,8 +717,8 @@ const StudentDashboard: React.FC = () => {
       if (item.pathSource === 'cross_subject_access') {
         return {
           rationale: standard
-            ? `${subjectLabel} stays on grade-level themes while the reading load tracks your ELA level through ${standard}.`
-            : `${subjectLabel} stays on grade-level themes while the reading load tracks your ELA level.`,
+            ? `${subjectLabel} stays on engaging themes while the reading load is tuned through ${standard}.`
+            : `${subjectLabel} stays on engaging themes while the reading load is tuned to feel right.`,
           metric: [themeGradeLabel, readingSupportLabel].filter(Boolean).join(' · ') || readingSupportLabel,
           reasonLabel: 'Cross-subject support',
         };
@@ -3519,7 +3517,7 @@ const StudentDashboard: React.FC = () => {
                       </span>
                     </div>
                     <p className="text-[11px] text-gray-600">
-                      Coverage {studentCoverage.pct ?? '—'}% of this week&apos;s grade-level plan.
+                      Coverage {studentCoverage.pct ?? '—'}% of this week&apos;s plan.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div className="rounded-lg bg-white border border-slate-200 p-3 space-y-2">

@@ -474,7 +474,7 @@ const LearningAssistant: React.FC = () => {
       return `I notice you're working on improving in ${studentWeaknesses[0] || 'certain areas'}. That's totally normal! Everyone has topics that challenge them more. The key is consistent practice and not being afraid to ask questions. Would you like some specific strategies for this topic? 🎯`;
     }
 
-    return `That's a great question! Based on your learning profile (Level ${student.level}, strong in ${studentStrengths[0] || 'multiple areas'}), I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
+    return `That's a great question! Based on your learning profile and the areas where you're already strong in ${studentStrengths[0] || 'multiple areas'}, I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
   };
 
   const handleReportSubmit = async () => {

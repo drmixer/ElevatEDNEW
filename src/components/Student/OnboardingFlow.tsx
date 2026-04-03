@@ -101,12 +101,12 @@ const confidenceLabel = (confidence: number): string => {
 
 const subjectExplanation = (result: SubjectPlacementResult): string => {
   if (result.workingLevel === result.expectedLevel) {
-    return `Started near Level ${result.expectedLevel} and the diagnostic confirmed that fit.`;
+    return 'The check-in confirmed this subject is starting in a good place.';
   }
   if (result.workingLevel > result.expectedLevel) {
-    return `Started near Level ${result.expectedLevel}, but the diagnostic showed readiness above that starting point.`;
+    return 'The check-in found room to move a little faster in this subject.';
   }
-  return `Started near Level ${result.expectedLevel}, and the diagnostic found that a lower working level is the better starting point right now.`;
+  return 'The check-in found this subject will feel better with more support at the start.';
 };
 
 const UpNextList: React.FC<{ entries: StudentPathEntry[]; subjectLabel?: string | null }> = ({ entries, subjectLabel }) => {
@@ -536,9 +536,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-sm font-semibold text-slate-800">Expected launch window</p>
-          <p className="mt-2 text-2xl font-bold text-slate-900">{gradeBand}</p>
-          <p className="mt-1 text-xs text-slate-500">This is just the starting band for Math and ELA placement.</p>
+          <p className="text-sm font-semibold text-slate-800">Personalized starting point</p>
+          <p className="mt-2 text-lg font-bold text-slate-900">We&apos;ll tune this after the check-in</p>
+          <p className="mt-1 text-xs text-slate-500">Math and ELA will each start at a level that feels appropriately challenging.</p>
         </div>
       </div>
       <div className="mt-4 flex items-center space-x-3 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100">
@@ -719,7 +719,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               </div>
               <p className="mt-1 text-xs text-slate-600">
                 {result
-                  ? `Working level ${result.workingLevel}`
+                  ? 'Starting path ready'
                   : placementSessions[subjectKey]
                     ? `${placementSessions[subjectKey]?.responses.size ?? 0} of ${placementSessions[subjectKey]?.items.length ?? 0} answered`
                     : 'Not started yet'}
@@ -817,7 +817,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           </div>
         </div>
         <p className="text-sm text-slate-600">
-          Nice work, {fullName || 'learner'}! That mixed check-in set separate starting points for Math and ELA so your first paths are useful and explainable.
+          Nice work, {fullName || 'learner'}! That mixed check-in set separate starting points for Math and ELA so your first paths feel just right without turning learning into a grade-level label.
         </p>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -826,14 +826,14 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-slate-500">{SUBJECT_LABELS[result.subject]}</p>
-                  <p className="text-xl font-bold text-slate-900 mt-1">Working level {result.workingLevel}</p>
+                  <p className="text-xl font-bold text-slate-900 mt-1">Personalized starting path</p>
                 </div>
                 <div className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 border border-slate-200">
                   {confidenceLabel(result.levelConfidence)}
                 </div>
               </div>
               <p className="mt-3 text-sm text-slate-600">{subjectExplanation(result)}</p>
-              <p className="mt-2 text-xs text-slate-500">Diagnostic score: {result.masteryPct}%</p>
+              <p className="mt-2 text-xs text-slate-500">First lessons are ready in this subject.</p>
               <UpNextList entries={summarizePath(result.entries)} subjectLabel={SUBJECT_LABELS[result.subject]} />
             </div>
           ))}
@@ -847,7 +847,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
               <p className="text-sm font-semibold text-slate-900">Separate by subject</p>
-              <p className="text-xs text-slate-600">Math and ELA can move at different levels, even though the check-in felt like one flow.</p>
+              <p className="text-xs text-slate-600">Math and ELA can move at different paces, even though the check-in felt like one flow.</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
               <p className="text-sm font-semibold text-slate-900">Deterministic first</p>
