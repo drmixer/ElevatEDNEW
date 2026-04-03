@@ -28,6 +28,9 @@ This diagram helps students see that the squares built on the legs and hypotenus
 ## Interactive Follow-Up
 Students can build and drag right triangles in the [Desmos Geometry tool](https://www.desmos.com/geometry) to test which side is the hypotenuse and how the side lengths change.
 
+## Video Follow-Up
+Students who need another explanation can review an introductory Pythagorean Theorem video in the [Khan Academy right triangles unit](https://www.khanacademy.org/v/the-pythagorean-theorem).
+
 ## Key Vocabulary
 **Right triangle**: A triangle with one `90` degree angle.
 

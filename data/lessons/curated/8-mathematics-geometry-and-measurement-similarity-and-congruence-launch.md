@@ -23,6 +23,9 @@ Students can use a visual figure set like this to mark matching vertices, corres
 ## Interactive Follow-Up
 Students can test rigid motions and dilations in the [Desmos Geometry tool](https://www.desmos.com/geometry) to compare what keeps a figure congruent and what creates a similar figure instead.
 
+## Video Follow-Up
+Students who need another explanation can review an introductory similarity video in the [Khan Academy similarity unit](https://www.khanacademy.org/math/geometry/hs-geo-similarity/hs-geo-triangle-similarity-intro/v/similar-triangle-basics).
+
 ## Key Vocabulary
 **Congruent**: Figures that have the same shape and the same size.
 

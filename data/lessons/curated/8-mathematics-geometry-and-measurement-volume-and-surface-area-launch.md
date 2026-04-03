@@ -22,6 +22,17 @@ In this lesson, focus on three questions:
 2. What measurements does the formula require?
 3. How can I check whether my answer makes geometric sense?
 
+## Visual Model
+![Cylinder, cone, and sphere with matching volume formulas](/images/lessons/math/solid_volume_formulas.svg)
+
+This comparison chart helps students see which solids use the same circular-base structure and why a cone is smaller than a matching cylinder.
+
+## Interactive Follow-Up
+Students can rotate solids and test radius and height changes in the [GeoGebra 3D Calculator](https://www.geogebra.org/3d).
+
+## Video Follow-Up
+Students who need another explanation can review a solid-geometry video set in the [Khan Academy volume and surface area unit](https://www.khanacademy.org/math/geometry-home/geometry-volume-surface-area).
+
 ## Key Vocabulary
 **Radius**: The distance from the center of a circle to its edge.
 

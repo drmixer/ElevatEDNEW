@@ -21,6 +21,17 @@ In this lesson, focus on three questions:
 2. Why does `length x width x height` work for a rectangular prism?
 3. How is volume different from surface area?
 
+## Visual Model
+![Rectangular prism built from unit cubes with labeled dimensions](/images/lessons/math/volume_prism.svg)
+
+This prism model helps students connect rows, layers, and dimensions while keeping the inside space of a solid separate from the outside faces.
+
+## Interactive Follow-Up
+Students can build prisms, stack cube layers, and compare solids in [Mathigon Polypad](https://mathigon.org/polypad).
+
+## Video Follow-Up
+Students who need another model can review a rectangular-prism volume video set in the [Khan Academy volume and surface area unit](https://www.khanacademy.org/math/geometry-home/geometry-volume-surface-area).
+
 ## Key Vocabulary
 **Volume**: The amount of space inside a three-dimensional figure.
 

@@ -19,6 +19,17 @@ In this lesson, focus on three questions:
 2. How do I calculate each one correctly?
 3. How can a net help me organize surface-area work?
 
+## Visual Model
+![Net of a prism next to the folded solid](/images/lessons/math/surface_area_nets.svg)
+
+This net helps students match each face on the prism to a rectangle in the unfolded drawing so they can organize surface-area work before adding.
+
+## Interactive Follow-Up
+Students can sketch prisms, label dimensions, and compare unfolded faces in the [Desmos Geometry tool](https://www.desmos.com/geometry).
+
+## Video Follow-Up
+Students who need another walkthrough can review a surface-area video set in the [Khan Academy volume and surface area unit](https://www.khanacademy.org/math/geometry-home/geometry-volume-surface-area).
+
 ## Key Vocabulary
 **Surface area**: The total area of all the outside faces of a solid.
 

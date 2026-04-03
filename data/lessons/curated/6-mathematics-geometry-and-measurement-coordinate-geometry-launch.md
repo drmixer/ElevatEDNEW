@@ -26,6 +26,9 @@ Students can use a coordinate-plane diagram like this to track horizontal moveme
 ## Interactive Follow-Up
 Students can plot points and test segments in the [Desmos Graphing Calculator](https://www.desmos.com/calculator) to confirm how shared `x`-values and shared `y`-values create vertical and horizontal sides.
 
+## Video Follow-Up
+Students who need another walkthrough can review a coordinate-plane video set in the [Khan Academy coordinate plane unit](https://www.khanacademy.org/math/cc-fifth-grade-math/imp-geometry/imp-coordinate-plane).
+
 ## Key Vocabulary
 **Coordinate plane**: A grid formed by a horizontal axis and a vertical axis.
 

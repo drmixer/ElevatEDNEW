@@ -25,6 +25,9 @@ This kind of diagram gives students a place to mark corresponding sides before t
 ## Interactive Follow-Up
 Students can enlarge and reduce figures with the [Desmos Geometry tool](https://www.desmos.com/geometry) to see how a dilation preserves shape while changing side lengths by one constant multiplier.
 
+## Video Follow-Up
+Students who need another walkthrough can review an introductory similarity video in the [Khan Academy similarity unit](https://www.khanacademy.org/math/geometry/hs-geo-similarity/hs-geo-triangle-similarity-intro/v/similar-triangle-basics).
+
 ## Key Vocabulary
 **Congruent**: Figures that have the same shape and the same size.
 

@@ -26,6 +26,9 @@ Students can use a coordinate grid like this to see the drawing measurement clea
 ## Interactive Follow-Up
 Students can build rectangles and segments in the [Desmos Graphing Calculator](https://www.desmos.com/calculator) to compare drawing lengths with scaled real lengths.
 
+## Video Follow-Up
+Students who need another walkthrough can review a scale-drawings video set in the [Khan Academy ratios and proportions unit](https://www.khanacademy.org/math/cc-seventh-grade-math/cc-7th-rates-and-percentages).
+
 ## Key Vocabulary
 **Scale drawing**: A drawing in which all lengths are proportional to the actual figure.
 

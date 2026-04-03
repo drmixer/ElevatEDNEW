@@ -1373,6 +1373,7 @@
     "standards": [
       "6.G.A.3"
     ],
+    "content_markdown_file": "curated/6-mathematics-geometry-and-measurement-coordinate-geometry-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -1402,6 +1403,7 @@
     "standards": [
       "6.G.A.3"
     ],
+    "content_markdown_file": "curated/6-mathematics-geometry-and-measurement-pythagorean-theorem-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -1431,6 +1433,7 @@
     "standards": [
       "6.G.A.2"
     ],
+    "content_markdown_file": "curated/6-mathematics-geometry-and-measurement-similarity-and-congruence-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -1819,6 +1822,7 @@
     "standards": [
       "7.G.A.1"
     ],
+    "content_markdown_file": "curated/7-mathematics-geometry-and-measurement-coordinate-geometry-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -1848,6 +1852,7 @@
     "standards": [
       "7.G.B.6"
     ],
+    "content_markdown_file": "curated/7-mathematics-geometry-and-measurement-pythagorean-theorem-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -1877,6 +1882,7 @@
     "standards": [
       "7.G.A.1"
     ],
+    "content_markdown_file": "curated/7-mathematics-geometry-and-measurement-similarity-and-congruence-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -2294,6 +2300,7 @@
     "standards": [
       "8.G.A.4"
     ],
+    "content_markdown_file": "curated/8-mathematics-geometry-and-measurement-similarity-and-congruence-launch.md",
     "outline": {
       "hook": "Start with a real-world connection or interesting question related to the topic.",
       "direct_instruction": "Teach key concepts step by step with clear examples. Use visuals and manipulatives.",
@@ -2352,6 +2359,7 @@
     "standards": [
       "8.G.C.9"
     ],
+    "content_markdown_file": "curated/8-mathematics-geometry-and-measurement-volume-and-surface-area-launch.md",
     "outline": {
       "hook": "Fill a small box with unit cubes. Count them together. Explain: this number is the volume\u2014how much space is inside.",
       "direct_instruction": "Volume is measured in cubic units (cm\u00b3, in\u00b3). Fill a rectangular prism with cubes and count. Or multiply: length \u00d7 width \u00d7 height.",

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T09:57:07.575Z",
+  "timestamp": "2026-04-03T03:13:10.549Z",
   "totalLessons": 1191,
   "byPriority": {
     "high": 973,
@@ -9,7 +9,7 @@
   "bySubject": {
     "Mathematics": {
       "count": 349,
-      "avgPriority": 17.3
+      "avgPriority": 17.2
     },
     "Science": {
       "count": 292,
@@ -540,38 +540,6 @@
       ]
     },
     {
-      "id": 112,
-      "title": "Moves in the Plane",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Transformations & Symmetry",
-      "contentLength": 3999,
-      "hasImages": true,
-      "hasLinks": false,
-      "hasVideo": true,
-      "visualScore": 20,
-      "interactiveScore": 6,
-      "videoScore": 1,
-      "overallPriority": 27,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram",
-        "graphing examples",
-        "educational map"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "plot",
-        "coordinate"
-      ]
-    },
-    {
       "id": 794,
       "title": "Intro: Computational Modeling (intro) (Grade 11)",
       "gradeBand": "11",
@@ -1074,65 +1042,6 @@
         "rectangle",
         "number line",
         "fraction"
-      ]
-    },
-    {
-      "id": 114,
-      "title": "What is Surface Area?",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume & Surface Area",
-      "contentLength": 3629,
-      "hasImages": true,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 13,
-      "interactiveScore": 10,
-      "videoScore": 2,
-      "overallPriority": 25,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "rectangle",
-        "angle",
-        "rotation"
-      ]
-    },
-    {
-      "id": 204,
-      "title": "Coordinate Geometry",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Coordinate Geometry",
-      "contentLength": 5032,
-      "hasImages": true,
-      "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 20,
-      "interactiveScore": 3,
-      "videoScore": 2,
-      "overallPriority": 25,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "rectangle",
-        "polygon",
-        "graph"
       ]
     },
     {
@@ -1881,6 +1790,35 @@
       ]
     },
     {
+      "id": 204,
+      "title": "Coordinate Geometry",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Coordinate Geometry",
+      "contentLength": 5263,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 20,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 24,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "rectangle",
+        "polygon",
+        "graph"
+      ]
+    },
+    {
       "id": 1487,
       "title": "Sequences & Series Launch Lesson",
       "gradeBand": "10",
@@ -2096,36 +2034,6 @@
         "triangle",
         "rectangle",
         "divide"
-      ]
-    },
-    {
-      "id": 221,
-      "title": "Volume & Surface Area",
-      "gradeBand": "7",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume & Surface Area",
-      "contentLength": 4127,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 18,
-      "interactiveScore": 4,
-      "videoScore": 2,
-      "overallPriority": 24,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "rectangle",
-        "angle",
-        "area",
-        "volume"
       ]
     },
     {
@@ -2437,35 +2345,6 @@
       ]
     },
     {
-      "id": 217,
-      "title": "Coordinate Geometry",
-      "gradeBand": "7",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Coordinate Geometry",
-      "contentLength": 5199,
-      "hasImages": true,
-      "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 18,
-      "interactiveScore": 3,
-      "videoScore": 2,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram",
-        "graphing examples"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "rectangle",
-        "graph",
-        "plot",
-        "coordinate"
-      ]
-    },
-    {
       "id": 1435,
       "title": "2D/3D Shapes & Attributes Launch Lesson",
       "gradeBand": "2",
@@ -2583,36 +2462,6 @@
         "rotation",
         "area",
         "diagram"
-      ]
-    },
-    {
-      "id": 218,
-      "title": "Pythagorean Theorem",
-      "gradeBand": "7",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Pythagorean Theorem",
-      "contentLength": 4597,
-      "hasImages": true,
-      "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 4,
-      "videoScore": 2,
-      "overallPriority": 23,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "rectangle",
-        "coordinate"
       ]
     },
     {
@@ -2957,34 +2806,6 @@
       ]
     },
     {
-      "id": 206,
-      "title": "Similarity & Congruence",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Similarity & Congruence",
-      "contentLength": 5295,
-      "hasImages": true,
-      "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 3,
-      "videoScore": 2,
-      "overallPriority": 22,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "rectangle",
-        "portion"
-      ]
-    },
-    {
       "id": 1351,
       "title": "Modeling & Applications Launch Lesson",
       "gradeBand": "11",
@@ -3294,6 +3115,65 @@
       ]
     },
     {
+      "id": 217,
+      "title": "Coordinate Geometry",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Coordinate Geometry",
+      "contentLength": 5431,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 18,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 22,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "rectangle",
+        "graph",
+        "plot",
+        "coordinate"
+      ]
+    },
+    {
+      "id": 218,
+      "title": "Pythagorean Theorem",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Pythagorean Theorem",
+      "contentLength": 4807,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 17,
+      "interactiveScore": 4,
+      "videoScore": 1,
+      "overallPriority": 22,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "triangle",
+        "rectangle",
+        "coordinate"
+      ]
+    },
+    {
       "id": 1360,
       "title": "Linear/Quadratic Functions Launch Lesson",
       "gradeBand": "9",
@@ -3501,60 +3381,30 @@
       ]
     },
     {
-      "id": 234,
-      "title": "Volume & Surface Area",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume & Surface Area",
-      "contentLength": 4399,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 17,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "circle",
-        "area",
-        "volume",
-        "model"
-      ]
-    },
-    {
-      "id": 219,
+      "id": 206,
       "title": "Similarity & Congruence",
-      "gradeBand": "7",
+      "gradeBand": "6",
       "subject": "Mathematics",
       "strand": "Geometry & Measurement",
       "topic": "Similarity & Congruence",
-      "contentLength": 5170,
+      "contentLength": 5556,
       "hasImages": true,
       "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 15,
-      "interactiveScore": 4,
-      "videoScore": 2,
+      "hasVideo": true,
+      "visualScore": 17,
+      "interactiveScore": 3,
+      "videoScore": 1,
       "overallPriority": 21,
       "recommendedResources": [
         "diagrams",
         "illustrations",
-        "interactive tool",
-        "practice simulation",
         "geometric shapes diagram"
       ],
       "conceptsForVisuals": [
         "geometry",
         "shape",
         "triangle",
-        "polygon",
+        "rectangle",
         "portion"
       ]
     },
@@ -3799,64 +3649,6 @@
         "plot",
         "pattern",
         "model"
-      ]
-    },
-    {
-      "id": 115,
-      "title": "Nets and Prisms",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume & Surface Area",
-      "contentLength": 4115,
-      "hasImages": true,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 11,
-      "interactiveScore": 8,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "interactive tool",
-        "practice simulation",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "rotation",
-        "area",
-        "volume"
-      ]
-    },
-    {
-      "id": 205,
-      "title": "Pythagorean Theorem",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Pythagorean Theorem",
-      "contentLength": 4706,
-      "hasImages": true,
-      "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 16,
-      "interactiveScore": 3,
-      "videoScore": 2,
-      "overallPriority": 21,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "rectangle",
-        "angle"
       ]
     },
     {
@@ -4251,6 +4043,34 @@
       ]
     },
     {
+      "id": 112,
+      "title": "Moves in the Plane",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Transformations & Symmetry",
+      "contentLength": 3358,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 16,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 20,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "coordinate",
+        "angle",
+        "degree"
+      ]
+    },
+    {
       "id": 1553,
       "title": "Derivatives (intro) Launch Lesson",
       "gradeBand": "12",
@@ -4375,6 +4195,36 @@
       ]
     },
     {
+      "id": 219,
+      "title": "Similarity & Congruence",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Similarity & Congruence",
+      "contentLength": 5431,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 15,
+      "interactiveScore": 4,
+      "videoScore": 1,
+      "overallPriority": 20,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "triangle",
+        "polygon",
+        "portion"
+      ]
+    },
+    {
       "id": 694,
       "title": "Intro: 2D/3D Shapes & Attributes",
       "gradeBand": "1",
@@ -4467,6 +4317,34 @@
         "divide",
         "pattern",
         "visual"
+      ]
+    },
+    {
+      "id": 205,
+      "title": "Pythagorean Theorem",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Pythagorean Theorem",
+      "contentLength": 4916,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 16,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 20,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "triangle",
+        "rectangle",
+        "angle"
       ]
     },
     {
@@ -4738,35 +4616,6 @@
         "area",
         "pattern",
         "visual"
-      ]
-    },
-    {
-      "id": 232,
-      "title": "Similarity & Congruence",
-      "gradeBand": "8",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Similarity & Congruence",
-      "contentLength": 5739,
-      "hasImages": true,
-      "hasLinks": true,
-      "hasVideo": false,
-      "visualScore": 15,
-      "interactiveScore": 3,
-      "videoScore": 2,
-      "overallPriority": 20,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram",
-        "educational map"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "shape",
-        "triangle",
-        "portion",
-        "angle"
       ]
     },
     {
@@ -5926,6 +5775,35 @@
       ]
     },
     {
+      "id": 232,
+      "title": "Similarity & Congruence",
+      "gradeBand": "8",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Similarity & Congruence",
+      "contentLength": 6000,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 15,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 19,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "triangle",
+        "portion",
+        "angle"
+      ]
+    },
+    {
       "id": 643,
       "title": "Intro: Studio Art, Design, Music Composition/Performance (Grade 10)",
       "gradeBand": "10",
@@ -6288,6 +6166,34 @@
       ]
     },
     {
+      "id": 114,
+      "title": "What is Surface Area?",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Volume & Surface Area",
+      "contentLength": 3059,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 14,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 18,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "rectangle",
+        "part of",
+        "angle",
+        "area"
+      ]
+    },
+    {
       "id": 1245,
       "title": "Literary Nonfiction (PD/open) Launch Lesson",
       "gradeBand": "12",
@@ -6403,6 +6309,35 @@
         "angle",
         "model",
         "visual"
+      ]
+    },
+    {
+      "id": 113,
+      "title": "What are Scale Drawings?",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "strand": "Number & Operations",
+      "topic": "Ratios & Proportional Reasoning",
+      "contentLength": 3115,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 14,
+      "interactiveScore": 3,
+      "videoScore": 1,
+      "overallPriority": 18,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram",
+        "educational map"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "rectangle",
+        "divide",
+        "portion"
       ]
     },
     {
@@ -7054,6 +6989,36 @@
       ]
     },
     {
+      "id": 221,
+      "title": "Volume & Surface Area",
+      "gradeBand": "7",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Volume & Surface Area",
+      "contentLength": 4764,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 13,
+      "interactiveScore": 4,
+      "videoScore": 1,
+      "overallPriority": 18,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "rectangle",
+        "angle",
+        "area",
+        "volume"
+      ]
+    },
+    {
       "id": 295,
       "title": "Launch Lesson: Earth And Space Earth History",
       "gradeBand": "7",
@@ -7573,34 +7538,6 @@
       ]
     },
     {
-      "id": 113,
-      "title": "What are Scale Drawings?",
-      "gradeBand": "7",
-      "subject": "Mathematics",
-      "strand": "Number & Operations",
-      "topic": "Ratios & Proportional Reasoning",
-      "contentLength": 4402,
-      "hasImages": true,
-      "hasLinks": false,
-      "hasVideo": true,
-      "visualScore": 14,
-      "interactiveScore": 2,
-      "videoScore": 1,
-      "overallPriority": 17,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "fraction visual model"
-      ],
-      "conceptsForVisuals": [
-        "circle",
-        "rectangle",
-        "number line",
-        "fraction",
-        "portion"
-      ]
-    },
-    {
       "id": 1370,
       "title": "Normal Distribution Launch Lesson",
       "gradeBand": "10",
@@ -7657,6 +7594,34 @@
         "graph",
         "model",
         "visual"
+      ]
+    },
+    {
+      "id": 115,
+      "title": "Nets and Prisms",
+      "gradeBand": "6",
+      "subject": "Mathematics",
+      "strand": "Geometry & Measurement",
+      "topic": "Volume & Surface Area",
+      "contentLength": 2790,
+      "hasImages": true,
+      "hasLinks": true,
+      "hasVideo": true,
+      "visualScore": 15,
+      "interactiveScore": 1,
+      "videoScore": 1,
+      "overallPriority": 17,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "geometric shapes diagram"
+      ],
+      "conceptsForVisuals": [
+        "geometry",
+        "shape",
+        "rectangle",
+        "angle",
+        "area"
       ]
     },
     {
@@ -8920,33 +8885,6 @@
       ]
     },
     {
-      "id": 208,
-      "title": "Volume & Surface Area",
-      "gradeBand": "6",
-      "subject": "Mathematics",
-      "strand": "Geometry & Measurement",
-      "topic": "Volume & Surface Area",
-      "contentLength": 4232,
-      "hasImages": false,
-      "hasLinks": false,
-      "hasVideo": false,
-      "visualScore": 13,
-      "interactiveScore": 2,
-      "videoScore": 2,
-      "overallPriority": 17,
-      "recommendedResources": [
-        "diagrams",
-        "illustrations",
-        "geometric shapes diagram"
-      ],
-      "conceptsForVisuals": [
-        "geometry",
-        "divide",
-        "area",
-        "volume"
-      ]
-    },
-    {
       "id": 64,
       "title": "Paragraphs, Narratives, Expository Writing, Grammar Basics Launch Lesson",
       "gradeBand": "4",
@@ -9029,6 +8967,69 @@
         "graph",
         "model"
       ]
+    },
+    {
+      "id": 86,
+      "title": "Evolution (advanced) Launch Lesson",
+      "gradeBand": "11",
+      "subject": "Science",
+      "strand": "Life Science",
+      "topic": "Evolution (advanced)",
+      "contentLength": 4356,
+      "hasImages": true,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 8,
+      "interactiveScore": 4,
+      "videoScore": 4,
+      "overallPriority": 16,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "geometric shapes diagram",
+        "graphing examples",
+        "process diagram"
+      ],
+      "conceptsForVisuals": [
+        "shape",
+        "graph",
+        "plot",
+        "diagram"
+      ]
+    },
+    {
+      "id": 60,
+      "title": "American/British Lit (PD works) Launch Lesson",
+      "gradeBand": "11",
+      "subject": "English Language Arts",
+      "strand": "Reading Literature",
+      "topic": "American/British Lit (PD works)",
+      "contentLength": 4224,
+      "hasImages": false,
+      "hasLinks": false,
+      "hasVideo": false,
+      "visualScore": 8,
+      "interactiveScore": 4,
+      "videoScore": 4,
+      "overallPriority": 16,
+      "recommendedResources": [
+        "diagrams",
+        "illustrations",
+        "interactive tool",
+        "practice simulation",
+        "video demonstration",
+        "geometric shapes diagram",
+        "graphing examples"
+      ],
+      "conceptsForVisuals": [
+        "shape",
+        "graph",
+        "chart",
+        "plot"
+      ]
     }
   ],
   "conceptsNeedingVisuals": {
@@ -9051,11 +9052,11 @@
       "degree",
       "chart",
       "pattern",
-      "polygon",
       "diagram",
       "model",
       "visual",
       "area",
+      "polygon",
       "volume",
       "sequence",
       "symmetry",

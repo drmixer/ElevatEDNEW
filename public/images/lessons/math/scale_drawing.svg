@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" width="720" height="360">
+  <rect width="720" height="360" fill="#F8F4EA"/>
+  <text x="36" y="42" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#1F3A5F">Scale Drawing as a Scaled Copy</text>
+  <text x="36" y="72" font-family="Arial, sans-serif" font-size="18" fill="#476C8A">Every corresponding side changes by the same multiplier.</text>
+
+  <g transform="translate(72 108)">
+    <rect x="0" y="0" width="140" height="90" rx="10" fill="#DCEAF7" stroke="#335C81" stroke-width="4"/>
+    <text x="70" y="-18" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#1F3A5F">Original figure</text>
+    <text x="70" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#335C81">4 units</text>
+    <text x="-18" y="52" transform="rotate(-90 -18 52)" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#335C81">2 units</text>
+  </g>
+
+  <g transform="translate(346 74)">
+    <text x="0" y="84" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#C26D42">scale factor = 3</text>
+    <line x1="-8" y1="104" x2="116" y2="104" stroke="#C26D42" stroke-width="5"/>
+    <polygon points="116,104 96,94 96,114" fill="#C26D42"/>
+    <text x="0" y="146" font-family="Arial, sans-serif" font-size="18" fill="#7B4B2A">Multiply every side length by the same factor.</text>
+  </g>
+
+  <g transform="translate(496 78)">
+    <rect x="0" y="0" width="180" height="135" rx="12" fill="#FFF0CC" stroke="#C26D42" stroke-width="4"/>
+    <text x="90" y="-18" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#7B4B2A">Scale drawing</text>
+    <text x="90" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#C26D42">12 units</text>
+    <text x="-18" y="74" transform="rotate(-90 -18 74)" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#C26D42">6 units</text>
+  </g>
+
+  <g transform="translate(68 258)">
+    <rect x="0" y="0" width="584" height="68" rx="12" fill="#FFFFFF" stroke="#D4C29A" stroke-width="2"/>
+    <text x="22" y="28" font-family="Arial, sans-serif" font-size="18" fill="#1F3A5F">Check the ratios:</text>
+    <text x="22" y="52" font-family="Arial, sans-serif" font-size="18" fill="#476C8A">12 / 4 = 3 and 6 / 2 = 3, so the drawing stays proportional.</text>
+    <text x="380" y="52" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#C26D42">same multiplier -> scaled copy</text>
+  </g>
+</svg>

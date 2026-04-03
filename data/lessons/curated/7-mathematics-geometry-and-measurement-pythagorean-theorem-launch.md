@@ -30,6 +30,9 @@ This visual supports the idea that the theorem compares areas built on the trian
 ## Interactive Follow-Up
 Students can build and drag right triangles in the [Desmos Geometry tool](https://www.desmos.com/geometry) to test how leg lengths and the hypotenuse change together.
 
+## Video Follow-Up
+Students who need another explanation can review an introductory Pythagorean Theorem video in the [Khan Academy right triangles unit](https://www.khanacademy.org/v/the-pythagorean-theorem).
+
 ## Key Vocabulary
 **Right triangle**: A triangle with one `90` degree angle.
 
