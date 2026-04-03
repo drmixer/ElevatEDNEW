@@ -48,6 +48,23 @@ type SubjectPlacementResult = {
   entries: StudentPathEntry[];
 };
 
+type PlacementSessionState = {
+  subject: SubjectPlacementKey;
+  assessmentId: number;
+  attemptId: number;
+  items: PlacementItem[];
+  responses: Map<number, PlacementResponseInput>;
+  currentIndex: number;
+  questionStartedAt: number | null;
+  expectedLevel: number | null;
+};
+
+type MixedPlacementQuestion = {
+  subject: SubjectPlacementKey;
+  item: PlacementItem;
+  itemIndex: number;
+};
+
 const SUBJECT_ORDER: SubjectPlacementKey[] = ['math', 'english'];
 
 const SUBJECT_LABELS: Record<SubjectPlacementKey, string> = {
@@ -152,17 +169,12 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const [selectedAvatar, setSelectedAvatar] = useState<string>('avatar-starter');
   const [selectedPersona, setSelectedPersona] = useState<string | null>(null);
 
-  const [currentSubjectIndex, setCurrentSubjectIndex] = useState(0);
-  const [placementItems, setPlacementItems] = useState<PlacementItem[]>([]);
-  const [attemptId, setAttemptId] = useState<number | null>(null);
-  const [assessmentId, setAssessmentId] = useState<number | null>(null);
-  const [responses, setResponses] = useState<Map<number, PlacementResponseInput>>(new Map());
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [questionStartedAt, setQuestionStartedAt] = useState<number | null>(null);
+  const [placementSessions, setPlacementSessions] = useState<Partial<Record<SubjectPlacementKey, PlacementSessionState>>>(
+    {},
+  );
   const [subjectResults, setSubjectResults] = useState<Partial<Record<SubjectPlacementKey, SubjectPlacementResult>>>({});
   const [subjectPaths, setSubjectPaths] = useState<StudentSubjectPath[]>([]);
 
-  const currentSubject = SUBJECT_ORDER[currentSubjectIndex] ?? null;
   const parsedAgeYears =
     ageYears.trim().length > 0 && Number.isFinite(Number(ageYears)) ? Math.round(Number(ageYears)) : null;
   const parsedCurrentGrade =
@@ -198,27 +210,49 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       });
   }, []);
 
-  const placementProgressPct = useMemo(() => {
-    if (!placementItems.length) return 0;
-    return Math.round((responses.size / placementItems.length) * 100);
-  }, [placementItems.length, responses.size]);
+  const mixedPlacementProgress = useMemo(() => {
+    const sessions = SUBJECT_ORDER.map((subject) => placementSessions[subject]).filter(
+      (value): value is PlacementSessionState => Boolean(value),
+    );
+    const totalItems = sessions.reduce((sum, session) => sum + session.items.length, 0);
+    const answeredItems = sessions.reduce((sum, session) => sum + session.responses.size, 0);
+    return {
+      totalItems,
+      answeredItems,
+      progressPct: totalItems > 0 ? Math.round((answeredItems / totalItems) * 100) : 0,
+    };
+  }, [placementSessions]);
 
   const subjectCompletionPct = useMemo(() => {
     return Math.round((Object.keys(subjectResults).length / SUBJECT_ORDER.length) * 100);
   }, [subjectResults]);
 
+  const pendingQuestions = useMemo(() => {
+    const sessions = SUBJECT_ORDER.map((subject) => placementSessions[subject]).filter(
+      (value): value is PlacementSessionState => Boolean(value),
+    );
+    if (!sessions.length) return [] as MixedPlacementQuestion[];
+    const maxLength = sessions.reduce((max, session) => Math.max(max, session.items.length), 0);
+    const mixed: MixedPlacementQuestion[] = [];
+    for (let itemIndex = 0; itemIndex < maxLength; itemIndex += 1) {
+      SUBJECT_ORDER.forEach((subject) => {
+        const session = placementSessions[subject];
+        if (!session) return;
+        const item = session.items[itemIndex];
+        if (!item || itemIndex < session.currentIndex) return;
+        mixed.push({ subject, item, itemIndex });
+      });
+    }
+    return mixed;
+  }, [placementSessions]);
+
+  const currentMixedQuestion = pendingQuestions[0] ?? null;
+  const currentSubject = currentMixedQuestion?.subject ?? null;
+  const currentSession = currentSubject ? placementSessions[currentSubject] ?? null : null;
+
   const goToStep = (next: Step) => {
     setStep(next);
     setError(null);
-  };
-
-  const resetPlacementSession = () => {
-    setPlacementItems([]);
-    setAttemptId(null);
-    setAssessmentId(null);
-    setResponses(new Map());
-    setCurrentIndex(0);
-    setQuestionStartedAt(null);
   };
 
   const hydrateExistingResponses = (existing: PlacementStartResponse['existingResponses']) => {
@@ -230,8 +264,10 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         timeSpentSeconds: null,
       });
     });
-    setResponses(map);
-    setCurrentIndex(existing.length);
+    return {
+      responses: map,
+      currentIndex: existing.length,
+    };
   };
 
   const handleProfileContinue = () => {
@@ -263,34 +299,48 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   };
 
   const handleStartPlacement = async () => {
-    if (!student || !currentSubject) return;
+    if (!student) return;
     setLoading(true);
     setError(null);
     try {
-      const placement = await startPlacement({
-        subject: currentSubject,
-        ageYears: parsedAgeYears,
-        gradeLevel: parsedCurrentGrade,
-        gradeBand,
-        fullName,
-        optInAi,
-        avatarId: selectedAvatar,
-        tutorPersonaId: selectedPersona,
-      });
-      setPlacementItems(placement.items);
-      setAttemptId(placement.attemptId);
-      setAssessmentId(placement.assessmentId);
-      hydrateExistingResponses(placement.existingResponses);
-      setQuestionStartedAt(Date.now());
+      const placements = await Promise.all(
+        SUBJECT_ORDER.map(async (subject) => {
+          const placement = await startPlacement({
+            subject,
+            ageYears: parsedAgeYears,
+            gradeLevel: parsedCurrentGrade,
+            gradeBand,
+            fullName,
+            optInAi,
+            avatarId: selectedAvatar,
+            tutorPersonaId: selectedPersona,
+          });
+          const hydrated = hydrateExistingResponses(placement.existingResponses);
+          trackEvent('placement_started', {
+            assessment_id: placement.assessmentId,
+            attempt_id: placement.attemptId,
+            grade_band: placement.gradeBand,
+            subject,
+            expected_level: placement.expectedLevel,
+            resume: placement.existingResponses.length > 0,
+          });
+          return [
+            subject,
+            {
+              subject,
+              assessmentId: placement.assessmentId,
+              attemptId: placement.attemptId,
+              items: placement.items,
+              responses: hydrated.responses,
+              currentIndex: hydrated.currentIndex,
+              questionStartedAt: placement.items[hydrated.currentIndex] ? Date.now() : null,
+              expectedLevel: placement.expectedLevel,
+            } satisfies PlacementSessionState,
+          ] as const;
+        }),
+      );
+      setPlacementSessions(Object.fromEntries(placements));
       setStep(3);
-      trackEvent('placement_started', {
-        assessment_id: placement.assessmentId,
-        attempt_id: placement.attemptId,
-        grade_band: placement.gradeBand,
-        subject: currentSubject,
-        expected_level: placement.expectedLevel,
-        resume: placement.existingResponses.length > 0,
-      });
     } catch (err) {
       console.error('[Onboarding] placement start failed', err);
       const message = err instanceof Error ? err.message : '';
@@ -300,7 +350,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       } else if (normalized.includes('content is incomplete') || normalized.includes('content is invalid')) {
         setError('We’re updating the placement assessment content right now. Please try again soon.');
       } else if (normalized.includes('no placement assessment')) {
-        setError(`We don’t have a ${SUBJECT_LABELS[currentSubject]} placement assessment available yet. Please try again soon.`);
+        setError('We don’t have the mixed placement assessment content ready for this grade band yet. Please try again soon.');
       } else {
         setError('We could not start your placement assessment. Please try again.');
       }
@@ -309,102 +359,107 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
     }
   };
 
-  const finalizePlacement = async (answerMap: Map<number, PlacementResponseInput>) => {
-    if (!assessmentId || !attemptId || !currentSubject) return;
-    setLoading(true);
-    setError(null);
+  const finalizePlacement = async (subject: SubjectPlacementKey, answerMap: Map<number, PlacementResponseInput>) => {
+    const session = placementSessions[subject];
+    if (!session) return false;
     const responseList = Array.from(answerMap.values());
-    try {
-      const result = await submitPlacement({
-        assessmentId,
-        attemptId,
-        responses: responseList,
-        subject: currentSubject,
-        ageYears: parsedAgeYears,
-        gradeLevel: parsedCurrentGrade,
-        gradeBand,
-        fullName,
-        optInAi,
-        avatarId: selectedAvatar,
-        tutorPersonaId: selectedPersona,
+    const result = await submitPlacement({
+      assessmentId: session.assessmentId,
+      attemptId: session.attemptId,
+      responses: responseList,
+      subject,
+      ageYears: parsedAgeYears,
+      gradeLevel: parsedCurrentGrade,
+      gradeBand,
+      fullName,
+      optInAi,
+      avatarId: selectedAvatar,
+      tutorPersonaId: selectedPersona,
+    });
+
+    setSubjectResults((prev) => ({
+      ...prev,
+      [subject]: {
+        subject,
+        expectedLevel: result.expectedLevel,
+        workingLevel: result.workingLevel,
+        levelConfidence: result.levelConfidence,
+        masteryPct: result.masteryPct,
+        entries: result.entries,
+      },
+    }));
+
+    trackEvent('placement_completed', {
+      assessment_id: session.assessmentId,
+      attempt_id: session.attemptId,
+      subject,
+      mastery_pct: result.masteryPct,
+      expected_level: result.expectedLevel,
+      working_level: result.workingLevel,
+    });
+
+    const completedSubjects = new Set([...Object.keys(subjectResults), subject]);
+    if (completedSubjects.size >= SUBJECT_ORDER.length) {
+      const refreshedPaths = await fetchStudentPaths().catch(() => []);
+      const flattenedEntries = refreshedPaths.flatMap((entry) => entry.path?.entries ?? []);
+      setSubjectPaths(refreshedPaths);
+      setStep(4);
+      await Promise.resolve(refreshUser()).catch(() => undefined);
+      onComplete?.({
+        pathEntries: flattenedEntries,
+        subjectPaths: refreshedPaths,
       });
-
-      setSubjectResults((prev) => ({
-        ...prev,
-        [currentSubject]: {
-          subject: currentSubject,
-          expectedLevel: result.expectedLevel,
-          workingLevel: result.workingLevel,
-          levelConfidence: result.levelConfidence,
-          masteryPct: result.masteryPct,
-          entries: result.entries,
-        },
-      }));
-
-      trackEvent('placement_completed', {
-        assessment_id: assessmentId,
-        attempt_id: attemptId,
-        subject: currentSubject,
-        mastery_pct: result.masteryPct,
-        expected_level: result.expectedLevel,
-        working_level: result.workingLevel,
-      });
-
-      const nextIndex = currentSubjectIndex + 1;
-      if (nextIndex < SUBJECT_ORDER.length) {
-        resetPlacementSession();
-        setCurrentSubjectIndex(nextIndex);
-      } else {
-        const refreshedPaths = await fetchStudentPaths().catch(() => []);
-        const flattenedEntries = refreshedPaths.flatMap((entry) => entry.path?.entries ?? []);
-        setSubjectPaths(refreshedPaths);
-        setStep(4);
-        await refreshUser().catch(() => undefined);
-        onComplete?.({
-          pathEntries: flattenedEntries,
-          subjectPaths: refreshedPaths,
-        });
-      }
-    } catch (submitError) {
-      console.error('[Onboarding] placement submit failed', submitError);
-      setError('We could not finish your placement. Please try again.');
-    } finally {
-      setLoading(false);
+      return true;
     }
+
+    return false;
   };
 
   const handleSaveResponse = async (optionId: number | null) => {
-    if (!assessmentId || !attemptId || !placementItems[currentIndex] || !currentSubject) return;
+    if (!currentMixedQuestion || !currentSession) return;
     setSaving(true);
     setError(null);
-    const elapsedSeconds = questionStartedAt ? Math.max(1, Math.round((Date.now() - questionStartedAt) / 1000)) : 1;
-    const item = placementItems[currentIndex];
+    const elapsedSeconds = currentSession.questionStartedAt
+      ? Math.max(1, Math.round((Date.now() - currentSession.questionStartedAt) / 1000))
+      : 1;
+    const item = currentMixedQuestion.item;
     try {
       const result = await savePlacementProgress({
-        assessmentId,
-        attemptId,
+        assessmentId: currentSession.assessmentId,
+        attemptId: currentSession.attemptId,
         bankQuestionId: item.bankQuestionId,
         optionId,
         timeSpentSeconds: elapsedSeconds,
       });
-      const nextMap = new Map(responses);
+      const nextMap = new Map(currentSession.responses);
       nextMap.set(item.bankQuestionId, {
         bankQuestionId: item.bankQuestionId,
         optionId,
         timeSpentSeconds: elapsedSeconds,
       });
-      setResponses(nextMap);
-      const nextIndex = currentIndex + 1;
-      if (nextIndex >= placementItems.length) {
-        await finalizePlacement(nextMap);
-      } else {
-        setCurrentIndex(nextIndex);
-        setQuestionStartedAt(Date.now());
+      const nextIndex = currentMixedQuestion.itemIndex + 1;
+      const nextItem = currentSession.items[nextIndex] ?? null;
+      setPlacementSessions((prev) => ({
+        ...prev,
+        [currentMixedQuestion.subject]: {
+          ...currentSession,
+          responses: nextMap,
+          currentIndex: nextIndex,
+          questionStartedAt: nextItem ? Date.now() : null,
+        },
+      }));
+      if (nextIndex >= currentSession.items.length) {
+        setLoading(true);
+        try {
+          await finalizePlacement(currentMixedQuestion.subject, nextMap);
+        } finally {
+          setLoading(false);
+        }
       }
       trackEvent('placement_response_saved', {
         question_id: item.bankQuestionId,
         is_correct: result.isCorrect,
-        subject: currentSubject,
+        subject: currentMixedQuestion.subject,
       });
     } catch (respError) {
       console.error('[Onboarding] save response failed', respError);
@@ -413,8 +468,6 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       setSaving(false);
     }
   };
-
-  const currentQuestion = placementItems[currentIndex] ?? null;
 
   const renderStepHeader = () => (
     <div className="flex items-center justify-between mb-6">
@@ -630,7 +683,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         <div>
           <p className="text-sm text-slate-600">Subject placement</p>
           <p className="text-xs text-slate-500">
-            Deterministic first pass: Math and ELA each get their own short check-in.
+            One short mixed check-in, with Math and ELA scored separately underneath.
           </p>
         </div>
         <div className="text-right">
@@ -640,7 +693,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
-        {SUBJECT_ORDER.map((subjectKey, index) => {
+        {SUBJECT_ORDER.map((subjectKey) => {
           const result = subjectResults[subjectKey];
           const isCurrent = currentSubject === subjectKey;
           return (
@@ -658,17 +711,17 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
                 <p className="text-sm font-semibold text-slate-900">{SUBJECT_LABELS[subjectKey]}</p>
                 {result ? (
                   <span className="text-xs font-semibold text-emerald-700">Placed</span>
-                ) : isCurrent ? (
-                  <span className="text-xs font-semibold text-sky-700">Current</span>
+                ) : isCurrent || placementSessions[subjectKey] ? (
+                  <span className="text-xs font-semibold text-sky-700">In progress</span>
                 ) : (
-                  <span className="text-xs font-semibold text-slate-500">Up next</span>
+                  <span className="text-xs font-semibold text-slate-500">Ready</span>
                 )}
               </div>
               <p className="mt-1 text-xs text-slate-600">
                 {result
                   ? `Working level ${result.workingLevel}`
-                  : index < currentSubjectIndex
-                    ? 'Completed'
+                  : placementSessions[subjectKey]
+                    ? `${placementSessions[subjectKey]?.responses.size ?? 0} of ${placementSessions[subjectKey]?.items.length ?? 0} answered`
                     : 'Not started yet'}
               </p>
             </div>
@@ -676,53 +729,52 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         })}
       </div>
 
-      {!placementItems.length ? (
+      {!Object.keys(placementSessions).length ? (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
           <p className="text-slate-700 font-semibold mb-2">
-            {currentSubject ? `Ready for your ${SUBJECT_LABELS[currentSubject]} check-in?` : 'Wrapping up your results'}
+            Ready for one adaptive check-in?
           </p>
           <p className="text-sm text-slate-500 mb-4">
-            {currentSubject
-              ? 'No pressure. This helps us choose the best starting point, not judge performance.'
-              : 'We are saving your placement results.'}
+            This interleaves Math and ELA so the experience feels like one flow, while we still calibrate each subject separately.
           </p>
-          {currentSubject && (
-            <button
-              onClick={handleStartPlacement}
-              disabled={loading}
-              className="inline-flex items-center bg-gradient-to-r from-sky-500 to-emerald-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:shadow-md transition disabled:opacity-60"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Loading questions...
-                </>
-              ) : (
-                <>
-                  Start {SUBJECT_LABELS[currentSubject]}
-                  <Play className="h-4 w-4 ml-2" />
-                </>
-              )}
-            </button>
-          )}
+          <button
+            onClick={handleStartPlacement}
+            disabled={loading}
+            className="inline-flex items-center bg-gradient-to-r from-sky-500 to-emerald-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:shadow-md transition disabled:opacity-60"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Loading questions...
+              </>
+            ) : (
+              <>
+                Start mixed assessment
+                <Play className="h-4 w-4 ml-2" />
+              </>
+            )}
+          </button>
         </div>
       ) : (
         <div className="bg-gradient-to-br from-slate-50 to-white border border-slate-100 rounded-2xl p-5">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-500">
-                {SUBJECT_LABELS[currentSubject ?? 'math']} check-in ({currentIndex + 1} of {placementItems.length})
+                {SUBJECT_LABELS[currentSubject ?? 'math']} question {currentMixedQuestion ? currentMixedQuestion.itemIndex + 1 : 0} of {currentSession?.items.length ?? 0}
               </p>
-              <h3 className="text-lg font-semibold text-slate-900 mt-1">{currentQuestion?.prompt}</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mt-1">{currentMixedQuestion?.item.prompt}</h3>
             </div>
-            <div className="text-xs text-slate-500">{placementProgressPct}% complete</div>
+            <div className="text-xs text-slate-500">{mixedPlacementProgress.progressPct}% complete</div>
           </div>
+          <p className="mt-2 text-xs text-slate-500">
+            We alternate subjects to keep the flow natural, but Math and ELA still get separate working levels.
+          </p>
           <div className="mt-4 space-y-2">
-            {currentQuestion?.options.map((option) => (
+            {currentMixedQuestion?.item.options.map((option) => (
               <button
                 key={option.id}
                 onClick={() => handleSaveResponse(option.id)}
-                disabled={saving}
+                disabled={saving || loading}
                 className="w-full text-left border border-slate-200 rounded-xl px-4 py-3 hover:border-sky-400 hover:bg-sky-50 transition disabled:opacity-60"
               >
                 {option.text}
@@ -765,7 +817,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           </div>
         </div>
         <p className="text-sm text-slate-600">
-          Nice work, {fullName || 'learner'}! We&apos;ve set separate starting points for Math and ELA so your first paths are useful and explainable.
+          Nice work, {fullName || 'learner'}! That mixed check-in set separate starting points for Math and ELA so your first paths are useful and explainable.
         </p>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -795,7 +847,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
               <p className="text-sm font-semibold text-slate-900">Separate by subject</p>
-              <p className="text-xs text-slate-600">Math and ELA can move at different levels. We won&apos;t force one global grade guess.</p>
+              <p className="text-xs text-slate-600">Math and ELA can move at different levels, even though the check-in felt like one flow.</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
               <p className="text-sm font-semibold text-slate-900">Deterministic first</p>

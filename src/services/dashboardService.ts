@@ -1342,9 +1342,12 @@ const buildLessonsFromLearningPath = (student: Student): DashboardLesson[] => {
       subject: item.subject,
       title: item.topic,
       moduleSlug: item.moduleSlug ?? item.id,
-      suggestionReason: item.concept
-        ? `From your grade-level path (${item.concept.replace(/_/g, ' ')})`
-        : 'From your grade-level path',
+      suggestionReason:
+        item.pathSource === 'cross_subject_access'
+          ? `From your learning path (${item.subject === 'science' ? 'grade-level science with reading support' : 'cross-subject support'})`
+          : item.concept
+            ? `From your learning path (${item.concept.replace(/_/g, ' ')})`
+            : 'From your learning path',
       status:
         item.status === 'completed' || item.status === 'mastered'
           ? 'completed'
@@ -2768,7 +2771,7 @@ export const fetchStudentDashboardData = async (
 
     const suggestionPlan = buildSuggestionPlan(suggestionData, lessonMetadata);
 
-    if (suggestionPlan.learningPath.length) {
+    if (!student.learningPath?.length && suggestionPlan.learningPath.length) {
       const existingPath = JSON.stringify(student.learningPath ?? []);
       const nextPath = JSON.stringify(suggestionPlan.learningPath);
       if (existingPath !== nextPath) {

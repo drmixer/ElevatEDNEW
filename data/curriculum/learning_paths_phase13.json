@@ -1000,5 +1000,215 @@
         "metadata": { "notes": "Constraints, stakeholders, and solution comparisons." }
       }
     ]
+  },
+  {
+    "grade_band": "6",
+    "subject": "social_studies",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "6-social-studies-civics-and-government-elections-and-civic-participation",
+        "module_title": "Elections & Civic Participation",
+        "strand": "Civics & Government",
+        "standard_codes": [],
+        "metadata": { "notes": "Ballots, turnout, and how participation shapes representation." }
+      },
+      {
+        "position": 2,
+        "module_slug": "6-social-studies-civics-and-government-us-constitution-and-federalism",
+        "module_title": "US Constitution & Federalism",
+        "strand": "Civics & Government",
+        "standard_codes": [],
+        "metadata": { "notes": "Constitutional structure, shared powers, and federal-state roles." }
+      },
+      {
+        "position": 3,
+        "module_slug": "6-social-studies-economics-and-financial-literacy-personal-finance-basics",
+        "module_title": "Personal Finance Basics",
+        "strand": "Economics & Financial Literacy",
+        "standard_codes": [],
+        "metadata": { "notes": "Budgets, tradeoffs, saving, and needs versus wants." }
+      },
+      {
+        "position": 4,
+        "module_slug": "6-social-studies-economics-and-financial-literacy-supply-demand-intro",
+        "module_title": "Supply/Demand (intro)",
+        "strand": "Economics & Financial Literacy",
+        "standard_codes": [],
+        "metadata": { "notes": "Basic market charts, supply, demand, and price change." }
+      },
+      {
+        "position": 5,
+        "module_slug": "6-social-studies-us-history-reconstruction-to-wwii",
+        "module_title": "Reconstruction to WWII",
+        "strand": "US History",
+        "standard_codes": [],
+        "metadata": { "notes": "Reconstruction, industrial change, and the path into World War II." }
+      },
+      {
+        "position": 6,
+        "module_slug": "6-social-studies-us-history-postwar-to-present",
+        "module_title": "Postwar to Present",
+        "strand": "US History",
+        "standard_codes": [],
+        "metadata": { "notes": "Postwar change, public life, and continuity to the present." }
+      },
+      {
+        "position": 7,
+        "module_slug": "6-social-studies-world-history-and-geography-medieval-to-early-modern",
+        "module_title": "Medieval to Early Modern",
+        "strand": "World History & Geography",
+        "standard_codes": [],
+        "metadata": { "notes": "Trade, belief, and political change across medieval and early modern eras." }
+      },
+      {
+        "position": 8,
+        "module_slug": "6-social-studies-world-history-and-geography-global-interactions",
+        "module_title": "Global Interactions",
+        "strand": "World History & Geography",
+        "standard_codes": [],
+        "metadata": { "notes": "Trade routes, exchange, and movement of ideas, goods, and people." }
+      }
+    ]
+  },
+  {
+    "grade_band": "7",
+    "subject": "social_studies",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "7-social-studies-civics-and-government-elections-and-civic-participation",
+        "module_title": "Elections & Civic Participation",
+        "strand": "Civics & Government",
+        "standard_codes": [],
+        "metadata": { "notes": "Turnout, issue context, and how participation affects representation." }
+      },
+      {
+        "position": 2,
+        "module_slug": "7-social-studies-civics-and-government-us-constitution-and-federalism",
+        "module_title": "US Constitution & Federalism",
+        "strand": "Civics & Government",
+        "standard_codes": [],
+        "metadata": { "notes": "Enumerated, reserved, and shared powers in real disputes." }
+      },
+      {
+        "position": 3,
+        "module_slug": "7-social-studies-economics-and-financial-literacy-personal-finance-basics",
+        "module_title": "Personal Finance Basics",
+        "strand": "Economics & Financial Literacy",
+        "standard_codes": [],
+        "metadata": { "notes": "Paychecks, budgeting, saving goals, and financial planning." }
+      },
+      {
+        "position": 4,
+        "module_slug": "7-social-studies-economics-and-financial-literacy-supply-demand-intro",
+        "module_title": "Supply/Demand (intro)",
+        "strand": "Economics & Financial Literacy",
+        "standard_codes": [],
+        "metadata": { "notes": "Market graphs, supply-demand shifts, and evidence-based explanations." }
+      },
+      {
+        "position": 5,
+        "module_slug": "7-social-studies-us-history-reconstruction-to-wwii",
+        "module_title": "Reconstruction to WWII",
+        "strand": "US History",
+        "standard_codes": [],
+        "metadata": { "notes": "Political tensions, industrial growth, and turning points before WWII." }
+      },
+      {
+        "position": 6,
+        "module_slug": "7-social-studies-us-history-postwar-to-present",
+        "module_title": "Postwar to Present",
+        "strand": "US History",
+        "standard_codes": [],
+        "metadata": { "notes": "Rights, policy, and postwar shifts in public life." }
+      },
+      {
+        "position": 7,
+        "module_slug": "7-social-studies-world-history-and-geography-medieval-to-early-modern",
+        "module_title": "Medieval to Early Modern",
+        "strand": "World History & Geography",
+        "standard_codes": [],
+        "metadata": { "notes": "Trade, reform, and growing state power across regions." }
+      },
+      {
+        "position": 8,
+        "module_slug": "7-social-studies-world-history-and-geography-global-interactions",
+        "module_title": "Global Interactions",
+        "strand": "World History & Geography",
+        "standard_codes": [],
+        "metadata": { "notes": "Migration, exchange, and cross-regional consequences." }
+      }
+    ]
+  },
+  {
+    "grade_band": "8",
+    "subject": "social_studies",
+    "sequence": [
+      {
+        "position": 1,
+        "module_slug": "8-social-studies-civics-and-government-elections-and-civic-participation",
+        "module_title": "Elections & Civic Participation",
+        "strand": "Civics & Government",
+        "standard_codes": [],
+        "metadata": { "notes": "Turnout, persuasion, and evidence about democratic participation." }
+      },
+      {
+        "position": 2,
+        "module_slug": "8-social-studies-civics-and-government-us-constitution-and-federalism",
+        "module_title": "US Constitution & Federalism",
+        "strand": "Civics & Government",
+        "standard_codes": [],
+        "metadata": { "notes": "Constitutional text, shared authority, and debate across levels of government." }
+      },
+      {
+        "position": 3,
+        "module_slug": "8-social-studies-economics-and-financial-literacy-personal-finance-basics",
+        "module_title": "Personal Finance Basics",
+        "strand": "Economics & Financial Literacy",
+        "standard_codes": [],
+        "metadata": { "notes": "Budgets, fees, saving goals, and long-term financial choices." }
+      },
+      {
+        "position": 4,
+        "module_slug": "8-social-studies-economics-and-financial-literacy-supply-demand-intro",
+        "module_title": "Supply/Demand (intro)",
+        "strand": "Economics & Financial Literacy",
+        "standard_codes": [],
+        "metadata": { "notes": "Market graphs, policy or event shocks, and real-world outcomes." }
+      },
+      {
+        "position": 5,
+        "module_slug": "8-social-studies-us-history-reconstruction-to-wwii",
+        "module_title": "Reconstruction to WWII",
+        "strand": "US History",
+        "standard_codes": [],
+        "metadata": { "notes": "Turning points, tensions, and continuity from Reconstruction through WWII." }
+      },
+      {
+        "position": 6,
+        "module_slug": "8-social-studies-us-history-postwar-to-present",
+        "module_title": "Postwar to Present",
+        "strand": "US History",
+        "standard_codes": [],
+        "metadata": { "notes": "Postwar rights, policy, and public debate to the present." }
+      },
+      {
+        "position": 7,
+        "module_slug": "8-social-studies-world-history-and-geography-medieval-to-early-modern",
+        "module_title": "Medieval to Early Modern",
+        "strand": "World History & Geography",
+        "standard_codes": [],
+        "metadata": { "notes": "Trade, reform, and expanding state power in historical context." }
+      },
+      {
+        "position": 8,
+        "module_slug": "8-social-studies-world-history-and-geography-global-interactions",
+        "module_title": "Global Interactions",
+        "strand": "World History & Geography",
+        "standard_codes": [],
+        "metadata": { "notes": "Globalization, migration, trade, and shared regional effects." }
+      }
+    ]
   }
 ]

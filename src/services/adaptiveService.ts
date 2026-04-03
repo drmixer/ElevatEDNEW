@@ -1,6 +1,6 @@
 import supabase from '../lib/supabaseClient';
 import { formatSubjectLabel, normalizeSubject } from '../lib/subjects';
-import { buildCanonicalLearningPath } from '../lib/learningPaths';
+import { buildBlendedLearningPath, buildCanonicalLearningPath, type SubjectPlacementSnapshot } from '../lib/learningPaths';
 import { applyLearningPreferencesToPlan, maxLessonsForSession } from '../lib/learningPlan';
 import { castLearningPreferences } from './profileService';
 import type { DashboardLesson, LearningPathItem, LearningPreferences, Subject } from '../types';
@@ -28,6 +28,89 @@ type SuggestionBuildResult = {
   lessons: Array<DashboardLesson & { suggestionReason?: string | null; suggestionConfidence?: number | null }>;
   learningPath: LearningPathItem[];
   messages: string[];
+};
+
+const loadSubjectPlacementSnapshots = async (studentId: string): Promise<SubjectPlacementSnapshot[]> => {
+  const { data, error } = await supabase
+    .from('student_subject_state')
+    .select('subject, expected_level, working_level, recommended_module_slugs')
+    .eq('student_id', studentId);
+
+  if (error) {
+    throw new Error(`Unable to load subject placements: ${error.message}`);
+  }
+
+  return (data ?? [])
+    .map((row) => {
+      const subject = normalizeSubject((row.subject as string | null | undefined) ?? null);
+      if (!subject) return null;
+      return {
+        subject,
+        expectedLevel: (row.expected_level as number | null | undefined) ?? null,
+        workingLevel: (row.working_level as number | null | undefined) ?? null,
+        preferredModules: Array.isArray(row.recommended_module_slugs)
+          ? row.recommended_module_slugs.filter((value): value is string => typeof value === 'string')
+          : [],
+      } satisfies SubjectPlacementSnapshot;
+    })
+    .filter((value): value is SubjectPlacementSnapshot => Boolean(value));
+};
+
+export const buildFallbackLearningPath = async (
+  studentId: string,
+  options?: {
+    grade?: number | string | null;
+    subject?: Subject | null;
+    preferredModules?: string[];
+    limit?: number;
+  },
+): Promise<LearningPathItem[]> => {
+  const placements = await loadSubjectPlacementSnapshots(studentId).catch((error) => {
+    console.warn('[adaptive] Unable to load subject placement snapshots', error);
+    return [] as SubjectPlacementSnapshot[];
+  });
+
+  const limitCount = options?.limit && options.limit > 0 ? options.limit : 4;
+  const mergedPlacements = placements.slice();
+
+  const numericGrade =
+    typeof options?.grade === 'number'
+      ? options.grade
+      : typeof options?.grade === 'string' && options.grade.trim().length
+        ? Number.parseInt(options.grade, 10)
+        : null;
+
+  if (options?.subject) {
+    const existing = mergedPlacements.find((entry) => entry.subject === options.subject);
+    if (existing) {
+      const preferred = new Set([...(existing.preferredModules ?? []), ...(options.preferredModules ?? [])]);
+      existing.preferredModules = Array.from(preferred);
+    } else {
+      mergedPlacements.push({
+        subject: options.subject,
+        workingLevel: Number.isFinite(numericGrade) ? numericGrade : null,
+        preferredModules: options.preferredModules ?? [],
+      });
+    }
+  }
+
+  const blendedPath = buildBlendedLearningPath({
+    nominalGrade: options?.grade ?? null,
+    placements: mergedPlacements,
+    limit: limitCount,
+  });
+  if (blendedPath.length) return blendedPath;
+
+  if (options?.subject) {
+    return buildCanonicalLearningPath({
+      grade: options.grade ?? null,
+      subject: options.subject,
+      preferredModules: options.preferredModules,
+      limit: limitCount,
+    }).slice(0, limitCount);
+  }
+
+  return [];
 };
 
 const difficultyFromDuration = (durationMinutes?: number | null): DashboardLesson['difficulty'] => {
@@ -192,13 +275,12 @@ export const refreshLearningPathFromSuggestions = async (
 
   if (!lessonIds.length) {
     // Fallback to canonical path if no database suggestions yet.
-    const fallbackSubject = subject ?? 'math';
     const canonicalLimit = maxLessonsForSession[preferences.sessionLength] ?? limitCount ?? 4;
-    const canonicalPath = buildCanonicalLearningPath({
+    const canonicalPath = await buildFallbackLearningPath(studentId, {
       grade,
-      subject: fallbackSubject,
+      subject: subject ?? 'math',
       limit: canonicalLimit,
-    }).slice(0, canonicalLimit);
+    });
     if (canonicalPath.length) {
       try {
         await supabase.from('student_profiles').update({ learning_path: canonicalPath }).eq('id', studentId);
@@ -210,7 +292,12 @@ export const refreshLearningPathFromSuggestions = async (
         lessonCount: canonicalPath.length,
         studentId,
       });
-      return { lessons: [], learningPath: canonicalPath, messages: ['Starting your grade-level path.'] };
+      const subjectCount = new Set(canonicalPath.map((item) => item.subject)).size;
+      return {
+        lessons: [],
+        learningPath: canonicalPath,
+        messages: [subjectCount > 1 ? 'Starting with a blended path tuned from your diagnostic.' : 'Starting your grade-level path.'],
+      };
     }
 
     return { lessons: [], learningPath: [], messages: [] };

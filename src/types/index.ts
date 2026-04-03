@@ -142,6 +142,9 @@ export interface LearningPathItem {
   moduleSlug?: string;
   strand?: string;
   standardCodes?: string[];
+  pathSource?: 'subject_placement' | 'cross_subject_access' | 'adaptive_recommendation';
+  accessibilityLevel?: number;
+  themeGrade?: number;
 }
 
 export type SessionLengthPreference = 'short' | 'standard' | 'long';

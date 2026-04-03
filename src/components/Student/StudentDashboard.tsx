@@ -77,7 +77,7 @@ import type {
   StudentSubjectPath,
   TutorPersona as CatalogTutorPersona,
 } from '../../services/onboardingService';
-import { describePathEntryReason, humanizeStandard } from '../../lib/pathReason';
+import { humanizeStandard } from '../../lib/pathReason';
 import {
   consumeAdaptiveFlash,
   studentPathQueryKey,
@@ -145,13 +145,6 @@ type StudentNudge = {
   body: string;
   targetUrl: string | null;
   detail?: string | null;
-};
-
-const pathEntryReasonSlug = (entry: StudentPathEntry): string => {
-  const meta = (entry.metadata ?? {}) as Record<string, unknown>;
-  if (typeof meta.reason === 'string') return meta.reason.toLowerCase();
-  if (entry.type === 'lesson' && meta.source === 'placement') return 'placement';
-  return entry.type;
 };
 
 const formatAgo = (input: Date | string): string => {
@@ -621,14 +614,42 @@ const StudentDashboard: React.FC = () => {
     [studentPath?.metadata],
   );
 
-  const pathFocus = useMemo(
-    () => pickDiagnosticFocus(pathMetadata, upNextEntries),
-    [pathMetadata, upNextEntries],
+  const subjectGapMap = useMemo(() => {
+    const map = new Map<Subject, number>();
+    subjectPaths.forEach((entry) => {
+      const subject = entry.subject as Subject | null;
+      const expected = entry.state?.expected_level ?? null;
+      const working = entry.state?.working_level ?? null;
+      if (!subject || expected == null || working == null) return;
+      map.set(subject, expected - working);
+    });
+    return map;
+  }, [subjectPaths]);
+
+  const primaryUpNextItems = useMemo(
+    () => journeyPeekAhead.slice(0, 5),
+    [journeyPeekAhead],
   );
 
-  const upNextSignature = useMemo(
-    () => upNextEntries.map((entry) => `${entry.id}:${entry.status}:${entry.position ?? ''}`).join('|'),
-    [upNextEntries],
+  const placementFocusLabel = useMemo(() => {
+    let best: { subject: Subject; gap: number } | null = null;
+    subjectGapMap.forEach((gap, subject) => {
+      if (gap <= 0) return;
+      if (!best || gap > best.gap) {
+        best = { subject, gap };
+      }
+    });
+    return best ? formatSubjectLabel(best.subject) : null;
+  }, [subjectGapMap]);
+
+  const pathFocus = useMemo(
+    () => placementFocusLabel ?? pickDiagnosticFocus(pathMetadata, upNextEntries),
+    [placementFocusLabel, pathMetadata, upNextEntries],
+  );
+
+  const primaryUpNextSignature = useMemo(
+    () => primaryUpNextItems.map((item) => `${item.id}:${item.status}:${item.subject}`).join('|'),
+    [primaryUpNextItems],
   );
 
   const upNextRecentlyUpdated = useMemo(
@@ -637,7 +658,7 @@ const StudentDashboard: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!upNextSignature) return;
+    if (!primaryUpNextSignature) return;
     if (!upNextChangeTracked.current) {
       upNextChangeTracked.current = true;
       return;
@@ -645,58 +666,85 @@ const StudentDashboard: React.FC = () => {
     setUpNextUpdatedAt(Date.now());
     const timeout = setTimeout(() => setUpNextUpdatedAt(null), 8000);
     return () => clearTimeout(timeout);
-  }, [upNextSignature]);
+  }, [primaryUpNextSignature]);
 
   useEffect(() => {
-    if (!upNextRecentlyUpdated || !upNextEntries.length) return;
-    if (lastUpNextEventSignature.current === upNextSignature) return;
-    lastUpNextEventSignature.current = upNextSignature;
-    const reason = pathEntryReasonSlug(upNextEntries[0]);
+    if (!upNextRecentlyUpdated || !primaryUpNextItems.length) return;
+    if (lastUpNextEventSignature.current === primaryUpNextSignature) return;
+    lastUpNextEventSignature.current = primaryUpNextSignature;
     trackEvent('upnext_updated', {
-      reason,
-      entry_id: upNextEntries[0].id,
+      reason: primaryUpNextItems[0].concept ?? 'blended_path',
+      entry_id: primaryUpNextItems[0].id,
+      subject: primaryUpNextItems[0].subject,
     });
-  }, [upNextEntries, upNextRecentlyUpdated, upNextSignature]);
+  }, [primaryUpNextItems, upNextRecentlyUpdated, primaryUpNextSignature]);
 
   const upNextSubtitle = useMemo(() => {
+    const uniqueSubjects = Array.from(new Set(primaryUpNextItems.map((item) => item.subject)));
+    if (placementFocusLabel && uniqueSubjects.length > 1) {
+      return `Blended from your subject placements - leaning into ${placementFocusLabel} while keeping other subjects moving.`;
+    }
     if (pathFocus) {
       return `Built from your diagnostic results - starting with ${pathFocus} to strengthen that area.`;
     }
+    if (uniqueSubjects.length > 1) {
+      return 'Blended from your subject placements so you keep moving in more than one subject.';
+    }
     return 'Built from your diagnostic - start with the first card below.';
-  }, [pathFocus]);
+  }, [pathFocus, placementFocusLabel, primaryUpNextItems]);
 
-  const describeUpNextRationale = useCallback(
-    (entry: StudentPathEntry) => {
-      const meta = (entry.metadata ?? {}) as Record<string, unknown>;
-      const reasonCopy = describePathEntryReason(entry);
-      const standard =
-        humanizeStandard((meta.standard_code as string | undefined) ?? entry.target_standard_codes?.[0] ?? null) ?? null;
-      const accuracy =
-        typeof meta.accuracy_pct === 'number'
-          ? Math.round(meta.accuracy_pct)
-          : typeof meta.accuracy === 'number'
-            ? Math.round(meta.accuracy)
-            : typeof entry.score === 'number'
-              ? Math.round(entry.score)
-              : typeof meta.mastery === 'number'
-                ? Math.round(meta.mastery)
-                : null;
-      const rationale =
-        pathEntryReasonSlug(entry) === 'placement' || meta.source === 'placement'
-          ? standard && accuracy != null
-            ? `From your diagnostic on ${standard} (${accuracy}% accuracy). Starting here locks in that skill.`
-            : reasonCopy
-          : accuracy != null && standard
-            ? `${reasonCopy} Recent accuracy on ${standard} is ${accuracy}%, so we queued extra practice.`
-            : accuracy != null
-              ? `${reasonCopy} Recent performance was ${accuracy}%.`
-              : standard
-                ? `${reasonCopy} Focus: ${standard}.`
-                : reasonCopy;
-      const metric = accuracy != null && standard ? `${accuracy}% · ${standard}` : accuracy != null ? `${accuracy}% recent` : standard;
-      return { rationale, metric };
+  const describeLearningPathRationale = useCallback(
+    (item: LearningPathItem) => {
+      const subjectLabel = formatSubjectLabel(item.subject);
+      const standard = humanizeStandard(item.standardCodes?.[0] ?? item.strand ?? null);
+      const gap = subjectGapMap.get(item.subject) ?? 0;
+      const isPriorityCatchUp = gap >= 2;
+      const readingSupportLabel =
+        item.pathSource === 'cross_subject_access' && item.accessibilityLevel != null
+          ? `Reading support L${item.accessibilityLevel}`
+          : null;
+      const themeGradeLabel =
+        item.pathSource === 'cross_subject_access' && item.themeGrade != null ? `Grade ${item.themeGrade} theme` : null;
+
+      if (isPriorityCatchUp) {
+        return {
+          rationale: standard
+            ? `${subjectLabel} is getting extra reps right now, starting with ${standard}.`
+            : `${subjectLabel} is getting extra reps right now because it needs the most support.`,
+          metric: `Priority gap`,
+          reasonLabel: 'Catch-up focus',
+        };
+      }
+
+      if (item.pathSource === 'cross_subject_access') {
+        return {
+          rationale: standard
+            ? `${subjectLabel} stays on grade-level themes while the reading load tracks your ELA level through ${standard}.`
+            : `${subjectLabel} stays on grade-level themes while the reading load tracks your ELA level.`,
+          metric: [themeGradeLabel, readingSupportLabel].filter(Boolean).join(' · ') || readingSupportLabel,
+          reasonLabel: 'Cross-subject support',
+        };
+      }
+
+      if (item.status === 'in_progress') {
+        return {
+          rationale: standard
+            ? `You already have momentum here, so we kept ${subjectLabel} moving with ${standard}.`
+            : `You already have momentum here, so we kept ${subjectLabel} moving.`,
+          metric: standard,
+          reasonLabel: 'Keep going',
+        };
+      }
+
+      return {
+        rationale: standard
+          ? `This keeps your ${subjectLabel} path moving through ${standard}.`
+          : `This is the next step in your ${subjectLabel} path.`,
+        metric: standard,
+        reasonLabel: 'Path pick',
+      };
     },
-    [],
+    [subjectGapMap],
   );
 
   const adaptiveFocusLabel = useMemo(() => {
@@ -704,9 +752,9 @@ const StudentDashboard: React.FC = () => {
       humanizeStandard(adaptiveFlash?.primaryStandard ?? null) ??
       humanizeStandard(adaptiveFlash?.misconceptions?.[0] ?? null);
     if (flashStandard) return flashStandard;
-    const upNextStandard = humanizeStandard(upNextEntries[0]?.target_standard_codes?.[0] ?? null);
+    const upNextStandard = humanizeStandard(primaryUpNextItems[0]?.standardCodes?.[0] ?? primaryUpNextItems[0]?.strand ?? null);
     return pathFocus ?? upNextStandard;
-  }, [adaptiveFlash?.misconceptions, adaptiveFlash?.primaryStandard, pathFocus, upNextEntries]);
+  }, [adaptiveFlash?.misconceptions, adaptiveFlash?.primaryStandard, pathFocus, primaryUpNextItems]);
 
   const adaptiveBannerCopy = useMemo(() => {
     if (!adaptiveFlash) return null;
@@ -2800,18 +2848,18 @@ const StudentDashboard: React.FC = () => {
           </div>
         )}
 
-        {!pathLoading && upNextEntries.length > 0 && (
+        {!showSkeleton && primaryUpNextItems.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-slate-500">Up Next</p>
-                  <h3 className="text-lg font-bold text-slate-900">Placement-powered path</h3>
+                  <h3 className="text-lg font-bold text-slate-900">Blended learning path</h3>
                   <p className="text-sm text-slate-600">{upNextSubtitle}</p>
                   <p className="text-xs text-slate-500">
                     Next 3–5 steps with a quick rationale. Updates instantly after diagnostics and task outcomes.
                   </p>
-                  {upNextEntries.length < 3 && (
+                  {primaryUpNextItems.length < 3 && (
                     <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 inline-flex px-2 py-1 rounded-lg mt-2">
                       Finish the diagnostic or one activity to unlock more steps.
                     </p>
@@ -2965,37 +3013,23 @@ const StudentDashboard: React.FC = () => {
                 </motion.div>
               )}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {upNextEntries.slice(0, 5).map((entry, index) => {
-                  const meta = (entry.metadata ?? {}) as Record<string, unknown>;
-                  const title =
-                    (meta.module_title as string | undefined) ??
-                    (meta.module_slug as string | undefined) ??
-                    `Module ${entry.position}`;
-                  const { rationale, metric } = describeUpNextRationale(entry);
-                  const reasonSlug = pathEntryReasonSlug(entry);
-                  const reasonLabel =
-                    reasonSlug === 'placement'
-                      ? 'Diagnostic pick'
-                      : reasonSlug === 'remediation' || reasonSlug === 'review'
-                        ? 'Review boost'
-                        : reasonSlug === 'stretch'
-                          ? 'Stretch'
-                          : 'Path pick';
+                {primaryUpNextItems.map((item, index) => {
+                  const { rationale, metric, reasonLabel } = describeLearningPathRationale(item);
                   return (
                     <motion.div
-                      key={entry.id}
+                      key={`${item.subject}:${item.id}:${index}`}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.25, delay: index * 0.05 }}
                       className="rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 shadow-sm flex items-start space-x-3"
                     >
                       <div className="h-10 w-10 rounded-full bg-sky-100 text-sky-700 font-semibold flex items-center justify-center">
-                        {entry.position}
+                        {index + 1}
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-semibold text-slate-900">{title}</p>
-                        <p className="text-xs text-slate-600 capitalize">
-                          {entry.type} · {entry.status === 'not_started' ? 'Ready' : entry.status}
+                        <p className="text-sm font-semibold text-slate-900">{item.topic}</p>
+                        <p className="text-xs text-slate-600">
+                          {formatSubjectLabel(item.subject)} · {PATH_STATUS_LABELS[item.status]}
                         </p>
                         <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
                           <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-1 font-semibold text-slate-700">
@@ -3009,7 +3043,7 @@ const StudentDashboard: React.FC = () => {
                             </span>
                           )}
                           <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600 capitalize">
-                            {entry.type}
+                            {formatSubjectLabel(item.subject)}
                           </span>
                         </div>
                         <p className="mt-2 text-xs text-slate-600 leading-snug">Why now: {rationale}</p>

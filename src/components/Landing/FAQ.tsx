@@ -17,7 +17,7 @@ const FAQ: React.FC = () => {
     },
     {
       question: 'How long does the diagnostic assessment take?',
-      answer: 'The initial diagnostic typically takes 15-20 minutes and adapts based on student responses. Students can pause and resume anytime. The assessment covers all core subjects and creates a personalized learning profile. Students can also skip the diagnostic to start at their grade level.'
+      answer: 'The initial diagnostic typically takes 15-20 minutes and adapts based on student responses. Students can pause and resume anytime. The onboarding assessment currently blends Math and Reading/Writing questions into one flow, then creates separate starting points by subject so each learner begins where they are strongest and where they need support.'
     },
     {
       question: 'What can parents see in their dashboard?',

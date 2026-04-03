@@ -1,8 +1,7 @@
 import supabase from '../lib/supabaseClient';
 import { normalizeSubject } from '../lib/subjects';
 import type { LearningPathItem, Subject } from '../types';
-import { buildCanonicalLearningPath } from '../lib/learningPaths';
-import { refreshLearningPathFromSuggestions } from './adaptiveService';
+import { buildFallbackLearningPath, refreshLearningPathFromSuggestions } from './adaptiveService';
 import { sendStudentEvent, type StudentEventInput, type StudentEventResponse } from './studentEventService';
 import recordReliabilityCheckpoint from '../lib/reliability';
 import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../../shared/questionQuality';
@@ -950,7 +949,7 @@ export const finalizeAssessmentAttempt = async (
 
   let canonicalPath: LearningPathItem[] = [];
   try {
-    canonicalPath = buildCanonicalLearningPath({
+    canonicalPath = await buildFallbackLearningPath(studentId, {
       grade: targetGrade,
       subject: targetSubject,
       preferredModules,

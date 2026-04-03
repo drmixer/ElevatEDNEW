@@ -8,6 +8,7 @@ import { captureServerException, raiseAlert } from './monitoring.js';
 import { HttpError } from './httpError.js';
 import { selectPlacementAssessmentId } from './placementSelection.js';
 import { validatePlacementQuestions } from './placementValidation.js';
+import { parseProfileLearningPath, projectProfileLearningPathEntries } from './learningPathProjection.js';
 
 type PathBuildOptions = {
   gradeBand?: string | null;
@@ -1752,7 +1753,7 @@ const updateAdaptiveState = (
   return { currentDifficulty, difficultyStreak };
 };
 
-export const getStudentPath = async (
+const getStoredStudentPath = async (
   supabase: SupabaseClient,
   studentId: string,
   options?: { subject?: string | null },
@@ -1798,6 +1799,58 @@ export const getStudentPath = async (
       metadata: (pathRow.metadata as Record<string, unknown> | null | undefined) ?? null,
     },
     entries: (entries as PathEntry[]) ?? [],
+  };
+};
+
+export const getStudentPath = async (
+  supabase: SupabaseClient,
+  studentId: string,
+  options?: { subject?: string | null },
+): Promise<{ path: PathSummary; entries: PathEntry[] } | null> => {
+  const subject = normalizeSubjectKey(options?.subject ?? null);
+  if (subject) {
+    return getStoredStudentPath(supabase, studentId, { subject });
+  }
+
+  const [storedPath, profileRow] = await Promise.all([
+    getStoredStudentPath(supabase, studentId).catch(() => null),
+    supabase.from('student_profiles').select('learning_path').eq('id', studentId).maybeSingle(),
+  ]);
+
+  if (profileRow.error) {
+    throw new Error(`Unable to load student profile learning path: ${profileRow.error.message}`);
+  }
+
+  const profileItems = parseProfileLearningPath(profileRow.data?.learning_path ?? null);
+  if (!profileItems.length) {
+    return storedPath;
+  }
+
+  const nowIso = new Date().toISOString();
+  const basePath = storedPath?.path ?? {
+    id: 0,
+    subject: null,
+    status: 'active',
+    started_at: nowIso,
+    updated_at: nowIso,
+    metadata: null,
+  };
+
+  return {
+    path: {
+      ...basePath,
+      subject: null,
+      metadata: {
+        ...(basePath.metadata ?? {}),
+        path_mode: 'blended_profile',
+        source: 'student_profile_learning_path',
+      },
+    },
+    entries: projectProfileLearningPathEntries(profileItems, {
+      pathId: basePath.id,
+      createdAt: basePath.started_at,
+      updatedAt: basePath.updated_at,
+    }) as PathEntry[],
   };
 };
 
@@ -1918,7 +1971,7 @@ export const getAdaptiveContext = async (
   studentId: string,
 ): Promise<{ targetDifficulty: number; misconceptions: string[]; recentAttempts: AdaptiveAttempt[] }> => {
   await syncAdaptiveConfig(supabase);
-  const path = await getStudentPath(supabase, studentId);
+  const path = await getStoredStudentPath(supabase, studentId);
   const attempts = await fetchAdaptiveAttempts(supabase, studentId, 12);
   const state = readAdaptiveState(path?.path.metadata ?? {});
   const misconceptions = detectMisconceptions(attempts);
@@ -1943,7 +1996,7 @@ export const applyAdaptiveEvent = async (
   },
 ): Promise<{ path: { path: PathSummary; entries: PathEntry[] } | null; next: PathEntry | null; adaptive: { targetDifficulty: number; misconceptions: string[]; recentAttempts: AdaptiveAttempt[] } }> => {
   await syncAdaptiveConfig(supabase);
-  const currentPath = await getStudentPath(supabase, studentId);
+  const currentPath = await getStoredStudentPath(supabase, studentId);
   if (!currentPath) {
     return { path: null, next: null, adaptive: { targetDifficulty: 1, misconceptions: [], recentAttempts: [] } };
   }
@@ -2068,8 +2121,9 @@ export const applyAdaptiveEvent = async (
     }
   }
 
+  const refreshedStoredPath = await getStoredStudentPath(supabase, studentId);
   const refreshedPath = await getStudentPath(supabase, studentId);
-  const resolvedPath = refreshedPath ?? { ...currentPath, entries: workingEntries };
+  const resolvedPath = refreshedPath ?? refreshedStoredPath ?? { ...currentPath, entries: workingEntries };
   const next = chooseAdaptiveNext(resolvedPath.entries);
 
   return {
