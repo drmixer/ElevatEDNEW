@@ -56,6 +56,36 @@ describe('buildBlendedLearningPath', () => {
     expect(path.some((item) => item.subject === 'science')).toBe(true);
   });
 
+  it('builds a blended grade 4 path with contextual science and social studies support', () => {
+    const path = buildBlendedLearningPath({
+      nominalGrade: 4,
+      placements: [
+        { subject: 'math', expectedLevel: 4, workingLevel: 2 },
+        { subject: 'english', expectedLevel: 4, workingLevel: 4 },
+      ],
+      limit: 6,
+    });
+
+    expect(path).toHaveLength(6);
+    expect(path.map((item) => item.subject)).toEqual([
+      'math',
+      'math',
+      'english',
+      'science',
+      'social_studies',
+      'math',
+    ]);
+
+    const scienceEntry = path.find((item) => item.subject === 'science');
+    const socialStudiesEntry = path.find((item) => item.subject === 'social_studies');
+    expect(scienceEntry?.themeGrade).toBe(4);
+    expect(scienceEntry?.accessibilityLevel).toBe(4);
+    expect(scienceEntry?.pathSource).toBe('cross_subject_access');
+    expect(socialStudiesEntry?.themeGrade).toBe(4);
+    expect(socialStudiesEntry?.accessibilityLevel).toBe(4);
+    expect(socialStudiesEntry?.pathSource).toBe('cross_subject_access');
+  });
+
   it('mixes in social studies at the nominal grade when canonical paths exist', () => {
     const path = buildBlendedLearningPath({
       nominalGrade: 8,

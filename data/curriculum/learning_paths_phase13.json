@@ -1,5 +1,209 @@
 [
   {
+    "grade_band": "3",
+    "subject": "math",
+    "sequence": [
+      { "position": 1, "module_slug": "3-mathematics-number-and-operations-place-value-thousands-millions", "module_title": "Place Value (thousands/millions)", "strand": "Number & Operations", "standard_codes": ["3.NBT.A.1"] },
+      { "position": 2, "module_slug": "3-mathematics-number-and-operations-rounding-and-estimation", "module_title": "Rounding & Estimation", "strand": "Number & Operations", "standard_codes": ["3.NBT.A.1"] },
+      { "position": 3, "module_slug": "3-mathematics-number-and-operations-multiplication-division", "module_title": "Multiplication/Division", "strand": "Number & Operations", "standard_codes": ["3.OA.A.1"] },
+      { "position": 4, "module_slug": "3-mathematics-number-and-operations-fractions-concepts-equivalence", "module_title": "Fractions (concepts, equivalence)", "strand": "Number & Operations", "standard_codes": ["3.NF.A.1"] },
+      { "position": 5, "module_slug": "3-mathematics-number-and-operations-decimals-intro", "module_title": "Decimals (intro)", "strand": "Number & Operations", "standard_codes": ["3.NF.A.3"] },
+      { "position": 6, "module_slug": "3-mathematics-geometry-and-measurement-angles-and-lines", "module_title": "Angles & Lines", "strand": "Geometry & Measurement", "standard_codes": ["3.G.A.1"] },
+      { "position": 7, "module_slug": "3-mathematics-geometry-and-measurement-area-perimeter", "module_title": "Area/Perimeter", "strand": "Geometry & Measurement", "standard_codes": ["3.MD.C.5"] },
+      { "position": 8, "module_slug": "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i", "module_title": "Coordinate Plane (Quadrant I)", "strand": "Geometry & Measurement", "standard_codes": ["3.G.A.1"] },
+      { "position": 9, "module_slug": "3-mathematics-geometry-and-measurement-transformations-intro", "module_title": "Transformations (intro)", "strand": "Geometry & Measurement", "standard_codes": ["3.G.A.2"] },
+      { "position": 10, "module_slug": "3-mathematics-geometry-and-measurement-volume", "module_title": "Volume", "strand": "Geometry & Measurement", "standard_codes": ["3.MD.C.5"] },
+      { "position": 11, "module_slug": "3-mathematics-data-and-probability-statistics-interpreting-tables-charts", "module_title": "Interpreting Tables/Charts", "strand": "Data & Probability / Statistics", "standard_codes": ["3.MD.B.3"] },
+      { "position": 12, "module_slug": "3-mathematics-data-and-probability-statistics-bar-line-plots", "module_title": "Bar/Line Plots", "strand": "Data & Probability / Statistics", "standard_codes": ["3.MD.B.3"] },
+      { "position": 13, "module_slug": "3-mathematics-data-and-probability-statistics-mean-median-mode", "module_title": "Mean/Median/Mode", "strand": "Data & Probability / Statistics", "standard_codes": ["3.MD.B.3"] },
+      { "position": 14, "module_slug": "3-mathematics-data-and-probability-statistics-intro-probability-experimental", "module_title": "Intro Probability (experimental)", "strand": "Data & Probability / Statistics", "standard_codes": ["3.MD.B.3"] }
+    ]
+  },
+  {
+    "grade_band": "3",
+    "subject": "ela",
+    "sequence": [
+      { "position": 1, "module_slug": "3-english-language-arts-vocabulary-roots-prefixes-suffixes", "module_title": "Roots/Prefixes/Suffixes", "strand": "Vocabulary", "standard_codes": ["CCSS.ELA-LITERACY.L.3.4", "CCSS.ELA-LITERACY.L.3.4.b"] },
+      { "position": 2, "module_slug": "3-english-language-arts-reading-informational-biographies-pd", "module_title": "Biographies (PD)", "strand": "Reading Informational", "standard_codes": ["CCSS.ELA-LITERACY.RI.3.1", "CCSS.ELA-LITERACY.RI.3.3"] },
+      { "position": 3, "module_slug": "3-english-language-arts-reading-informational-nonfiction-articles-open-licensed", "module_title": "Nonfiction Articles (open-licensed)", "strand": "Reading Informational", "standard_codes": ["CCSS.ELA-LITERACY.RI.3.2", "CCSS.ELA-LITERACY.RI.3.4"] },
+      { "position": 4, "module_slug": "3-english-language-arts-reading-literature-short-stories-pd", "module_title": "Short Stories (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.3.1", "CCSS.ELA-LITERACY.RL.3.2"] },
+      { "position": 5, "module_slug": "3-english-language-arts-reading-literature-chapter-books-pd", "module_title": "Chapter Books (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.3.1", "CCSS.ELA-LITERACY.RL.3.3"] },
+      { "position": 6, "module_slug": "3-english-language-arts-reading-literature-myths-legends-pd", "module_title": "Myths/Legends (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.3.2", "CCSS.ELA-LITERACY.RL.3.6"] },
+      { "position": 7, "module_slug": "3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics", "module_title": "Paragraphs, Narratives, Expository Writing, Grammar Basics", "strand": "Writing & Grammar", "standard_codes": ["CCSS.ELA-LITERACY.W.3.3", "CCSS.ELA-LITERACY.L.3.1"] },
+      { "position": 8, "module_slug": "3-english-language-arts-speaking-and-listening-presentations-summaries", "module_title": "Presentations, Summaries", "strand": "Speaking & Listening", "standard_codes": ["CCSS.ELA-LITERACY.SL.3.4", "CCSS.ELA-LITERACY.SL.3.6"] }
+    ]
+  },
+  {
+    "grade_band": "3",
+    "subject": "science",
+    "sequence": [
+      { "position": 1, "module_slug": "3-science-physical-science-forces-balanced-unbalanced", "module_title": "Forces: Balanced & Unbalanced", "strand": "Physical Science", "standard_codes": ["3-PS2-1"] },
+      { "position": 2, "module_slug": "3-science-physical-science-energy-transfer", "module_title": "Energy Transfer", "strand": "Physical Science", "standard_codes": ["3-PS3-1"] },
+      { "position": 3, "module_slug": "3-science-physical-science-matter-particles", "module_title": "Matter & Particles", "strand": "Physical Science", "standard_codes": ["3-PS1-1"] },
+      { "position": 4, "module_slug": "3-science-physical-science-waves-intro", "module_title": "Waves (Intro)", "strand": "Physical Science", "standard_codes": ["3-PS4-1"] },
+      { "position": 5, "module_slug": "3-science-life-science-human-body-systems-intro", "module_title": "Human Body Systems (Intro)", "strand": "Life Science", "standard_codes": ["3-LS1-1"] },
+      { "position": 6, "module_slug": "3-science-life-science-heredity-intro", "module_title": "Heredity (Intro)", "strand": "Life Science", "standard_codes": ["3-LS3-1"] },
+      { "position": 7, "module_slug": "3-science-life-science-ecosystems-and-food-webs", "module_title": "Ecosystems & Food Webs", "strand": "Life Science", "standard_codes": ["3-LS2-1"] },
+      { "position": 8, "module_slug": "3-science-life-science-adaptations", "module_title": "Adaptations", "strand": "Life Science", "standard_codes": ["3-LS4-3"] },
+      { "position": 9, "module_slug": "3-science-earth-and-space-earth-systems-geosphere-hydrosphere", "module_title": "Earth Systems: Geosphere & Hydrosphere", "strand": "Earth & Space Science", "standard_codes": ["3-ESS2-1"] },
+      { "position": 10, "module_slug": "3-science-earth-and-space-weather-and-climate", "module_title": "Weather & Climate", "strand": "Earth & Space Science", "standard_codes": ["3-ESS2-1"] },
+      { "position": 11, "module_slug": "3-science-earth-and-space-natural-resources", "module_title": "Natural Resources", "strand": "Earth & Space Science", "standard_codes": ["3-ESS3-1"] },
+      { "position": 12, "module_slug": "3-science-earth-and-space-solar-system-relative-scale", "module_title": "Solar System & Relative Scale", "strand": "Earth & Space Science", "standard_codes": ["3-ESS1-1"] },
+      { "position": 13, "module_slug": "3-science-engineering-practices-criteria-and-constraints", "module_title": "Engineering: Criteria & Constraints", "strand": "Engineering Practices", "standard_codes": ["3-ETS1-1"] },
+      { "position": 14, "module_slug": "3-science-engineering-practices-prototypes-and-iteration", "module_title": "Engineering: Prototypes & Iteration", "strand": "Engineering Practices", "standard_codes": ["3-ETS1-2"] }
+    ]
+  },
+  {
+    "grade_band": "3",
+    "subject": "social_studies",
+    "sequence": [
+      { "position": 1, "module_slug": "3-social-studies-civics-and-government-citizenship-and-rights", "module_title": "Citizenship & Rights", "strand": "Civics & Government", "standard_codes": [] },
+      { "position": 2, "module_slug": "3-social-studies-civics-and-government-local-state-government", "module_title": "Local/State Government", "strand": "Civics & Government", "standard_codes": [] },
+      { "position": 3, "module_slug": "3-social-studies-economics-and-financial-literacy-markets-intro", "module_title": "Markets (intro)", "strand": "Economics & Financial Literacy", "standard_codes": [] },
+      { "position": 4, "module_slug": "3-social-studies-economics-and-financial-literacy-producers-consumers", "module_title": "Producers/Consumers", "strand": "Economics & Financial Literacy", "standard_codes": [] },
+      { "position": 5, "module_slug": "3-social-studies-us-history-exploration-to-civil-war", "module_title": "Exploration to Civil War", "strand": "US History", "standard_codes": [] },
+      { "position": 6, "module_slug": "3-social-studies-us-history-industrialization-and-immigration", "module_title": "Industrialization & Immigration", "strand": "US History", "standard_codes": [] },
+      { "position": 7, "module_slug": "3-social-studies-world-history-and-geography-ancient-civilizations", "module_title": "Ancient Civilizations", "strand": "World History & Geography", "standard_codes": [] },
+      { "position": 8, "module_slug": "3-social-studies-world-history-and-geography-world-regions-physical-human", "module_title": "World Regions (physical/human)", "strand": "World History & Geography", "standard_codes": [] }
+    ]
+  },
+  {
+    "grade_band": "4",
+    "subject": "math",
+    "sequence": [
+      { "position": 1, "module_slug": "4-mathematics-number-and-operations-place-value-thousands-millions", "module_title": "Place Value (thousands/millions)", "strand": "Number & Operations", "standard_codes": ["4.NBT.A.1"] },
+      { "position": 2, "module_slug": "4-mathematics-number-and-operations-rounding-and-estimation", "module_title": "Rounding & Estimation", "strand": "Number & Operations", "standard_codes": ["4.NBT.A.3"] },
+      { "position": 3, "module_slug": "4-mathematics-number-and-operations-multiplication-division", "module_title": "Multiplication/Division", "strand": "Number & Operations", "standard_codes": ["4.OA.A.1"] },
+      { "position": 4, "module_slug": "4-mathematics-number-and-operations-fractions-concepts-equivalence", "module_title": "Fractions (concepts, equivalence)", "strand": "Number & Operations", "standard_codes": ["4.NF.A.1"] },
+      { "position": 5, "module_slug": "4-mathematics-number-and-operations-decimals-intro", "module_title": "Decimals (intro)", "strand": "Number & Operations", "standard_codes": ["4.NF.C.6"] },
+      { "position": 6, "module_slug": "4-mathematics-geometry-and-measurement-angles-and-lines", "module_title": "Angles & Lines", "strand": "Geometry & Measurement", "standard_codes": ["4.MD.C.5"] },
+      { "position": 7, "module_slug": "4-mathematics-geometry-and-measurement-area-perimeter", "module_title": "Area/Perimeter", "strand": "Geometry & Measurement", "standard_codes": ["4.MD.A.3"] },
+      { "position": 8, "module_slug": "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i", "module_title": "Coordinate Plane (Quadrant I)", "strand": "Geometry & Measurement", "standard_codes": ["4.G.A.1"] },
+      { "position": 9, "module_slug": "4-mathematics-geometry-and-measurement-transformations-intro", "module_title": "Transformations (intro)", "strand": "Geometry & Measurement", "standard_codes": ["4.G.A.2"] },
+      { "position": 10, "module_slug": "4-mathematics-geometry-and-measurement-volume", "module_title": "Volume", "strand": "Geometry & Measurement", "standard_codes": ["4.MD.A.3"] },
+      { "position": 11, "module_slug": "4-mathematics-data-and-probability-statistics-interpreting-tables-charts", "module_title": "Interpreting Tables/Charts", "strand": "Data & Probability / Statistics", "standard_codes": ["4.MD.B.4"] },
+      { "position": 12, "module_slug": "4-mathematics-data-and-probability-statistics-bar-line-plots", "module_title": "Bar/Line Plots", "strand": "Data & Probability / Statistics", "standard_codes": ["4.MD.B.4"] },
+      { "position": 13, "module_slug": "4-mathematics-data-and-probability-statistics-mean-median-mode", "module_title": "Mean/Median/Mode", "strand": "Data & Probability / Statistics", "standard_codes": ["4.MD.B.4"] },
+      { "position": 14, "module_slug": "4-mathematics-data-and-probability-statistics-intro-probability-experimental", "module_title": "Intro Probability (experimental)", "strand": "Data & Probability / Statistics", "standard_codes": ["4.MD.B.4"] }
+    ]
+  },
+  {
+    "grade_band": "4",
+    "subject": "ela",
+    "sequence": [
+      { "position": 1, "module_slug": "4-english-language-arts-vocabulary-roots-prefixes-suffixes", "module_title": "Roots/Prefixes/Suffixes", "strand": "Vocabulary", "standard_codes": ["CCSS.ELA-LITERACY.L.4.4", "CCSS.ELA-LITERACY.L.4.4.b"] },
+      { "position": 2, "module_slug": "4-english-language-arts-reading-informational-biographies-pd", "module_title": "Biographies (PD)", "strand": "Reading Informational", "standard_codes": ["CCSS.ELA-LITERACY.RI.4.1", "CCSS.ELA-LITERACY.RI.4.3"] },
+      { "position": 3, "module_slug": "4-english-language-arts-reading-informational-nonfiction-articles-open-licensed", "module_title": "Nonfiction Articles (open-licensed)", "strand": "Reading Informational", "standard_codes": ["CCSS.ELA-LITERACY.RI.4.2", "CCSS.ELA-LITERACY.RI.4.4"] },
+      { "position": 4, "module_slug": "4-english-language-arts-reading-literature-short-stories-pd", "module_title": "Short Stories (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.4.1", "CCSS.ELA-LITERACY.RL.4.2"] },
+      { "position": 5, "module_slug": "4-english-language-arts-reading-literature-chapter-books-pd", "module_title": "Chapter Books (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.4.1", "CCSS.ELA-LITERACY.RL.4.3"] },
+      { "position": 6, "module_slug": "4-english-language-arts-reading-literature-myths-legends-pd", "module_title": "Myths/Legends (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.4.2", "CCSS.ELA-LITERACY.RL.4.6"] },
+      { "position": 7, "module_slug": "4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics", "module_title": "Paragraphs, Narratives, Expository Writing, Grammar Basics", "strand": "Writing & Grammar", "standard_codes": ["CCSS.ELA-LITERACY.W.4.3", "CCSS.ELA-LITERACY.L.4.1"] },
+      { "position": 8, "module_slug": "4-english-language-arts-speaking-and-listening-presentations-summaries", "module_title": "Presentations, Summaries", "strand": "Speaking & Listening", "standard_codes": ["CCSS.ELA-LITERACY.SL.4.4", "CCSS.ELA-LITERACY.SL.4.6"] }
+    ]
+  },
+  {
+    "grade_band": "4",
+    "subject": "science",
+    "sequence": [
+      { "position": 1, "module_slug": "4-science-physical-science-forces-balanced-unbalanced", "module_title": "Forces: Balanced & Unbalanced", "strand": "Physical Science", "standard_codes": ["4-PS2-1"] },
+      { "position": 2, "module_slug": "4-science-physical-science-energy-transfer", "module_title": "Energy Transfer", "strand": "Physical Science", "standard_codes": ["4-PS3-1"] },
+      { "position": 3, "module_slug": "4-science-physical-science-matter-particles", "module_title": "Matter & Particles", "strand": "Physical Science", "standard_codes": ["4-PS1-1"] },
+      { "position": 4, "module_slug": "4-science-physical-science-waves-intro", "module_title": "Waves (Intro)", "strand": "Physical Science", "standard_codes": ["4-PS4-1"] },
+      { "position": 5, "module_slug": "4-science-life-science-human-body-systems-intro", "module_title": "Human Body Systems (Intro)", "strand": "Life Science", "standard_codes": ["4-LS1-1"] },
+      { "position": 6, "module_slug": "4-science-life-science-heredity-intro", "module_title": "Heredity (Intro)", "strand": "Life Science", "standard_codes": ["4-LS3-1"] },
+      { "position": 7, "module_slug": "4-science-life-science-ecosystems-and-food-webs", "module_title": "Ecosystems & Food Webs", "strand": "Life Science", "standard_codes": ["4-LS1-1"] },
+      { "position": 8, "module_slug": "4-science-life-science-adaptations", "module_title": "Adaptations", "strand": "Life Science", "standard_codes": ["4-LS4-1"] },
+      { "position": 9, "module_slug": "4-science-earth-and-space-earth-systems-geosphere-hydrosphere", "module_title": "Earth Systems: Geosphere & Hydrosphere", "strand": "Earth & Space Science", "standard_codes": ["4-ESS2-1"] },
+      { "position": 10, "module_slug": "4-science-earth-and-space-weather-and-climate", "module_title": "Weather & Climate", "strand": "Earth & Space Science", "standard_codes": ["4-ESS3-2"] },
+      { "position": 11, "module_slug": "4-science-earth-and-space-natural-resources", "module_title": "Natural Resources", "strand": "Earth & Space Science", "standard_codes": ["4-ESS3-1"] },
+      { "position": 12, "module_slug": "4-science-earth-and-space-solar-system-relative-scale", "module_title": "Solar System & Relative Scale", "strand": "Earth & Space Science", "standard_codes": ["4-ESS1-1"] },
+      { "position": 13, "module_slug": "4-science-engineering-practices-criteria-and-constraints", "module_title": "Engineering: Criteria & Constraints", "strand": "Engineering Practices", "standard_codes": ["4-ETS1-1"] },
+      { "position": 14, "module_slug": "4-science-engineering-practices-prototypes-and-iteration", "module_title": "Engineering: Prototypes & Iteration", "strand": "Engineering Practices", "standard_codes": ["4-ETS1-2"] }
+    ]
+  },
+  {
+    "grade_band": "4",
+    "subject": "social_studies",
+    "sequence": [
+      { "position": 1, "module_slug": "4-social-studies-civics-and-government-citizenship-and-rights", "module_title": "Citizenship & Rights", "strand": "Civics & Government", "standard_codes": [] },
+      { "position": 2, "module_slug": "4-social-studies-civics-and-government-local-state-government", "module_title": "Local/State Government", "strand": "Civics & Government", "standard_codes": [] },
+      { "position": 3, "module_slug": "4-social-studies-economics-and-financial-literacy-markets-intro", "module_title": "Markets (intro)", "strand": "Economics & Financial Literacy", "standard_codes": [] },
+      { "position": 4, "module_slug": "4-social-studies-economics-and-financial-literacy-producers-consumers", "module_title": "Producers/Consumers", "strand": "Economics & Financial Literacy", "standard_codes": [] },
+      { "position": 5, "module_slug": "4-social-studies-us-history-exploration-to-civil-war", "module_title": "Exploration to Civil War", "strand": "US History", "standard_codes": [] },
+      { "position": 6, "module_slug": "4-social-studies-us-history-industrialization-and-immigration", "module_title": "Industrialization & Immigration", "strand": "US History", "standard_codes": [] },
+      { "position": 7, "module_slug": "4-social-studies-world-history-and-geography-ancient-civilizations", "module_title": "Ancient Civilizations", "strand": "World History & Geography", "standard_codes": [] },
+      { "position": 8, "module_slug": "4-social-studies-world-history-and-geography-world-regions-physical-human", "module_title": "World Regions (physical/human)", "strand": "World History & Geography", "standard_codes": [] }
+    ]
+  },
+  {
+    "grade_band": "5",
+    "subject": "math",
+    "sequence": [
+      { "position": 1, "module_slug": "5-mathematics-number-and-operations-place-value-thousands-millions", "module_title": "Place Value (thousands/millions)", "strand": "Number & Operations", "standard_codes": ["5.NBT.A.1"] },
+      { "position": 2, "module_slug": "5-mathematics-number-and-operations-rounding-and-estimation", "module_title": "Rounding & Estimation", "strand": "Number & Operations", "standard_codes": ["5.NBT.A.4"] },
+      { "position": 3, "module_slug": "5-mathematics-number-and-operations-multiplication-division", "module_title": "Multiplication/Division", "strand": "Number & Operations", "standard_codes": ["5.OA.A.1"] },
+      { "position": 4, "module_slug": "5-mathematics-number-and-operations-fractions-concepts-equivalence", "module_title": "Fractions (concepts, equivalence)", "strand": "Number & Operations", "standard_codes": ["5.NF.A.1"] },
+      { "position": 5, "module_slug": "5-mathematics-number-and-operations-decimals-intro", "module_title": "Decimals (intro)", "strand": "Number & Operations", "standard_codes": ["5.NBT.A.3"] },
+      { "position": 6, "module_slug": "5-mathematics-geometry-and-measurement-angles-and-lines", "module_title": "Angles & Lines", "strand": "Geometry & Measurement", "standard_codes": ["5.MD.C.3"] },
+      { "position": 7, "module_slug": "5-mathematics-geometry-and-measurement-area-perimeter", "module_title": "Area/Perimeter", "strand": "Geometry & Measurement", "standard_codes": ["5.MD.A.1"] },
+      { "position": 8, "module_slug": "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i", "module_title": "Coordinate Plane (Quadrant I)", "strand": "Geometry & Measurement", "standard_codes": ["5.G.A.1"] },
+      { "position": 9, "module_slug": "5-mathematics-geometry-and-measurement-transformations-intro", "module_title": "Transformations (intro)", "strand": "Geometry & Measurement", "standard_codes": ["5.G.A.2"] },
+      { "position": 10, "module_slug": "5-mathematics-geometry-and-measurement-volume", "module_title": "Volume", "strand": "Geometry & Measurement", "standard_codes": ["5.MD.C.3"] },
+      { "position": 11, "module_slug": "5-mathematics-data-and-probability-statistics-interpreting-tables-charts", "module_title": "Interpreting Tables/Charts", "strand": "Data & Probability / Statistics", "standard_codes": ["5.MD.B.2"] },
+      { "position": 12, "module_slug": "5-mathematics-data-and-probability-statistics-bar-line-plots", "module_title": "Bar/Line Plots", "strand": "Data & Probability / Statistics", "standard_codes": ["5.MD.B.2"] },
+      { "position": 13, "module_slug": "5-mathematics-data-and-probability-statistics-mean-median-mode", "module_title": "Mean/Median/Mode", "strand": "Data & Probability / Statistics", "standard_codes": ["5.MD.B.2"] },
+      { "position": 14, "module_slug": "5-mathematics-data-and-probability-statistics-intro-probability-experimental", "module_title": "Intro Probability (experimental)", "strand": "Data & Probability / Statistics", "standard_codes": ["5.MD.B.2"] }
+    ]
+  },
+  {
+    "grade_band": "5",
+    "subject": "ela",
+    "sequence": [
+      { "position": 1, "module_slug": "5-english-language-arts-vocabulary-roots-prefixes-suffixes", "module_title": "Roots/Prefixes/Suffixes", "strand": "Vocabulary", "standard_codes": ["CCSS.ELA-LITERACY.L.5.4", "CCSS.ELA-LITERACY.L.5.4.b"] },
+      { "position": 2, "module_slug": "5-english-language-arts-reading-informational-biographies-pd", "module_title": "Biographies (PD)", "strand": "Reading Informational", "standard_codes": ["CCSS.ELA-LITERACY.RI.5.1", "CCSS.ELA-LITERACY.RI.5.3"] },
+      { "position": 3, "module_slug": "5-english-language-arts-reading-informational-nonfiction-articles-open-licensed", "module_title": "Nonfiction Articles (open-licensed)", "strand": "Reading Informational", "standard_codes": ["CCSS.ELA-LITERACY.RI.5.2", "CCSS.ELA-LITERACY.RI.5.4"] },
+      { "position": 4, "module_slug": "5-english-language-arts-reading-literature-short-stories-pd", "module_title": "Short Stories (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.5.1", "CCSS.ELA-LITERACY.RL.5.2"] },
+      { "position": 5, "module_slug": "5-english-language-arts-reading-literature-chapter-books-pd", "module_title": "Chapter Books (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.5.1", "CCSS.ELA-LITERACY.RL.5.3"] },
+      { "position": 6, "module_slug": "5-english-language-arts-reading-literature-myths-legends-pd", "module_title": "Myths/Legends (PD)", "strand": "Reading Literature", "standard_codes": ["CCSS.ELA-LITERACY.RL.5.2", "CCSS.ELA-LITERACY.RL.5.6"] },
+      { "position": 7, "module_slug": "5-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics", "module_title": "Paragraphs, Narratives, Expository Writing, Grammar Basics", "strand": "Writing & Grammar", "standard_codes": ["CCSS.ELA-LITERACY.W.5.3", "CCSS.ELA-LITERACY.L.5.1"] },
+      { "position": 8, "module_slug": "5-english-language-arts-speaking-and-listening-presentations-summaries", "module_title": "Presentations, Summaries", "strand": "Speaking & Listening", "standard_codes": ["CCSS.ELA-LITERACY.SL.5.4", "CCSS.ELA-LITERACY.SL.5.6"] }
+    ]
+  },
+  {
+    "grade_band": "5",
+    "subject": "science",
+    "sequence": [
+      { "position": 1, "module_slug": "5-science-physical-science-forces-balanced-unbalanced", "module_title": "Forces: Balanced & Unbalanced", "strand": "Physical Science", "standard_codes": ["5-PS2-1"] },
+      { "position": 2, "module_slug": "5-science-physical-science-energy-transfer", "module_title": "Energy Transfer", "strand": "Physical Science", "standard_codes": ["5-PS3-1"] },
+      { "position": 3, "module_slug": "5-science-physical-science-matter-particles", "module_title": "Matter & Particles", "strand": "Physical Science", "standard_codes": ["5-PS1-1"] },
+      { "position": 4, "module_slug": "5-science-physical-science-waves-intro", "module_title": "Waves (Intro)", "strand": "Physical Science", "standard_codes": ["5-PS4-1"] },
+      { "position": 5, "module_slug": "5-science-life-science-human-body-systems-intro", "module_title": "Human Body Systems (Intro)", "strand": "Life Science", "standard_codes": ["5-LS1-1"] },
+      { "position": 6, "module_slug": "5-science-life-science-heredity-intro", "module_title": "Heredity (Intro)", "strand": "Life Science", "standard_codes": ["5-LS3-1"] },
+      { "position": 7, "module_slug": "5-science-life-science-ecosystems-and-food-webs", "module_title": "Ecosystems & Food Webs", "strand": "Life Science", "standard_codes": ["5-LS2-1"] },
+      { "position": 8, "module_slug": "5-science-life-science-adaptations", "module_title": "Adaptations", "strand": "Life Science", "standard_codes": ["5-LS4-1"] },
+      { "position": 9, "module_slug": "5-science-earth-and-space-earth-systems-geosphere-hydrosphere", "module_title": "Earth Systems: Geosphere & Hydrosphere", "strand": "Earth & Space Science", "standard_codes": ["5-ESS2-1"] },
+      { "position": 10, "module_slug": "5-science-earth-and-space-weather-and-climate", "module_title": "Weather & Climate", "strand": "Earth & Space Science", "standard_codes": ["5-ESS3-1"] },
+      { "position": 11, "module_slug": "5-science-earth-and-space-natural-resources", "module_title": "Natural Resources", "strand": "Earth & Space Science", "standard_codes": ["5-ESS3-1"] },
+      { "position": 12, "module_slug": "5-science-earth-and-space-solar-system-relative-scale", "module_title": "Solar System & Relative Scale", "strand": "Earth & Space Science", "standard_codes": ["5-ESS1-1"] },
+      { "position": 13, "module_slug": "5-science-engineering-practices-criteria-and-constraints", "module_title": "Engineering: Criteria & Constraints", "strand": "Engineering Practices", "standard_codes": ["5-ETS1-1"] },
+      { "position": 14, "module_slug": "5-science-engineering-practices-prototypes-and-iteration", "module_title": "Engineering: Prototypes & Iteration", "strand": "Engineering Practices", "standard_codes": ["5-ETS1-2"] }
+    ]
+  },
+  {
+    "grade_band": "5",
+    "subject": "social_studies",
+    "sequence": [
+      { "position": 1, "module_slug": "5-social-studies-civics-and-government-citizenship-and-rights", "module_title": "Citizenship & Rights", "strand": "Civics & Government", "standard_codes": [] },
+      { "position": 2, "module_slug": "5-social-studies-civics-and-government-local-state-government", "module_title": "Local/State Government", "strand": "Civics & Government", "standard_codes": [] },
+      { "position": 3, "module_slug": "5-social-studies-economics-and-financial-literacy-markets-intro", "module_title": "Markets (intro)", "strand": "Economics & Financial Literacy", "standard_codes": [] },
+      { "position": 4, "module_slug": "5-social-studies-economics-and-financial-literacy-producers-consumers", "module_title": "Producers/Consumers", "strand": "Economics & Financial Literacy", "standard_codes": [] },
+      { "position": 5, "module_slug": "5-social-studies-us-history-exploration-to-civil-war", "module_title": "Exploration to Civil War", "strand": "US History", "standard_codes": [] },
+      { "position": 6, "module_slug": "5-social-studies-us-history-industrialization-and-immigration", "module_title": "Industrialization & Immigration", "strand": "US History", "standard_codes": [] },
+      { "position": 7, "module_slug": "5-social-studies-world-history-and-geography-ancient-civilizations", "module_title": "Ancient Civilizations", "strand": "World History & Geography", "standard_codes": [] },
+      { "position": 8, "module_slug": "5-social-studies-world-history-and-geography-world-regions-physical-human", "module_title": "World Regions (physical/human)", "strand": "World History & Geography", "standard_codes": [] }
+    ]
+  },
+  {
     "grade_band": "6",
     "subject": "math",
     "sequence": [
