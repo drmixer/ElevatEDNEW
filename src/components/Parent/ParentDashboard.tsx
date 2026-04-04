@@ -2842,6 +2842,7 @@ const ParentDashboard: React.FC = () => {
                 focusAreas={currentChild.focusAreas}
                 strengths={currentChild.strengths}
                 adaptivePlanNotes={currentChild.adaptivePlanNotes}
+                adaptiveReplanSummary={currentChild.adaptiveReplanSummary}
                 currentFocusSubject={currentChild.learningPreferences?.focusSubject !== 'balanced' ? currentChild.learningPreferences?.focusSubject : null}
                 isExpanded={planDetailsOpen}
                 onToggle={() => setPlanDetailsOpen(!planDetailsOpen)}

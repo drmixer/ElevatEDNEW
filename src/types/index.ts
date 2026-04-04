@@ -528,6 +528,7 @@ export interface ParentChildSnapshot {
   diagnosticStatus?: 'not_started' | 'scheduled' | 'in_progress' | 'completed';
   diagnosticCompletedAt?: string | null;
   masteryConfidence?: number | null;
+  adaptiveReplanSummary?: AdaptiveReplanSummary | null;
   adaptivePlanNotes?: string[];
   skillGaps?: SkillGapInsight[];
   homeExtensions?: DashboardActivity[];
@@ -544,6 +545,27 @@ export interface ParentChildSnapshot {
     autoRepaired: number;
     flagged: number;
   };
+}
+
+export interface AdaptiveSubjectSignalSummary {
+  subject: Subject;
+  masteryTrend: 'support' | 'steady' | 'stretch';
+  supportPressure: number | null;
+  stretchReadiness: number | null;
+  recentAccuracy: number | null;
+  masteryPct: number | null;
+  evidenceCount: number | null;
+  lessonSignals: number | null;
+  weakStandards: string[];
+}
+
+export interface AdaptiveReplanSummary {
+  lastReplannedAt: string;
+  triggerSubject: Subject | null;
+  triggerEventType: string | null;
+  rationale: string;
+  highlights: string[];
+  subjectSignals: AdaptiveSubjectSignalSummary[];
 }
 
 export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';

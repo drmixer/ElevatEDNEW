@@ -9,6 +9,7 @@ Related docs:
 - [adaptive-phase1-implementation-plan.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-phase1-implementation-plan.md)
 - [student-experience-improvements.md](/Users/drmixer/code/ElevatEDNEW/docs/student-experience-improvements.md)
 - [family-ready.md](/Users/drmixer/code/ElevatEDNEW/docs/family-ready.md)
+- [adaptive-profile-blend-signal-reference.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-profile-blend-signal-reference.md)
 
 ## 1. Product goal
 

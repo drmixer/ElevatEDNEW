@@ -10,6 +10,8 @@ import {
     Brain,
     HelpCircle,
 } from 'lucide-react';
+import type { AdaptiveReplanSummary } from '../../types';
+import { formatSubjectLabel } from '../../lib/subjects';
 
 interface PathExplanationCardProps {
     childName: string;
@@ -18,6 +20,7 @@ interface PathExplanationCardProps {
     focusAreas?: string[];
     strengths?: string[];
     adaptivePlanNotes?: string[];
+    adaptiveReplanSummary?: AdaptiveReplanSummary | null;
     currentFocusSubject?: string | null;
     isExpanded?: boolean;
     onToggle?: () => void;
@@ -40,10 +43,32 @@ const PathExplanationCard: React.FC<PathExplanationCardProps> = ({
     focusAreas = [],
     strengths = [],
     adaptivePlanNotes = [],
+    adaptiveReplanSummary = null,
     currentFocusSubject,
     isExpanded = false,
     onToggle,
 }) => {
+    const formatAdaptiveTimestamp = (value: string) =>
+        new Intl.DateTimeFormat(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+        }).format(new Date(value));
+
+    const formatAdaptiveEvent = (value: string | null | undefined) => {
+        if (!value) return 'Activity';
+        if (value === 'lesson_completed') return 'Lesson completion';
+        if (value === 'practice_answered') return 'Practice results';
+        if (value === 'quiz_submitted') return 'Checkpoint results';
+        return value.replace(/_/g, ' ');
+    };
+
+    const formatRatioPercent = (value: number | null | undefined) => {
+        if (typeof value !== 'number' || !Number.isFinite(value)) return '0%';
+        return `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%`;
+    };
+
     // Generate the primary "why" explanation
     const getWhyExplanation = (): { title: string; detail: string } => {
         const firstName = childName.split(' ')[0];
@@ -145,6 +170,65 @@ const PathExplanationCard: React.FC<PathExplanationCardProps> = ({
                         <div className="bg-brand-light-blue/20 rounded-xl p-4">
                             <p className="text-sm text-gray-700">{whyExplanation.detail}</p>
                         </div>
+
+                        {adaptiveReplanSummary && (
+                            <div className="rounded-xl border border-brand-blue/20 bg-brand-light-blue/15 p-4 space-y-3">
+                                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                        <h4 className="text-sm font-semibold text-gray-900">
+                                            Latest route shift
+                                        </h4>
+                                        <p className="text-xs text-gray-600 mt-1">
+                                            {adaptiveReplanSummary.rationale}
+                                        </p>
+                                    </div>
+                                    <span className="inline-flex rounded-full border border-brand-blue/20 bg-white px-2 py-1 text-[11px] font-medium text-brand-blue">
+                                        {formatAdaptiveTimestamp(adaptiveReplanSummary.lastReplannedAt)}
+                                    </span>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="inline-flex rounded-full bg-white px-2 py-1 text-[11px] text-gray-600 border border-slate-200">
+                                        Trigger: {formatAdaptiveEvent(adaptiveReplanSummary.triggerEventType)}
+                                    </span>
+                                    {adaptiveReplanSummary.triggerSubject && (
+                                        <span className="inline-flex rounded-full bg-white px-2 py-1 text-[11px] text-gray-600 border border-slate-200">
+                                            Subject: {formatSubjectLabel(adaptiveReplanSummary.triggerSubject)}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    {adaptiveReplanSummary.subjectSignals.slice(0, 2).map((signal) => (
+                                        <div
+                                            key={signal.subject}
+                                            className="rounded-xl border border-white/70 bg-white/80 p-3"
+                                        >
+                                            <div className="flex items-center justify-between gap-3">
+                                                <p className="text-sm font-semibold text-gray-900">
+                                                    {formatSubjectLabel(signal.subject)}
+                                                </p>
+                                                <span className="text-[11px] uppercase tracking-wide text-brand-blue">
+                                                    {signal.masteryTrend}
+                                                </span>
+                                            </div>
+                                            <div className="mt-2 space-y-1 text-xs text-gray-600">
+                                                <p>
+                                                    Support pressure: {formatRatioPercent(signal.supportPressure)}
+                                                </p>
+                                                <p>
+                                                    Stretch readiness: {formatRatioPercent(signal.stretchReadiness)}
+                                                </p>
+                                                {signal.recentAccuracy != null && (
+                                                    <p>Recent accuracy: {Math.round(signal.recentAccuracy)}%</p>
+                                                )}
+                                                {signal.masteryPct != null && (
+                                                    <p>Mastery snapshot: {Math.round(signal.masteryPct)}%</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Diagnostic Status */}
                         <div className="flex items-start gap-3">

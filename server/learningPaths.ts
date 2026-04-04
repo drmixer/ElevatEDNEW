@@ -119,6 +119,13 @@ type AdaptiveAttempt = {
   accuracy: number | null;
 };
 
+type SubjectMixSummary = {
+  counts: Array<{ subject: string; count: number }>;
+  label: string;
+  primarySubject: string | null;
+  primaryCoreSubject: string | null;
+};
+
 type SubjectMasteryAggregate = {
   subject: string | null;
   mastery: number | null;
@@ -262,11 +269,17 @@ const splitName = (fullName?: string | null): { first: string; last: string | nu
 const loadStudentProfile = async (
   supabase: SupabaseClient,
   studentId: string,
-): Promise<{ grade_level: number | null; grade_band: string | null; age_years: number | null; preferences: StudentPreferences }> => {
+): Promise<{
+  grade_level: number | null;
+  grade_band: string | null;
+  age_years: number | null;
+  learning_path: unknown;
+  preferences: StudentPreferences;
+}> => {
   const [profile, preferences] = await Promise.all([
     supabase
       .from('student_profiles')
-      .select('grade_level, grade_band, age_years')
+      .select('grade_level, grade_band, age_years, learning_path')
       .eq('id', studentId)
       .maybeSingle(),
     getStudentPreferences(supabase, studentId),
@@ -280,6 +293,7 @@ const loadStudentProfile = async (
     grade_level: (profile.data?.grade_level as number | null | undefined) ?? null,
     grade_band: (profile.data?.grade_band as string | null | undefined) ?? null,
     age_years: (profile.data?.age_years as number | null | undefined) ?? null,
+    learning_path: profile.data?.learning_path ?? null,
     preferences,
   };
 };
@@ -2132,6 +2146,42 @@ const interleaveProfileLearningPath = (params: {
   return result.slice(0, params.limit);
 };
 
+const summarizeProfileLearningPathMix = (items: ProfileLearningPathItem[]): SubjectMixSummary => {
+  const counts = new Map<string, number>();
+  items.forEach((item) => {
+    const subject = normalizeSubjectKey(item.subject);
+    if (!subject) return;
+    counts.set(subject, (counts.get(subject) ?? 0) + 1);
+  });
+
+  const sorted = Array.from(counts.entries())
+    .map(([subject, count]) => ({ subject, count }))
+    .sort((left, right) => right.count - left.count || left.subject.localeCompare(right.subject));
+  const primarySubject = sorted[0]?.subject ?? null;
+  const primaryCoreSubject =
+    sorted.find((entry) => CORE_PROFILE_SUBJECTS.includes(entry.subject as (typeof CORE_PROFILE_SUBJECTS)[number]))
+      ?.subject ?? null;
+
+  return {
+    counts: sorted,
+    label: sorted.length ? sorted.map((entry) => `${entry.subject}×${entry.count}`).join(', ') : 'empty',
+    primarySubject,
+    primaryCoreSubject,
+  };
+};
+
+const compareSignalPriority = (
+  left: SubjectSignalSnapshot,
+  right: SubjectSignalSnapshot,
+): number => {
+  const leftPriority = Math.max(left.supportPressure, left.stretchReadiness);
+  const rightPriority = Math.max(right.supportPressure, right.stretchReadiness);
+  if (rightPriority !== leftPriority) {
+    return rightPriority - leftPriority;
+  }
+  return left.subject.localeCompare(right.subject);
+};
+
 const replanBlendedLearningPath = async (
   supabase: SupabaseClient,
   studentId: string,
@@ -2212,6 +2262,8 @@ const replanBlendedLearningPath = async (
     }),
   );
   const signalMap = new Map(subjectSignals.map((signal) => [signal.subject, signal] as const));
+  const previousLearningPath = parseProfileLearningPath(profile.learning_path ?? null);
+  const previousMix = summarizeProfileLearningPathMix(previousLearningPath);
 
   const triggerSubject = resolveEventSubject(event.payload ?? {}, moduleSubjectLookup);
   const triggerSignal = triggerSubject ? signalMap.get(triggerSubject) ?? null : null;
@@ -2328,6 +2380,60 @@ const replanBlendedLearningPath = async (
       await supabase.from('student_subject_state').update({ metadata: nextMetadata }).eq('id', state.id);
     }),
   );
+
+  const nextMix = summarizeProfileLearningPathMix(learningPath);
+  const rankedSignals = subjectSignals.slice().sort(compareSignalPriority);
+  const supportSignal =
+    rankedSignals.find((signal) => signal.masteryTrend === 'support') ?? rankedSignals[0] ?? null;
+  const stretchSignal =
+    rankedSignals.find((signal) => signal.masteryTrend === 'stretch') ??
+    rankedSignals.find((signal) => signal.subject !== supportSignal?.subject) ??
+    null;
+  const timeSincePreviousReplanMs =
+    triggerSignal?.lastReplannedAt != null
+      ? Math.max(0, Date.now() - new Date(triggerSignal.lastReplannedAt).getTime())
+      : null;
+  const triggerLabel = `${event.eventType}:${triggerSubject ?? 'unknown'}`;
+  const mixShiftLabel = `${previousMix.label} -> ${nextMix.label}`;
+  const oscillationRisk =
+    timeSincePreviousReplanMs != null &&
+    timeSincePreviousReplanMs < 60 * 60 * 1000 &&
+    previousMix.primaryCoreSubject != null &&
+    nextMix.primaryCoreSubject != null &&
+    previousMix.primaryCoreSubject !== nextMix.primaryCoreSubject;
+
+  recordOpsEvent({
+    type: 'adaptive_replan',
+    label: triggerLabel,
+    reason:
+      event.eventType === 'lesson_completed'
+        ? 'lesson_completion'
+        : stableDirection != null
+          ? `stable_${stableDirection}`
+          : 'adaptive_signal',
+    metadata: {
+      studentId,
+      triggerLabel,
+      triggerEventType: event.eventType,
+      triggerSubject,
+      stableDirection,
+      previousMixLabel: previousMix.label,
+      nextMixLabel: nextMix.label,
+      mixShiftLabel,
+      timeSincePreviousReplanMs,
+      primarySupportSubject: supportSignal?.subject ?? null,
+      primaryStretchSubject: stretchSignal?.subject ?? null,
+      supportPressure: supportSignal?.supportPressure ?? null,
+      stretchReadiness: stretchSignal?.stretchReadiness ?? null,
+      evidenceCount: supportSignal?.evidenceCount ?? null,
+      lessonSignals: supportSignal?.lessonSignals ?? null,
+      oscillationRisk,
+      oscillationLabel:
+        oscillationRisk && previousMix.primaryCoreSubject && nextMix.primaryCoreSubject
+          ? `${previousMix.primaryCoreSubject} -> ${nextMix.primaryCoreSubject}`
+          : null,
+    },
+  });
 };
 
 const updateAdaptiveState = (

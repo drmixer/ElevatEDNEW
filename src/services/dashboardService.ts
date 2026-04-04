@@ -1,6 +1,8 @@
 import supabase from '../lib/supabaseClient';
 import { describeSuggestionReason } from './adaptiveService';
 import type {
+  AdaptiveReplanSummary,
+  AdaptiveSubjectSignalSummary,
   Admin,
   AdminAlert,
   AdminDashboardData,
@@ -114,6 +116,13 @@ type XpEventRow = {
 type AssessmentAttemptRow = {
   status: 'in_progress' | 'completed' | 'abandoned' | null;
   completed_at: string | null;
+};
+
+type StudentSubjectStateRow = {
+  student_id: string;
+  subject: string | null;
+  metadata: Record<string, unknown> | null;
+  updated_at?: string | null;
 };
 
 type AnalyticsCheckpointEventRow = {
@@ -258,6 +267,193 @@ const formatIsoDate = (value: string | Date): string => {
     return value.toISOString();
   }
   return new Date(value).toISOString();
+};
+
+const asFiniteNumber = (value: unknown): number | null => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return null;
+};
+
+const asStringArray = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return [];
+  return value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0);
+};
+
+const ADAPTIVE_EVENT_LABELS: Record<string, string> = {
+  lesson_completed: 'lesson completion',
+  practice_answered: 'practice results',
+  quiz_submitted: 'checkpoint results',
+};
+
+const formatAdaptiveEventLabel = (eventType: string | null | undefined): string => {
+  if (!eventType) return 'activity';
+  const normalized = eventType.trim().toLowerCase();
+  return ADAPTIVE_EVENT_LABELS[normalized] ?? normalized.replace(/_/g, ' ');
+};
+
+const formatRatioPercent = (value: number | null | undefined): string => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return '0%';
+  return `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%`;
+};
+
+const formatAdaptiveEvidenceSummary = (signal: AdaptiveSubjectSignalSummary): string | null => {
+  const parts: string[] = [];
+  if ((signal.lessonSignals ?? 0) > 0) {
+    parts.push(`${signal.lessonSignals} lesson signal${signal.lessonSignals === 1 ? '' : 's'}`);
+  }
+  if ((signal.evidenceCount ?? 0) > 0) {
+    parts.push(`${signal.evidenceCount} scored signal${signal.evidenceCount === 1 ? '' : 's'}`);
+  }
+  if (signal.weakStandards.length > 0) {
+    parts.push(`${signal.weakStandards.length} weak standard${signal.weakStandards.length === 1 ? '' : 's'}`);
+  }
+  return parts.length ? parts.join(', ') : null;
+};
+
+const compareAdaptiveSignals = (
+  left: AdaptiveSubjectSignalSummary,
+  right: AdaptiveSubjectSignalSummary,
+): number => {
+  const leftCoreRank = left.subject === 'math' ? 0 : left.subject === 'english' ? 1 : 2;
+  const rightCoreRank = right.subject === 'math' ? 0 : right.subject === 'english' ? 1 : 2;
+  if (leftCoreRank !== rightCoreRank) {
+    return leftCoreRank - rightCoreRank;
+  }
+  const leftPriority = Math.max(left.supportPressure ?? 0, left.stretchReadiness ?? 0);
+  const rightPriority = Math.max(right.supportPressure ?? 0, right.stretchReadiness ?? 0);
+  if (rightPriority !== leftPriority) {
+    return rightPriority - leftPriority;
+  }
+  return formatSubjectLabel(left.subject).localeCompare(formatSubjectLabel(right.subject));
+};
+
+export const buildAdaptiveReplanSummary = (
+  rows: StudentSubjectStateRow[],
+): AdaptiveReplanSummary | null => {
+  const signals = rows
+    .map((row) => {
+      const subject = normalizeSubject(row.subject);
+      if (!subject) return null;
+      const metadata =
+        row.metadata && typeof row.metadata === 'object' ? row.metadata : null;
+      const rawSignal =
+        metadata && typeof metadata.profile_blend_signal === 'object'
+          ? (metadata.profile_blend_signal as Record<string, unknown>)
+          : null;
+      if (!rawSignal) return null;
+      const lastReplannedAt =
+        typeof rawSignal.last_replanned_at === 'string' ? rawSignal.last_replanned_at : null;
+      if (!lastReplannedAt) return null;
+
+      return {
+        lastReplannedAt,
+        triggerSubject: normalizeSubject(
+          typeof rawSignal.trigger_subject === 'string' ? rawSignal.trigger_subject : null,
+        ),
+        triggerEventType:
+          typeof rawSignal.trigger_event_type === 'string' ? rawSignal.trigger_event_type : null,
+        signal: {
+          subject,
+          masteryTrend:
+            rawSignal.mastery_trend === 'support' ||
+            rawSignal.mastery_trend === 'stretch' ||
+            rawSignal.mastery_trend === 'steady'
+              ? rawSignal.mastery_trend
+              : 'steady',
+          supportPressure: asFiniteNumber(rawSignal.support_pressure),
+          stretchReadiness: asFiniteNumber(rawSignal.stretch_readiness),
+          recentAccuracy: asFiniteNumber(rawSignal.recent_accuracy),
+          masteryPct: asFiniteNumber(rawSignal.mastery_pct),
+          evidenceCount: asFiniteNumber(rawSignal.evidence_count),
+          lessonSignals: asFiniteNumber(rawSignal.lesson_signals),
+          weakStandards: asStringArray(rawSignal.weak_standards),
+        } satisfies AdaptiveSubjectSignalSummary,
+      };
+    })
+    .filter(
+      (
+        entry,
+      ): entry is {
+        lastReplannedAt: string;
+        triggerSubject: Subject | null;
+        triggerEventType: string | null;
+        signal: AdaptiveSubjectSignalSummary;
+      } => Boolean(entry),
+    );
+
+  if (!signals.length) return null;
+
+  const datedSignals = signals
+    .map((entry) => ({
+      ...entry,
+      lastReplannedMs: Date.parse(entry.lastReplannedAt),
+    }))
+    .filter((entry) => Number.isFinite(entry.lastReplannedMs));
+
+  if (!datedSignals.length) return null;
+
+  const latestMs = Math.max(...datedSignals.map((entry) => entry.lastReplannedMs));
+  const latestSignals = datedSignals
+    .filter((entry) => entry.lastReplannedMs === latestMs)
+    .sort((left, right) => compareAdaptiveSignals(left.signal, right.signal));
+
+  if (!latestSignals.length) return null;
+
+  const subjectSignals = latestSignals.map((entry) => entry.signal);
+  const supportSignal =
+    subjectSignals.find((signal) => signal.masteryTrend === 'support') ?? subjectSignals[0];
+  const stretchSignal =
+    subjectSignals.find((signal) => signal.masteryTrend === 'stretch') ??
+    subjectSignals.find((signal) => signal.subject !== supportSignal.subject) ??
+    null;
+  const trigger =
+    latestSignals.find((entry) => entry.triggerSubject || entry.triggerEventType) ?? latestSignals[0];
+
+  const supportEvidence = formatAdaptiveEvidenceSummary(supportSignal);
+  const supportIntro =
+    supportSignal.masteryTrend === 'support'
+      ? `${formatSubjectLabel(supportSignal.subject)} moved into extra support`
+      : `${formatSubjectLabel(supportSignal.subject)} is setting the current blend`;
+  const rationaleParts = [
+    supportIntro,
+    supportEvidence ? `after ${supportEvidence}` : null,
+    `with ${formatRatioPercent(supportSignal.supportPressure)} support pressure and ${formatRatioPercent(
+      supportSignal.stretchReadiness,
+    )} stretch readiness.`,
+  ].filter(Boolean);
+
+  const highlights = [
+    supportEvidence
+      ? `${formatSubjectLabel(supportSignal.subject)} is carrying ${formatRatioPercent(
+          supportSignal.supportPressure,
+        )} support pressure from ${supportEvidence}.`
+      : `${formatSubjectLabel(supportSignal.subject)} is carrying ${formatRatioPercent(
+          supportSignal.supportPressure,
+        )} support pressure right now.`,
+    stretchSignal
+      ? `${formatSubjectLabel(stretchSignal.subject)} is still at ${formatRatioPercent(
+          stretchSignal.stretchReadiness,
+        )} stretch readiness, so the path can keep lighter reinforcement there.`
+      : null,
+    trigger.triggerEventType || trigger.triggerSubject
+      ? `Latest replan was triggered by ${formatAdaptiveEventLabel(trigger.triggerEventType)}${
+          trigger.triggerSubject ? ` in ${formatSubjectLabel(trigger.triggerSubject)}` : ''
+        }.`
+      : null,
+  ].filter((entry): entry is string => Boolean(entry));
+
+  return {
+    lastReplannedAt: latestSignals[0].lastReplannedAt,
+    triggerSubject: trigger.triggerSubject,
+    triggerEventType: trigger.triggerEventType,
+    rationale: rationaleParts.join(' '),
+    highlights,
+    subjectSignals,
+  };
 };
 
 const ensureLearningPreferences = (student: Student): LearningPreferences => {
@@ -773,6 +969,42 @@ const fallbackParentChildren = (parentName: string): ParentChildSnapshot[] => {
       },
     goalProgress: 78,
     cohortComparison: 64,
+    adaptiveReplanSummary: {
+      lastReplannedAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+      triggerSubject: 'math',
+      triggerEventType: 'lesson_completed',
+      rationale:
+        'Math moved into extra support after 3 scored signals and 1 lesson signal with 78% support pressure and 24% stretch readiness.',
+      highlights: [
+        'Math is carrying 78% support pressure from 3 scored signals and 1 lesson signal.',
+        'English is still at 71% stretch readiness, so the path can keep lighter reinforcement there.',
+        'Latest replan was triggered by lesson completion in Math.',
+      ],
+      subjectSignals: [
+        {
+          subject: 'math',
+          masteryTrend: 'support',
+          supportPressure: 0.78,
+          stretchReadiness: 0.24,
+          recentAccuracy: 62,
+          masteryPct: 64,
+          evidenceCount: 3,
+          lessonSignals: 1,
+          weakStandards: ['ratio_reasoning'],
+        },
+        {
+          subject: 'english',
+          masteryTrend: 'stretch',
+          supportPressure: 0.22,
+          stretchReadiness: 0.71,
+          recentAccuracy: 87,
+          masteryPct: 82,
+          evidenceCount: 3,
+          lessonSignals: 1,
+          weakStandards: [],
+        },
+      ],
+    },
     adaptivePlanNotes: [
       'Dialed up Geometry practice this week based on recent misconceptions.',
       'Keeping English steady while we rebuild Science confidence.',
@@ -868,6 +1100,7 @@ const mapParentDashboardChildRow = (row: ParentDashboardChildRow): ParentChildSn
     },
     goalProgress: undefined,
     cohortComparison: undefined,
+    adaptiveReplanSummary: null,
     adaptivePlanNotes: [],
     learningPreferences: defaultLearningPreferences,
     diagnosticStatus: 'not_started',
@@ -2096,6 +2329,12 @@ const aggregateParentActivity = (
 };
 
 const buildAdaptivePlanNotes = (child: ParentChildSnapshot): string[] => {
+  if (child.adaptiveReplanSummary) {
+    return [child.adaptiveReplanSummary.rationale, ...child.adaptiveReplanSummary.highlights]
+      .filter((note, index, notes) => notes.indexOf(note) === index)
+      .slice(0, 4);
+  }
+
   const notes: string[] = [];
 
   const sortedByMastery = child.masteryBySubject.slice().sort((a, b) => a.mastery - b.mastery);
@@ -2990,16 +3229,17 @@ export const fetchParentDashboardData = async (
     const [
       { data: masteryRows, error: masteryError },
       { data: xpRows, error: xpError },
-  { data: activityRows, error: activityError },
-  { data: skillRows, error: skillError },
-  { data: subjectRows, error: subjectError },
-  { data: progressRows, error: progressError },
-  { data: recentLessonRows, error: recentLessonsError },
-  { data: assessmentsRows, error: assessmentsError },
-  { data: feedbackRows, error: feedbackError },
-  { data: weeklyReportRow, error: weeklyError },
-  { data: learningPrefRows, error: learningPrefError },
-] = await Promise.all([
+      { data: activityRows, error: activityError },
+      { data: skillRows, error: skillError },
+      { data: subjectRows, error: subjectError },
+      { data: progressRows, error: progressError },
+      { data: recentLessonRows, error: recentLessonsError },
+      { data: assessmentsRows, error: assessmentsError },
+      { data: feedbackRows, error: feedbackError },
+      { data: weeklyReportRow, error: weeklyError },
+      { data: learningPrefRows, error: learningPrefError },
+      { data: subjectStateRows, error: subjectStateError },
+    ] = await Promise.all([
       childIds.length
         ? supabase
             .from('student_mastery')
@@ -3021,51 +3261,54 @@ export const fetchParentDashboardData = async (
             .in('student_id', childIds)
             .gte('activity_date', new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString())
         : Promise.resolve({ data: [] as StudentDailyActivityRow[], error: null }),
-  supabase.from('skills').select('id, subject_id'),
-  supabase.from('subjects').select('id, name'),
-  childIds.length
-    ? supabase
-        .from('student_progress')
-        .select('student_id, status')
-        .in('student_id', childIds)
-    : Promise.resolve({
-        data: [] as Array<{ student_id: string; status: 'not_started' | 'in_progress' | 'completed' }>,
-        error: null,
-      }),
-  childIds.length
-    ? supabase
-        .from('student_progress')
-        .select(
-          `student_id, status, last_activity_at,
-           lessons!inner(modules(subject))`,
-        )
-        .in('student_id', childIds)
-        .not('last_activity_at', 'is', null)
-        .gte('last_activity_at', new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString())
-    : Promise.resolve({ data: [] as StudentProgressSubjectRow[], error: null }),
-  childIds.length
-    ? supabase
-        .from('student_assessment_attempts')
-        .select('student_id, completed_at, status')
-        .in('student_id', childIds)
-        .order('completed_at', { ascending: false })
-    : Promise.resolve({
-        data: [] as Array<{ student_id: string; completed_at: string | null; status: string | null }>,
-        error: null,
-      }),
-  childIds.length
-    ? supabase
-        .from('parent_coaching_feedback')
-        .select('student_id, suggestion_id, reason')
-        .in('student_id', childIds)
+      supabase.from('skills').select('id, subject_id'),
+      supabase.from('subjects').select('id, name'),
+      childIds.length
+        ? supabase
+            .from('student_progress')
+            .select('student_id, status')
+            .in('student_id', childIds)
+        : Promise.resolve({
+            data: [] as Array<{ student_id: string; status: 'not_started' | 'in_progress' | 'completed' }>,
+            error: null,
+          }),
+      childIds.length
+        ? supabase
+            .from('student_progress')
+            .select(
+              `student_id, status, last_activity_at,
+               lessons!inner(modules(subject))`,
+            )
+            .in('student_id', childIds)
+            .not('last_activity_at', 'is', null)
+            .gte('last_activity_at', new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString())
+        : Promise.resolve({ data: [] as StudentProgressSubjectRow[], error: null }),
+      childIds.length
+        ? supabase
+            .from('student_assessment_attempts')
+            .select('student_id, completed_at, status')
+            .in('student_id', childIds)
+            .order('completed_at', { ascending: false })
+        : Promise.resolve({
+            data: [] as Array<{ student_id: string; completed_at: string | null; status: string | null }>,
+            error: null,
+          }),
+      childIds.length
+        ? supabase
+            .from('parent_coaching_feedback')
+            .select('student_id, suggestion_id, reason')
+            .in('student_id', childIds)
+            .eq('parent_id', parent.id)
+        : Promise.resolve({
+            data: [] as Array<{ student_id: string; suggestion_id: string; reason: string }>,
+            error: null,
+          }),
+      supabase
+        .from('parent_weekly_reports')
+        .select('*')
         .eq('parent_id', parent.id)
-    : Promise.resolve({ data: [] as Array<{ student_id: string; suggestion_id: string; reason: string }>, error: null }),
-  supabase
-    .from('parent_weekly_reports')
-    .select('*')
-    .eq('parent_id', parent.id)
-    .order('week_start', { ascending: false })
-    .limit(1)
+        .order('week_start', { ascending: false })
+        .limit(1)
         .maybeSingle(),
       childIds.length
         ? supabase
@@ -3073,6 +3316,12 @@ export const fetchParentDashboardData = async (
             .select('id, learning_style')
             .in('id', childIds)
         : Promise.resolve({ data: [] as Array<{ id: string; learning_style: unknown }>, error: null }),
+      childIds.length
+        ? supabase
+            .from('student_subject_state')
+            .select('student_id, subject, metadata, updated_at')
+            .in('student_id', childIds)
+        : Promise.resolve({ data: [] as StudentSubjectStateRow[], error: null }),
     ]);
 
     if (masteryError) console.error('[Dashboard] Parent mastery fetch failed', masteryError);
@@ -3086,6 +3335,7 @@ export const fetchParentDashboardData = async (
     if (feedbackError) console.error('[Dashboard] Parent coaching feedback fetch failed', feedbackError);
     if (weeklyError) console.error('[Dashboard] Parent weekly report fetch failed', weeklyError);
     if (learningPrefError) console.error('[Dashboard] Parent learning prefs fetch failed', learningPrefError);
+    if (subjectStateError) console.error('[Dashboard] Parent adaptive signal fetch failed', subjectStateError);
 
     const skillMap = (skillRows as SkillRow[]) ?? [];
     const subjectMap = (subjectRows as SubjectRow[]) ?? [];
@@ -3197,6 +3447,13 @@ export const fetchParentDashboardData = async (
     const learningPreferencesByStudent = new Map<string, LearningPreferences>();
     (learningPrefRows as { id: string; learning_style: unknown }[]).forEach((row) => {
       learningPreferencesByStudent.set(row.id, castLearningPreferences(row.learning_style));
+    });
+
+    const adaptiveSignalsByStudent = new Map<string, StudentSubjectStateRow[]>();
+    (subjectStateRows as StudentSubjectStateRow[]).forEach((row) => {
+      const list = adaptiveSignalsByStudent.get(row.student_id) ?? [];
+      list.push(row);
+      adaptiveSignalsByStudent.set(row.student_id, list);
     });
 
     const xpByChild = new Map<string, XpEventRow[]>();
@@ -3328,6 +3585,9 @@ export const fetchParentDashboardData = async (
           avgAccuracyDelta = Math.round((avgAccuracyWeek - avgAccuracyPriorWeek) * 10) / 10;
         }
       }
+      const adaptiveReplanSummary = buildAdaptiveReplanSummary(
+        adaptiveSignalsByStudent.get(child.id) ?? [],
+      );
       const snapshot: ParentChildSnapshot = {
         ...child,
         masteryBySubject: mastery,
@@ -3355,6 +3615,7 @@ export const fetchParentDashboardData = async (
         },
         diagnosticStatus: diagnosticStatus ?? 'not_started',
         diagnosticCompletedAt,
+        adaptiveReplanSummary,
       };
 
       snapshot.coachingSuggestions = buildCoachingSuggestions(snapshot, {

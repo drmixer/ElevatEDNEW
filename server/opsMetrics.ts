@@ -5,6 +5,7 @@ type OpsEventType =
   | 'tutor_plan_limit'
   | 'tutor_latency'
   | 'path_progress'
+  | 'adaptive_replan'
   | 'xp_rate'
   | 'api_failure'
   | 'api_slow'
@@ -57,6 +58,7 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     tutor_plan_limit: 0,
     tutor_latency: 0,
     path_progress: 0,
+    adaptive_replan: 0,
     xp_rate: 0,
     api_failure: 0,
     api_slow: 0,
@@ -68,6 +70,10 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
   const planLimitReasons = new Map<string, number>();
   const apiRoutes = new Map<string, number>();
   const pathLabels = new Map<string, number>();
+  const adaptiveReplanTriggers = new Map<string, number>();
+  const adaptiveReplanSubjects = new Map<string, number>();
+  const adaptiveReplanMixShifts = new Map<string, number>();
+  const adaptiveOscillationRisks = new Map<string, number>();
   const xpSources = new Map<string, number>();
   const placementAssessments = new Map<string, number>();
   const placementInvalidReasons = new Map<string, number>();
@@ -86,6 +92,40 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     }
     if (event.type === 'path_progress' && event.label) {
       pathLabels.set(event.label, (pathLabels.get(event.label) ?? 0) + 1);
+    }
+    if (event.type === 'adaptive_replan') {
+      const triggerLabel =
+        typeof event.metadata?.triggerLabel === 'string' && event.metadata.triggerLabel.trim().length > 0
+          ? event.metadata.triggerLabel
+          : event.label ?? 'unknown';
+      adaptiveReplanTriggers.set(triggerLabel, (adaptiveReplanTriggers.get(triggerLabel) ?? 0) + 1);
+
+      const supportSubject =
+        typeof event.metadata?.primarySupportSubject === 'string' && event.metadata.primarySupportSubject.trim().length > 0
+          ? event.metadata.primarySupportSubject
+          : null;
+      if (supportSubject) {
+        adaptiveReplanSubjects.set(supportSubject, (adaptiveReplanSubjects.get(supportSubject) ?? 0) + 1);
+      }
+
+      const mixShift =
+        typeof event.metadata?.mixShiftLabel === 'string' && event.metadata.mixShiftLabel.trim().length > 0
+          ? event.metadata.mixShiftLabel
+          : null;
+      if (mixShift) {
+        adaptiveReplanMixShifts.set(mixShift, (adaptiveReplanMixShifts.get(mixShift) ?? 0) + 1);
+      }
+
+      if (event.metadata?.oscillationRisk === true) {
+        const oscillationLabel =
+          typeof event.metadata?.oscillationLabel === 'string' && event.metadata.oscillationLabel.trim().length > 0
+            ? event.metadata.oscillationLabel
+            : supportSubject ?? triggerLabel;
+        adaptiveOscillationRisks.set(
+          oscillationLabel,
+          (adaptiveOscillationRisks.get(oscillationLabel) ?? 0) + 1,
+        );
+      }
     }
     if (event.type === 'xp_rate' && event.label) {
       xpSources.set(event.label, (xpSources.get(event.label) ?? 0) + 1);
@@ -112,9 +152,17 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     topPlanLimitReasons: topFromMap(planLimitReasons),
     apiFailuresByRoute: topFromMap(apiRoutes),
     pathEventsByLabel: topFromMap(pathLabels),
+    adaptiveReplansByTrigger: topFromMap(adaptiveReplanTriggers),
+    adaptiveReplansBySupportSubject: topFromMap(adaptiveReplanSubjects),
+    adaptiveReplanMixShifts: topFromMap(adaptiveReplanMixShifts),
+    adaptiveOscillationRisks: topFromMap(adaptiveOscillationRisks),
     xpEventsBySource: topFromMap(xpSources),
     placementSelectionsByAssessment: topFromMap(placementAssessments),
     placementInvalidByReason: topFromMap(placementInvalidReasons),
     recent: events.slice(-30).reverse(),
   };
+};
+
+export const clearOpsEventsForTests = (): void => {
+  events.length = 0;
 };

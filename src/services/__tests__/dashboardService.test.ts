@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  buildAdaptiveReplanSummary,
   buildParentDownloadableReport,
   calculateChildGoalProgress,
   injectMixInsIntoPlan,
@@ -86,6 +87,95 @@ describe('buildParentDownloadableReport', () => {
     expect(report).toContain('Avery');
     expect(report.toLowerCase()).toContain('lessons');
     expect(report).toContain('Recommended Next Steps');
+  });
+});
+
+describe('buildAdaptiveReplanSummary', () => {
+  it('derives an adult-facing rationale from the latest stored blend signal', () => {
+    const summary = buildAdaptiveReplanSummary([
+      {
+        student_id: 'child-1',
+        subject: 'math',
+        metadata: {
+          profile_blend_signal: {
+            last_replanned_at: '2026-04-03T15:40:00.000Z',
+            trigger_subject: 'math',
+            trigger_event_type: 'lesson_completed',
+            mastery_trend: 'support',
+            support_pressure: 0.78,
+            stretch_readiness: 0.22,
+            recent_accuracy: 61,
+            mastery_pct: 64,
+            evidence_count: 3,
+            lesson_signals: 1,
+            weak_standards: ['ratio_reasoning'],
+          },
+        },
+      },
+      {
+        student_id: 'child-1',
+        subject: 'english',
+        metadata: {
+          profile_blend_signal: {
+            last_replanned_at: '2026-04-03T15:40:00.000Z',
+            trigger_subject: 'math',
+            trigger_event_type: 'lesson_completed',
+            mastery_trend: 'stretch',
+            support_pressure: 0.19,
+            stretch_readiness: 0.74,
+            recent_accuracy: 88,
+            mastery_pct: 82,
+            evidence_count: 3,
+            lesson_signals: 1,
+            weak_standards: [],
+          },
+        },
+      },
+      {
+        student_id: 'child-1',
+        subject: 'science',
+        metadata: {
+          profile_blend_signal: {
+            last_replanned_at: '2026-04-01T15:40:00.000Z',
+            trigger_subject: 'science',
+            trigger_event_type: 'practice_answered',
+            mastery_trend: 'support',
+            support_pressure: 0.91,
+            stretch_readiness: 0.08,
+          },
+        },
+      },
+    ]);
+
+    expect(summary).not.toBeNull();
+    expect(summary).toMatchObject({
+      lastReplannedAt: '2026-04-03T15:40:00.000Z',
+      triggerSubject: 'math',
+      triggerEventType: 'lesson_completed',
+    });
+    expect(summary?.subjectSignals.map((signal) => signal.subject)).toEqual(['math', 'english']);
+    expect(summary?.rationale).toContain('Math moved into extra support');
+    expect(summary?.rationale).toContain('78% support pressure');
+    expect(summary?.highlights).toContain(
+      'Latest replan was triggered by lesson completion in Math.',
+    );
+  });
+
+  it('returns null when no replanned blend signal is present', () => {
+    const summary = buildAdaptiveReplanSummary([
+      {
+        student_id: 'child-1',
+        subject: 'math',
+        metadata: {
+          profile_blend_signal: {
+            mastery_trend: 'support',
+            support_pressure: 0.8,
+          },
+        },
+      },
+    ]);
+
+    expect(summary).toBeNull();
   });
 });
 

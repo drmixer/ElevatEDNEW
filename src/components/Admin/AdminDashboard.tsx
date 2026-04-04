@@ -1248,6 +1248,7 @@ const AdminDashboard: React.FC = () => {
                       { label: 'API failures', value: opsMetrics.totals.api_failure, tone: 'warn' },
                       { label: 'Slow APIs', value: opsMetrics.totals.api_slow, tone: 'default' },
                       { label: 'Path progression', value: opsMetrics.totals.path_progress, tone: 'default' },
+                      { label: 'Adaptive replans', value: opsMetrics.totals.adaptive_replan, tone: 'default' },
                       { label: 'XP events', value: opsMetrics.totals.xp_rate, tone: 'default' },
                     ] as const).map((stat) => {
                       const tone =
@@ -1344,6 +1345,72 @@ const AdminDashboard: React.FC = () => {
                         <p className="text-sm text-slate-600">No XP events in window.</p>
                       )}
                     </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Adaptive replan triggers</p>
+                      {opsMetrics.adaptiveReplansByTrigger.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.adaptiveReplansByTrigger.map((item) => (
+                            <li key={item.label} className="flex justify-between gap-3">
+                              <span className="truncate" title={item.label}>
+                                {item.label}
+                              </span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No adaptive replans in window.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Support-heavy subjects</p>
+                      {opsMetrics.adaptiveReplansBySupportSubject.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.adaptiveReplansBySupportSubject.map((item) => (
+                            <li key={item.label} className="flex justify-between gap-3">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No support subject shifts yet.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Oscillation watch</p>
+                      {opsMetrics.adaptiveOscillationRisks.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.adaptiveOscillationRisks.map((item) => (
+                            <li key={item.label} className="flex justify-between gap-3">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No fast flip risks in window.</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Adaptive mix shifts</p>
+                    {opsMetrics.adaptiveReplanMixShifts.length ? (
+                      <ul className="space-y-1 text-sm text-slate-800">
+                        {opsMetrics.adaptiveReplanMixShifts.map((item) => (
+                          <li key={item.label} className="flex justify-between gap-3">
+                            <span className="truncate" title={item.label}>
+                              {item.label}
+                            </span>
+                            <span className="font-semibold">{item.count}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-slate-600">No adaptive mix shifts recorded yet.</p>
+                    )}
                   </div>
                   <div className="rounded-lg border border-slate-200 bg-white p-3">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Recent signals</p>

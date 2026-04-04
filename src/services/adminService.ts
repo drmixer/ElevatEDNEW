@@ -91,6 +91,7 @@ export type OpsMetricsSnapshot = {
     | 'tutor_plan_limit'
     | 'tutor_latency'
     | 'path_progress'
+    | 'adaptive_replan'
     | 'xp_rate'
     | 'api_failure'
     | 'api_slow'
@@ -102,6 +103,10 @@ export type OpsMetricsSnapshot = {
   topPlanLimitReasons: Array<{ label: string; count: number }>;
   apiFailuresByRoute: Array<{ label: string; count: number }>;
   pathEventsByLabel: Array<{ label: string; count: number }>;
+  adaptiveReplansByTrigger: Array<{ label: string; count: number }>;
+  adaptiveReplansBySupportSubject: Array<{ label: string; count: number }>;
+  adaptiveReplanMixShifts: Array<{ label: string; count: number }>;
+  adaptiveOscillationRisks: Array<{ label: string; count: number }>;
   xpEventsBySource: Array<{ label: string; count: number }>;
   placementSelectionsByAssessment: Array<{ label: string; count: number }>;
   placementInvalidByReason: Array<{ label: string; count: number }>;

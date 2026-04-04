@@ -1,62 +1,8 @@
 import { expect, test } from '@playwright/test';
-
-const runLive = process.env.RUN_E2E_LIVE === 'true';
-const studentEmail = process.env.E2E_STUDENT_EMAIL;
-const studentPassword = process.env.E2E_STUDENT_PASSWORD;
-
-const shouldRun = runLive && Boolean(studentEmail && studentPassword);
-
-const fillLoginForm = async (page: Parameters<typeof test>[0]['page'], email: string, password: string) => {
-  const emailInputCandidates = [
-    page.getByLabel('Email Address'),
-    page.getByPlaceholder(/enter your email/i),
-    page.locator('input[type="email"]'),
-  ];
-  const passwordInputCandidates = [
-    page.getByLabel('Password'),
-    page.getByPlaceholder(/^password$/i),
-    page.locator('input[type="password"]'),
-  ];
-
-  let emailFilled = false;
-  for (const locator of emailInputCandidates) {
-    try {
-      await locator.first().fill(email);
-      emailFilled = true;
-      break;
-    } catch {
-      // try next selector
-    }
-  }
-  if (!emailFilled) throw new Error('Could not locate email input on auth modal.');
-
-  let passwordFilled = false;
-  for (const locator of passwordInputCandidates) {
-    try {
-      await locator.first().fill(password);
-      passwordFilled = true;
-      break;
-    } catch {
-      // try next selector
-    }
-  }
-  if (!passwordFilled) throw new Error('Could not locate password input on auth modal.');
-};
-
-const loginStudent = async (
-  page: Parameters<typeof test>[0]['page'],
-  email: string,
-  password: string,
-) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: /start learning/i }).first().click();
-  await fillLoginForm(page, email, password);
-  await page.getByRole('button', { name: /sign in/i }).click();
-  await page.waitForURL(/\/student(\b|\/|$)/, { timeout: 60_000 });
-};
+import { loginStudent, shouldRunStudentLive, studentEmail, studentPassword } from './helpers/liveAuth';
 
 test.describe('live placement → path → lesson', () => {
-  test.skip(!shouldRun, 'RUN_E2E_LIVE with E2E_STUDENT_EMAIL/E2E_STUDENT_PASSWORD required');
+  test.skip(!shouldRunStudentLive, 'RUN_E2E_LIVE with E2E_STUDENT_EMAIL/E2E_STUDENT_PASSWORD required');
 
   test('student completes placement (if needed) and launches recommended lesson', async ({ page }) => {
     test.setTimeout(240_000);
@@ -152,4 +98,3 @@ test.describe('live placement → path → lesson', () => {
     expect(pathOk).toBeGreaterThan(0);
   });
 });
-

@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest watch",
+    "test:db:adaptive": "RUN_DB_INTEGRATION_TESTS=true vitest --run server/__tests__/learningPaths.db.test.ts",
     "test:e2e": "playwright test",
     "test:e2e:auth-reload": "playwright test tests/e2e/auth-reload-timeout.spec.ts",
     "import:oer": "tsx tools/importers/oer/index.ts",

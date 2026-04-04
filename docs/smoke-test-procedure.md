@@ -51,6 +51,7 @@ This document outlines the manual smoke test procedure to verify all critical pa
 | Weekly Plan Display | View weekly plan card | Shows lessons remaining, progress bar | ☐ |
 | Study Mode Selection | Select "Catch Up" mode | Up Next updates with appropriate lessons | ☐ |
 | Today's Focus | View Today's Focus card | Shows recommended lesson with rationale | ☐ |
+| Adaptive Plan Refresh | Trigger a learner path update, refresh dashboard | Shows neutral “plan updated” copy with no grade or placement labels | ☐ |
 | Start Lesson | Click on a lesson | Lesson player opens | ☐ |
 | XP Display | Complete a lesson activity | XP animation plays, total updates | ☐ |
 
@@ -64,6 +65,7 @@ This document outlines the manual smoke test procedure to verify all critical pa
 | Content Navigation | Click "Next" button | Advances to next section | ☐ |
 | Practice Question | Complete a practice question | Shows correct/incorrect feedback | ☐ |
 | Lesson Completion | Reach end of lesson | Celebration screen, XP awarded | ☐ |
+| Post-Replan Lesson Safety | Open next lesson after a path update | Lesson stays free of grade-band or placement-level labels | ☐ |
 | Exit Mid-Lesson | Click back during lesson | Progress saved, can resume | ☐ |
 | Assets Load | Open lesson with images/video | Media loads properly | ☐ |
 
@@ -103,6 +105,7 @@ This document outlines the manual smoke test procedure to verify all critical pa
 | Admin Login | Login with admin account | Admin dashboard loads | ☐ |
 | User Management | View users list | Can search, promote/demote admins | ☐ |
 | Ops Signals | View Ops Signals section | Shows metrics, recent signals | ☐ |
+| Adaptive Replan Telemetry | Trigger a learner replan, refresh Ops Signals | Adaptive replans, trigger labels, mix shifts, and oscillation watch update | ☐ |
 | Content Coverage | View Content Coverage card | Shows ready/beta/thin counts | ☐ |
 | Tutor Reports | View reported answers | Can review and mark resolved | ☐ |
 | Platform Config | Update a config value | Change persists after refresh | ☐ |
