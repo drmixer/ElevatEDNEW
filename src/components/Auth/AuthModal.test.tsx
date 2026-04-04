@@ -42,7 +42,7 @@ describe('AuthModal', () => {
   });
 
   it('requires guardian consent before registering a student under 13 and logs consent metadata', async () => {
-    registerSpy.mockResolvedValue(undefined);
+    registerSpy.mockResolvedValue({ requiresEmailConfirmation: true });
 
     renderModal();
     fireEvent.click(screen.getByText("Don't have an account? Sign up"));
@@ -77,7 +77,7 @@ describe('AuthModal', () => {
   });
 
   it('lets 13+ students self-attest without guardian consent when age is provided', async () => {
-    registerSpy.mockResolvedValue(undefined);
+    registerSpy.mockResolvedValue({ requiresEmailConfirmation: true });
 
     renderModal();
     fireEvent.click(screen.getByText("Don't have an account? Sign up"));
@@ -103,6 +103,45 @@ describe('AuthModal', () => {
           consentActor: 'self_attested_13_plus',
         }),
       ),
+    );
+  });
+
+  it('closes immediately when signup returns a live session', async () => {
+    registerSpy.mockResolvedValue({ requiresEmailConfirmation: false });
+    const onClose = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <AuthModal isOpen onClose={onClose} />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByText("Don't have an account? Sign up"));
+    fireEvent.change(screen.getByPlaceholderText('Enter your full name'), { target: { value: 'Parent Tester' } });
+    fireEvent.change(screen.getByPlaceholderText('Enter your email'), { target: { value: 'parent@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Enter your password'), { target: { value: 'Password123!' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create Account' }));
+
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(
+      screen.queryByText(/please check your email to confirm your account/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows the confirmation notice when signup requires email confirmation', async () => {
+    registerSpy.mockResolvedValue({ requiresEmailConfirmation: true });
+
+    renderModal();
+    fireEvent.click(screen.getByText("Don't have an account? Sign up"));
+    fireEvent.change(screen.getByPlaceholderText('Enter your full name'), { target: { value: 'Parent Tester' } });
+    fireEvent.change(screen.getByPlaceholderText('Enter your email'), { target: { value: 'parent@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Enter your password'), { target: { value: 'Password123!' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create Account' }));
+
+    await waitFor(() =>
+      expect(screen.getByText(/please check your email to confirm your account, then sign in/i)).toBeInTheDocument(),
     );
   });
 });

@@ -1,9 +1,7 @@
 import { expect, test } from '@playwright/test';
 const authTimeoutPattern = /\[Auth\] Profile load timed out/i;
 import {
-  fillLoginForm,
-  getDefaultAuthDialog,
-  openLoginModal,
+  loginStudent,
   shouldRunStudentLive,
   studentEmail,
   studentPassword,
@@ -23,13 +21,7 @@ test.describe('auth session restore smoke', () => {
       }
     });
 
-    await page.goto('/');
-    const dialog = getDefaultAuthDialog(page);
-    await openLoginModal(page, dialog);
-    await fillLoginForm(page, studentEmail as string, studentPassword as string, dialog);
-    await dialog.getByRole('button', { name: /sign in/i }).click();
-
-    await waitForStudentShell(page);
+    await loginStudent(page, studentEmail as string, studentPassword as string);
 
     await page.reload();
     await waitForStudentShell(page);

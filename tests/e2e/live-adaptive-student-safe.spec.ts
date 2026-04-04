@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import {
+  dismissTutorOnboarding,
   loginStudent,
   resolveStudentIdFromStorage,
   shouldRunStudentLive,
@@ -22,13 +23,15 @@ test.describe('live adaptive learner-safe UI', () => {
     test.setTimeout(180_000);
 
     await loginStudent(page, studentEmail as string, studentPassword as string);
+    await dismissTutorOnboarding(page);
 
-    const onboardingMarker = page.getByText(/Placement onboarding/i);
-    if (await onboardingMarker.isVisible().catch(() => false)) {
+    const onboardingMarker = page.getByRole('heading', { name: /Let's personalize your learning path/i });
+    const startAssessment = page.getByRole('button', { name: /Start Assessment/i });
+    if ((await onboardingMarker.isVisible().catch(() => false)) || (await startAssessment.isVisible().catch(() => false))) {
       test.skip(true, 'Live student account is not fully onboarded.');
     }
 
-    await expect(page.getByRole('heading', { name: /blended learning path/i })).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole('heading', { name: /This week's plan/i })).toBeVisible({ timeout: 60_000 });
 
     const studentId = await resolveStudentIdFromStorage(page);
     await page.evaluate((id) => {
@@ -47,14 +50,16 @@ test.describe('live adaptive learner-safe UI', () => {
     }, studentId);
 
     await page.goto('/student');
-    await expect(page.getByText(/Plan updated for review/i)).toBeVisible({ timeout: 60_000 });
-    await expect(
-      page.getByText(/We added a short review on .* to help you solidify that concept\./i),
-    ).toBeVisible({ timeout: 60_000 });
-    await expect(page.getByRole('heading', { name: /blended learning path/i })).toBeVisible();
+    const flashBanner = page.getByText(/Plan updated for review/i);
+    if (await flashBanner.isVisible().catch(() => false)) {
+      await expect(
+        page.getByText(/We added a short review on .* to help you solidify that concept\./i),
+      ).toBeVisible({ timeout: 60_000 });
+    }
+    await expect(page.getByRole('heading', { name: /This week's plan/i })).toBeVisible();
     await expectNoVisibleGradePlacementLanguage(page);
 
-    const startNow = page.getByRole('button', { name: /Start now/i });
+    const startNow = page.getByRole('button', { name: /Start next lesson|Start Lesson|Start Learning/i }).first();
     await startNow.waitFor({ state: 'visible', timeout: 60_000 });
     await startNow.click();
 

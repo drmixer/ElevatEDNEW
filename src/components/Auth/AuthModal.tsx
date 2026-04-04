@@ -131,7 +131,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             ? 'guardian_present'
             : 'self_attested_13_plus';
 
-        await register(formData.email, formData.password, formData.name, formData.role, formData.grade, {
+        const result = await register(formData.email, formData.password, formData.name, formData.role, formData.grade, {
           guardianConsent,
           studentAge: hasValidAge ? parsedAge : undefined,
           consentActor,
@@ -143,9 +143,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           parentEmail: formData.parentEmail?.trim() || null,
           focusSubject: formData.focusSubject,
         });
-        setNotice({ type: 'info', message: 'Sign-up successful. Please check your email to confirm your account, then sign in.' });
-        setResendMode('signup');
-        setAuthView('login');
+        if (result.requiresEmailConfirmation) {
+          setNotice({ type: 'info', message: 'Sign-up successful. Please check your email to confirm your account, then sign in.' });
+          setResendMode('signup');
+          setAuthView('login');
+          return;
+        }
+        onClose();
         return;
       } else {
         const emailRedirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/reset` : undefined;
@@ -165,11 +169,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const isEmailNotConfirmedError =
         err instanceof Error && ((err as { code?: string }).code === 'email_not_confirmed' || err.message === 'email_not_confirmed');
 
-      if (authView === 'signup' && err instanceof Error && err.message.toLowerCase().includes('sign-up successful')) {
-        setNotice({ type: 'info', message: err.message });
-        setResendMode('signup');
-        setAuthView('login');
-      } else if (authView === 'login' && isEmailNotConfirmedError) {
+      if (authView === 'login' && isEmailNotConfirmedError) {
         const normalizedEmail = formData.email.trim() || 'your new email address';
         setNotice({
           type: 'info',

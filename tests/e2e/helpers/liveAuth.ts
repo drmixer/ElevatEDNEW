@@ -1,86 +1,95 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { createClient, type Session } from '@supabase/supabase-js';
+import { expect, type Page } from '@playwright/test';
 
 export const runLive = process.env.RUN_E2E_LIVE === 'true';
 export const studentEmail = process.env.E2E_STUDENT_EMAIL;
 export const studentPassword = process.env.E2E_STUDENT_PASSWORD;
 export const parentEmail = process.env.E2E_PARENT_EMAIL;
 export const parentPassword = process.env.E2E_PARENT_PASSWORD;
+const supabaseUrl = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
 
 export const shouldRunStudentLive = runLive && Boolean(studentEmail && studentPassword);
 export const shouldRunParentLive = runLive && Boolean(parentEmail && parentPassword);
 
-export const getDefaultAuthDialog = (page: Page): Locator =>
-  page.getByRole('dialog').filter({ has: page.getByRole('heading', { name: /welcome back!/i }) }).first();
-
-export const openLoginModal = async (page: Page, dialog = getDefaultAuthDialog(page)) => {
-  const triggerCandidates = [
-    page.getByRole('button', { name: /start learning today/i }),
-    page.getByRole('button', { name: /start learning/i }),
-    page.getByRole('button', { name: /get started/i }),
-    page.getByRole('button', { name: /log in/i }),
-  ];
-
-  for (const trigger of triggerCandidates) {
-    try {
-      await trigger.first().click();
-      await dialog.waitFor({ state: 'visible', timeout: 5_000 });
-      return;
-    } catch {
-      // try next trigger
-    }
+const getSupabaseProjectRef = () => {
+  if (!supabaseUrl) {
+    throw new Error('Missing SUPABASE_URL/VITE_SUPABASE_URL for live E2E auth.');
   }
 
-  throw new Error('Could not open the auth modal.');
+  const { hostname } = new URL(supabaseUrl);
+  return hostname.split('.')[0];
 };
 
-export const fillLoginForm = async (page: Page, email: string, password: string, scope?: Locator) => {
-  const root = scope ?? page;
-  const emailInputCandidates = [
-    root.getByLabel('Email Address'),
-    root.getByPlaceholder(/enter your email/i),
-    root.locator('input[type="email"]'),
-  ];
-  const passwordInputCandidates = [
-    root.getByLabel('Password'),
-    root.getByPlaceholder(/^password$/i),
-    root.locator('input[type="password"]'),
-  ];
+const getSupabaseStorageKey = () => `sb-${getSupabaseProjectRef()}-auth-token`;
 
-  let emailFilled = false;
-  for (const locator of emailInputCandidates) {
-    try {
-      await locator.first().fill(email);
-      emailFilled = true;
-      break;
-    } catch {
-      // try next selector
-    }
+const createE2ESupabaseClient = () => {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase anon credentials for live E2E auth.');
   }
-  if (!emailFilled) throw new Error('Could not locate email input on auth modal.');
 
-  let passwordFilled = false;
-  for (const locator of passwordInputCandidates) {
-    try {
-      await locator.first().fill(password);
-      passwordFilled = true;
-      break;
-    } catch {
-      // try next selector
-    }
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+  });
+};
+
+export const createLiveSession = async (email: string, password: string): Promise<Session> => {
+  const client = createE2ESupabaseClient();
+  const { data, error } = await client.auth.signInWithPassword({ email, password });
+  if (error) {
+    throw new Error(`Failed live E2E sign-in for ${email}: ${error.message}`);
   }
-  if (!passwordFilled) throw new Error('Could not locate password input on auth modal.');
+  if (!data.session) {
+    throw new Error(`Supabase did not return a session for ${email}.`);
+  }
+  return data.session;
 };
 
-export const login = async (page: Page, email: string, password: string) => {
-  await page.goto('/');
-  await openLoginModal(page);
-  await fillLoginForm(page, email, password);
-  await page.getByRole('button', { name: /sign in/i }).click();
+export const seedLiveSession = async (page: Page, session: Session) => {
+  const storageKey = getSupabaseStorageKey();
+  const serializedSession = JSON.stringify(session);
+
+  await page.context().clearCookies();
+  await page.addInitScript(
+    ({ key, value }) => {
+      window.localStorage.setItem(key, value);
+    },
+    { key: storageKey, value: serializedSession },
+  );
 };
 
-export const loginStudent = async (page: Page, email: string, password: string) => {
-  await login(page, email, password);
+export const login = async (page: Page, email: string, password: string, targetRoute = '/') => {
+  const session = await createLiveSession(email, password);
+  await seedLiveSession(page, session);
+  await page.goto(targetRoute);
+};
+
+export const loginStudent = async (page: Page, email: string, password: string, targetRoute = '/student') => {
+  await login(page, email, password, targetRoute);
   await page.waitForURL(/\/student(\b|\/|$)/, { timeout: 60_000 });
+};
+
+export const dismissTutorOnboarding = async (page: Page) => {
+  const startedAt = Date.now();
+  while (Date.now() - startedAt < 4_000) {
+    const skipButton = page.getByRole('button', { name: /Skip for now/i });
+    if (await skipButton.isVisible().catch(() => false)) {
+      await skipButton.click();
+      return;
+    }
+
+    const closeButton = page.getByRole('button', { name: /^Close$/i });
+    if (await closeButton.isVisible().catch(() => false)) {
+      await closeButton.click();
+      return;
+    }
+
+    await page.waitForTimeout(200);
+  }
 };
 
 export const waitForStudentShell = async (page: Page) => {

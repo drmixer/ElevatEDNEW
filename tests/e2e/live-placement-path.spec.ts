@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { loginStudent, shouldRunStudentLive, studentEmail, studentPassword } from './helpers/liveAuth';
+import { dismissTutorOnboarding, loginStudent, shouldRunStudentLive, studentEmail, studentPassword } from './helpers/liveAuth';
 
 test.describe('live placement → path → lesson', () => {
   test.skip(!shouldRunStudentLive, 'RUN_E2E_LIVE with E2E_STUDENT_EMAIL/E2E_STUDENT_PASSWORD required');
@@ -27,8 +27,25 @@ test.describe('live placement → path → lesson', () => {
       await maybeDismissModal.click();
     }
 
-    // If the account isn't yet onboarded, walk the placement onboarding flow.
-    const onboardingMarker = page.getByText(/Placement onboarding/i);
+    const onboardingMarker = page.getByRole('heading', { name: /Let's personalize your learning path/i });
+    const startAssessment = page.getByRole('button', { name: /Start Assessment/i });
+
+    const branchStartedAt = Date.now();
+    let startedOnboarding = false;
+    while (Date.now() - branchStartedAt < 60_000) {
+      if (await onboardingMarker.isVisible().catch(() => false)) break;
+      if (await startAssessment.isVisible().catch(() => false)) {
+        await startAssessment.click();
+        startedOnboarding = true;
+        break;
+      }
+      await page.waitForTimeout(250);
+    }
+
+    if (startedOnboarding) {
+      await expect(onboardingMarker).toBeVisible({ timeout: 60_000 });
+    }
+
     if (await onboardingMarker.isVisible().catch(() => false)) {
       const preferredName = page.getByPlaceholder(/What should we call you\?/i);
       if (await preferredName.isVisible().catch(() => false)) {
@@ -40,21 +57,20 @@ test.describe('live placement → path → lesson', () => {
         await continueButton.click();
       }
 
-      const continueToPlacement = page.getByRole('button', { name: /Continue to placement/i });
+      const continueToPlacement = page.getByRole('button', { name: /Continue to check-in/i });
       await continueToPlacement.waitFor({ state: 'visible', timeout: 30_000 });
       await continueToPlacement.click();
 
-      const startPlacement = page.getByRole('button', { name: /Start assessment/i });
+      const startPlacement = page.getByRole('button', { name: /Start mixed assessment/i });
       await startPlacement.waitFor({ state: 'visible', timeout: 60_000 });
       await startPlacement.click();
 
       // Click through placement questions by selecting the first visible option until completion.
-      for (let attempts = 0; attempts < 50; attempts += 1) {
-        const completionHeader = page.getByText(/Your learning plan is set/i);
+      for (let attempts = 0; attempts < 80; attempts += 1) {
+        const completionHeader = page.getByRole('heading', { name: /You're all set to start learning/i });
         if (await completionHeader.isVisible().catch(() => false)) break;
 
-        const optionCard = page.getByText(/Strand:/i).locator('xpath=../..');
-        const optionButtons = optionCard.getByRole('button');
+        const optionButtons = page.locator('button.w-full.text-left.border:not([disabled])');
         const count = await optionButtons.count();
         if (count > 0) {
           await optionButtons.first().click();
@@ -65,10 +81,12 @@ test.describe('live placement → path → lesson', () => {
         await page.waitForTimeout(250);
       }
 
-      await expect(page.getByText(/Your learning plan is set/i)).toBeVisible({ timeout: 60_000 });
-      await expect(page.getByText(/Up Next from your path/i)).toBeVisible();
+      await expect(page.getByRole('heading', { name: /You're all set to start learning/i })).toBeVisible({
+        timeout: 60_000,
+      });
+      await expect(page.getByText(/Personalized starting path/i).first()).toBeVisible();
 
-      const goToDashboard = page.getByRole('button', { name: /Go to dashboard/i });
+      const goToDashboard = page.getByRole('button', { name: /Let's start learning!/i });
       await goToDashboard.click();
       await page.waitForURL(/\/student(\b|\/|$)/, { timeout: 60_000 });
     } else {
@@ -78,8 +96,10 @@ test.describe('live placement → path → lesson', () => {
       }
     }
 
+    await dismissTutorOnboarding(page);
+
     // Confirm the path is visible and launch the recommended lesson.
-    const startNow = page.getByRole('button', { name: /Start now/i });
+    const startNow = page.getByRole('button', { name: /Start next lesson|Start Lesson|Start Learning/i }).first();
     await startNow.waitFor({ state: 'visible', timeout: 60_000 });
     await startNow.click();
 

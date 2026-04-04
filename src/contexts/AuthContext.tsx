@@ -26,7 +26,7 @@ interface AuthContextType {
       focusSubject?: Subject | 'balanced';
       parentEmail?: string | null;
     },
-  ) => Promise<void>;
+  ) => Promise<{ requiresEmailConfirmation: boolean }>;
   logout: () => void;
   loading: boolean;
   refreshUser: () => Promise<void>;
@@ -342,7 +342,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       focusSubject?: Subject | 'balanced';
       parentEmail?: string | null;
     },
-  ) => {
+  ): Promise<{ requiresEmailConfirmation: boolean }> => {
     safeSetLoading(true);
     try {
       const studentAge = options?.studentAge;
@@ -385,7 +385,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!data.session || !data.user) {
         handleSignedOut();
         recordReliabilityCheckpoint('auth_register', 'error', { reason: 'pending_email_confirmation' });
-        throw new Error('Sign-up successful. Please check your email to confirm your account.');
+        return { requiresEmailConfirmation: true };
       }
 
       if (role === 'student') {
@@ -415,6 +415,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         consentActor,
         guardianConsent: options?.guardianConsent === true,
       });
+      return { requiresEmailConfirmation: false };
     } catch (error) {
       console.error('[Auth] Registration failed', error);
       recordReliabilityCheckpoint('auth_register', 'error', { error });
