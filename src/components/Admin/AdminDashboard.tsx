@@ -1773,11 +1773,34 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
+              {tutorReportsQuery.data?.summary && (
+                <div className="mb-4 grid gap-2 sm:grid-cols-4">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Answered In Lesson</p>
+                    <p className="text-lg font-bold text-slate-900">{tutorReportsQuery.data.summary.answeredInLesson}</p>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Retried After Hint</p>
+                    <p className="text-lg font-bold text-slate-900">{tutorReportsQuery.data.summary.retriedAfterHint}</p>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Retry Rate</p>
+                    <p className="text-lg font-bold text-slate-900">
+                      {tutorReportsQuery.data.summary.retryRatePct != null ? `${tutorReportsQuery.data.summary.retryRatePct}%` : 'N/A'}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Problem Grounded</p>
+                    <p className="text-lg font-bold text-slate-900">{tutorReportsQuery.data.summary.problemGroundedAnswers}</p>
+                  </div>
+                </div>
+              )}
+
               {tutorReportsQuery.isLoading ? (
                 <SkeletonCard className="h-32" />
-              ) : (tutorReportsQuery.data ?? []).length ? (
+              ) : (tutorReportsQuery.data?.reports ?? []).length ? (
                 <div className="space-y-3">
-                  {(tutorReportsQuery.data as TutorAdminReport[]).map((report) => (
+                  {(tutorReportsQuery.data?.reports as TutorAdminReport[]).map((report) => (
                     <div key={report.id} className="p-4 border border-slate-200 rounded-xl bg-slate-50">
                       <div className="flex items-start justify-between gap-3">
                         <div>

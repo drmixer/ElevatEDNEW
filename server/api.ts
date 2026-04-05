@@ -63,7 +63,7 @@ import {
 import { processPendingAccountDeletionRequests } from './accountDeletion.js';
 import { NotificationScheduler, notifyAssignmentCreated } from './notifications.js';
 import { HttpError } from './httpError.js';
-import { listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
+import { getTutorUsefulnessSummary, listTutorReports, parseReportStatus, updateTutorReportStatus } from './tutorReports.js';
 import { getOpsSnapshot } from './opsMetrics.js';
 import {
   getParentOverview,
@@ -2134,8 +2134,11 @@ export const createApiHandler = (context: ApiContext) => {
             typeof url.query.limit === 'string' && !Number.isNaN(Number(url.query.limit))
               ? Number(url.query.limit)
               : 50;
-          const reports = await listTutorReports(serviceSupabase, { status, limit });
-          sendJson(res, 200, { reports }, API_VERSION);
+          const [reports, summary] = await Promise.all([
+            listTutorReports(serviceSupabase, { status, limit }),
+            getTutorUsefulnessSummary(serviceSupabase),
+          ]);
+          sendJson(res, 200, { reports, summary }, API_VERSION);
         });
       }
 

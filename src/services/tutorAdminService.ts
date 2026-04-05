@@ -15,18 +15,36 @@ export type TutorAdminReport = {
   created_at: string | null;
 };
 
-type TutorReportListResponse = {
-  reports: TutorAdminReport[];
+export type TutorUsefulnessSummary = {
+  windowDays: number;
+  answeredInLesson: number;
+  retriedAfterHint: number;
+  answersReported: number;
+  aiDirectAnswers: number;
+  fallbackAnswers: number;
+  problemGroundedAnswers: number;
+  retryRatePct: number | null;
 };
 
-export const fetchTutorReports = async (status?: TutorReportStatus, limit = 50): Promise<TutorAdminReport[]> => {
+type TutorReportListResponse = {
+  reports: TutorAdminReport[];
+  summary: TutorUsefulnessSummary;
+};
+
+export const fetchTutorReports = async (
+  status?: TutorReportStatus,
+  limit = 50,
+): Promise<{ reports: TutorAdminReport[]; summary: TutorUsefulnessSummary | null }> => {
   const params = new URLSearchParams();
   if (status) params.set('status', status);
   if (limit) params.set('limit', String(limit));
 
   const response = await authenticatedFetch(`/api/v1/admins/tutor-reports?${params.toString()}`);
   const payload = await handleApiResponse<TutorReportListResponse>(response);
-  return payload.reports ?? [];
+  return {
+    reports: payload.reports ?? [],
+    summary: payload.summary ?? null,
+  };
 };
 
 export const updateTutorReportStatus = async (id: number, status: TutorReportStatus): Promise<TutorAdminReport> => {

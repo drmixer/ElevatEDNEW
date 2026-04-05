@@ -2,6 +2,7 @@ import supabase from '../lib/supabaseClient';
 import type { LessonPracticeQuestion, Subject } from '../types';
 import recordReliabilityCheckpoint from '../lib/reliability';
 import { assessPracticeQuestionQuality } from '../../shared/questionQuality';
+import { getDeterministicPracticeFallbackQuestion } from '../lib/deterministicPracticeFallback';
 
 type LessonSkillRow = { skill_id: number };
 type QuestionSkillRow = { question_id: number; skill_id: number };
@@ -34,6 +35,11 @@ export const calculateMasteryPct = (correct: number, total: number): number => {
 export const fetchLessonCheckQuestions = async (
   lessonId: number,
   subject?: Subject | null,
+  context?: {
+    gradeBand?: string | null;
+    lessonTitle?: string | null;
+    lessonContent?: string | null;
+  },
   limit = 4,
 ): Promise<LessonPracticeQuestion[]> => {
   const [{ data: lessonSkills, error: skillError }] = await Promise.all([
@@ -200,7 +206,29 @@ export const fetchLessonCheckQuestions = async (
     });
   }
 
-  return filteredQuestions.slice(0, limit);
+  const selectedQuestions = filteredQuestions.slice(0, limit);
+  const fallbackQuestion =
+    selectedQuestions.length < limit
+      ? getDeterministicPracticeFallbackQuestion({
+          lessonId,
+          subject,
+          gradeBand: context?.gradeBand ?? null,
+          lessonTitle: context?.lessonTitle ?? null,
+          lessonContent: context?.lessonContent ?? null,
+        })
+      : null;
+
+  if (fallbackQuestion && !selectedQuestions.some((question) => question.id === fallbackQuestion.id)) {
+    selectedQuestions.push(fallbackQuestion);
+    recordReliabilityCheckpoint('lesson_playback', 'warning', {
+      phase: 'practice_question_fallback',
+      lessonId,
+      filteredCount: filteredQuestions.length,
+      blockedCount,
+    });
+  }
+
+  return selectedQuestions;
 };
 
 type QuestionAttemptInput = {

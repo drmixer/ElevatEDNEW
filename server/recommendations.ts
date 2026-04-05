@@ -408,17 +408,26 @@ export const fetchModuleById = async (
     .from('modules')
     .select('id, slug, title, summary, grade_band, subject, strand, topic, subtopic, open_track, metadata, visibility')
     .eq('id', moduleId)
-    .single();
+    .limit(2);
 
   if (error) {
     throw new Error(`Failed to load module ${moduleId}: ${error.message}`);
   }
 
-  if (!data || data.visibility !== 'public') {
+  const rows = (data ?? []) as ModuleRecord[];
+  if (rows.length > 1) {
+    console.warn('[recommendations] multiple module rows returned for id', {
+      moduleId,
+      count: rows.length,
+    });
+  }
+
+  const moduleRow = rows.find((row) => row.visibility === 'public') ?? null;
+  if (!moduleRow) {
     return null;
   }
 
-  return data as ModuleRecord;
+  return moduleRow;
 };
 
 const fetchCandidates = async (

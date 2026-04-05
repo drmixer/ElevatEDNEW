@@ -28,6 +28,7 @@ import {
     isK5MathAdaptiveLesson,
 } from '../../../lib/k5MathAdaptation';
 import { fetchRemoteImage, type RemoteImageResult } from '../../../lib/remoteImageSearch';
+import type { TutorOpenRequest } from '../../../../shared/tutor';
 
 interface LearnPhaseProps {
     sections: LessonSection[];
@@ -37,7 +38,7 @@ interface LearnPhaseProps {
     lessonTitle?: string;
     subject?: string;
     gradeBand?: string;
-    onAskTutor?: (context: string) => void;
+    onAskTutor?: (request: TutorOpenRequest) => void;
     onSectionComplete?: (sectionIndex: number) => void;
 }
 
@@ -977,7 +978,17 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
 
     const handleAskTutor = () => {
         if (onAskTutor && currentSection) {
-            onAskTutor(`I'm reading about "${currentSection.title}". Can you explain it in simple terms?`);
+            onAskTutor({
+                prompt: `Can you explain this part in simpler words?`,
+                source: 'lesson_learn_section',
+                helpMode: 'another_way',
+                lesson: {
+                    phase: 'learn',
+                    sectionId: currentSection.id,
+                    sectionTitle: currentSection.title,
+                    visibleText: clampText(currentSection.content ?? '', 900),
+                },
+            });
         }
     };
 
@@ -1011,14 +1022,21 @@ export const LearnPhase: React.FC<LearnPhaseProps> = ({
         trackCheckpointRiskSignal('success_checkpoint_confusion_signal', 'tutor_hint_requested', {
             trigger: 'ask_tutor_hint',
         });
-        onAskTutor(
-            [
-                `I'm stuck on a checkpoint question for "${currentSection.title}".`,
-                `Question: ${question}`,
-                `Options: ${options.map((opt, idx) => `${String.fromCharCode(65 + idx)}. ${opt}`).join(' ')}`,
-                `Please give me a hint and help me reason, but do NOT tell me the answer letter.`,
-            ].join('\n'),
-        );
+        onAskTutor({
+            prompt: `I'm stuck on this checkpoint question. Please give me a hint and help me reason, but do not tell me the answer letter.`,
+            source: 'lesson_checkpoint_hint',
+            helpMode: 'hint',
+            lesson: {
+                phase: 'learn',
+                sectionId: currentSection.id,
+                sectionTitle: currentSection.title,
+                visibleText: clampText(currentSection.content ?? '', 700),
+                questionStem: question,
+                answerChoices: options,
+                correctAnswer: checkpointState.payload.options[checkpointState.payload.correctIndex] ?? null,
+                rubric: checkpointState.payload.explanation,
+            },
+        });
     };
 
     return (

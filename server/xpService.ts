@@ -13,6 +13,11 @@ const BASE_POINTS_BY_EVENT: Record<string, number> = {
   review_completed: 20,
   placement_completed: 30,
 };
+const NON_XP_EVENT_TYPES = new Set([
+  'tutor_answered_in_lesson',
+  'tutor_retried_after_hint',
+  'tutor_answer_reported',
+]);
 
 const PASSING_QUIZ_SCORE = 70;
 const STREAK_BADGE_DAYS = 3;
@@ -106,6 +111,7 @@ const safeNumber = (value: unknown): number | null => {
 };
 
 const normalizeEventType = (value: string): string => value.trim().toLowerCase();
+export const isNonXpEventType = (value: string): boolean => NON_XP_EVENT_TYPES.has(normalizeEventType(value));
 
 const nextStreak = (lastAwardedAt: string | null | undefined, previous: number, now: Date): number => {
   if (!lastAwardedAt) {
@@ -388,6 +394,34 @@ export const recordLearningEvent = async (
   supabase: SupabaseClient,
   input: AwardXPInput,
 ): Promise<AwardXPResult> => {
+  if (isNonXpEventType(input.eventType)) {
+    const ledger = await loadXpLedger(supabase, input.studentId);
+    const { data: eventRow, error: eventError } = await supabase
+      .from('student_events')
+      .insert({
+        student_id: input.studentId,
+        event_type: input.eventType,
+        payload: input.payload ?? {},
+        points_awarded: 0,
+        path_entry_id: input.pathEntryId ?? null,
+      })
+      .select('id, created_at')
+      .maybeSingle();
+
+    if (eventError) {
+      throw new Error(`Unable to log student event: ${eventError.message}`);
+    }
+
+    return {
+      pointsAwarded: 0,
+      xpTotal: ledger.xp_total,
+      streakDays: ledger.streak_days,
+      eventId: (eventRow?.id as number | null | undefined) ?? null,
+      eventCreatedAt: (eventRow?.created_at as string | null | undefined) ?? null,
+      awardedBadges: [],
+    };
+  }
+
   const now = new Date();
   const runtimeConfig = await getRuntimeConfig(supabase);
   const ledger = await loadXpLedger(supabase, input.studentId);

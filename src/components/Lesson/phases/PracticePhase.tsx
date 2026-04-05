@@ -39,6 +39,7 @@ import {
     getDeterministicK5MathSteps,
     getK5MathAdaptationTopic,
 } from '../../../lib/k5MathAdaptation';
+import type { TutorOpenRequest } from '../../../../shared/tutor';
 
 interface PracticePhaseProps {
     questions: LessonPracticeQuestion[];
@@ -51,7 +52,7 @@ interface PracticePhaseProps {
     subject?: string | null;
     gradeBand?: string | null;
     onAnswerSubmit?: (questionId: number, optionId: number, isCorrect: boolean) => void;
-    onAskTutor?: (context: string) => void;
+    onAskTutor?: (request: TutorOpenRequest) => void;
 }
 
 interface QuestionState {
@@ -669,9 +670,23 @@ export const PracticePhase: React.FC<PracticePhaseProps> = ({
         }
 
         if (onAskTutor) {
-            onAskTutor(
-                `I need a hint for this question: "${currentQuestion.prompt}". Don't give away the answer, just help me think about it.`,
-            );
+            onAskTutor({
+                prompt: `I need a hint for this question. Do not give away the answer. Help me think about the next step.`,
+                source: 'lesson_practice_hint',
+                helpMode: 'hint',
+                lesson: {
+                    phase: 'practice',
+                    sectionId: currentQuestion.id,
+                    sectionTitle: `Practice question ${currentIndex + 1}`,
+                    questionStem: currentQuestion.prompt,
+                    answerChoices: currentQuestion.options.map((option) => option.text),
+                    learnerAnswer:
+                        currentQuestion.options.find((option) => option.id === selectedOptionId)?.text ?? null,
+                    correctAnswer:
+                        currentQuestion.options.filter((option) => option.isCorrect).map((option) => option.text),
+                    rubric: currentQuestion.explanation ?? currentQuestion.hint ?? null,
+                },
+            });
         }
     };
 

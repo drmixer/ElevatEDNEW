@@ -231,4 +231,28 @@ describe('AuthContext', () => {
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('student-1'));
     expect(profileHarness.fetchUserProfile).toHaveBeenCalledTimes(1);
   });
+
+  it('hydrates the user on a plain SIGNED_IN auth event', async () => {
+    authHarness.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
+    profileHarness.fetchUserProfile.mockResolvedValue(mockUser);
+
+    render(
+      <AuthProvider>
+        <Probe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId('loading')).toHaveTextContent('false'));
+    expect(screen.getByTestId('user')).toHaveTextContent('none');
+
+    await act(async () => {
+      await emitAuthEvent('SIGNED_IN', mockSession);
+    });
+
+    await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('student-1'));
+    expect(profileHarness.fetchUserProfile).toHaveBeenCalledTimes(1);
+  });
 });

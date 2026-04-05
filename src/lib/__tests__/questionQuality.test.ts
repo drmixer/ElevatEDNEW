@@ -43,6 +43,30 @@ describe('assessPracticeQuestionQuality', () => {
     expect(placeholder.reasons).toContain('placeholder_prompt');
     expect(placeholder.reasons).toContain('insufficient_options');
   });
+
+  it('blocks generic scientific-method prompts and classroom-skill prompts', () => {
+    const sciencePrompt = assessPracticeQuestionQuality({
+      prompt: 'What is the scientific method used when studying chemistry?',
+      type: 'multiple_choice',
+      options: [
+        { text: 'A step-by-step process for testing ideas', isCorrect: true },
+        { text: 'A random guess', isCorrect: false },
+      ],
+    });
+    const subjectClassPrompt = assessPracticeQuestionQuality({
+      prompt: 'In Social Studies class, which step best evaluates information about this topic?',
+      type: 'multiple_choice',
+      options: [
+        { text: 'Check whether the source is reliable', isCorrect: true },
+        { text: 'Pick the longest answer', isCorrect: false },
+      ],
+    });
+
+    expect(sciencePrompt.shouldBlock).toBe(true);
+    expect(sciencePrompt.reasons).toContain('generic_scientific_method');
+    expect(subjectClassPrompt.shouldBlock).toBe(true);
+    expect(subjectClassPrompt.reasons).toContain('generic_subject_class_step');
+  });
 });
 
 describe('assessAssessmentQuestionQuality', () => {

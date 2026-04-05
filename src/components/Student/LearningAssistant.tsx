@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Send, X, Lightbulb, Target, BookOpen, Info, MessageSquare, Sparkles, Flag, Wand2, Layers, Repeat } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import { ChatMessage, Student, Subject } from '../../types';
+import { ChatMessage, Student } from '../../types';
 import getTutorResponse from '../../services/getTutorResponse';
 import trackEvent from '../../lib/analytics';
 import { TUTOR_AVATARS } from '../../../shared/avatarManifests';
@@ -11,8 +11,10 @@ import { tutorControlsCopy } from '../../lib/tutorControlsCopy';
 import { fetchReflections } from '../../services/reflectionService';
 import { submitTutorAnswerReport, type TutorReportReason } from '../../services/tutorReportService';
 import { useStudentPath, useTutorPersona } from '../../hooks/useStudentData';
-import { findCuratedAlternate } from '../../data/curatedAlternates';
+import { useStudentEvent } from '../../hooks/useStudentData';
 import { TUTOR_GUARDRAILS } from '../../lib/tutorTones';
+import { buildTutorDeterministicFallback } from '../../lib/tutorFallback';
+import type { TutorAnsweredEventDetail, TutorChatMessage, TutorHelpMode, TutorLessonContext, TutorOpenRequest } from '../../../shared/tutor';
 
 const defaultPalette = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
 const defaultStudentLearningPreferences = {
@@ -44,21 +46,23 @@ const humanizeStandard = (code?: string | null): string | null => {
   return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 };
 
-const alternateExplanationTemplate = (subject?: Subject | string | null, focus?: string | null) => {
-  const focusLabel = focus ?? 'this concept';
-  const normalized = subject ? subject.toString().toLowerCase() : '';
-  if (normalized.includes('math')) {
-    return `Offer an alternate explanation for ${focusLabel} using a concrete math example (e.g., a number line or simple fraction like 1/4 vs 1/2). Keep it under 4 sentences, include one quick self-check the learner can try, and avoid giving a full solution.`;
-  }
-  if (normalized.includes('english') || normalized.includes('ela') || normalized.includes('reading')) {
-    return `Explain ${focusLabel} another way using a short text or sentence frame. Show one model sentence, underline the key move (like citing evidence), and invite the learner to try their own in one sentence. Keep it concise.`;
-  }
-  return `Explain ${focusLabel} with a different angle or analogy in under 4 sentences. Include one quick check so the learner can test their understanding.`;
-};
-
 type HintLevel = 'hint' | 'break_down' | 'another_way';
-type MessageMetadata = { source?: 'card' | 'free' | 'scaffold'; cardId?: string; hintLevel?: HintLevel };
+type MessageMetadata = { source?: 'card' | 'free' | 'scaffold'; cardId?: string; hintLevel?: HintLevel; helpMode?: TutorHelpMode };
 type AdaptiveTutorDeliveryMode = 'ai_direct' | 'deterministic_fallback';
+
+const resolveHelpMode = (
+  responseMode: 'hint' | 'solution',
+  hintLevel?: HintLevel,
+  explicitHelpMode?: TutorHelpMode,
+  message?: string,
+): TutorHelpMode => {
+  if (explicitHelpMode) return explicitHelpMode;
+  if (responseMode === 'solution') return 'solution';
+  if (hintLevel === 'break_down') return 'break_down';
+  if (hintLevel === 'another_way') return 'another_way';
+  if (message && /\bcheck my (answer|thinking)\b/i.test(message)) return 'check_thinking';
+  return 'hint';
+};
 
 const LearningAssistant: React.FC = () => {
   const { user } = useAuth();
@@ -97,6 +101,7 @@ const LearningAssistant: React.FC = () => {
   // All hooks must be called unconditionally
   const { persona: tutorPersona } = useTutorPersona(actualStudent?.id);
   const pathQuery = useStudentPath(actualStudent?.id);
+  const { emitStudentEvent } = useStudentEvent(actualStudent?.id);
   const tutorAvatar = useMemo(
     () => TUTOR_AVATARS.find((avatar) => avatar.id === student?.tutorAvatarId) ?? TUTOR_AVATARS[0],
     [student?.tutorAvatarId],
@@ -216,18 +221,8 @@ const LearningAssistant: React.FC = () => {
     plan: null,
   });
   const [contextHint, setContextHint] = useState<string | null>(null);
-  const [lessonContext, setLessonContext] = useState<{
-    lessonId?: number | string | null;
-    lessonTitle?: string | null;
-    moduleTitle?: string | null;
-    subject?: Subject | string | null;
-  } | null>(null);
-  const [homeLessonContext, setHomeLessonContext] = useState<{
-    lessonId?: number | string | null;
-    lessonTitle?: string | null;
-    moduleTitle?: string | null;
-    subject?: Subject | string | null;
-  } | null>(null);
+  const [lessonContext, setLessonContext] = useState<TutorLessonContext | null>(null);
+  const [homeLessonContext, setHomeLessonContext] = useState<TutorLessonContext | null>(null);
   const conversationId = useRef<string>(`conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
   const [showExplainModal, setShowExplainModal] = useState(false);
   const assistantWindowRef = useRef<HTMLDivElement>(null);
@@ -291,7 +286,8 @@ const LearningAssistant: React.FC = () => {
   }, [adaptiveMisconceptions, contextHint, lessonContext]);
 
   const scaffoldActions: Array<{
-    id: HintLevel;
+    id: string;
+    helpMode: TutorHelpMode;
     label: string;
     helper: string;
     prompt: string;
@@ -301,6 +297,7 @@ const LearningAssistant: React.FC = () => {
       () => [
         {
           id: 'hint',
+          helpMode: 'hint',
           label: 'Show hint',
           helper: '1-2 sentence nudge',
           prompt: `Give me one short hint for ${scaffoldTopic}.`,
@@ -308,6 +305,7 @@ const LearningAssistant: React.FC = () => {
         },
         {
           id: 'break_down',
+          helpMode: 'break_down',
           label: 'Break it down',
           helper: 'Step-by-step',
           prompt: `Break ${scaffoldTopic} into 3-4 clear steps.`,
@@ -315,10 +313,19 @@ const LearningAssistant: React.FC = () => {
         },
         {
           id: 'another_way',
+          helpMode: 'another_way',
           label: 'Explain another way',
           helper: 'New angle',
           prompt: `Explain ${scaffoldTopic} another way with a quick example.`,
           icon: Repeat,
+        },
+        {
+          id: 'check_thinking',
+          helpMode: 'check_thinking',
+          label: 'Check my thinking',
+          helper: 'Spot mistakes',
+          prompt: `Check my thinking on ${scaffoldTopic} and point out what to fix.`,
+          icon: Target,
         },
       ],
       [scaffoldTopic],
@@ -439,40 +446,6 @@ const LearningAssistant: React.FC = () => {
       .catch((err) => console.warn('[LearningAssistant] Unable to load reflections', err));
   }, []);
 
-  const getContextualResponse = (userMessage: string): string => {
-    const message = userMessage.toLowerCase();
-
-    if (message.includes('help') || message.includes('stuck')) {
-      return `I can see you're working on ${studentStrengths[0] || 'several topics'}. When you're stuck, try breaking the problem into smaller steps. What specific part is challenging you? I can walk you through it step by step! 🤔`;
-    }
-
-    if (message.includes('motivation') || message.includes('tired') || message.includes('give up')) {
-      return `You're doing amazing! You've already earned ${student.xp} XP and you're on a ${student.streakDays}-day streak! 🔥 Remember, every expert was once a beginner. What you're learning today is building your future success. Take a short break if you need one, then come back strong! 💪`;
-    }
-
-    if (message.includes('math') || message.includes('algebra') || message.includes('equation')) {
-      return `Great choice focusing on math! I can see algebra is one of your strengths. For equations, remember the golden rule: whatever you do to one side, do to the other. Would you like me to walk through a specific type of problem with you? 📊`;
-    }
-
-    if (message.includes('english') || message.includes('writing') || message.includes('grammar')) {
-      return `English skills are so important! For writing, I always recommend the 3-step approach: Plan (outline your ideas), Draft (write without worrying about perfection), and Revise (polish your work). What type of writing are you working on? 📝`;
-    }
-
-    if (message.includes('science') || message.includes('experiment') || message.includes('biology')) {
-      return `Science is all about curiosity and discovery! The key is to understand the 'why' behind concepts, not just memorize facts. Try connecting what you learn to real-world examples. What science topic are you exploring? 🔬`;
-    }
-
-    if (message.includes('study tip') || message.includes('how to study')) {
-      return `Here's a personalized study tip for you: Since ${studentWeaknesses[0] || 'some areas'} need more practice, try the Feynman Technique - explain the concept in simple terms as if teaching a friend. This reveals gaps in understanding! Also, take breaks every 25 minutes (Pomodoro technique). 🧠`;
-    }
-
-    if (message.includes('weak') || message.includes('difficult') || message.includes('struggle')) {
-      return `I notice you're working on improving in ${studentWeaknesses[0] || 'certain areas'}. That's totally normal! Everyone has topics that challenge them more. The key is consistent practice and not being afraid to ask questions. Would you like some specific strategies for this topic? 🎯`;
-    }
-
-    return `That's a great question! Based on your learning profile and the areas where you're already strong in ${studentStrengths[0] || 'multiple areas'}, I can help you tackle this. Can you tell me more about what you're working on so I can give you the most helpful guidance? 🤝`;
-  };
-
   const handleReportSubmit = async () => {
     if (!reportTarget) return;
     setReportSubmitting(true);
@@ -496,6 +469,19 @@ const LearningAssistant: React.FC = () => {
         lesson_id: lessonContext?.lessonId ?? null,
         subject: lessonContext?.subject ?? null,
       });
+      if (lessonContext?.lessonId) {
+        void emitStudentEvent({
+          eventType: 'tutor_answer_reported',
+          payload: {
+            lesson_id: lessonContext.lessonId ?? null,
+            subject: lessonContext.subject ?? null,
+            reason: reportReason,
+            message_id: reportTarget.messageId ?? null,
+          },
+        }).catch((eventError) => {
+          console.warn('[LearningAssistant] Failed to persist tutor report event', eventError);
+        });
+      }
       setReportSuccess(true);
       setReportNotes('');
     } catch (error) {
@@ -524,22 +510,13 @@ const LearningAssistant: React.FC = () => {
     if (typeof window === 'undefined') return;
 
     const handleOpen = (event: Event) => {
-      const detail = (event as CustomEvent<{
-        prompt?: string;
-        source?: string;
-        lesson?: {
-          lessonId?: number | string | null;
-          lessonTitle?: string | null;
-          moduleTitle?: string | null;
-          subject?: Subject | string | null;
-        };
-      }>).detail ?? {};
+      const detail = (event as CustomEvent<TutorOpenRequest>).detail ?? {};
       setIsOpen(true);
       if (detail.prompt) {
         setInputMessage(detail.prompt);
-        setContextHint(detail.lesson?.lessonTitle ?? detail.source ?? 'Lesson context');
+        setContextHint(detail.lesson?.lessonTitle ?? detail.lesson?.sectionTitle ?? detail.source ?? 'Lesson context');
       } else {
-        setContextHint(detail.lesson?.lessonTitle ?? detail.source ?? null);
+        setContextHint(detail.lesson?.lessonTitle ?? detail.lesson?.sectionTitle ?? detail.source ?? null);
       }
       setLessonContext(detail.lesson ?? null);
       trackEvent('learning_assistant_context_open', {
@@ -673,25 +650,9 @@ const LearningAssistant: React.FC = () => {
       return;
     }
 
-    const modeInstruction =
-      responseMode === 'hint'
-        ? 'Provide a scaffolded hint without giving away the full answer unless I ask for it.'
-        : 'Share the full worked solution with reasoning after a short hint reminder.';
-    const hintLevelInstruction =
-      metadata?.hintLevel === 'break_down'
-        ? 'Break the solution into 3-4 clear, numbered steps with a short encouragement to try after each step.'
-        : metadata?.hintLevel === 'another_way'
-          ? alternateExplanationTemplate(lessonContext?.subject ?? lessonContext?.moduleTitle ?? null, conceptTagLabel)
-          : metadata?.hintLevel === 'hint'
-            ? 'Give one brief hint (1-2 sentences) without revealing the full answer.'
-            : '';
-    const curatedAlternate =
-      metadata?.hintLevel === 'another_way'
-        ? findCuratedAlternate(subjectTagLabel, conceptTagLabel)
-        : null;
-    const decoratedMessage = `${messageToSend}\n\n${modeInstruction}${hintLevelInstruction ? ` ${hintLevelInstruction}` : ''}`;
     const conceptForTelemetry = conceptTagLabel ?? 'concept';
     const subjectForTelemetry = lessonContext?.subject ?? null;
+    const helpMode = resolveHelpMode(responseMode, metadata?.hintLevel, metadata?.helpMode, messageToSend);
 
     const trackAdaptiveTutorOutcome = (
       outcome: 'success' | 'error' | 'safety_block',
@@ -728,15 +689,16 @@ const LearningAssistant: React.FC = () => {
       trackEvent('learning_assistant_scaffold_used', {
         studentId: student.id,
         hint_level: metadata.hintLevel,
+        help_mode: helpMode,
         subject: lessonContext?.subject ?? null,
         concept: conceptTagLabel ?? lessonContext?.lessonTitle ?? null,
-        curated_alternate: Boolean(curatedAlternate),
       });
     }
     trackEvent(metadata?.source === 'card' ? 'chat_prompt_card_sent' : 'learning_assistant_message_sent', {
       studentId: student.id,
       length: messageToSend.length,
       responseMode,
+      help_mode: helpMode,
       contextSource: contextHint ?? lessonContext?.lessonTitle ?? 'direct',
       card_id: metadata?.cardId,
       mode: chatMode,
@@ -753,13 +715,14 @@ const LearningAssistant: React.FC = () => {
     }
 
     try {
-      const promptEntries = [...messages, { ...userMessage, content: decoratedMessage }];
-      const contextWindow = promptEntries
+      const promptEntries = [...messages, userMessage];
+      const structuredMessages: TutorChatMessage[] = promptEntries
         .slice(-6)
-        .map((entry) => `${entry.isUser ? 'Student' : 'Assistant'}: ${entry.content}`)
-        .join('\n');
-
-      const promptForModel = `${contextWindow}\nAssistant:`.slice(-1100);
+        .map((entry) => ({
+          role: entry.isUser ? 'user' : 'assistant',
+          content: entry.content,
+          createdAt: entry.timestamp instanceof Date ? entry.timestamp.toISOString() : undefined,
+        }));
       const personaName = student.tutorName?.trim();
       const personaStyle =
         tutorPersona?.prompt_snippet ??
@@ -819,9 +782,8 @@ const LearningAssistant: React.FC = () => {
         contextHint ? `Context: ${contextHint}` : null,
         focusLabel ? `Current focus: ${focusLabel}` : null,
         conceptTag ? `Focus concept: ${conceptTag}` : null,
-        metadata?.hintLevel ? `Hint level: ${metadata.hintLevel}` : null,
+        helpMode ? `Help mode: ${helpMode}` : null,
         planIntent !== 'balanced' ? `Weekly intent: ${planIntent}` : null,
-        curatedAlternate ? `Curated alternate: ${curatedAlternate}` : null,
         recentReflections.length
           ? `Recent reflections: ${recentReflections
             .map((entry) => entry.responseText.trim())
@@ -832,10 +794,17 @@ const LearningAssistant: React.FC = () => {
         .filter(Boolean)
         .join(' | ');
 
-      const response = await getTutorResponse(promptForModel, {
+      const response = await getTutorResponse(messageToSend, {
         mode: 'learning',
         systemPrompt: guardrails,
         knowledge: knowledgeContext || undefined,
+        messages: structuredMessages,
+        helpMode,
+        lessonContext: lessonContext ?? undefined,
+        learnerContext: {
+          gradeLevel: student.grade > 0 ? `${student.grade}` : undefined,
+          supportLevel: student.grade > 0 && student.grade <= 5 ? 'extra_scaffold' : 'default',
+        },
       });
       if (recentReflections.length) {
         trackEvent('reflection_referenced_in_tutor', {
@@ -875,10 +844,47 @@ const LearningAssistant: React.FC = () => {
         plan: response.plan ?? undefined,
         remaining: response.remaining,
         hint_level: metadata?.hintLevel ?? null,
+        help_mode: helpMode,
         subject: lessonContext?.subject ?? null,
         concept: conceptTag,
-        curated_alternate: Boolean(curatedAlternate),
       });
+      if (lessonContext?.lessonId) {
+        const detail: TutorAnsweredEventDetail = {
+          lessonId: lessonContext.lessonId,
+          phase: lessonContext.phase,
+          sectionId: lessonContext.sectionId ?? null,
+          questionStem: lessonContext.questionStem ?? null,
+          helpMode,
+          deliveryMode: 'ai_direct',
+          subject: lessonContext.subject ?? null,
+          timestamp: Date.now(),
+        };
+        window.dispatchEvent(new CustomEvent('learning-assistant:answered', { detail }));
+        trackEvent('tutor_answered_in_lesson', {
+          studentId: student.id,
+          lesson_id: lessonContext.lessonId ?? null,
+          subject: lessonContext.subject ?? null,
+          help_mode: helpMode,
+          delivery_mode: 'ai_direct',
+          phase: lessonContext.phase ?? null,
+          grounded_to_problem: Boolean(lessonContext.questionStem),
+        });
+        void emitStudentEvent({
+          eventType: 'tutor_answered_in_lesson',
+          payload: {
+            lesson_id: lessonContext.lessonId ?? null,
+            phase: lessonContext.phase ?? null,
+            section_id: lessonContext.sectionId ?? null,
+            question_stem: lessonContext.questionStem ?? null,
+            help_mode: helpMode,
+            delivery_mode: 'ai_direct',
+            subject: lessonContext.subject ?? null,
+            grounded_to_problem: Boolean(lessonContext.questionStem),
+          },
+        }).catch((eventError) => {
+          console.warn('[LearningAssistant] Failed to persist tutor answered event', eventError);
+        });
+      }
       trackAdaptiveTutorOutcome('success', 'ai_direct', {
         plan: response.plan ?? undefined,
       });
@@ -919,7 +925,15 @@ const LearningAssistant: React.FC = () => {
 
       const fallbackResponse: ChatMessage = {
         id: (Date.now() + 2).toString(),
-        content: getContextualResponse(messageToSend),
+        content: buildTutorDeterministicFallback({
+          userMessage: messageToSend,
+          helpMode,
+          lessonContext,
+          studentXp: student.xp,
+          studentStreakDays: student.streakDays,
+          studentStrengths,
+          studentWeaknesses,
+        }),
         isUser: false,
         timestamp: new Date(),
         role: 'assistant',
@@ -930,10 +944,47 @@ const LearningAssistant: React.FC = () => {
         studentId: student.id,
         source: 'rules-engine',
         hint_level: metadata?.hintLevel ?? null,
+        help_mode: helpMode,
         subject: lessonContext?.subject ?? null,
         concept: conceptTagLabel ?? 'concept',
-        curated_alternate: false,
       });
+      if (lessonContext?.lessonId) {
+        const detail: TutorAnsweredEventDetail = {
+          lessonId: lessonContext.lessonId,
+          phase: lessonContext.phase,
+          sectionId: lessonContext.sectionId ?? null,
+          questionStem: lessonContext.questionStem ?? null,
+          helpMode,
+          deliveryMode: 'deterministic_fallback',
+          subject: lessonContext.subject ?? null,
+          timestamp: Date.now(),
+        };
+        window.dispatchEvent(new CustomEvent('learning-assistant:answered', { detail }));
+        trackEvent('tutor_answered_in_lesson', {
+          studentId: student.id,
+          lesson_id: lessonContext.lessonId ?? null,
+          subject: lessonContext.subject ?? null,
+          help_mode: helpMode,
+          delivery_mode: 'deterministic_fallback',
+          phase: lessonContext.phase ?? null,
+          grounded_to_problem: Boolean(lessonContext.questionStem),
+        });
+        void emitStudentEvent({
+          eventType: 'tutor_answered_in_lesson',
+          payload: {
+            lesson_id: lessonContext.lessonId ?? null,
+            phase: lessonContext.phase ?? null,
+            section_id: lessonContext.sectionId ?? null,
+            question_stem: lessonContext.questionStem ?? null,
+            help_mode: helpMode,
+            delivery_mode: 'deterministic_fallback',
+            subject: lessonContext.subject ?? null,
+            grounded_to_problem: Boolean(lessonContext.questionStem),
+          },
+        }).catch((eventError) => {
+          console.warn('[LearningAssistant] Failed to persist tutor answered event', eventError);
+        });
+      }
       trackAdaptiveTutorOutcome('error', 'deterministic_fallback', {
         fallbackSource: 'rules-engine',
         reason: 'assistant_error_fallback',
@@ -1304,7 +1355,11 @@ const LearningAssistant: React.FC = () => {
                     type="button"
                     onClick={() => {
                       setResponseMode('hint');
-                      void handleSendMessage(action.prompt, { source: 'scaffold', hintLevel: action.id });
+                      void handleSendMessage(action.prompt, {
+                        source: 'scaffold',
+                        hintLevel: action.helpMode === 'check_thinking' ? undefined : (action.helpMode as HintLevel),
+                        helpMode: action.helpMode,
+                      });
                     }}
                     className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 font-semibold text-slate-700 hover:border-brand-blue/60 hover:text-brand-blue focus-ring"
                   >

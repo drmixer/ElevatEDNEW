@@ -20,6 +20,14 @@ Goal: stand up import paths for anchor OER curricula, starting with Math 3-8 (Il
 3) **Import:**
    - Run: `pnpm tsx tools/importers/oer/index.ts --path ./data/oer --subject Mathematics --source "Open Up Resources / IM"`.
    - This writes into `subjects`, `topics`, and `lessons` with license/provenance preserved. It is source-agnostic and safe for CC BY.
+   - After any import or seeding pass that touches `question_bank`, run `npm run eval:question-bank-gate`. This must stay green.
+   - Prefer the guarded package scripts when available:
+     - `npm run import:authored-practice:guarded`
+     - `npm run import:provider-dataset:guarded`
+     - `npm run import:openstax:guarded`
+     - `npm run seed:practice-questions:guarded`
+     - `npm run seed:module-assessments:guarded`
+     - `npm run seed:launch-all:guarded`
 
 4) **Enrich with standards and assets:**
    - Attach standards at the module/unit level when those modules exist via `pnpm tsx scripts/import_module_standards.ts`.
@@ -28,6 +36,7 @@ Goal: stand up import paths for anchor OER curricula, starting with Math 3-8 (Il
 5) **QA:**
    - `pnpm tsx scripts/audit_licenses.ts` to flag NC/ND or missing license fields.
    - `pnpm tsx scripts/audit_completeness.ts` to catch missing grade/subject/standards metadata.
+   - `npm run eval:question-bank-gate` to fail the run if generic or blocked practice questions re-enter the bank.
    - Spot-check a couple of imported lessons per grade: titles, URLs resolve, attribution present.
 
 ## ELA 3-8 (EL Education + PD texts) - Next

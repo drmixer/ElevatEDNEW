@@ -197,7 +197,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       sessionUser: SupabaseAuthUser | null | undefined,
     ) => {
       if (!sessionUser) return false;
-      return event === 'INITIAL_SESSION' || event === 'USER_UPDATED';
+      return event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'USER_UPDATED';
     };
 
     const initialise = async () => {

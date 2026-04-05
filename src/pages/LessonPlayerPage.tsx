@@ -36,6 +36,8 @@ import { getGrade2MathPilotTopic, type Grade2MathPilotTopic } from '../lib/pilot
 import { generateGrade2MathPracticeQuestions } from '../lib/pilotGrade2Math';
 import { getNonMathRemediationSubject, type NonMathRemediationSubject } from '../lib/nonMathRemediation';
 import { buildLessonNextReasonCard } from '../lib/transparencyReason';
+import { shouldTrackTutorRetryAfterHint } from '../lib/tutorTelemetry';
+import type { TutorAnsweredEventDetail, TutorLessonContext, TutorOpenRequest } from '../../shared/tutor';
 
 // Core Lesson Components (eagerly loaded)
 import {
@@ -150,7 +152,7 @@ const LessonContent: React.FC<{
     practiceQuestions: LessonPracticeQuestion[];
     hideGradeLabels: boolean;
     onAnswerSubmit: (questionId: number, optionId: number, isCorrect: boolean) => void;
-    onAskTutor?: (context: string) => void;
+    onAskTutor?: (request: TutorOpenRequest) => void;
     onSectionComplete?: (sectionIndex: number) => void;
     xpEarned: number;
 }> = ({
@@ -291,6 +293,7 @@ const LessonPlayerPage: React.FC = () => {
     const lessonStartedAt = useRef<number>(Date.now());
     const lessonCompletionLogged = useRef<boolean>(false);
     const lessonReasonTelemetryKey = useRef<string | null>(null);
+    const recentTutorAnswerRef = useRef<TutorAnsweredEventDetail | null>(null);
     const [xpEarned, setXpEarned] = useState(0);
 
     // Validate lesson ID
@@ -360,6 +363,11 @@ const LessonPlayerPage: React.FC = () => {
             fetchLessonCheckQuestions(
                 lessonId,
                 (lessonDetail?.module.subject as Subject | null) ?? null,
+                {
+                    gradeBand: lessonDetail?.module.gradeBand ?? null,
+                    lessonTitle: lessonDetail?.lesson.title ?? null,
+                    lessonContent: lessonDetail?.lesson.content ?? null,
+                },
             ),
         enabled: isLessonIdValid && Boolean(studentId) && Boolean(lessonDetail),
         staleTime: 5 * 60 * 1000,
@@ -417,7 +425,23 @@ const LessonPlayerPage: React.FC = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         lessonStartedAt.current = Date.now();
         lessonCompletionLogged.current = false;
+        recentTutorAnswerRef.current = null;
     }, [lessonId]);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const handleTutorAnswered = (event: Event) => {
+            const detail = (event as CustomEvent<TutorAnsweredEventDetail>).detail;
+            if (!detail) return;
+            recentTutorAnswerRef.current = detail;
+        };
+
+        window.addEventListener('learning-assistant:answered', handleTutorAnswered as EventListener);
+        return () => {
+            window.removeEventListener('learning-assistant:answered', handleTutorAnswered as EventListener);
+        };
+    }, []);
 
     // Extract lesson standards for tracking
     const lessonStandards = useMemo(() => {
@@ -542,6 +566,7 @@ const LessonPlayerPage: React.FC = () => {
 
         const question = practiceQuestions.find((q) => q.id === questionId);
         if (!question) return;
+        const recentTutorAnswer = recentTutorAnswerRef.current;
 
         if (isGrade2MathPilot) {
             trackEvent('success_pilot_practice_answered', {
@@ -593,6 +618,33 @@ const LessonPlayerPage: React.FC = () => {
                     time_spent: elapsedSeconds,
                 },
             });
+
+            if (shouldTrackTutorRetryAfterHint(recentTutorAnswer, {
+                lessonId,
+                questionStem: question.prompt,
+            })) {
+                trackEvent('tutor_retried_after_hint', {
+                    studentId,
+                    lesson_id: lessonId,
+                    question_id: questionId,
+                    subject: lessonDetail.module.subject ?? null,
+                    help_mode: recentTutorAnswer?.helpMode ?? null,
+                    delivery_mode: recentTutorAnswer?.deliveryMode ?? null,
+                    is_correct: isCorrect,
+                });
+                await emitStudentEvent({
+                    eventType: 'tutor_retried_after_hint',
+                    payload: {
+                        lesson_id: lessonId,
+                        question_id: questionId,
+                        subject: lessonDetail.module.subject ?? null,
+                        help_mode: recentTutorAnswer?.helpMode ?? null,
+                        delivery_mode: recentTutorAnswer?.deliveryMode ?? null,
+                        correct: isCorrect,
+                        question_stem: question.prompt,
+                    },
+                });
+            }
         } catch (error) {
             console.warn('[lesson] Failed to record practice answer', error);
         }
@@ -601,22 +653,27 @@ const LessonPlayerPage: React.FC = () => {
     /**
      * Handle AI tutor open with context
      */
-    const handleAskTutor = useCallback((context: string) => {
-        if (!context || typeof window === 'undefined') return;
+    const handleAskTutor = useCallback((request: TutorOpenRequest) => {
+        if ((!request.prompt && !request.lesson) || typeof window === 'undefined') return;
+
+        const lessonContext: TutorLessonContext | undefined = lessonDetail
+            ? {
+                moduleId: lessonDetail.module.id ?? null,
+                moduleTitle: lessonDetail.module.title,
+                lessonId: lessonDetail.lesson.id,
+                lessonTitle: lessonDetail.lesson.title,
+                subject: lessonDetail.module.subject,
+                ...request.lesson,
+            }
+            : request.lesson;
 
         window.dispatchEvent(
             new CustomEvent('learning-assistant:open', {
                 detail: {
-                    prompt: context,
-                    source: 'lesson',
-                    lesson: lessonDetail
-                        ? {
-                            lessonId: lessonDetail.lesson.id,
-                            lessonTitle: lessonDetail.lesson.title,
-                            moduleTitle: lessonDetail.module.title,
-                            subject: lessonDetail.module.subject,
-                        }
-                        : undefined,
+                    prompt: request.prompt,
+                    source: request.source ?? 'lesson',
+                    helpMode: request.helpMode,
+                    lesson: lessonContext,
                 },
             }),
         );
@@ -624,7 +681,7 @@ const LessonPlayerPage: React.FC = () => {
         trackEvent('contextual_ai_help_opened', {
             studentId,
             lessonId,
-            source: 'lesson_stepper',
+            source: request.source ?? 'lesson_stepper',
             subject: lessonDetail?.module.subject,
         });
     }, [lessonDetail, lessonId, studentId]);

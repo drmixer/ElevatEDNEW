@@ -1,0 +1,1062 @@
+lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_questions,blocked_linked_questions,generic_linked_questions,blocked_rate,all_linked_questions_blocked,reason_codes,flagged_question_ids,lesson_title
+38,1-electives-computer-science-algorithms-unplugged,Electives,1,12,0,0,0,0,false,,,Algorithms (unplugged) Launch Lesson
+39,10-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,10,24,0,0,0,0,false,,,"CS Principles, Data Structures (intro), Web Dev Basics Launch Lesson"
+40,11-electives-financial-literacy-elective-taxes-credit-debt,Electives,11,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
+41,12-electives-financial-literacy-elective-investing-basics,Electives,12,24,0,0,0,0,false,,,Investing Basics Launch Lesson
+42,k-electives-health-and-pe-movement-safety-hygiene,Electives,K,24,0,0,0,0,false,,,"Movement, Safety, Hygiene Launch Lesson"
+56,9-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,9,28,0,0,0,0,false,,,"Studio Art, Design, Music Composition/Performance Launch Lesson"
+58,1-english-language-arts-reading-literature-poetry-short-forms,English Language Arts,1,16,0,0,0,0,false,,,Poetry (short forms) Launch Lesson
+59,10-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,10,24,0,0,0,0,false,,,World Lit (PD where possible) Launch Lesson
+60,11-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,11,24,0,0,0,0,false,,,American/British Lit (PD works) Launch Lesson
+61,12-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,12,16,0,0,0,0,false,,,Rhetoric & Argument Launch Lesson
+62,2-english-language-arts-reading-literature-picture-books-pd,English Language Arts,2,8,0,0,0,0,false,,,Picture Books (PD) Launch Lesson
+69,9-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,9,24,0,0,0,0,false,,,"Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review Launch Lesson"
+70,k-english-language-arts-speaking-and-listening-show-and-tell-retelling,English Language Arts,K,16,0,0,0,0,false,,,"Show & Tell, Retelling Launch Lesson"
+71,1-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard,Mathematics,1,16,0,0,0,0,false,,,Length/Weight/Capacity (non-standard/standard) Launch Lesson
+72,10-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,10,36,0,0,0,0,false,,,Transformations (advanced) Launch Lesson
+73,11-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,11,16,0,0,0,0,false,,,Derivatives (intro) Launch Lesson
+74,12-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,12,24,0,0,0,0,false,,,Regression (linear/multiple) Launch Lesson
+75,2-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes,Mathematics,2,16,0,0,0,0,false,,,2D/3D Shapes & Attributes Launch Lesson
+82,9-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,9,24,0,0,0,0,false,,,Linear/Quadratic Functions Launch Lesson
+83,k-mathematics-geometry-and-measurement-perimeter-intro,Mathematics,K,20,0,0,0,0,false,,,Perimeter (intro) Launch Lesson
+84,2-science-physical-science-energy-heat-sun,Science,2,12,0,0,0,0,false,,,Energy (heat/sun) Launch Lesson
+85,10-science-engineering-practices-systems-design,Science,10,32,0,0,0,0,false,,,Systems Design Launch Lesson
+86,11-science-life-science-evolution-advanced,Science,11,24,0,0,0,0,false,,,Evolution (advanced) Launch Lesson
+87,12-science-life-science-molecular-genetics,Science,12,16,0,0,0,0,false,,,Molecular Genetics Launch Lesson
+95,9-science-earth-and-space-oceanography-atmospheric-science,Science,9,24,0,0,0,0,false,,,Oceanography/Atmospheric Science Launch Lesson
+96,k-science-life-science-habitats,Science,K,12,0,0,0,0,false,,,Habitats Launch Lesson
+97,k-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,K,20,0,0,0,0,false,,,Choices & Trade Launch Lesson
+98,10-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,10,28,0,0,0,0,false,,,Thematic/AP-style depth (PD docs) Launch Lesson
+99,12-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,12,24,0,0,0,0,false,,,"Personal Finance (taxes, credit) Launch Lesson"
+101,2-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,2,12,0,0,0,0,false,,,Maps/Globes (basic) Launch Lesson
+108,9-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,9,24,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography Launch Lesson"
+109,k-social-studies-us-history-national-symbols,Social Studies,K,16,0,0,0,0,false,,,National Symbols Launch Lesson
+124,3-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,3,36,0,0,0,0,false,,,Roots/Prefixes/Suffixes
+125,3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,3,108,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
+126,4-english-language-arts-reading-informational-biographies-pd,English Language Arts,4,252,0,0,0,0,false,,,Biographies (PD)
+127,4-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,4,72,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
+128,4-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,4,4,0,0,0,0,false,,,Chapter Books (PD)
+129,4-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,4,252,0,0,0,0,false,,,Myths/Legends (PD)
+130,4-english-language-arts-reading-literature-short-stories-pd,English Language Arts,4,252,0,0,0,0,false,,,Short Stories (PD)
+131,4-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,4,36,0,0,0,0,false,,,"Presentations, Summaries"
+132,4-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,4,36,0,0,0,0,false,,,Roots/Prefixes/Suffixes
+133,5-english-language-arts-reading-informational-biographies-pd,English Language Arts,5,4,0,0,0,0,false,,,Biographies (PD)
+134,5-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,5,72,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
+135,5-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,5,252,0,0,0,0,false,,,Chapter Books (PD)
+136,5-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,5,252,0,0,0,0,false,,,Myths/Legends (PD)
+137,5-english-language-arts-reading-literature-short-stories-pd,English Language Arts,5,252,0,0,0,0,false,,,Short Stories (PD)
+138,5-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,5,8,0,0,0,0,false,,,"Presentations, Summaries"
+139,5-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,5,108,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
+140,6-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,6,252,0,0,0,0,false,,,Historical Documents (PD)
+141,6-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,6,72,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
+142,6-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,6,252,0,0,0,0,false,,,Poetry & Drama (PD)
+143,6-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,6,36,0,0,0,0,false,,,World Literature (PD where possible)
+144,6-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,6,36,0,0,0,0,false,,,"Debates, Multimedia Presentations"
+145,6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,6,8,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
+146,6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,6,4,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
+147,7-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,7,252,0,0,0,0,false,,,Historical Documents (PD)
+148,7-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,7,12,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
+149,7-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,7,252,0,0,0,0,false,,,Novellas/Short Novels (PD)
+150,7-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,7,252,0,0,0,0,false,,,Poetry & Drama (PD)
+151,7-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,7,36,0,0,0,0,false,,,World Literature (PD where possible)
+152,7-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,7,4,0,0,0,0,false,,,"Debates, Multimedia Presentations"
+153,7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,7,36,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
+154,8-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,8,72,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
+155,8-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,8,252,0,0,0,0,false,,,Novellas/Short Novels (PD)
+156,8-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,8,252,0,0,0,0,false,,,Poetry & Drama (PD)
+157,8-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,8,36,0,0,0,0,false,,,World Literature (PD where possible)
+158,8-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,8,36,0,0,0,0,false,,,"Debates, Multimedia Presentations"
+159,8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,8,36,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
+160,8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,8,36,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
+161,3-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,3,36,0,0,0,0,false,,,Bar/Line Plots
+162,3-mathematics-data-and-probability-statistics-interpreting-tables-charts,Mathematics,3,8,0,0,0,0,false,,,Interpreting Tables/Charts
+163,3-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,3,36,0,0,0,0,false,,,Intro Probability (experimental)
+164,3-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,3,36,0,0,0,0,false,,,Mean/Median/Mode
+165,3-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,3,36,0,0,0,0,false,,,Angles & Lines
+166,3-mathematics-geometry-and-measurement-area-perimeter,Mathematics,3,36,0,0,0,0,false,,,Area/Perimeter
+167,3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,3,8,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
+168,3-mathematics-geometry-and-measurement-transformations-intro,Mathematics,3,36,0,0,0,0,false,,,Transformations (intro)
+169,3-mathematics-geometry-and-measurement-volume,Mathematics,3,36,0,0,0,0,false,,,Volume
+170,3-mathematics-number-and-operations-decimals-intro,Mathematics,3,288,0,0,0,0,false,,,Decimals (intro)
+171,3-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,3,36,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
+172,3-mathematics-number-and-operations-multiplication-division,Mathematics,3,4,0,0,0,0,false,,,Multiplication/Division
+173,3-mathematics-number-and-operations-rounding-and-estimation,Mathematics,3,36,0,0,0,0,false,,,Rounding & Estimation
+174,4-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,4,36,0,0,0,0,false,,,Bar/Line Plots
+175,4-mathematics-data-and-probability-statistics-interpreting-tables-charts,Mathematics,4,8,0,0,0,0,false,,,Interpreting Tables/Charts
+176,4-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,4,8,0,0,0,0,false,,,Intro Probability (experimental)
+177,4-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,4,36,0,0,0,0,false,,,Mean/Median/Mode
+178,4-mathematics-geometry-and-measurement-area-perimeter,Mathematics,4,36,0,0,0,0,false,,,Area/Perimeter
+179,4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,4,8,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
+180,4-mathematics-geometry-and-measurement-transformations-intro,Mathematics,4,288,0,0,0,0,false,,,Transformations (intro)
+181,4-mathematics-geometry-and-measurement-volume,Mathematics,4,36,0,0,0,0,false,,,Volume
+182,4-mathematics-number-and-operations-decimals-intro,Mathematics,4,4,0,0,0,0,false,,,Decimals (intro)
+183,4-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,4,36,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
+184,4-mathematics-number-and-operations-multiplication-division,Mathematics,4,36,0,0,0,0,false,,,Multiplication/Division
+185,4-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,4,36,0,0,0,0,false,,,Place Value (thousands/millions)
+186,4-mathematics-number-and-operations-rounding-and-estimation,Mathematics,4,36,0,0,0,0,false,,,Rounding & Estimation
+187,5-mathematics-data-and-probability-statistics-interpreting-tables-charts,Mathematics,5,36,0,0,0,0,false,,,Interpreting Tables/Charts
+188,5-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,5,8,0,0,0,0,false,,,Intro Probability (experimental)
+189,5-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,5,36,0,0,0,0,false,,,Mean/Median/Mode
+190,5-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,5,8,0,0,0,0,false,,,Angles & Lines
+191,5-mathematics-geometry-and-measurement-area-perimeter,Mathematics,5,4,0,0,0,0,false,,,Area/Perimeter
+192,5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,5,36,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
+193,5-mathematics-geometry-and-measurement-transformations-intro,Mathematics,5,36,0,0,0,0,false,,,Transformations (intro)
+194,5-mathematics-geometry-and-measurement-volume,Mathematics,5,4,0,0,0,0,false,,,Volume
+195,5-mathematics-number-and-operations-decimals-intro,Mathematics,5,288,0,0,0,0,false,,,Decimals (intro)
+196,5-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,5,4,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
+197,5-mathematics-number-and-operations-multiplication-division,Mathematics,5,36,0,0,0,0,false,,,Multiplication/Division
+198,5-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,5,8,0,0,0,0,false,,,Place Value (thousands/millions)
+199,5-mathematics-number-and-operations-rounding-and-estimation,Mathematics,5,4,0,0,0,0,false,,,Rounding & Estimation
+200,6-mathematics-data-and-probability-statistics-probability-rules,Mathematics,6,36,0,0,0,0,false,,,Probability Rules
+201,6-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,6,288,0,0,0,0,false,,,Sampling & Inference (intro)
+202,6-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,6,36,0,0,0,0,false,,,Scatterplots & Correlation
+203,6-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,6,36,0,0,0,0,false,,,Two-way Tables
+204,6-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,6,36,0,0,0,0,false,,,Coordinate Geometry
+205,6-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,6,36,0,0,0,0,false,,,Pythagorean Theorem
+206,6-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,6,36,0,0,0,0,false,,,Similarity & Congruence
+207,6-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,6,36,0,0,0,0,false,,,Transformations & Symmetry
+208,6-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,6,4,0,0,0,0,false,,,Volume & Surface Area
+209,6-mathematics-number-and-operations-expressions-and-equations,Mathematics,6,8,0,0,0,0,false,,,Expressions & Equations
+210,6-mathematics-number-and-operations-functions-intro,Mathematics,6,288,0,0,0,0,false,,,Functions (intro)
+211,6-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,6,4,0,0,0,0,false,,,Integers & Rational Numbers
+212,6-mathematics-number-and-operations-percent-and-rates,Mathematics,6,36,0,0,0,0,false,,,Percent & Rates
+213,7-mathematics-data-and-probability-statistics-probability-rules,Mathematics,7,8,0,0,0,0,false,,,Probability Rules
+214,7-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,7,8,0,0,0,0,false,,,Sampling & Inference (intro)
+215,7-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,7,4,0,0,0,0,false,,,Scatterplots & Correlation
+216,7-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,7,4,0,0,0,0,false,,,Two-way Tables
+217,7-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,7,36,0,0,0,0,false,,,Coordinate Geometry
+218,7-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,7,36,0,0,0,0,false,,,Pythagorean Theorem
+219,7-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,7,36,0,0,0,0,false,,,Similarity & Congruence
+220,7-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,7,36,0,0,0,0,false,,,Transformations & Symmetry
+221,7-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,7,36,0,0,0,0,false,,,Volume & Surface Area
+222,7-mathematics-number-and-operations-expressions-and-equations,Mathematics,7,36,0,0,0,0,false,,,Expressions & Equations
+223,7-mathematics-number-and-operations-functions-intro,Mathematics,7,8,0,0,0,0,false,,,Functions (intro)
+224,7-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,7,36,0,0,0,0,false,,,Integers & Rational Numbers
+225,7-mathematics-number-and-operations-percent-and-rates,Mathematics,7,8,0,0,0,0,false,,,Percent & Rates
+226,7-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,7,12,0,0,0,0,false,,,Ratios & Proportional Reasoning
+227,8-mathematics-data-and-probability-statistics-probability-rules,Mathematics,8,8,0,0,0,0,false,,,Probability Rules
+228,8-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,8,8,0,0,0,0,false,,,Sampling & Inference (intro)
+229,8-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,8,36,0,0,0,0,false,,,Two-way Tables
+230,8-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,8,4,0,0,0,0,false,,,Coordinate Geometry
+231,8-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,8,36,0,0,0,0,false,,,Pythagorean Theorem
+232,8-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,8,12,0,0,0,0,false,,,Similarity & Congruence
+233,8-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,8,4,0,0,0,0,false,,,Transformations & Symmetry
+234,8-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,8,36,0,0,0,0,false,,,Volume & Surface Area
+235,8-mathematics-number-and-operations-expressions-and-equations,Mathematics,8,8,0,0,0,0,false,,,Expressions & Equations
+236,8-mathematics-number-and-operations-functions-intro,Mathematics,8,8,0,0,0,0,false,,,Functions (intro)
+237,8-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,8,36,0,0,0,0,false,,,Integers & Rational Numbers
+238,8-mathematics-number-and-operations-percent-and-rates,Mathematics,8,8,0,0,0,0,false,,,Percent & Rates
+239,8-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,8,12,0,0,0,0,false,,,Ratios & Proportional Reasoning
+240,3-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,3,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
+241,3-science-earth-and-space-natural-resources,Science,3,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Natural Resources
+242,3-science-earth-and-space-solar-system-relative-scale,Science,3,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
+243,3-science-earth-and-space-weather-and-climate,Science,3,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
+244,3-science-engineering-practices-criteria-and-constraints,Science,3,72,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
+245,3-science-engineering-practices-prototypes-and-iteration,Science,3,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
+246,3-science-life-science-adaptations,Science,3,36,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
+247,3-science-life-science-ecosystems-and-food-webs,Science,3,36,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
+248,3-science-life-science-heredity-intro,Science,3,8,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
+249,3-science-life-science-human-body-systems-intro,Science,3,288,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
+250,3-science-physical-science-energy-transfer,Science,3,36,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
+251,3-science-physical-science-forces-balanced-unbalanced,Science,3,36,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
+252,3-science-physical-science-waves-intro,Science,3,8,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
+253,4-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,4,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
+254,4-science-earth-and-space-natural-resources,Science,4,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Natural Resources
+255,4-science-earth-and-space-weather-and-climate,Science,4,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
+256,4-science-engineering-practices-criteria-and-constraints,Science,4,72,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
+257,4-science-engineering-practices-prototypes-and-iteration,Science,4,4,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
+258,4-science-life-science-adaptations,Science,4,36,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
+259,4-science-life-science-ecosystems-and-food-webs,Science,4,4,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
+260,4-science-life-science-heredity-intro,Science,4,8,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
+261,4-science-life-science-human-body-systems-intro,Science,4,288,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
+262,4-science-physical-science-energy-transfer,Science,4,36,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
+263,4-science-physical-science-forces-balanced-unbalanced,Science,4,8,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
+264,4-science-physical-science-matter-particles,Science,4,36,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
+265,4-science-physical-science-waves-intro,Science,4,8,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
+266,5-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,5,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
+267,5-science-earth-and-space-natural-resources,Science,5,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Natural Resources
+268,5-science-earth-and-space-solar-system-relative-scale,Science,5,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
+269,5-science-earth-and-space-weather-and-climate,Science,5,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
+270,5-science-engineering-practices-prototypes-and-iteration,Science,5,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
+271,5-science-life-science-adaptations,Science,5,36,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
+272,5-science-life-science-ecosystems-and-food-webs,Science,5,36,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
+273,5-science-life-science-heredity-intro,Science,5,288,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
+274,5-science-life-science-human-body-systems-intro,Science,5,288,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
+275,5-science-physical-science-energy-transfer,Science,5,36,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
+276,5-science-physical-science-forces-balanced-unbalanced,Science,5,8,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
+277,5-science-physical-science-matter-particles,Science,5,4,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
+278,5-science-physical-science-waves-intro,Science,5,288,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
+279,6-science-earth-and-space-astronomy-stars-galaxies,Science,6,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Astronomy Stars Galaxies
+280,6-science-earth-and-space-earth-history,Science,6,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth History
+281,6-science-earth-and-space-weather-climate-systems,Science,6,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather Climate Systems
+282,6-science-engineering-practices-data-driven-design,Science,6,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Data Driven Design
+283,6-science-engineering-practices-modeling-and-optimization,Science,6,8,0,0,0,0,false,,,Launch Lesson: Engineering Practices Modeling And Optimization
+284,6-science-engineering-practices-tradeoffs-and-constraints,Science,6,72,0,0,0,0,false,,,Launch Lesson: Engineering Practices Tradeoffs And Constraints
+285,6-science-life-science-cells-and-organelles,Science,6,8,0,0,0,0,false,,,Launch Lesson: Life Science Cells And Organelles
+286,6-science-life-science-ecology-and-biodiversity,Science,6,36,0,0,0,0,false,,,Launch Lesson: Life Science Ecology And Biodiversity
+287,6-science-life-science-evolution-and-natural-selection,Science,6,12,0,0,0,0,false,,,Launch Lesson: Life Science Evolution And Natural Selection
+288,6-science-life-science-genetics-and-heredity,Science,6,4,0,0,0,0,false,,,Launch Lesson: Life Science Genetics And Heredity
+289,6-science-life-science-human-body-systems-detailed,Science,6,8,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Detailed
+290,6-science-physical-science-chemistry-atoms-bonding-reactions,Science,6,36,0,0,0,0,false,,,Launch Lesson: Physical Science Chemistry Atoms Bonding Reactions
+291,6-science-physical-science-energy-and-heat,Science,6,12,0,0,0,0,false,,,Launch Lesson: Physical Science Energy And Heat
+292,6-science-physical-science-kinematics-and-forces,Science,6,8,0,0,0,0,false,,,Launch Lesson: Physical Science Kinematics And Forces
+293,6-science-physical-science-waves-and-electromagnetic-spectrum,Science,6,8,0,0,0,0,false,,,Launch Lesson: Physical Science Waves And Electromagnetic Spectrum
+294,7-science-earth-and-space-astronomy-stars-galaxies,Science,7,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Astronomy Stars Galaxies
+295,7-science-earth-and-space-earth-history,Science,7,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth History
+296,7-science-earth-and-space-plate-tectonics,Science,7,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Plate Tectonics
+297,7-science-earth-and-space-weather-climate-systems,Science,7,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather Climate Systems
+298,7-science-engineering-practices-data-driven-design,Science,7,4,0,0,0,0,false,,,Launch Lesson: Engineering Practices Data Driven Design
+299,7-science-engineering-practices-modeling-and-optimization,Science,7,8,0,0,0,0,false,,,Launch Lesson: Engineering Practices Modeling And Optimization
+300,7-science-engineering-practices-tradeoffs-and-constraints,Science,7,8,0,0,0,0,false,,,Launch Lesson: Engineering Practices Tradeoffs And Constraints
+301,7-science-life-science-cells-and-organelles,Science,7,8,0,0,0,0,false,,,Launch Lesson: Life Science Cells And Organelles
+302,7-science-life-science-ecology-and-biodiversity,Science,7,36,0,0,0,0,false,,,Launch Lesson: Life Science Ecology And Biodiversity
+303,7-science-life-science-genetics-and-heredity,Science,7,36,0,0,0,0,false,,,Launch Lesson: Life Science Genetics And Heredity
+304,7-science-life-science-human-body-systems-detailed,Science,7,36,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Detailed
+305,7-science-physical-science-chemistry-atoms-bonding-reactions,Science,7,36,0,0,0,0,false,,,Launch Lesson: Physical Science Chemistry Atoms Bonding Reactions
+306,7-science-physical-science-energy-and-heat,Science,7,12,0,0,0,0,false,,,Launch Lesson: Physical Science Energy And Heat
+307,7-science-physical-science-kinematics-and-forces,Science,7,36,0,0,0,0,false,,,Launch Lesson: Physical Science Kinematics And Forces
+308,7-science-physical-science-waves-and-electromagnetic-spectrum,Science,7,36,0,0,0,0,false,,,Launch Lesson: Physical Science Waves And Electromagnetic Spectrum
+309,8-science-earth-and-space-astronomy-stars-galaxies,Science,8,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Astronomy Stars Galaxies
+310,8-science-earth-and-space-earth-history,Science,8,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth History
+311,8-science-earth-and-space-plate-tectonics,Science,8,48,0,0,0,0,false,,,Launch Lesson: Earth And Space Plate Tectonics
+312,8-science-earth-and-space-weather-climate-systems,Science,8,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather Climate Systems
+313,8-science-engineering-practices-data-driven-design,Science,8,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Data Driven Design
+314,8-science-engineering-practices-modeling-and-optimization,Science,8,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Modeling And Optimization
+315,8-science-life-science-cells-and-organelles,Science,8,36,0,0,0,0,false,,,Launch Lesson: Life Science Cells And Organelles
+316,8-science-life-science-ecology-and-biodiversity,Science,8,4,0,0,0,0,false,,,Launch Lesson: Life Science Ecology And Biodiversity
+317,8-science-life-science-evolution-and-natural-selection,Science,8,12,0,0,0,0,false,,,Launch Lesson: Life Science Evolution And Natural Selection
+318,8-science-life-science-genetics-and-heredity,Science,8,36,0,0,0,0,false,,,Launch Lesson: Life Science Genetics And Heredity
+319,8-science-life-science-human-body-systems-detailed,Science,8,8,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Detailed
+320,8-science-physical-science-chemistry-atoms-bonding-reactions,Science,8,4,0,0,0,0,false,,,Launch Lesson: Physical Science Chemistry Atoms Bonding Reactions
+321,8-science-physical-science-energy-and-heat,Science,8,12,0,0,0,0,false,,,Launch Lesson: Physical Science Energy And Heat
+322,8-science-physical-science-kinematics-and-forces,Science,8,8,0,0,0,0,false,,,Launch Lesson: Physical Science Kinematics And Forces
+323,8-science-physical-science-waves-and-electromagnetic-spectrum,Science,8,8,0,0,0,0,false,,,Launch Lesson: Physical Science Waves And Electromagnetic Spectrum
+324,3-social-studies-civics-and-government-citizenship-and-rights,Social Studies,3,16,0,0,0,0,false,,,Citizenship & Rights
+325,3-social-studies-economics-and-financial-literacy-markets-intro,Social Studies,3,12,0,0,0,0,false,,,Markets (intro)
+326,3-social-studies-economics-and-financial-literacy-producers-consumers,Social Studies,3,8,0,0,0,0,false,,,Producers/Consumers
+327,3-social-studies-us-history-exploration-to-civil-war,Social Studies,3,12,0,0,0,0,false,,,Exploration to Civil War
+328,3-social-studies-us-history-industrialization-and-immigration,Social Studies,3,16,0,0,0,0,false,,,Industrialization & Immigration
+329,3-social-studies-world-history-and-geography-ancient-civilizations,Social Studies,3,12,0,0,0,0,false,,,Ancient Civilizations
+330,3-social-studies-world-history-and-geography-world-regions-physical-human,Social Studies,3,4,0,0,0,0,false,,,World Regions (physical/human)
+331,4-social-studies-civics-and-government-citizenship-and-rights,Social Studies,4,12,0,0,0,0,false,,,Citizenship & Rights Launch Lesson
+332,4-social-studies-civics-and-government-local-state-government,Social Studies,4,16,0,0,0,0,false,,,Local/State Government
+333,4-social-studies-economics-and-financial-literacy-markets-intro,Social Studies,4,12,0,0,0,0,false,,,Markets (intro)
+334,4-social-studies-economics-and-financial-literacy-producers-consumers,Social Studies,4,8,0,0,0,0,false,,,Producers/Consumers
+335,4-social-studies-us-history-exploration-to-civil-war,Social Studies,4,12,0,0,0,0,false,,,Exploration to Civil War
+336,4-social-studies-us-history-industrialization-and-immigration,Social Studies,4,16,0,0,0,0,false,,,Industrialization & Immigration
+337,4-social-studies-world-history-and-geography-world-regions-physical-human,Social Studies,4,4,0,0,0,0,false,,,World Regions (physical/human)
+338,5-social-studies-civics-and-government-citizenship-and-rights,Social Studies,5,16,0,0,0,0,false,,,Citizenship & Rights
+339,5-social-studies-civics-and-government-local-state-government,Social Studies,5,16,0,0,0,0,false,,,Local/State Government
+340,5-social-studies-economics-and-financial-literacy-markets-intro,Social Studies,5,12,0,0,0,0,false,,,Markets (intro)
+341,5-social-studies-economics-and-financial-literacy-producers-consumers,Social Studies,5,8,0,0,0,0,false,,,Producers/Consumers
+342,5-social-studies-us-history-exploration-to-civil-war,Social Studies,5,12,0,0,0,0,false,,,Exploration to Civil War
+343,5-social-studies-world-history-and-geography-ancient-civilizations,Social Studies,5,12,0,0,0,0,false,,,Ancient Civilizations
+344,5-social-studies-world-history-and-geography-world-regions-physical-human,Social Studies,5,4,0,0,0,0,false,,,World Regions (physical/human)
+345,6-social-studies-civics-and-government-elections-and-civic-participation,Social Studies,6,16,0,0,0,0,false,,,Elections & Civic Participation
+346,6-social-studies-civics-and-government-us-constitution-and-federalism,Social Studies,6,8,0,0,0,0,false,,,US Constitution & Federalism
+347,6-social-studies-economics-and-financial-literacy-personal-finance-basics,Social Studies,6,12,0,0,0,0,false,,,Personal Finance Basics
+348,6-social-studies-economics-and-financial-literacy-supply-demand-intro,Social Studies,6,12,0,0,0,0,false,,,Supply/Demand (intro)
+349,6-social-studies-us-history-postwar-to-present,Social Studies,6,12,0,0,0,0,false,,,Postwar to Present
+350,6-social-studies-us-history-reconstruction-to-wwii,Social Studies,6,8,0,0,0,0,false,,,Reconstruction to WWII
+351,6-social-studies-world-history-and-geography-global-interactions,Social Studies,6,8,0,0,0,0,false,,,Global Interactions
+352,6-social-studies-world-history-and-geography-medieval-to-early-modern,Social Studies,6,16,0,0,0,0,false,,,Medieval to Early Modern
+353,7-social-studies-civics-and-government-elections-and-civic-participation,Social Studies,7,16,0,0,0,0,false,,,Elections & Civic Participation
+354,7-social-studies-civics-and-government-us-constitution-and-federalism,Social Studies,7,8,0,0,0,0,false,,,US Constitution & Federalism
+355,7-social-studies-economics-and-financial-literacy-personal-finance-basics,Social Studies,7,12,0,0,0,0,false,,,Personal Finance Basics
+356,7-social-studies-us-history-postwar-to-present,Social Studies,7,12,0,0,0,0,false,,,Postwar to Present
+357,7-social-studies-us-history-reconstruction-to-wwii,Social Studies,7,8,0,0,0,0,false,,,Reconstruction to WWII
+358,7-social-studies-world-history-and-geography-global-interactions,Social Studies,7,8,0,0,0,0,false,,,Global Interactions
+359,7-social-studies-world-history-and-geography-medieval-to-early-modern,Social Studies,7,16,0,0,0,0,false,,,Medieval to Early Modern
+360,8-social-studies-civics-and-government-elections-and-civic-participation,Social Studies,8,16,0,0,0,0,false,,,Elections & Civic Participation
+361,8-social-studies-civics-and-government-us-constitution-and-federalism,Social Studies,8,8,0,0,0,0,false,,,US Constitution & Federalism
+362,8-social-studies-economics-and-financial-literacy-personal-finance-basics,Social Studies,8,12,0,0,0,0,false,,,Personal Finance Basics
+363,8-social-studies-economics-and-financial-literacy-supply-demand-intro,Social Studies,8,12,0,0,0,0,false,,,Supply/Demand (intro)
+364,8-social-studies-us-history-postwar-to-present,Social Studies,8,12,0,0,0,0,false,,,Postwar to Present
+365,8-social-studies-us-history-reconstruction-to-wwii,Social Studies,8,8,0,0,0,0,false,,,Reconstruction to WWII
+366,8-social-studies-world-history-and-geography-global-interactions,Social Studies,8,8,0,0,0,0,false,,,Global Interactions
+367,6-mathematics-number-operations-ratios-proportional-reasoning,Mathematics,6,4,0,0,0,0,false,,,Ratios and Proportional Reasoning (Grade 6)
+371,3-english-language-arts-reading-informational-biographies-pd,English Language Arts,3,252,0,0,0,0,false,,,Biographies (PD)
+372,3-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,3,8,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
+373,3-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,3,252,0,0,0,0,false,,,Chapter Books (PD)
+374,3-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,3,252,0,0,0,0,false,,,Myths/Legends (PD)
+375,3-english-language-arts-reading-literature-short-stories-pd,English Language Arts,3,252,0,0,0,0,false,,,Short Stories (PD)
+376,3-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,3,8,0,0,0,0,false,,,"Presentations, Summaries"
+386,4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,4,108,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
+393,5-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,5,4,0,0,0,0,false,,,Roots/Prefixes/Suffixes
+397,6-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,6,252,0,0,0,0,false,,,Novellas/Short Novels (PD)
+409,7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,7,8,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
+411,8-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,8,252,0,0,0,0,false,,,Historical Documents (PD)
+431,3-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,3,36,0,0,0,0,false,,,Place Value (thousands/millions)
+437,4-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,4,8,0,0,0,0,false,,,Angles & Lines
+447,5-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,5,36,0,0,0,0,false,,,Bar/Line Plots
+474,6-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,6,12,0,0,0,0,false,,,Ratios & Proportional Reasoning
+491,8-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,8,36,0,0,0,0,false,,,Scatterplots & Correlation
+515,3-science-physical-science-matter-particles,Science,3,36,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
+519,4-science-earth-and-space-solar-system-relative-scale,Science,4,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
+535,5-science-engineering-practices-criteria-and-constraints,Science,5,4,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
+547,6-science-earth-and-space-plate-tectonics,Science,6,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Plate Tectonics
+570,7-science-life-science-evolution-and-natural-selection,Science,7,12,0,0,0,0,false,,,Launch Lesson: Life Science Evolution And Natural Selection
+583,8-science-engineering-practices-tradeoffs-and-constraints,Science,8,8,0,0,0,0,false,,,Launch Lesson: Engineering Practices Tradeoffs And Constraints
+594,3-social-studies-civics-and-government-local-state-government,Social Studies,3,16,0,0,0,0,false,,,Local/State Government
+607,4-social-studies-world-history-and-geography-ancient-civilizations,Social Studies,4,12,0,0,0,0,false,,,Ancient Civilizations
+614,5-social-studies-us-history-industrialization-and-immigration,Social Studies,5,16,0,0,0,0,false,,,Industrialization & Immigration
+628,7-social-studies-economics-and-financial-literacy-supply-demand-intro,Social Studies,7,12,0,0,0,0,false,,,Supply/Demand (intro)
+640,8-social-studies-world-history-and-geography-medieval-to-early-modern,Social Studies,8,16,0,0,0,0,false,,,Medieval to Early Modern
+641,1-electives-arts-and-music-colors-shapes-in-art,Electives,1,20,0,0,0,0,false,,,Intro: Colors/Shapes in Art
+642,1-electives-arts-and-music-rhythm-and-melody,Electives,1,12,0,0,0,0,false,,,Intro: Rhythm & Melody
+643,10-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,10,28,0,0,0,0,false,,,"Intro: Studio Art, Design, Music Composition/Performance (Grade 10)"
+648,6-electives-arts-and-music-music-theory-intro,Electives,6,12,0,0,0,0,false,,,Intro: Music Theory (intro)
+649,1-electives-computer-science-patterns-and-sequencing,Electives,1,16,0,0,0,0,false,,,Intro: Patterns & Sequencing
+650,11-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,11,24,0,0,0,0,false,,,"Intro: CS Principles, Data Structures (intro), Web Dev Basics (Grade 11)"
+651,2-electives-computer-science-algorithms-unplugged,Electives,2,12,0,0,0,0,false,,,Intro: Algorithms (unplugged)
+656,10-electives-financial-literacy-elective-investing-basics,Electives,10,24,0,0,0,0,false,,,Intro: Investing Basics (Grade 10)
+657,10-electives-financial-literacy-elective-taxes-credit-debt,Electives,10,28,0,0,0,0,false,,,Intro: Taxes/Credit/Debt (Grade 10)
+660,1-electives-health-and-pe-movement-safety-hygiene,Electives,1,24,0,0,0,0,false,,,"Intro: Movement, Safety, Hygiene"
+661,10-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,10,28,0,0,0,0,false,,,"Intro: Wellness, Mental Health Basics, CPR/AED awareness (Grade 10)"
+665,1-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,1,16,0,0,0,0,false,,,"Intro: Simple Nonfiction (animals, places)"
+666,10-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,10,24,0,0,0,0,false,,,Intro: Literary Nonfiction (PD/open) (Grade 10)
+667,10-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,10,20,0,0,0,0,false,,,Intro: Primary Sources (PD) (Grade 10)
+668,10-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,10,16,0,0,0,0,false,,,Intro: Rhetoric & Argument (Grade 10)
+669,1-english-language-arts-reading-literature-fables-and-folktales-pd,English Language Arts,1,16,0,0,0,0,false,,,Intro: Fables & Folktales (PD)
+670,1-english-language-arts-reading-literature-picture-books-pd,English Language Arts,1,8,0,0,0,0,false,,,Intro: Picture Books (PD)
+671,10-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,10,24,0,0,0,0,false,,,Intro: American/British Lit (PD works) (Grade 10)
+672,10-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,10,24,0,0,0,0,false,,,Intro: Poetry/Drama (PD) (Grade 10)
+673,11-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,11,24,0,0,0,0,false,,,Intro: World Lit (PD where possible) (Grade 11)
+674,2-english-language-arts-reading-literature-poetry-short-forms,English Language Arts,2,16,0,0,0,0,false,,,Intro: Poetry (short forms)
+675,1-english-language-arts-speaking-and-listening-show-and-tell-retelling,English Language Arts,1,16,0,0,0,0,false,,,"Intro: Show & Tell, Retelling"
+676,10-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,10,20,0,0,0,0,false,,,"Intro: Seminars, Academic Discussions, Formal Presentations (Grade 10)"
+677,1-english-language-arts-vocabulary-sight-words-and-phonics,English Language Arts,1,20,0,0,0,0,false,,,Intro: Sight Words & Phonics
+678,10-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,10,28,0,0,0,0,false,,,"Intro: Discipline-Specific Terms, Test Prep (Grade 10)"
+679,1-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation,English Language Arts,1,20,0,0,0,0,false,,,"Intro: Handwriting, Sentences, Capitalization/Punctuation"
+680,10-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,10,24,0,0,0,0,false,,,"Intro: Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review (Grade 10)"
+681,10-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,10,24,0,0,0,0,false,,,Intro: Linear/Quadratic Functions (Grade 10)
+682,10-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,10,20,0,0,0,0,false,,,Intro: Modeling & Applications (Grade 10)
+683,10-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,10,24,0,0,0,0,false,,,Intro: Piecewise/Absolute Value (Grade 10)
+684,10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,10,28,0,0,0,0,false,,,Intro: Polynomial/Polynomial Identities (Grade 10)
+685,10-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,10,24,0,0,0,0,false,,,Intro: Rational/ Radical Functions (Grade 10)
+686,1-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,1,16,0,0,0,0,false,,,Intro: Categorize & Tally
+687,1-mathematics-data-and-probability-statistics-describe-data-more-less,Mathematics,1,20,0,0,0,0,false,,,Intro: Describe Data (more/less)
+688,1-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,1,16,0,0,0,0,false,,,Intro: Picture/Bar Graphs (intro)
+689,1-mathematics-data-and-probability-statistics-simple-probability-informal,Mathematics,1,12,0,0,0,0,false,,,Intro: Simple Probability (informal)
+690,10-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,10,28,0,0,0,0,false,,,Intro: Confidence Intervals & Hypothesis Tests (intro HS Stats) (Grade 10)
+691,10-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,10,20,0,0,0,0,false,,,Intro: Descriptive/Inferential Statistics (Grade 10)
+692,10-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,10,24,0,0,0,0,false,,,Intro: Normal Distribution (Grade 10)
+693,10-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,10,24,0,0,0,0,false,,,Intro: Regression (linear/multiple) (Grade 10)
+694,1-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes,Mathematics,1,16,0,0,0,0,false,,,Intro: 2D/3D Shapes & Attributes
+695,1-mathematics-geometry-and-measurement-perimeter-intro,Mathematics,1,20,0,0,0,0,false,,,Intro: Perimeter (intro)
+696,1-mathematics-geometry-and-measurement-time-and-money-intro,Mathematics,1,20,0,0,0,0,false,,,Intro: Time & Money (intro)
+697,10-mathematics-geometry-and-measurement-conic-sections,Mathematics,10,28,0,0,0,0,false,,,Intro: Conic Sections (Grade 10)
+698,10-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,10,28,0,0,0,0,false,,,Intro: Euclidean Proofs (Grade 10)
+699,10-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,10,28,0,0,0,0,false,,,Intro: Trigonometry (right/units) (Grade 10)
+700,10-mathematics-geometry-and-measurement-vectors,Mathematics,10,28,0,0,0,0,false,,,Intro: Vectors (Grade 10)
+701,11-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,11,36,0,0,0,0,false,,,Intro: Transformations (advanced) (Grade 11)
+702,2-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard,Mathematics,2,16,0,0,0,0,false,,,Intro: Length/Weight/Capacity (non-standard/standard)
+703,1-mathematics-number-and-operations-addition-subtraction-within-20,Mathematics,1,12,0,0,0,0,false,,,Intro: Addition/Subtraction within 20
+704,1-mathematics-number-and-operations-compare-numbers,Mathematics,1,16,0,0,0,0,false,,,Intro: Compare Numbers
+705,1-mathematics-number-and-operations-counting-and-cardinality,Mathematics,1,16,0,0,0,0,false,,,Intro: Counting & Cardinality
+706,1-mathematics-number-and-operations-place-value-tens-ones,Mathematics,1,20,0,0,0,0,false,,,Intro: Place Value (tens/ones)
+707,1-mathematics-number-and-operations-skip-counting,Mathematics,1,16,0,0,0,0,false,,,Intro: Skip Counting
+708,10-mathematics-number-and-operations-complex-numbers,Mathematics,10,24,0,0,0,0,false,,,Intro: Complex Numbers (Grade 10)
+709,10-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,10,28,0,0,0,0,false,,,Intro: Exponential/Logarithmic Functions (Grade 10)
+710,10-mathematics-number-and-operations-matrices-optional,Mathematics,10,24,0,0,0,0,false,,,Intro: Matrices (optional) (Grade 10)
+711,10-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,10,24,0,0,0,0,false,,,Intro: Polynomial & Rational Expressions (Grade 10)
+712,10-mathematics-number-and-operations-sequences-and-series,Mathematics,10,28,0,0,0,0,false,,,Intro: Sequences & Series (Grade 10)
+713,10-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,10,16,0,0,0,0,false,,,Intro: Derivatives (intro) (Grade 10)
+714,10-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,10,28,0,0,0,0,false,,,Intro: Integrals (intro) (Grade 10)
+715,10-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,10,28,0,0,0,0,false,,,Intro: Limits (Grade 10)
+716,10-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,10,28,0,0,0,0,false,,,Intro: Parametric/Polar (optional) (Grade 10)
+717,10-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,10,24,0,0,0,0,false,,,Intro: Trigonometric Identities (Grade 10)
+718,1-science-earth-and-space-earth-materials-rocks-soil,Science,1,24,0,0,0,0,false,,,Intro: Earth Materials (rocks/soil)
+719,1-science-earth-and-space-sun-moon-stars-patterns,Science,1,16,0,0,0,0,false,,,Intro: Sun/Moon/Stars (patterns)
+720,1-science-earth-and-space-weather-and-seasons,Science,1,24,0,0,0,0,false,,,Intro: Weather & Seasons
+721,10-science-earth-and-space-astronomy-astrophysics-intro,Science,10,28,0,0,0,0,false,,,Intro: Astronomy/Astrophysics (intro) (Grade 10)
+722,10-science-earth-and-space-climate-science,Science,10,28,0,0,0,0,false,,,Intro: Climate Science (Grade 10)
+723,10-science-earth-and-space-geology-minerals-rocks,Science,10,32,0,0,0,0,false,,,Intro: Geology (minerals/rocks) (Grade 10)
+724,10-science-earth-and-space-oceanography-atmospheric-science,Science,10,24,0,0,0,0,false,,,Intro: Oceanography/Atmospheric Science (Grade 10)
+725,1-science-engineering-practices-ask-imagine-plan-create-test-design-cycle,Science,1,20,0,0,0,0,false,,,Intro: Ask/Imagine/Plan/Create/Test (Design Cycle)
+726,10-science-engineering-practices-computational-modeling-intro,Science,10,24,0,0,0,0,false,,,Intro: Computational Modeling (intro) (Grade 10)
+727,10-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,10,20,0,0,0,0,false,,,Intro: Experiment Design & Statistics in Labs (Grade 10)
+728,11-science-engineering-practices-systems-design,Science,11,32,0,0,0,0,false,,,Intro: Systems Design (Grade 11)
+729,1-science-life-science-habitats,Science,1,12,0,0,0,0,false,,,Intro: Habitats
+730,1-science-life-science-life-cycles,Science,1,20,0,0,0,0,false,,,Intro: Life Cycles
+731,1-science-life-science-plants-animals-needs,Science,1,12,0,0,0,0,false,,,Intro: Plants/Animals Needs
+732,10-science-life-science-biochemistry-intro,Science,10,28,0,0,0,0,false,,,Intro: Biochemistry (intro) (Grade 10)
+733,10-science-life-science-ecology-population-community,Science,10,24,0,0,0,0,false,,,Intro: Ecology (population/community) (Grade 10)
+734,10-science-life-science-evolution-advanced,Science,10,24,0,0,0,0,false,,,Intro: Evolution (advanced) (Grade 10)
+735,10-science-life-science-molecular-genetics,Science,10,16,0,0,0,0,false,,,Intro: Molecular Genetics (Grade 10)
+736,10-science-life-science-physiology,Science,10,24,0,0,0,0,false,,,Intro: Physiology (Grade 10)
+737,1-science-physical-science-energy-heat-sun,Science,1,12,0,0,0,0,false,,,Intro: Energy (heat/sun)
+738,1-science-physical-science-forces-and-motion-push-pull,Science,1,20,0,0,0,0,false,,,Intro: Forces & Motion (push/pull)
+739,1-science-physical-science-light-and-sound,Science,1,20,0,0,0,0,false,,,Intro: Light & Sound
+740,1-science-physical-science-matter-properties-solids-liquids-gases,Science,1,20,0,0,0,0,false,,,Intro: Matter Properties (solids/liquids/gases)
+741,10-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,10,28,0,0,0,0,false,,,Intro: Chemistry: Stoichiometry/Equilibrium/Acids-Bases (Grade 10)
+742,10-science-physical-science-electricity-and-magnetism,Science,10,24,0,0,0,0,false,,,Intro: Electricity & Magnetism (Grade 10)
+743,10-science-physical-science-mechanics,Science,10,20,0,0,0,0,false,,,Intro: Mechanics (Grade 10)
+744,10-science-physical-science-thermodynamics,Science,10,28,0,0,0,0,false,,,Intro: Thermodynamics (Grade 10)
+745,10-science-physical-science-waves-and-optics,Science,10,24,0,0,0,0,false,,,Intro: Waves & Optics (Grade 10)
+746,1-social-studies-civics-and-government-rules-and-community,Social Studies,1,24,0,0,0,0,false,,,Intro: Rules & Community
+747,1-social-studies-civics-and-government-symbols-and-holidays,Social Studies,1,20,0,0,0,0,false,,,Intro: Symbols & Holidays
+748,10-social-studies-civics-and-government-comparative-government,Social Studies,10,24,0,0,0,0,false,,,Intro: Comparative Government (Grade 10)
+749,10-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,10,24,0,0,0,0,false,,,"Intro: US Government (institutions, policy) (Grade 10)"
+750,1-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,1,8,0,0,0,0,false,,,Intro: Needs vs Wants
+751,10-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,10,20,0,0,0,0,false,,,Intro: Macro/Micro (OpenStax where applicable) (Grade 10)
+752,10-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,10,24,0,0,0,0,false,,,"Intro: Personal Finance (taxes, credit) (Grade 10)"
+753,2-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,2,20,0,0,0,0,false,,,Intro: Choices & Trade
+754,1-social-studies-us-history-national-symbols,Social Studies,1,16,0,0,0,0,false,,,Intro: National Symbols
+755,1-social-studies-us-history-personal-family-history,Social Studies,1,16,0,0,0,0,false,,,Intro: Personal/Family History
+756,11-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,11,28,0,0,0,0,false,,,Intro: Thematic/AP-style depth (PD docs) (Grade 11)
+757,1-social-studies-world-history-and-geography-cultures-intro,Social Studies,1,20,0,0,0,0,false,,,Intro: Cultures (intro)
+758,1-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,1,12,0,0,0,0,false,,,Intro: Maps/Globes (basic)
+759,10-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,10,24,0,0,0,0,false,,,"Intro: Modern Era, Globalization, Human Geography (Grade 10)"
+761,11-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,11,28,0,0,0,0,false,,,"Intro: Studio Art, Design, Music Composition/Performance (Grade 11)"
+762,11-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,11,28,0,0,0,0,false,,,"Intro: Wellness, Mental Health Basics, CPR/AED awareness (Grade 11)"
+763,11-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,11,24,0,0,0,0,false,,,Intro: Literary Nonfiction (PD/open) (Grade 11)
+764,11-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,11,20,0,0,0,0,false,,,Intro: Primary Sources (PD) (Grade 11)
+765,11-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,11,24,0,0,0,0,false,,,Intro: Poetry/Drama (PD) (Grade 11)
+766,11-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,11,20,0,0,0,0,false,,,"Intro: Seminars, Academic Discussions, Formal Presentations (Grade 11)"
+767,11-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,11,28,0,0,0,0,false,,,"Intro: Discipline-Specific Terms, Test Prep (Grade 11)"
+768,11-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,11,24,0,0,0,0,false,,,"Intro: Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review (Grade 11)"
+769,11-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,11,24,0,0,0,0,false,,,Intro: Linear/Quadratic Functions (Grade 11)
+770,11-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,11,20,0,0,0,0,false,,,Intro: Modeling & Applications (Grade 11)
+771,11-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,11,24,0,0,0,0,false,,,Intro: Piecewise/Absolute Value (Grade 11)
+772,11-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,11,28,0,0,0,0,false,,,Intro: Polynomial/Polynomial Identities (Grade 11)
+773,11-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,11,24,0,0,0,0,false,,,Intro: Rational/ Radical Functions (Grade 11)
+774,11-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,11,28,0,0,0,0,false,,,Intro: Confidence Intervals & Hypothesis Tests (intro HS Stats) (Grade 11)
+775,11-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,11,20,0,0,0,0,false,,,Intro: Descriptive/Inferential Statistics (Grade 11)
+776,11-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,11,24,0,0,0,0,false,,,Intro: Normal Distribution (Grade 11)
+777,11-mathematics-geometry-and-measurement-conic-sections,Mathematics,11,28,0,0,0,0,false,,,Intro: Conic Sections (Grade 11)
+778,11-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,11,28,0,0,0,0,false,,,Intro: Euclidean Proofs (Grade 11)
+779,11-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,11,28,0,0,0,0,false,,,Intro: Trigonometry (right/units) (Grade 11)
+780,11-mathematics-geometry-and-measurement-vectors,Mathematics,11,28,0,0,0,0,false,,,Intro: Vectors (Grade 11)
+781,11-mathematics-number-and-operations-complex-numbers,Mathematics,11,24,0,0,0,0,false,,,Intro: Complex Numbers (Grade 11)
+782,11-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,11,28,0,0,0,0,false,,,Intro: Exponential/Logarithmic Functions (Grade 11)
+783,11-mathematics-number-and-operations-matrices-optional,Mathematics,11,24,0,0,0,0,false,,,Intro: Matrices (optional) (Grade 11)
+784,11-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,11,24,0,0,0,0,false,,,Intro: Polynomial & Rational Expressions (Grade 11)
+785,11-mathematics-number-and-operations-sequences-and-series,Mathematics,11,28,0,0,0,0,false,,,Intro: Sequences & Series (Grade 11)
+786,11-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,11,28,0,0,0,0,false,,,Intro: Integrals (intro) (Grade 11)
+787,11-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,11,28,0,0,0,0,false,,,Intro: Limits (Grade 11)
+788,11-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,11,28,0,0,0,0,false,,,Intro: Parametric/Polar (optional) (Grade 11)
+789,11-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,11,24,0,0,0,0,false,,,Intro: Trigonometric Identities (Grade 11)
+790,11-science-earth-and-space-astronomy-astrophysics-intro,Science,11,28,0,0,0,0,false,,,Intro: Astronomy/Astrophysics (intro) (Grade 11)
+791,11-science-earth-and-space-climate-science,Science,11,28,0,0,0,0,false,,,Intro: Climate Science (Grade 11)
+792,11-science-earth-and-space-geology-minerals-rocks,Science,11,32,0,0,0,0,false,,,Intro: Geology (minerals/rocks) (Grade 11)
+793,11-science-earth-and-space-oceanography-atmospheric-science,Science,11,24,0,0,0,0,false,,,Intro: Oceanography/Atmospheric Science (Grade 11)
+794,11-science-engineering-practices-computational-modeling-intro,Science,11,24,0,0,0,0,false,,,Intro: Computational Modeling (intro) (Grade 11)
+795,11-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,11,20,0,0,0,0,false,,,Intro: Experiment Design & Statistics in Labs (Grade 11)
+796,11-science-life-science-biochemistry-intro,Science,11,28,0,0,0,0,false,,,Intro: Biochemistry (intro) (Grade 11)
+797,11-science-life-science-ecology-population-community,Science,11,24,0,0,0,0,false,,,Intro: Ecology (population/community) (Grade 11)
+798,11-science-life-science-physiology,Science,11,24,0,0,0,0,false,,,Intro: Physiology (Grade 11)
+799,11-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,11,28,0,0,0,0,false,,,Intro: Chemistry: Stoichiometry/Equilibrium/Acids-Bases (Grade 11)
+800,11-science-physical-science-electricity-and-magnetism,Science,11,24,0,0,0,0,false,,,Intro: Electricity & Magnetism (Grade 11)
+801,11-science-physical-science-mechanics,Science,11,20,0,0,0,0,false,,,Intro: Mechanics (Grade 11)
+802,11-science-physical-science-thermodynamics,Science,11,28,0,0,0,0,false,,,Intro: Thermodynamics (Grade 11)
+803,11-science-physical-science-waves-and-optics,Science,11,24,0,0,0,0,false,,,Intro: Waves & Optics (Grade 11)
+804,11-social-studies-civics-and-government-comparative-government,Social Studies,11,24,0,0,0,0,false,,,Intro: Comparative Government (Grade 11)
+805,11-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,11,24,0,0,0,0,false,,,"Intro: US Government (institutions, policy) (Grade 11)"
+806,11-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,11,20,0,0,0,0,false,,,Intro: Macro/Micro (OpenStax where applicable) (Grade 11)
+807,11-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,11,24,0,0,0,0,false,,,"Intro: Modern Era, Globalization, Human Geography (Grade 11)"
+808,12-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,12,24,0,0,0,0,false,,,"Intro: CS Principles, Data Structures (intro), Web Dev Basics (Grade 12)"
+809,12-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,12,24,0,0,0,0,false,,,Intro: World Lit (PD where possible) (Grade 12)
+810,12-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,12,36,0,0,0,0,false,,,Intro: Transformations (advanced) (Grade 12)
+811,12-science-engineering-practices-systems-design,Science,12,32,0,0,0,0,false,,,Intro: Systems Design (Grade 12)
+812,12-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,12,28,0,0,0,0,false,,,Intro: Thematic/AP-style depth (PD docs) (Grade 12)
+813,2-electives-arts-and-music-colors-shapes-in-art,Electives,2,20,0,0,0,0,false,,,Intro: Colors/Shapes in Art (Grade 2)
+814,2-electives-arts-and-music-rhythm-and-melody,Electives,2,12,0,0,0,0,false,,,Intro: Rhythm & Melody (Grade 2)
+818,k-electives-arts-and-music-colors-shapes-in-art,Electives,K,4,0,0,0,0,false,,,Intro: Colors/Shapes in Art (Grade K)
+819,k-electives-arts-and-music-rhythm-and-melody,Electives,K,4,0,0,0,0,false,,,Intro: Rhythm & Melody (Grade K)
+820,2-electives-computer-science-patterns-and-sequencing,Electives,2,16,0,0,0,0,false,,,Intro: Patterns & Sequencing (Grade 2)
+825,k-electives-computer-science-algorithms-unplugged,Electives,K,4,0,0,0,0,false,,,Intro: Algorithms (unplugged) (Grade K)
+826,k-electives-computer-science-patterns-and-sequencing,Electives,K,4,0,0,0,0,false,,,Intro: Patterns & Sequencing (Grade K)
+827,2-electives-health-and-pe-movement-safety-hygiene,Electives,2,24,0,0,0,0,false,,,"Intro: Movement, Safety, Hygiene (Grade 2)"
+829,2-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,2,16,0,0,0,0,false,,,"Intro: Simple Nonfiction (animals, places) (Grade 2)"
+830,k-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,K,4,0,0,0,0,false,,,"Intro: Simple Nonfiction (animals, places) (Grade K)"
+831,2-english-language-arts-reading-literature-fables-and-folktales-pd,English Language Arts,2,16,0,0,0,0,false,,,Intro: Fables & Folktales (PD) (Grade 2)
+832,k-english-language-arts-reading-literature-fables-and-folktales-pd,English Language Arts,K,4,0,0,0,0,false,,,Intro: Fables & Folktales (PD) (Grade K)
+833,k-english-language-arts-reading-literature-picture-books-pd,English Language Arts,K,4,0,0,0,0,false,,,Intro: Picture Books (PD) (Grade K)
+834,k-english-language-arts-reading-literature-poetry-short-forms,English Language Arts,K,4,0,0,0,0,false,,,Intro: Poetry (short forms) (Grade K)
+835,2-english-language-arts-speaking-and-listening-show-and-tell-retelling,English Language Arts,2,16,0,0,0,0,false,,,"Intro: Show & Tell, Retelling (Grade 2)"
+836,2-english-language-arts-vocabulary-sight-words-and-phonics,English Language Arts,2,20,0,0,0,0,false,,,Intro: Sight Words & Phonics (Grade 2)
+837,k-english-language-arts-vocabulary-sight-words-and-phonics,English Language Arts,K,4,0,0,0,0,false,,,Intro: Sight Words & Phonics (Grade K)
+838,2-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation,English Language Arts,2,20,0,0,0,0,false,,,"Intro: Handwriting, Sentences, Capitalization/Punctuation (Grade 2)"
+839,k-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation,English Language Arts,K,4,0,0,0,0,false,,,"Intro: Handwriting, Sentences, Capitalization/Punctuation (Grade K)"
+840,2-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,2,16,0,0,0,0,false,,,Intro: Categorize & Tally (Grade 2)
+841,2-mathematics-data-and-probability-statistics-describe-data-more-less,Mathematics,2,20,0,0,0,0,false,,,Intro: Describe Data (more/less) (Grade 2)
+842,2-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,2,16,0,0,0,0,false,,,Intro: Picture/Bar Graphs (intro) (Grade 2)
+843,2-mathematics-data-and-probability-statistics-simple-probability-informal,Mathematics,2,12,0,0,0,0,false,,,Intro: Simple Probability (informal) (Grade 2)
+844,k-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,K,4,0,0,0,0,false,,,Intro: Categorize & Tally (Grade K)
+845,k-mathematics-data-and-probability-statistics-describe-data-more-less,Mathematics,K,4,0,0,0,0,false,,,Intro: Describe Data (more/less) (Grade K)
+846,k-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,K,4,0,0,0,0,false,,,Intro: Picture/Bar Graphs (intro) (Grade K)
+847,k-mathematics-data-and-probability-statistics-simple-probability-informal,Mathematics,K,4,0,0,0,0,false,,,Intro: Simple Probability (informal) (Grade K)
+848,2-mathematics-geometry-and-measurement-perimeter-intro,Mathematics,2,20,0,0,0,0,false,,,Intro: Perimeter (intro) (Grade 2)
+849,2-mathematics-geometry-and-measurement-time-and-money-intro,Mathematics,2,20,0,0,0,0,false,,,Intro: Time & Money (intro) (Grade 2)
+850,k-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes,Mathematics,K,4,0,0,0,0,false,,,Intro: 2D/3D Shapes & Attributes (Grade K)
+851,k-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard,Mathematics,K,4,0,0,0,0,false,,,Intro: Length/Weight/Capacity (non-standard/standard) (Grade K)
+852,k-mathematics-geometry-and-measurement-time-and-money-intro,Mathematics,K,4,0,0,0,0,false,,,Intro: Time & Money (intro) (Grade K)
+853,2-mathematics-number-and-operations-addition-subtraction-within-20,Mathematics,2,12,0,0,0,0,false,,,Intro: Addition/Subtraction within 20 (Grade 2)
+854,2-mathematics-number-and-operations-compare-numbers,Mathematics,2,16,0,0,0,0,false,,,Intro: Compare Numbers (Grade 2)
+855,2-mathematics-number-and-operations-counting-and-cardinality,Mathematics,2,16,0,0,0,0,false,,,Intro: Counting & Cardinality (Grade 2)
+856,2-mathematics-number-and-operations-place-value-tens-ones,Mathematics,2,20,0,0,0,0,false,,,Intro: Place Value (tens/ones) (Grade 2)
+857,2-mathematics-number-and-operations-skip-counting,Mathematics,2,16,0,0,0,0,false,,,Intro: Skip Counting (Grade 2)
+858,k-mathematics-number-and-operations-addition-subtraction-within-20,Mathematics,K,4,0,0,0,0,false,,,Intro: Addition/Subtraction within 20 (Grade K)
+859,k-mathematics-number-and-operations-compare-numbers,Mathematics,K,4,0,0,0,0,false,,,Intro: Compare Numbers (Grade K)
+860,k-mathematics-number-and-operations-counting-and-cardinality,Mathematics,K,4,0,0,0,0,false,,,Intro: Counting & Cardinality (Grade K)
+861,k-mathematics-number-and-operations-place-value-tens-ones,Mathematics,K,4,0,0,0,0,false,,,Intro: Place Value (tens/ones) (Grade K)
+862,k-mathematics-number-and-operations-skip-counting,Mathematics,K,4,0,0,0,0,false,,,Intro: Skip Counting (Grade K)
+863,2-science-earth-and-space-earth-materials-rocks-soil,Science,2,24,0,0,0,0,false,,,Intro: Earth Materials (rocks/soil) (Grade 2)
+864,2-science-earth-and-space-sun-moon-stars-patterns,Science,2,16,0,0,0,0,false,,,Intro: Sun/Moon/Stars (patterns) (Grade 2)
+865,2-science-earth-and-space-weather-and-seasons,Science,2,24,0,0,0,0,false,,,Intro: Weather & Seasons (Grade 2)
+866,k-science-earth-and-space-earth-materials-rocks-soil,Science,K,4,0,0,0,0,false,,,Intro: Earth Materials (rocks/soil) (Grade K)
+867,k-science-earth-and-space-sun-moon-stars-patterns,Science,K,4,0,0,0,0,false,,,Intro: Sun/Moon/Stars (patterns) (Grade K)
+868,k-science-earth-and-space-weather-and-seasons,Science,K,4,0,0,0,0,false,,,Intro: Weather & Seasons (Grade K)
+869,2-science-engineering-practices-ask-imagine-plan-create-test-design-cycle,Science,2,20,0,0,0,0,false,,,Intro: Ask/Imagine/Plan/Create/Test (Design Cycle) (Grade 2)
+870,k-science-engineering-practices-ask-imagine-plan-create-test-design-cycle,Science,K,4,0,0,0,0,false,,,Intro: Ask/Imagine/Plan/Create/Test (Design Cycle) (Grade K)
+871,2-science-life-science-habitats,Science,2,12,0,0,0,0,false,,,Intro: Habitats (Grade 2)
+872,2-science-life-science-life-cycles,Science,2,20,0,0,0,0,false,,,Intro: Life Cycles (Grade 2)
+873,2-science-life-science-plants-animals-needs,Science,2,12,0,0,0,0,false,,,Intro: Plants/Animals Needs (Grade 2)
+874,k-science-life-science-life-cycles,Science,K,4,0,0,0,0,false,,,Intro: Life Cycles (Grade K)
+875,k-science-life-science-plants-animals-needs,Science,K,4,0,0,0,0,false,,,Intro: Plants/Animals Needs (Grade K)
+876,2-science-physical-science-forces-and-motion-push-pull,Science,2,20,0,0,0,0,false,,,Intro: Forces & Motion (push/pull) (Grade 2)
+877,2-science-physical-science-light-and-sound,Science,2,20,0,0,0,0,false,,,Intro: Light & Sound (Grade 2)
+878,2-science-physical-science-matter-properties-solids-liquids-gases,Science,2,20,0,0,0,0,false,,,Intro: Matter Properties (solids/liquids/gases) (Grade 2)
+879,k-science-physical-science-energy-heat-sun,Science,K,4,0,0,0,0,false,,,Intro: Energy (heat/sun) (Grade K)
+880,k-science-physical-science-forces-and-motion-push-pull,Science,K,4,0,0,0,0,false,,,Intro: Forces & Motion (push/pull) (Grade K)
+881,k-science-physical-science-light-and-sound,Science,K,4,0,0,0,0,false,,,Intro: Light & Sound (Grade K)
+882,k-science-physical-science-matter-properties-solids-liquids-gases,Science,K,4,0,0,0,0,false,,,Intro: Matter Properties (solids/liquids/gases) (Grade K)
+883,2-social-studies-civics-and-government-rules-and-community,Social Studies,2,24,0,0,0,0,false,,,Intro: Rules & Community (Grade 2)
+884,2-social-studies-civics-and-government-symbols-and-holidays,Social Studies,2,20,0,0,0,0,false,,,Intro: Symbols & Holidays (Grade 2)
+885,k-social-studies-civics-and-government-rules-and-community,Social Studies,K,4,0,0,0,0,false,,,Intro: Rules & Community (Grade K)
+886,k-social-studies-civics-and-government-symbols-and-holidays,Social Studies,K,4,0,0,0,0,false,,,Intro: Symbols & Holidays (Grade K)
+887,2-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,2,8,0,0,0,0,false,,,Intro: Needs vs Wants (Grade 2)
+888,k-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,K,4,0,0,0,0,false,,,Intro: Choices & Trade (Grade K)
+889,k-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,K,4,0,0,0,0,false,,,Intro: Needs vs Wants (Grade K)
+890,2-social-studies-us-history-national-symbols,Social Studies,2,16,0,0,0,0,false,,,Intro: National Symbols (Grade 2)
+891,2-social-studies-us-history-personal-family-history,Social Studies,2,16,0,0,0,0,false,,,Intro: Personal/Family History (Grade 2)
+892,k-social-studies-us-history-personal-family-history,Social Studies,K,4,0,0,0,0,false,,,Intro: Personal/Family History (Grade K)
+893,2-social-studies-world-history-and-geography-cultures-intro,Social Studies,2,20,0,0,0,0,false,,,Intro: Cultures (intro) (Grade 2)
+894,k-social-studies-world-history-and-geography-cultures-intro,Social Studies,K,4,0,0,0,0,false,,,Intro: Cultures (intro) (Grade K)
+895,k-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,K,4,0,0,0,0,false,,,Intro: Maps/Globes (basic) (Grade K)
+903,9-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,9,24,0,0,0,0,false,,,"Intro: CS Principles, Data Structures (intro), Web Dev Basics (Grade 9)"
+907,9-electives-financial-literacy-elective-investing-basics,Electives,9,24,0,0,0,0,false,,,Intro: Investing Basics (Grade 9)
+908,9-electives-financial-literacy-elective-taxes-credit-debt,Electives,9,28,0,0,0,0,false,,,Intro: Taxes/Credit/Debt (Grade 9)
+913,9-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,9,28,0,0,0,0,false,,,"Intro: Wellness, Mental Health Basics, CPR/AED awareness (Grade 9)"
+914,9-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,9,24,0,0,0,0,false,,,Intro: Literary Nonfiction (PD/open) (Grade 9)
+915,9-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,9,20,0,0,0,0,false,,,Intro: Primary Sources (PD) (Grade 9)
+916,9-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,9,16,0,0,0,0,false,,,Intro: Rhetoric & Argument (Grade 9)
+917,9-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,9,24,0,0,0,0,false,,,Intro: American/British Lit (PD works) (Grade 9)
+918,9-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,9,24,0,0,0,0,false,,,Intro: Poetry/Drama (PD) (Grade 9)
+919,9-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,9,24,0,0,0,0,false,,,Intro: World Lit (PD where possible) (Grade 9)
+920,9-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,9,20,0,0,0,0,false,,,"Intro: Seminars, Academic Discussions, Formal Presentations (Grade 9)"
+921,9-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,9,28,0,0,0,0,false,,,"Intro: Discipline-Specific Terms, Test Prep (Grade 9)"
+922,9-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,9,20,0,0,0,0,false,,,Intro: Modeling & Applications (Grade 9)
+923,9-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,9,24,0,0,0,0,false,,,Intro: Piecewise/Absolute Value (Grade 9)
+924,9-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,9,28,0,0,0,0,false,,,Intro: Polynomial/Polynomial Identities (Grade 9)
+925,9-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,9,24,0,0,0,0,false,,,Intro: Rational/ Radical Functions (Grade 9)
+926,9-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,9,28,0,0,0,0,false,,,Intro: Confidence Intervals & Hypothesis Tests (intro HS Stats) (Grade 9)
+927,9-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,9,20,0,0,0,0,false,,,Intro: Descriptive/Inferential Statistics (Grade 9)
+928,9-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,9,24,0,0,0,0,false,,,Intro: Normal Distribution (Grade 9)
+929,9-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,9,24,0,0,0,0,false,,,Intro: Regression (linear/multiple) (Grade 9)
+930,9-mathematics-geometry-and-measurement-conic-sections,Mathematics,9,28,0,0,0,0,false,,,Intro: Conic Sections (Grade 9)
+931,9-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,9,28,0,0,0,0,false,,,Intro: Euclidean Proofs (Grade 9)
+932,9-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,9,36,0,0,0,0,false,,,Intro: Transformations (advanced) (Grade 9)
+933,9-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,9,28,0,0,0,0,false,,,Intro: Trigonometry (right/units) (Grade 9)
+934,9-mathematics-geometry-and-measurement-vectors,Mathematics,9,28,0,0,0,0,false,,,Intro: Vectors (Grade 9)
+935,9-mathematics-number-and-operations-complex-numbers,Mathematics,9,24,0,0,0,0,false,,,Intro: Complex Numbers (Grade 9)
+936,9-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,9,28,0,0,0,0,false,,,Intro: Exponential/Logarithmic Functions (Grade 9)
+937,9-mathematics-number-and-operations-matrices-optional,Mathematics,9,24,0,0,0,0,false,,,Intro: Matrices (optional) (Grade 9)
+938,9-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,9,24,0,0,0,0,false,,,Intro: Polynomial & Rational Expressions (Grade 9)
+939,9-mathematics-number-and-operations-sequences-and-series,Mathematics,9,28,0,0,0,0,false,,,Intro: Sequences & Series (Grade 9)
+940,9-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,9,16,0,0,0,0,false,,,Intro: Derivatives (intro) (Grade 9)
+941,9-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,9,28,0,0,0,0,false,,,Intro: Integrals (intro) (Grade 9)
+942,9-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,9,28,0,0,0,0,false,,,Intro: Limits (Grade 9)
+943,9-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,9,28,0,0,0,0,false,,,Intro: Parametric/Polar (optional) (Grade 9)
+944,9-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,9,24,0,0,0,0,false,,,Intro: Trigonometric Identities (Grade 9)
+945,9-science-earth-and-space-astronomy-astrophysics-intro,Science,9,28,0,0,0,0,false,,,Intro: Astronomy/Astrophysics (intro) (Grade 9)
+946,9-science-earth-and-space-climate-science,Science,9,28,0,0,0,0,false,,,Intro: Climate Science (Grade 9)
+947,9-science-earth-and-space-geology-minerals-rocks,Science,9,32,0,0,0,0,false,,,Intro: Geology (minerals/rocks) (Grade 9)
+948,9-science-engineering-practices-computational-modeling-intro,Science,9,24,0,0,0,0,false,,,Intro: Computational Modeling (intro) (Grade 9)
+949,9-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,9,20,0,0,0,0,false,,,Intro: Experiment Design & Statistics in Labs (Grade 9)
+950,9-science-engineering-practices-systems-design,Science,9,32,0,0,0,0,false,,,Intro: Systems Design (Grade 9)
+951,9-science-life-science-biochemistry-intro,Science,9,28,0,0,0,0,false,,,Intro: Biochemistry (intro) (Grade 9)
+952,9-science-life-science-ecology-population-community,Science,9,24,0,0,0,0,false,,,Intro: Ecology (population/community) (Grade 9)
+953,9-science-life-science-evolution-advanced,Science,9,24,0,0,0,0,false,,,Intro: Evolution (advanced) (Grade 9)
+954,9-science-life-science-molecular-genetics,Science,9,16,0,0,0,0,false,,,Intro: Molecular Genetics (Grade 9)
+955,9-science-life-science-physiology,Science,9,24,0,0,0,0,false,,,Intro: Physiology (Grade 9)
+956,9-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,9,28,0,0,0,0,false,,,Intro: Chemistry: Stoichiometry/Equilibrium/Acids-Bases (Grade 9)
+957,9-science-physical-science-electricity-and-magnetism,Science,9,24,0,0,0,0,false,,,Intro: Electricity & Magnetism (Grade 9)
+958,9-science-physical-science-mechanics,Science,9,20,0,0,0,0,false,,,Intro: Mechanics (Grade 9)
+959,9-science-physical-science-thermodynamics,Science,9,28,0,0,0,0,false,,,Intro: Thermodynamics (Grade 9)
+960,9-science-physical-science-waves-and-optics,Science,9,24,0,0,0,0,false,,,Intro: Waves & Optics (Grade 9)
+961,9-social-studies-civics-and-government-comparative-government,Social Studies,9,24,0,0,0,0,false,,,Intro: Comparative Government (Grade 9)
+962,9-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,9,24,0,0,0,0,false,,,"Intro: US Government (institutions, policy) (Grade 9)"
+963,9-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,9,20,0,0,0,0,false,,,Intro: Macro/Micro (OpenStax where applicable) (Grade 9)
+964,9-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,9,24,0,0,0,0,false,,,"Intro: Personal Finance (taxes, credit) (Grade 9)"
+965,9-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,9,28,0,0,0,0,false,,,Intro: Thematic/AP-style depth (PD docs) (Grade 9)
+1238,1-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,1,16,0,0,0,0,false,,,"Simple Nonfiction (animals, places) Launch Lesson"
+1239,10-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,10,24,0,0,0,0,false,,,Literary Nonfiction (PD/open) Launch Lesson
+1240,10-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,10,20,0,0,0,0,false,,,Primary Sources (PD) Launch Lesson
+1241,10-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,10,16,0,0,0,0,false,,,Rhetoric & Argument Launch Lesson
+1242,11-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,11,24,0,0,0,0,false,,,Literary Nonfiction (PD/open) Launch Lesson
+1243,11-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,11,20,0,0,0,0,false,,,Primary Sources (PD) Launch Lesson
+1244,11-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,11,16,0,0,0,0,false,,,Rhetoric & Argument Launch Lesson
+1245,12-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,12,24,0,0,0,0,false,,,Literary Nonfiction (PD/open) Launch Lesson
+1246,12-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,12,20,0,0,0,0,false,,,Primary Sources (PD) Launch Lesson
+1247,12-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,12,16,0,0,0,0,false,,,Rhetoric & Argument Launch Lesson
+1248,2-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,2,16,0,0,0,0,false,,,"Simple Nonfiction (animals, places) Launch Lesson"
+1261,9-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,9,24,0,0,0,0,false,,,Literary Nonfiction (PD/open) Launch Lesson
+1262,9-english-language-arts-reading-informational-primary-sources-pd,English Language Arts,9,20,0,0,0,0,false,,,Primary Sources (PD) Launch Lesson
+1263,9-english-language-arts-reading-informational-rhetoric-and-argument,English Language Arts,9,16,0,0,0,0,false,,,Rhetoric & Argument Launch Lesson
+1264,k-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,K,16,0,0,0,0,false,,,"Simple Nonfiction (animals, places) Launch Lesson"
+1265,1-english-language-arts-reading-literature-fables-and-folktales-pd,English Language Arts,1,16,0,0,0,0,false,,,Fables & Folktales (PD) Launch Lesson
+1266,1-english-language-arts-reading-literature-picture-books-pd,English Language Arts,1,8,0,0,0,0,false,,,Picture Books (PD) Launch Lesson
+1267,1-english-language-arts-reading-literature-poetry-short-forms,English Language Arts,1,16,0,0,0,0,false,,,Poetry (short forms) Launch Lesson
+1268,10-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,10,24,0,0,0,0,false,,,American/British Lit (PD works) Launch Lesson
+1269,10-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,10,24,0,0,0,0,false,,,Poetry/Drama (PD) Launch Lesson
+1270,10-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,10,24,0,0,0,0,false,,,World Lit (PD where possible) Launch Lesson
+1271,11-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,11,24,0,0,0,0,false,,,American/British Lit (PD works) Launch Lesson
+1272,11-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,11,24,0,0,0,0,false,,,Poetry/Drama (PD) Launch Lesson
+1273,11-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,11,24,0,0,0,0,false,,,World Lit (PD where possible) Launch Lesson
+1274,12-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,12,24,0,0,0,0,false,,,American/British Lit (PD works) Launch Lesson
+1275,12-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,12,24,0,0,0,0,false,,,Poetry/Drama (PD) Launch Lesson
+1276,12-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,12,24,0,0,0,0,false,,,World Lit (PD where possible) Launch Lesson
+1277,2-english-language-arts-reading-literature-fables-and-folktales-pd,English Language Arts,2,16,0,0,0,0,false,,,Fables & Folktales (PD) Launch Lesson
+1278,2-english-language-arts-reading-literature-picture-books-pd,English Language Arts,2,8,0,0,0,0,false,,,Picture Books (PD) Launch Lesson
+1279,2-english-language-arts-reading-literature-poetry-short-forms,English Language Arts,2,16,0,0,0,0,false,,,Poetry (short forms) Launch Lesson
+1298,9-english-language-arts-reading-literature-american-british-lit-pd-works,English Language Arts,9,24,0,0,0,0,false,,,American/British Lit (PD works) Launch Lesson
+1299,9-english-language-arts-reading-literature-poetry-drama-pd,English Language Arts,9,24,0,0,0,0,false,,,Poetry/Drama (PD) Launch Lesson
+1300,9-english-language-arts-reading-literature-world-lit-pd-where-possible,English Language Arts,9,24,0,0,0,0,false,,,World Lit (PD where possible) Launch Lesson
+1301,k-english-language-arts-reading-literature-fables-and-folktales-pd,English Language Arts,K,16,0,0,0,0,false,,,Fables & Folktales (PD) Launch Lesson
+1302,k-english-language-arts-reading-literature-picture-books-pd,English Language Arts,K,8,0,0,0,0,false,,,Picture Books (PD) Launch Lesson
+1303,k-english-language-arts-reading-literature-poetry-short-forms,English Language Arts,K,16,0,0,0,0,false,,,Poetry (short forms) Launch Lesson
+1304,1-english-language-arts-speaking-and-listening-show-and-tell-retelling,English Language Arts,1,16,0,0,0,0,false,,,"Show & Tell, Retelling Launch Lesson"
+1305,10-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,10,20,0,0,0,0,false,,,"Seminars, Academic Discussions, Formal Presentations Launch Lesson"
+1306,11-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,11,20,0,0,0,0,false,,,"Seminars, Academic Discussions, Formal Presentations Launch Lesson"
+1307,12-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,12,20,0,0,0,0,false,,,"Seminars, Academic Discussions, Formal Presentations Launch Lesson"
+1308,2-english-language-arts-speaking-and-listening-show-and-tell-retelling,English Language Arts,2,16,0,0,0,0,false,,,"Show & Tell, Retelling Launch Lesson"
+1315,9-english-language-arts-speaking-and-listening-seminars-academic-discussions-formal-presentations,English Language Arts,9,20,0,0,0,0,false,,,"Seminars, Academic Discussions, Formal Presentations Launch Lesson"
+1316,k-english-language-arts-speaking-and-listening-show-and-tell-retelling,English Language Arts,K,16,0,0,0,0,false,,,"Show & Tell, Retelling Launch Lesson"
+1317,1-english-language-arts-vocabulary-sight-words-and-phonics,English Language Arts,1,20,0,0,0,0,false,,,Sight Words & Phonics Launch Lesson
+1318,10-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,10,28,0,0,0,0,false,,,"Discipline-Specific Terms, Test Prep Launch Lesson"
+1319,11-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,11,28,0,0,0,0,false,,,"Discipline-Specific Terms, Test Prep Launch Lesson"
+1320,12-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,12,28,0,0,0,0,false,,,"Discipline-Specific Terms, Test Prep Launch Lesson"
+1321,2-english-language-arts-vocabulary-sight-words-and-phonics,English Language Arts,2,20,0,0,0,0,false,,,Sight Words & Phonics Launch Lesson
+1328,9-english-language-arts-vocabulary-discipline-specific-terms-test-prep,English Language Arts,9,28,0,0,0,0,false,,,"Discipline-Specific Terms, Test Prep Launch Lesson"
+1329,k-english-language-arts-vocabulary-sight-words-and-phonics,English Language Arts,K,20,0,0,0,0,false,,,Sight Words & Phonics Launch Lesson
+1330,1-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation,English Language Arts,1,20,0,0,0,0,false,,,"Handwriting, Sentences, Capitalization/Punctuation Launch Lesson"
+1331,10-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,10,24,0,0,0,0,false,,,"Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review Launch Lesson"
+1332,11-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,11,24,0,0,0,0,false,,,"Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review Launch Lesson"
+1333,12-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,12,24,0,0,0,0,false,,,"Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review Launch Lesson"
+1334,2-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation,English Language Arts,2,20,0,0,0,0,false,,,"Handwriting, Sentences, Capitalization/Punctuation Launch Lesson"
+1341,9-english-language-arts-writing-and-grammar-research-papers-rhetoric-style-mla-apa-basics-grammar-review,English Language Arts,9,24,0,0,0,0,false,,,"Research Papers, Rhetoric, Style, MLA/APA Basics, Grammar Review Launch Lesson"
+1342,k-english-language-arts-writing-and-grammar-handwriting-sentences-capitalization-punctuation,English Language Arts,K,20,0,0,0,0,false,,,"Handwriting, Sentences, Capitalization/Punctuation Launch Lesson"
+1343,1-mathematics-data-and-probability-statistics-describe-data-more-less,Mathematics,1,20,0,0,0,0,false,,,Describe Data (more/less) Launch Lesson
+1345,10-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,10,24,0,0,0,0,false,,,Linear/Quadratic Functions Launch Lesson
+1346,10-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,10,20,0,0,0,0,false,,,Modeling & Applications Launch Lesson
+1347,10-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,10,24,0,0,0,0,false,,,Piecewise/Absolute Value Launch Lesson
+1348,10-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,10,28,0,0,0,0,false,,,Polynomial/Polynomial Identities Launch Lesson
+1349,10-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,10,24,0,0,0,0,false,,,Rational/ Radical Functions Launch Lesson
+1350,11-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,11,24,0,0,0,0,false,,,Linear/Quadratic Functions Launch Lesson
+1351,11-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,11,20,0,0,0,0,false,,,Modeling & Applications Launch Lesson
+1352,11-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,11,24,0,0,0,0,false,,,Piecewise/Absolute Value Launch Lesson
+1353,11-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,11,28,0,0,0,0,false,,,Polynomial/Polynomial Identities Launch Lesson
+1354,11-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,11,24,0,0,0,0,false,,,Rational/ Radical Functions Launch Lesson
+1355,12-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,12,24,0,0,0,0,false,,,Linear/Quadratic Functions Launch Lesson
+1356,12-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,12,20,0,0,0,0,false,,,Modeling & Applications Launch Lesson
+1357,12-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,12,24,0,0,0,0,false,,,Piecewise/Absolute Value Launch Lesson
+1358,12-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,12,28,0,0,0,0,false,,,Polynomial/Polynomial Identities Launch Lesson
+1359,12-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,12,24,0,0,0,0,false,,,Rational/ Radical Functions Launch Lesson
+1360,9-mathematics-algebra-hs-pathways-linear-quadratic-functions,Mathematics,9,24,0,0,0,0,false,,,Linear/Quadratic Functions Launch Lesson
+1361,9-mathematics-algebra-hs-pathways-modeling-and-applications,Mathematics,9,20,0,0,0,0,false,,,Modeling & Applications Launch Lesson
+1362,9-mathematics-algebra-hs-pathways-piecewise-absolute-value,Mathematics,9,24,0,0,0,0,false,,,Piecewise/Absolute Value Launch Lesson
+1363,9-mathematics-algebra-hs-pathways-polynomial-polynomial-identities,Mathematics,9,28,0,0,0,0,false,,,Polynomial/Polynomial Identities Launch Lesson
+1364,9-mathematics-algebra-hs-pathways-rational-radical-functions,Mathematics,9,24,0,0,0,0,false,,,Rational/ Radical Functions Launch Lesson
+1365,1-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,1,16,0,0,0,0,false,,,Categorize & Tally Launch Lesson
+1366,1-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,1,16,0,0,0,0,false,,,Picture/Bar Graphs (intro) Launch Lesson
+1367,1-mathematics-data-and-probability-statistics-simple-probability-informal,Mathematics,1,12,0,0,0,0,false,,,Simple Probability (informal) Launch Lesson
+1368,10-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,10,28,0,0,0,0,false,,,Confidence Intervals & Hypothesis Tests (intro HS Stats) Launch Lesson
+1369,10-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,10,20,0,0,0,0,false,,,Descriptive/Inferential Statistics Launch Lesson
+1370,10-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,10,24,0,0,0,0,false,,,Normal Distribution Launch Lesson
+1371,10-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,10,24,0,0,0,0,false,,,Regression (linear/multiple) Launch Lesson
+1372,12-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,12,24,0,0,0,0,false,,,Regression (linear/multiple) Launch Lesson
+1373,11-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,11,28,0,0,0,0,false,,,Confidence Intervals & Hypothesis Tests (intro HS Stats) Launch Lesson
+1374,11-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,11,20,0,0,0,0,false,,,Descriptive/Inferential Statistics Launch Lesson
+1375,11-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,11,24,0,0,0,0,false,,,Normal Distribution Launch Lesson
+1376,11-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,11,24,0,0,0,0,false,,,Regression (linear/multiple) Launch Lesson
+1377,12-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,12,28,0,0,0,0,false,,,Confidence Intervals & Hypothesis Tests (intro HS Stats) Launch Lesson
+1378,12-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,12,20,0,0,0,0,false,,,Descriptive/Inferential Statistics Launch Lesson
+1379,12-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,12,24,0,0,0,0,false,,,Normal Distribution Launch Lesson
+1380,2-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,2,16,0,0,0,0,false,,,Categorize & Tally Launch Lesson
+1381,2-mathematics-data-and-probability-statistics-describe-data-more-less,Mathematics,2,20,0,0,0,0,false,,,Describe Data (more/less) Launch Lesson
+1382,2-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,2,16,0,0,0,0,false,,,Picture/Bar Graphs (intro) Launch Lesson
+1383,2-mathematics-data-and-probability-statistics-simple-probability-informal,Mathematics,2,12,0,0,0,0,false,,,Simple Probability (informal) Launch Lesson
+1408,9-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,9,28,0,0,0,0,false,,,Confidence Intervals & Hypothesis Tests (intro HS Stats) Launch Lesson
+1409,9-mathematics-data-and-probability-statistics-descriptive-inferential-statistics,Mathematics,9,20,0,0,0,0,false,,,Descriptive/Inferential Statistics Launch Lesson
+1410,9-mathematics-data-and-probability-statistics-normal-distribution,Mathematics,9,24,0,0,0,0,false,,,Normal Distribution Launch Lesson
+1411,9-mathematics-data-and-probability-statistics-regression-linear-multiple,Mathematics,9,24,0,0,0,0,false,,,Regression (linear/multiple) Launch Lesson
+1412,k-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,K,16,0,0,0,0,false,,,Categorize & Tally Launch Lesson
+1413,k-mathematics-data-and-probability-statistics-describe-data-more-less,Mathematics,K,20,0,0,0,0,false,,,Describe Data (more/less) Launch Lesson
+1414,k-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,K,16,0,0,0,0,false,,,Picture/Bar Graphs (intro) Launch Lesson
+1415,k-mathematics-data-and-probability-statistics-simple-probability-informal,Mathematics,K,12,0,0,0,0,false,,,Simple Probability (informal) Launch Lesson
+1416,1-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes,Mathematics,1,16,0,0,0,0,false,,,2D/3D Shapes & Attributes Launch Lesson
+1417,1-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard,Mathematics,1,16,0,0,0,0,false,,,Length/Weight/Capacity (non-standard/standard) Launch Lesson
+1418,1-mathematics-geometry-and-measurement-perimeter-intro,Mathematics,1,20,0,0,0,0,false,,,Perimeter (intro) Launch Lesson
+1419,1-mathematics-geometry-and-measurement-time-and-money-intro,Mathematics,1,20,0,0,0,0,false,,,Time & Money (intro) Launch Lesson
+1420,10-mathematics-geometry-and-measurement-conic-sections,Mathematics,10,28,0,0,0,0,false,,,Conic Sections Launch Lesson
+1421,10-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,10,28,0,0,0,0,false,,,Euclidean Proofs Launch Lesson
+1422,10-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,10,36,0,0,0,0,false,,,Transformations (advanced) Launch Lesson
+1423,10-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,10,28,0,0,0,0,false,,,Trigonometry (right/units) Launch Lesson
+1424,10-mathematics-geometry-and-measurement-vectors,Mathematics,10,28,0,0,0,0,false,,,Vectors Launch Lesson
+1425,11-mathematics-geometry-and-measurement-conic-sections,Mathematics,11,28,0,0,0,0,false,,,Conic Sections Launch Lesson
+1426,11-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,11,28,0,0,0,0,false,,,Euclidean Proofs Launch Lesson
+1427,11-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,11,36,0,0,0,0,false,,,Transformations (advanced) Launch Lesson
+1428,11-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,11,28,0,0,0,0,false,,,Trigonometry (right/units) Launch Lesson
+1429,11-mathematics-geometry-and-measurement-vectors,Mathematics,11,28,0,0,0,0,false,,,Vectors Launch Lesson
+1430,12-mathematics-geometry-and-measurement-conic-sections,Mathematics,12,28,0,0,0,0,false,,,Conic Sections Launch Lesson
+1431,12-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,12,28,0,0,0,0,false,,,Euclidean Proofs Launch Lesson
+1432,12-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,12,36,0,0,0,0,false,,,Transformations (advanced) Launch Lesson
+1433,12-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,12,28,0,0,0,0,false,,,Trigonometry (right/units) Launch Lesson
+1434,12-mathematics-geometry-and-measurement-vectors,Mathematics,12,28,0,0,0,0,false,,,Vectors Launch Lesson
+1435,2-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes,Mathematics,2,16,0,0,0,0,false,,,2D/3D Shapes & Attributes Launch Lesson
+1436,2-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard,Mathematics,2,16,0,0,0,0,false,,,Length/Weight/Capacity (non-standard/standard) Launch Lesson
+1437,2-mathematics-geometry-and-measurement-perimeter-intro,Mathematics,2,20,0,0,0,0,false,,,Perimeter (intro) Launch Lesson
+1438,2-mathematics-geometry-and-measurement-time-and-money-intro,Mathematics,2,20,0,0,0,0,false,,,Time & Money (intro) Launch Lesson
+1469,9-mathematics-geometry-and-measurement-conic-sections,Mathematics,9,28,0,0,0,0,false,,,Conic Sections Launch Lesson
+1470,9-mathematics-geometry-and-measurement-euclidean-proofs,Mathematics,9,28,0,0,0,0,false,,,Euclidean Proofs Launch Lesson
+1471,9-mathematics-geometry-and-measurement-transformations-advanced,Mathematics,9,36,0,0,0,0,false,,,Transformations (advanced) Launch Lesson
+1472,9-mathematics-geometry-and-measurement-trigonometry-right-units,Mathematics,9,28,0,0,0,0,false,,,Trigonometry (right/units) Launch Lesson
+1473,9-mathematics-geometry-and-measurement-vectors,Mathematics,9,28,0,0,0,0,false,,,Vectors Launch Lesson
+1474,k-mathematics-geometry-and-measurement-2d-3d-shapes-and-attributes,Mathematics,K,16,0,0,0,0,false,,,2D/3D Shapes & Attributes Launch Lesson
+1475,k-mathematics-geometry-and-measurement-length-weight-capacity-non-standard-standard,Mathematics,K,16,0,0,0,0,false,,,Length/Weight/Capacity (non-standard/standard) Launch Lesson
+1476,k-mathematics-geometry-and-measurement-perimeter-intro,Mathematics,K,20,0,0,0,0,false,,,Perimeter (intro) Launch Lesson
+1477,k-mathematics-geometry-and-measurement-time-and-money-intro,Mathematics,K,20,0,0,0,0,false,,,Time & Money (intro) Launch Lesson
+1478,1-mathematics-number-and-operations-addition-subtraction-within-20,Mathematics,1,12,0,0,0,0,false,,,Addition/Subtraction within 20 Launch Lesson
+1479,1-mathematics-number-and-operations-compare-numbers,Mathematics,1,16,0,0,0,0,false,,,Compare Numbers Launch Lesson
+1480,1-mathematics-number-and-operations-counting-and-cardinality,Mathematics,1,16,0,0,0,0,false,,,Counting & Cardinality Launch Lesson
+1481,1-mathematics-number-and-operations-place-value-tens-ones,Mathematics,1,20,0,0,0,0,false,,,Place Value (tens/ones) Launch Lesson
+1482,1-mathematics-number-and-operations-skip-counting,Mathematics,1,16,0,0,0,0,false,,,Skip Counting Launch Lesson
+1483,10-mathematics-number-and-operations-complex-numbers,Mathematics,10,24,0,0,0,0,false,,,Complex Numbers Launch Lesson
+1484,10-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,10,28,0,0,0,0,false,,,Exponential/Logarithmic Functions Launch Lesson
+1485,10-mathematics-number-and-operations-matrices-optional,Mathematics,10,24,0,0,0,0,false,,,Matrices (optional) Launch Lesson
+1486,10-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,10,24,0,0,0,0,false,,,Polynomial & Rational Expressions Launch Lesson
+1487,10-mathematics-number-and-operations-sequences-and-series,Mathematics,10,28,0,0,0,0,false,,,Sequences & Series Launch Lesson
+1488,11-mathematics-number-and-operations-complex-numbers,Mathematics,11,24,0,0,0,0,false,,,Complex Numbers Launch Lesson
+1489,11-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,11,28,0,0,0,0,false,,,Exponential/Logarithmic Functions Launch Lesson
+1490,11-mathematics-number-and-operations-matrices-optional,Mathematics,11,24,0,0,0,0,false,,,Matrices (optional) Launch Lesson
+1491,11-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,11,24,0,0,0,0,false,,,Polynomial & Rational Expressions Launch Lesson
+1492,11-mathematics-number-and-operations-sequences-and-series,Mathematics,11,28,0,0,0,0,false,,,Sequences & Series Launch Lesson
+1493,12-mathematics-number-and-operations-complex-numbers,Mathematics,12,24,0,0,0,0,false,,,Complex Numbers Launch Lesson
+1494,12-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,12,28,0,0,0,0,false,,,Exponential/Logarithmic Functions Launch Lesson
+1495,12-mathematics-number-and-operations-matrices-optional,Mathematics,12,24,0,0,0,0,false,,,Matrices (optional) Launch Lesson
+1496,12-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,12,24,0,0,0,0,false,,,Polynomial & Rational Expressions Launch Lesson
+1497,12-mathematics-number-and-operations-sequences-and-series,Mathematics,12,28,0,0,0,0,false,,,Sequences & Series Launch Lesson
+1498,2-mathematics-number-and-operations-addition-subtraction-within-20,Mathematics,2,12,0,0,0,0,false,,,Addition/Subtraction within 20 Launch Lesson
+1499,2-mathematics-number-and-operations-compare-numbers,Mathematics,2,16,0,0,0,0,false,,,Compare Numbers Launch Lesson
+1500,2-mathematics-number-and-operations-counting-and-cardinality,Mathematics,2,16,0,0,0,0,false,,,Counting & Cardinality Launch Lesson
+1501,2-mathematics-number-and-operations-place-value-tens-ones,Mathematics,2,20,0,0,0,0,false,,,Place Value (tens/ones) Launch Lesson
+1502,2-mathematics-number-and-operations-skip-counting,Mathematics,2,16,0,0,0,0,false,,,Skip Counting Launch Lesson
+1533,9-mathematics-number-and-operations-complex-numbers,Mathematics,9,24,0,0,0,0,false,,,Complex Numbers Launch Lesson
+1534,9-mathematics-number-and-operations-exponential-logarithmic-functions,Mathematics,9,28,0,0,0,0,false,,,Exponential/Logarithmic Functions Launch Lesson
+1535,9-mathematics-number-and-operations-matrices-optional,Mathematics,9,24,0,0,0,0,false,,,Matrices (optional) Launch Lesson
+1536,9-mathematics-number-and-operations-polynomial-and-rational-expressions,Mathematics,9,24,0,0,0,0,false,,,Polynomial & Rational Expressions Launch Lesson
+1537,9-mathematics-number-and-operations-sequences-and-series,Mathematics,9,28,0,0,0,0,false,,,Sequences & Series Launch Lesson
+1538,k-mathematics-number-and-operations-addition-subtraction-within-20,Mathematics,K,12,0,0,0,0,false,,,Addition/Subtraction within 20 Launch Lesson
+1539,k-mathematics-number-and-operations-compare-numbers,Mathematics,K,16,0,0,0,0,false,,,Compare Numbers Launch Lesson
+1540,k-mathematics-number-and-operations-counting-and-cardinality,Mathematics,K,16,0,0,0,0,false,,,Counting & Cardinality Launch Lesson
+1541,k-mathematics-number-and-operations-place-value-tens-ones,Mathematics,K,20,0,0,0,0,false,,,Place Value (tens/ones) Launch Lesson
+1542,k-mathematics-number-and-operations-skip-counting,Mathematics,K,16,0,0,0,0,false,,,Skip Counting Launch Lesson
+1543,10-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,10,16,0,0,0,0,false,,,Derivatives (intro) Launch Lesson
+1544,10-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,10,28,0,0,0,0,false,,,Integrals (intro) Launch Lesson
+1545,10-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,10,28,0,0,0,0,false,,,Limits Launch Lesson
+1546,10-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,10,28,0,0,0,0,false,,,Parametric/Polar (optional) Launch Lesson
+1547,10-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,10,24,0,0,0,0,false,,,Trigonometric Identities Launch Lesson
+1548,11-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,11,16,0,0,0,0,false,,,Derivatives (intro) Launch Lesson
+1549,11-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,11,28,0,0,0,0,false,,,Integrals (intro) Launch Lesson
+1550,11-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,11,28,0,0,0,0,false,,,Limits Launch Lesson
+1551,11-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,11,28,0,0,0,0,false,,,Parametric/Polar (optional) Launch Lesson
+1552,11-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,11,24,0,0,0,0,false,,,Trigonometric Identities Launch Lesson
+1553,12-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,12,16,0,0,0,0,false,,,Derivatives (intro) Launch Lesson
+1554,12-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,12,28,0,0,0,0,false,,,Integrals (intro) Launch Lesson
+1555,12-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,12,28,0,0,0,0,false,,,Limits Launch Lesson
+1556,12-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,12,28,0,0,0,0,false,,,Parametric/Polar (optional) Launch Lesson
+1557,12-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,12,24,0,0,0,0,false,,,Trigonometric Identities Launch Lesson
+1558,9-mathematics-precalculus-calculus-advanced-hs-derivatives-intro,Mathematics,9,16,0,0,0,0,false,,,Derivatives (intro) Launch Lesson
+1559,9-mathematics-precalculus-calculus-advanced-hs-integrals-intro,Mathematics,9,28,0,0,0,0,false,,,Integrals (intro) Launch Lesson
+1560,9-mathematics-precalculus-calculus-advanced-hs-limits,Mathematics,9,28,0,0,0,0,false,,,Limits Launch Lesson
+1561,9-mathematics-precalculus-calculus-advanced-hs-parametric-polar-optional,Mathematics,9,28,0,0,0,0,false,,,Parametric/Polar (optional) Launch Lesson
+1562,9-mathematics-precalculus-calculus-advanced-hs-trigonometric-identities,Mathematics,9,24,0,0,0,0,false,,,Trigonometric Identities Launch Lesson
+1563,11-science-life-science-physiology,Science,11,24,0,0,0,0,false,,,Physiology Launch Lesson
+1564,1-science-earth-and-space-weather-and-seasons,Science,1,24,0,0,0,0,false,,,Weather & Seasons Launch Lesson
+1565,10-science-earth-and-space-astronomy-astrophysics-intro,Science,10,28,0,0,0,0,false,,,Astronomy/Astrophysics (intro) Launch Lesson
+1567,10-science-life-science-physiology,Science,10,24,0,0,0,0,false,,,Physiology Launch Lesson
+1568,1-science-earth-and-space-earth-materials-rocks-soil,Science,1,24,0,0,0,0,false,,,Earth Materials (rocks/soil) Launch Lesson
+1569,1-science-earth-and-space-sun-moon-stars-patterns,Science,1,16,0,0,0,0,false,,,Sun/Moon/Stars (patterns) Launch Lesson
+1570,10-science-earth-and-space-climate-science,Science,10,28,0,0,0,0,false,,,Climate Science Launch Lesson
+1571,10-science-earth-and-space-geology-minerals-rocks,Science,10,32,0,0,0,0,false,,,Geology (minerals/rocks) Launch Lesson
+1572,10-science-earth-and-space-oceanography-atmospheric-science,Science,10,24,0,0,0,0,false,,,Oceanography/Atmospheric Science Launch Lesson
+1573,11-science-earth-and-space-astronomy-astrophysics-intro,Science,11,28,0,0,0,0,false,,,Astronomy/Astrophysics (intro) Launch Lesson
+1574,11-science-earth-and-space-climate-science,Science,11,28,0,0,0,0,false,,,Climate Science Launch Lesson
+1575,11-science-earth-and-space-geology-minerals-rocks,Science,11,32,0,0,0,0,false,,,Geology (minerals/rocks) Launch Lesson
+1576,11-science-earth-and-space-oceanography-atmospheric-science,Science,11,24,0,0,0,0,false,,,Oceanography/Atmospheric Science Launch Lesson
+1577,12-science-earth-and-space-astronomy-astrophysics-intro,Science,12,28,0,0,0,0,false,,,Astronomy/Astrophysics (intro) Launch Lesson
+1578,12-science-earth-and-space-climate-science,Science,12,28,0,0,0,0,false,,,Climate Science Launch Lesson
+1579,12-science-earth-and-space-geology-minerals-rocks,Science,12,32,0,0,0,0,false,,,Geology (minerals/rocks) Launch Lesson
+1580,12-science-earth-and-space-oceanography-atmospheric-science,Science,12,24,0,0,0,0,false,,,Oceanography/Atmospheric Science Launch Lesson
+1581,2-science-earth-and-space-earth-materials-rocks-soil,Science,2,24,0,0,0,0,false,,,Earth Materials (rocks/soil) Launch Lesson
+1582,2-science-earth-and-space-sun-moon-stars-patterns,Science,2,16,0,0,0,0,false,,,Sun/Moon/Stars (patterns) Launch Lesson
+1583,2-science-earth-and-space-weather-and-seasons,Science,2,24,0,0,0,0,false,,,Weather & Seasons Launch Lesson
+1608,9-science-earth-and-space-astronomy-astrophysics-intro,Science,9,28,0,0,0,0,false,,,Astronomy/Astrophysics (intro) Launch Lesson
+1609,9-science-earth-and-space-climate-science,Science,9,28,0,0,0,0,false,,,Climate Science Launch Lesson
+1610,9-science-earth-and-space-geology-minerals-rocks,Science,9,32,0,0,0,0,false,,,Geology (minerals/rocks) Launch Lesson
+1611,9-science-earth-and-space-oceanography-atmospheric-science,Science,9,24,0,0,0,0,false,,,Oceanography/Atmospheric Science Launch Lesson
+1612,k-science-earth-and-space-earth-materials-rocks-soil,Science,K,24,0,0,0,0,false,,,Earth Materials (rocks/soil) Launch Lesson
+1613,k-science-earth-and-space-sun-moon-stars-patterns,Science,K,16,0,0,0,0,false,,,Sun/Moon/Stars (patterns) Launch Lesson
+1614,k-science-earth-and-space-weather-and-seasons,Science,K,24,0,0,0,0,false,,,Weather & Seasons Launch Lesson
+1615,1-science-engineering-practices-ask-imagine-plan-create-test-design-cycle,Science,1,20,0,0,0,0,false,,,Ask/Imagine/Plan/Create/Test (Design Cycle) Launch Lesson
+1616,10-science-engineering-practices-computational-modeling-intro,Science,10,24,0,0,0,0,false,,,Computational Modeling (intro) Launch Lesson
+1617,10-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,10,20,0,0,0,0,false,,,Experiment Design & Statistics in Labs Launch Lesson
+1618,10-science-engineering-practices-systems-design,Science,10,32,0,0,0,0,false,,,Systems Design Launch Lesson
+1619,11-science-engineering-practices-computational-modeling-intro,Science,11,24,0,0,0,0,false,,,Computational Modeling (intro) Launch Lesson
+1620,11-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,11,20,0,0,0,0,false,,,Experiment Design & Statistics in Labs Launch Lesson
+1621,11-science-engineering-practices-systems-design,Science,11,32,0,0,0,0,false,,,Systems Design Launch Lesson
+1622,12-science-engineering-practices-computational-modeling-intro,Science,12,24,0,0,0,0,false,,,Computational Modeling (intro) Launch Lesson
+1623,12-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,12,20,0,0,0,0,false,,,Experiment Design & Statistics in Labs Launch Lesson
+1624,12-science-engineering-practices-systems-design,Science,12,32,0,0,0,0,false,,,Systems Design Launch Lesson
+1625,2-science-engineering-practices-ask-imagine-plan-create-test-design-cycle,Science,2,20,0,0,0,0,false,,,Ask/Imagine/Plan/Create/Test (Design Cycle) Launch Lesson
+1641,9-science-engineering-practices-computational-modeling-intro,Science,9,24,0,0,0,0,false,,,Computational Modeling (intro) Launch Lesson
+1642,9-science-engineering-practices-experiment-design-and-statistics-in-labs,Science,9,20,0,0,0,0,false,,,Experiment Design & Statistics in Labs Launch Lesson
+1643,9-science-engineering-practices-systems-design,Science,9,32,0,0,0,0,false,,,Systems Design Launch Lesson
+1644,k-science-engineering-practices-ask-imagine-plan-create-test-design-cycle,Science,K,20,0,0,0,0,false,,,Ask/Imagine/Plan/Create/Test (Design Cycle) Launch Lesson
+1645,1-science-life-science-habitats,Science,1,12,0,0,0,0,false,,,Habitats Launch Lesson
+1646,1-science-life-science-life-cycles,Science,1,20,0,0,0,0,false,,,Life Cycles Launch Lesson
+1647,1-science-life-science-plants-animals-needs,Science,1,12,0,0,0,0,false,,,Plants/Animals Needs Launch Lesson
+1648,10-science-life-science-biochemistry-intro,Science,10,28,0,0,0,0,false,,,Biochemistry (intro) Launch Lesson
+1649,10-science-life-science-ecology-population-community,Science,10,24,0,0,0,0,false,,,Ecology (population/community) Launch Lesson
+1650,10-science-life-science-evolution-advanced,Science,10,24,0,0,0,0,false,,,Evolution (advanced) Launch Lesson
+1651,10-science-life-science-molecular-genetics,Science,10,16,0,0,0,0,false,,,Molecular Genetics Launch Lesson
+1652,11-science-life-science-biochemistry-intro,Science,11,28,0,0,0,0,false,,,Biochemistry (intro) Launch Lesson
+1653,11-science-life-science-ecology-population-community,Science,11,24,0,0,0,0,false,,,Ecology (population/community) Launch Lesson
+1654,11-science-life-science-evolution-advanced,Science,11,24,0,0,0,0,false,,,Evolution (advanced) Launch Lesson
+1655,11-science-life-science-molecular-genetics,Science,11,16,0,0,0,0,false,,,Molecular Genetics Launch Lesson
+1656,12-science-life-science-biochemistry-intro,Science,12,28,0,0,0,0,false,,,Biochemistry (intro) Launch Lesson
+1657,12-science-life-science-ecology-population-community,Science,12,24,0,0,0,0,false,,,Ecology (population/community) Launch Lesson
+1658,12-science-life-science-evolution-advanced,Science,12,24,0,0,0,0,false,,,Evolution (advanced) Launch Lesson
+1659,12-science-life-science-molecular-genetics,Science,12,16,0,0,0,0,false,,,Molecular Genetics Launch Lesson
+1660,12-science-life-science-physiology,Science,12,24,0,0,0,0,false,,,Physiology Launch Lesson
+1661,2-science-life-science-habitats,Science,2,12,0,0,0,0,false,,,Habitats Launch Lesson
+1662,2-science-life-science-life-cycles,Science,2,20,0,0,0,0,false,,,Life Cycles Launch Lesson
+1663,2-science-life-science-plants-animals-needs,Science,2,12,0,0,0,0,false,,,Plants/Animals Needs Launch Lesson
+1691,9-science-life-science-biochemistry-intro,Science,9,28,0,0,0,0,false,,,Biochemistry (intro) Launch Lesson
+1692,9-science-life-science-ecology-population-community,Science,9,24,0,0,0,0,false,,,Ecology (population/community) Launch Lesson
+1693,9-science-life-science-evolution-advanced,Science,9,24,0,0,0,0,false,,,Evolution (advanced) Launch Lesson
+1694,9-science-life-science-molecular-genetics,Science,9,16,0,0,0,0,false,,,Molecular Genetics Launch Lesson
+1695,9-science-life-science-physiology,Science,9,24,0,0,0,0,false,,,Physiology Launch Lesson
+1696,k-science-life-science-habitats,Science,K,12,0,0,0,0,false,,,Habitats Launch Lesson
+1697,k-science-life-science-life-cycles,Science,K,20,0,0,0,0,false,,,Life Cycles Launch Lesson
+1698,k-science-life-science-plants-animals-needs,Science,K,12,0,0,0,0,false,,,Plants/Animals Needs Launch Lesson
+1699,1-science-physical-science-energy-heat-sun,Science,1,12,0,0,0,0,false,,,Energy (heat/sun) Launch Lesson
+1700,1-science-physical-science-forces-and-motion-push-pull,Science,1,20,0,0,0,0,false,,,Forces & Motion (push/pull) Launch Lesson
+1701,1-science-physical-science-light-and-sound,Science,1,20,0,0,0,0,false,,,Light & Sound Launch Lesson
+1702,1-science-physical-science-matter-properties-solids-liquids-gases,Science,1,20,0,0,0,0,false,,,Matter Properties (solids/liquids/gases) Launch Lesson
+1703,10-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,10,28,0,0,0,0,false,,,Chemistry: Stoichiometry/Equilibrium/Acids-Bases Launch Lesson
+1704,10-science-physical-science-electricity-and-magnetism,Science,10,24,0,0,0,0,false,,,Electricity & Magnetism Launch Lesson
+1705,10-science-physical-science-mechanics,Science,10,20,0,0,0,0,false,,,Mechanics Launch Lesson
+1706,10-science-physical-science-thermodynamics,Science,10,28,0,0,0,0,false,,,Thermodynamics Launch Lesson
+1707,10-science-physical-science-waves-and-optics,Science,10,24,0,0,0,0,false,,,Waves & Optics Launch Lesson
+1708,11-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,11,28,0,0,0,0,false,,,Chemistry: Stoichiometry/Equilibrium/Acids-Bases Launch Lesson
+1709,11-science-physical-science-electricity-and-magnetism,Science,11,24,0,0,0,0,false,,,Electricity & Magnetism Launch Lesson
+1710,11-science-physical-science-mechanics,Science,11,20,0,0,0,0,false,,,Mechanics Launch Lesson
+1711,11-science-physical-science-thermodynamics,Science,11,28,0,0,0,0,false,,,Thermodynamics Launch Lesson
+1712,11-science-physical-science-waves-and-optics,Science,11,24,0,0,0,0,false,,,Waves & Optics Launch Lesson
+1714,12-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,12,28,0,0,0,0,false,,,Chemistry: Stoichiometry/Equilibrium/Acids-Bases Launch Lesson
+1715,12-science-physical-science-electricity-and-magnetism,Science,12,24,0,0,0,0,false,,,Electricity & Magnetism Launch Lesson
+1716,12-science-physical-science-mechanics,Science,12,20,0,0,0,0,false,,,Mechanics Launch Lesson
+1717,12-science-physical-science-thermodynamics,Science,12,28,0,0,0,0,false,,,Thermodynamics Launch Lesson
+1718,12-science-physical-science-waves-and-optics,Science,12,24,0,0,0,0,false,,,Waves & Optics Launch Lesson
+1719,2-science-physical-science-energy-heat-sun,Science,2,12,0,0,0,0,false,,,Energy (heat/sun) Launch Lesson
+1720,2-science-physical-science-forces-and-motion-push-pull,Science,2,20,0,0,0,0,false,,,Forces & Motion (push/pull) Launch Lesson
+1721,2-science-physical-science-light-and-sound,Science,2,20,0,0,0,0,false,,,Light & Sound Launch Lesson
+1722,2-science-physical-science-matter-properties-solids-liquids-gases,Science,2,20,0,0,0,0,false,,,Matter Properties (solids/liquids/gases) Launch Lesson
+1746,9-science-physical-science-chemistry-stoichiometry-equilibrium-acids-bases,Science,9,28,0,0,0,0,false,,,Chemistry: Stoichiometry/Equilibrium/Acids-Bases Launch Lesson
+1747,9-science-physical-science-electricity-and-magnetism,Science,9,24,0,0,0,0,false,,,Electricity & Magnetism Launch Lesson
+1748,9-science-physical-science-mechanics,Science,9,20,0,0,0,0,false,,,Mechanics Launch Lesson
+1749,9-science-physical-science-thermodynamics,Science,9,28,0,0,0,0,false,,,Thermodynamics Launch Lesson
+1750,9-science-physical-science-waves-and-optics,Science,9,24,0,0,0,0,false,,,Waves & Optics Launch Lesson
+1751,k-science-physical-science-energy-heat-sun,Science,K,12,0,0,0,0,false,,,Energy (heat/sun) Launch Lesson
+1752,k-science-physical-science-forces-and-motion-push-pull,Science,K,20,0,0,0,0,false,,,Forces & Motion (push/pull) Launch Lesson
+1753,k-science-physical-science-light-and-sound,Science,K,20,0,0,0,0,false,,,Light & Sound Launch Lesson
+1754,k-science-physical-science-matter-properties-solids-liquids-gases,Science,K,20,0,0,0,0,false,,,Matter Properties (solids/liquids/gases) Launch Lesson
+1755,1-social-studies-us-history-personal-family-history,Social Studies,1,16,0,0,0,0,false,,,Personal/Family History Launch Lesson
+1759,1-social-studies-civics-and-government-rules-and-community,Social Studies,1,24,0,0,0,0,false,,,Rules & Community Launch Lesson
+1760,1-social-studies-civics-and-government-symbols-and-holidays,Social Studies,1,20,0,0,0,0,false,,,Symbols & Holidays Launch Lesson
+1761,10-social-studies-civics-and-government-comparative-government,Social Studies,10,24,0,0,0,0,false,,,Comparative Government Launch Lesson
+1762,10-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,10,24,0,0,0,0,false,,,"US Government (institutions, policy) Launch Lesson"
+1763,11-social-studies-civics-and-government-comparative-government,Social Studies,11,24,0,0,0,0,false,,,Comparative Government Launch Lesson
+1764,11-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,11,24,0,0,0,0,false,,,"US Government (institutions, policy) Launch Lesson"
+1765,12-social-studies-civics-and-government-comparative-government,Social Studies,12,24,0,0,0,0,false,,,Comparative Government Launch Lesson
+1766,12-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,12,24,0,0,0,0,false,,,"US Government (institutions, policy) Launch Lesson"
+1767,2-social-studies-civics-and-government-rules-and-community,Social Studies,2,24,0,0,0,0,false,,,Rules & Community Launch Lesson
+1768,2-social-studies-civics-and-government-symbols-and-holidays,Social Studies,2,20,0,0,0,0,false,,,Symbols & Holidays Launch Lesson
+1780,9-social-studies-civics-and-government-comparative-government,Social Studies,9,24,0,0,0,0,false,,,Comparative Government Launch Lesson
+1781,9-social-studies-civics-and-government-us-government-institutions-policy,Social Studies,9,24,0,0,0,0,false,,,"US Government (institutions, policy) Launch Lesson"
+1782,k-social-studies-civics-and-government-rules-and-community,Social Studies,K,24,0,0,0,0,false,,,Rules & Community Launch Lesson
+1783,k-social-studies-civics-and-government-symbols-and-holidays,Social Studies,K,20,0,0,0,0,false,,,Symbols & Holidays Launch Lesson
+1784,1-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,1,20,0,0,0,0,false,,,Choices & Trade Launch Lesson
+1785,1-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,1,8,0,0,0,0,false,,,Needs vs Wants Launch Lesson
+1786,10-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,10,20,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable) Launch Lesson
+1787,10-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,10,24,0,0,0,0,false,,,"Personal Finance (taxes, credit) Launch Lesson"
+1788,11-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,11,20,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable) Launch Lesson
+1789,11-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,11,24,0,0,0,0,false,,,"Personal Finance (taxes, credit) Launch Lesson"
+1790,12-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,12,20,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable) Launch Lesson
+1791,12-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,12,24,0,0,0,0,false,,,"Personal Finance (taxes, credit) Launch Lesson"
+1792,2-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,2,20,0,0,0,0,false,,,Choices & Trade Launch Lesson
+1793,2-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,2,8,0,0,0,0,false,,,Needs vs Wants Launch Lesson
+1806,9-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,9,20,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable) Launch Lesson
+1807,9-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,9,24,0,0,0,0,false,,,"Personal Finance (taxes, credit) Launch Lesson"
+1808,k-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,K,20,0,0,0,0,false,,,Choices & Trade Launch Lesson
+1809,k-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,K,8,0,0,0,0,false,,,Needs vs Wants Launch Lesson
+1810,1-social-studies-us-history-national-symbols,Social Studies,1,16,0,0,0,0,false,,,National Symbols Launch Lesson
+1811,10-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,10,28,0,0,0,0,false,,,Thematic/AP-style depth (PD docs) Launch Lesson
+1812,11-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,11,28,0,0,0,0,false,,,Thematic/AP-style depth (PD docs) Launch Lesson
+1813,12-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,12,28,0,0,0,0,false,,,Thematic/AP-style depth (PD docs) Launch Lesson
+1814,2-social-studies-us-history-national-symbols,Social Studies,2,16,0,0,0,0,false,,,National Symbols Launch Lesson
+1815,2-social-studies-us-history-personal-family-history,Social Studies,2,16,0,0,0,0,false,,,Personal/Family History Launch Lesson
+1826,9-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,9,28,0,0,0,0,false,,,Thematic/AP-style depth (PD docs) Launch Lesson
+1827,k-social-studies-us-history-national-symbols,Social Studies,K,16,0,0,0,0,false,,,National Symbols Launch Lesson
+1828,k-social-studies-us-history-personal-family-history,Social Studies,K,16,0,0,0,0,false,,,Personal/Family History Launch Lesson
+1829,1-social-studies-world-history-and-geography-cultures-intro,Social Studies,1,20,0,0,0,0,false,,,Cultures (intro) Launch Lesson
+1830,1-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,1,12,0,0,0,0,false,,,Maps/Globes (basic) Launch Lesson
+1831,10-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,10,24,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography Launch Lesson"
+1832,11-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,11,24,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography Launch Lesson"
+1833,12-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,12,24,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography Launch Lesson"
+1834,2-social-studies-world-history-and-geography-cultures-intro,Social Studies,2,20,0,0,0,0,false,,,Cultures (intro) Launch Lesson
+1835,2-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,2,12,0,0,0,0,false,,,Maps/Globes (basic) Launch Lesson
+1848,9-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,9,24,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography Launch Lesson"
+1849,k-social-studies-world-history-and-geography-cultures-intro,Social Studies,K,20,0,0,0,0,false,,,Cultures (intro) Launch Lesson
+1850,k-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,K,12,0,0,0,0,false,,,Maps/Globes (basic) Launch Lesson
+1851,5-electives-arts-and-music-notation-basics,Electives,5,4,0,0,0,0,false,,,Understanding Musical Structure and Expression
+1852,6-electives-computer-science-data-and-graphics,Electives,6,4,0,0,0,0,false,,,Understanding Data and Creating Visualizations
+1853,6-electives-computer-science-intro-python-js,Electives,6,4,0,0,0,0,false,,,Introduction to Text-Based Programming in Python or JavaScript
+1854,6-electives-arts-and-music-art-history-pd-images,Electives,6,4,0,0,0,0,false,,,Discovering Artists and Artwork from History
+1855,6-electives-arts-and-music-music-theory-intro,Electives,6,4,0,0,0,0,false,,,Building Blocks of Musical Sound: Introduction to Theory
+1856,7-electives-arts-and-music-art-history-pd-images,Electives,7,4,0,0,0,0,false,,,Modern and Contemporary Art: Revolution and Reflection
+1857,7-electives-arts-and-music-music-theory-intro,Electives,7,288,0,0,0,0,false,,,Advanced Harmony: Chords in Motion
+1858,5-electives-arts-and-music-drawing-painting-techniques,Electives,5,4,0,0,0,0,false,,,Mastering Artistic Techniques and Expression
+1859,1-electives-arts-and-music-colors-shapes-in-art,Electives,1,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
+1860,1-electives-arts-and-music-rhythm-and-melody,Electives,1,12,0,0,0,0,false,,,Rhythm & Melody Launch Lesson
+1861,10-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,10,28,0,0,0,0,false,,,"Studio Art, Design, Music Composition/Performance Launch Lesson"
+1862,11-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,11,28,0,0,0,0,false,,,"Studio Art, Design, Music Composition/Performance Launch Lesson"
+1863,12-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,12,28,0,0,0,0,false,,,"Studio Art, Design, Music Composition/Performance Launch Lesson"
+1864,2-electives-arts-and-music-colors-shapes-in-art,Electives,2,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
+1865,2-electives-arts-and-music-rhythm-and-melody,Electives,2,12,0,0,0,0,false,,,Rhythm & Melody Launch Lesson
+1866,3-electives-arts-and-music-drawing-painting-techniques,Electives,3,36,0,0,0,0,false,,,Discovering How to Draw and Paint
+1867,3-electives-arts-and-music-notation-basics,Electives,3,108,0,0,0,0,false,,,Learning to Read Music Notes
+1868,4-electives-arts-and-music-drawing-painting-techniques,Electives,4,4,0,0,0,0,false,,,Techniques That Make Art Come Alive
+1869,4-electives-arts-and-music-notation-basics,Electives,4,4,0,0,0,0,false,,,Reading Rhythms and Melodies
+1870,8-electives-arts-and-music-art-history-pd-images,Electives,8,36,0,0,0,0,false,,,"Critical Perspectives: Art, Power, and Identity"
+1871,8-electives-arts-and-music-music-theory-intro,Electives,8,4,0,0,0,0,false,,,Complex Harmony and Compositional Strategies
+1872,9-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,9,28,0,0,0,0,false,,,"Studio Art, Design, Music Composition/Performance Launch Lesson"
+1873,k-electives-arts-and-music-colors-shapes-in-art,Electives,K,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
+1874,k-electives-arts-and-music-rhythm-and-melody,Electives,K,12,0,0,0,0,false,,,Rhythm & Melody Launch Lesson
+1875,1-electives-computer-science-algorithms-unplugged,Electives,1,12,0,0,0,0,false,,,Algorithms (unplugged) Launch Lesson
+1876,1-electives-computer-science-patterns-and-sequencing,Electives,1,16,0,0,0,0,false,,,Patterns & Sequencing Launch Lesson
+1877,10-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,10,24,0,0,0,0,false,,,"CS Principles, Data Structures (intro), Web Dev Basics Launch Lesson"
+1878,11-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,11,24,0,0,0,0,false,,,"CS Principles, Data Structures (intro), Web Dev Basics Launch Lesson"
+1879,12-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,12,24,0,0,0,0,false,,,"CS Principles, Data Structures (intro), Web Dev Basics Launch Lesson"
+1880,2-electives-computer-science-algorithms-unplugged,Electives,2,12,0,0,0,0,false,,,Algorithms (unplugged) Launch Lesson
+1881,2-electives-computer-science-patterns-and-sequencing,Electives,2,16,0,0,0,0,false,,,Patterns & Sequencing Launch Lesson
+1882,3-electives-computer-science-block-based-programming,Electives,3,4,0,0,0,0,false,,,Getting Started with Block-Based Programming
+1883,3-electives-computer-science-digital-citizenship,Electives,3,4,0,0,0,0,false,,,Being Safe and Kind Online
+1884,4-electives-computer-science-block-based-programming,Electives,4,4,0,0,0,0,false,,,Controlling Programs with Loops and Decisions
+1885,4-electives-computer-science-digital-citizenship,Electives,4,4,0,0,0,0,false,,,Protecting Yourself Online and Respecting Others
+1886,5-electives-computer-science-block-based-programming,Electives,5,4,0,0,0,0,false,,,"Advanced Programming: Functions, Lists, and Patterns"
+1887,5-electives-computer-science-digital-citizenship,Electives,5,4,0,0,0,0,false,,,Being Smart About Information Online and Staying Healthy
+1888,7-electives-computer-science-data-and-graphics,Electives,7,36,0,0,0,0,false,,,"Analyzing Data: Patterns, Bias, and Truthfulness"
+1889,7-electives-computer-science-intro-python-js,Electives,7,4,0,0,0,0,false,,,"Building Programs with Functions, Lists, and Logic"
+1890,8-electives-computer-science-data-and-graphics,Electives,8,4,0,0,0,0,false,,,"Advanced Data Analysis: Big Data, Bias, and Decision-Making"
+1891,8-electives-computer-science-intro-python-js,Electives,8,36,0,0,0,0,false,,,"Advanced Programming: Objects, Error Handling, and Real Problems"
+1892,9-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,9,24,0,0,0,0,false,,,"CS Principles, Data Structures (intro), Web Dev Basics Launch Lesson"
+1893,k-electives-computer-science-algorithms-unplugged,Electives,K,12,0,0,0,0,false,,,Algorithms (unplugged) Launch Lesson
+1894,k-electives-computer-science-patterns-and-sequencing,Electives,K,16,0,0,0,0,false,,,Patterns & Sequencing Launch Lesson
+1895,10-electives-financial-literacy-elective-investing-basics,Electives,10,24,0,0,0,0,false,,,Investing Basics Launch Lesson
+1896,10-electives-financial-literacy-elective-taxes-credit-debt,Electives,10,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
+1897,11-electives-financial-literacy-elective-investing-basics,Electives,11,24,0,0,0,0,false,,,Investing Basics Launch Lesson
+1898,11-electives-financial-literacy-elective-taxes-credit-debt,Electives,11,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
+1899,12-electives-financial-literacy-elective-investing-basics,Electives,12,24,0,0,0,0,false,,,Investing Basics Launch Lesson
+1900,12-electives-financial-literacy-elective-taxes-credit-debt,Electives,12,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
+1901,6-electives-financial-literacy-elective-banking-basics,Electives,6,108,0,0,0,0,false,,,Understanding Banks and Your Money
+1902,6-electives-financial-literacy-elective-saving-budgeting,Electives,6,4,0,0,0,0,false,,,Creating Your First Budget and Saving Goals
+1903,7-electives-financial-literacy-elective-banking-basics,Electives,7,4,0,0,0,0,false,,,"Credit, Loans, and Building Your Financial Identity"
+1904,7-electives-financial-literacy-elective-saving-budgeting,Electives,7,36,0,0,0,0,false,,,Advanced Budgeting and Long-Term Financial Goals
+1905,8-electives-financial-literacy-elective-banking-basics,Electives,8,108,0,0,0,0,false,,,"Financial Systems, Smart Banking, and Protecting Your Identity"
+1906,8-electives-financial-literacy-elective-saving-budgeting,Electives,8,4,0,0,0,0,false,,,"Wealth Building: Investing, Planning, and Financial Independence"
+1907,9-electives-financial-literacy-elective-investing-basics,Electives,9,24,0,0,0,0,false,,,Investing Basics Launch Lesson
+1908,9-electives-financial-literacy-elective-taxes-credit-debt,Electives,9,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
+1909,1-electives-health-and-pe-movement-safety-hygiene,Electives,1,24,0,0,0,0,false,,,"Movement, Safety, Hygiene Launch Lesson"
+1910,10-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,10,28,0,0,0,0,false,,,"Wellness, Mental Health Basics, CPR/AED awareness Launch Lesson"
+1911,11-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,11,28,0,0,0,0,false,,,"Wellness, Mental Health Basics, CPR/AED awareness Launch Lesson"
+1912,12-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,12,28,0,0,0,0,false,,,"Wellness, Mental Health Basics, CPR/AED awareness Launch Lesson"
+1913,2-electives-health-and-pe-movement-safety-hygiene,Electives,2,24,0,0,0,0,false,,,"Movement, Safety, Hygiene Launch Lesson"
+1914,3-electives-health-and-pe-nutrition-fitness-safety,Electives,3,36,0,0,0,0,false,,,"Healthy Eating, Movement, and Staying Safe"
+1915,4-electives-health-and-pe-nutrition-fitness-safety,Electives,4,4,0,0,0,0,false,,,"Balanced Meals, Physical Fitness, and Wellness"
+1916,5-electives-health-and-pe-nutrition-fitness-safety,Electives,5,4,0,0,0,0,false,,,"Nutrients, Physical Training, and Food Safety"
+1917,6-electives-health-and-pe-body-systems-and-health,Electives,6,36,0,0,0,0,false,,,Body Systems: How Your Body Works
+1918,6-electives-health-and-pe-fitness-planning,Electives,6,4,0,0,0,0,false,,,Creating Your Personal Fitness Plan
+1919,7-electives-health-and-pe-body-systems-and-health,Electives,7,4,0,0,0,0,false,,,Advanced Body Systems: Integration and Disease Prevention
+1920,7-electives-health-and-pe-fitness-planning,Electives,7,36,0,0,0,0,false,,,"Advanced Training: Progression, Variety, and Performance"
+1921,8-electives-health-and-pe-body-systems-and-health,Electives,8,4,0,0,0,0,false,,,"Chronic Disease, Lifestyle, and Personal Health Planning"
+1922,8-electives-health-and-pe-fitness-planning,Electives,8,4,0,0,0,0,false,,,"Lifetime Fitness: Genetics, Goals, and Sustainability"
+1923,9-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,9,28,0,0,0,0,false,,,"Wellness, Mental Health Basics, CPR/AED awareness Launch Lesson"
+1924,k-electives-health-and-pe-movement-safety-hygiene,Electives,K,24,0,0,0,0,false,,,"Movement, Safety, Hygiene Launch Lesson"
+3225,k-electives-arts-and-music-colors-shapes-in-art,Electives,K,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
+3238,k-english-language-arts-reading-informational-simple-nonfiction-animals-places,English Language Arts,K,16,0,0,0,0,false,,,"Simple Nonfiction (animals, places) Launch Lesson"
+3239,9-english-language-arts-reading-informational-literary-nonfiction-pd-open,English Language Arts,9,24,0,0,0,0,false,,,Literary Nonfiction (PD/open) Launch Lesson
+3251,1-mathematics-data-and-probability-statistics-picture-bar-graphs-intro,Mathematics,1,16,0,0,0,0,false,,,Picture/Bar Graphs (intro) Launch Lesson
+3252,10-mathematics-data-and-probability-statistics-confidence-intervals-and-hypothesis-tests-intro-hs-stats,Mathematics,10,28,0,0,0,0,false,,,Confidence Intervals & Hypothesis Tests (intro HS Stats) Launch Lesson
+3255,k-mathematics-data-and-probability-statistics-categorize-and-tally,Mathematics,K,16,0,0,0,0,false,,,Categorize & Tally Launch Lesson
+3264,2-science-earth-and-space-weather-and-seasons,Science,2,24,0,0,0,0,false,,,Weather & Seasons Launch Lesson
+3265,10-science-earth-and-space-geology-minerals-rocks,Science,10,32,0,0,0,0,false,,,Geology (minerals/rocks) Launch Lesson
+3266,9-science-earth-and-space-astronomy-astrophysics-intro,Science,9,28,0,0,0,0,false,,,Astronomy/Astrophysics (intro) Launch Lesson
+3267,12-science-physical-science-thermodynamics,Science,12,28,0,0,0,0,false,,,Thermodynamics Launch Lesson
+3276,k-science-earth-and-space-earth-materials-rocks-soil,Science,K,24,0,0,0,0,false,,,Earth Materials (rocks/soil) Launch Lesson
+3277,2-social-studies-civics-and-government-rules-and-community,Social Studies,2,24,0,0,0,0,false,,,Rules & Community Launch Lesson
+3278,12-social-studies-civics-and-government-comparative-government,Social Studies,12,24,0,0,0,0,false,,,Comparative Government Launch Lesson
+4510,k-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,K,4,0,0,0,0,false,,,Choices & Trade: Launch Lesson
+4513,9-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,9,4,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography: Launch Lesson"
+4518,k-social-studies-world-history-and-geography-cultures-intro,Social Studies,K,4,0,0,0,0,false,,,Cultures (intro): Launch Lesson
+4519,k-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,K,4,0,0,0,0,false,,,Maps/Globes (basic): Launch Lesson
+4521,11-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,11,4,0,0,0,0,false,,,"Personal Finance (taxes, credit): Launch Lesson"
+4522,12-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,12,4,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable): Launch Lesson
+4525,2-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,2,4,0,0,0,0,false,,,Needs vs Wants: Launch Lesson
+4541,1-social-studies-us-history-national-symbols,Social Studies,1,4,0,0,0,0,false,,,National Symbols: Launch Lesson
+4542,1-social-studies-us-history-personal-family-history,Social Studies,1,4,0,0,0,0,false,,,Personal/Family History: Launch Lesson
+4543,10-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,10,4,0,0,0,0,false,,,Thematic/AP-style depth (PD docs): Launch Lesson
+4590,12-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,12,4,0,0,0,0,false,,,"Personal Finance (taxes, credit): Grade 12 Launch Lesson"
+4591,2-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,2,4,0,0,0,0,false,,,Choices & Trade: Grade 2 Launch Lesson
+4605,9-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,9,4,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable): Grade 9 Launch Lesson
+4606,9-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,9,4,0,0,0,0,false,,,"Personal Finance (taxes, credit): Grade 9 Launch Lesson"
+4607,k-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,K,4,0,0,0,0,false,,,Needs vs Wants: Grade K Launch Lesson
+4611,11-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,11,4,0,0,0,0,false,,,Thematic/AP-style depth (PD docs): Grade 11 Launch Lesson
+4612,12-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,12,4,0,0,0,0,false,,,Thematic/AP-style depth (PD docs): Grade 12 Launch Lesson
+4613,2-social-studies-us-history-national-symbols,Social Studies,2,4,0,0,0,0,false,,,National Symbols: Grade 2 Launch Lesson
+4614,2-social-studies-us-history-personal-family-history,Social Studies,2,4,0,0,0,0,false,,,Personal/Family History: Grade 2 Launch Lesson
+4626,9-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,9,4,0,0,0,0,false,,,Thematic/AP-style depth (PD docs): Grade 9 Launch Lesson
+4627,k-social-studies-us-history-national-symbols,Social Studies,K,4,0,0,0,0,false,,,National Symbols: Grade K Launch Lesson
+4628,k-social-studies-us-history-personal-family-history,Social Studies,K,4,0,0,0,0,false,,,Personal/Family History: Grade K Launch Lesson
+4629,1-social-studies-world-history-and-geography-cultures-intro,Social Studies,1,4,0,0,0,0,false,,,Cultures (intro): Grade 1 Launch Lesson
+4630,1-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,1,4,0,0,0,0,false,,,Maps/Globes (basic): Grade 1 Launch Lesson
+4631,10-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,10,4,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography: Grade 10 Launch Lesson"
+4632,11-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,11,4,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography: Grade 11 Launch Lesson"
+4633,12-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,12,4,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography: Grade 12 Launch Lesson"
+4634,2-social-studies-world-history-and-geography-cultures-intro,Social Studies,2,4,0,0,0,0,false,,,Cultures (intro): Grade 2 Launch Lesson
+4635,2-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,2,4,0,0,0,0,false,,,Maps/Globes (basic): Grade 2 Launch Lesson
+4644,k-social-studies-economics-and-financial-literacy-choices-and-trade,Social Studies,K,4,0,0,0,0,false,,,Choices & Trade: Grade K Launch Lesson
+4647,9-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,9,4,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography: Grade 9 Launch Lesson"
+4648,6-science-earth-space-plate-tectonics,Science,6,12,0,0,0,0,false,,,"Plate Tectonics (Earth & Space Science, Grade 6): Grade 6 Launch Lesson"
+4652,k-social-studies-world-history-and-geography-cultures-intro,Social Studies,K,4,0,0,0,0,false,,,Cultures (intro): Grade K Launch Lesson
+4653,k-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,K,4,0,0,0,0,false,,,Maps/Globes (basic): Grade K Launch Lesson
+4655,11-social-studies-economics-and-financial-literacy-personal-finance-taxes-credit,Social Studies,11,4,0,0,0,0,false,,,"Personal Finance (taxes, credit): Grade 11 Launch Lesson"
+4656,12-social-studies-economics-and-financial-literacy-macro-micro-openstax-where-applicable,Social Studies,12,4,0,0,0,0,false,,,Macro/Micro (OpenStax where applicable): Grade 12 Launch Lesson
+4659,2-social-studies-economics-and-financial-literacy-needs-vs-wants,Social Studies,2,4,0,0,0,0,false,,,Needs vs Wants: Grade 2 Launch Lesson
+4675,1-social-studies-us-history-national-symbols,Social Studies,1,4,0,0,0,0,false,,,National Symbols: Grade 1 Launch Lesson
+4676,1-social-studies-us-history-personal-family-history,Social Studies,1,4,0,0,0,0,false,,,Personal/Family History: Grade 1 Launch Lesson
+4677,10-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,10,4,0,0,0,0,false,,,Thematic/AP-style depth (PD docs): Grade 10 Launch Lesson
+4901,6-study-skills-executive-functioning-plan-your-week-in-10-minutes,Study Skills,6,12,0,0,0,0,false,,,Plan Your Week in 10 Minutes

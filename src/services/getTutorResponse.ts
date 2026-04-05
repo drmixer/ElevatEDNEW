@@ -1,4 +1,10 @@
 import supabase from '../lib/supabaseClient';
+import type {
+  TutorChatMessage,
+  TutorHelpMode,
+  TutorLearnerContext,
+  TutorLessonContext,
+} from '../../shared/tutor';
 
 type TutorMode = 'learning' | 'marketing';
 
@@ -8,6 +14,10 @@ type TutorResponseOptions =
       systemPrompt?: string;
       mode?: TutorMode;
       knowledge?: string;
+      messages?: TutorChatMessage[];
+      helpMode?: TutorHelpMode;
+      lessonContext?: TutorLessonContext;
+      learnerContext?: TutorLearnerContext;
     };
 
 type TutorResponsePayload = {
@@ -80,6 +90,10 @@ export async function getTutorResponse(
     systemPrompt: resolvedOptions.systemPrompt,
     knowledge: resolvedOptions.knowledge,
     mode: resolvedOptions.mode ?? 'learning',
+    messages: resolvedOptions.messages,
+    helpMode: resolvedOptions.helpMode,
+    lessonContext: resolvedOptions.lessonContext,
+    learnerContext: resolvedOptions.learnerContext,
   };
 
   const response = await fetch('/api/v1/ai/tutor', {

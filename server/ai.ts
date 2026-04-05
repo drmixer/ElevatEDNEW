@@ -7,6 +7,12 @@ import { recordOpsEvent } from './opsMetrics.js';
 import { getRuntimeConfig } from './config.js';
 import { getAdaptiveContext } from './learningPaths.js';
 import { MARKETING_KNOWLEDGE, MARKETING_SYSTEM_PROMPT } from '../shared/marketingContent.js';
+import type {
+  TutorChatMessage,
+  TutorHelpMode,
+  TutorLearnerContext,
+  TutorLessonContext,
+} from '../shared/tutor.js';
 
 type TutorMode = 'learning' | 'marketing';
 
@@ -15,6 +21,10 @@ export type TutorRequestBody = {
   systemPrompt?: string;
   mode?: TutorMode;
   knowledge?: string;
+  messages?: TutorChatMessage[];
+  helpMode?: TutorHelpMode;
+  lessonContext?: TutorLessonContext;
+  learnerContext?: TutorLearnerContext;
 };
 
 type TutorContext = {
@@ -22,6 +32,10 @@ type TutorContext = {
   systemPrompt: string;
   mode: TutorMode;
   knowledge?: string;
+  messages?: TutorChatMessage[];
+  helpMode?: TutorHelpMode;
+  lessonContext?: TutorLessonContext;
+  learnerContext?: TutorLearnerContext;
   studentContext?: StudentContext;
 };
 
@@ -216,6 +230,131 @@ const sanitizeText = (input: string, maxLength: number): string => {
 
 const sanitizeOutput = (text: string): string =>
   sanitizeText(text, MAX_RESPONSE_CHARS);
+
+const sanitizeTutorMessages = (messages?: TutorChatMessage[]): TutorChatMessage[] => {
+  if (!Array.isArray(messages)) return [];
+  return messages
+    .filter(
+      (entry): entry is TutorChatMessage =>
+        Boolean(entry) &&
+        (entry.role === 'user' || entry.role === 'assistant') &&
+        typeof entry.content === 'string' &&
+        entry.content.trim().length > 0,
+    )
+    .slice(-8)
+    .map((entry) => ({
+      role: entry.role,
+      content: sanitizeText(entry.content, MAX_PROMPT_CHARS),
+      createdAt: entry.createdAt,
+    }))
+    .filter((entry) => entry.content.length > 0);
+};
+
+const sanitizeStringArray = (values?: string[]): string[] | undefined => {
+  if (!Array.isArray(values)) return undefined;
+  const cleaned = values
+    .filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+    .slice(0, 6)
+    .map((value) => sanitizeText(value, 240))
+    .filter((value) => value.length > 0);
+  return cleaned.length ? cleaned : undefined;
+};
+
+const sanitizeOptionalString = (value: string | null | undefined, maxLength: number): string | null | undefined => {
+  if (typeof value !== 'string') return value;
+  const cleaned = sanitizeText(value, maxLength);
+  return cleaned.length ? cleaned : null;
+};
+
+const sanitizeMaybeList = (
+  value: string | string[] | null | undefined,
+  maxLength: number,
+): string | string[] | null | undefined => {
+  if (Array.isArray(value)) {
+    const cleaned = value
+      .filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
+      .slice(0, 4)
+      .map((entry) => sanitizeText(entry, maxLength))
+      .filter((entry) => entry.length > 0);
+    return cleaned.length ? cleaned : null;
+  }
+  return sanitizeOptionalString(value, maxLength);
+};
+
+const sanitizeLessonContext = (context?: TutorLessonContext): TutorLessonContext | undefined => {
+  if (!context || typeof context !== 'object') return undefined;
+  return {
+    phase:
+      context.phase === 'learn' || context.phase === 'example' || context.phase === 'practice' || context.phase === 'review'
+        ? context.phase
+        : undefined,
+    subject: sanitizeOptionalString(context.subject, 80),
+    moduleId: context.moduleId ?? undefined,
+    moduleTitle: sanitizeOptionalString(context.moduleTitle, 160),
+    lessonId: context.lessonId ?? undefined,
+    lessonTitle: sanitizeOptionalString(context.lessonTitle, 160),
+    sectionId: context.sectionId ?? undefined,
+    sectionTitle: sanitizeOptionalString(context.sectionTitle, 160),
+    visibleText: sanitizeOptionalString(context.visibleText, 1400),
+    questionStem: sanitizeOptionalString(context.questionStem, 500),
+    answerChoices: sanitizeStringArray(context.answerChoices),
+    learnerAnswer: sanitizeMaybeList(context.learnerAnswer, 240),
+    correctAnswer: sanitizeMaybeList(context.correctAnswer, 240),
+    rubric: sanitizeOptionalString(context.rubric, 500),
+    workedExample: sanitizeOptionalString(context.workedExample, 500),
+  };
+};
+
+const formatMaybeList = (value: string | string[] | null | undefined): string | null => {
+  if (Array.isArray(value)) {
+    return value.length ? value.join(' | ') : null;
+  }
+  return typeof value === 'string' && value.trim().length ? value : null;
+};
+
+export const formatLessonContextForPrompt = (context?: TutorLessonContext): string => {
+  if (!context) return '';
+  const lines = [
+    context.phase ? `Phase: ${context.phase}` : null,
+    context.subject ? `Subject: ${context.subject}` : null,
+    context.moduleTitle ? `Module: ${context.moduleTitle}` : null,
+    context.lessonTitle ? `Lesson: ${context.lessonTitle}` : null,
+    context.sectionTitle ? `Section: ${context.sectionTitle}` : null,
+    context.visibleText ? `Visible lesson text:\n${context.visibleText}` : null,
+    context.questionStem ? `Current question:\n${context.questionStem}` : null,
+    context.answerChoices?.length ? `Answer choices:\n${context.answerChoices.map((choice, index) => `${String.fromCharCode(65 + index)}. ${choice}`).join('\n')}` : null,
+    formatMaybeList(context.learnerAnswer) ? `Learner answer:\n${formatMaybeList(context.learnerAnswer)}` : null,
+    formatMaybeList(context.correctAnswer) ? `Internal correct answer:\n${formatMaybeList(context.correctAnswer)}` : null,
+    context.rubric ? `Internal explanation or rubric:\n${context.rubric}` : null,
+    context.workedExample ? `Worked example:\n${context.workedExample}` : null,
+  ].filter(Boolean);
+
+  return lines.join('\n\n');
+};
+
+const helpModeInstruction = (helpMode?: TutorHelpMode, lessonContext?: TutorLessonContext): string | null => {
+  const subject = lessonContext?.subject?.toLowerCase() ?? '';
+  switch (helpMode) {
+    case 'hint':
+      return 'Help mode: hint. Give one short next step or clue. Do not reveal the final answer or answer choice.';
+    case 'break_down':
+      return 'Help mode: break_down. Break the task into 3-4 short steps. Keep each step actionable and do not give away the final answer.';
+    case 'another_way':
+      if (subject.includes('math')) {
+        return 'Help mode: another_way. Explain the same math idea with a different concrete representation or worked mini-example while staying grounded in the current lesson. Keep it short and do not give away the final answer.';
+      }
+      if (subject.includes('english') || subject.includes('ela') || subject.includes('reading')) {
+        return 'Help mode: another_way. Rephrase the idea with a simpler explanation or sentence frame grounded in the current text. Keep it concise and actionable.';
+      }
+      return 'Help mode: another_way. Explain the same idea with a different angle, analogy, or example while staying grounded in the current lesson.';
+    case 'check_thinking':
+      return 'Help mode: check_thinking. Evaluate the learner reasoning, point out what is right or off, and prompt a revision before giving the final answer.';
+    case 'solution':
+      return 'Help mode: solution. Give a short hint first, then provide the worked solution using the lesson context.';
+    default:
+      return null;
+  }
+};
 
 const detectUnsafePrompt = (prompt: string, context?: StudentContext): string | null => {
   const normalized = prompt.toLowerCase();
@@ -765,9 +904,12 @@ const fetchStudentContext = async (supabase: SupabaseClient, studentId: string):
   return context;
 };
 
-const buildTutorContext = (payload: TutorRequestBody, studentContext?: StudentContext): TutorContext => {
+export const buildTutorContext = (payload: TutorRequestBody, studentContext?: StudentContext): TutorContext => {
   const mode: TutorMode = payload.mode === 'marketing' ? 'marketing' : 'learning';
-  const prompt = sanitizeText(payload.prompt ?? '', MAX_PROMPT_CHARS);
+  const messages = mode === 'learning' ? sanitizeTutorMessages(payload.messages) : [];
+  const fallbackPrompt = sanitizeText(payload.prompt ?? '', MAX_PROMPT_CHARS);
+  const promptFromMessages = [...messages].reverse().find((entry) => entry.role === 'user')?.content ?? '';
+  const prompt = promptFromMessages || fallbackPrompt;
   if (!prompt) {
     throw new AiRequestError(400, 'Prompt is required.');
   }
@@ -778,12 +920,23 @@ const buildTutorContext = (payload: TutorRequestBody, studentContext?: StudentCo
       ? [MARKETING_KNOWLEDGE, payload.knowledge].filter(Boolean).join('\n\n')
       : payload.knowledge;
   const knowledge = marketingKnowledge ? sanitizeText(marketingKnowledge, MAX_KNOWLEDGE_CHARS) : undefined;
+  const lessonContext = mode === 'learning' ? sanitizeLessonContext(payload.lessonContext) : undefined;
 
-  return { prompt, systemPrompt, mode, knowledge, studentContext };
+  return {
+    prompt,
+    systemPrompt,
+    mode,
+    knowledge,
+    messages: messages.length ? messages : undefined,
+    helpMode: mode === 'learning' ? payload.helpMode : undefined,
+    lessonContext,
+    learnerContext: mode === 'learning' ? payload.learnerContext : undefined,
+    studentContext,
+  };
 };
 
-const buildMessages = (context: TutorContext) => {
-  const messages: Array<{ role: 'system' | 'user'; content: string }> = [
+export const buildMessages = (context: TutorContext) => {
+  const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
     { role: 'system', content: context.systemPrompt },
   ];
 
@@ -839,11 +992,42 @@ const buildMessages = (context: TutorContext) => {
   }
 
   if (context.mode === 'learning') {
+    if (context.lessonContext) {
+      const lessonGrounding = formatLessonContextForPrompt(context.lessonContext);
+      if (lessonGrounding.trim().length) {
+        messages.push({
+          role: 'system',
+          content: `Active lesson context. Stay grounded in this material and do not invent missing facts:\n${lessonGrounding}`,
+        });
+      }
+    }
+    if (context.learnerContext) {
+      const learnerLines = [
+        context.learnerContext.gradeLevel ? `Grade level: ${context.learnerContext.gradeLevel}` : null,
+        context.learnerContext.readingLevel ? `Reading level: ${context.learnerContext.readingLevel}` : null,
+        context.learnerContext.supportLevel ? `Support level: ${context.learnerContext.supportLevel}` : null,
+      ]
+        .filter(Boolean)
+        .join('\n');
+      if (learnerLines.length) {
+        messages.push({
+          role: 'system',
+          content: `Additional learner guidance:\n${learnerLines}`,
+        });
+      }
+    }
     const guardrails = buildLearningGuardrails(context.studentContext);
     if (guardrails) {
       messages.push({
         role: 'system',
         content: guardrails,
+      });
+    }
+    const helpInstruction = helpModeInstruction(context.helpMode, context.lessonContext);
+    if (helpInstruction) {
+      messages.push({
+        role: 'system',
+        content: helpInstruction,
       });
     }
     const chatMode = context.studentContext?.chatMode;
@@ -888,10 +1072,19 @@ const buildMessages = (context: TutorContext) => {
     }
   }
 
-  messages.push({
-    role: 'user',
-    content: context.prompt,
-  });
+  if (context.mode === 'learning' && context.messages?.length) {
+    context.messages.forEach((entry) => {
+      messages.push({
+        role: entry.role,
+        content: entry.content,
+      });
+    });
+  } else {
+    messages.push({
+      role: 'user',
+      content: context.prompt,
+    });
+  }
 
   return messages;
 };
