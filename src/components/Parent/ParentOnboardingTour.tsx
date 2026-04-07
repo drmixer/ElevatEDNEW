@@ -350,97 +350,103 @@ export const ParentOnboardingTour: React.FC<ParentOnboardingTourProps> = ({
                     />
 
                     {/* Modal */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 40 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg bg-white rounded-2xl shadow-2xl z-50 max-h-[calc(100vh-2rem)] md:max-h-[90vh] overflow-hidden flex flex-col"
-                        role="dialog"
-                        aria-modal="true"
-                    >
-                        {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-                            <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-lg flex items-center justify-center">
-                                    <Sparkles className="w-4 h-4 text-white" />
-                                </div>
-                                <span className="font-semibold text-slate-900">Getting Started</span>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={handleSkip}
-                                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
-                                title="Skip tour"
+                    <div className="fixed inset-0 z-50 overflow-y-auto p-4">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 40 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="mx-auto flex min-h-[calc(100vh-2rem)] w-full items-center justify-center"
+                        >
+                            <div
+                                className="w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col"
+                                role="dialog"
+                                aria-modal="true"
                             >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 overflow-y-auto p-6">
-                            <AnimatePresence mode="wait">
-                                {currentStep === 'welcome' && (
-                                    <motion.div
-                                        key="welcome"
-                                        initial={{ opacity: 0, x: 50 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -50 }}
-                                    >
-                                        <WelcomeStep parentName={parentName} childrenCount={childrenCount} />
-                                    </motion.div>
-                                )}
-                                {currentStep === 'features' && (
-                                    <motion.div
-                                        key="features"
-                                        initial={{ opacity: 0, x: 50 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -50 }}
-                                    >
-                                        <FeaturesStep />
-                                    </motion.div>
-                                )}
-                                {currentStep === 'actions' && (
-                                    <motion.div
-                                        key="actions"
-                                        initial={{ opacity: 0, x: 50 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -50 }}
-                                    >
-                                        <ActionsStep onComplete={handleComplete} />
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Footer - Navigation */}
-                        {currentStep !== 'actions' && (
-                            <div className="shrink-0 px-6 py-4 border-t border-slate-100 bg-slate-50">
-                                <div className="flex items-center justify-between">
+                                {/* Header */}
+                                <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-lg flex items-center justify-center">
+                                            <Sparkles className="w-4 h-4 text-white" />
+                                        </div>
+                                        <span className="font-semibold text-slate-900">Getting Started</span>
+                                    </div>
                                     <button
                                         type="button"
-                                        onClick={handleBack}
-                                        disabled={currentStepIndex === 0}
-                                        className="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        onClick={handleSkip}
+                                        className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                                        title="Skip tour"
                                     >
-                                        <ChevronLeft className="w-4 h-4" />
-                                        Back
-                                    </button>
-
-                                    <ProgressIndicator currentStep={currentStepIndex} totalSteps={TOUR_STEPS.length} />
-
-                                    <button
-                                        type="button"
-                                        onClick={handleNext}
-                                        className="inline-flex items-center gap-1 px-4 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition-colors"
-                                    >
-                                        Next
-                                        <ChevronRight className="w-4 h-4" />
+                                        <X className="w-5 h-5" />
                                     </button>
                                 </div>
+
+                                {/* Content */}
+                                <div className="min-h-0 flex-1 overflow-y-auto p-6">
+                                    <AnimatePresence mode="wait">
+                                        {currentStep === 'welcome' && (
+                                            <motion.div
+                                                key="welcome"
+                                                initial={{ opacity: 0, x: 50 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -50 }}
+                                            >
+                                                <WelcomeStep parentName={parentName} childrenCount={childrenCount} />
+                                            </motion.div>
+                                        )}
+                                        {currentStep === 'features' && (
+                                            <motion.div
+                                                key="features"
+                                                initial={{ opacity: 0, x: 50 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -50 }}
+                                            >
+                                                <FeaturesStep />
+                                            </motion.div>
+                                        )}
+                                        {currentStep === 'actions' && (
+                                            <motion.div
+                                                key="actions"
+                                                initial={{ opacity: 0, x: 50 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -50 }}
+                                            >
+                                                <ActionsStep onComplete={handleComplete} />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* Footer - Navigation */}
+                                {currentStep !== 'actions' && (
+                                    <div className="shrink-0 px-6 py-4 border-t border-slate-100 bg-slate-50">
+                                        <div className="flex items-center justify-between">
+                                            <button
+                                                type="button"
+                                                onClick={handleBack}
+                                                disabled={currentStepIndex === 0}
+                                                className="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            >
+                                                <ChevronLeft className="w-4 h-4" />
+                                                Back
+                                            </button>
+
+                                            <ProgressIndicator currentStep={currentStepIndex} totalSteps={TOUR_STEPS.length} />
+
+                                            <button
+                                                type="button"
+                                                onClick={handleNext}
+                                                className="inline-flex items-center gap-1 px-4 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition-colors"
+                                            >
+                                                Next
+                                                <ChevronRight className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </motion.div>
+                        </motion.div>
+                    </div>
                 </>
             )}
         </AnimatePresence>
