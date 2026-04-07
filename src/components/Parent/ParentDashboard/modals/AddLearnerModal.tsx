@@ -30,6 +30,9 @@ export interface AddLearnerModalProps {
     isLoading: boolean;
     error: string | null;
     success: string | null;
+    familyLinkCode?: string | null;
+    temporaryPassword?: string | null;
+    inviteSent?: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -45,14 +48,17 @@ const AddLearnerModal: React.FC<AddLearnerModalProps> = ({
     isLoading,
     error,
     success,
+    familyLinkCode,
+    temporaryPassword,
+    inviteSent,
 }) => {
     if (!isOpen) return null;
 
     const isUnder13 = formState.age.trim() !== '' && Number.parseInt(formState.age, 10) < 13;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl p-6 border border-slate-200">
+        <div className="fixed inset-0 z-50 bg-black/40 px-4 py-4 sm:py-8 overflow-y-auto">
+            <div className="mx-auto w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 border border-slate-200 max-h-[calc(100vh-2rem)] overflow-y-auto">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-4">
                     <div>
@@ -195,6 +201,25 @@ const AddLearnerModal: React.FC<AddLearnerModalProps> = ({
                     {success && (
                         <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
                             {success}
+                        </div>
+                    )}
+                    {(familyLinkCode || temporaryPassword || inviteSent) && (
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 space-y-2">
+                            {familyLinkCode && (
+                                <p>
+                                    Family Link code: <span className="font-mono font-semibold">{familyLinkCode}</span>
+                                </p>
+                            )}
+                            {temporaryPassword && (
+                                <p>
+                                    Temporary password: <span className="font-mono font-semibold">{temporaryPassword}</span>
+                                </p>
+                            )}
+                            {inviteSent && (
+                                <p className="text-emerald-700">
+                                    Invite email sent. The learner can finish sign-in from their inbox.
+                                </p>
+                            )}
                         </div>
                     )}
 

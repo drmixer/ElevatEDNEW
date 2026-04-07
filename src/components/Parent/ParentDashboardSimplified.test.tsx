@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -27,6 +27,10 @@ vi.mock('../../services/statsService', () => ({
 
 vi.mock('../../services/profileService', () => ({
   updateLearningPreferences: vi.fn(),
+}));
+
+vi.mock('../../services/parentService', () => ({
+  createLearnerForParent: vi.fn(),
 }));
 
 vi.mock('./SubjectStatusCards', () => ({ default: () => <div>Subject status cards</div> }));
@@ -117,5 +121,35 @@ describe('ParentDashboardSimplified', () => {
     expect(screen.getByText('Math')).toBeInTheDocument();
     expect(screen.getAllByText('L7').length).toBeGreaterThan(0);
     expect(screen.getAllByText('from 7').length).toBe(2);
+  });
+
+  it('opens the add learner modal from the empty state instead of navigating to a dead route', async () => {
+    fetchParentDashboardDataSpy.mockResolvedValue({
+      alerts: [],
+      children: [],
+      activitySeries: [],
+    });
+
+    fetchParentOverviewSpy.mockResolvedValue({
+      children: [],
+    });
+
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <ParentDashboardSimplified />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Add a Learner' }));
+
+    expect(await screen.findByText('Create and link a learner')).toBeInTheDocument();
   });
 });

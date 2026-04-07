@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
     AlertCircle,
@@ -27,8 +27,10 @@ import WeeklyCoachingSuggestions from './WeeklyCoachingSuggestions';
 import ParentTutorControls from './ParentTutorControls';
 import SafetyTransparencySection from './SafetyTransparencySection';
 import ParentOnboardingTour from './ParentOnboardingTour';
+import AddLearnerModal, { type AddLearnerFormState } from './ParentDashboard/modals/AddLearnerModal';
 import { shouldShowParentOnboarding, markParentOnboardingDone } from '../../lib/parentOnboardingHelpers';
 import { defaultLearningPreferences } from '../../types';
+import { createLearnerForParent } from '../../services/parentService';
 import {
     ResponsiveContainer,
     AreaChart,
@@ -421,6 +423,21 @@ const ParentDashboardSimplified: React.FC = () => {
     const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
     const [savingTutor, setSavingTutor] = useState<string | null>(null);
     const [showOnboarding, setShowOnboarding] = useState(false);
+    const [showAddLearnerModal, setShowAddLearnerModal] = useState(false);
+    const [addLearnerForm, setAddLearnerForm] = useState<AddLearnerFormState>({
+        name: '',
+        email: '',
+        grade: 1,
+        age: '',
+        focusSubject: 'balanced',
+        sendInvite: false,
+        consentAttested: false,
+    });
+    const [addLearnerError, setAddLearnerError] = useState<string | null>(null);
+    const [addLearnerSuccess, setAddLearnerSuccess] = useState<string | null>(null);
+    const [createdFamilyCode, setCreatedFamilyCode] = useState<string | null>(null);
+    const [lastTemporaryPassword, setLastTemporaryPassword] = useState<string | null>(null);
+    const [lastInviteSent, setLastInviteSent] = useState(false);
 
     // Check if parent should see onboarding tour
     useEffect(() => {
@@ -492,6 +509,73 @@ const ParentDashboardSimplified: React.FC = () => {
         setShowOnboarding(false);
     }, [parent?.id]);
 
+    const closeAddLearnerModal = useCallback(() => {
+        setShowAddLearnerModal(false);
+        setAddLearnerError(null);
+        setAddLearnerSuccess(null);
+        setCreatedFamilyCode(null);
+        setLastTemporaryPassword(null);
+        setLastInviteSent(false);
+    }, []);
+
+    const createLearnerMutation = useMutation({
+        mutationFn: async () => {
+            const ageNumber = addLearnerForm.age.trim() ? Number.parseInt(addLearnerForm.age, 10) : null;
+            return createLearnerForParent({
+                name: addLearnerForm.name.trim(),
+                email: addLearnerForm.email.trim(),
+                grade: addLearnerForm.grade,
+                age: ageNumber && Number.isFinite(ageNumber) ? ageNumber : null,
+                sendInvite: addLearnerForm.sendInvite && (!ageNumber || ageNumber >= 13),
+                consentAttested: ageNumber !== null && ageNumber < 13 ? addLearnerForm.consentAttested : true,
+                focusSubject: addLearnerForm.focusSubject === 'balanced' ? null : addLearnerForm.focusSubject,
+            });
+        },
+        onSuccess: async (result) => {
+            setAddLearnerError(null);
+            setAddLearnerSuccess(
+                result.inviteSent
+                    ? 'Learner created, linked, and invite email sent.'
+                    : 'Learner created and linked. Share the code and temporary password below.',
+            );
+            setCreatedFamilyCode(result.familyLinkCode ?? null);
+            setLastTemporaryPassword(result.temporaryPassword ?? null);
+            setLastInviteSent(result.inviteSent);
+            await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
+            await queryClient.invalidateQueries({ queryKey: ['parent-overview', parent?.id] });
+        },
+        onError: (error) => {
+            setAddLearnerSuccess(null);
+            setCreatedFamilyCode(null);
+            setLastTemporaryPassword(null);
+            setLastInviteSent(false);
+            setAddLearnerError(error instanceof Error ? error.message : 'Unable to add learner right now.');
+        },
+    });
+
+    const handleSubmitAddLearner = useCallback(async (event: React.FormEvent) => {
+        event.preventDefault();
+        setAddLearnerError(null);
+        setAddLearnerSuccess(null);
+        setCreatedFamilyCode(null);
+        setLastTemporaryPassword(null);
+        setLastInviteSent(false);
+
+        const ageNumber = addLearnerForm.age.trim() ? Number.parseInt(addLearnerForm.age, 10) : null;
+
+        if (!addLearnerForm.name.trim() || !addLearnerForm.email.trim()) {
+            setAddLearnerError('Add a name and email to create this learner.');
+            return;
+        }
+
+        if (ageNumber !== null && ageNumber < 13 && !addLearnerForm.consentAttested) {
+            setAddLearnerError('Confirm guardian consent for learners under 13.');
+            return;
+        }
+
+        await createLearnerMutation.mutateAsync();
+    }, [addLearnerForm, createLearnerMutation]);
+
     const overviewByChildId = useMemo(
         () => new Map((overview?.children ?? []).map((child) => [child.id, child])),
         [overview?.children],
@@ -529,20 +613,30 @@ const ParentDashboardSimplified: React.FC = () => {
                 <section className="mb-8">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-xl font-semibold text-slate-900">Your Children</h2>
-                        {children.length > 0 && (
-                            <span className="text-sm text-slate-500">
-                                {children.length} learner{children.length > 1 ? 's' : ''}
-                                {selectedChildId && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setSelectedChildId(null)}
-                                        className="ml-3 text-teal-600 hover:text-teal-700 font-medium"
-                                    >
-                                        Show all
-                                    </button>
-                                )}
-                            </span>
-                        )}
+                        <div className="flex items-center gap-3">
+                            {children.length > 0 && (
+                                <span className="text-sm text-slate-500">
+                                    {children.length} learner{children.length > 1 ? 's' : ''}
+                                    {selectedChildId && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setSelectedChildId(null)}
+                                            className="ml-3 text-teal-600 hover:text-teal-700 font-medium"
+                                        >
+                                            Show all
+                                        </button>
+                                    )}
+                                </span>
+                            )}
+                            <button
+                                type="button"
+                                onClick={() => setShowAddLearnerModal(true)}
+                                className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
+                            >
+                                Add learner
+                                <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
 
                     {children.length === 0 ? (
@@ -554,13 +648,14 @@ const ParentDashboardSimplified: React.FC = () => {
                             <p className="text-slate-500 mb-6">
                                 Add your first learner to start tracking their progress
                             </p>
-                            <Link
-                                to="/parent/add-learner"
+                            <button
+                                type="button"
+                                onClick={() => setShowAddLearnerModal(true)}
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors"
                             >
                                 Add a Learner
                                 <ArrowRight className="w-5 h-5" />
-                            </Link>
+                            </button>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -650,6 +745,19 @@ const ParentDashboardSimplified: React.FC = () => {
                 onComplete={handleOnboardingComplete}
                 parentName={parent?.name}
                 childrenCount={children.length}
+            />
+            <AddLearnerModal
+                isOpen={showAddLearnerModal}
+                onClose={closeAddLearnerModal}
+                formState={addLearnerForm}
+                onFormChange={(updates) => setAddLearnerForm((prev) => ({ ...prev, ...updates }))}
+                onSubmit={handleSubmitAddLearner}
+                isLoading={createLearnerMutation.isLoading}
+                error={addLearnerError}
+                success={addLearnerSuccess}
+                familyLinkCode={createdFamilyCode}
+                temporaryPassword={lastTemporaryPassword}
+                inviteSent={lastInviteSent}
             />
         </div>
     );

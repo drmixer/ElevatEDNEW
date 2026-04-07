@@ -355,7 +355,9 @@ export const ParentOnboardingTour: React.FC<ParentOnboardingTourProps> = ({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 40 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="fixed inset-x-4 top-[5%] md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg bg-white rounded-2xl shadow-2xl z-50 max-h-[90vh] overflow-hidden flex flex-col"
+                        className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg bg-white rounded-2xl shadow-2xl z-50 max-h-[calc(100vh-2rem)] md:max-h-[90vh] overflow-hidden flex flex-col"
+                        role="dialog"
+                        aria-modal="true"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
@@ -376,7 +378,7 @@ export const ParentOnboardingTour: React.FC<ParentOnboardingTourProps> = ({
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 overflow-auto p-6">
+                        <div className="flex-1 overflow-y-auto p-6">
                             <AnimatePresence mode="wait">
                                 {currentStep === 'welcome' && (
                                     <motion.div
@@ -413,7 +415,7 @@ export const ParentOnboardingTour: React.FC<ParentOnboardingTourProps> = ({
 
                         {/* Footer - Navigation */}
                         {currentStep !== 'actions' && (
-                            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50">
+                            <div className="shrink-0 px-6 py-4 border-t border-slate-100 bg-slate-50">
                                 <div className="flex items-center justify-between">
                                     <button
                                         type="button"
