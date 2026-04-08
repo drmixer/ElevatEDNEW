@@ -75,8 +75,8 @@ const PathExplanationCard: React.FC<PathExplanationCardProps> = ({
 
         if (diagnosticStatus !== 'completed') {
             return {
-                title: `${firstName} hasn't completed the diagnostic yet`,
-                detail: "Once they finish the quick assessment, we'll create a personalized learning path just for them based on their unique strengths and areas to explore.",
+                title: `${firstName} hasn't completed the adaptive check-in yet`,
+                detail: "Once they finish the quick assessment, we'll set an initial path based on what they know now. That path can keep adjusting as new evidence comes in.",
             };
         }
 
@@ -85,20 +85,20 @@ const PathExplanationCard: React.FC<PathExplanationCardProps> = ({
             const secondaryFocus = focusAreas[1];
             return {
                 title: `Focusing on ${primaryFocus}${secondaryFocus ? ` and ${secondaryFocus}` : ''}`,
-                detail: `Based on ${firstName}'s diagnostic results, we're prioritizing these areas to build a strong foundation. As they improve, the path will automatically adjust.`,
+                detail: `Based on ${firstName}'s latest check-in and learning signals, we're prioritizing these areas to build a strong foundation. As they improve, the path will automatically adjust.`,
             };
         }
 
         if (currentFocusSubject) {
             return {
                 title: `Building skills in ${currentFocusSubject}`,
-                detail: `${firstName}'s path is designed to strengthen their understanding step by step, with the AI adjusting difficulty as they progress.`,
+                detail: `${firstName}'s path is designed to strengthen understanding step by step, with the system adjusting pace and support as they progress.`,
             };
         }
 
         return {
             title: 'Learning path personalized for ' + firstName,
-            detail: "We're selecting lessons based on their assessment results and ongoing performance. The path adapts as they learn.",
+            detail: "We're selecting lessons based on their check-in results and ongoing performance. The path adapts as they learn.",
         };
     };
 
@@ -237,16 +237,16 @@ const PathExplanationCard: React.FC<PathExplanationCardProps> = ({
                             </div>
                             <div>
                                 <h4 className="text-sm font-semibold text-gray-900">
-                                    Diagnostic Assessment
+                                    Adaptive check-in
                                 </h4>
                                 <p className="text-xs text-gray-600 mt-0.5">
                                     {diagnosticStatus === 'completed'
-                                        ? `Completed ${formatDiagnosticDate() ?? 'recently'} — path is calibrated`
+                                        ? `Completed ${formatDiagnosticDate() ?? 'recently'} — initial path calibrated`
                                         : diagnosticStatus === 'in_progress'
-                                            ? 'In progress — path will update when done'
+                                            ? 'In progress — the path will update when it finishes'
                                             : diagnosticStatus === 'scheduled'
                                                 ? 'Scheduled — reminder set'
-                                                : 'Not started — recommend completing soon'}
+                                                : 'Not started — recommended for an initial calibration'}
                                 </p>
                             </div>
                         </div>
@@ -321,7 +321,7 @@ const PathExplanationCard: React.FC<PathExplanationCardProps> = ({
                                 <li className="flex items-start gap-2">
                                     <span className="text-brand-blue mt-0.5">•</span>
                                     <span>
-                                        <strong>Goal alignment:</strong> We balance your weekly goals with their current skill level.
+                                        <strong>Goal alignment:</strong> We balance your weekly goals with their current learning pace and support needs.
                                     </span>
                                 </li>
                             </ul>

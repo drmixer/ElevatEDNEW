@@ -41,6 +41,7 @@ import {
 import { fetchCatalogModules } from '../../services/catalogService';
 import {
   logAdminAuditEvent,
+  fetchRecentCatPlacementAttempts,
   fetchOpsMetrics,
   updatePlatformConfig,
   fetchPlatformConfig,
@@ -49,6 +50,7 @@ import {
   processAccountDeletionQueue,
   fetchContentCoverageSummary,
   type OpsMetricsSnapshot,
+  type CatPlacementReviewAttempt,
   type ContentCoverageSummary,
 } from '../../services/adminService';
 import { buildReleaseGateDashboard } from '../../lib/evaluationHarness';
@@ -118,6 +120,7 @@ const AdminDashboard: React.FC = () => {
   const [configSaving, setConfigSaving] = useState(false);
   const [configMessage, setConfigMessage] = useState<string | null>(null);
   const BILLING_FLAG_KEY = 'billing.require_subscription';
+  const PLACEMENT_ENGINE_KEY = 'placement.engine_active';
   const [billingSaving, setBillingSaving] = useState(false);
   const [billingMessage, setBillingMessage] = useState<string | null>(null);
   const [showQualityDashboard, setShowQualityDashboard] = useState(false);
@@ -203,6 +206,21 @@ const AdminDashboard: React.FC = () => {
     queryFn: () => fetchPlatformConfig([BILLING_FLAG_KEY]),
     enabled: Boolean(admin),
     staleTime: 1000 * 60 * 5,
+  });
+
+  const placementConfigQuery = useQuery({
+    queryKey: ['admin-placement-config', admin?.id],
+    queryFn: () => fetchPlatformConfig([PLACEMENT_ENGINE_KEY]),
+    enabled: Boolean(admin),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const catPlacementAttemptsQuery = useQuery({
+    queryKey: ['admin-cat-placement-attempts'],
+    queryFn: () => fetchRecentCatPlacementAttempts(8),
+    enabled: Boolean(admin),
+    refetchInterval: 30 * 1000,
+    staleTime: 15 * 1000,
   });
 
   const assignmentsOverview = assignmentsQuery.data ?? [];
@@ -303,6 +321,13 @@ const AdminDashboard: React.FC = () => {
     }
     return true; // default to requiring billing unless explicitly disabled
   }, [billingConfigQuery.data]);
+
+  const placementEngineValue = useMemo(() => {
+    const raw = placementConfigQuery.data?.[PLACEMENT_ENGINE_KEY];
+    return typeof raw === 'string' && raw.trim().length ? raw.trim() : 'legacy_v1';
+  }, [placementConfigQuery.data]);
+
+  const recentCatAttempts = catPlacementAttemptsQuery.data ?? [];
 
   useEffect(() => {
     if (!admin || auditLogged || studentsQuery.isLoading || assignmentsQuery.isLoading) {
@@ -1475,6 +1500,113 @@ const AdminDashboard: React.FC = () => {
                 </div>
               ) : (
                 <p className="text-sm text-slate-600">Unable to load ops signals.</p>
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.38 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200"
+            >
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">CAT Rollout Review</h3>
+                  <p className="text-sm text-slate-600">Recent grades 3-8 CAT attempts with remediation-path anchors.</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-xs px-3 py-1 rounded-full border ${
+                      placementEngineValue === 'cat_v2'
+                        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                        : 'bg-amber-50 border-amber-200 text-amber-700'
+                    }`}
+                  >
+                    Engine: {placementEngineValue}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => catPlacementAttemptsQuery.refetch()}
+                    className="p-2 rounded-full border border-slate-200 text-slate-500 hover:text-brand-blue hover:border-brand-blue/40 transition-colors"
+                    disabled={catPlacementAttemptsQuery.isFetching}
+                  >
+                    <RefreshCw className={`h-4 w-4 ${catPlacementAttemptsQuery.isFetching ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 mb-4 text-sm text-slate-700">
+                Migration checkpoint: `050_cat_v2_phase0_phase1.sql` must be applied in the target DB before broad CAT rollout.
+              </div>
+              {catPlacementAttemptsQuery.isLoading ? (
+                <SkeletonCard className="h-40" />
+              ) : recentCatAttempts.length ? (
+                <div className="space-y-3">
+                  {recentCatAttempts.map((attempt: CatPlacementReviewAttempt) => {
+                    const gapSummary = attempt.prerequisiteGaps.map((gap) => gap.standardCode).join(', ');
+                    const firstAnchor = attempt.reviewAnchors[0] ?? null;
+                    return (
+                      <div key={attempt.attemptId} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="font-semibold text-slate-900">
+                              {attempt.studentName ?? attempt.studentId}
+                              {attempt.gradeLevel != null ? ` • Grade ${attempt.gradeLevel}` : ''}
+                            </p>
+                            <p className="text-sm text-slate-600">
+                              {(attempt.subject ?? 'unknown subject').toUpperCase()} • attempt #{attempt.attemptNumber}
+                              {attempt.updatedAt ? ` • ${new Date(attempt.updatedAt).toLocaleString()}` : ''}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap justify-end gap-2">
+                            {attempt.coverageFallbackUsed ? (
+                              <span className="text-[11px] px-2 py-1 rounded-full bg-amber-100 text-amber-800">coverage fallback</span>
+                            ) : null}
+                            {attempt.lowConfidence ? (
+                              <span className="text-[11px] px-2 py-1 rounded-full bg-rose-100 text-rose-800">low confidence</span>
+                            ) : null}
+                          </div>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-3 mt-3 text-sm">
+                          <div className="rounded-lg bg-white border border-slate-200 p-3">
+                            <p className="text-xs uppercase tracking-wide text-slate-500">Placement</p>
+                            <p className="font-semibold text-slate-900">
+                              expected {attempt.expectedLevel ?? 'n/a'} {'->'} working {attempt.workingLevel ?? 'n/a'}
+                            </p>
+                            <p className="text-slate-600">
+                              confidence {attempt.diagnosticConfidence != null ? attempt.diagnosticConfidence.toFixed(2) : 'n/a'}
+                              {attempt.confidenceLow != null && attempt.confidenceHigh != null
+                                ? ` (${attempt.confidenceLow.toFixed(1)}-${attempt.confidenceHigh.toFixed(1)})`
+                                : ''}
+                            </p>
+                          </div>
+                          <div className="rounded-lg bg-white border border-slate-200 p-3">
+                            <p className="text-xs uppercase tracking-wide text-slate-500">Prerequisite Gaps</p>
+                            <p className="font-semibold text-slate-900">{gapSummary || 'None recorded'}</p>
+                            <p className="text-slate-600">
+                              {attempt.terminationReason ? `termination: ${attempt.terminationReason}` : 'termination: n/a'}
+                            </p>
+                          </div>
+                          <div className="rounded-lg bg-white border border-slate-200 p-3">
+                            <p className="text-xs uppercase tracking-wide text-slate-500">Anchored Review</p>
+                            {firstAnchor ? (
+                              <>
+                                <p className="font-semibold text-slate-900">{firstAnchor.reviewModuleSlug ?? 'review module'}</p>
+                                <p className="text-slate-600">
+                                  {firstAnchor.previousModuleSlug ?? 'start'} {'->'} {firstAnchor.reviewModuleSlug ?? 'review'} {'->'}{' '}
+                                  {firstAnchor.nextModuleSlug ?? 'end'}
+                                </p>
+                              </>
+                            ) : (
+                              <p className="text-slate-600">No remediation review inserted for this attempt.</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-600">No recent CAT attempts available yet.</p>
               )}
             </motion.div>
           </div>

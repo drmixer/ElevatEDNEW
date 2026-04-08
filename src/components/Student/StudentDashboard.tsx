@@ -680,15 +680,15 @@ const StudentDashboard: React.FC = () => {
   const upNextSubtitle = useMemo(() => {
     const uniqueSubjects = Array.from(new Set(primaryUpNextItems.map((item) => item.subject)));
     if (placementFocusLabel && uniqueSubjects.length > 1) {
-      return `Blended from your subject placements - leaning into ${placementFocusLabel} while keeping other subjects moving.`;
+      return `Blended from your latest check-ins - leaning into ${placementFocusLabel} while keeping other subjects moving.`;
     }
     if (pathFocus) {
-      return `Built from your diagnostic results - starting with ${pathFocus} to strengthen that area.`;
+      return `Built from your latest learning signals - starting with ${pathFocus} while we keep adjusting from your work.`;
     }
     if (uniqueSubjects.length > 1) {
-      return 'Blended from your subject placements so you keep moving in more than one subject.';
+      return 'Blended from your latest check-ins so you keep moving in more than one subject.';
     }
-    return 'Built from your diagnostic - start with the first card below.';
+    return 'Built from your latest check-in - start with the first card below.';
   }, [pathFocus, placementFocusLabel, primaryUpNextItems]);
 
   const describeLearningPathRationale = useCallback(
@@ -3175,7 +3175,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="text-2xl font-bold text-brand-blue">
                       {quickStats?.level ?? student.level}
                     </div>
-                    <div className="text-sm text-gray-700">Current Level</div>
+                    <div className="text-sm text-gray-700">Current Pace</div>
                   </div>
                   <div className="w-12 h-12 bg-brand-light-blue rounded-full flex items-center justify-center">
                     <Star className="h-6 w-6 text-brand-blue" />
@@ -3373,7 +3373,7 @@ const StudentDashboard: React.FC = () => {
           </div>
           <div className="text-xs text-gray-500 flex items-center space-x-2">
             <Sparkles className="h-4 w-4 text-brand-violet" />
-            <span>Adaptive path synced to your diagnostic</span>
+            <span>Adaptive path synced to your latest learning signals</span>
           </div>
         </motion.div>
 
@@ -3869,7 +3869,7 @@ const StudentDashboard: React.FC = () => {
                       <div>
                         <h3 className="text-xl font-bold mb-2">Complete Your Assessment</h3>
                         <p className="opacity-90 mb-4">
-                          Take our adaptive diagnostic to unlock a precision learning path tailored by AI.
+                          Take a short adaptive check-in so your path can start in the right place and keep adjusting from there.
                         </p>
                         <button
                           onClick={() => setActiveView('onboarding')}
@@ -4108,7 +4108,7 @@ const StudentDashboard: React.FC = () => {
                         <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center">
                           <p className="text-sm text-gray-600">
                             {subjectFilter === 'all'
-                              ? 'Your AI coach will assign fresh lessons after you complete the diagnostic.'
+                              ? 'Your AI coach will assign fresh lessons after you complete the check-in.'
                               : `No ${formatSubjectLabel(subjectFilter)} lessons queued today—check another subject or refresh recommendations.`}
                           </p>
                         </div>
@@ -4526,7 +4526,7 @@ const StudentDashboard: React.FC = () => {
                   ) : (
                     <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center">
                       <p className="text-sm text-gray-600">
-                        We’ll display your personalized path once you complete the diagnostic.
+                        We’ll display your adaptive path once you complete the check-in.
                       </p>
                     </div>
                   )}
@@ -4606,10 +4606,10 @@ const StudentDashboard: React.FC = () => {
                   <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
                     <div className="flex items-center justify-between mb-2">
                       <Star className="h-5 w-5 text-brand-blue" />
-                      <span className="text-[11px] font-semibold text-brand-blue uppercase">Level</span>
+                      <span className="text-[11px] font-semibold text-brand-blue uppercase">Pace</span>
                     </div>
                     <div className="text-2xl font-bold text-gray-900">{quickStats?.level ?? student.level}</div>
-                    <p className="text-xs text-gray-500">Current level</p>
+                    <p className="text-xs text-gray-500">Current challenge pace</p>
                   </div>
                   <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
                     <div className="flex items-center justify-between mb-2">

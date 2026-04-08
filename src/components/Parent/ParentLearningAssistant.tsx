@@ -66,7 +66,7 @@ const buildChildContext = (children: ParentChildSnapshot[]): string => {
             .join('; ') || 'No recent activity';
 
         return `
-Child: ${child.name} (Grade ${child.grade}, Level ${child.level})
+Child: ${child.name} (School grade ${child.grade}, Current pace ${child.level})
 - XP: ${child.xp} | Streak: ${child.streakDays} days
 - This Week: ${child.lessonsCompletedWeek} lessons, ${child.practiceMinutesWeek} minutes
 - Subject Performance: ${subjects}
@@ -623,7 +623,7 @@ function getFallbackResponse(
         return `${child.name} is making steady progress. Every learner has different paces - consistency matters more than speed. Keep encouraging them! 💪`;
     }
 
-    return `${child.name} is at Level ${child.level} with ${child.xp} XP total. They've been learning regularly with a ${child.streakDays}-day streak. Ask me specific questions about their subjects, strengths, or how you can help at home!`;
+    return `${child.name} is currently working at pace ${child.level} with ${child.xp} XP total. They've been learning regularly with a ${child.streakDays}-day streak. Ask me specific questions about their subjects, strengths, or how you can help at home!`;
 }
 
 export default ParentLearningAssistant;

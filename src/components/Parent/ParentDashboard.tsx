@@ -2916,7 +2916,7 @@ const ParentDashboard: React.FC = () => {
                           <div>
                             <p className="text-sm font-semibold text-slate-900">{child.name}</p>
                             <p className="text-xs text-slate-600">
-                              Grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
+                              School grade band {child.grade_band ?? '—'} • Streak {child.streak_days}d
                             </p>
                           </div>
                           <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded-lg">
@@ -2942,7 +2942,7 @@ const ParentDashboard: React.FC = () => {
                         </div>
                         {subjectPlacements.length > 0 && (
                           <div className="rounded-lg border border-slate-200 bg-white p-2">
-                            <div className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Placement</div>
+                            <div className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Current learning pace</div>
                             <div className="flex flex-wrap gap-2">
                               {subjectPlacements.map((placement) => (
                                 <div
@@ -2950,10 +2950,8 @@ const ParentDashboard: React.FC = () => {
                                   className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700"
                                 >
                                   <span className="font-semibold">{formatSubjectLabel(placement.subject)}</span>
-                                  <span>L{placement.working_level}</span>
-                                  <span className="text-slate-500">
-                                    from {placement.expected_level}
-                                  </span>
+                                  <span>pace {placement.working_level}</span>
+                                  <span className="text-slate-500">school grade signal {placement.expected_level}</span>
                                 </div>
                               ))}
                             </div>

@@ -133,6 +133,53 @@ export const fetchOpsMetrics = async (): Promise<OpsMetricsSnapshot> => {
   return handleApiResponse<OpsMetricsSnapshot>(response);
 };
 
+export type CatPlacementReviewGap = {
+  standardCode: string;
+  observedLevel: number | null;
+  confidence: number | null;
+};
+
+export type CatPlacementReviewAnchor = {
+  reviewModuleSlug: string | null;
+  reviewModuleTitle: string | null;
+  gapStandardCode: string | null;
+  previousModuleSlug: string | null;
+  nextModuleSlug: string | null;
+};
+
+export type CatPlacementReviewAttempt = {
+  attemptId: number;
+  assessmentId: number | null;
+  attemptNumber: number;
+  studentId: string;
+  studentName: string | null;
+  gradeLevel: number | null;
+  subject: string | null;
+  gradeBand: string | null;
+  status: string | null;
+  updatedAt: string | null;
+  completedAt: string | null;
+  expectedLevel: number | null;
+  workingLevel: number | null;
+  diagnosticConfidence: number | null;
+  confidenceLow: number | null;
+  confidenceHigh: number | null;
+  coverageFallbackUsed: boolean;
+  lowConfidence: boolean;
+  terminationReason: string | null;
+  prerequisiteGaps: CatPlacementReviewGap[];
+  testedLevels: Array<{ level: number; correct: number; total: number; accuracyPct: number }>;
+  pathId: number | null;
+  reviewAnchors: CatPlacementReviewAnchor[];
+};
+
+export const fetchRecentCatPlacementAttempts = async (limit = 8): Promise<CatPlacementReviewAttempt[]> => {
+  const params = new URLSearchParams({ limit: String(limit) });
+  const response = await authenticatedFetch(`/api/v1/admins/cat-placement-attempts?${params.toString()}`);
+  const payload = await handleApiResponse<{ attempts: CatPlacementReviewAttempt[] }>(response);
+  return payload.attempts ?? [];
+};
+
 export const fetchPlatformConfig = async (keys: string[]): Promise<Record<string, unknown>> => {
   const params = new URLSearchParams({ keys: keys.join(',') });
   const response = await authenticatedFetch(`/api/v1/admins/platform-config?${params.toString()}`);

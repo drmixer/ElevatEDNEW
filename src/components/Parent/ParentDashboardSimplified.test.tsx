@@ -117,10 +117,10 @@ describe('ParentDashboardSimplified', () => {
       </QueryClientProvider>,
     );
 
-    expect(await screen.findByText('Placement')).toBeInTheDocument();
+    expect(await screen.findByText('Current learning pace')).toBeInTheDocument();
     expect(screen.getByText('Math')).toBeInTheDocument();
-    expect(screen.getAllByText('L7').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('from 7').length).toBe(2);
+    expect(screen.getAllByText('pace 7').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('school grade signal 7').length).toBe(2);
   });
 
   it('opens the add learner modal from the empty state instead of navigating to a dead route', async () => {

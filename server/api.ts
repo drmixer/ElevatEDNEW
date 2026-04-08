@@ -88,6 +88,7 @@ import { recordLearningEvent } from './xpService.js';
 import { upsertPlanOptOut, listPlanOptOutsApi } from './optOuts.js';
 import { getContentCoverage, getCoverageSummary } from './contentCoverage.js';
 import { getContentQualityMetrics } from './contentQuality.js';
+import { listRecentCatPlacementAttempts } from './adminPlacement.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -2165,6 +2166,17 @@ export const createApiHandler = (context: ApiContext) => {
               : undefined;
           const snapshot = getOpsSnapshot(windowMs);
           sendJson(res, 200, snapshot, API_VERSION);
+        });
+      }
+
+      if (method === 'GET' && path === '/admins/cat-placement-attempts') {
+        return handleRoute(async () => {
+          const limit =
+            typeof url.query.limit === 'string' && !Number.isNaN(Number(url.query.limit))
+              ? Number(url.query.limit)
+              : undefined;
+          const attempts = await listRecentCatPlacementAttempts(serviceSupabase, { limit });
+          sendJson(res, 200, { attempts }, API_VERSION);
         });
       }
 

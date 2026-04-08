@@ -199,7 +199,7 @@ const ChildCard: React.FC<ChildCardProps> = ({ child, subjectPlacements = [] }) 
             {subjectPlacements.length > 0 && (
                 <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
                     <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-2">
-                        Placement
+                        Current learning pace
                     </p>
                     <div className="flex flex-wrap gap-2">
                         {subjectPlacements
@@ -211,8 +211,8 @@ const ChildCard: React.FC<ChildCardProps> = ({ child, subjectPlacements = [] }) 
                                     className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-700"
                                 >
                                     <span className="font-semibold">{formatSubjectLabel(placement.subject)}</span>
-                                    <span>L{placement.working_level}</span>
-                                    <span className="text-slate-500">from {placement.expected_level}</span>
+                                    <span>pace {placement.working_level}</span>
+                                    <span className="text-slate-500">school grade signal {placement.expected_level}</span>
                                 </span>
                             ))}
                     </div>

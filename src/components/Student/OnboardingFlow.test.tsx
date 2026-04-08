@@ -84,7 +84,9 @@ describe('OnboardingFlow', () => {
   it('renders an avatar image preview when image_url is present and falls back to icon when missing', async () => {
     render(<OnboardingFlow onComplete={() => {}} />);
 
-    await screen.findByText("Let's personalize your learning path");
+    await screen.findByText("Let's set up a learning path that moves with you");
+    expect(screen.queryByText('Age')).not.toBeInTheDocument();
+    expect(screen.getByText('School grade')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
@@ -171,13 +173,13 @@ describe('OnboardingFlow', () => {
 
     render(<OnboardingFlow onComplete={() => {}} />);
 
-    await screen.findByText("Let's personalize your learning path");
+    await screen.findByText("Let's set up a learning path that moves with you");
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
     await screen.findByText('Choose an avatar');
     fireEvent.click(screen.getByRole('button', { name: /Continue to check-in/i }));
-    await screen.findByText('Start mixed assessment');
+    await screen.findByText('Start adaptive check-in');
 
-    fireEvent.click(screen.getByRole('button', { name: /Start mixed assessment/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Start adaptive check-in/i }));
 
     expect(await screen.findByText('Math question')).toBeInTheDocument();
     expect(startPlacementSpy).toHaveBeenCalledTimes(2);
@@ -311,13 +313,13 @@ describe('OnboardingFlow', () => {
 
     render(<OnboardingFlow onComplete={() => {}} />);
 
-    await screen.findByText("Let's personalize your learning path");
+    await screen.findByText("Let's set up a learning path that moves with you");
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
     await screen.findByText('Choose an avatar');
     fireEvent.click(screen.getByRole('button', { name: /Continue to check-in/i }));
-    await screen.findByText('Start mixed assessment');
+    await screen.findByText('Start adaptive check-in');
 
-    fireEvent.click(screen.getByRole('button', { name: /Start mixed assessment/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Start adaptive check-in/i }));
 
     expect(await screen.findByText('CAT Math question 1')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '12' }));

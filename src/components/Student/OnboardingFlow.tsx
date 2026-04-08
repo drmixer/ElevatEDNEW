@@ -95,19 +95,22 @@ const deriveGradeBandFromGrade = (grade: number | null | undefined): string => {
 const summarizePath = (entries: StudentPathEntry[]): StudentPathEntry[] => entries.slice(0, 3);
 
 const confidenceLabel = (confidence: number): string => {
-  if (confidence >= 0.8) return 'High confidence';
-  if (confidence >= 0.6) return 'Good confidence';
-  return 'Low confidence';
+  if (confidence >= 0.8) return 'Dialed in';
+  if (confidence >= 0.6) return 'Good starting read';
+  return 'Still calibrating';
 };
 
 const subjectExplanation = (result: SubjectPlacementResult): string => {
-  if (result.workingLevel === result.expectedLevel) {
-    return 'The check-in confirmed this subject is starting in a good place.';
+  if (result.levelConfidence < 0.6) {
+    return 'We found a useful place to start here, and the path will keep adjusting as you work.';
   }
-  if (result.workingLevel > result.expectedLevel) {
-    return 'The check-in found room to move a little faster in this subject.';
+  if (result.masteryPct >= 85) {
+    return 'You showed you are ready to move into challenging work quickly in this subject.';
   }
-  return 'The check-in found this subject will feel better with more support at the start.';
+  if (result.masteryPct >= 60) {
+    return 'This subject is opening in a just-right range and can speed up or slow down from here.';
+  }
+  return 'This subject will open with a little more support so the first steps feel clear and doable.';
 };
 
 const UpNextList: React.FC<{ entries: StudentPathEntry[]; subjectLabel?: string | null }> = ({ entries, subjectLabel }) => {
@@ -159,7 +162,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const [error, setError] = useState<string | null>(null);
 
   const [fullName, setFullName] = useState<string>(student?.name ?? '');
-  const [ageYears, setAgeYears] = useState<string>('');
+  const [ageYears] = useState<string>('');
   const [currentGrade, setCurrentGrade] = useState<string>(student?.grade != null ? String(student.grade) : '');
   const [optInAi, setOptInAi] = useState<boolean>(true);
 
@@ -482,7 +485,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
     <div className="flex items-center justify-between mb-6">
       <div>
         <p className="text-xs uppercase tracking-wide text-slate-500">Welcome</p>
-        <h2 className="text-2xl font-bold text-slate-900">Let&apos;s personalize your learning path</h2>
+        <h2 className="text-2xl font-bold text-slate-900">Let&apos;s set up a learning path that moves with you</h2>
       </div>
       <div className="flex items-center space-x-2">
         {[1, 2, 3].map((value) => (
@@ -518,20 +521,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         <div>
           <label className="text-sm font-semibold text-slate-800 flex items-center space-x-2">
             <Brain className="h-4 w-4 text-emerald-500" />
-            <span>Age</span>
-          </label>
-          <input
-            value={ageYears}
-            onChange={(e) => setAgeYears(e.target.value.replace(/[^\d]/g, ''))}
-            className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-sky-400 focus:outline-none"
-            placeholder="How old are you?"
-            inputMode="numeric"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-semibold text-slate-800 flex items-center space-x-2">
-            <Brain className="h-4 w-4 text-emerald-500" />
-            <span>Current grade</span>
+            <span>School grade</span>
           </label>
           <input
             value={currentGrade}
@@ -541,13 +531,13 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
             inputMode="numeric"
           />
           <p className="mt-2 text-xs text-slate-500">
-            We use age and current grade as a starting prior. The diagnostics decide the final working levels.
+            This only helps choose a reasonable first question range. Your answers can move the path up or down right away.
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-sm font-semibold text-slate-800">Personalized starting point</p>
-          <p className="mt-2 text-lg font-bold text-slate-900">We&apos;ll tune this after the check-in</p>
-          <p className="mt-1 text-xs text-slate-500">Math and ELA will each start at a level that feels appropriately challenging.</p>
+          <p className="text-sm font-semibold text-slate-800">Adaptive from the start</p>
+          <p className="mt-2 text-lg font-bold text-slate-900">Nothing here locks you to one grade or tier</p>
+          <p className="mt-1 text-xs text-slate-500">The check-in adjusts from your answers, and your learning path can keep changing after that too.</p>
         </div>
       </div>
       <div className="mt-4 flex items-center space-x-3 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100">
@@ -690,9 +680,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       {renderStepHeader()}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-sm text-slate-600">Subject placement</p>
+          <p className="text-sm text-slate-600">Adaptive check-in</p>
           <p className="text-xs text-slate-500">
-            One short mixed check-in, with Math and ELA scored separately underneath.
+            One short mixed check-in, with Math and ELA adapting separately underneath.
           </p>
         </div>
         <div className="text-right">
@@ -744,7 +734,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
             Ready for one adaptive check-in?
           </p>
           <p className="text-sm text-slate-500 mb-4">
-            This interleaves Math and ELA so the experience feels like one flow, while we still calibrate each subject separately.
+            This interleaves Math and ELA so it feels like one flow, while each subject quietly adjusts to what you know.
           </p>
           <button
             onClick={handleStartPlacement}
@@ -758,7 +748,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               </>
             ) : (
               <>
-                Start mixed assessment
+                Start adaptive check-in
                 <Play className="h-4 w-4 ml-2" />
               </>
             )}
@@ -826,7 +816,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           </div>
         </div>
         <p className="text-sm text-slate-600">
-          Nice work, {fullName || 'learner'}! That mixed check-in set separate starting points for Math and ELA so your first paths feel just right without turning learning into a grade-level label.
+          Nice work, {fullName || 'learner'}! That check-in gave Math and ELA each a live starting path. From here, the system can keep adjusting as you practice, miss, and master new things.
         </p>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -859,12 +849,12 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               <p className="text-xs text-slate-600">Math and ELA can move at different paces, even though the check-in felt like one flow.</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
-              <p className="text-sm font-semibold text-slate-900">Deterministic first</p>
-              <p className="text-xs text-slate-600">These starting paths come from age, grade, and diagnostic results, not opaque AI judgments.</p>
+              <p className="text-sm font-semibold text-slate-900">Keeps adapting</p>
+              <p className="text-xs text-slate-600">Your answers set the first path, and later practice and checkpoints can update it again.</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1">
-              <p className="text-sm font-semibold text-slate-900">Start small</p>
-              <p className="text-xs text-slate-600">The first lessons are chosen to be understandable and trustworthy, then we can tune from there.</p>
+              <p className="text-sm font-semibold text-slate-900">No lock-in</p>
+              <p className="text-xs text-slate-600">We are choosing the next best step, not assigning a permanent level label.</p>
             </div>
           </div>
         </div>
