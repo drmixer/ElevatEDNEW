@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
@@ -414,9 +414,10 @@ const QuickActions: React.FC = () => (
 // ============================================================================
 
 const ParentDashboardSimplified: React.FC = () => {
-    const { user } = useAuth();
+    const { user, refreshUser } = useAuth();
     const parent = (user as Parent) ?? null;
     const navigate = useNavigate();
+    const location = useLocation();
     const queryClient = useQueryClient();
 
     // Track which child is expanded for detailed view (Sprint 3)
@@ -447,6 +448,20 @@ const ParentDashboardSimplified: React.FC = () => {
             return () => clearTimeout(timer);
         }
     }, [parent?.id]);
+
+    useEffect(() => {
+        if (!location.hash) return;
+
+        const targetId = decodeURIComponent(location.hash.slice(1));
+        if (!targetId) return;
+
+        const timer = window.setTimeout(() => {
+            const target = document.getElementById(targetId);
+            target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
+
+        return () => window.clearTimeout(timer);
+    }, [location.hash]);
 
     // Fetch dashboard data
     const {
@@ -543,6 +558,7 @@ const ParentDashboardSimplified: React.FC = () => {
             setLastInviteSent(result.inviteSent);
             await queryClient.invalidateQueries({ queryKey: ['parent-dashboard', parent?.id] });
             await queryClient.invalidateQueries({ queryKey: ['parent-overview', parent?.id] });
+            await refreshUser().catch(() => undefined);
         },
         onError: (error) => {
             setAddLearnerSuccess(null);
@@ -717,14 +733,12 @@ const ParentDashboardSimplified: React.FC = () => {
                 )}
 
                 {/* Weekly Summary Chart */}
-                {dashboard?.activitySeries && dashboard.activitySeries.length > 0 && (
-                    <section className="mb-8">
-                        <WeeklySummaryChart activityData={dashboard.activitySeries} />
-                    </section>
-                )}
+                <section id="learning-insights" className="mb-8 scroll-mt-24">
+                    <WeeklySummaryChart activityData={dashboard?.activitySeries ?? []} />
+                </section>
 
                 {/* Quick Actions */}
-                <section>
+                <section id="goal-planner" className="scroll-mt-24">
                     <QuickActions />
                 </section>
 

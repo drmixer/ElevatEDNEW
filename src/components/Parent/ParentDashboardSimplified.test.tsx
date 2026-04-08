@@ -1,19 +1,22 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ParentDashboardSimplified from './ParentDashboardSimplified';
 
-const { fetchParentDashboardDataSpy, fetchParentOverviewSpy } = vi.hoisted(() => ({
+const { fetchParentDashboardDataSpy, fetchParentOverviewSpy, createLearnerForParentSpy, refreshUserSpy } = vi.hoisted(() => ({
   fetchParentDashboardDataSpy: vi.fn(),
   fetchParentOverviewSpy: vi.fn(),
+  createLearnerForParentSpy: vi.fn(),
+  refreshUserSpy: vi.fn(),
 }));
 
 vi.mock('../../contexts/AuthContext', () => ({
   useAuth: () => ({
     user: { id: 'parent-1', role: 'parent', name: 'Pat Parent', children: [] },
+    refreshUser: refreshUserSpy,
   }),
 }));
 
@@ -30,7 +33,7 @@ vi.mock('../../services/profileService', () => ({
 }));
 
 vi.mock('../../services/parentService', () => ({
-  createLearnerForParent: vi.fn(),
+  createLearnerForParent: createLearnerForParentSpy,
 }));
 
 vi.mock('./SubjectStatusCards', () => ({ default: () => <div>Subject status cards</div> }));
@@ -45,6 +48,9 @@ vi.mock('../../lib/parentOnboardingHelpers', () => ({
 
 describe('ParentDashboardSimplified', () => {
   beforeEach(() => {
+    createLearnerForParentSpy.mockReset();
+    refreshUserSpy.mockReset();
+    refreshUserSpy.mockResolvedValue(undefined);
     fetchParentDashboardDataSpy.mockResolvedValue({
       alerts: [],
       children: [
@@ -100,6 +106,16 @@ describe('ParentDashboardSimplified', () => {
         },
       ],
     });
+
+    if (!HTMLElement.prototype.scrollIntoView) {
+      Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+        configurable: true,
+        writable: true,
+        value: vi.fn(),
+      });
+    } else {
+      vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => undefined);
+    }
   });
 
   it('shows subject placement chips from the live overview endpoint', async () => {
@@ -151,5 +167,62 @@ describe('ParentDashboardSimplified', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Add a Learner' }));
 
     expect(await screen.findByText('Create and link a learner')).toBeInTheDocument();
+  });
+
+  it('refreshes the auth profile after creating a learner so the header count can update', async () => {
+    createLearnerForParentSpy.mockResolvedValue({
+      studentId: 'student-2',
+      email: 'newlearner@example.com',
+      familyLinkCode: 'ABCD1234',
+      temporaryPassword: 'temp-pass',
+      inviteSent: true,
+    });
+
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <ParentDashboardSimplified />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: /add learner/i }));
+
+    fireEvent.change(await screen.findByPlaceholderText('Alex Rivera'), {
+      target: { value: 'New Learner' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('learner@example.com'), {
+      target: { value: 'newlearner@example.com' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Create learner' }));
+
+    await waitFor(() => expect(createLearnerForParentSpy).toHaveBeenCalled());
+    await waitFor(() => expect(refreshUserSpy).toHaveBeenCalled());
+  });
+
+  it('renders anchor targets for the parent header goals and insights links', async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter initialEntries={[{ pathname: '/parent', hash: '#goal-planner' }]}>
+          <ParentDashboardSimplified />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText('Quick Actions');
+    expect(document.getElementById('goal-planner')).toBeTruthy();
+    expect(document.getElementById('learning-insights')).toBeTruthy();
   });
 });
