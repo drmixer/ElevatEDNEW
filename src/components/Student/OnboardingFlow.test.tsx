@@ -198,4 +198,140 @@ describe('OnboardingFlow', () => {
       expect(submitPlacementSpy).toHaveBeenCalledWith(expect.objectContaining({ subject: 'english', assessmentId: 102 }));
     });
   });
+
+  it('appends CAT next items while preserving mixed-subject interleaving', async () => {
+    startPlacementSpy.mockImplementation(async ({ subject }: { subject?: string | null }) => {
+      if (subject === 'math') {
+        return {
+          assessmentId: 201,
+          attemptId: 301,
+          attemptNumber: 1,
+          gradeBand: '6-8',
+          subject: 'math',
+          expectedLevel: 6,
+          engineVersion: 'cat_v2',
+          resumeToken: 'math-cat-token',
+          items: [
+            {
+              id: 'math-q1',
+              bankQuestionId: 3001,
+              prompt: 'CAT Math question 1',
+              type: 'multiple_choice',
+              options: [
+                { id: 11, text: '12', isCorrect: true },
+                { id: 12, text: '14', isCorrect: false },
+              ],
+              weight: 1,
+              difficulty: 6,
+              strand: 'numbers',
+              targetStandards: [],
+              metadata: null,
+            },
+          ],
+          existingResponses: [],
+        };
+      }
+
+      return {
+        assessmentId: 202,
+        attemptId: 302,
+        attemptNumber: 1,
+        gradeBand: '6-8',
+        subject: 'english',
+        expectedLevel: 6,
+        engineVersion: 'cat_v2',
+        resumeToken: 'ela-cat-token',
+        items: [
+          {
+            id: 'ela-q1',
+            bankQuestionId: 4001,
+            prompt: 'CAT ELA question 1',
+            type: 'multiple_choice',
+            options: [
+              { id: 21, text: 'Theme', isCorrect: true },
+              { id: 22, text: 'Author', isCorrect: false },
+            ],
+            weight: 1,
+            difficulty: 6,
+            strand: 'reading',
+            targetStandards: [],
+            metadata: null,
+          },
+        ],
+        existingResponses: [],
+      };
+    });
+
+    savePlacementProgressSpy
+      .mockResolvedValueOnce({
+        isCorrect: true,
+        engineVersion: 'cat_v2',
+        isComplete: false,
+        nextItem: {
+          id: 'math-q2',
+          bankQuestionId: 3002,
+          prompt: 'CAT Math question 2',
+          type: 'multiple_choice',
+          options: [
+            { id: 13, text: '18', isCorrect: true },
+            { id: 14, text: '16', isCorrect: false },
+          ],
+          weight: 1,
+          difficulty: 7,
+          strand: 'ratios',
+          targetStandards: [],
+          metadata: null,
+        },
+      })
+      .mockResolvedValueOnce({
+        isCorrect: true,
+        engineVersion: 'cat_v2',
+        isComplete: true,
+        nextItem: null,
+      })
+      .mockResolvedValueOnce({
+        isCorrect: true,
+        engineVersion: 'cat_v2',
+        isComplete: true,
+        nextItem: null,
+      });
+
+    submitPlacementSpy.mockImplementation(async ({ subject }: { subject?: string | null }) => ({
+      pathId: subject === 'math' ? 401 : 402,
+      entries: [],
+      strandEstimates: [],
+      score: 100,
+      masteryPct: 100,
+      subject,
+      expectedLevel: 6,
+      workingLevel: 6,
+      levelConfidence: 0.85,
+      subjectState: null,
+    }));
+
+    render(<OnboardingFlow onComplete={() => {}} />);
+
+    await screen.findByText("Let's personalize your learning path");
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+    await screen.findByText('Choose an avatar');
+    fireEvent.click(screen.getByRole('button', { name: /Continue to check-in/i }));
+    await screen.findByText('Start mixed assessment');
+
+    fireEvent.click(screen.getByRole('button', { name: /Start mixed assessment/i }));
+
+    expect(await screen.findByText('CAT Math question 1')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: '12' }));
+
+    expect(await screen.findByText('CAT ELA question 1')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Theme' }));
+
+    expect(await screen.findByText('CAT Math question 2')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: '18' }));
+
+    await waitFor(() => {
+      expect(savePlacementProgressSpy).toHaveBeenCalledTimes(3);
+      expect(submitPlacementSpy).toHaveBeenCalledWith(expect.objectContaining({ subject: 'english', assessmentId: 202 }));
+      expect(submitPlacementSpy).toHaveBeenCalledWith(expect.objectContaining({ subject: 'math', assessmentId: 201 }));
+    });
+  });
 });

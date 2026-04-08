@@ -3388,7 +3388,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "RI.9-10.2"
+        "code": "RI.K.1"
       }
     ]
   },
@@ -3397,7 +3397,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "RI.9-10.2"
+        "code": "RL.K.1"
       }
     ]
   },
@@ -3406,7 +3406,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "RI.9-10.2"
+        "code": "RL.K.1"
       }
     ]
   },
@@ -3415,7 +3415,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "RL.9-10.2"
+        "code": "RL.K.1"
       }
     ]
   },
@@ -3424,7 +3424,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "SL.11-12.1"
+        "code": "SL.K.1"
       }
     ]
   },
@@ -3433,7 +3433,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "L.11-12.4"
+        "code": "RF.K.3"
       }
     ]
   },
@@ -3442,7 +3442,7 @@
     "standards": [
       {
         "framework": "CCSS-ELA",
-        "code": "RI.9-10.2"
+        "code": "W.K.1"
       }
     ]
   },
@@ -3451,7 +3451,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.MD.B.3"
       }
     ]
   },
@@ -3460,7 +3460,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.CC.C.6"
       }
     ]
   },
@@ -3469,7 +3469,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.MD.B.3"
       }
     ]
   },
@@ -3478,7 +3478,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.MD.B.3"
       }
     ]
   },
@@ -3487,7 +3487,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.G.A.1"
       }
     ]
   },
@@ -3496,7 +3496,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.MD.A.1"
       }
     ]
   },
@@ -3505,7 +3505,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.G.A.1"
       }
     ]
   },
@@ -3514,7 +3514,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.MD.A.1"
       }
     ]
   },
@@ -3523,7 +3523,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.OA.A.1"
       }
     ]
   },
@@ -3532,7 +3532,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.CC.C.6"
       }
     ]
   },
@@ -3541,7 +3541,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.CC.B.4"
       }
     ]
   },
@@ -3550,7 +3550,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.NBT.A.1"
       }
     ]
   },
@@ -3559,7 +3559,7 @@
     "standards": [
       {
         "framework": "CCSS-M",
-        "code": "HSF-IF.4"
+        "code": "K.CC.A.1"
       }
     ]
   },

@@ -1,0 +1,842 @@
+{
+  "generatedAt": "2026-04-08T00:30:03.035Z",
+  "scope": {
+    "subjects": [
+      "math",
+      "ela"
+    ],
+    "diagnosticGrades": [
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "foundationalGrades": [
+      "K",
+      "1",
+      "2",
+      "3"
+    ],
+    "lowEndGrades": [
+      "K",
+      "1",
+      "2"
+    ]
+  },
+  "currentNormalization": {
+    "1": {
+      "placementLevel": 1,
+      "placementWindow": {
+        "min_level": 0,
+        "max_level": 2
+      }
+    },
+    "2": {
+      "placementLevel": 2,
+      "placementWindow": {
+        "min_level": 1,
+        "max_level": 3
+      }
+    },
+    "K": {
+      "placementLevel": 0,
+      "placementWindow": {
+        "min_level": 0,
+        "max_level": 1
+      }
+    }
+  },
+  "assessmentCoverageBySubject": {
+    "math": {
+      "diagnosticCount": 9,
+      "totalQuestionCount": 146,
+      "assessmentPlacementLevels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "questionPlacementLevels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "gradeBands": [
+        "6",
+        "7",
+        "8",
+        "1",
+        "4",
+        "K",
+        "2",
+        "3",
+        "5"
+      ]
+    },
+    "ela": {
+      "diagnosticCount": 9,
+      "totalQuestionCount": 138,
+      "assessmentPlacementLevels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "questionPlacementLevels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "gradeBands": [
+        "6",
+        "7",
+        "8",
+        "1",
+        "4",
+        "K",
+        "2",
+        "3",
+        "5"
+      ]
+    }
+  },
+  "foundationalCoverage": {
+    "math": {
+      "rows": [
+        {
+          "id": 2984,
+          "title": "Kindergarten Math Diagnostic",
+          "subject": "math",
+          "gradeBand": "K",
+          "assessmentPlacementLevel": 0,
+          "assessmentWindow": {
+            "max_level": 1,
+            "min_level": 0
+          },
+          "questionCount": 12,
+          "questionPlacementLevels": [
+            0
+          ],
+          "difficultyCounts": {
+            "1": 6,
+            "2": 3,
+            "3": 3
+          },
+          "strandCount": 3,
+          "standardCount": 3
+        },
+        {
+          "id": 2978,
+          "title": "Grade 1 Math Diagnostic",
+          "subject": "math",
+          "gradeBand": "1",
+          "assessmentPlacementLevel": 1,
+          "assessmentWindow": {
+            "max_level": 2,
+            "min_level": 0
+          },
+          "questionCount": 15,
+          "questionPlacementLevels": [
+            1
+          ],
+          "difficultyCounts": {
+            "1": 6,
+            "2": 5,
+            "3": 4
+          },
+          "strandCount": 4,
+          "standardCount": 4
+        },
+        {
+          "id": 2986,
+          "title": "Grade 2 Math Diagnostic",
+          "subject": "math",
+          "gradeBand": "2",
+          "assessmentPlacementLevel": 2,
+          "assessmentWindow": {
+            "max_level": 3,
+            "min_level": 1
+          },
+          "questionCount": 13,
+          "questionPlacementLevels": [
+            2
+          ],
+          "difficultyCounts": {
+            "1": 6,
+            "2": 4,
+            "3": 3
+          },
+          "strandCount": 3,
+          "standardCount": 2
+        },
+        {
+          "id": 2988,
+          "title": "Grade 3 Math Diagnostic",
+          "subject": "math",
+          "gradeBand": "3",
+          "assessmentPlacementLevel": 3,
+          "assessmentWindow": {
+            "max_level": 4,
+            "min_level": 2
+          },
+          "questionCount": 13,
+          "questionPlacementLevels": [
+            3
+          ],
+          "difficultyCounts": {
+            "1": 5,
+            "2": 8
+          },
+          "strandCount": 3,
+          "standardCount": 3
+        }
+      ],
+      "distinctQuestionPlacementLevels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "hasLevelBelowThree": true,
+      "lowEndBandsCollapsedToThree": false,
+      "lowEndBandsSingleDifficulty": false
+    },
+    "ela": {
+      "rows": [
+        {
+          "id": 2985,
+          "title": "Kindergarten ELA Diagnostic",
+          "subject": "ela",
+          "gradeBand": "K",
+          "assessmentPlacementLevel": 0,
+          "assessmentWindow": {
+            "max_level": 1,
+            "min_level": 0
+          },
+          "questionCount": 12,
+          "questionPlacementLevels": [
+            0
+          ],
+          "difficultyCounts": {
+            "1": 6,
+            "2": 3,
+            "3": 3
+          },
+          "strandCount": 3,
+          "standardCount": 3
+        },
+        {
+          "id": 2979,
+          "title": "Grade 1 ELA Diagnostic",
+          "subject": "ela",
+          "gradeBand": "1",
+          "assessmentPlacementLevel": 1,
+          "assessmentWindow": {
+            "max_level": 2,
+            "min_level": 0
+          },
+          "questionCount": 15,
+          "questionPlacementLevels": [
+            1
+          ],
+          "difficultyCounts": {
+            "1": 7,
+            "2": 4,
+            "3": 4
+          },
+          "strandCount": 4,
+          "standardCount": 4
+        },
+        {
+          "id": 2987,
+          "title": "Grade 2 ELA Diagnostic",
+          "subject": "ela",
+          "gradeBand": "2",
+          "assessmentPlacementLevel": 2,
+          "assessmentWindow": {
+            "max_level": 3,
+            "min_level": 1
+          },
+          "questionCount": 13,
+          "questionPlacementLevels": [
+            2
+          ],
+          "difficultyCounts": {
+            "1": 6,
+            "2": 4,
+            "3": 3
+          },
+          "strandCount": 3,
+          "standardCount": 3
+        },
+        {
+          "id": 2989,
+          "title": "Grade 3 ELA Diagnostic",
+          "subject": "ela",
+          "gradeBand": "3",
+          "assessmentPlacementLevel": 3,
+          "assessmentWindow": {
+            "max_level": 4,
+            "min_level": 2
+          },
+          "questionCount": 13,
+          "questionPlacementLevels": [
+            3
+          ],
+          "difficultyCounts": {
+            "1": 4,
+            "2": 9
+          },
+          "strandCount": 3,
+          "standardCount": 3
+        }
+      ],
+      "distinctQuestionPlacementLevels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "hasLevelBelowThree": true,
+      "lowEndBandsCollapsedToThree": false,
+      "lowEndBandsSingleDifficulty": false
+    }
+  },
+  "lowEndContentRollups": [
+    {
+      "grade_band": "K",
+      "subject": "Mathematics",
+      "modules": 13,
+      "modules_with_explanations": 13,
+      "modules_meeting_practice_baseline": 0,
+      "modules_with_assessments": 13,
+      "modules_with_external_resources": 13,
+      "modules_needing_attention": 13,
+      "modules_missing_explanations": 0,
+      "modules_missing_practice": 13,
+      "modules_missing_assessments": 0,
+      "modules_missing_external_resources": 0
+    },
+    {
+      "grade_band": "K",
+      "subject": "English Language Arts",
+      "modules": 7,
+      "modules_with_explanations": 7,
+      "modules_meeting_practice_baseline": 0,
+      "modules_with_assessments": 7,
+      "modules_with_external_resources": 7,
+      "modules_needing_attention": 7,
+      "modules_missing_explanations": 0,
+      "modules_missing_practice": 7,
+      "modules_missing_assessments": 0,
+      "modules_missing_external_resources": 0
+    },
+    {
+      "grade_band": "1",
+      "subject": "Mathematics",
+      "modules": 13,
+      "modules_with_explanations": 13,
+      "modules_meeting_practice_baseline": 13,
+      "modules_with_assessments": 13,
+      "modules_with_external_resources": 13,
+      "modules_needing_attention": 0,
+      "modules_missing_explanations": 0,
+      "modules_missing_practice": 0,
+      "modules_missing_assessments": 0,
+      "modules_missing_external_resources": 0
+    },
+    {
+      "grade_band": "1",
+      "subject": "English Language Arts",
+      "modules": 7,
+      "modules_with_explanations": 7,
+      "modules_meeting_practice_baseline": 7,
+      "modules_with_assessments": 7,
+      "modules_with_external_resources": 7,
+      "modules_needing_attention": 0,
+      "modules_missing_explanations": 0,
+      "modules_missing_practice": 0,
+      "modules_missing_assessments": 0,
+      "modules_missing_external_resources": 0
+    },
+    {
+      "grade_band": "2",
+      "subject": "Mathematics",
+      "modules": 13,
+      "modules_with_explanations": 13,
+      "modules_meeting_practice_baseline": 13,
+      "modules_with_assessments": 13,
+      "modules_with_external_resources": 13,
+      "modules_needing_attention": 0,
+      "modules_missing_explanations": 0,
+      "modules_missing_practice": 0,
+      "modules_missing_assessments": 0,
+      "modules_missing_external_resources": 0
+    },
+    {
+      "grade_band": "2",
+      "subject": "English Language Arts",
+      "modules": 7,
+      "modules_with_explanations": 7,
+      "modules_meeting_practice_baseline": 7,
+      "modules_with_assessments": 7,
+      "modules_with_external_resources": 7,
+      "modules_needing_attention": 0,
+      "modules_missing_explanations": 0,
+      "modules_missing_practice": 0,
+      "modules_missing_assessments": 0,
+      "modules_missing_external_resources": 0
+    }
+  ],
+  "lowEndModuleStandardAlignment": {
+    "summary": {
+      "K:Mathematics": {
+        "links": 13,
+        "mismatches": 0
+      },
+      "K:English Language Arts": {
+        "links": 7,
+        "mismatches": 0
+      },
+      "1:Mathematics": {
+        "links": 13,
+        "mismatches": 0
+      },
+      "1:English Language Arts": {
+        "links": 7,
+        "mismatches": 0
+      },
+      "2:Mathematics": {
+        "links": 13,
+        "mismatches": 0
+      },
+      "2:English Language Arts": {
+        "links": 7,
+        "mismatches": 0
+      }
+    },
+    "mismatchExamples": []
+  },
+  "diagnostics": [
+    {
+      "id": 2969,
+      "title": "Grade 6 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "6",
+      "assessmentPlacementLevel": 6,
+      "assessmentWindow": {
+        "max_level": 7,
+        "min_level": 5
+      },
+      "questionCount": 20,
+      "questionPlacementLevels": [
+        6
+      ],
+      "difficultyCounts": {
+        "1": 6,
+        "2": 13,
+        "3": 1
+      },
+      "strandCount": 5,
+      "standardCount": 13
+    },
+    {
+      "id": 2970,
+      "title": "Grade 7 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "7",
+      "assessmentPlacementLevel": 7,
+      "assessmentWindow": {
+        "max_level": 8,
+        "min_level": 6
+      },
+      "questionCount": 20,
+      "questionPlacementLevels": [
+        7
+      ],
+      "difficultyCounts": {
+        "1": 1,
+        "2": 15,
+        "3": 4
+      },
+      "strandCount": 5,
+      "standardCount": 10
+    },
+    {
+      "id": 2971,
+      "title": "Grade 8 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "8",
+      "assessmentPlacementLevel": 8,
+      "assessmentWindow": {
+        "max_level": 8,
+        "min_level": 7
+      },
+      "questionCount": 20,
+      "questionPlacementLevels": [
+        8
+      ],
+      "difficultyCounts": {
+        "1": 2,
+        "2": 13,
+        "3": 5
+      },
+      "strandCount": 5,
+      "standardCount": 14
+    },
+    {
+      "id": 2972,
+      "title": "Grade 6 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "6",
+      "assessmentPlacementLevel": 6,
+      "assessmentWindow": {
+        "max_level": 7,
+        "min_level": 5
+      },
+      "questionCount": 18,
+      "questionPlacementLevels": [
+        6
+      ],
+      "difficultyCounts": {
+        "1": 4,
+        "2": 14
+      },
+      "strandCount": 5,
+      "standardCount": 9
+    },
+    {
+      "id": 2973,
+      "title": "Grade 7 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "7",
+      "assessmentPlacementLevel": 7,
+      "assessmentWindow": {
+        "max_level": 8,
+        "min_level": 6
+      },
+      "questionCount": 18,
+      "questionPlacementLevels": [
+        7
+      ],
+      "difficultyCounts": {
+        "2": 12,
+        "3": 6
+      },
+      "strandCount": 5,
+      "standardCount": 8
+    },
+    {
+      "id": 2974,
+      "title": "Grade 8 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "8",
+      "assessmentPlacementLevel": 8,
+      "assessmentWindow": {
+        "max_level": 8,
+        "min_level": 7
+      },
+      "questionCount": 18,
+      "questionPlacementLevels": [
+        8
+      ],
+      "difficultyCounts": {
+        "2": 11,
+        "3": 7
+      },
+      "strandCount": 5,
+      "standardCount": 9
+    },
+    {
+      "id": 2978,
+      "title": "Grade 1 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "1",
+      "assessmentPlacementLevel": 1,
+      "assessmentWindow": {
+        "max_level": 2,
+        "min_level": 0
+      },
+      "questionCount": 15,
+      "questionPlacementLevels": [
+        1
+      ],
+      "difficultyCounts": {
+        "1": 6,
+        "2": 5,
+        "3": 4
+      },
+      "strandCount": 4,
+      "standardCount": 4
+    },
+    {
+      "id": 2979,
+      "title": "Grade 1 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "1",
+      "assessmentPlacementLevel": 1,
+      "assessmentWindow": {
+        "max_level": 2,
+        "min_level": 0
+      },
+      "questionCount": 15,
+      "questionPlacementLevels": [
+        1
+      ],
+      "difficultyCounts": {
+        "1": 7,
+        "2": 4,
+        "3": 4
+      },
+      "strandCount": 4,
+      "standardCount": 4
+    },
+    {
+      "id": 2981,
+      "title": "Grade 4 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "4",
+      "assessmentPlacementLevel": 4,
+      "assessmentWindow": {
+        "max_level": 5,
+        "min_level": 3
+      },
+      "questionCount": 18,
+      "questionPlacementLevels": [
+        4
+      ],
+      "difficultyCounts": {
+        "1": 2,
+        "2": 14,
+        "3": 2
+      },
+      "strandCount": 4,
+      "standardCount": 5
+    },
+    {
+      "id": 2982,
+      "title": "Grade 4 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "4",
+      "assessmentPlacementLevel": 4,
+      "assessmentWindow": {
+        "max_level": 5,
+        "min_level": 3
+      },
+      "questionCount": 16,
+      "questionPlacementLevels": [
+        4
+      ],
+      "difficultyCounts": {
+        "1": 4,
+        "2": 12
+      },
+      "strandCount": 4,
+      "standardCount": 5
+    },
+    {
+      "id": 2984,
+      "title": "Kindergarten Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "K",
+      "assessmentPlacementLevel": 0,
+      "assessmentWindow": {
+        "max_level": 1,
+        "min_level": 0
+      },
+      "questionCount": 12,
+      "questionPlacementLevels": [
+        0
+      ],
+      "difficultyCounts": {
+        "1": 6,
+        "2": 3,
+        "3": 3
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    },
+    {
+      "id": 2985,
+      "title": "Kindergarten ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "K",
+      "assessmentPlacementLevel": 0,
+      "assessmentWindow": {
+        "max_level": 1,
+        "min_level": 0
+      },
+      "questionCount": 12,
+      "questionPlacementLevels": [
+        0
+      ],
+      "difficultyCounts": {
+        "1": 6,
+        "2": 3,
+        "3": 3
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    },
+    {
+      "id": 2986,
+      "title": "Grade 2 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "2",
+      "assessmentPlacementLevel": 2,
+      "assessmentWindow": {
+        "max_level": 3,
+        "min_level": 1
+      },
+      "questionCount": 13,
+      "questionPlacementLevels": [
+        2
+      ],
+      "difficultyCounts": {
+        "1": 6,
+        "2": 4,
+        "3": 3
+      },
+      "strandCount": 3,
+      "standardCount": 2
+    },
+    {
+      "id": 2987,
+      "title": "Grade 2 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "2",
+      "assessmentPlacementLevel": 2,
+      "assessmentWindow": {
+        "max_level": 3,
+        "min_level": 1
+      },
+      "questionCount": 13,
+      "questionPlacementLevels": [
+        2
+      ],
+      "difficultyCounts": {
+        "1": 6,
+        "2": 4,
+        "3": 3
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    },
+    {
+      "id": 2988,
+      "title": "Grade 3 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "3",
+      "assessmentPlacementLevel": 3,
+      "assessmentWindow": {
+        "max_level": 4,
+        "min_level": 2
+      },
+      "questionCount": 13,
+      "questionPlacementLevels": [
+        3
+      ],
+      "difficultyCounts": {
+        "1": 5,
+        "2": 8
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    },
+    {
+      "id": 2989,
+      "title": "Grade 3 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "3",
+      "assessmentPlacementLevel": 3,
+      "assessmentWindow": {
+        "max_level": 4,
+        "min_level": 2
+      },
+      "questionCount": 13,
+      "questionPlacementLevels": [
+        3
+      ],
+      "difficultyCounts": {
+        "1": 4,
+        "2": 9
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    },
+    {
+      "id": 2990,
+      "title": "Grade 5 Math Diagnostic",
+      "subject": "math",
+      "gradeBand": "5",
+      "assessmentPlacementLevel": 5,
+      "assessmentWindow": {
+        "max_level": 6,
+        "min_level": 4
+      },
+      "questionCount": 15,
+      "questionPlacementLevels": [
+        5
+      ],
+      "difficultyCounts": {
+        "2": 11,
+        "3": 4
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    },
+    {
+      "id": 2991,
+      "title": "Grade 5 ELA Diagnostic",
+      "subject": "ela",
+      "gradeBand": "5",
+      "assessmentPlacementLevel": 5,
+      "assessmentWindow": {
+        "max_level": 6,
+        "min_level": 4
+      },
+      "questionCount": 15,
+      "questionPlacementLevels": [
+        5
+      ],
+      "difficultyCounts": {
+        "2": 13,
+        "3": 2
+      },
+      "strandCount": 3,
+      "standardCount": 3
+    }
+  ],
+  "recommendation": {
+    "phase3Ready": true,
+    "blockers": [],
+    "summary": "Low-end diagnostic and path content are ready for CAT v2 Phase 3."
+  }
+}

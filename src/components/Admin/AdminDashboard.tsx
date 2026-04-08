@@ -1250,6 +1250,8 @@ const AdminDashboard: React.FC = () => {
                       { label: 'Path progression', value: opsMetrics.totals.path_progress, tone: 'default' },
                       { label: 'Adaptive replans', value: opsMetrics.totals.adaptive_replan, tone: 'default' },
                       { label: 'XP events', value: opsMetrics.totals.xp_rate, tone: 'default' },
+                      { label: 'CAT content gaps', value: opsMetrics.totals.cat_content_gap_detected, tone: 'amber' },
+                      { label: 'CAT low-confidence', value: opsMetrics.totals.cat_low_confidence, tone: 'warn' },
                     ] as const).map((stat) => {
                       const tone =
                         stat.tone === 'warn'
@@ -1411,6 +1413,38 @@ const AdminDashboard: React.FC = () => {
                     ) : (
                       <p className="text-sm text-slate-600">No adaptive mix shifts recorded yet.</p>
                     )}
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">CAT content gaps</p>
+                      {opsMetrics.catContentGapsBySubject.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.catContentGapsBySubject.map((item) => (
+                            <li key={item.label} className="flex justify-between gap-3">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No CAT content gaps in window.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">CAT low-confidence subjects</p>
+                      {opsMetrics.catLowConfidenceBySubject.length ? (
+                        <ul className="space-y-1 text-sm text-slate-800">
+                          {opsMetrics.catLowConfidenceBySubject.map((item) => (
+                            <li key={item.label} className="flex justify-between gap-3">
+                              <span>{item.label}</span>
+                              <span className="font-semibold">{item.count}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-600">No CAT low-confidence sessions in window.</p>
+                      )}
+                    </div>
                   </div>
                   <div className="rounded-lg border border-slate-200 bg-white p-3">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 mb-2">Recent signals</p>

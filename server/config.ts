@@ -19,10 +19,17 @@ type TutorConfig = {
   timeoutMs: number;
 };
 
+type PlacementConfig = {
+  activeEngine: string;
+  catV2NewStudentsEnabled: boolean;
+  catV2RestartEnabled: boolean;
+};
+
 export type RuntimeConfig = {
   adaptive: AdaptiveConfig;
   xp: XpConfig;
   tutor: TutorConfig;
+  placement: PlacementConfig;
 };
 
 const DEFAULT_CONFIG: RuntimeConfig = {
@@ -42,6 +49,11 @@ const DEFAULT_CONFIG: RuntimeConfig = {
   tutor: {
     timeoutMs: 12000,
   },
+  placement: {
+    activeEngine: 'legacy_v1',
+    catV2NewStudentsEnabled: false,
+    catV2RestartEnabled: false,
+  },
 };
 
 type RawConfigRow = { key?: string | null; value?: unknown };
@@ -49,9 +61,23 @@ type RawConfigRow = { key?: string | null; value?: unknown };
 let cachedConfig: { expires: number; config: RuntimeConfig } | null = null;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
+export const clearRuntimeConfigCacheForTests = (): void => {
+  cachedConfig = null;
+};
+
 const coerceNumber = (value: unknown, fallback: number): number => {
   const parsed = typeof value === 'number' ? value : typeof value === 'string' ? Number.parseFloat(value) : null;
   return Number.isFinite(parsed) ? (parsed as number) : fallback;
+};
+
+const coerceBoolean = (value: unknown, fallback: boolean): boolean => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') return true;
+    if (normalized === 'false' || normalized === '0') return false;
+  }
+  return fallback;
 };
 
 const hydrateConfig = (rows: RawConfigRow[]): RuntimeConfig => {
@@ -89,6 +115,20 @@ const hydrateConfig = (rows: RawConfigRow[]): RuntimeConfig => {
     },
     tutor: {
       timeoutMs: Math.max(3000, Math.round(coerceNumber(map.get('tutor.timeout_ms'), DEFAULT_CONFIG.tutor.timeoutMs))),
+    },
+    placement: {
+      activeEngine:
+        typeof map.get('placement.engine_active') === 'string' && String(map.get('placement.engine_active')).trim().length
+          ? String(map.get('placement.engine_active')).trim()
+          : DEFAULT_CONFIG.placement.activeEngine,
+      catV2NewStudentsEnabled: coerceBoolean(
+        map.get('placement.cat_v2_new_students_enabled'),
+        DEFAULT_CONFIG.placement.catV2NewStudentsEnabled,
+      ),
+      catV2RestartEnabled: coerceBoolean(
+        map.get('placement.cat_v2_restart_enabled'),
+        DEFAULT_CONFIG.placement.catV2RestartEnabled,
+      ),
     },
   };
 };

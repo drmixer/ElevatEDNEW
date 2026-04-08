@@ -96,7 +96,9 @@ export type OpsMetricsSnapshot = {
     | 'api_failure'
     | 'api_slow'
     | 'placement_selected'
-    | 'placement_content_invalid',
+    | 'placement_content_invalid'
+    | 'cat_content_gap_detected'
+    | 'cat_low_confidence',
     number
   >;
   topSafetyReasons: Array<{ label: string; count: number }>;
@@ -110,6 +112,8 @@ export type OpsMetricsSnapshot = {
   xpEventsBySource: Array<{ label: string; count: number }>;
   placementSelectionsByAssessment: Array<{ label: string; count: number }>;
   placementInvalidByReason: Array<{ label: string; count: number }>;
+  catContentGapsBySubject: Array<{ label: string; count: number }>;
+  catLowConfidenceBySubject: Array<{ label: string; count: number }>;
   recent: Array<{
     type: string;
     reason?: string | null;

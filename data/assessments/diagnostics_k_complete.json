@@ -192,7 +192,7 @@
             },
             {
                 "id": "km-cnt-3",
-                "prompt": "Count: 1, 2, ___",
+                "prompt": "What number comes next in the counting sequence 1, 2?",
                 "type": "multiple_choice",
                 "difficulty": 1,
                 "strand": "Counting",
@@ -322,7 +322,7 @@
             },
             {
                 "id": "km-shp-4",
-                "prompt": "A door is shaped like a ___.",
+                "prompt": "Which shape is most like a door?",
                 "type": "multiple_choice",
                 "difficulty": 1,
                 "strand": "Shapes",

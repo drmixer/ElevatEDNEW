@@ -52,6 +52,7 @@ type PlacementSessionState = {
   subject: SubjectPlacementKey;
   assessmentId: number;
   attemptId: number;
+  engineVersion: string;
   items: PlacementItem[];
   responses: Map<number, PlacementResponseInput>;
   currentIndex: number;
@@ -330,6 +331,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
               subject,
               assessmentId: placement.assessmentId,
               attemptId: placement.attemptId,
+              engineVersion: placement.engineVersion ?? 'legacy_v1',
               items: placement.items,
               responses: hydrated.responses,
               currentIndex: hydrated.currentIndex,
@@ -437,18 +439,25 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         optionId,
         timeSpentSeconds: elapsedSeconds,
       });
+      const isCatSession = currentSession.engineVersion === 'cat_v2';
+      const appendedItems =
+        isCatSession && result.nextItem && !currentSession.items.some((entry) => entry.bankQuestionId === result.nextItem?.bankQuestionId)
+          ? [...currentSession.items, result.nextItem]
+          : currentSession.items;
       const nextIndex = currentMixedQuestion.itemIndex + 1;
-      const nextItem = currentSession.items[nextIndex] ?? null;
+      const nextItem = appendedItems[nextIndex] ?? null;
       setPlacementSessions((prev) => ({
         ...prev,
         [currentMixedQuestion.subject]: {
           ...currentSession,
+          items: appendedItems,
           responses: nextMap,
           currentIndex: nextIndex,
           questionStartedAt: nextItem ? Date.now() : null,
         },
       }));
-      if (nextIndex >= currentSession.items.length) {
+      const sessionComplete = isCatSession ? Boolean(result.isComplete) : nextIndex >= appendedItems.length;
+      if (sessionComplete) {
         setLoading(true);
         try {
           await finalizePlacement(currentMixedQuestion.subject, nextMap);

@@ -124,9 +124,11 @@ export const selectPlacementAssessmentId = (rows: AssessmentRow[], options: Plac
 
       return {
         id: row.id,
+        created_at: row.created_at ?? null,
         purpose: purpose as 'placement' | 'diagnostic',
         subjectKey,
         subjects: subjectList,
+        placementLevel,
       };
     })
     .filter((row): row is NonNullable<typeof row> => Boolean(row));
@@ -134,10 +136,33 @@ export const selectPlacementAssessmentId = (rows: AssessmentRow[], options: Plac
   const placements = candidates.filter((row) => row.purpose === 'placement');
   const diagnostics = candidates.filter((row) => row.purpose === 'diagnostic');
 
+  const sortForTargetLevel = (list: typeof candidates) => {
+    if (options.targetLevel == null) return list;
+    const targetLevel = options.targetLevel;
+    return [...list].sort((left, right) => {
+      const leftDistance =
+        left.placementLevel == null ? Number.POSITIVE_INFINITY : Math.abs(left.placementLevel - targetLevel);
+      const rightDistance =
+        right.placementLevel == null ? Number.POSITIVE_INFINITY : Math.abs(right.placementLevel - targetLevel);
+      if (leftDistance !== rightDistance) return leftDistance - rightDistance;
+
+      const leftBias = left.placementLevel != null && left.placementLevel > targetLevel ? 1 : 0;
+      const rightBias = right.placementLevel != null && right.placementLevel > targetLevel ? 1 : 0;
+      if (leftBias !== rightBias) return leftBias - rightBias;
+
+      const leftCreatedAt = left.created_at ? Date.parse(left.created_at) : 0;
+      const rightCreatedAt = right.created_at ? Date.parse(right.created_at) : 0;
+      if (leftCreatedAt !== rightCreatedAt) return rightCreatedAt - leftCreatedAt;
+
+      return right.id - left.id;
+    });
+  };
+
   const pickBySubject = (list: typeof candidates, subjectKey: string): number | null => {
-    const direct = list.find((row) => row.subjectKey === subjectKey);
+    const ranked = sortForTargetLevel(list);
+    const direct = ranked.find((row) => row.subjectKey === subjectKey);
     if (direct) return direct.id;
-    const mixed = list.find((row) => row.subjects.includes(subjectKey));
+    const mixed = ranked.find((row) => row.subjects.includes(subjectKey));
     return mixed?.id ?? null;
   };
 

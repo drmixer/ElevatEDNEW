@@ -66,4 +66,27 @@ describe('opsMetrics adaptive replan summaries', () => {
       count: 2,
     });
   });
+
+  it('aggregates CAT coverage gaps and low-confidence sessions by subject', () => {
+    recordOpsEvent({
+      type: 'cat_content_gap_detected',
+      label: 'math',
+      reason: 'coverage_fallback',
+      metadata: { fallbackDistance: 2 },
+    });
+
+    recordOpsEvent({
+      type: 'cat_low_confidence',
+      label: 'math',
+      reason: 'coverage_fallback',
+      metadata: { confidenceLow: 4.2, confidenceHigh: 6.8 },
+    });
+
+    const snapshot = getOpsSnapshot();
+
+    expect(snapshot.totals.cat_content_gap_detected).toBe(1);
+    expect(snapshot.totals.cat_low_confidence).toBe(1);
+    expect(snapshot.catContentGapsBySubject[0]).toEqual({ label: 'math', count: 1 });
+    expect(snapshot.catLowConfidenceBySubject[0]).toEqual({ label: 'math', count: 1 });
+  });
 });

@@ -46,6 +46,16 @@ export const createRlsClient = (accessToken?: string | null): SupabaseClient =>
 
 type ModuleRecord = { id: number; slug: string };
 
+const chunkValues = <T>(values: T[], size: number): T[][] => {
+  const chunks: T[][] = [];
+  for (let index = 0; index < values.length; index += size) {
+    chunks.push(values.slice(index, index + size));
+  }
+  return chunks;
+};
+
+const MODULE_RESOLVE_CHUNK_SIZE = 200;
+
 export const resolveModules = async (
   supabase: SupabaseClient,
   identifiers: string[],
@@ -66,32 +76,36 @@ export const resolveModules = async (
   const results = new Map<string, ModuleRecord>();
 
   if (slugKeys.length > 0) {
-    const { data, error } = await supabase
-      .from('modules')
-      .select('id, slug')
-      .in('slug', slugKeys);
+    for (const chunk of chunkValues(slugKeys, MODULE_RESOLVE_CHUNK_SIZE)) {
+      const { data, error } = await supabase
+        .from('modules')
+        .select('id, slug')
+        .in('slug', chunk);
 
-    if (error) {
-      throw new Error(`Failed to resolve module slugs: ${error.message}`);
-    }
+      if (error) {
+        throw new Error(`Failed to resolve module slugs: ${error.message}`);
+      }
 
-    for (const record of data ?? []) {
-      results.set(record.slug, { id: record.id as number, slug: record.slug as string });
+      for (const record of data ?? []) {
+        results.set(record.slug, { id: record.id as number, slug: record.slug as string });
+      }
     }
   }
 
   if (idKeys.length > 0) {
-    const { data, error } = await supabase
-      .from('modules')
-      .select('id, slug')
-      .in('id', idKeys);
+    for (const chunk of chunkValues(idKeys, MODULE_RESOLVE_CHUNK_SIZE)) {
+      const { data, error } = await supabase
+        .from('modules')
+        .select('id, slug')
+        .in('id', chunk);
 
-    if (error) {
-      throw new Error(`Failed to resolve module ids: ${error.message}`);
-    }
+      if (error) {
+        throw new Error(`Failed to resolve module ids: ${error.message}`);
+      }
 
-    for (const record of data ?? []) {
-      results.set(String(record.id), { id: record.id as number, slug: record.slug as string });
+      for (const record of data ?? []) {
+        results.set(String(record.id), { id: record.id as number, slug: record.slug as string });
+      }
     }
   }
 

@@ -3,6 +3,8 @@ import process from 'node:process';
 
 import { loadStructuredFile } from './utils/files.js';
 import {
+  MAX_PLACEMENT_LEVEL,
+  MIN_PLACEMENT_LEVEL,
   PHASE1_PLACEMENT_LEVELS,
   normalizePlacementLevel,
   normalizePlacementSubjectKey,
@@ -91,7 +93,7 @@ const parseArgs = (argv: string[]) => {
         .split(',')
         .map((entry) => Number.parseInt(entry.trim(), 10))
         .filter((entry) => Number.isFinite(entry))
-        .map((entry) => Math.max(3, Math.min(8, entry))),
+        .map((entry) => Math.max(MIN_PLACEMENT_LEVEL, Math.min(MAX_PLACEMENT_LEVEL, entry))),
     ),
   ).sort((a, b) => a - b);
   const help = Boolean(args.get('help')) || Boolean(args.get('h'));
@@ -106,12 +108,12 @@ audit_placement_readiness.ts
 Audits local diagnostic source files for Phase 1 placement readiness.
 
 Usage:
-  npx tsx scripts/audit_placement_readiness.ts [--subjects math,ela] [--levels 3,4,5,6,7,8]
+  npx tsx scripts/audit_placement_readiness.ts [--subjects math,ela] [--levels 0,1,2,3,4,5,6,7,8]
       [--files data/assessments/diagnostics_phase13.json,data/assessments/diagnostics_grades35.json]
 
 Defaults:
   --subjects  math,ela
-  --levels    3,4,5,6,7,8
+  --levels    0,1,2,3,4,5,6,7,8
   --files     all diagnostics JSON files used by seed_diagnostic_assessments.ts
 `.trim());
 };

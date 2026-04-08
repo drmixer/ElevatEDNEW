@@ -42,6 +42,7 @@
     "seed:fallback-assets": "tsx scripts/seed_fallback_assets.ts --apply",
     "seed:placement-assessment": "tsx scripts/seed_placement_assessment.ts --apply",
     "audit:placement": "tsx scripts/audit_placement_readiness.ts",
+    "audit:cat-coverage": "tsx scripts/audit_cat_content_coverage.ts",
     "audit:licenses": "tsx scripts/audit_licenses.ts",
     "audit:completeness": "tsx scripts/audit_completeness.ts",
     "audit:question-bank-quality": "tsx scripts/audit_question_bank_quality.ts",

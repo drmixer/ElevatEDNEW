@@ -98,4 +98,46 @@ describe('selectPlacementAssessmentId', () => {
 
     expect(id).toBe(702);
   });
+
+  it('prefers the closest anchor level instead of the newest in-window candidate', () => {
+    const id = selectPlacementAssessmentId(
+      [
+        {
+          id: 801,
+          module_id: null,
+          created_at: '2026-04-01T00:00:00.000Z',
+          metadata: { purpose: 'diagnostic', grade_band: '6-8', subject_key: 'math', placement_level: 6, placement_window: { min_level: 5, max_level: 7 } },
+        },
+        {
+          id: 802,
+          module_id: null,
+          created_at: '2026-04-03T00:00:00.000Z',
+          metadata: { purpose: 'diagnostic', grade_band: '6-8', subject_key: 'math', placement_level: 8, placement_window: { min_level: 6, max_level: 8 } },
+        },
+      ],
+      { targetGradeBand: '6-8', subjectKey: 'math', targetLevel: 6 },
+    );
+
+    expect(id).toBe(801);
+  });
+
+  it('prefers the nearer easier anchor before an equally distant harder one', () => {
+    const id = selectPlacementAssessmentId(
+      [
+        {
+          id: 901,
+          module_id: null,
+          metadata: { purpose: 'diagnostic', grade_band: '6-8', subject_key: 'math', placement_level: 5, placement_window: { min_level: 4, max_level: 6 } },
+        },
+        {
+          id: 902,
+          module_id: null,
+          metadata: { purpose: 'diagnostic', grade_band: '6-8', subject_key: 'math', placement_level: 7, placement_window: { min_level: 6, max_level: 8 } },
+        },
+      ],
+      { targetGradeBand: '6-8', subjectKey: 'math', targetLevel: 6 },
+    );
+
+    expect(id).toBe(901);
+  });
 });

@@ -29,6 +29,7 @@ export type PlacementStartResponse = {
   gradeBand: string;
   subject: string | null;
   expectedLevel: number | null;
+  engineVersion?: string;
   resumeToken: string;
   items: PlacementItem[];
   existingResponses: Array<{ questionId: number; selectedOptionId: number | null; isCorrect: boolean | null }>;
@@ -151,13 +152,13 @@ export const savePlacementProgress = async (payload: {
   bankQuestionId: number;
   optionId: number | null;
   timeSpentSeconds?: number | null;
-}): Promise<{ isCorrect: boolean }> => {
+}): Promise<{ isCorrect: boolean; engineVersion?: string; nextItem?: PlacementItem | null; isComplete?: boolean }> => {
   const response = await authenticatedFetch('/api/v1/student/assessment/save', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  return handleApiResponse<{ isCorrect: boolean }>(response);
+  return handleApiResponse<{ isCorrect: boolean; engineVersion?: string; nextItem?: PlacementItem | null; isComplete?: boolean }>(response);
 };
 
 export const submitPlacement = async (payload: {

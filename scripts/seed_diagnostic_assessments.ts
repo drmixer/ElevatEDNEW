@@ -4,7 +4,12 @@ import process from 'node:process';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { loadStructuredFile } from './utils/files.js';
-import { normalizePlacementLevel, placementWindowForLevel, standardsFromValue } from './utils/placementMetadata.js';
+import {
+  buildFoundationalDiagnosticDifficultyMap,
+  normalizePlacementLevel,
+  placementWindowForLevel,
+  standardsFromValue,
+} from './utils/placementMetadata.js';
 import { createServiceRoleClient } from './utils/supabase.js';
 import { extractWriteMode, logWriteMode } from './utils/writeMode.js';
 import { assessAssessmentQuestionQuality, incrementQuestionQualityReasonCounts } from '../shared/questionQuality.js';
@@ -231,6 +236,7 @@ const insertDiagnostic = async (
   let questionOrder = 1;
   let blockedCount = 0;
   const blockedReasonCounts: Record<string, number> = {};
+  const foundationalDifficultyById = buildFoundationalDiagnosticDifficultyMap(config.items, config.grade_band);
 
   for (const item of config.items) {
     if (!item.prompt || !item.options?.length) {
@@ -267,6 +273,8 @@ const insertDiagnostic = async (
     const tags: string[] = [];
     standards.forEach((standard) => tags.push(standard));
     if (item.strand) tags.push(item.strand);
+    const seededDifficulty = foundationalDifficultyById.get(item.id) ?? item.difficulty ?? 3;
+    const difficultySource = foundationalDifficultyById.has(item.id) ? 'derived_foundational_ladder' : 'authored';
 
     const questionMeta: Record<string, unknown> = {
       placement: item.placement ?? {},
@@ -277,6 +285,9 @@ const insertDiagnostic = async (
       grade_band: config.grade_band,
       subject_key: subjectKey,
       placement_level: placementLevel,
+      authored_difficulty: item.difficulty ?? null,
+      seeded_difficulty: seededDifficulty,
+      difficulty_source: difficultySource,
       phase: 'subject_placement_v1',
     };
 
@@ -286,7 +297,7 @@ const insertDiagnostic = async (
         subject_id: subjectId,
         question_type: item.type ?? 'multiple_choice',
         prompt: item.prompt,
-        difficulty: item.difficulty ?? 3,
+        difficulty: seededDifficulty,
         tags,
         metadata: questionMeta,
       })

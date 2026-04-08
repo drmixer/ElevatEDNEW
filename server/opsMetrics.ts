@@ -10,7 +10,9 @@ type OpsEventType =
   | 'api_failure'
   | 'api_slow'
   | 'placement_selected'
-  | 'placement_content_invalid';
+  | 'placement_content_invalid'
+  | 'cat_content_gap_detected'
+  | 'cat_low_confidence';
 
 export type OpsEvent = {
   type: OpsEventType;
@@ -64,6 +66,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     api_slow: 0,
     placement_selected: 0,
     placement_content_invalid: 0,
+    cat_content_gap_detected: 0,
+    cat_low_confidence: 0,
   };
 
   const safetyReasons = new Map<string, number>();
@@ -77,6 +81,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
   const xpSources = new Map<string, number>();
   const placementAssessments = new Map<string, number>();
   const placementInvalidReasons = new Map<string, number>();
+  const catGapSubjects = new Map<string, number>();
+  const catLowConfidenceSubjects = new Map<string, number>();
 
   windowEvents.forEach((event) => {
     totals[event.type] += 1;
@@ -137,6 +143,14 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
       const reason = event.reason ?? 'unknown';
       placementInvalidReasons.set(reason, (placementInvalidReasons.get(reason) ?? 0) + 1);
     }
+    if (event.type === 'cat_content_gap_detected') {
+      const label = event.label ?? 'unknown';
+      catGapSubjects.set(label, (catGapSubjects.get(label) ?? 0) + 1);
+    }
+    if (event.type === 'cat_low_confidence') {
+      const label = event.label ?? 'unknown';
+      catLowConfidenceSubjects.set(label, (catLowConfidenceSubjects.get(label) ?? 0) + 1);
+    }
   });
 
   const topFromMap = (map: Map<string, number>) =>
@@ -159,6 +173,8 @@ export const getOpsSnapshot = (windowMs = 60 * 60 * 1000) => {
     xpEventsBySource: topFromMap(xpSources),
     placementSelectionsByAssessment: topFromMap(placementAssessments),
     placementInvalidByReason: topFromMap(placementInvalidReasons),
+    catContentGapsBySubject: topFromMap(catGapSubjects),
+    catLowConfidenceBySubject: topFromMap(catLowConfidenceSubjects),
     recent: events.slice(-30).reverse(),
   };
 };

@@ -2,11 +2,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   applyAdaptiveEvent,
+  buildStudentPath,
   buildSubjectSignalSnapshot,
   deriveExpectedLevel,
   deriveWorkingLevelEstimate,
   hasStableSignalCluster,
+  savePlacementResponse,
+  startPlacementAssessment,
+  submitPlacementAssessment,
+  resolvePlacementEngineVersion,
 } from '../learningPaths.js';
+import { clearOpsEventsForTests, getOpsSnapshot } from '../opsMetrics.js';
 
 type TestRow = Record<string, unknown>;
 
@@ -16,6 +22,15 @@ const createLearningPathsSupabaseStub = (seed: Record<string, TestRow[]>) => {
   const tables = Object.fromEntries(
     Object.entries(seed).map(([table, rows]) => [table, rows.map((row) => cloneRow(row))]),
   ) as Record<string, TestRow[]>;
+  const nextIdByTable = new Map<string, number>(
+    Object.entries(tables).map(([table, rows]) => [
+      table,
+      rows.reduce((max, row) => {
+        const id = typeof row.id === 'number' ? row.id : 0;
+        return Math.max(max, id);
+      }, 0) + 1,
+    ]),
+  );
 
   const applyFilters = (rows: TestRow[], filters: Array<(row: TestRow) => boolean>) =>
     rows.filter((row) => filters.every((filter) => filter(row)));
@@ -55,8 +70,9 @@ const createLearningPathsSupabaseStub = (seed: Record<string, TestRow[]>) => {
     const orderBy: Array<{ key: string; ascending: boolean }> = [];
     let limitCount: number | null = null;
     let selectedColumns: string | null = null;
-    let mode: 'select' | 'update' | 'insert' = 'select';
+    let mode: 'select' | 'update' | 'insert' | 'upsert' = 'select';
     let payload: TestRow | TestRow[] | null = null;
+    let onConflictKeys: string[] = [];
 
     const runSelect = () => {
       const rows = applyFilters(tables[table] ?? [], filters);
@@ -75,14 +91,51 @@ const createLearningPathsSupabaseStub = (seed: Record<string, TestRow[]>) => {
 
     const runInsert = () => {
       const inserts = (Array.isArray(payload) ? payload : [payload]).filter(Boolean) as TestRow[];
-      const cloned = inserts.map((row) => cloneRow(row));
+      const cloned = inserts.map((row) => {
+        const copy = cloneRow(row);
+        if (copy.id == null) {
+          const nextId = nextIdByTable.get(table) ?? 1;
+          copy.id = nextId;
+          nextIdByTable.set(table, nextId + 1);
+        }
+        return copy;
+      });
       tables[table] = [...(tables[table] ?? []), ...cloned];
       return { data: cloned.map((row) => projectRow(row, selectedColumns)), error: null };
+    };
+
+    const runUpsert = () => {
+      const rows = tables[table] ?? [];
+      const inserts = (Array.isArray(payload) ? payload : [payload]).filter(Boolean) as TestRow[];
+      const upserted: TestRow[] = [];
+
+      inserts.forEach((entry) => {
+        const clone = cloneRow(entry);
+        const match = rows.find((row) =>
+          onConflictKeys.length > 0 ? onConflictKeys.every((key) => row[key] === clone[key]) : row.id === clone.id,
+        );
+        if (match) {
+          Object.assign(match, clone);
+          upserted.push(cloneRow(match));
+          return;
+        }
+        if (clone.id == null) {
+          const nextId = nextIdByTable.get(table) ?? 1;
+          clone.id = nextId;
+          nextIdByTable.set(table, nextId + 1);
+        }
+        rows.push(clone);
+        upserted.push(cloneRow(clone));
+      });
+
+      tables[table] = rows;
+      return { data: upserted.map((row) => projectRow(row, selectedColumns)), error: null };
     };
 
     const execute = async () => {
       if (mode === 'update') return runUpdate();
       if (mode === 'insert') return runInsert();
+      if (mode === 'upsert') return runUpsert();
       return { data: runSelect(), error: null };
     };
 
@@ -92,6 +145,10 @@ const createLearningPathsSupabaseStub = (seed: Record<string, TestRow[]>) => {
         return builder;
       },
       eq: (key: string, value: unknown) => {
+        filters.push((row) => row[key] === value);
+        return builder;
+      },
+      is: (key: string, value: unknown) => {
         filters.push((row) => row[key] === value);
         return builder;
       },
@@ -117,6 +174,12 @@ const createLearningPathsSupabaseStub = (seed: Record<string, TestRow[]>) => {
         payload = value;
         return builder;
       },
+      upsert: (value: TestRow | TestRow[], options?: { onConflict?: string }) => {
+        mode = 'upsert';
+        payload = value;
+        onConflictKeys = options?.onConflict?.split(',').map((entry) => entry.trim()).filter(Boolean) ?? [];
+        return builder;
+      },
       maybeSingle: async () => {
         const result = await execute();
         const rows = Array.isArray(result.data) ? result.data : [];
@@ -139,12 +202,15 @@ const createLearningPathsSupabaseStub = (seed: Record<string, TestRow[]>) => {
 
 afterEach(() => {
   vi.useRealTimers();
+  clearOpsEventsForTests();
 });
 
 describe('learningPaths placement helpers', () => {
   it('derives expected level from age and grade with clamping', () => {
     expect(deriveExpectedLevel({ ageYears: 13, gradeLevel: 6 })).toBe(7);
+    expect(deriveExpectedLevel({ ageYears: 6, gradeLevel: null })).toBe(1);
     expect(deriveExpectedLevel({ ageYears: 8, gradeLevel: null })).toBe(3);
+    expect(deriveExpectedLevel({ ageYears: null, gradeBand: 'K-2' })).toBe(2);
     expect(deriveExpectedLevel({ ageYears: null, gradeLevel: 10 })).toBe(8);
   });
 
@@ -249,6 +315,621 @@ describe('learningPaths placement helpers', () => {
     expect(estimate.levelConfidence).toBe(0.65);
     expect(estimate.weakStandardCodes).toContain('7.G.A.1');
     expect(estimate.strandEstimates.find((entry) => entry.strand === 'ratios')?.accuracyPct).toBe(100);
+  });
+
+  it('gates CAT v2 to grades 3-8 math/ELA requests', () => {
+    const catConfig = {
+      adaptive: {
+        targetAccuracyMin: 0.65,
+        targetAccuracyMax: 0.8,
+        maxRemediationPending: 2,
+        maxPracticePending: 3,
+        struggleConsecutiveMisses: 3,
+      },
+      xp: {
+        multiplier: 1,
+        difficultyBonusMultiplier: 1,
+        accuracyBonusMultiplier: 1,
+        streakBonusMultiplier: 1,
+      },
+      tutor: { timeoutMs: 12000 },
+      placement: {
+        activeEngine: 'cat_v2',
+        catV2NewStudentsEnabled: false,
+        catV2RestartEnabled: false,
+      },
+    };
+
+    expect(resolvePlacementEngineVersion({ config: catConfig, subject: 'math', gradeBand: '6-8' })).toBe('cat_v2');
+    expect(resolvePlacementEngineVersion({ config: catConfig, subject: 'english', gradeBand: '3' })).toBe('cat_v2');
+    expect(resolvePlacementEngineVersion({ config: catConfig, subject: 'science', gradeBand: '6-8' })).toBe('legacy_v1');
+    expect(resolvePlacementEngineVersion({ config: catConfig, subject: 'math', gradeBand: 'K-2' })).toBe('legacy_v1');
+  });
+
+  it('runs CAT v2 start, save, and submit through the live placement entry points', async () => {
+    const supabase = createLearningPathsSupabaseStub({
+      platform_config: [{ key: 'placement.engine_active', value: 'cat_v2' }],
+      student_profiles: [
+        {
+          id: 'student-1',
+          grade_level: 6,
+          grade_band: '6-8',
+          age_years: 11,
+          learning_path: [],
+          assessment_completed: false,
+        },
+      ],
+      student_preferences: [
+        {
+          student_id: 'student-1',
+          avatar_id: 'avatar-starter',
+          tutor_persona_id: null,
+          opt_in_ai: true,
+          goal_focus: null,
+          theme: null,
+        },
+      ],
+      assessments: [
+        {
+          id: 105,
+          module_id: null,
+          created_at: '2026-04-01T00:00:00.000Z',
+          metadata: {
+            purpose: 'diagnostic',
+            grade_band: '5',
+            subject_key: 'math',
+            placement_level: 5,
+            placement_window: { min_level: 4, max_level: 6 },
+          },
+        },
+        {
+          id: 106,
+          module_id: null,
+          created_at: '2026-04-02T00:00:00.000Z',
+          metadata: {
+            purpose: 'diagnostic',
+            grade_band: '6',
+            subject_key: 'math',
+            placement_level: 6,
+            placement_window: { min_level: 5, max_level: 7 },
+          },
+        },
+        {
+          id: 107,
+          module_id: null,
+          created_at: '2026-04-03T00:00:00.000Z',
+          metadata: {
+            purpose: 'diagnostic',
+            grade_band: '7',
+            subject_key: 'math',
+            placement_level: 7,
+            placement_window: { min_level: 6, max_level: 8 },
+          },
+        },
+      ],
+      assessment_sections: [
+        { id: 205, assessment_id: 105, section_order: 1 },
+        { id: 206, assessment_id: 106, section_order: 1 },
+        { id: 207, assessment_id: 107, section_order: 1 },
+      ],
+      assessment_questions: [
+        { section_id: 205, question_id: 5001, question_order: 1, weight: 1, metadata: null },
+        { section_id: 206, question_id: 6001, question_order: 1, weight: 1, metadata: null },
+        { section_id: 206, question_id: 6002, question_order: 2, weight: 1, metadata: null },
+        { section_id: 207, question_id: 7001, question_order: 1, weight: 1, metadata: null },
+      ],
+      question_bank: [
+        {
+          id: 5001,
+          prompt: 'Level 5 question',
+          question_type: 'multiple_choice',
+          difficulty: 2,
+          metadata: { placement_level: 5, strand: 'fractions', standards: ['5.NF.A.1'] },
+          tags: ['fractions'],
+        },
+        {
+          id: 6001,
+          prompt: 'Level 6 question A',
+          question_type: 'multiple_choice',
+          difficulty: 2,
+          metadata: { placement_level: 6, strand: 'expressions', standards: ['6.EE.A.1'] },
+          tags: ['expressions'],
+        },
+        {
+          id: 6002,
+          prompt: 'Level 6 question B',
+          question_type: 'multiple_choice',
+          difficulty: 2,
+          metadata: { placement_level: 6, strand: 'expressions', standards: ['6.EE.A.2'] },
+          tags: ['expressions'],
+        },
+        {
+          id: 7001,
+          prompt: 'Level 7 question',
+          question_type: 'multiple_choice',
+          difficulty: 3,
+          metadata: { placement_level: 7, strand: 'ratios', standards: ['7.RP.A.1'] },
+          tags: ['ratios'],
+        },
+      ],
+      question_options: [
+        { id: 1, question_id: 5001, option_order: 1, content: 'A', is_correct: true, feedback: null },
+        { id: 2, question_id: 5001, option_order: 2, content: 'B', is_correct: false, feedback: null },
+        { id: 3, question_id: 6001, option_order: 1, content: 'A', is_correct: true, feedback: null },
+        { id: 4, question_id: 6001, option_order: 2, content: 'B', is_correct: false, feedback: null },
+        { id: 5, question_id: 6002, option_order: 1, content: 'A', is_correct: true, feedback: null },
+        { id: 6, question_id: 6002, option_order: 2, content: 'B', is_correct: false, feedback: null },
+        { id: 7, question_id: 7001, option_order: 1, content: 'A', is_correct: true, feedback: null },
+        { id: 8, question_id: 7001, option_order: 2, content: 'B', is_correct: false, feedback: null },
+      ],
+      question_skills: [],
+      student_assessment_attempts: [],
+      student_assessment_responses: [],
+      student_events: [],
+      student_paths: [],
+      student_path_entries: [],
+      student_subject_state: [],
+      learning_sequences: [
+        {
+          grade_band: '6',
+          position: 1,
+          module_id: 901,
+          module_slug: 'math-core-1',
+          module_title: 'Math Core 1',
+          subject: 'math',
+          standard_codes: ['6.EE.A.1'],
+        },
+        {
+          grade_band: '6',
+          position: 2,
+          module_id: 902,
+          module_slug: 'math-core-2',
+          module_title: 'Math Core 2',
+          subject: 'math',
+          standard_codes: ['6.EE.A.2'],
+        },
+      ],
+      modules: [],
+    });
+
+    const started = await startPlacementAssessment(supabase as never, 'student-1', {
+      subject: 'math',
+      serviceSupabase: supabase as never,
+    });
+
+    expect(started.engineVersion).toBe('cat_v2');
+    expect(started.assessmentId).toBe(106);
+    expect(started.items).toHaveLength(1);
+    expect(started.items[0]?.bankQuestionId).toBe(6001);
+
+    const savedOne = await savePlacementResponse(
+      supabase as never,
+      'student-1',
+      {
+        assessmentId: started.assessmentId,
+        attemptId: started.attemptId,
+        bankQuestionId: 6001,
+        optionId: 3,
+      },
+      supabase as never,
+    );
+
+    expect(savedOne.engineVersion).toBe('cat_v2');
+    expect(savedOne.nextItem?.bankQuestionId).toBe(7001);
+    expect(savedOne.isComplete).toBe(false);
+
+    await savePlacementResponse(
+      supabase as never,
+      'student-1',
+      {
+        assessmentId: started.assessmentId,
+        attemptId: started.attemptId,
+        bankQuestionId: 7001,
+        optionId: 8,
+      },
+      supabase as never,
+    );
+
+    const submitted = await submitPlacementAssessment(
+      supabase as never,
+      'student-1',
+      {
+        assessmentId: started.assessmentId,
+        attemptId: started.attemptId,
+        subject: 'math',
+        responses: [
+          { bankQuestionId: 6001, optionId: 3 },
+          { bankQuestionId: 7001, optionId: 8 },
+          { bankQuestionId: 6002, optionId: 5 },
+        ],
+      },
+      supabase as never,
+    );
+
+    expect(submitted.subject).toBe('math');
+    expect(submitted.workingLevel).toBe(6);
+    expect(submitted.levelConfidence).toBeGreaterThan(0.5);
+    expect(submitted.subjectState?.diagnostic_version).toBe('cat_v2');
+    expect(submitted.subjectState?.confidence_low).not.toBeNull();
+    expect(submitted.subjectState?.confidence_high).not.toBeNull();
+    expect(submitted.entries).toHaveLength(2);
+
+    const responseRows = supabase.tables.student_assessment_responses;
+    expect(responseRows).toHaveLength(3);
+    expect((responseRows.find((row) => row.question_id === 6002)?.metadata as Record<string, unknown>)?.diagnostic_version).toBe('cat_v2');
+  });
+
+  it('records CAT coverage-gap and low-confidence ops signals when routing must fall back', async () => {
+    const supabase = createLearningPathsSupabaseStub({
+      platform_config: [{ key: 'placement.engine_active', value: 'cat_v2' }],
+      student_profiles: [
+        {
+          id: 'student-1',
+          grade_level: 6,
+          grade_band: '6-8',
+          age_years: 11,
+          learning_path: [],
+          assessment_completed: false,
+        },
+      ],
+      student_preferences: [
+        {
+          student_id: 'student-1',
+          avatar_id: 'avatar-starter',
+          tutor_persona_id: null,
+          opt_in_ai: true,
+          goal_focus: null,
+          theme: null,
+        },
+      ],
+      assessments: [
+        {
+          id: 206,
+          module_id: null,
+          created_at: '2026-04-02T00:00:00.000Z',
+          metadata: {
+            purpose: 'diagnostic',
+            grade_band: '6',
+            subject_key: 'math',
+            placement_level: 6,
+            placement_window: { min_level: 5, max_level: 7 },
+          },
+        },
+        {
+          id: 208,
+          module_id: null,
+          created_at: '2026-04-03T00:00:00.000Z',
+          metadata: {
+            purpose: 'diagnostic',
+            grade_band: '8',
+            subject_key: 'math',
+            placement_level: 8,
+            placement_window: { min_level: 6, max_level: 8 },
+          },
+        },
+      ],
+      assessment_sections: [
+        { id: 306, assessment_id: 206, section_order: 1 },
+        { id: 308, assessment_id: 208, section_order: 1 },
+      ],
+      assessment_questions: [
+        { section_id: 306, question_id: 4001, question_order: 1, weight: 1, metadata: null },
+        { section_id: 308, question_id: 8001, question_order: 1, weight: 1, metadata: null },
+      ],
+      question_bank: [
+        {
+          id: 4001,
+          prompt: 'Fallback question low',
+          question_type: 'multiple_choice',
+          difficulty: 2,
+          metadata: { placement_level: 4, strand: 'fractions', standards: ['4.NF.A.1'] },
+          tags: ['fractions'],
+        },
+        {
+          id: 8001,
+          prompt: 'Fallback question high',
+          question_type: 'multiple_choice',
+          difficulty: 3,
+          metadata: { placement_level: 8, strand: 'functions', standards: ['8.F.A.1'] },
+          tags: ['functions'],
+        },
+      ],
+      question_options: [
+        { id: 31, question_id: 4001, option_order: 1, content: 'A', is_correct: true, feedback: null },
+        { id: 32, question_id: 4001, option_order: 2, content: 'B', is_correct: false, feedback: null },
+        { id: 33, question_id: 8001, option_order: 1, content: 'A', is_correct: true, feedback: null },
+        { id: 34, question_id: 8001, option_order: 2, content: 'B', is_correct: false, feedback: null },
+      ],
+      question_skills: [],
+      student_assessment_attempts: [],
+      student_assessment_responses: [],
+      student_events: [],
+      student_paths: [],
+      student_path_entries: [],
+      student_subject_state: [],
+      learning_sequences: [
+        {
+          grade_band: '7',
+          position: 1,
+          module_id: 990,
+          module_slug: 'math-support-1',
+          module_title: 'Math Support',
+          subject: 'math',
+          standard_codes: ['4.NF.A.1'],
+        },
+      ],
+      modules: [],
+    });
+
+    const started = await startPlacementAssessment(supabase as never, 'student-1', {
+      subject: 'math',
+      serviceSupabase: supabase as never,
+    });
+
+    expect(started.items[0]?.bankQuestionId).toBe(4001);
+
+    await savePlacementResponse(
+      supabase as never,
+      'student-1',
+      {
+        assessmentId: 206,
+        attemptId: started.attemptId,
+        bankQuestionId: 4001,
+        optionId: 31,
+      },
+      supabase as never,
+    );
+
+    await submitPlacementAssessment(
+      supabase as never,
+      'student-1',
+      {
+        assessmentId: 206,
+        attemptId: started.attemptId,
+        subject: 'math',
+        responses: [{ bankQuestionId: 4001, optionId: 31 }],
+      },
+      supabase as never,
+    );
+
+    const snapshot = getOpsSnapshot();
+    expect(snapshot.totals.cat_content_gap_detected).toBeGreaterThanOrEqual(1);
+    expect(snapshot.totals.cat_low_confidence).toBe(1);
+    expect(snapshot.catContentGapsBySubject[0]).toEqual({ label: 'math', count: 1 });
+    expect(snapshot.catLowConfidenceBySubject[0]).toEqual({ label: 'math', count: 1 });
+  });
+
+  it('front-loads prerequisite remediation modules when no downstream anchor exists', async () => {
+    const supabase = createLearningPathsSupabaseStub({
+      student_profiles: [
+        {
+          id: 'student-1',
+          grade_level: 6,
+          grade_band: '6-8',
+          age_years: 11,
+          learning_path: [],
+        },
+      ],
+      student_paths: [],
+      student_path_entries: [],
+      learning_sequences: [
+        {
+          grade_band: '6',
+          position: 1,
+          module_id: 901,
+          module_slug: 'math-core-1',
+          module_title: 'Math Core 1',
+          subject: 'math',
+          standard_codes: ['6.EE.A.1'],
+        },
+        {
+          grade_band: '6',
+          position: 2,
+          module_id: 902,
+          module_slug: 'math-core-2',
+          module_title: 'Math Core 2',
+          subject: 'math',
+          standard_codes: ['6.EE.A.2'],
+        },
+      ],
+      modules: [
+        { id: 801, slug: 'math-gap-review-a', title: 'Fraction Foundations Review', grade_band: '5', subject: 'math' },
+        { id: 802, slug: 'math-gap-review-b', title: 'Fraction Fluency Review', grade_band: '5', subject: 'math' },
+        { id: 901, slug: 'math-core-1', title: 'Math Core 1', grade_band: '6', subject: 'math' },
+        { id: 902, slug: 'math-core-2', title: 'Math Core 2', grade_band: '6', subject: 'math' },
+      ],
+      standards: [{ id: 1, code: '5.NF.A.1' }],
+      module_standards: [
+        { module_id: 801, standard_id: 1 },
+        { module_id: 802, standard_id: 1 },
+      ],
+    });
+
+    const result = await buildStudentPath(supabase as never, 'student-1', {
+      subject: 'math',
+      workingLevel: 6,
+      preferredModuleSlugs: ['math-gap-review-b'],
+      metadata: {
+        prerequisite_gaps: [{ standardCode: '5.NF.A.1', observedLevel: 5, confidence: 0.7 }],
+      },
+    });
+
+    expect(result.entries).toHaveLength(3);
+    expect(result.entries[0]?.type).toBe('review');
+    expect(result.entries[0]?.module_id).toBe(802);
+    expect(result.entries[0]?.target_standard_codes).toEqual(['5.NF.A.1']);
+    expect(result.entries[0]?.metadata).toMatchObject({
+      module_slug: 'math-gap-review-b',
+      reason: 'remediation',
+      gap_standard_code: '5.NF.A.1',
+    });
+    expect(result.entries.slice(1).map((entry) => entry.module_id)).toEqual([901, 902]);
+    expect(result.entries.map((entry) => entry.position)).toEqual([1, 2, 3]);
+  });
+
+  it('anchors prerequisite remediation modules before the first related core lesson in the same standard family', async () => {
+    const supabase = createLearningPathsSupabaseStub({
+      student_profiles: [
+        {
+          id: 'student-1',
+          grade_level: 6,
+          grade_band: '6-8',
+          age_years: 11,
+          learning_path: [],
+        },
+      ],
+      student_paths: [],
+      student_path_entries: [],
+      learning_sequences: [
+        {
+          grade_band: '6',
+          position: 1,
+          module_id: 901,
+          module_slug: 'math-core-1',
+          module_title: 'Math Core 1',
+          subject: 'math',
+          standard_codes: ['6.G.A.1'],
+        },
+        {
+          grade_band: '6',
+          position: 2,
+          module_id: 902,
+          module_slug: 'math-core-2',
+          module_title: 'Math Core 2',
+          subject: 'math',
+          standard_codes: ['6.EE.B.5'],
+        },
+      ],
+      modules: [
+        { id: 801, slug: 'math-gap-review-a', title: 'Expressions Foundations Review', grade_band: '6', subject: 'math' },
+        { id: 901, slug: 'math-core-1', title: 'Math Core 1', grade_band: '6', subject: 'math' },
+        { id: 902, slug: 'math-core-2', title: 'Math Core 2', grade_band: '6', subject: 'math' },
+      ],
+      standards: [{ id: 1, code: '6.EE.A.1' }],
+      module_standards: [{ module_id: 801, standard_id: 1 }],
+    });
+
+    const result = await buildStudentPath(supabase as never, 'student-1', {
+      subject: 'math',
+      workingLevel: 6,
+      metadata: {
+        prerequisite_gaps: [{ standardCode: '6.EE.A.1', observedLevel: 6, confidence: 0.7 }],
+      },
+    });
+
+    expect(result.entries).toHaveLength(3);
+    expect(result.entries.map((entry) => entry.module_id)).toEqual([901, 801, 902]);
+    expect(result.entries[1]?.type).toBe('review');
+    expect(result.entries[1]?.target_standard_codes).toEqual(['6.EE.A.1']);
+    expect(result.entries[1]?.metadata).toMatchObject({
+      module_slug: 'math-gap-review-a',
+      reason: 'remediation',
+      gap_standard_code: '6.EE.A.1',
+    });
+  });
+
+  it('prefers explicit prerequisite metadata on sequence nodes over inferred family matches', async () => {
+    const supabase = createLearningPathsSupabaseStub({
+      student_profiles: [
+        {
+          id: 'student-1',
+          grade_level: 6,
+          grade_band: '6-8',
+          age_years: 11,
+          learning_path: [],
+        },
+      ],
+      student_paths: [],
+      student_path_entries: [],
+      learning_sequences: [
+        {
+          grade_band: '6',
+          position: 1,
+          module_id: 901,
+          module_slug: 'math-core-1',
+          module_title: 'Math Core 1',
+          subject: 'math',
+          standard_codes: ['5.NF.B.3'],
+          metadata: {},
+        },
+        {
+          grade_band: '6',
+          position: 2,
+          module_id: 902,
+          module_slug: 'math-core-2',
+          module_title: 'Math Core 2',
+          subject: 'math',
+          standard_codes: ['6.G.A.1'],
+          metadata: { prerequisite_standard_codes: ['5.NF.A.1'] },
+        },
+      ],
+      modules: [
+        { id: 801, slug: 'math-gap-review-a', title: 'Fraction Foundations Review', grade_band: '5', subject: 'math' },
+        { id: 901, slug: 'math-core-1', title: 'Math Core 1', grade_band: '6', subject: 'math' },
+        { id: 902, slug: 'math-core-2', title: 'Math Core 2', grade_band: '6', subject: 'math' },
+      ],
+      standards: [{ id: 1, code: '5.NF.A.1' }],
+      module_standards: [{ module_id: 801, standard_id: 1 }],
+    });
+
+    const result = await buildStudentPath(supabase as never, 'student-1', {
+      subject: 'math',
+      workingLevel: 6,
+      metadata: {
+        prerequisite_gaps: [{ standardCode: '5.NF.A.1', observedLevel: 5, confidence: 0.7 }],
+      },
+    });
+
+    expect(result.entries).toHaveLength(3);
+    expect(result.entries.map((entry) => entry.module_id)).toEqual([901, 801, 902]);
+    expect(result.entries[1]?.type).toBe('review');
+    expect(result.entries[1]?.metadata).toMatchObject({
+      module_slug: 'math-gap-review-a',
+      reason: 'remediation',
+      gap_standard_code: '5.NF.A.1',
+    });
+  });
+
+  it('leaves the core placement sequence untouched when no aligned remediation module exists', async () => {
+    const supabase = createLearningPathsSupabaseStub({
+      student_profiles: [
+        {
+          id: 'student-1',
+          grade_level: 6,
+          grade_band: '6-8',
+          age_years: 11,
+          learning_path: [],
+        },
+      ],
+      student_paths: [],
+      student_path_entries: [],
+      learning_sequences: [
+        {
+          grade_band: '6',
+          position: 1,
+          module_id: 901,
+          module_slug: 'math-core-1',
+          module_title: 'Math Core 1',
+          subject: 'math',
+          standard_codes: ['6.EE.A.1'],
+        },
+      ],
+      modules: [{ id: 901, slug: 'math-core-1', title: 'Math Core 1', grade_band: '6', subject: 'math' }],
+      standards: [],
+      module_standards: [],
+    });
+
+    const result = await buildStudentPath(supabase as never, 'student-1', {
+      subject: 'math',
+      workingLevel: 6,
+      metadata: {
+        prerequisite_gaps: [{ standardCode: '5.NF.A.1', observedLevel: 5, confidence: 0.7 }],
+      },
+    });
+
+    expect(result.entries).toHaveLength(1);
+    expect(result.entries[0]?.type).toBe('lesson');
+    expect(result.entries[0]?.module_id).toBe(901);
   });
 
   it('marks a core subject for support when live accuracy and mastery stay low', () => {
