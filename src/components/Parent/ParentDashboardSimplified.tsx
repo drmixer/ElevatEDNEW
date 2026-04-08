@@ -95,9 +95,10 @@ const Header: React.FC<HeaderProps> = ({ parentName, hasNotifications }) => {
 interface ChildCardProps {
     child: ParentChildSnapshot;
     subjectPlacements?: ParentOverview['children'][number]['subject_placements'];
+    onViewDetails?: () => void;
 }
 
-const ChildCard: React.FC<ChildCardProps> = ({ child, subjectPlacements = [] }) => {
+const ChildCard: React.FC<ChildCardProps> = ({ child, subjectPlacements = [], onViewDetails }) => {
     // Calculate average mastery across all subjects
     const avgMastery = useMemo(() => {
         if (!child.masteryBySubject?.length) return null;
@@ -136,13 +137,17 @@ const ChildCard: React.FC<ChildCardProps> = ({ child, subjectPlacements = [] }) 
                         <p className="text-sm text-slate-500">Grade {child.grade}</p>
                     </div>
                 </div>
-                <Link
-                    to={`/parent/child/${child.id}`}
+                <button
+                    type="button"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        onViewDetails?.();
+                    }}
                     className="text-sm font-medium text-teal-600 hover:text-teal-700 flex items-center gap-1"
                 >
                     View Details
                     <ChevronRight className="w-4 h-4" />
-                </Link>
+                </button>
             </div>
 
             {/* Mastery Progress Bar */}
@@ -330,9 +335,10 @@ const WeeklySummaryChart: React.FC<WeeklySummaryChartProps> = ({ activityData })
 
 interface AlertBannerProps {
     alertCount: number;
+    viewHref?: string;
 }
 
-const AlertBanner: React.FC<AlertBannerProps> = ({ alertCount }) => {
+const AlertBanner: React.FC<AlertBannerProps> = ({ alertCount, viewHref = '/parent#learning-insights' }) => {
     if (alertCount === 0) return null;
 
     return (
@@ -351,7 +357,7 @@ const AlertBanner: React.FC<AlertBannerProps> = ({ alertCount }) => {
                 <p className="text-sm text-amber-600">Review your child's progress and take action</p>
             </div>
             <Link
-                to="/parent/alerts"
+                to={viewHref}
                 className="px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors text-sm"
             >
                 View
@@ -360,7 +366,11 @@ const AlertBanner: React.FC<AlertBannerProps> = ({ alertCount }) => {
     );
 };
 
-const QuickActions: React.FC = () => (
+interface QuickActionsProps {
+    onAddLearner: () => void;
+}
+
+const QuickActions: React.FC<QuickActionsProps> = ({ onAddLearner }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -370,7 +380,7 @@ const QuickActions: React.FC = () => (
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <Link
-                to="/parent/goals"
+                to="/parent#goal-planner"
                 className="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-center"
             >
                 <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center">
@@ -387,15 +397,16 @@ const QuickActions: React.FC = () => (
                 </div>
                 <span className="text-sm font-medium text-slate-700">Browse Lessons</span>
             </Link>
-            <Link
-                to="/parent/add-learner"
+            <button
+                type="button"
+                onClick={onAddLearner}
                 className="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-slate-200 hover:border-purple-300 hover:shadow-md transition-all text-center"
             >
                 <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
                     <Users className="w-5 h-5 text-purple-600" />
                 </div>
                 <span className="text-sm font-medium text-slate-700">Add Learner</span>
-            </Link>
+            </button>
             <Link
                 to="/settings"
                 className="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all text-center"
@@ -493,6 +504,13 @@ const ParentDashboardSimplified: React.FC = () => {
         return dashboard.children.find((c) => c.id === selectedChildId) ?? null;
     }, [selectedChildId, dashboard?.children]);
 
+    const scrollToSection = useCallback((sectionId: string) => {
+        window.setTimeout(() => {
+            const target = document.getElementById(sectionId);
+            target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
+    }, []);
+
     // Handle tutor settings save
     const handleSaveTutorSettings = useCallback(
         async (childId: string, updates: Partial<LearningPreferences>) => {
@@ -511,9 +529,12 @@ const ParentDashboardSimplified: React.FC = () => {
     // Navigate to subject details
     const handleViewSubject = useCallback(
         (childId: string, subject: Subject) => {
-            navigate(`/parent/child/${childId}?subject=${subject}`);
+            void subject;
+            setSelectedChildId(childId);
+            navigate('/parent#child-details');
+            scrollToSection('child-details');
         },
-        [navigate],
+        [navigate, scrollToSection],
     );
 
     // Handle onboarding completion
@@ -596,6 +617,12 @@ const ParentDashboardSimplified: React.FC = () => {
         () => new Map((overview?.children ?? []).map((child) => [child.id, child])),
         [overview?.children],
     );
+
+    const openChildDetails = useCallback((childId: string) => {
+        setSelectedChildId(childId);
+        scrollToSection('child-details');
+    }, [scrollToSection]);
+
     // Loading state
     if (isLoading && !dashboard) {
         return (
@@ -687,6 +714,7 @@ const ParentDashboardSimplified: React.FC = () => {
                                         <ChildCard
                                             child={child}
                                             subjectPlacements={overviewByChildId.get(child.id)?.subject_placements ?? []}
+                                            onViewDetails={() => openChildDetails(child.id)}
                                         />
                                     </div>
                                 ))}
@@ -697,9 +725,10 @@ const ParentDashboardSimplified: React.FC = () => {
                 {/* Sprint 3: Selected Child Detailed View */}
                 {selectedChild && (
                     <motion.div
+                        id="child-details"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="space-y-8"
+                        className="space-y-8 scroll-mt-24"
                     >
                         {/* Subject Status Cards */}
                         {selectedChild.subjectStatuses && selectedChild.subjectStatuses.length > 0 && (
@@ -739,7 +768,7 @@ const ParentDashboardSimplified: React.FC = () => {
 
                 {/* Quick Actions */}
                 <section id="goal-planner" className="scroll-mt-24">
-                    <QuickActions />
+                    <QuickActions onAddLearner={() => setShowAddLearnerModal(true)} />
                 </section>
 
                 {/* Safety & Transparency Section */}

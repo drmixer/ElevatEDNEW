@@ -192,7 +192,7 @@ describe('ParentDashboardSimplified', () => {
       </QueryClientProvider>,
     );
 
-    fireEvent.click(await screen.findByRole('button', { name: /add learner/i }));
+    fireEvent.click((await screen.findAllByRole('button', { name: /add learner/i }))[0]);
 
     fireEvent.change(await screen.findByPlaceholderText('Alex Rivera'), {
       target: { value: 'New Learner' },
@@ -224,5 +224,27 @@ describe('ParentDashboardSimplified', () => {
     await screen.findByText('Quick Actions');
     expect(document.getElementById('goal-planner')).toBeTruthy();
     expect(document.getElementById('learning-insights')).toBeTruthy();
+  });
+
+  it('uses in-dashboard navigation targets instead of dead parent subroutes', async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <ParentDashboardSimplified />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const setGoalsLink = await screen.findByRole('link', { name: 'Set Goals' });
+    expect(setGoalsLink).toHaveAttribute('href', '/parent#goal-planner');
+    expect(screen.queryByRole('link', { name: 'View Details' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Add Learner' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Add Learner' }).length).toBeGreaterThan(0);
   });
 });
