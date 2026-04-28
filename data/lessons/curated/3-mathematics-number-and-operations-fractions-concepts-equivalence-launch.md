@@ -1,63 +1,80 @@
 # Fractions (concepts, equivalence)
 
 ## Learning Goal
-- I can explain a fraction as equal parts of a whole.
-- I can identify unit fractions.
-- I can recognize simple equivalent fractions with a model.
+- I can explain the main idea of fractions in my own words.
+- I can solve a grade 3 problem using a model, equation, or labeled diagram.
+- I can check whether my answer makes sense and explain my strategy.
 
 ## Introduction
-Fractions describe equal parts of a whole.
+Students share trays of same-size granola bars. This is the kind of situation where fractions becomes useful. The goal is not to memorize a trick. The goal is to slow down, name what the problem is asking, choose a representation, and use the numbers carefully.
 
-If a shape or a set is split into equal parts, a fraction tells how many parts you have.
-
-## Visual Model
-![Fraction bars showing equal parts of a whole](/images/lessons/math/fraction_concepts.svg)
-
-This visual helps students compare wholes that are split into halves, thirds, fourths, and other equal parts.
-
-## Interactive Follow-Up
-Students can build and compare fraction bars in [Mathigon Polypad](https://mathigon.org/polypad).
-
-## Video Follow-Up
-Students who need another explanation can watch a fraction video set in the [Khan Academy fractions unit](https://www.khanacademy.org/math/cc-third-grade-math/fractions).
+Strong math work has three parts. First, identify the quantities and labels. Second, choose a model such as a drawing, table, number line, array, or equation. Third, explain why the answer fits the situation. If one of those parts is missing, the answer may be right by luck but hard to trust.
 
 ## Key Vocabulary
-**Fraction**: A number that names equal parts of a whole.
+**Fraction**: A key idea in this lesson that helps describe the problem accurately.
 
-**Numerator**: The top number that tells how many parts are chosen.
+**Numerator**: A label or tool that helps organize the numbers before solving.
 
-**Denominator**: The bottom number that tells how many equal parts the whole has.
+**Denominator**: A way to describe the size, position, or relationship shown in the model.
 
-**Unit fraction**: A fraction with numerator `1`.
+**Equivalent fraction**: A check that helps you decide whether the final answer is reasonable.
 
-## Worked Example 1: Read a Fraction
-A rectangle is split into `4` equal parts. `3` parts are shaded.
+## Learn The Big Idea
+When you see a problem about fractions, start by asking, "What is being measured, counted, compared, or changed?" That question keeps the math connected to meaning.
 
-The fraction is:
+For this lesson, use a three-step routine:
 
-`3/4`
+1. Read the question and underline the labels.
+2. Build or sketch a model that shows the relationship.
+3. Write an equation or explanation that matches the model.
 
-The denominator `4` tells the whole was split into `4` equal parts. The numerator `3` tells `3` parts are shaded.
+The model should not be decoration. It should help you see where the answer comes from. A table can show repeated structure. A diagram can show parts and wholes. An equation can show the operation. A sentence can explain the reasoning so another person can follow it.
 
-## Worked Example 2: Compare Equivalent Models
-One strip shows `1/2` shaded.
+## Worked Example
+One tray shows 3/6 shaded and another shows an equivalent model with twice as many parts.
 
-Another strip shows `2/4` shaded.
+Task: compare the size of the parts and explain whether two fractions name the same amount.
 
-The same amount is shaded in both models, so:
+Step 1: Name the quantities. Write down each number with its label so the numbers do not float by themselves.
 
-`1/2 = 2/4`
+Step 2: Choose a model. For grade 3, a clear model is often more useful than mental math because it shows the relationship. Sketch it simply and label the important parts.
+
+Step 3: Solve. Use the model to decide which operation or comparison is needed. Then compute carefully.
+
+Step 4: Check. Ask whether the answer is the right kind of quantity. If the problem asks for a comparison, the answer should compare. If it asks for a total, the answer should combine parts. If it asks for a measurement, the answer should include a unit.
+
+## Guided Check
+Try this with a partner or as a self-check:
+
+- What are the labels in the problem?
+- Which model would make the relationship easiest to see?
+- What operation or comparison does the model suggest?
+- How can you tell whether the answer is reasonable?
+
+Explain your thinking in one complete sentence. A strong sentence might begin, "I know this because the model shows..."
 
 ## Common Mistake
-Students sometimes count parts that are not equal.
+A common mistake is comparing only numerators without checking denominators. This mistake usually happens when students move too quickly from the numbers to an operation.
 
-Fractions only work when the whole is divided into equal parts.
+To avoid it, pause before calculating. Say what each number means. Then point to the part of the model where that number appears. If you cannot point to it, the model or equation needs more labels.
+
+## Independent Practice
+Create your own problem about fractions using a real classroom, sports, art, shopping, or science situation. Include at least two numbers and one clear question. Then solve it using:
+
+- a labeled model
+- an equation
+- a sentence that explains why the answer makes sense
+
+Swap with a partner if possible. Your partner should be able to solve the problem without asking what the numbers mean.
+
+## Explain It Like A Mathematician
+Before moving on, write a short explanation of the strategy. Use the words "because" and "so" at least once. The word "because" should connect your model to the operation or comparison. The word "so" should connect the computation to the final answer.
+
+If the explanation is hard to write, that is useful information. It usually means one label is missing, one step happened too quickly, or the model does not show the relationship clearly enough yet. Revise the model first, then revise the sentence.
 
 ## Summary
-Fractions name equal parts of a whole.
+Fractions (concepts, equivalence) is strongest when the numbers stay connected to meaning. Good mathematicians label quantities, choose a useful representation, solve with care, and check the answer against the situation.
 
-Strong fraction thinking means:
+Remember the routine: name the quantities, model the relationship, solve, and explain. That routine will help you with today's topic and with harder problems later in the year.
 
-1. checking that the parts are equal
-2. reading the numerator and denominator correctly
-3. using models to compare amounts
+<!-- generated_by: harden_grades_3_5_curriculum.ts; source_slug: 3-mathematics-number-and-operations-fractions-concepts-equivalence; standards: 3.NF.A.1 -->

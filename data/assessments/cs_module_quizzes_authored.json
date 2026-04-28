@@ -105,7 +105,7 @@
       },
       {
         "id": "3bp005",
-        "prompt": "What is the purpose of an 'if' block in programming?",
+        "prompt": "A game should award points only when the player collects a coin. Which coding block lets the program make that decision?",
         "type": "short_answer",
         "difficulty": 2,
         "standards": [
@@ -833,7 +833,7 @@
       },
       {
         "id": "5bp005",
-        "prompt": "What is the purpose of comments in code?",
+        "prompt": "A teammate opens your program next week and needs to understand a tricky section. What should a useful code comment do?",
         "type": "short_answer",
         "difficulty": 2,
         "standards": [
@@ -1285,7 +1285,7 @@
     "questions": [
       {
         "id": "6pj001",
-        "prompt": "What is the purpose of a variable in Python or JavaScript?",
+        "prompt": "A program needs to store the player score and update it after each round. Which tool should the programmer use?",
         "type": "multiple_choice",
         "difficulty": 1,
         "standards": [
@@ -1389,7 +1389,7 @@
       },
       {
         "id": "6pj006",
-        "prompt": "What is the purpose of a for loop in coding?",
+        "prompt": "A program needs to repeat the same drawing command exactly 10 times. Which coding structure fits this task best?",
         "type": "multiple_choice",
         "difficulty": 1,
         "standards": [
@@ -1897,7 +1897,7 @@
       },
       {
         "id": "8dg004",
-        "prompt": "What is the purpose of data cleaning or preprocessing?",
+        "prompt": "A data table has duplicate rows and inconsistent labels before analysis. What should data cleaning do before the program uses the data?",
         "type": "multiple_choice",
         "difficulty": 2,
         "standards": [
@@ -2180,6 +2180,1008 @@
           }
         ],
         "explanation": "Systematic debugging: narrow down where the error occurs, add diagnostic output, check each function independently."
+      }
+    ]
+  },
+  "3-electives-computer-science-computational-thinking-lab": {
+    "title": "Computational Thinking Lab Checkpoint",
+    "description": "Baseline quiz for grade 3 Computer Science: Computational Thinking Lab.",
+    "estimatedDuration": 10,
+    "standards": [
+      "CS.3.AP.1",
+      "CS.3.IC.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Computational Thinking Lab, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.3.AP.1",
+          "CS.3.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Computational Thinking Lab feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.3.AP.1",
+          "CS.3.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Computational Thinking Lab during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.3.AP.1",
+          "CS.3.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Computational Thinking Lab strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.3.AP.1",
+          "CS.3.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-electives-computer-science-computational-thinking-lab": {
+    "title": "Computational Thinking Lab Checkpoint",
+    "description": "Baseline quiz for grade 4 Computer Science: Computational Thinking Lab.",
+    "estimatedDuration": 10,
+    "standards": [
+      "CS.4.AP.1",
+      "CS.4.IC.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Computational Thinking Lab, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.4.AP.1",
+          "CS.4.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Computational Thinking Lab feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.4.AP.1",
+          "CS.4.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Computational Thinking Lab during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.4.AP.1",
+          "CS.4.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Computational Thinking Lab strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.4.AP.1",
+          "CS.4.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-electives-computer-science-computational-thinking-lab": {
+    "title": "Computational Thinking Lab Checkpoint",
+    "description": "Baseline quiz for grade 5 Computer Science: Computational Thinking Lab.",
+    "estimatedDuration": 10,
+    "standards": [
+      "CS.5.AP.1",
+      "CS.5.IC.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Computational Thinking Lab, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.5.AP.1",
+          "CS.5.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Computational Thinking Lab feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.5.AP.1",
+          "CS.5.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Computational Thinking Lab during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.5.AP.1",
+          "CS.5.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Computational Thinking Lab strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.5.AP.1",
+          "CS.5.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-electives-computer-science-computational-thinking-lab": {
+    "title": "Computational Thinking Lab Checkpoint",
+    "description": "Baseline quiz for grade 6 Computer Science: Computational Thinking Lab.",
+    "estimatedDuration": 10,
+    "standards": [
+      "CS.6.AP.1",
+      "CS.6.IC.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Computational Thinking Lab, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.6.AP.1",
+          "CS.6.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Computational Thinking Lab feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.6.AP.1",
+          "CS.6.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Computational Thinking Lab during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.6.AP.1",
+          "CS.6.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Computational Thinking Lab strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.6.AP.1",
+          "CS.6.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-electives-computer-science-computational-thinking-lab": {
+    "title": "Computational Thinking Lab Checkpoint",
+    "description": "Baseline quiz for grade 7 Computer Science: Computational Thinking Lab.",
+    "estimatedDuration": 10,
+    "standards": [
+      "CS.7.AP.1",
+      "CS.7.IC.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Computational Thinking Lab, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.7.AP.1",
+          "CS.7.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Computational Thinking Lab feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.7.AP.1",
+          "CS.7.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Computational Thinking Lab during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.7.AP.1",
+          "CS.7.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Computational Thinking Lab strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.7.AP.1",
+          "CS.7.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-electives-computer-science-computational-thinking-lab": {
+    "title": "Computational Thinking Lab Checkpoint",
+    "description": "Baseline quiz for grade 8 Computer Science: Computational Thinking Lab.",
+    "estimatedDuration": 10,
+    "standards": [
+      "CS.8.AP.1",
+      "CS.8.IC.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Computational Thinking Lab, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.8.AP.1",
+          "CS.8.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Computational Thinking Lab feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.8.AP.1",
+          "CS.8.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Computational Thinking Lab during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.8.AP.1",
+          "CS.8.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Computational Thinking Lab strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_computer_science_computational_thinking_lab"
+        ],
+        "standards": [
+          "CS.8.AP.1",
+          "CS.8.IC.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
       }
     ]
   }

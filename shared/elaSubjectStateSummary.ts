@@ -1,0 +1,94 @@
+import type { ElaAssignmentReason, ElaStrand } from './elaHomeschool';
+
+export type ElaSubjectEvidenceSummary = {
+  moduleSlug: string;
+  moduleTitle?: string;
+  strand?: ElaStrand;
+  scorePct: number;
+  completedAt?: string;
+  estimatedMinutes?: number;
+  outcome?: 'mastered' | 'practice' | 'weak';
+  reasonCode?: ElaAssignmentReason;
+  nextModuleSlug?: string;
+  nextModuleTitle?: string;
+  parentSummary?: string;
+  responseKind?: string;
+  promptId?: string;
+  promptText?: string;
+  promptChecklist?: string[];
+  contentId?: string;
+  contentTitle?: string;
+  contentKind?: string;
+  contentSourceType?: string;
+  contentFocus?: string;
+  contentSource?: string;
+  contentText?: string;
+  contentExcerpt?: string;
+  responseText?: string;
+  responseExcerpt?: string;
+  responseWordCount?: number;
+  rubricChecks?: Record<string, boolean>;
+};
+
+export type ElaSubjectStateSummary = {
+  subject: 'ela';
+  placementStatus: string;
+  currentStrand: ElaStrand;
+  currentModuleSlug?: string;
+  currentModuleTitle?: string;
+  workingGrade?: number;
+  confidence?: number;
+  masteredModuleSlugs: string[];
+  weakModuleSlugs: string[];
+  recommendedModuleSlugs: string[];
+  recentEvidence: ElaSubjectEvidenceSummary[];
+  reasonCode?: ElaAssignmentReason;
+  parentSummary?: string;
+};
+
+export type ElaWeeklyRecordModuleSummary = {
+  moduleSlug: string;
+  moduleTitle?: string;
+  strand?: ElaStrand;
+  completedAt?: string;
+  scorePct?: number;
+  estimatedMinutes?: number;
+  outcome?: 'mastered' | 'practice' | 'weak';
+  reasonCode?: ElaAssignmentReason;
+  nextModuleSlug?: string;
+  nextModuleTitle?: string;
+  parentSummary?: string;
+  responseKind?: string;
+  promptId?: string;
+  promptText?: string;
+  promptChecklist?: string[];
+  contentId?: string;
+  contentTitle?: string;
+  contentKind?: string;
+  contentSourceType?: string;
+  contentFocus?: string;
+  contentSource?: string;
+  contentText?: string;
+  contentExcerpt?: string;
+  responseText?: string;
+  responseExcerpt?: string;
+  responseWordCount?: number;
+  rubricChecks?: Record<string, boolean>;
+};
+
+export type ElaWeeklyRecordSummary = {
+  subject: 'ela';
+  studentId: string;
+  weekStart: string;
+  weekEnd: string;
+  estimatedMinutes: number;
+  completedModuleCount: number;
+  completedModules: ElaWeeklyRecordModuleSummary[];
+  masteredModuleSlugs: string[];
+  weakModuleSlugs: string[];
+  currentModuleSlug?: string;
+  currentModuleTitle?: string;
+  currentStrand: ElaStrand;
+  latestChangeSummary?: string;
+  parentNotes: string[];
+};

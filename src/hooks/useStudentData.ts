@@ -17,6 +17,15 @@ import {
   type StudentStats,
 } from '../services/statsService';
 import { sendStudentEvent, type StudentEventInput, type StudentEventResponse } from '../services/studentEventService';
+import {
+  fetchElaDailyPlan,
+  fetchElaSubjectState,
+  fetchMathDailyPlan,
+  fetchMathSubjectState,
+} from '../services/homeschoolPlanService';
+import type { DailyHomeschoolPlan } from '../../shared/homeschoolDailyPlan';
+import type { ElaSubjectStateSummary } from '../../shared/elaSubjectStateSummary';
+import type { MathSubjectStateSummary } from '../../shared/mathSubjectStateSummary';
 
 const DEFAULT_PALETTE = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
 
@@ -36,6 +45,12 @@ export const xpSummaryQueryKey = (studentId?: string | null) => ['xp-summary', s
 export const tutorPersonaQueryKey = (studentId?: string | null) => ['tutor-persona', studentId ?? 'unknown'];
 export const parentOverviewQueryKey = (parentId?: string | null) => ['parent-overview', parentId ?? 'unknown'];
 export const studentDashboardQueryKey = (studentId?: string | null) => ['student-dashboard', studentId ?? 'unknown'];
+export const mathDailyPlanQueryKey = (studentId?: string | null) => ['math-daily-plan', studentId ?? 'unknown'];
+export const mathSubjectStateQueryKey = (studentId?: string | null) => ['math-subject-state', studentId ?? 'unknown'];
+export const mathWeeklyRecordQueryKey = (studentId?: string | null) => ['math-weekly-record', studentId ?? 'unknown'];
+export const elaDailyPlanQueryKey = (studentId?: string | null) => ['ela-daily-plan', studentId ?? 'unknown'];
+export const elaSubjectStateQueryKey = (studentId?: string | null) => ['ela-subject-state', studentId ?? 'unknown'];
+export const elaWeeklyRecordQueryKey = (studentId?: string | null) => ['ela-weekly-record', studentId ?? 'unknown'];
 
 export type AdaptiveFlash = {
   eventType: string;
@@ -190,6 +205,38 @@ export const useStudentStats = (studentId?: string | null) =>
     staleTime: 60 * 1000,
   });
 
+export const useMathDailyPlan = (studentId?: string | null) =>
+  useQuery<DailyHomeschoolPlan>({
+    queryKey: mathDailyPlanQueryKey(studentId),
+    queryFn: () => fetchMathDailyPlan(),
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
+export const useMathSubjectState = (studentId?: string | null) =>
+  useQuery<MathSubjectStateSummary | null>({
+    queryKey: mathSubjectStateQueryKey(studentId),
+    queryFn: () => fetchMathSubjectState(studentId),
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
+export const useElaDailyPlan = (studentId?: string | null) =>
+  useQuery<DailyHomeschoolPlan>({
+    queryKey: elaDailyPlanQueryKey(studentId),
+    queryFn: () => fetchElaDailyPlan(),
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
+export const useElaSubjectState = (studentId?: string | null) =>
+  useQuery<ElaSubjectStateSummary | null>({
+    queryKey: elaSubjectStateQueryKey(studentId),
+    queryFn: () => fetchElaSubjectState(studentId),
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
 export const useXP = (
   studentId?: string | null,
   initial?: { xp?: number | null; streakDays?: number | null; badges?: number | null },
@@ -248,10 +295,55 @@ export const useParentOverview = (parentId?: string | null) =>
     staleTime: 2 * 60 * 1000,
   });
 
+const ELA_SUBJECT_KEYS = [
+  'subject',
+  'module_subject',
+  'moduleSubject',
+  'subject_area',
+  'subjectArea',
+  'course_subject',
+  'courseSubject',
+];
+
+const ELA_MODULE_DESCRIPTOR_KEYS = [
+  'module_slug',
+  'moduleSlug',
+  'current_module_slug',
+  'currentModuleSlug',
+];
+
+const isElaSubjectValue = (value: unknown): boolean => {
+  if (typeof value !== 'string') return false;
+  const normalized = value.trim().toLowerCase().replace(/[_-]+/g, ' ');
+  const tokens = normalized.split(/\s+/).filter(Boolean);
+  return (
+    normalized === 'ela' ||
+    normalized === 'english' ||
+    normalized.includes('english language arts') ||
+    tokens.includes('ela') ||
+    tokens.includes('english')
+  );
+};
+
+const isElaEventPayload = (payload: Record<string, unknown>): boolean => {
+  if ([...ELA_SUBJECT_KEYS, ...ELA_MODULE_DESCRIPTOR_KEYS].some((key) => isElaSubjectValue(payload[key]))) {
+    return true;
+  }
+
+  const module = payload.module;
+  if (module && typeof module === 'object' && !Array.isArray(module)) {
+    const moduleRecord = module as Record<string, unknown>;
+    return ELA_SUBJECT_KEYS.some((key) => isElaSubjectValue(moduleRecord[key]));
+  }
+
+  return false;
+};
+
 export const applyStudentEventResponse = (
   queryClient: QueryClient,
   studentId: string | null | undefined,
   response: StudentEventResponse,
+  event?: StudentEventInput,
 ) => {
   if (response.path || response.next) {
     const nextPath: StudentPath = {
@@ -273,6 +365,22 @@ export const applyStudentEventResponse = (
   }
 
   queryClient.invalidateQueries({ queryKey: studentDashboardQueryKey(studentId) }).catch(() => undefined);
+  queryClient.invalidateQueries({ queryKey: mathDailyPlanQueryKey(studentId) }).catch(() => undefined);
+  queryClient.invalidateQueries({ queryKey: mathSubjectStateQueryKey(studentId) }).catch(() => undefined);
+  const payload = event?.payload ?? {};
+  if (isElaEventPayload(payload)) {
+    queryClient.invalidateQueries({ queryKey: elaDailyPlanQueryKey(studentId) }).catch(() => undefined);
+    queryClient.invalidateQueries({ queryKey: elaSubjectStateQueryKey(studentId) }).catch(() => undefined);
+    queryClient.invalidateQueries({ queryKey: elaWeeklyRecordQueryKey(studentId) }).catch(() => undefined);
+  }
+  const isMathAdaptiveVariantCompletion =
+    payload.subject === 'math' &&
+    typeof payload.adaptive_variant_id === 'string' &&
+    typeof payload.module_slug === 'string' &&
+    typeof (payload.score ?? event?.score) === 'number';
+  if (isMathAdaptiveVariantCompletion) {
+    queryClient.invalidateQueries({ queryKey: mathWeeklyRecordQueryKey(studentId) }).catch(() => undefined);
+  }
 };
 
 export const useStudentEvent = (studentId?: string | null) => {
@@ -280,7 +388,7 @@ export const useStudentEvent = (studentId?: string | null) => {
   const mutation = useMutation({
     mutationFn: (input: StudentEventInput) => sendStudentEvent(input),
     onSuccess: (response, variables) => {
-      applyStudentEventResponse(queryClient, studentId, response);
+      applyStudentEventResponse(queryClient, studentId, response, variables);
       persistAdaptiveFlash(studentId, response, variables);
     },
   });

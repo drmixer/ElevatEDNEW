@@ -21,6 +21,8 @@ const CatalogPage = lazy(() => import('./pages/CatalogPage'));
 const ModulePage = lazy(() => import('./pages/ModulePage'));
 const AdminImportPage = lazy(() => import('./pages/AdminImportPage'));
 const LessonPlayerPage = lazy(() => import('./pages/LessonPlayerPage'));
+const MathAdaptiveVariantPage = lazy(() => import('./pages/MathAdaptiveVariantPage'));
+const ElaDailyBlockPage = lazy(() => import('./pages/ElaDailyBlockPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const AccountSettingsPage = lazy(() => import('./pages/AccountSettingsPage'));
@@ -124,6 +126,22 @@ const AppContent: React.FC = () => {
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/module/:id" element={<ModulePage />} />
           <Route path="/lesson/:id" element={<LessonPlayerPage />} />
+          <Route
+            path="/student/math/variant/:variantId"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <MathAdaptiveVariantPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/ela/block/:blockId"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <ElaDailyBlockPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/student"
             element={

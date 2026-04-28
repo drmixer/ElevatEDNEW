@@ -1636,5 +1636,1007 @@
         "explanation": "Motivation requires intrinsic rewards (feeling good), extrinsic progress (visible improvement), and environmental support (community, variety)."
       }
     ]
+  },
+  "3-electives-health-and-pe-personal-wellness-plan": {
+    "title": "Personal Wellness Plan Checkpoint",
+    "description": "Baseline quiz for grade 3 Health & PE: Personal Wellness Plan.",
+    "estimatedDuration": 10,
+    "standards": [
+      "HP.3.WELL.1",
+      "PE.3.FIT.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Personal Wellness Plan, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.3.WELL.1",
+          "PE.3.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Personal Wellness Plan feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.3.WELL.1",
+          "PE.3.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Personal Wellness Plan during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.3.WELL.1",
+          "PE.3.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Personal Wellness Plan strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.3.WELL.1",
+          "PE.3.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-electives-health-and-pe-personal-wellness-plan": {
+    "title": "Personal Wellness Plan Checkpoint",
+    "description": "Baseline quiz for grade 4 Health & PE: Personal Wellness Plan.",
+    "estimatedDuration": 10,
+    "standards": [
+      "HP.4.WELL.1",
+      "PE.4.FIT.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Personal Wellness Plan, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.4.WELL.1",
+          "PE.4.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Personal Wellness Plan feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.4.WELL.1",
+          "PE.4.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Personal Wellness Plan during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.4.WELL.1",
+          "PE.4.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Personal Wellness Plan strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.4.WELL.1",
+          "PE.4.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-electives-health-and-pe-personal-wellness-plan": {
+    "title": "Personal Wellness Plan Checkpoint",
+    "description": "Baseline quiz for grade 5 Health & PE: Personal Wellness Plan.",
+    "estimatedDuration": 10,
+    "standards": [
+      "HP.5.WELL.1",
+      "PE.5.FIT.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Personal Wellness Plan, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.5.WELL.1",
+          "PE.5.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Personal Wellness Plan feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.5.WELL.1",
+          "PE.5.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Personal Wellness Plan during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.5.WELL.1",
+          "PE.5.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Personal Wellness Plan strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.5.WELL.1",
+          "PE.5.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-electives-health-and-pe-personal-wellness-plan": {
+    "title": "Personal Wellness Plan Checkpoint",
+    "description": "Baseline quiz for grade 6 Health & PE: Personal Wellness Plan.",
+    "estimatedDuration": 10,
+    "standards": [
+      "HP.6.WELL.1",
+      "PE.6.FIT.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Personal Wellness Plan, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.6.WELL.1",
+          "PE.6.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Personal Wellness Plan feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.6.WELL.1",
+          "PE.6.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Personal Wellness Plan during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.6.WELL.1",
+          "PE.6.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Personal Wellness Plan strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.6.WELL.1",
+          "PE.6.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-electives-health-and-pe-personal-wellness-plan": {
+    "title": "Personal Wellness Plan Checkpoint",
+    "description": "Baseline quiz for grade 7 Health & PE: Personal Wellness Plan.",
+    "estimatedDuration": 10,
+    "standards": [
+      "HP.7.WELL.1",
+      "PE.7.FIT.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Personal Wellness Plan, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.7.WELL.1",
+          "PE.7.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Personal Wellness Plan feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.7.WELL.1",
+          "PE.7.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Personal Wellness Plan during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.7.WELL.1",
+          "PE.7.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Personal Wellness Plan strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.7.WELL.1",
+          "PE.7.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-electives-health-and-pe-personal-wellness-plan": {
+    "title": "Personal Wellness Plan Checkpoint",
+    "description": "Baseline quiz for grade 8 Health & PE: Personal Wellness Plan.",
+    "estimatedDuration": 10,
+    "standards": [
+      "HP.8.WELL.1",
+      "PE.8.FIT.1"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Personal Wellness Plan, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.8.WELL.1",
+          "PE.8.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Personal Wellness Plan feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.8.WELL.1",
+          "PE.8.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Personal Wellness Plan during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.8.WELL.1",
+          "PE.8.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Personal Wellness Plan strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_health_and_pe_personal_wellness_plan"
+        ],
+        "standards": [
+          "HP.8.WELL.1",
+          "PE.8.FIT.1"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
   }
 }

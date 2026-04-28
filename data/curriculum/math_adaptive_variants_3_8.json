@@ -1,0 +1,1518 @@
+{
+  "version": 1,
+  "scope": {
+    "subject": "Mathematics",
+    "grades": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "concepts": [
+      "multiplication_division",
+      "fractions",
+      "decimals",
+      "ratios",
+      "percent_rates",
+      "expressions_equations"
+    ]
+  },
+  "variants": [
+    {
+      "id": "3-mathematics-number-and-operations-multiplication-division::repair_lesson",
+      "moduleSlug": "3-mathematics-number-and-operations-multiplication-division",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Multiplication/Division",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 3 multiplication and division before moving on.",
+      "markdown": "# Repair: Multiplication/Division\n\n## Goal\nRebuild the missing piece for grade 3 multiplication and division.\n\n## Key Idea\nUse equal groups. 5 groups of 7 means 5 x 7. To divide, use the total and ask how many equal groups or how many in each group.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Draw or imagine 5 equal groups with 7 in each group. What is the total?\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 5 equal groups with 7 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 35 objects is split into 5 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-multiplication-division::guided_repair_practice",
+      "moduleSlug": "3-mathematics-number-and-operations-multiplication-division",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Multiplication/Division",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 3 multiplication and division before moving on.",
+      "markdown": "# Guided Practice: Multiplication/Division\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Draw or imagine 5 equal groups with 7 in each group. What is the total?\n- A total of 35 objects is split into 5 equal groups. How many are in each group?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 5 equal groups with 7 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 35 objects is split into 5 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-multiplication-division::challenge_task",
+      "moduleSlug": "3-mathematics-number-and-operations-multiplication-division",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Multiplication/Division",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 3 multiplication and division.",
+      "markdown": "# Challenge: Multiplication/Division\n\n## Task\nA club packs 35 snacks into bags. Each bag has 7 snacks. Then 3 more bags are added. How many snacks are packed now? Show two operations.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A club packs 35 snacks into bags. Each bag has 7 snacks. Then 3 more bags are added. How many snacks are packed now? Show two operations.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-multiplication-division::exit_ticket",
+      "moduleSlug": "3-mathematics-number-and-operations-multiplication-division",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Multiplication/Division",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 3 multiplication and division before moving on.",
+      "markdown": "# Exit Ticket: Multiplication/Division\n\nSolve one short multiplication and division problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nDraw or imagine 5 equal groups with 7 in each group. What is the total?\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 5 equal groups with 7 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 35 objects is split into 5 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-fractions-concepts-equivalence::repair_lesson",
+      "moduleSlug": "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 3 fractions before moving on.",
+      "markdown": "# Repair: Fractions (concepts, equivalence)\n\n## Goal\nRebuild the missing piece for grade 3 fractions.\n\n## Key Idea\nName the whole first. If 4 of 6 equal parts are shaded, the fraction is 4/6. Equivalent fractions keep the same value by multiplying or dividing numerator and denominator by the same number.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Write a fraction for 4 shaded parts out of 6 equal parts.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 4 shaded parts out of 6 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 4/6 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-fractions-concepts-equivalence::guided_repair_practice",
+      "moduleSlug": "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 3 fractions before moving on.",
+      "markdown": "# Guided Practice: Fractions (concepts, equivalence)\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Write a fraction for 4 shaded parts out of 6 equal parts.\n- Create an equivalent fraction for 4/6 by multiplying numerator and denominator by 2.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 4 shaded parts out of 6 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 4/6 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-fractions-concepts-equivalence::challenge_task",
+      "moduleSlug": "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 3 fractions.",
+      "markdown": "# Challenge: Fractions (concepts, equivalence)\n\n## Task\nTwo recipes use 4/6 cup and 5/6 cup of flour. Compare them, then write one equivalent fraction for each.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "Two recipes use 4/6 cup and 5/6 cup of flour. Compare them, then write one equivalent fraction for each.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-fractions-concepts-equivalence::exit_ticket",
+      "moduleSlug": "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 3 fractions before moving on.",
+      "markdown": "# Exit Ticket: Fractions (concepts, equivalence)\n\nSolve one short fractions problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nWrite a fraction for 4 shaded parts out of 6 equal parts.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 4 shaded parts out of 6 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 4/6 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-decimals-intro::repair_lesson",
+      "moduleSlug": "3-mathematics-number-and-operations-decimals-intro",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Decimals (intro)",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 3 decimals before moving on.",
+      "markdown": "# Repair: Decimals (intro)\n\n## Goal\nRebuild the missing piece for grade 3 decimals.\n\n## Key Idea\nConnect decimals to place value. 3.5 means 35 tenths. Line up decimal points before comparing or adding.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Write 35 tenths as a decimal.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Write 35 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 3.5 or 3.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-decimals-intro::guided_repair_practice",
+      "moduleSlug": "3-mathematics-number-and-operations-decimals-intro",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Decimals (intro)",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 3 decimals before moving on.",
+      "markdown": "# Guided Practice: Decimals (intro)\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Write 35 tenths as a decimal.\n- Which is greater: 3.5 or 3.7? Explain using tenths.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Write 35 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 3.5 or 3.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-decimals-intro::challenge_task",
+      "moduleSlug": "3-mathematics-number-and-operations-decimals-intro",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Decimals (intro)",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 3 decimals.",
+      "markdown": "# Challenge: Decimals (intro)\n\n## Task\nA runner records 3.5 miles on Monday and 4.0 miles on Tuesday. How many miles total, and how do you know the decimal point is placed correctly?\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A runner records 3.5 miles on Monday and 4.0 miles on Tuesday. How many miles total, and how do you know the decimal point is placed correctly?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "3-mathematics-number-and-operations-decimals-intro::exit_ticket",
+      "moduleSlug": "3-mathematics-number-and-operations-decimals-intro",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Decimals (intro)",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 3 decimals before moving on.",
+      "markdown": "# Exit Ticket: Decimals (intro)\n\nSolve one short decimals problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nWrite 35 tenths as a decimal.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Write 35 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 3.5 or 3.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-multiplication-division::repair_lesson",
+      "moduleSlug": "4-mathematics-number-and-operations-multiplication-division",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Multiplication/Division",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 4 multiplication and division before moving on.",
+      "markdown": "# Repair: Multiplication/Division\n\n## Goal\nRebuild the missing piece for grade 4 multiplication and division.\n\n## Key Idea\nUse equal groups. 6 groups of 8 means 6 x 8. To divide, use the total and ask how many equal groups or how many in each group.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Draw or imagine 6 equal groups with 8 in each group. What is the total?\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 6 equal groups with 8 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 48 objects is split into 6 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-multiplication-division::guided_repair_practice",
+      "moduleSlug": "4-mathematics-number-and-operations-multiplication-division",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Multiplication/Division",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 4 multiplication and division before moving on.",
+      "markdown": "# Guided Practice: Multiplication/Division\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Draw or imagine 6 equal groups with 8 in each group. What is the total?\n- A total of 48 objects is split into 6 equal groups. How many are in each group?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 6 equal groups with 8 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 48 objects is split into 6 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-multiplication-division::challenge_task",
+      "moduleSlug": "4-mathematics-number-and-operations-multiplication-division",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Multiplication/Division",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 4 multiplication and division.",
+      "markdown": "# Challenge: Multiplication/Division\n\n## Task\nA club packs 48 snacks into bags. Each bag has 8 snacks. Then 3 more bags are added. How many snacks are packed now? Show two operations.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A club packs 48 snacks into bags. Each bag has 8 snacks. Then 3 more bags are added. How many snacks are packed now? Show two operations.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-multiplication-division::exit_ticket",
+      "moduleSlug": "4-mathematics-number-and-operations-multiplication-division",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Multiplication/Division",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 4 multiplication and division before moving on.",
+      "markdown": "# Exit Ticket: Multiplication/Division\n\nSolve one short multiplication and division problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nDraw or imagine 6 equal groups with 8 in each group. What is the total?\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 6 equal groups with 8 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 48 objects is split into 6 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-fractions-concepts-equivalence::repair_lesson",
+      "moduleSlug": "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 4 fractions before moving on.",
+      "markdown": "# Repair: Fractions (concepts, equivalence)\n\n## Goal\nRebuild the missing piece for grade 4 fractions.\n\n## Key Idea\nName the whole first. If 5 of 7 equal parts are shaded, the fraction is 5/7. Equivalent fractions keep the same value by multiplying or dividing numerator and denominator by the same number.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Write a fraction for 5 shaded parts out of 7 equal parts.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 5 shaded parts out of 7 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 5/7 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-fractions-concepts-equivalence::guided_repair_practice",
+      "moduleSlug": "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 4 fractions before moving on.",
+      "markdown": "# Guided Practice: Fractions (concepts, equivalence)\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Write a fraction for 5 shaded parts out of 7 equal parts.\n- Create an equivalent fraction for 5/7 by multiplying numerator and denominator by 2.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 5 shaded parts out of 7 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 5/7 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-fractions-concepts-equivalence::challenge_task",
+      "moduleSlug": "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 4 fractions.",
+      "markdown": "# Challenge: Fractions (concepts, equivalence)\n\n## Task\nTwo recipes use 5/7 cup and 6/7 cup of flour. Compare them, then write one equivalent fraction for each.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "Two recipes use 5/7 cup and 6/7 cup of flour. Compare them, then write one equivalent fraction for each.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-fractions-concepts-equivalence::exit_ticket",
+      "moduleSlug": "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 4 fractions before moving on.",
+      "markdown": "# Exit Ticket: Fractions (concepts, equivalence)\n\nSolve one short fractions problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nWrite a fraction for 5 shaded parts out of 7 equal parts.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 5 shaded parts out of 7 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 5/7 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-decimals-intro::repair_lesson",
+      "moduleSlug": "4-mathematics-number-and-operations-decimals-intro",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Decimals (intro)",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 4 decimals before moving on.",
+      "markdown": "# Repair: Decimals (intro)\n\n## Goal\nRebuild the missing piece for grade 4 decimals.\n\n## Key Idea\nConnect decimals to place value. 4.5 means 45 tenths. Line up decimal points before comparing or adding.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Write 45 tenths as a decimal.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Write 45 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 4.5 or 4.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-decimals-intro::guided_repair_practice",
+      "moduleSlug": "4-mathematics-number-and-operations-decimals-intro",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Decimals (intro)",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 4 decimals before moving on.",
+      "markdown": "# Guided Practice: Decimals (intro)\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Write 45 tenths as a decimal.\n- Which is greater: 4.5 or 4.7? Explain using tenths.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Write 45 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 4.5 or 4.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-decimals-intro::challenge_task",
+      "moduleSlug": "4-mathematics-number-and-operations-decimals-intro",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Decimals (intro)",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 4 decimals.",
+      "markdown": "# Challenge: Decimals (intro)\n\n## Task\nA runner records 4.5 miles on Monday and 5.1 miles on Tuesday. How many miles total, and how do you know the decimal point is placed correctly?\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A runner records 4.5 miles on Monday and 5.1 miles on Tuesday. How many miles total, and how do you know the decimal point is placed correctly?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "4-mathematics-number-and-operations-decimals-intro::exit_ticket",
+      "moduleSlug": "4-mathematics-number-and-operations-decimals-intro",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Decimals (intro)",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 4 decimals before moving on.",
+      "markdown": "# Exit Ticket: Decimals (intro)\n\nSolve one short decimals problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nWrite 45 tenths as a decimal.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Write 45 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 4.5 or 4.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-multiplication-division::repair_lesson",
+      "moduleSlug": "5-mathematics-number-and-operations-multiplication-division",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Multiplication/Division",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 5 multiplication and division before moving on.",
+      "markdown": "# Repair: Multiplication/Division\n\n## Goal\nRebuild the missing piece for grade 5 multiplication and division.\n\n## Key Idea\nUse equal groups. 7 groups of 9 means 7 x 9. To divide, use the total and ask how many equal groups or how many in each group.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Draw or imagine 7 equal groups with 9 in each group. What is the total?\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 7 equal groups with 9 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 63 objects is split into 7 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-multiplication-division::guided_repair_practice",
+      "moduleSlug": "5-mathematics-number-and-operations-multiplication-division",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Multiplication/Division",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 5 multiplication and division before moving on.",
+      "markdown": "# Guided Practice: Multiplication/Division\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Draw or imagine 7 equal groups with 9 in each group. What is the total?\n- A total of 63 objects is split into 7 equal groups. How many are in each group?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 7 equal groups with 9 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 63 objects is split into 7 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-multiplication-division::challenge_task",
+      "moduleSlug": "5-mathematics-number-and-operations-multiplication-division",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Multiplication/Division",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 5 multiplication and division.",
+      "markdown": "# Challenge: Multiplication/Division\n\n## Task\nA club packs 63 snacks into bags. Each bag has 9 snacks. Then 3 more bags are added. How many snacks are packed now? Show two operations.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A club packs 63 snacks into bags. Each bag has 9 snacks. Then 3 more bags are added. How many snacks are packed now? Show two operations.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-multiplication-division::exit_ticket",
+      "moduleSlug": "5-mathematics-number-and-operations-multiplication-division",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Multiplication/Division",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 5 multiplication and division before moving on.",
+      "markdown": "# Exit Ticket: Multiplication/Division\n\nSolve one short multiplication and division problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nDraw or imagine 7 equal groups with 9 in each group. What is the total?\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Draw or imagine 7 equal groups with 9 in each group. What is the total?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "A total of 63 objects is split into 7 equal groups. How many are in each group?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate multiplication and division reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-fractions-concepts-equivalence::repair_lesson",
+      "moduleSlug": "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 5 fractions before moving on.",
+      "markdown": "# Repair: Fractions (concepts, equivalence)\n\n## Goal\nRebuild the missing piece for grade 5 fractions.\n\n## Key Idea\nName the whole first. If 6 of 8 equal parts are shaded, the fraction is 6/8. Equivalent fractions keep the same value by multiplying or dividing numerator and denominator by the same number.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Write a fraction for 6 shaded parts out of 8 equal parts.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 6 shaded parts out of 8 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 6/8 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-fractions-concepts-equivalence::guided_repair_practice",
+      "moduleSlug": "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 5 fractions before moving on.",
+      "markdown": "# Guided Practice: Fractions (concepts, equivalence)\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Write a fraction for 6 shaded parts out of 8 equal parts.\n- Create an equivalent fraction for 6/8 by multiplying numerator and denominator by 2.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 6 shaded parts out of 8 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 6/8 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-fractions-concepts-equivalence::challenge_task",
+      "moduleSlug": "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 5 fractions.",
+      "markdown": "# Challenge: Fractions (concepts, equivalence)\n\n## Task\nTwo recipes use 6/8 cup and 7/8 cup of flour. Compare them, then write one equivalent fraction for each.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "Two recipes use 6/8 cup and 7/8 cup of flour. Compare them, then write one equivalent fraction for each.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-fractions-concepts-equivalence::exit_ticket",
+      "moduleSlug": "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Fractions (concepts, equivalence)",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 5 fractions before moving on.",
+      "markdown": "# Exit Ticket: Fractions (concepts, equivalence)\n\nSolve one short fractions problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nWrite a fraction for 6 shaded parts out of 8 equal parts.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Write a fraction for 6 shaded parts out of 8 equal parts.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Create an equivalent fraction for 6/8 by multiplying numerator and denominator by 2.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate fractions reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-decimals-intro::repair_lesson",
+      "moduleSlug": "5-mathematics-number-and-operations-decimals-intro",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Decimals (intro)",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 5 decimals before moving on.",
+      "markdown": "# Repair: Decimals (intro)\n\n## Goal\nRebuild the missing piece for grade 5 decimals.\n\n## Key Idea\nConnect decimals to place value. 5.5 means 55 tenths. Line up decimal points before comparing or adding.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Write 55 tenths as a decimal.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Write 55 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 5.5 or 5.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-decimals-intro::guided_repair_practice",
+      "moduleSlug": "5-mathematics-number-and-operations-decimals-intro",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Decimals (intro)",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 5 decimals before moving on.",
+      "markdown": "# Guided Practice: Decimals (intro)\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Write 55 tenths as a decimal.\n- Which is greater: 5.5 or 5.7? Explain using tenths.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Write 55 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 5.5 or 5.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-decimals-intro::challenge_task",
+      "moduleSlug": "5-mathematics-number-and-operations-decimals-intro",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Decimals (intro)",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 5 decimals.",
+      "markdown": "# Challenge: Decimals (intro)\n\n## Task\nA runner records 5.5 miles on Monday and 6.2 miles on Tuesday. How many miles total, and how do you know the decimal point is placed correctly?\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A runner records 5.5 miles on Monday and 6.2 miles on Tuesday. How many miles total, and how do you know the decimal point is placed correctly?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "5-mathematics-number-and-operations-decimals-intro::exit_ticket",
+      "moduleSlug": "5-mathematics-number-and-operations-decimals-intro",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Decimals (intro)",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 5 decimals before moving on.",
+      "markdown": "# Exit Ticket: Decimals (intro)\n\nSolve one short decimals problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nWrite 55 tenths as a decimal.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Write 55 tenths as a decimal.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Which is greater: 5.5 or 5.7? Explain using tenths.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate decimals reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning::repair_lesson",
+      "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 6 ratios and proportional reasoning before moving on.",
+      "markdown": "# Repair: Ratios & Proportional Reasoning\n\n## Goal\nRebuild the missing piece for grade 6 ratios and proportional reasoning.\n\n## Key Idea\nRead a ratio as a relationship. If 8 notebooks cost $24, one notebook costs $3. A table helps keep equivalent ratios organized.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Complete the ratio table: 8 items cost $24; 16 items cost ___; 24 items cost ___.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 8 items cost $24; 16 items cost ___; 24 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 8 items costing $24?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning::guided_repair_practice",
+      "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 6 ratios and proportional reasoning before moving on.",
+      "markdown": "# Guided Practice: Ratios & Proportional Reasoning\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Complete the ratio table: 8 items cost $24; 16 items cost ___; 24 items cost ___.\n- What is the unit rate for 8 items costing $24?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 8 items cost $24; 16 items cost ___; 24 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 8 items costing $24?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning::challenge_task",
+      "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 6 ratios and proportional reasoning.",
+      "markdown": "# Challenge: Ratios & Proportional Reasoning\n\n## Task\nA map uses 8 inches for 24 miles. Build a table for 8, 16, and 40 inches, then find the miles per inch.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A map uses 8 inches for 24 miles. Build a table for 8, 16, and 40 inches, then find the miles per inch.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning::exit_ticket",
+      "moduleSlug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 6 ratios and proportional reasoning before moving on.",
+      "markdown": "# Exit Ticket: Ratios & Proportional Reasoning\n\nSolve one short ratios and proportional reasoning problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nComplete the ratio table: 8 items cost $24; 16 items cost ___; 24 items cost ___.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 8 items cost $24; 16 items cost ___; 24 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 8 items costing $24?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-percent-and-rates::repair_lesson",
+      "moduleSlug": "6-mathematics-number-and-operations-percent-and-rates",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Percent & Rates",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 6 percent and rates before moving on.",
+      "markdown": "# Repair: Percent & Rates\n\n## Goal\nRebuild the missing piece for grade 6 percent and rates.\n\n## Key Idea\nPercent means per 100. 25% of 48 can be written as 25/100 x 48. Estimate first so the answer has a reasonable size.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Find 25% of 48.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 48.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 48 be less than, equal to, or greater than 48?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-percent-and-rates::guided_repair_practice",
+      "moduleSlug": "6-mathematics-number-and-operations-percent-and-rates",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Percent & Rates",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 6 percent and rates before moving on.",
+      "markdown": "# Guided Practice: Percent & Rates\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Find 25% of 48.\n- Estimate first: should 25% of 48 be less than, equal to, or greater than 48?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 48.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 48 be less than, equal to, or greater than 48?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-percent-and-rates::challenge_task",
+      "moduleSlug": "6-mathematics-number-and-operations-percent-and-rates",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Percent & Rates",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 6 percent and rates.",
+      "markdown": "# Challenge: Percent & Rates\n\n## Task\nA store discounts a $48 item by 25%, then adds $100 shipping. What is the final cost?\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A store discounts a $48 item by 25%, then adds $100 shipping. What is the final cost?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-percent-and-rates::exit_ticket",
+      "moduleSlug": "6-mathematics-number-and-operations-percent-and-rates",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Percent & Rates",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 6 percent and rates before moving on.",
+      "markdown": "# Exit Ticket: Percent & Rates\n\nSolve one short percent and rates problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nFind 25% of 48.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 48.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 48 be less than, equal to, or greater than 48?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-expressions-and-equations::repair_lesson",
+      "moduleSlug": "6-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Expressions & Equations",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 6 expressions and equations before moving on.",
+      "markdown": "# Repair: Expressions & Equations\n\n## Goal\nRebuild the missing piece for grade 6 expressions and equations.\n\n## Key Idea\nKeep both sides balanced. If x + 2 = 13, subtract 2 from both sides to isolate x.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Solve x + 2 = 13.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 13.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 11.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-expressions-and-equations::guided_repair_practice",
+      "moduleSlug": "6-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Expressions & Equations",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 6 expressions and equations before moving on.",
+      "markdown": "# Guided Practice: Expressions & Equations\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Solve x + 2 = 13.\n- Write an expression for a number plus 2, then evaluate it when the number is 11.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 13.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 11.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-expressions-and-equations::challenge_task",
+      "moduleSlug": "6-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Expressions & Equations",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 6 expressions and equations.",
+      "markdown": "# Challenge: Expressions & Equations\n\n## Task\nWrite and solve an equation for: a number multiplied by 2, then increased by 11, equals 33.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "Write and solve an equation for: a number multiplied by 2, then increased by 11, equals 33.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "6-mathematics-number-and-operations-expressions-and-equations::exit_ticket",
+      "moduleSlug": "6-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Expressions & Equations",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 6 expressions and equations before moving on.",
+      "markdown": "# Exit Ticket: Expressions & Equations\n\nSolve one short expressions and equations problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nSolve x + 2 = 13.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 13.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 11.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning::repair_lesson",
+      "moduleSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 7 ratios and proportional reasoning before moving on.",
+      "markdown": "# Repair: Ratios & Proportional Reasoning\n\n## Goal\nRebuild the missing piece for grade 7 ratios and proportional reasoning.\n\n## Key Idea\nRead a ratio as a relationship. If 9 notebooks cost $27, one notebook costs $3. A table helps keep equivalent ratios organized.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Complete the ratio table: 9 items cost $27; 18 items cost ___; 27 items cost ___.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 9 items cost $27; 18 items cost ___; 27 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 9 items costing $27?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning::guided_repair_practice",
+      "moduleSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 7 ratios and proportional reasoning before moving on.",
+      "markdown": "# Guided Practice: Ratios & Proportional Reasoning\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Complete the ratio table: 9 items cost $27; 18 items cost ___; 27 items cost ___.\n- What is the unit rate for 9 items costing $27?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 9 items cost $27; 18 items cost ___; 27 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 9 items costing $27?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning::challenge_task",
+      "moduleSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 7 ratios and proportional reasoning.",
+      "markdown": "# Challenge: Ratios & Proportional Reasoning\n\n## Task\nA map uses 9 inches for 27 miles. Build a table for 9, 18, and 45 inches, then find the miles per inch.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A map uses 9 inches for 27 miles. Build a table for 9, 18, and 45 inches, then find the miles per inch.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning::exit_ticket",
+      "moduleSlug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 7 ratios and proportional reasoning before moving on.",
+      "markdown": "# Exit Ticket: Ratios & Proportional Reasoning\n\nSolve one short ratios and proportional reasoning problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nComplete the ratio table: 9 items cost $27; 18 items cost ___; 27 items cost ___.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 9 items cost $27; 18 items cost ___; 27 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 9 items costing $27?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-percent-and-rates::repair_lesson",
+      "moduleSlug": "7-mathematics-number-and-operations-percent-and-rates",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Percent & Rates",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 7 percent and rates before moving on.",
+      "markdown": "# Repair: Percent & Rates\n\n## Goal\nRebuild the missing piece for grade 7 percent and rates.\n\n## Key Idea\nPercent means per 100. 25% of 56 can be written as 25/100 x 56. Estimate first so the answer has a reasonable size.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Find 25% of 56.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 56.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 56 be less than, equal to, or greater than 56?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-percent-and-rates::guided_repair_practice",
+      "moduleSlug": "7-mathematics-number-and-operations-percent-and-rates",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Percent & Rates",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 7 percent and rates before moving on.",
+      "markdown": "# Guided Practice: Percent & Rates\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Find 25% of 56.\n- Estimate first: should 25% of 56 be less than, equal to, or greater than 56?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 56.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 56 be less than, equal to, or greater than 56?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-percent-and-rates::challenge_task",
+      "moduleSlug": "7-mathematics-number-and-operations-percent-and-rates",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Percent & Rates",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 7 percent and rates.",
+      "markdown": "# Challenge: Percent & Rates\n\n## Task\nA store discounts a $56 item by 25%, then adds $100 shipping. What is the final cost?\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A store discounts a $56 item by 25%, then adds $100 shipping. What is the final cost?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-percent-and-rates::exit_ticket",
+      "moduleSlug": "7-mathematics-number-and-operations-percent-and-rates",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Percent & Rates",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 7 percent and rates before moving on.",
+      "markdown": "# Exit Ticket: Percent & Rates\n\nSolve one short percent and rates problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nFind 25% of 56.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 56.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 56 be less than, equal to, or greater than 56?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-expressions-and-equations::repair_lesson",
+      "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Expressions & Equations",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 7 expressions and equations before moving on.",
+      "markdown": "# Repair: Expressions & Equations\n\n## Goal\nRebuild the missing piece for grade 7 expressions and equations.\n\n## Key Idea\nKeep both sides balanced. If x + 2 = 14, subtract 2 from both sides to isolate x.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Solve x + 2 = 14.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 14.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 12.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-expressions-and-equations::guided_repair_practice",
+      "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Expressions & Equations",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 7 expressions and equations before moving on.",
+      "markdown": "# Guided Practice: Expressions & Equations\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Solve x + 2 = 14.\n- Write an expression for a number plus 2, then evaluate it when the number is 12.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 14.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 12.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-expressions-and-equations::challenge_task",
+      "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Expressions & Equations",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 7 expressions and equations.",
+      "markdown": "# Challenge: Expressions & Equations\n\n## Task\nWrite and solve an equation for: a number multiplied by 2, then increased by 12, equals 36.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "Write and solve an equation for: a number multiplied by 2, then increased by 12, equals 36.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "7-mathematics-number-and-operations-expressions-and-equations::exit_ticket",
+      "moduleSlug": "7-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Expressions & Equations",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 7 expressions and equations before moving on.",
+      "markdown": "# Exit Ticket: Expressions & Equations\n\nSolve one short expressions and equations problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nSolve x + 2 = 14.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 14.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 12.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning::repair_lesson",
+      "moduleSlug": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 8 ratios and proportional reasoning before moving on.",
+      "markdown": "# Repair: Ratios & Proportional Reasoning\n\n## Goal\nRebuild the missing piece for grade 8 ratios and proportional reasoning.\n\n## Key Idea\nRead a ratio as a relationship. If 10 notebooks cost $30, one notebook costs $3. A table helps keep equivalent ratios organized.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Complete the ratio table: 10 items cost $30; 20 items cost ___; 30 items cost ___.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 10 items cost $30; 20 items cost ___; 30 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 10 items costing $30?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning::guided_repair_practice",
+      "moduleSlug": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 8 ratios and proportional reasoning before moving on.",
+      "markdown": "# Guided Practice: Ratios & Proportional Reasoning\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Complete the ratio table: 10 items cost $30; 20 items cost ___; 30 items cost ___.\n- What is the unit rate for 10 items costing $30?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 10 items cost $30; 20 items cost ___; 30 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 10 items costing $30?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning::challenge_task",
+      "moduleSlug": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 8 ratios and proportional reasoning.",
+      "markdown": "# Challenge: Ratios & Proportional Reasoning\n\n## Task\nA map uses 10 inches for 30 miles. Build a table for 10, 20, and 50 inches, then find the miles per inch.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A map uses 10 inches for 30 miles. Build a table for 10, 20, and 50 inches, then find the miles per inch.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning::exit_ticket",
+      "moduleSlug": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Ratios & Proportional Reasoning",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 8 ratios and proportional reasoning before moving on.",
+      "markdown": "# Exit Ticket: Ratios & Proportional Reasoning\n\nSolve one short ratios and proportional reasoning problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nComplete the ratio table: 10 items cost $30; 20 items cost ___; 30 items cost ___.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Complete the ratio table: 10 items cost $30; 20 items cost ___; 30 items cost ___.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "What is the unit rate for 10 items costing $30?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate ratios and proportional reasoning reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-percent-and-rates::repair_lesson",
+      "moduleSlug": "8-mathematics-number-and-operations-percent-and-rates",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Percent & Rates",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 8 percent and rates before moving on.",
+      "markdown": "# Repair: Percent & Rates\n\n## Goal\nRebuild the missing piece for grade 8 percent and rates.\n\n## Key Idea\nPercent means per 100. 25% of 64 can be written as 25/100 x 64. Estimate first so the answer has a reasonable size.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Find 25% of 64.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 64.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 64 be less than, equal to, or greater than 64?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-percent-and-rates::guided_repair_practice",
+      "moduleSlug": "8-mathematics-number-and-operations-percent-and-rates",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Percent & Rates",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 8 percent and rates before moving on.",
+      "markdown": "# Guided Practice: Percent & Rates\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Find 25% of 64.\n- Estimate first: should 25% of 64 be less than, equal to, or greater than 64?\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 64.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 64 be less than, equal to, or greater than 64?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-percent-and-rates::challenge_task",
+      "moduleSlug": "8-mathematics-number-and-operations-percent-and-rates",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Percent & Rates",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 8 percent and rates.",
+      "markdown": "# Challenge: Percent & Rates\n\n## Task\nA store discounts a $64 item by 25%, then adds $100 shipping. What is the final cost?\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "A store discounts a $64 item by 25%, then adds $100 shipping. What is the final cost?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-percent-and-rates::exit_ticket",
+      "moduleSlug": "8-mathematics-number-and-operations-percent-and-rates",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Percent & Rates",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 8 percent and rates before moving on.",
+      "markdown": "# Exit Ticket: Percent & Rates\n\nSolve one short percent and rates problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nFind 25% of 64.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Find 25% of 64.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Estimate first: should 25% of 64 be less than, equal to, or greater than 64?",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate percent and rates reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-expressions-and-equations::repair_lesson",
+      "moduleSlug": "8-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "repair_lesson",
+      "title": "Repair Lesson: Expressions & Equations",
+      "estimatedMinutes": 20,
+      "purpose": "Strengthen grade 8 expressions and equations before moving on.",
+      "markdown": "# Repair: Expressions & Equations\n\n## Goal\nRebuild the missing piece for grade 8 expressions and equations.\n\n## Key Idea\nKeep both sides balanced. If x + 2 = 15, subtract 2 from both sides to isolate x.\n\n## Worked Example\nRead the problem slowly. Name the quantities. Draw a quick model. Then write the equation that matches the model.\n\n## Common Mistake\nDo not start with a memorized operation. First decide what the numbers mean.\n\n## Try It\n- Solve x + 2 = 15.\n- Explain why your answer fits the model.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 15.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 13.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-expressions-and-equations::guided_repair_practice",
+      "moduleSlug": "8-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "guided_repair_practice",
+      "title": "Guided Repair Practice: Expressions & Equations",
+      "estimatedMinutes": 12,
+      "purpose": "Strengthen grade 8 expressions and equations before moving on.",
+      "markdown": "# Guided Practice: Expressions & Equations\n\n1. Name what each number represents.\n2. Choose a model: equal groups, fraction bar, decimal grid, ratio table, percent equation, or balance equation.\n3. Solve one step at a time.\n4. Check whether the answer is reasonable.\n\n## Practice Set\n- Solve x + 2 = 15.\n- Write an expression for a number plus 2, then evaluate it when the number is 13.\n- Write one sentence explaining the strategy you used.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 15.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 13.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-expressions-and-equations::challenge_task",
+      "moduleSlug": "8-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "challenge_task",
+      "title": "Challenge Task: Expressions & Equations",
+      "estimatedMinutes": 25,
+      "purpose": "Stretch strong mastery of grade 8 expressions and equations.",
+      "markdown": "# Challenge: Expressions & Equations\n\n## Task\nWrite and solve an equation for: a number multiplied by 2, then increased by 13, equals 39.\n\n## Requirements\n- Show a model or table before calculating.\n- Write the equation or steps.\n- Explain why the answer makes sense.\n\n## Stretch\nChange one number in the problem and predict how the answer changes before recalculating.",
+      "practiceItems": [
+        {
+          "prompt": "Write and solve an equation for: a number multiplied by 2, then increased by 13, equals 39.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves the multi-step task, explains the model, and checks reasonableness."
+    },
+    {
+      "id": "8-mathematics-number-and-operations-expressions-and-equations::exit_ticket",
+      "moduleSlug": "8-mathematics-number-and-operations-expressions-and-equations",
+      "kind": "exit_ticket",
+      "title": "Exit Ticket: Expressions & Equations",
+      "estimatedMinutes": 5,
+      "purpose": "Strengthen grade 8 expressions and equations before moving on.",
+      "markdown": "# Exit Ticket: Expressions & Equations\n\nSolve one short expressions and equations problem without hints. This is not a speed test. It checks whether the strategy is ready to use again tomorrow.\n\n## Task\nSolve x + 2 = 15.\n\n## Explain\nWrite one sentence that names the model or strategy you used. Use labels, units, or variables so the work is easy to check.\n\n## Check\nEstimate or reverse the operation to prove your answer is reasonable.\n\n## Ready To Move On\nA strong response has the correct answer, a clear model or equation, and a reasonableness check.",
+      "practiceItems": [
+        {
+          "prompt": "Solve x + 2 = 15.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        },
+        {
+          "prompt": "Write an expression for a number plus 2, then evaluate it when the number is 13.",
+          "answer": "Student response should include the correct computation and a labeled model or equation.",
+          "explanation": "Look for accurate expressions and equations reasoning, clear labels, and a reasonableness check."
+        }
+      ],
+      "masteryCheck": "Student solves an aligned problem without hints and explains the strategy."
+    }
+  ]
+}

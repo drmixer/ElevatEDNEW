@@ -61,6 +61,7 @@ create index if not exists student_subject_state_student_subject_idx
 create index if not exists student_subject_state_status_idx
   on public.student_subject_state (placement_status, diagnostic_completed_at desc);
 
+drop trigger if exists student_subject_state_set_updated_at on public.student_subject_state;
 create trigger student_subject_state_set_updated_at
 before update on public.student_subject_state
 for each row

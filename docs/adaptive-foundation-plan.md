@@ -8,6 +8,7 @@ Status:
 Related docs:
 - [vision_plan.md](/Users/drmixer/code/ElevatEDNEW/docs/vision_plan.md)
 - [family-ready.md](/Users/drmixer/code/ElevatEDNEW/docs/family-ready.md)
+- [adaptive-homeschool-3-8-roadmap.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-homeschool-3-8-roadmap.md)
 - [adaptive-phase1-implementation-plan.md](/Users/drmixer/code/ElevatEDNEW/docs/adaptive-phase1-implementation-plan.md)
 - [product_polish_todo.md](/Users/drmixer/code/ElevatEDNEW/docs/product_polish_todo.md)
 - [release-checklist.md](/Users/drmixer/code/ElevatEDNEW/docs/release-checklist.md)

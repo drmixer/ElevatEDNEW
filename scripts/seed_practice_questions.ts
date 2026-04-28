@@ -277,6 +277,7 @@ async function createQuestion(
                 seeded: true,
                 seeded_at: new Date().toISOString(),
                 moduleSlug: item.moduleSlug,
+                module_slug: item.moduleSlug,
                 standards: item.standards || [],
                 source_of_truth_file: sourceFile,
             },

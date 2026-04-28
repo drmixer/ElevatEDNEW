@@ -31,161 +31,161 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 101,2-social-studies-world-history-and-geography-maps-globes-basic,Social Studies,2,12,0,0,0,0,false,,,Maps/Globes (basic) Launch Lesson
 108,9-social-studies-world-history-and-geography-modern-era-globalization-human-geography,Social Studies,9,24,0,0,0,0,false,,,"Modern Era, Globalization, Human Geography Launch Lesson"
 109,k-social-studies-us-history-national-symbols,Social Studies,K,16,0,0,0,0,false,,,National Symbols Launch Lesson
-124,3-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,3,36,0,0,0,0,false,,,Roots/Prefixes/Suffixes
-125,3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,3,108,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
-126,4-english-language-arts-reading-informational-biographies-pd,English Language Arts,4,252,0,0,0,0,false,,,Biographies (PD)
-127,4-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,4,72,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
+124,3-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,3,42,0,0,0,0,false,,,Roots/Prefixes/Suffixes
+125,3-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,3,147,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
+126,4-english-language-arts-reading-informational-biographies-pd,English Language Arts,4,798,0,0,0,0,false,,,Biographies (PD)
+127,4-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,4,198,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
 128,4-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,4,4,0,0,0,0,false,,,Chapter Books (PD)
-129,4-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,4,252,0,0,0,0,false,,,Myths/Legends (PD)
-130,4-english-language-arts-reading-literature-short-stories-pd,English Language Arts,4,252,0,0,0,0,false,,,Short Stories (PD)
-131,4-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,4,36,0,0,0,0,false,,,"Presentations, Summaries"
+129,4-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,4,798,0,0,0,0,false,,,Myths/Legends (PD)
+130,4-english-language-arts-reading-literature-short-stories-pd,English Language Arts,4,798,0,0,0,0,false,,,Short Stories (PD)
+131,4-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,4,42,0,0,0,0,false,,,"Presentations, Summaries"
 132,4-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,4,36,0,0,0,0,false,,,Roots/Prefixes/Suffixes
 133,5-english-language-arts-reading-informational-biographies-pd,English Language Arts,5,4,0,0,0,0,false,,,Biographies (PD)
-134,5-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,5,72,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
-135,5-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,5,252,0,0,0,0,false,,,Chapter Books (PD)
-136,5-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,5,252,0,0,0,0,false,,,Myths/Legends (PD)
-137,5-english-language-arts-reading-literature-short-stories-pd,English Language Arts,5,252,0,0,0,0,false,,,Short Stories (PD)
+134,5-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,5,198,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
+135,5-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,5,792,0,0,0,0,false,,,Chapter Books (PD)
+136,5-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,5,798,0,0,0,0,false,,,Myths/Legends (PD)
+137,5-english-language-arts-reading-literature-short-stories-pd,English Language Arts,5,792,0,0,0,0,false,,,Short Stories (PD)
 138,5-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,5,8,0,0,0,0,false,,,"Presentations, Summaries"
-139,5-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,5,108,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
-140,6-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,6,252,0,0,0,0,false,,,Historical Documents (PD)
-141,6-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,6,72,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
-142,6-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,6,252,0,0,0,0,false,,,Poetry & Drama (PD)
-143,6-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,6,36,0,0,0,0,false,,,World Literature (PD where possible)
-144,6-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,6,36,0,0,0,0,false,,,"Debates, Multimedia Presentations"
+139,5-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,5,129,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
+140,6-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,6,792,0,0,0,0,false,,,Historical Documents (PD)
+141,6-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,6,192,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
+142,6-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,6,792,0,0,0,0,false,,,Poetry & Drama (PD)
+143,6-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,6,216,0,0,0,0,false,,,World Literature (PD where possible)
+144,6-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,6,216,0,0,0,0,false,,,"Debates, Multimedia Presentations"
 145,6-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,6,8,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
 146,6-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,6,4,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
-147,7-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,7,252,0,0,0,0,false,,,Historical Documents (PD)
+147,7-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,7,792,0,0,0,0,false,,,Historical Documents (PD)
 148,7-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,7,12,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
-149,7-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,7,252,0,0,0,0,false,,,Novellas/Short Novels (PD)
-150,7-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,7,252,0,0,0,0,false,,,Poetry & Drama (PD)
-151,7-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,7,36,0,0,0,0,false,,,World Literature (PD where possible)
+149,7-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,7,792,0,0,0,0,false,,,Novellas/Short Novels (PD)
+150,7-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,7,792,0,0,0,0,false,,,Poetry & Drama (PD)
+151,7-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,7,216,0,0,0,0,false,,,World Literature (PD where possible)
 152,7-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,7,4,0,0,0,0,false,,,"Debates, Multimedia Presentations"
-153,7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,7,36,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
-154,8-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,8,72,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
-155,8-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,8,252,0,0,0,0,false,,,Novellas/Short Novels (PD)
-156,8-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,8,252,0,0,0,0,false,,,Poetry & Drama (PD)
-157,8-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,8,36,0,0,0,0,false,,,World Literature (PD where possible)
-158,8-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,8,36,0,0,0,0,false,,,"Debates, Multimedia Presentations"
-159,8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,8,36,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
-160,8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,8,36,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
-161,3-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,3,36,0,0,0,0,false,,,Bar/Line Plots
+153,7-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,7,216,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
+154,8-english-language-arts-reading-informational-science-tech-articles-open-licensed,English Language Arts,8,192,0,0,0,0,false,,,Science/Tech Articles (open-licensed)
+155,8-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,8,792,0,0,0,0,false,,,Novellas/Short Novels (PD)
+156,8-english-language-arts-reading-literature-poetry-and-drama-pd,English Language Arts,8,792,0,0,0,0,false,,,Poetry & Drama (PD)
+157,8-english-language-arts-reading-literature-world-literature-pd-where-possible,English Language Arts,8,216,0,0,0,0,false,,,World Literature (PD where possible)
+158,8-english-language-arts-speaking-and-listening-debates-multimedia-presentations,English Language Arts,8,216,0,0,0,0,false,,,"Debates, Multimedia Presentations"
+159,8-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,8,216,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
+160,8-english-language-arts-writing-and-grammar-essays-research-argumentative-writing-grammar-and-usage,English Language Arts,8,216,0,0,0,0,false,,,"Essays, Research, Argumentative Writing, Grammar & Usage"
+161,3-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,3,42,0,0,0,0,false,,,Bar/Line Plots
 162,3-mathematics-data-and-probability-statistics-interpreting-tables-charts,Mathematics,3,8,0,0,0,0,false,,,Interpreting Tables/Charts
 163,3-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,3,36,0,0,0,0,false,,,Intro Probability (experimental)
-164,3-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,3,36,0,0,0,0,false,,,Mean/Median/Mode
-165,3-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,3,36,0,0,0,0,false,,,Angles & Lines
-166,3-mathematics-geometry-and-measurement-area-perimeter,Mathematics,3,36,0,0,0,0,false,,,Area/Perimeter
-167,3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,3,8,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
-168,3-mathematics-geometry-and-measurement-transformations-intro,Mathematics,3,36,0,0,0,0,false,,,Transformations (intro)
-169,3-mathematics-geometry-and-measurement-volume,Mathematics,3,36,0,0,0,0,false,,,Volume
-170,3-mathematics-number-and-operations-decimals-intro,Mathematics,3,288,0,0,0,0,false,,,Decimals (intro)
+164,3-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,3,42,0,0,0,0,false,,,Mean/Median/Mode
+165,3-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,3,40,0,0,0,0,false,,,Angles & Lines
+166,3-mathematics-geometry-and-measurement-area-perimeter,Mathematics,3,42,0,0,0,0,false,,,Area/Perimeter
+167,3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,3,14,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
+168,3-mathematics-geometry-and-measurement-transformations-intro,Mathematics,3,40,0,0,0,0,false,,,Transformations (intro)
+169,3-mathematics-geometry-and-measurement-volume,Mathematics,3,42,0,0,0,0,false,,,Volume
+170,3-mathematics-number-and-operations-decimals-intro,Mathematics,3,666,0,0,0,0,false,,,Decimals (intro)
 171,3-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,3,36,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
 172,3-mathematics-number-and-operations-multiplication-division,Mathematics,3,4,0,0,0,0,false,,,Multiplication/Division
-173,3-mathematics-number-and-operations-rounding-and-estimation,Mathematics,3,36,0,0,0,0,false,,,Rounding & Estimation
-174,4-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,4,36,0,0,0,0,false,,,Bar/Line Plots
+173,3-mathematics-number-and-operations-rounding-and-estimation,Mathematics,3,54,0,0,0,0,false,,,Rounding & Estimation
+174,4-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,4,42,0,0,0,0,false,,,Bar/Line Plots
 175,4-mathematics-data-and-probability-statistics-interpreting-tables-charts,Mathematics,4,8,0,0,0,0,false,,,Interpreting Tables/Charts
-176,4-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,4,8,0,0,0,0,false,,,Intro Probability (experimental)
-177,4-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,4,36,0,0,0,0,false,,,Mean/Median/Mode
-178,4-mathematics-geometry-and-measurement-area-perimeter,Mathematics,4,36,0,0,0,0,false,,,Area/Perimeter
-179,4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,4,8,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
-180,4-mathematics-geometry-and-measurement-transformations-intro,Mathematics,4,288,0,0,0,0,false,,,Transformations (intro)
-181,4-mathematics-geometry-and-measurement-volume,Mathematics,4,36,0,0,0,0,false,,,Volume
-182,4-mathematics-number-and-operations-decimals-intro,Mathematics,4,4,0,0,0,0,false,,,Decimals (intro)
-183,4-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,4,36,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
-184,4-mathematics-number-and-operations-multiplication-division,Mathematics,4,36,0,0,0,0,false,,,Multiplication/Division
-185,4-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,4,36,0,0,0,0,false,,,Place Value (thousands/millions)
-186,4-mathematics-number-and-operations-rounding-and-estimation,Mathematics,4,36,0,0,0,0,false,,,Rounding & Estimation
+176,4-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,4,14,0,0,0,0,false,,,Intro Probability (experimental)
+177,4-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,4,42,0,0,0,0,false,,,Mean/Median/Mode
+178,4-mathematics-geometry-and-measurement-area-perimeter,Mathematics,4,42,0,0,0,0,false,,,Area/Perimeter
+179,4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,4,14,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
+180,4-mathematics-geometry-and-measurement-transformations-intro,Mathematics,4,664,0,0,0,0,false,,,Transformations (intro)
+181,4-mathematics-geometry-and-measurement-volume,Mathematics,4,42,0,0,0,0,false,,,Volume
+182,4-mathematics-number-and-operations-decimals-intro,Mathematics,4,10,0,0,0,0,false,,,Decimals (intro)
+183,4-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,4,42,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
+184,4-mathematics-number-and-operations-multiplication-division,Mathematics,4,42,0,0,0,0,false,,,Multiplication/Division
+185,4-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,4,42,0,0,0,0,false,,,Place Value (thousands/millions)
+186,4-mathematics-number-and-operations-rounding-and-estimation,Mathematics,4,54,0,0,0,0,false,,,Rounding & Estimation
 187,5-mathematics-data-and-probability-statistics-interpreting-tables-charts,Mathematics,5,36,0,0,0,0,false,,,Interpreting Tables/Charts
-188,5-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,5,8,0,0,0,0,false,,,Intro Probability (experimental)
-189,5-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,5,36,0,0,0,0,false,,,Mean/Median/Mode
-190,5-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,5,8,0,0,0,0,false,,,Angles & Lines
-191,5-mathematics-geometry-and-measurement-area-perimeter,Mathematics,5,4,0,0,0,0,false,,,Area/Perimeter
-192,5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,5,36,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
-193,5-mathematics-geometry-and-measurement-transformations-intro,Mathematics,5,36,0,0,0,0,false,,,Transformations (intro)
-194,5-mathematics-geometry-and-measurement-volume,Mathematics,5,4,0,0,0,0,false,,,Volume
-195,5-mathematics-number-and-operations-decimals-intro,Mathematics,5,288,0,0,0,0,false,,,Decimals (intro)
-196,5-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,5,4,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
-197,5-mathematics-number-and-operations-multiplication-division,Mathematics,5,36,0,0,0,0,false,,,Multiplication/Division
-198,5-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,5,8,0,0,0,0,false,,,Place Value (thousands/millions)
+188,5-mathematics-data-and-probability-statistics-intro-probability-experimental,Mathematics,5,14,0,0,0,0,false,,,Intro Probability (experimental)
+189,5-mathematics-data-and-probability-statistics-mean-median-mode,Mathematics,5,42,0,0,0,0,false,,,Mean/Median/Mode
+190,5-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,5,12,0,0,0,0,false,,,Angles & Lines
+191,5-mathematics-geometry-and-measurement-area-perimeter,Mathematics,5,10,0,0,0,0,false,,,Area/Perimeter
+192,5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i,Mathematics,5,42,0,0,0,0,false,,,Coordinate Plane (Quadrant I)
+193,5-mathematics-geometry-and-measurement-transformations-intro,Mathematics,5,40,0,0,0,0,false,,,Transformations (intro)
+194,5-mathematics-geometry-and-measurement-volume,Mathematics,5,10,0,0,0,0,false,,,Volume
+195,5-mathematics-number-and-operations-decimals-intro,Mathematics,5,666,0,0,0,0,false,,,Decimals (intro)
+196,5-mathematics-number-and-operations-fractions-concepts-equivalence,Mathematics,5,10,0,0,0,0,false,,,"Fractions (concepts, equivalence)"
+197,5-mathematics-number-and-operations-multiplication-division,Mathematics,5,42,0,0,0,0,false,,,Multiplication/Division
+198,5-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,5,14,0,0,0,0,false,,,Place Value (thousands/millions)
 199,5-mathematics-number-and-operations-rounding-and-estimation,Mathematics,5,4,0,0,0,0,false,,,Rounding & Estimation
-200,6-mathematics-data-and-probability-statistics-probability-rules,Mathematics,6,36,0,0,0,0,false,,,Probability Rules
-201,6-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,6,288,0,0,0,0,false,,,Sampling & Inference (intro)
-202,6-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,6,36,0,0,0,0,false,,,Scatterplots & Correlation
-203,6-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,6,36,0,0,0,0,false,,,Two-way Tables
-204,6-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,6,36,0,0,0,0,false,,,Coordinate Geometry
-205,6-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,6,36,0,0,0,0,false,,,Pythagorean Theorem
-206,6-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,6,36,0,0,0,0,false,,,Similarity & Congruence
-207,6-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,6,36,0,0,0,0,false,,,Transformations & Symmetry
+200,6-mathematics-data-and-probability-statistics-probability-rules,Mathematics,6,216,0,0,0,0,false,,,Probability Rules
+201,6-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,6,660,0,0,0,0,false,,,Sampling & Inference (intro)
+202,6-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,6,216,0,0,0,0,false,,,Scatterplots & Correlation
+203,6-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,6,216,0,0,0,0,false,,,Two-way Tables
+204,6-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,6,216,0,0,0,0,false,,,Coordinate Geometry
+205,6-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,6,216,0,0,0,0,false,,,Pythagorean Theorem
+206,6-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,6,156,0,0,0,0,false,,,Similarity & Congruence
+207,6-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,6,216,0,0,0,0,false,,,Transformations & Symmetry
 208,6-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,6,4,0,0,0,0,false,,,Volume & Surface Area
-209,6-mathematics-number-and-operations-expressions-and-equations,Mathematics,6,8,0,0,0,0,false,,,Expressions & Equations
-210,6-mathematics-number-and-operations-functions-intro,Mathematics,6,288,0,0,0,0,false,,,Functions (intro)
+209,6-mathematics-number-and-operations-expressions-and-equations,Mathematics,6,224,0,0,0,0,false,,,Expressions & Equations
+210,6-mathematics-number-and-operations-functions-intro,Mathematics,6,660,0,0,0,0,false,,,Functions (intro)
 211,6-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,6,4,0,0,0,0,false,,,Integers & Rational Numbers
-212,6-mathematics-number-and-operations-percent-and-rates,Mathematics,6,36,0,0,0,0,false,,,Percent & Rates
+212,6-mathematics-number-and-operations-percent-and-rates,Mathematics,6,216,0,0,0,0,false,,,Percent & Rates
 213,7-mathematics-data-and-probability-statistics-probability-rules,Mathematics,7,8,0,0,0,0,false,,,Probability Rules
-214,7-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,7,8,0,0,0,0,false,,,Sampling & Inference (intro)
-215,7-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,7,4,0,0,0,0,false,,,Scatterplots & Correlation
+214,7-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,7,668,0,0,0,0,false,,,Sampling & Inference (intro)
+215,7-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,7,220,0,0,0,0,false,,,Scatterplots & Correlation
 216,7-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,7,4,0,0,0,0,false,,,Two-way Tables
-217,7-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,7,36,0,0,0,0,false,,,Coordinate Geometry
-218,7-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,7,36,0,0,0,0,false,,,Pythagorean Theorem
-219,7-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,7,36,0,0,0,0,false,,,Similarity & Congruence
-220,7-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,7,36,0,0,0,0,false,,,Transformations & Symmetry
-221,7-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,7,36,0,0,0,0,false,,,Volume & Surface Area
-222,7-mathematics-number-and-operations-expressions-and-equations,Mathematics,7,36,0,0,0,0,false,,,Expressions & Equations
+217,7-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,7,216,0,0,0,0,false,,,Coordinate Geometry
+218,7-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,7,216,0,0,0,0,false,,,Pythagorean Theorem
+219,7-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,7,156,0,0,0,0,false,,,Similarity & Congruence
+220,7-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,7,216,0,0,0,0,false,,,Transformations & Symmetry
+221,7-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,7,216,0,0,0,0,false,,,Volume & Surface Area
+222,7-mathematics-number-and-operations-expressions-and-equations,Mathematics,7,216,0,0,0,0,false,,,Expressions & Equations
 223,7-mathematics-number-and-operations-functions-intro,Mathematics,7,8,0,0,0,0,false,,,Functions (intro)
-224,7-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,7,36,0,0,0,0,false,,,Integers & Rational Numbers
-225,7-mathematics-number-and-operations-percent-and-rates,Mathematics,7,8,0,0,0,0,false,,,Percent & Rates
+224,7-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,7,216,0,0,0,0,false,,,Integers & Rational Numbers
+225,7-mathematics-number-and-operations-percent-and-rates,Mathematics,7,224,0,0,0,0,false,,,Percent & Rates
 226,7-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,7,12,0,0,0,0,false,,,Ratios & Proportional Reasoning
 227,8-mathematics-data-and-probability-statistics-probability-rules,Mathematics,8,8,0,0,0,0,false,,,Probability Rules
-228,8-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,8,8,0,0,0,0,false,,,Sampling & Inference (intro)
-229,8-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,8,36,0,0,0,0,false,,,Two-way Tables
-230,8-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,8,4,0,0,0,0,false,,,Coordinate Geometry
-231,8-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,8,36,0,0,0,0,false,,,Pythagorean Theorem
+228,8-mathematics-data-and-probability-statistics-sampling-and-inference-intro,Mathematics,8,668,0,0,0,0,false,,,Sampling & Inference (intro)
+229,8-mathematics-data-and-probability-statistics-two-way-tables,Mathematics,8,216,0,0,0,0,false,,,Two-way Tables
+230,8-mathematics-geometry-and-measurement-coordinate-geometry,Mathematics,8,220,0,0,0,0,false,,,Coordinate Geometry
+231,8-mathematics-geometry-and-measurement-pythagorean-theorem,Mathematics,8,216,0,0,0,0,false,,,Pythagorean Theorem
 232,8-mathematics-geometry-and-measurement-similarity-and-congruence,Mathematics,8,12,0,0,0,0,false,,,Similarity & Congruence
 233,8-mathematics-geometry-and-measurement-transformations-and-symmetry,Mathematics,8,4,0,0,0,0,false,,,Transformations & Symmetry
-234,8-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,8,36,0,0,0,0,false,,,Volume & Surface Area
-235,8-mathematics-number-and-operations-expressions-and-equations,Mathematics,8,8,0,0,0,0,false,,,Expressions & Equations
+234,8-mathematics-geometry-and-measurement-volume-and-surface-area,Mathematics,8,216,0,0,0,0,false,,,Volume & Surface Area
+235,8-mathematics-number-and-operations-expressions-and-equations,Mathematics,8,224,0,0,0,0,false,,,Expressions & Equations
 236,8-mathematics-number-and-operations-functions-intro,Mathematics,8,8,0,0,0,0,false,,,Functions (intro)
-237,8-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,8,36,0,0,0,0,false,,,Integers & Rational Numbers
-238,8-mathematics-number-and-operations-percent-and-rates,Mathematics,8,8,0,0,0,0,false,,,Percent & Rates
-239,8-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,8,12,0,0,0,0,false,,,Ratios & Proportional Reasoning
+237,8-mathematics-number-and-operations-integers-and-rational-numbers,Mathematics,8,216,0,0,0,0,false,,,Integers & Rational Numbers
+238,8-mathematics-number-and-operations-percent-and-rates,Mathematics,8,224,0,0,0,0,false,,,Percent & Rates
+239,8-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,8,240,0,0,0,0,false,,,Ratios & Proportional Reasoning
 240,3-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,3,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
 241,3-science-earth-and-space-natural-resources,Science,3,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Natural Resources
-242,3-science-earth-and-space-solar-system-relative-scale,Science,3,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
+242,3-science-earth-and-space-solar-system-relative-scale,Science,3,40,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
 243,3-science-earth-and-space-weather-and-climate,Science,3,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
 244,3-science-engineering-practices-criteria-and-constraints,Science,3,72,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
-245,3-science-engineering-practices-prototypes-and-iteration,Science,3,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
-246,3-science-life-science-adaptations,Science,3,36,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
-247,3-science-life-science-ecosystems-and-food-webs,Science,3,36,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
+245,3-science-engineering-practices-prototypes-and-iteration,Science,3,40,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
+246,3-science-life-science-adaptations,Science,3,40,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
+247,3-science-life-science-ecosystems-and-food-webs,Science,3,40,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
 248,3-science-life-science-heredity-intro,Science,3,8,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
-249,3-science-life-science-human-body-systems-intro,Science,3,288,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
+249,3-science-life-science-human-body-systems-intro,Science,3,664,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
 250,3-science-physical-science-energy-transfer,Science,3,36,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
-251,3-science-physical-science-forces-balanced-unbalanced,Science,3,36,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
+251,3-science-physical-science-forces-balanced-unbalanced,Science,3,40,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
 252,3-science-physical-science-waves-intro,Science,3,8,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
-253,4-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,4,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
+253,4-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,4,40,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
 254,4-science-earth-and-space-natural-resources,Science,4,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Natural Resources
-255,4-science-earth-and-space-weather-and-climate,Science,4,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
+255,4-science-earth-and-space-weather-and-climate,Science,4,40,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
 256,4-science-engineering-practices-criteria-and-constraints,Science,4,72,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
 257,4-science-engineering-practices-prototypes-and-iteration,Science,4,4,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
-258,4-science-life-science-adaptations,Science,4,36,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
+258,4-science-life-science-adaptations,Science,4,40,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
 259,4-science-life-science-ecosystems-and-food-webs,Science,4,4,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
 260,4-science-life-science-heredity-intro,Science,4,8,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
-261,4-science-life-science-human-body-systems-intro,Science,4,288,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
-262,4-science-physical-science-energy-transfer,Science,4,36,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
+261,4-science-life-science-human-body-systems-intro,Science,4,660,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
+262,4-science-physical-science-energy-transfer,Science,4,40,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
 263,4-science-physical-science-forces-balanced-unbalanced,Science,4,8,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
-264,4-science-physical-science-matter-particles,Science,4,36,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
+264,4-science-physical-science-matter-particles,Science,4,40,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
 265,4-science-physical-science-waves-intro,Science,4,8,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
 266,5-science-earth-and-space-earth-systems-geosphere-hydrosphere,Science,5,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth Systems Geosphere Hydrosphere
 267,5-science-earth-and-space-natural-resources,Science,5,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Natural Resources
 268,5-science-earth-and-space-solar-system-relative-scale,Science,5,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
-269,5-science-earth-and-space-weather-and-climate,Science,5,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
-270,5-science-engineering-practices-prototypes-and-iteration,Science,5,36,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
-271,5-science-life-science-adaptations,Science,5,36,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
-272,5-science-life-science-ecosystems-and-food-webs,Science,5,36,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
-273,5-science-life-science-heredity-intro,Science,5,288,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
-274,5-science-life-science-human-body-systems-intro,Science,5,288,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
-275,5-science-physical-science-energy-transfer,Science,5,36,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
+269,5-science-earth-and-space-weather-and-climate,Science,5,40,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather And Climate
+270,5-science-engineering-practices-prototypes-and-iteration,Science,5,40,0,0,0,0,false,,,Launch Lesson: Engineering Practices Prototypes And Iteration
+271,5-science-life-science-adaptations,Science,5,40,0,0,0,0,false,,,Launch Lesson: Life Science Adaptations
+272,5-science-life-science-ecosystems-and-food-webs,Science,5,40,0,0,0,0,false,,,Launch Lesson: Life Science Ecosystems And Food Webs
+273,5-science-life-science-heredity-intro,Science,5,660,0,0,0,0,false,,,Launch Lesson: Life Science Heredity Intro
+274,5-science-life-science-human-body-systems-intro,Science,5,664,0,0,0,0,false,,,Launch Lesson: Life Science Human Body Systems Intro
+275,5-science-physical-science-energy-transfer,Science,5,40,0,0,0,0,false,,,Launch Lesson: Physical Science Energy Transfer
 276,5-science-physical-science-forces-balanced-unbalanced,Science,5,8,0,0,0,0,false,,,Launch Lesson: Physical Science Forces Balanced Unbalanced
-277,5-science-physical-science-matter-particles,Science,5,4,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
-278,5-science-physical-science-waves-intro,Science,5,288,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
+277,5-science-physical-science-matter-particles,Science,5,8,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
+278,5-science-physical-science-waves-intro,Science,5,676,0,0,0,0,false,,,Launch Lesson: Physical Science Waves Intro
 279,6-science-earth-and-space-astronomy-stars-galaxies,Science,6,4,0,0,0,0,false,,,Launch Lesson: Earth And Space Astronomy Stars Galaxies
 280,6-science-earth-and-space-earth-history,Science,6,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Earth History
 281,6-science-earth-and-space-weather-climate-systems,Science,6,36,0,0,0,0,false,,,Launch Lesson: Earth And Space Weather Climate Systems
@@ -275,27 +275,28 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 365,8-social-studies-us-history-reconstruction-to-wwii,Social Studies,8,8,0,0,0,0,false,,,Reconstruction to WWII
 366,8-social-studies-world-history-and-geography-global-interactions,Social Studies,8,8,0,0,0,0,false,,,Global Interactions
 367,6-mathematics-number-operations-ratios-proportional-reasoning,Mathematics,6,4,0,0,0,0,false,,,Ratios and Proportional Reasoning (Grade 6)
-371,3-english-language-arts-reading-informational-biographies-pd,English Language Arts,3,252,0,0,0,0,false,,,Biographies (PD)
+368,6-science-earth-space-plate-tectonics,Science,6,16,0,0,0,0,false,,,"Plate Tectonics (Earth & Space Science, Grade 6): Launch Lesson"
+371,3-english-language-arts-reading-informational-biographies-pd,English Language Arts,3,792,0,0,0,0,false,,,Biographies (PD)
 372,3-english-language-arts-reading-informational-nonfiction-articles-open-licensed,English Language Arts,3,8,0,0,0,0,false,,,Nonfiction Articles (open-licensed)
-373,3-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,3,252,0,0,0,0,false,,,Chapter Books (PD)
-374,3-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,3,252,0,0,0,0,false,,,Myths/Legends (PD)
-375,3-english-language-arts-reading-literature-short-stories-pd,English Language Arts,3,252,0,0,0,0,false,,,Short Stories (PD)
-376,3-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,3,8,0,0,0,0,false,,,"Presentations, Summaries"
-386,4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,4,108,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
+373,3-english-language-arts-reading-literature-chapter-books-pd,English Language Arts,3,792,0,0,0,0,false,,,Chapter Books (PD)
+374,3-english-language-arts-reading-literature-myths-legends-pd,English Language Arts,3,792,0,0,0,0,false,,,Myths/Legends (PD)
+375,3-english-language-arts-reading-literature-short-stories-pd,English Language Arts,3,792,0,0,0,0,false,,,Short Stories (PD)
+376,3-english-language-arts-speaking-and-listening-presentations-summaries,English Language Arts,3,14,0,0,0,0,false,,,"Presentations, Summaries"
+386,4-english-language-arts-writing-and-grammar-paragraphs-narratives-expository-writing-grammar-basics,English Language Arts,4,147,0,0,0,0,false,,,"Paragraphs, Narratives, Expository Writing, Grammar Basics"
 393,5-english-language-arts-vocabulary-roots-prefixes-suffixes,English Language Arts,5,4,0,0,0,0,false,,,Roots/Prefixes/Suffixes
-397,6-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,6,252,0,0,0,0,false,,,Novellas/Short Novels (PD)
+397,6-english-language-arts-reading-literature-novellas-short-novels-pd,English Language Arts,6,792,0,0,0,0,false,,,Novellas/Short Novels (PD)
 409,7-english-language-arts-vocabulary-academic-vocabulary-greek-latin-roots,English Language Arts,7,8,0,0,0,0,false,,,"Academic Vocabulary, Greek/Latin Roots"
-411,8-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,8,252,0,0,0,0,false,,,Historical Documents (PD)
-431,3-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,3,36,0,0,0,0,false,,,Place Value (thousands/millions)
-437,4-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,4,8,0,0,0,0,false,,,Angles & Lines
-447,5-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,5,36,0,0,0,0,false,,,Bar/Line Plots
+411,8-english-language-arts-reading-informational-historical-documents-pd,English Language Arts,8,792,0,0,0,0,false,,,Historical Documents (PD)
+431,3-mathematics-number-and-operations-place-value-thousands-millions,Mathematics,3,42,0,0,0,0,false,,,Place Value (thousands/millions)
+437,4-mathematics-geometry-and-measurement-angles-and-lines,Mathematics,4,12,0,0,0,0,false,,,Angles & Lines
+447,5-mathematics-data-and-probability-statistics-bar-line-plots,Mathematics,5,42,0,0,0,0,false,,,Bar/Line Plots
 474,6-mathematics-number-and-operations-ratios-and-proportional-reasoning,Mathematics,6,12,0,0,0,0,false,,,Ratios & Proportional Reasoning
-491,8-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,8,36,0,0,0,0,false,,,Scatterplots & Correlation
+491,8-mathematics-data-and-probability-statistics-scatterplots-and-correlation,Mathematics,8,216,0,0,0,0,false,,,Scatterplots & Correlation
 515,3-science-physical-science-matter-particles,Science,3,36,0,0,0,0,false,,,Launch Lesson: Physical Science Matter Particles
-519,4-science-earth-and-space-solar-system-relative-scale,Science,4,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
-535,5-science-engineering-practices-criteria-and-constraints,Science,5,4,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
-547,6-science-earth-and-space-plate-tectonics,Science,6,8,0,0,0,0,false,,,Launch Lesson: Earth And Space Plate Tectonics
-570,7-science-life-science-evolution-and-natural-selection,Science,7,12,0,0,0,0,false,,,Launch Lesson: Life Science Evolution And Natural Selection
+519,4-science-earth-and-space-solar-system-relative-scale,Science,4,12,0,0,0,0,false,,,Launch Lesson: Earth And Space Solar System Relative Scale
+535,5-science-engineering-practices-criteria-and-constraints,Science,5,8,0,0,0,0,false,,,Launch Lesson: Engineering Practices Criteria And Constraints
+547,6-science-earth-and-space-plate-tectonics,Science,6,56,0,0,0,0,false,,,Launch Lesson: Earth And Space Plate Tectonics
+570,7-science-life-science-evolution-and-natural-selection,Science,7,48,0,0,0,0,false,,,Launch Lesson: Life Science Evolution And Natural Selection
 583,8-science-engineering-practices-tradeoffs-and-constraints,Science,8,8,0,0,0,0,false,,,Launch Lesson: Engineering Practices Tradeoffs And Constraints
 594,3-social-studies-civics-and-government-local-state-government,Social Studies,3,16,0,0,0,0,false,,,Local/State Government
 607,4-social-studies-world-history-and-geography-ancient-civilizations,Social Studies,4,12,0,0,0,0,false,,,Ancient Civilizations
@@ -305,7 +306,7 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 641,1-electives-arts-and-music-colors-shapes-in-art,Electives,1,20,0,0,0,0,false,,,Intro: Colors/Shapes in Art
 642,1-electives-arts-and-music-rhythm-and-melody,Electives,1,12,0,0,0,0,false,,,Intro: Rhythm & Melody
 643,10-electives-arts-and-music-studio-art-design-music-composition-performance,Electives,10,28,0,0,0,0,false,,,"Intro: Studio Art, Design, Music Composition/Performance (Grade 10)"
-648,6-electives-arts-and-music-music-theory-intro,Electives,6,12,0,0,0,0,false,,,Intro: Music Theory (intro)
+648,6-electives-arts-and-music-music-theory-intro,Electives,6,660,0,0,0,0,false,,,Intro: Music Theory (intro)
 649,1-electives-computer-science-patterns-and-sequencing,Electives,1,16,0,0,0,0,false,,,Intro: Patterns & Sequencing
 650,11-electives-computer-science-cs-principles-data-structures-intro-web-dev-basics,Electives,11,24,0,0,0,0,false,,,"Intro: CS Principles, Data Structures (intro), Web Dev Basics (Grade 11)"
 651,2-electives-computer-science-algorithms-unplugged,Electives,2,12,0,0,0,0,false,,,Intro: Algorithms (unplugged)
@@ -938,7 +939,7 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 1854,6-electives-arts-and-music-art-history-pd-images,Electives,6,4,0,0,0,0,false,,,Discovering Artists and Artwork from History
 1855,6-electives-arts-and-music-music-theory-intro,Electives,6,4,0,0,0,0,false,,,Building Blocks of Musical Sound: Introduction to Theory
 1856,7-electives-arts-and-music-art-history-pd-images,Electives,7,4,0,0,0,0,false,,,Modern and Contemporary Art: Revolution and Reflection
-1857,7-electives-arts-and-music-music-theory-intro,Electives,7,288,0,0,0,0,false,,,Advanced Harmony: Chords in Motion
+1857,7-electives-arts-and-music-music-theory-intro,Electives,7,660,0,0,0,0,false,,,Advanced Harmony: Chords in Motion
 1858,5-electives-arts-and-music-drawing-painting-techniques,Electives,5,4,0,0,0,0,false,,,Mastering Artistic Techniques and Expression
 1859,1-electives-arts-and-music-colors-shapes-in-art,Electives,1,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
 1860,1-electives-arts-and-music-rhythm-and-melody,Electives,1,12,0,0,0,0,false,,,Rhythm & Melody Launch Lesson
@@ -948,8 +949,8 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 1864,2-electives-arts-and-music-colors-shapes-in-art,Electives,2,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
 1865,2-electives-arts-and-music-rhythm-and-melody,Electives,2,12,0,0,0,0,false,,,Rhythm & Melody Launch Lesson
 1866,3-electives-arts-and-music-drawing-painting-techniques,Electives,3,36,0,0,0,0,false,,,Discovering How to Draw and Paint
-1867,3-electives-arts-and-music-notation-basics,Electives,3,108,0,0,0,0,false,,,Learning to Read Music Notes
-1868,4-electives-arts-and-music-drawing-painting-techniques,Electives,4,4,0,0,0,0,false,,,Techniques That Make Art Come Alive
+1867,3-electives-arts-and-music-notation-basics,Electives,3,129,0,0,0,0,false,,,Learning to Read Music Notes
+1868,4-electives-arts-and-music-drawing-painting-techniques,Electives,4,40,0,0,0,0,false,,,Techniques That Make Art Come Alive
 1869,4-electives-arts-and-music-notation-basics,Electives,4,4,0,0,0,0,false,,,Reading Rhythms and Melodies
 1870,8-electives-arts-and-music-art-history-pd-images,Electives,8,36,0,0,0,0,false,,,"Critical Perspectives: Art, Power, and Identity"
 1871,8-electives-arts-and-music-music-theory-intro,Electives,8,4,0,0,0,0,false,,,Complex Harmony and Compositional Strategies
@@ -969,7 +970,7 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 1885,4-electives-computer-science-digital-citizenship,Electives,4,4,0,0,0,0,false,,,Protecting Yourself Online and Respecting Others
 1886,5-electives-computer-science-block-based-programming,Electives,5,4,0,0,0,0,false,,,"Advanced Programming: Functions, Lists, and Patterns"
 1887,5-electives-computer-science-digital-citizenship,Electives,5,4,0,0,0,0,false,,,Being Smart About Information Online and Staying Healthy
-1888,7-electives-computer-science-data-and-graphics,Electives,7,36,0,0,0,0,false,,,"Analyzing Data: Patterns, Bias, and Truthfulness"
+1888,7-electives-computer-science-data-and-graphics,Electives,7,51,0,0,0,0,false,,,"Analyzing Data: Patterns, Bias, and Truthfulness"
 1889,7-electives-computer-science-intro-python-js,Electives,7,4,0,0,0,0,false,,,"Building Programs with Functions, Lists, and Logic"
 1890,8-electives-computer-science-data-and-graphics,Electives,8,4,0,0,0,0,false,,,"Advanced Data Analysis: Big Data, Bias, and Decision-Making"
 1891,8-electives-computer-science-intro-python-js,Electives,8,36,0,0,0,0,false,,,"Advanced Programming: Objects, Error Handling, and Real Problems"
@@ -982,11 +983,11 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 1898,11-electives-financial-literacy-elective-taxes-credit-debt,Electives,11,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
 1899,12-electives-financial-literacy-elective-investing-basics,Electives,12,24,0,0,0,0,false,,,Investing Basics Launch Lesson
 1900,12-electives-financial-literacy-elective-taxes-credit-debt,Electives,12,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
-1901,6-electives-financial-literacy-elective-banking-basics,Electives,6,108,0,0,0,0,false,,,Understanding Banks and Your Money
+1901,6-electives-financial-literacy-elective-banking-basics,Electives,6,129,0,0,0,0,false,,,Understanding Banks and Your Money
 1902,6-electives-financial-literacy-elective-saving-budgeting,Electives,6,4,0,0,0,0,false,,,Creating Your First Budget and Saving Goals
 1903,7-electives-financial-literacy-elective-banking-basics,Electives,7,4,0,0,0,0,false,,,"Credit, Loans, and Building Your Financial Identity"
-1904,7-electives-financial-literacy-elective-saving-budgeting,Electives,7,36,0,0,0,0,false,,,Advanced Budgeting and Long-Term Financial Goals
-1905,8-electives-financial-literacy-elective-banking-basics,Electives,8,108,0,0,0,0,false,,,"Financial Systems, Smart Banking, and Protecting Your Identity"
+1904,7-electives-financial-literacy-elective-saving-budgeting,Electives,7,56,0,0,0,0,false,,,Advanced Budgeting and Long-Term Financial Goals
+1905,8-electives-financial-literacy-elective-banking-basics,Electives,8,129,0,0,0,0,false,,,"Financial Systems, Smart Banking, and Protecting Your Identity"
 1906,8-electives-financial-literacy-elective-saving-budgeting,Electives,8,4,0,0,0,0,false,,,"Wealth Building: Investing, Planning, and Financial Independence"
 1907,9-electives-financial-literacy-elective-investing-basics,Electives,9,24,0,0,0,0,false,,,Investing Basics Launch Lesson
 1908,9-electives-financial-literacy-elective-taxes-credit-debt,Electives,9,28,0,0,0,0,false,,,Taxes/Credit/Debt Launch Lesson
@@ -1001,9 +1002,9 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 1917,6-electives-health-and-pe-body-systems-and-health,Electives,6,36,0,0,0,0,false,,,Body Systems: How Your Body Works
 1918,6-electives-health-and-pe-fitness-planning,Electives,6,4,0,0,0,0,false,,,Creating Your Personal Fitness Plan
 1919,7-electives-health-and-pe-body-systems-and-health,Electives,7,4,0,0,0,0,false,,,Advanced Body Systems: Integration and Disease Prevention
-1920,7-electives-health-and-pe-fitness-planning,Electives,7,36,0,0,0,0,false,,,"Advanced Training: Progression, Variety, and Performance"
+1920,7-electives-health-and-pe-fitness-planning,Electives,7,46,0,0,0,0,false,,,"Advanced Training: Progression, Variety, and Performance"
 1921,8-electives-health-and-pe-body-systems-and-health,Electives,8,4,0,0,0,0,false,,,"Chronic Disease, Lifestyle, and Personal Health Planning"
-1922,8-electives-health-and-pe-fitness-planning,Electives,8,4,0,0,0,0,false,,,"Lifetime Fitness: Genetics, Goals, and Sustainability"
+1922,8-electives-health-and-pe-fitness-planning,Electives,8,50,0,0,0,0,false,,,"Lifetime Fitness: Genetics, Goals, and Sustainability"
 1923,9-electives-health-and-pe-wellness-mental-health-basics-cpr-aed-awareness,Electives,9,28,0,0,0,0,false,,,"Wellness, Mental Health Basics, CPR/AED awareness Launch Lesson"
 1924,k-electives-health-and-pe-movement-safety-hygiene,Electives,K,24,0,0,0,0,false,,,"Movement, Safety, Hygiene Launch Lesson"
 3225,k-electives-arts-and-music-colors-shapes-in-art,Electives,K,20,0,0,0,0,false,,,Colors/Shapes in Art Launch Lesson
@@ -1060,3 +1061,174 @@ lesson_id,module_slug,subject,grade_band,total_linked_questions,flagged_linked_q
 4676,1-social-studies-us-history-personal-family-history,Social Studies,1,4,0,0,0,0,false,,,Personal/Family History: Grade 1 Launch Lesson
 4677,10-social-studies-us-history-thematic-ap-style-depth-pd-docs,Social Studies,10,4,0,0,0,0,false,,,Thematic/AP-style depth (PD docs): Grade 10 Launch Lesson
 4901,6-study-skills-executive-functioning-plan-your-week-in-10-minutes,Study Skills,6,12,0,0,0,0,false,,,Plan Your Week in 10 Minutes
+5919,3-mathematics-problem-solving-multi-step-word-problems,Mathematics,3,54,0,0,0,0,false,,,Multi-Step Word Problems
+5920,4-mathematics-problem-solving-multi-step-word-problems,Mathematics,4,54,0,0,0,0,false,,,Multi-Step Word Problems
+5921,5-mathematics-problem-solving-multi-step-word-problems,Mathematics,5,54,0,0,0,0,false,,,Multi-Step Word Problems
+5960,3-english-language-arts-reading-informational-text-structure-and-transitions,English Language Arts,3,54,0,0,0,0,false,,,Text Structure and Transitions
+5961,4-english-language-arts-reading-informational-text-structure-and-transitions,English Language Arts,4,54,0,0,0,0,false,,,Text Structure and Transitions
+5962,5-english-language-arts-reading-informational-text-structure-and-transitions,English Language Arts,5,54,0,0,0,0,false,,,Text Structure and Transitions
+6037,3-science-engineering-practices-planning-fair-tests,Science,3,52,0,0,0,0,false,,,Planning Fair Tests
+6038,4-science-engineering-practices-planning-fair-tests,Science,4,52,0,0,0,0,false,,,Planning Fair Tests
+6039,5-science-engineering-practices-planning-fair-tests,Science,5,52,0,0,0,0,false,,,Planning Fair Tests
+6190,3-electives-arts-and-music-creative-composition-studio,Electives,3,144,0,0,0,0,false,,,Creative Composition Studio
+6191,4-electives-arts-and-music-creative-composition-studio,Electives,4,144,0,0,0,0,false,,,Creative Composition Studio
+6192,5-electives-arts-and-music-creative-composition-studio,Electives,5,144,0,0,0,0,false,,,Creative Composition Studio
+6193,6-electives-arts-and-music-creative-composition-studio,Electives,6,144,0,0,0,0,false,,,Creative Composition Studio
+6194,7-electives-arts-and-music-creative-composition-studio,Electives,7,144,0,0,0,0,false,,,Creative Composition Studio
+6195,8-electives-arts-and-music-creative-composition-studio,Electives,8,144,0,0,0,0,false,,,Creative Composition Studio
+6241,3-mathematics-depth-and-application-estimation-strategies,Mathematics,3,144,0,0,0,0,false,,,Estimation Strategies
+6242,3-mathematics-depth-and-application-error-analysis-and-revision,Mathematics,3,144,0,0,0,0,false,,,Error Analysis and Revision
+6243,3-mathematics-depth-and-application-mathematical-modeling,Mathematics,3,144,0,0,0,0,false,,,Mathematical Modeling
+6244,3-mathematics-depth-and-application-patterns-and-rules,Mathematics,3,144,0,0,0,0,false,,,Patterns and Rules
+6245,3-mathematics-depth-and-application-performance-task-plan-a-field-trip,Mathematics,3,144,0,0,0,0,false,,,Performance Task: Plan a Field Trip
+6246,4-mathematics-depth-and-application-estimation-strategies,Mathematics,4,144,0,0,0,0,false,,,Estimation Strategies
+6247,4-mathematics-depth-and-application-error-analysis-and-revision,Mathematics,4,144,0,0,0,0,false,,,Error Analysis and Revision
+6248,4-mathematics-depth-and-application-mathematical-modeling,Mathematics,4,144,0,0,0,0,false,,,Mathematical Modeling
+6249,4-mathematics-depth-and-application-patterns-and-rules,Mathematics,4,144,0,0,0,0,false,,,Patterns and Rules
+6250,4-mathematics-depth-and-application-performance-task-plan-a-field-trip,Mathematics,4,144,0,0,0,0,false,,,Performance Task: Plan a Field Trip
+6251,5-mathematics-depth-and-application-estimation-strategies,Mathematics,5,144,0,0,0,0,false,,,Estimation Strategies
+6252,5-mathematics-depth-and-application-error-analysis-and-revision,Mathematics,5,144,0,0,0,0,false,,,Error Analysis and Revision
+6253,5-mathematics-depth-and-application-mathematical-modeling,Mathematics,5,144,0,0,0,0,false,,,Mathematical Modeling
+6254,5-mathematics-depth-and-application-patterns-and-rules,Mathematics,5,144,0,0,0,0,false,,,Patterns and Rules
+6255,5-mathematics-depth-and-application-performance-task-plan-a-field-trip,Mathematics,5,144,0,0,0,0,false,,,Performance Task: Plan a Field Trip
+6256,6-mathematics-depth-and-application-estimation-strategies,Mathematics,6,144,0,0,0,0,false,,,Estimation Strategies
+6257,6-mathematics-depth-and-application-error-analysis-and-revision,Mathematics,6,144,0,0,0,0,false,,,Error Analysis and Revision
+6258,6-mathematics-depth-and-application-mathematical-modeling,Mathematics,6,144,0,0,0,0,false,,,Mathematical Modeling
+6259,6-mathematics-depth-and-application-patterns-and-rules,Mathematics,6,144,0,0,0,0,false,,,Patterns and Rules
+6260,6-mathematics-depth-and-application-performance-task-plan-a-field-trip,Mathematics,6,144,0,0,0,0,false,,,Performance Task: Plan a Field Trip
+6261,7-mathematics-depth-and-application-estimation-strategies,Mathematics,7,144,0,0,0,0,false,,,Estimation Strategies
+6262,7-mathematics-depth-and-application-error-analysis-and-revision,Mathematics,7,144,0,0,0,0,false,,,Error Analysis and Revision
+6263,7-mathematics-depth-and-application-mathematical-modeling,Mathematics,7,144,0,0,0,0,false,,,Mathematical Modeling
+6264,7-mathematics-depth-and-application-patterns-and-rules,Mathematics,7,144,0,0,0,0,false,,,Patterns and Rules
+6265,7-mathematics-depth-and-application-performance-task-plan-a-field-trip,Mathematics,7,144,0,0,0,0,false,,,Performance Task: Plan a Field Trip
+6266,8-mathematics-depth-and-application-estimation-strategies,Mathematics,8,144,0,0,0,0,false,,,Estimation Strategies
+6267,8-mathematics-depth-and-application-error-analysis-and-revision,Mathematics,8,144,0,0,0,0,false,,,Error Analysis and Revision
+6268,8-mathematics-depth-and-application-mathematical-modeling,Mathematics,8,144,0,0,0,0,false,,,Mathematical Modeling
+6269,8-mathematics-depth-and-application-patterns-and-rules,Mathematics,8,144,0,0,0,0,false,,,Patterns and Rules
+6270,8-mathematics-depth-and-application-performance-task-plan-a-field-trip,Mathematics,8,144,0,0,0,0,false,,,Performance Task: Plan a Field Trip
+6283,3-electives-computer-science-computational-thinking-lab,Electives,3,144,0,0,0,0,false,,,Computational Thinking Lab
+6284,4-electives-computer-science-computational-thinking-lab,Electives,4,144,0,0,0,0,false,,,Computational Thinking Lab
+6285,5-electives-computer-science-computational-thinking-lab,Electives,5,144,0,0,0,0,false,,,Computational Thinking Lab
+6286,6-electives-computer-science-computational-thinking-lab,Electives,6,144,0,0,0,0,false,,,Computational Thinking Lab
+6287,7-electives-computer-science-computational-thinking-lab,Electives,7,144,0,0,0,0,false,,,Computational Thinking Lab
+6288,8-electives-computer-science-computational-thinking-lab,Electives,8,144,0,0,0,0,false,,,Computational Thinking Lab
+6318,3-english-language-arts-reading-writing-and-communication-comparing-two-texts,English Language Arts,3,144,0,0,0,0,false,,,Comparing Two Texts
+6319,3-english-language-arts-reading-writing-and-communication-author-purpose-and-point-of-view,English Language Arts,3,144,0,0,0,0,false,,,Author Purpose and Point of View
+6320,3-english-language-arts-reading-writing-and-communication-evidence-paragraphs,English Language Arts,3,144,0,0,0,0,false,,,Evidence Paragraphs
+6321,3-english-language-arts-reading-writing-and-communication-vocabulary-in-context,English Language Arts,3,144,0,0,0,0,false,,,Vocabulary in Context
+6322,3-english-language-arts-reading-writing-and-communication-discussion-and-collaborative-conversation,English Language Arts,3,144,0,0,0,0,false,,,Discussion and Collaborative Conversation
+6323,3-english-language-arts-reading-writing-and-communication-research-notes-and-source-cards,English Language Arts,3,144,0,0,0,0,false,,,Research Notes and Source Cards
+6324,3-english-language-arts-reading-writing-and-communication-revision-for-clarity,English Language Arts,3,144,0,0,0,0,false,,,Revision for Clarity
+6325,4-english-language-arts-reading-writing-and-communication-comparing-two-texts,English Language Arts,4,144,0,0,0,0,false,,,Comparing Two Texts
+6326,4-english-language-arts-reading-writing-and-communication-author-purpose-and-point-of-view,English Language Arts,4,144,0,0,0,0,false,,,Author Purpose and Point of View
+6327,4-english-language-arts-reading-writing-and-communication-evidence-paragraphs,English Language Arts,4,144,0,0,0,0,false,,,Evidence Paragraphs
+6328,4-english-language-arts-reading-writing-and-communication-vocabulary-in-context,English Language Arts,4,144,0,0,0,0,false,,,Vocabulary in Context
+6329,4-english-language-arts-reading-writing-and-communication-discussion-and-collaborative-conversation,English Language Arts,4,144,0,0,0,0,false,,,Discussion and Collaborative Conversation
+6330,4-english-language-arts-reading-writing-and-communication-research-notes-and-source-cards,English Language Arts,4,144,0,0,0,0,false,,,Research Notes and Source Cards
+6331,4-english-language-arts-reading-writing-and-communication-revision-for-clarity,English Language Arts,4,144,0,0,0,0,false,,,Revision for Clarity
+6332,5-english-language-arts-reading-writing-and-communication-comparing-two-texts,English Language Arts,5,144,0,0,0,0,false,,,Comparing Two Texts
+6333,5-english-language-arts-reading-writing-and-communication-author-purpose-and-point-of-view,English Language Arts,5,144,0,0,0,0,false,,,Author Purpose and Point of View
+6334,5-english-language-arts-reading-writing-and-communication-evidence-paragraphs,English Language Arts,5,144,0,0,0,0,false,,,Evidence Paragraphs
+6335,5-english-language-arts-reading-writing-and-communication-vocabulary-in-context,English Language Arts,5,144,0,0,0,0,false,,,Vocabulary in Context
+6336,5-english-language-arts-reading-writing-and-communication-discussion-and-collaborative-conversation,English Language Arts,5,144,0,0,0,0,false,,,Discussion and Collaborative Conversation
+6337,5-english-language-arts-reading-writing-and-communication-research-notes-and-source-cards,English Language Arts,5,144,0,0,0,0,false,,,Research Notes and Source Cards
+6338,5-english-language-arts-reading-writing-and-communication-revision-for-clarity,English Language Arts,5,144,0,0,0,0,false,,,Revision for Clarity
+6339,6-english-language-arts-reading-writing-and-communication-comparing-two-texts,English Language Arts,6,144,0,0,0,0,false,,,Comparing Two Texts
+6340,6-english-language-arts-reading-writing-and-communication-author-purpose-and-point-of-view,English Language Arts,6,144,0,0,0,0,false,,,Author Purpose and Point of View
+6341,6-english-language-arts-reading-writing-and-communication-evidence-paragraphs,English Language Arts,6,144,0,0,0,0,false,,,Evidence Paragraphs
+6342,6-english-language-arts-reading-writing-and-communication-vocabulary-in-context,English Language Arts,6,144,0,0,0,0,false,,,Vocabulary in Context
+6343,6-english-language-arts-reading-writing-and-communication-discussion-and-collaborative-conversation,English Language Arts,6,144,0,0,0,0,false,,,Discussion and Collaborative Conversation
+6344,6-english-language-arts-reading-writing-and-communication-research-notes-and-source-cards,English Language Arts,6,144,0,0,0,0,false,,,Research Notes and Source Cards
+6345,6-english-language-arts-reading-writing-and-communication-revision-for-clarity,English Language Arts,6,144,0,0,0,0,false,,,Revision for Clarity
+6346,7-english-language-arts-reading-writing-and-communication-comparing-two-texts,English Language Arts,7,144,0,0,0,0,false,,,Comparing Two Texts
+6347,7-english-language-arts-reading-writing-and-communication-author-purpose-and-point-of-view,English Language Arts,7,144,0,0,0,0,false,,,Author Purpose and Point of View
+6348,7-english-language-arts-reading-writing-and-communication-evidence-paragraphs,English Language Arts,7,144,0,0,0,0,false,,,Evidence Paragraphs
+6349,7-english-language-arts-reading-writing-and-communication-vocabulary-in-context,English Language Arts,7,144,0,0,0,0,false,,,Vocabulary in Context
+6350,7-english-language-arts-reading-writing-and-communication-discussion-and-collaborative-conversation,English Language Arts,7,144,0,0,0,0,false,,,Discussion and Collaborative Conversation
+6351,7-english-language-arts-reading-writing-and-communication-research-notes-and-source-cards,English Language Arts,7,144,0,0,0,0,false,,,Research Notes and Source Cards
+6352,7-english-language-arts-reading-writing-and-communication-revision-for-clarity,English Language Arts,7,144,0,0,0,0,false,,,Revision for Clarity
+6353,8-english-language-arts-reading-writing-and-communication-comparing-two-texts,English Language Arts,8,144,0,0,0,0,false,,,Comparing Two Texts
+6354,8-english-language-arts-reading-writing-and-communication-author-purpose-and-point-of-view,English Language Arts,8,144,0,0,0,0,false,,,Author Purpose and Point of View
+6355,8-english-language-arts-reading-writing-and-communication-evidence-paragraphs,English Language Arts,8,144,0,0,0,0,false,,,Evidence Paragraphs
+6356,8-english-language-arts-reading-writing-and-communication-vocabulary-in-context,English Language Arts,8,144,0,0,0,0,false,,,Vocabulary in Context
+6357,8-english-language-arts-reading-writing-and-communication-discussion-and-collaborative-conversation,English Language Arts,8,144,0,0,0,0,false,,,Discussion and Collaborative Conversation
+6358,8-english-language-arts-reading-writing-and-communication-research-notes-and-source-cards,English Language Arts,8,144,0,0,0,0,false,,,Research Notes and Source Cards
+6359,8-english-language-arts-reading-writing-and-communication-revision-for-clarity,English Language Arts,8,144,0,0,0,0,false,,,Revision for Clarity
+6366,3-electives-financial-literacy-money-decisions-in-real-life,Electives,3,144,0,0,0,0,false,,,Money Decisions in Real Life
+6367,4-electives-financial-literacy-money-decisions-in-real-life,Electives,4,144,0,0,0,0,false,,,Money Decisions in Real Life
+6368,5-electives-financial-literacy-money-decisions-in-real-life,Electives,5,144,0,0,0,0,false,,,Money Decisions in Real Life
+6369,6-electives-financial-literacy-money-decisions-in-real-life,Electives,6,144,0,0,0,0,false,,,Money Decisions in Real Life
+6370,7-electives-financial-literacy-money-decisions-in-real-life,Electives,7,144,0,0,0,0,false,,,Money Decisions in Real Life
+6371,8-electives-financial-literacy-money-decisions-in-real-life,Electives,8,144,0,0,0,0,false,,,Money Decisions in Real Life
+6381,3-electives-health-and-pe-personal-wellness-plan,Electives,3,144,0,0,0,0,false,,,Personal Wellness Plan
+6382,4-electives-health-and-pe-personal-wellness-plan,Electives,4,144,0,0,0,0,false,,,Personal Wellness Plan
+6383,5-electives-health-and-pe-personal-wellness-plan,Electives,5,144,0,0,0,0,false,,,Personal Wellness Plan
+6384,6-electives-health-and-pe-personal-wellness-plan,Electives,6,144,0,0,0,0,false,,,Personal Wellness Plan
+6385,7-electives-health-and-pe-personal-wellness-plan,Electives,7,144,0,0,0,0,false,,,Personal Wellness Plan
+6386,8-electives-health-and-pe-personal-wellness-plan,Electives,8,144,0,0,0,0,false,,,Personal Wellness Plan
+6449,3-science-science-and-engineering-practices-data-tables-and-graphs,Science,3,144,0,0,0,0,false,,,Data Tables and Graphs
+6450,3-science-science-and-engineering-practices-variables-and-fair-tests,Science,3,144,0,0,0,0,false,,,Variables and Fair Tests
+6451,3-science-science-and-engineering-practices-systems-and-interactions,Science,3,144,0,0,0,0,false,,,Systems and Interactions
+6452,3-science-science-and-engineering-practices-model-revision,Science,3,144,0,0,0,0,false,,,Model Revision
+6453,4-science-science-and-engineering-practices-data-tables-and-graphs,Science,4,144,0,0,0,0,false,,,Data Tables and Graphs
+6454,4-science-science-and-engineering-practices-variables-and-fair-tests,Science,4,144,0,0,0,0,false,,,Variables and Fair Tests
+6455,4-science-science-and-engineering-practices-systems-and-interactions,Science,4,144,0,0,0,0,false,,,Systems and Interactions
+6456,4-science-science-and-engineering-practices-model-revision,Science,4,144,0,0,0,0,false,,,Model Revision
+6457,5-science-science-and-engineering-practices-data-tables-and-graphs,Science,5,144,0,0,0,0,false,,,Data Tables and Graphs
+6458,5-science-science-and-engineering-practices-variables-and-fair-tests,Science,5,144,0,0,0,0,false,,,Variables and Fair Tests
+6459,5-science-science-and-engineering-practices-systems-and-interactions,Science,5,144,0,0,0,0,false,,,Systems and Interactions
+6460,5-science-science-and-engineering-practices-model-revision,Science,5,144,0,0,0,0,false,,,Model Revision
+6461,6-science-science-and-engineering-practices-data-tables-and-graphs,Science,6,144,0,0,0,0,false,,,Data Tables and Graphs
+6462,6-science-science-and-engineering-practices-variables-and-fair-tests,Science,6,144,0,0,0,0,false,,,Variables and Fair Tests
+6463,6-science-science-and-engineering-practices-systems-and-interactions,Science,6,144,0,0,0,0,false,,,Systems and Interactions
+6464,6-science-science-and-engineering-practices-model-revision,Science,6,144,0,0,0,0,false,,,Model Revision
+6465,7-science-science-and-engineering-practices-data-tables-and-graphs,Science,7,144,0,0,0,0,false,,,Data Tables and Graphs
+6466,7-science-science-and-engineering-practices-variables-and-fair-tests,Science,7,144,0,0,0,0,false,,,Variables and Fair Tests
+6467,7-science-science-and-engineering-practices-systems-and-interactions,Science,7,144,0,0,0,0,false,,,Systems and Interactions
+6468,7-science-science-and-engineering-practices-model-revision,Science,7,144,0,0,0,0,false,,,Model Revision
+6469,8-science-science-and-engineering-practices-data-tables-and-graphs,Science,8,144,0,0,0,0,false,,,Data Tables and Graphs
+6470,8-science-science-and-engineering-practices-variables-and-fair-tests,Science,8,144,0,0,0,0,false,,,Variables and Fair Tests
+6471,8-science-science-and-engineering-practices-systems-and-interactions,Science,8,144,0,0,0,0,false,,,Systems and Interactions
+6472,8-science-science-and-engineering-practices-model-revision,Science,8,144,0,0,0,0,false,,,Model Revision
+6520,3-social-studies-inquiry-and-civic-reasoning-map-skills-and-spatial-reasoning,Social Studies,3,144,0,0,0,0,false,,,Map Skills and Spatial Reasoning
+6521,3-social-studies-inquiry-and-civic-reasoning-primary-and-secondary-sources,Social Studies,3,144,0,0,0,0,false,,,Primary and Secondary Sources
+6522,3-social-studies-inquiry-and-civic-reasoning-cause-and-effect-in-history,Social Studies,3,144,0,0,0,0,false,,,Cause and Effect in History
+6523,3-social-studies-inquiry-and-civic-reasoning-community-and-civic-problem-solving,Social Studies,3,144,0,0,0,0,false,,,Community and Civic Problem Solving
+6524,3-social-studies-inquiry-and-civic-reasoning-economic-choices-and-tradeoffs,Social Studies,3,144,0,0,0,0,false,,,Economic Choices and Tradeoffs
+6525,3-social-studies-inquiry-and-civic-reasoning-culture-and-perspective,Social Studies,3,144,0,0,0,0,false,,,Culture and Perspective
+6526,4-social-studies-inquiry-and-civic-reasoning-map-skills-and-spatial-reasoning,Social Studies,4,144,0,0,0,0,false,,,Map Skills and Spatial Reasoning
+6527,4-social-studies-inquiry-and-civic-reasoning-primary-and-secondary-sources,Social Studies,4,144,0,0,0,0,false,,,Primary and Secondary Sources
+6528,4-social-studies-inquiry-and-civic-reasoning-cause-and-effect-in-history,Social Studies,4,144,0,0,0,0,false,,,Cause and Effect in History
+6529,4-social-studies-inquiry-and-civic-reasoning-community-and-civic-problem-solving,Social Studies,4,144,0,0,0,0,false,,,Community and Civic Problem Solving
+6530,4-social-studies-inquiry-and-civic-reasoning-economic-choices-and-tradeoffs,Social Studies,4,144,0,0,0,0,false,,,Economic Choices and Tradeoffs
+6531,4-social-studies-inquiry-and-civic-reasoning-culture-and-perspective,Social Studies,4,144,0,0,0,0,false,,,Culture and Perspective
+6532,5-social-studies-inquiry-and-civic-reasoning-map-skills-and-spatial-reasoning,Social Studies,5,144,0,0,0,0,false,,,Map Skills and Spatial Reasoning
+6533,5-social-studies-inquiry-and-civic-reasoning-primary-and-secondary-sources,Social Studies,5,144,0,0,0,0,false,,,Primary and Secondary Sources
+6534,5-social-studies-inquiry-and-civic-reasoning-cause-and-effect-in-history,Social Studies,5,144,0,0,0,0,false,,,Cause and Effect in History
+6535,5-social-studies-inquiry-and-civic-reasoning-community-and-civic-problem-solving,Social Studies,5,144,0,0,0,0,false,,,Community and Civic Problem Solving
+6536,5-social-studies-inquiry-and-civic-reasoning-economic-choices-and-tradeoffs,Social Studies,5,144,0,0,0,0,false,,,Economic Choices and Tradeoffs
+6537,5-social-studies-inquiry-and-civic-reasoning-culture-and-perspective,Social Studies,5,144,0,0,0,0,false,,,Culture and Perspective
+6538,6-social-studies-inquiry-and-civic-reasoning-map-skills-and-spatial-reasoning,Social Studies,6,144,0,0,0,0,false,,,Map Skills and Spatial Reasoning
+6539,6-social-studies-inquiry-and-civic-reasoning-primary-and-secondary-sources,Social Studies,6,144,0,0,0,0,false,,,Primary and Secondary Sources
+6540,6-social-studies-inquiry-and-civic-reasoning-cause-and-effect-in-history,Social Studies,6,144,0,0,0,0,false,,,Cause and Effect in History
+6541,6-social-studies-inquiry-and-civic-reasoning-community-and-civic-problem-solving,Social Studies,6,144,0,0,0,0,false,,,Community and Civic Problem Solving
+6542,6-social-studies-inquiry-and-civic-reasoning-economic-choices-and-tradeoffs,Social Studies,6,144,0,0,0,0,false,,,Economic Choices and Tradeoffs
+6543,6-social-studies-inquiry-and-civic-reasoning-culture-and-perspective,Social Studies,6,144,0,0,0,0,false,,,Culture and Perspective
+6544,7-social-studies-inquiry-and-civic-reasoning-map-skills-and-spatial-reasoning,Social Studies,7,144,0,0,0,0,false,,,Map Skills and Spatial Reasoning
+6545,7-social-studies-inquiry-and-civic-reasoning-primary-and-secondary-sources,Social Studies,7,144,0,0,0,0,false,,,Primary and Secondary Sources
+6546,7-social-studies-inquiry-and-civic-reasoning-cause-and-effect-in-history,Social Studies,7,144,0,0,0,0,false,,,Cause and Effect in History
+6547,7-social-studies-inquiry-and-civic-reasoning-community-and-civic-problem-solving,Social Studies,7,144,0,0,0,0,false,,,Community and Civic Problem Solving
+6548,7-social-studies-inquiry-and-civic-reasoning-economic-choices-and-tradeoffs,Social Studies,7,144,0,0,0,0,false,,,Economic Choices and Tradeoffs
+6549,7-social-studies-inquiry-and-civic-reasoning-culture-and-perspective,Social Studies,7,144,0,0,0,0,false,,,Culture and Perspective
+6550,8-social-studies-inquiry-and-civic-reasoning-map-skills-and-spatial-reasoning,Social Studies,8,144,0,0,0,0,false,,,Map Skills and Spatial Reasoning
+6551,8-social-studies-inquiry-and-civic-reasoning-primary-and-secondary-sources,Social Studies,8,144,0,0,0,0,false,,,Primary and Secondary Sources
+6552,8-social-studies-inquiry-and-civic-reasoning-cause-and-effect-in-history,Social Studies,8,144,0,0,0,0,false,,,Cause and Effect in History
+6553,8-social-studies-inquiry-and-civic-reasoning-community-and-civic-problem-solving,Social Studies,8,144,0,0,0,0,false,,,Community and Civic Problem Solving
+6554,8-social-studies-inquiry-and-civic-reasoning-economic-choices-and-tradeoffs,Social Studies,8,144,0,0,0,0,false,,,Economic Choices and Tradeoffs
+6555,8-social-studies-inquiry-and-civic-reasoning-culture-and-perspective,Social Studies,8,144,0,0,0,0,false,,,Culture and Perspective
+6556,3-electives-study-skills-goal-setting-and-reflection,Electives,3,144,0,0,0,0,false,,,Goal Setting and Reflection
+6557,4-electives-study-skills-goal-setting-and-reflection,Electives,4,144,0,0,0,0,false,,,Goal Setting and Reflection
+6558,5-electives-study-skills-goal-setting-and-reflection,Electives,5,144,0,0,0,0,false,,,Goal Setting and Reflection
+6559,6-electives-study-skills-goal-setting-and-reflection,Electives,6,144,0,0,0,0,false,,,Goal Setting and Reflection
+6560,7-electives-study-skills-goal-setting-and-reflection,Electives,7,144,0,0,0,0,false,,,Goal Setting and Reflection
+6561,8-electives-study-skills-goal-setting-and-reflection,Electives,8,144,0,0,0,0,false,,,Goal Setting and Reflection
