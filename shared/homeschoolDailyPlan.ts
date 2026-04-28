@@ -47,7 +47,12 @@ export type DailyPlanAction =
   | 'read'
   | 'write'
   | 'review'
-  | 'discuss';
+  | 'discuss'
+  | 'investigate'
+  | 'model'
+  | 'explain'
+  | 'repair'
+  | 'reflect';
 
 export type DailyPlanSubjectSummary = {
   subject: HomeschoolSubject;

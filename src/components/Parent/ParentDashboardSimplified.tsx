@@ -29,6 +29,7 @@ import SafetyTransparencySection from './SafetyTransparencySection';
 import ParentOnboardingTour from './ParentOnboardingTour';
 import AddLearnerModal, { type AddLearnerFormState } from './ParentDashboard/modals/AddLearnerModal';
 import { ParentElaAdaptationPanel, ParentElaWeeklyRecordPanel } from './ParentDashboard/ParentElaPanels';
+import { ParentScienceWeeklyRecordPanel } from './ParentDashboard/ParentSciencePanels';
 import {
     MathStrandPreferenceControl,
     ParentMathAdaptationPanel,
@@ -753,6 +754,10 @@ const ParentDashboardSimplified: React.FC = () => {
                             childName={selectedChild.name}
                         />
                         <ParentElaWeeklyRecordPanel
+                            childId={selectedChild.id}
+                            childName={selectedChild.name}
+                        />
+                        <ParentScienceWeeklyRecordPanel
                             childId={selectedChild.id}
                             childName={selectedChild.name}
                         />

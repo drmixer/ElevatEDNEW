@@ -23,6 +23,7 @@ const AdminImportPage = lazy(() => import('./pages/AdminImportPage'));
 const LessonPlayerPage = lazy(() => import('./pages/LessonPlayerPage'));
 const MathAdaptiveVariantPage = lazy(() => import('./pages/MathAdaptiveVariantPage'));
 const ElaDailyBlockPage = lazy(() => import('./pages/ElaDailyBlockPage'));
+const ScienceDailyBlockPage = lazy(() => import('./pages/ScienceDailyBlockPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const AccountSettingsPage = lazy(() => import('./pages/AccountSettingsPage'));
@@ -139,6 +140,14 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={['student']}>
                 <ElaDailyBlockPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/science/block/:blockId"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <ScienceDailyBlockPage />
               </ProtectedRoute>
             }
           />

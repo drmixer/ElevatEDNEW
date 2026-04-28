@@ -54,7 +54,130 @@ It is not yet:
 
 ---
 
-## 3. Design Decision
+## 3. Remaining Homeschool Readiness Gaps
+
+This is the active completion ledger. The goal is not just to add features, but to remove the reasons the app is not yet a full grades 3-8 homeschool replacement.
+
+### 3.1 Math Depth
+
+Current gap:
+- Math has the first adaptive spine, but many modules are still closer to single launch lessons than complete teach-practice-repair-mastery arcs.
+- Remediation and challenge variants exist for the highest-priority modules, but coverage should expand across the rest of the grades 3-8 math graph.
+- Spiral review is not yet rich enough to keep older skills warm across weeks.
+
+Completion target:
+- Each high-priority math module has a diagnostic, teach/model lesson, guided practice, independent practice, repair path, challenge path, mastery check, and spiral review items.
+- Weak prerequisite evidence reliably inserts backfill work before the student advances.
+- Parent math records explain what changed, why it changed, and what older skill is being revisited.
+
+Next actions:
+- Expand remediation and challenge variants beyond the first 18 priority modules.
+- Add spiral review selection to the math daily plan.
+- Persist and display more detailed math work evidence, not only state summaries.
+
+### 3.2 ELA Depth
+
+Current gap:
+- ELA has the first real written-response loop and durable work samples.
+- Authored content packs currently cover the first Grade 3 modules only.
+- Reading, vocabulary, grammar/revision, and longer writing still need broader grades 4-8 depth.
+
+Completion target:
+- Grades 3-8 ELA modules include deterministic authored packs for diagnostic, mini-lesson, repair, evidence practice, reflection, and longer writing blocks.
+- Reading comprehension, vocabulary in context, evidence paragraphs, grammar/revision, and writing rubrics update separate ELA strengths and weak points.
+- Parent work samples show the source content, prompt, rubric, response, score, and next-step reason.
+
+Next actions:
+- Expand `shared/elaBlockContentPacks.ts` across Grade 4-8 priority modules.
+- Split ELA state into clearer reading, writing, vocabulary, and revision evidence when enough work samples exist.
+- Add longer writing/project blocks after short constructed responses feel stable.
+
+### 3.3 Science Loop
+
+Current gap:
+- Science has content coverage, and the first lightweight daily loop now exists.
+- The first Science loop includes a daily plan, student block page, deterministic CER/data/model scaffold, rubric scoring, subject-state updater, durable work samples, and parent weekly science evidence.
+- It still needs more authored science content depth, home investigation variants, and a richer adaptation summary.
+
+Completion target:
+- Science runs 2-3 times per week with short phenomenon, investigation, data-table, model-revision, and CER blocks.
+- Science completions write to `student_subject_state` and `student_work_samples`.
+- Parent can see what phenomenon or investigation was used, what the student claimed/explained, and what the next science step is.
+
+Next actions:
+- Build the Science daily plan service and student block page using the ELA work-sample pattern. `Done: /student/homeschool/science-plan, /student/science/block/:blockId, and science block content resolution.`
+- Add deterministic science prompts and rubrics for CER, data interpretation, home investigation notes, and model revision. `Done for first CER/data/model scaffold: shared/scienceBlockPrompts.ts and shared/scienceBlockContent.ts.`
+- Add parent weekly science record and adaptation summary. `Partially done: parent weekly science record and work-sample detail are live; richer adaptation summary is still pending.`
+- Add authored science content packs and home investigation variants across priority Grade 3-8 modules.
+
+### 3.4 Social Studies Loop
+
+Current gap:
+- Social Studies has content coverage, but not a weekly homeschool loop with source analysis and constructed responses.
+- It should follow Science after the shared non-math work-sample pattern is proven.
+
+Completion target:
+- Social Studies runs 2-3 times per week with source-analysis, map/timeline, cause-effect, civic reasoning, and short constructed-response blocks.
+- Social Studies completions write to `student_subject_state` and `student_work_samples`.
+- Parent can inspect the source, prompt, response, rubric, and why the next topic was assigned.
+
+Next actions:
+- Reuse the Science/ELA block architecture for Social Studies.
+- Add deterministic source-analysis and map/timeline prompts.
+- Add parent weekly Social Studies evidence.
+
+### 3.5 Full Daily Planner
+
+Current gap:
+- Math and ELA can appear as daily cards, but the app does not yet generate a complete multi-subject homeschool day with rollover and weekly balance.
+- Required vs optional work is not yet first-class.
+- Unfinished work behavior is not fully modeled.
+
+Completion target:
+- The parent and student can open the app and see the full school day: required work, optional enrichment, estimated time, subject balance, and unfinished carryover.
+- Completed work updates subject state and tomorrow's plan.
+- Missed or unfinished blocks roll forward intentionally instead of disappearing.
+
+Next actions:
+- Create a unified daily plan model that can compose Math, ELA, Science, Social Studies, and elective blocks.
+- Add required/optional flags, weekly subject targets, and rollover rules.
+- Add parent daily summary for completed, unfinished, skipped, and reassigned work.
+
+### 3.6 Continuous Adaptation Across Evidence Types
+
+Current gap:
+- Adaptation works in pieces, but not uniformly across lesson, quiz, practice, writing, science projects, and social studies source work.
+- The deterministic rules need to become a shared cross-subject policy with subject-specific rubrics.
+
+Completion target:
+- Lesson completions, practice accuracy, quizzes, written responses, project artifacts, time-on-task, and repeated misses all contribute to explainable state changes.
+- Every state change has a parent-facing reason and a next-step rule.
+- AI can summarize and support the decision, but deterministic evidence remains the authority.
+
+Next actions:
+- Normalize event payloads for subject evidence across Math, ELA, Science, and Social Studies.
+- Add shared helper logic for mastery, practice, repair, and backfill outcomes.
+- Add tests that prove repeated success advances and repeated struggle repairs/backfills by subject.
+
+### 3.7 Parent Records and Completion Evidence
+
+Current gap:
+- Parent weekly views and ELA work samples are improving, but broader homeschool reporting is not complete.
+- There is not yet a printable/exportable portfolio or attendance/time summary.
+
+Completion target:
+- Parent can export or print a weekly/monthly record showing subjects, time estimates, completed work, scores, mastery changes, work samples, and parent notes.
+- `student_work_samples` is the durable portfolio source for written and constructed-response work.
+- Gaps, skipped work, and reassigned work are visible instead of hidden.
+
+Next actions:
+- Build reporting views on top of `student_work_samples`, subject state, and daily plan history.
+- Add export/print support after daily planner history is stable.
+- Add a lightweight content/work-sample issue reporting loop.
+
+---
+
+## 4. Design Decision
 
 Keep the adaptive band at grades 3-8.
 
@@ -71,7 +194,7 @@ The system should use grade as a rough prior, then let evidence decide the actua
 
 ---
 
-## 4. Target Daily Experience
+## 5. Target Daily Experience
 
 A good homeschool day should be generated by the app, not manually assembled by the parent.
 
@@ -98,7 +221,7 @@ Each assigned item should have:
 
 ---
 
-## 5. Content Depth Model
+## 6. Content Depth Model
 
 Each important module should eventually become a lesson arc instead of a single launch lesson.
 
@@ -140,7 +263,7 @@ Electives should stay lighter unless the student shows sustained interest.
 
 ---
 
-## 6. Adaptive Engine Requirements
+## 7. Adaptive Engine Requirements
 
 The adaptive engine should be deterministic first.
 
@@ -174,7 +297,7 @@ All path changes should have a plain-language reason visible to the parent.
 
 ---
 
-## 7. Parent Layer
+## 8. Parent Layer
 
 For homeschool replacement, the parent layer is not optional.
 
@@ -198,7 +321,7 @@ The parent should be able to answer:
 
 ---
 
-## 8. Phased Build Plan
+## 9. Phased Build Plan
 
 ### Phase 1. Math Adaptive Spine
 
@@ -285,7 +408,7 @@ Acceptance criteria:
 
 ---
 
-## 9. Near-Term Task List
+## 10. Near-Term Task List
 
 Start here in the next session:
 
@@ -304,6 +427,7 @@ Start here in the next session:
 13. Apply and verify the durable ELA work-sample migration in the target Supabase environment. `Done: supabase db push completed through 051_student_work_samples.sql; service-role read check confirmed public.student_work_samples is reachable.`
 14. Add the first authored ELA content-pack layer. `Done: shared/elaBlockContentPacks.ts covers diagnostic, mini-lesson, repair, evidence-practice, and reflection content for the first Grade 3 ELA modules; the resolver prefers these packs when the DB only has generic launch content.`
 15. Split parent homeschool panels out of ParentDashboardSimplified. `Done: math panels live in ParentDashboard/ParentMathPanels.tsx and ELA panels live in ParentDashboard/ParentElaPanels.tsx.`
+16. Add the first Science homeschool daily loop. `Done: live Science plan card, /student/science/block/:blockId, deterministic CER/data/model content, rubric scoring, science subject-state updates, durable work samples, and parent weekly Science work samples.`
 
 Next ELA tasks:
 - add more ELA authored content packs for Grade 4-8 once the first Grade 3 loop feels good in real use
@@ -330,7 +454,7 @@ Storage decision:
 
 ---
 
-## 10. New Chat Handoff Prompt
+## 11. New Chat Handoff Prompt
 
 Use this prompt to resume work in a fresh chat:
 
@@ -349,7 +473,7 @@ npm run audit:math-prereq-map
 
 ---
 
-## 11. Operating Principle
+## 12. Operating Principle
 
 Do not chase more raw coverage first. The key shift is packaging and adaptivity:
 

@@ -22,10 +22,13 @@ import {
   fetchElaSubjectState,
   fetchMathDailyPlan,
   fetchMathSubjectState,
+  fetchScienceDailyPlan,
+  fetchScienceSubjectState,
 } from '../services/homeschoolPlanService';
 import type { DailyHomeschoolPlan } from '../../shared/homeschoolDailyPlan';
 import type { ElaSubjectStateSummary } from '../../shared/elaSubjectStateSummary';
 import type { MathSubjectStateSummary } from '../../shared/mathSubjectStateSummary';
+import type { ScienceSubjectStateSummary } from '../../shared/scienceSubjectStateSummary';
 
 const DEFAULT_PALETTE = { background: '#EEF2FF', accent: '#6366F1', text: '#1F2937' };
 
@@ -51,6 +54,9 @@ export const mathWeeklyRecordQueryKey = (studentId?: string | null) => ['math-we
 export const elaDailyPlanQueryKey = (studentId?: string | null) => ['ela-daily-plan', studentId ?? 'unknown'];
 export const elaSubjectStateQueryKey = (studentId?: string | null) => ['ela-subject-state', studentId ?? 'unknown'];
 export const elaWeeklyRecordQueryKey = (studentId?: string | null) => ['ela-weekly-record', studentId ?? 'unknown'];
+export const scienceDailyPlanQueryKey = (studentId?: string | null) => ['science-daily-plan', studentId ?? 'unknown'];
+export const scienceSubjectStateQueryKey = (studentId?: string | null) => ['science-subject-state', studentId ?? 'unknown'];
+export const scienceWeeklyRecordQueryKey = (studentId?: string | null) => ['science-weekly-record', studentId ?? 'unknown'];
 
 export type AdaptiveFlash = {
   eventType: string;
@@ -237,6 +243,22 @@ export const useElaSubjectState = (studentId?: string | null) =>
     staleTime: 60 * 1000,
   });
 
+export const useScienceDailyPlan = (studentId?: string | null) =>
+  useQuery<DailyHomeschoolPlan>({
+    queryKey: scienceDailyPlanQueryKey(studentId),
+    queryFn: () => fetchScienceDailyPlan(),
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
+export const useScienceSubjectState = (studentId?: string | null) =>
+  useQuery<ScienceSubjectStateSummary | null>({
+    queryKey: scienceSubjectStateQueryKey(studentId),
+    queryFn: () => fetchScienceSubjectState(studentId),
+    enabled: Boolean(studentId),
+    staleTime: 60 * 1000,
+  });
+
 export const useXP = (
   studentId?: string | null,
   initial?: { xp?: number | null; streakDays?: number | null; badges?: number | null },
@@ -339,6 +361,27 @@ const isElaEventPayload = (payload: Record<string, unknown>): boolean => {
   return false;
 };
 
+const isScienceSubjectValue = (value: unknown): boolean => {
+  if (typeof value !== 'string') return false;
+  const normalized = value.trim().toLowerCase().replace(/[_-]+/g, ' ');
+  const tokens = normalized.split(/\s+/).filter(Boolean);
+  return normalized === 'science' || tokens.includes('science');
+};
+
+const isScienceEventPayload = (payload: Record<string, unknown>): boolean => {
+  if ([...ELA_SUBJECT_KEYS, ...ELA_MODULE_DESCRIPTOR_KEYS].some((key) => isScienceSubjectValue(payload[key]))) {
+    return true;
+  }
+
+  const module = payload.module;
+  if (module && typeof module === 'object' && !Array.isArray(module)) {
+    const moduleRecord = module as Record<string, unknown>;
+    return ELA_SUBJECT_KEYS.some((key) => isScienceSubjectValue(moduleRecord[key]));
+  }
+
+  return false;
+};
+
 export const applyStudentEventResponse = (
   queryClient: QueryClient,
   studentId: string | null | undefined,
@@ -372,6 +415,11 @@ export const applyStudentEventResponse = (
     queryClient.invalidateQueries({ queryKey: elaDailyPlanQueryKey(studentId) }).catch(() => undefined);
     queryClient.invalidateQueries({ queryKey: elaSubjectStateQueryKey(studentId) }).catch(() => undefined);
     queryClient.invalidateQueries({ queryKey: elaWeeklyRecordQueryKey(studentId) }).catch(() => undefined);
+  }
+  if (isScienceEventPayload(payload)) {
+    queryClient.invalidateQueries({ queryKey: scienceDailyPlanQueryKey(studentId) }).catch(() => undefined);
+    queryClient.invalidateQueries({ queryKey: scienceSubjectStateQueryKey(studentId) }).catch(() => undefined);
+    queryClient.invalidateQueries({ queryKey: scienceWeeklyRecordQueryKey(studentId) }).catch(() => undefined);
   }
   const isMathAdaptiveVariantCompletion =
     payload.subject === 'math' &&

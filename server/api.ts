@@ -103,12 +103,23 @@ import {
   fetchStudentElaWeeklyRecord,
 } from './elaHomeschoolPlans.js';
 import { fetchStudentElaBlockContent } from './elaBlockContentService.js';
+import {
+  fetchStudentScienceDailyPlan,
+  fetchStudentScienceSubjectState,
+  fetchStudentScienceWeeklyRecord,
+} from './scienceHomeschoolPlans.js';
+import { fetchStudentScienceBlockContent } from './scienceBlockContentService.js';
 import { updateMathSubjectStateFromAdaptiveVariantEvent } from './mathSubjectState.js';
 import {
   extractElaCompletionEvent,
   updateElaSubjectStateFromCompletionEvent,
 } from './elaSubjectState.js';
 import { recordElaWorkSampleFromSubjectStateUpdate } from './elaWorkSamples.js';
+import {
+  extractScienceCompletionEvent,
+  updateScienceSubjectStateFromCompletionEvent,
+} from './scienceSubjectState.js';
+import { recordScienceWorkSampleFromSubjectStateUpdate } from './scienceWorkSamples.js';
 import type { MathAdaptiveStrand } from '../shared/mathAdaptivePolicy.js';
 
 type ApiServerOptions = {
@@ -1557,6 +1568,19 @@ export const createApiHandler = (context: ApiContext) => {
       }, { actorId: actor.id });
     }
 
+    if (method === 'GET' && path === '/student/homeschool/science-plan') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const date = typeof url.query.date === 'string' && url.query.date.trim().length > 0
+          ? url.query.date.trim()
+          : undefined;
+        const plan = await fetchStudentScienceDailyPlan(supabase, actor.id, { date });
+        sendJson(res, 200, { plan }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
     if (method === 'GET' && path === '/student/homeschool/ela-block-content') {
       const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
       if (!actor) return true;
@@ -1572,6 +1596,26 @@ export const createApiHandler = (context: ApiContext) => {
         const resolution = await fetchStudentElaBlockContent(supabase, actor.id, blockId, { date });
         if (!resolution) {
           throw new HttpError(404, 'ELA block was not found in the current daily plan.', 'not_found');
+        }
+        sendJson(res, 200, resolution, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/science-block-content') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const blockId = typeof url.query.blockId === 'string' ? url.query.blockId.trim() : '';
+        const date = typeof url.query.date === 'string' && url.query.date.trim().length > 0
+          ? url.query.date.trim()
+          : undefined;
+        if (!blockId) {
+          throw new HttpError(400, 'blockId query parameter is required.', 'invalid_parameter');
+        }
+        const resolution = await fetchStudentScienceBlockContent(supabase, actor.id, blockId, { date });
+        if (!resolution) {
+          throw new HttpError(404, 'Science block was not found in the current daily plan.', 'not_found');
         }
         sendJson(res, 200, resolution, API_VERSION);
       }, { actorId: actor.id });
@@ -1605,6 +1649,22 @@ export const createApiHandler = (context: ApiContext) => {
         }
         await ensureGuardianAccess(supabase, actor, [studentId]);
         const state = await fetchStudentElaSubjectState(supabase, studentId);
+        sendJson(res, 200, { state }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/science-state') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const queryStudentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        const studentId = actor.role === 'student' ? actor.id : queryStudentId;
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const state = await fetchStudentScienceSubjectState(supabase, studentId);
         sendJson(res, 200, { state }, API_VERSION);
       }, { actorId: actor.id });
     }
@@ -1658,6 +1718,25 @@ export const createApiHandler = (context: ApiContext) => {
         }
         await ensureGuardianAccess(supabase, actor, [studentId]);
         const record = await fetchStudentElaWeeklyRecord(supabase, studentId, { weekStart });
+        sendJson(res, 200, { record }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/parent/homeschool/science-weekly-record') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const studentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        const weekStart =
+          typeof url.query.weekStart === 'string' && url.query.weekStart.trim().length > 0
+            ? url.query.weekStart.trim()
+            : undefined;
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const record = await fetchStudentScienceWeeklyRecord(supabase, studentId, { weekStart });
         sendJson(res, 200, { record }, API_VERSION);
       }, { actorId: actor.id });
     }
@@ -1944,6 +2023,20 @@ export const createApiHandler = (context: ApiContext) => {
         if (elaCompletion) {
           const elaUpdate = await updateElaSubjectStateFromCompletionEvent(serviceSupabase ?? supabase, actor.id, elaCompletion);
           await recordElaWorkSampleFromSubjectStateUpdate(serviceSupabase ?? supabase, actor.id, elaUpdate, {
+            eventType,
+            eventCreatedAt: eventResult.eventCreatedAt,
+            payload: enrichedPayload,
+          });
+        }
+
+        const scienceCompletion = extractScienceCompletionEvent(enrichedPayload, score, {
+          accuracy: typeof body.accuracy === 'number' ? body.accuracy : score,
+          completedAt: eventResult.eventCreatedAt,
+          timeSpentSeconds,
+        });
+        if (scienceCompletion) {
+          const scienceUpdate = await updateScienceSubjectStateFromCompletionEvent(serviceSupabase ?? supabase, actor.id, scienceCompletion);
+          await recordScienceWorkSampleFromSubjectStateUpdate(serviceSupabase ?? supabase, actor.id, scienceUpdate, {
             eventType,
             eventCreatedAt: eventResult.eventCreatedAt,
             payload: enrichedPayload,

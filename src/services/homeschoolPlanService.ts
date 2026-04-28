@@ -1,12 +1,17 @@
 import { authenticatedFetch, handleApiResponse } from '../lib/apiClient';
 import type { DailyHomeschoolPlan, DailyPlanBlock } from '../../shared/homeschoolDailyPlan';
 import type { ElaBlockContent } from '../../shared/elaBlockContent';
+import type { ScienceBlockContent } from '../../shared/scienceBlockContent';
 import type { MathAdaptiveVariant } from '../../shared/mathAdaptiveVariants';
 import type { MathAdaptiveStrand } from '../../shared/mathAdaptivePolicy';
 import type {
   ElaSubjectStateSummary,
   ElaWeeklyRecordSummary,
 } from '../../shared/elaSubjectStateSummary';
+import type {
+  ScienceSubjectStateSummary,
+  ScienceWeeklyRecordSummary,
+} from '../../shared/scienceSubjectStateSummary';
 import type {
   MathParentPreferenceSummary,
   MathSubjectStateSummary,
@@ -46,6 +51,19 @@ export type ElaWeeklyRecordResponse = {
   record: ElaWeeklyRecordSummary;
 };
 
+export type ScienceSubjectStateResponse = {
+  state: ScienceSubjectStateSummary | null;
+};
+
+export type ScienceBlockContentResponse = {
+  block: DailyPlanBlock;
+  content: ScienceBlockContent;
+};
+
+export type ScienceWeeklyRecordResponse = {
+  record: ScienceWeeklyRecordSummary;
+};
+
 export const fetchMathDailyPlan = async (date?: string): Promise<DailyHomeschoolPlan> => {
   const params = new URLSearchParams();
   if (date) params.set('date', date);
@@ -71,6 +89,15 @@ export const fetchElaDailyPlan = async (date?: string): Promise<DailyHomeschoolP
   return payload.plan;
 };
 
+export const fetchScienceDailyPlan = async (date?: string): Promise<DailyHomeschoolPlan> => {
+  const params = new URLSearchParams();
+  if (date) params.set('date', date);
+  const suffix = params.toString() ? `?${params.toString()}` : '';
+  const response = await authenticatedFetch(`/api/v1/student/homeschool/science-plan${suffix}`);
+  const payload = await handleApiResponse<MathDailyPlanResponse>(response);
+  return payload.plan;
+};
+
 export const fetchMathSubjectState = async (studentId?: string | null): Promise<MathSubjectStateSummary | null> => {
   const params = new URLSearchParams();
   if (studentId) params.set('studentId', studentId);
@@ -89,11 +116,27 @@ export const fetchElaSubjectState = async (studentId?: string | null): Promise<E
   return payload.state;
 };
 
+export const fetchScienceSubjectState = async (studentId?: string | null): Promise<ScienceSubjectStateSummary | null> => {
+  const params = new URLSearchParams();
+  if (studentId) params.set('studentId', studentId);
+  const suffix = params.toString() ? `?${params.toString()}` : '';
+  const response = await authenticatedFetch(`/api/v1/student/homeschool/science-state${suffix}`);
+  const payload = await handleApiResponse<ScienceSubjectStateResponse>(response);
+  return payload.state;
+};
+
 export const fetchElaBlockContent = async (blockId: string, date?: string): Promise<ElaBlockContentResponse> => {
   const params = new URLSearchParams({ blockId });
   if (date) params.set('date', date);
   const response = await authenticatedFetch(`/api/v1/student/homeschool/ela-block-content?${params.toString()}`);
   return handleApiResponse<ElaBlockContentResponse>(response);
+};
+
+export const fetchScienceBlockContent = async (blockId: string, date?: string): Promise<ScienceBlockContentResponse> => {
+  const params = new URLSearchParams({ blockId });
+  if (date) params.set('date', date);
+  const response = await authenticatedFetch(`/api/v1/student/homeschool/science-block-content?${params.toString()}`);
+  return handleApiResponse<ScienceBlockContentResponse>(response);
 };
 
 export const fetchMathParentPreference = async (studentId: string): Promise<MathParentPreferenceSummary | null> => {
@@ -122,6 +165,17 @@ export const fetchElaWeeklyRecord = async (
   if (weekStart) params.set('weekStart', weekStart);
   const response = await authenticatedFetch(`/api/v1/parent/homeschool/ela-weekly-record?${params.toString()}`);
   const payload = await handleApiResponse<ElaWeeklyRecordResponse>(response);
+  return payload.record;
+};
+
+export const fetchScienceWeeklyRecord = async (
+  studentId: string,
+  weekStart?: string,
+): Promise<ScienceWeeklyRecordSummary> => {
+  const params = new URLSearchParams({ studentId });
+  if (weekStart) params.set('weekStart', weekStart);
+  const response = await authenticatedFetch(`/api/v1/parent/homeschool/science-weekly-record?${params.toString()}`);
+  const payload = await handleApiResponse<ScienceWeeklyRecordResponse>(response);
   return payload.record;
 };
 

@@ -22,6 +22,7 @@ import {
     useElaSubjectState,
     useMathDailyPlan,
     useMathSubjectState,
+    useScienceDailyPlan,
     useStudentPath,
     useStudentStats,
 } from '../../hooks/useStudentData';
@@ -35,6 +36,7 @@ import MathDailyPlanCard from './MathDailyPlanCard';
 import MathAdaptationInsightCard from './MathAdaptationInsightCard';
 import ElaDailyPlanCard from './ElaDailyPlanCard';
 import ElaAdaptationInsightCard from './ElaAdaptationInsightCard';
+import ScienceDailyPlanCard from './ScienceDailyPlanCard';
 import type { DashboardLesson, Student, Subject } from '../../types';
 
 // ============================================================================
@@ -531,6 +533,11 @@ const StudentDashboardSimplified: React.FC = () => {
         isLoading: elaSubjectStateLoading,
         error: elaSubjectStateError,
     } = useElaSubjectState(student?.id);
+    const {
+        data: scienceDailyPlan,
+        isLoading: scienceDailyPlanLoading,
+        error: scienceDailyPlanError,
+    } = useScienceDailyPlan(student?.id);
 
     // Student path is fetched but we use todaysPlan from dashboard for lesson recommendations
     useStudentPath(student?.id);
@@ -764,6 +771,14 @@ const StudentDashboardSimplified: React.FC = () => {
                             state={elaSubjectState ?? null}
                             isLoading={elaSubjectStateLoading}
                             error={elaSubjectStateError instanceof Error ? elaSubjectStateError : null}
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <ScienceDailyPlanCard
+                            plan={scienceDailyPlan ?? null}
+                            isLoading={scienceDailyPlanLoading}
+                            error={scienceDailyPlanError instanceof Error ? scienceDailyPlanError : null}
                         />
                     </section>
 
