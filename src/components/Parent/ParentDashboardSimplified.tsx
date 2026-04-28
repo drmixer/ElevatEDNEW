@@ -28,6 +28,12 @@ import ParentTutorControls from './ParentTutorControls';
 import SafetyTransparencySection from './SafetyTransparencySection';
 import ParentOnboardingTour from './ParentOnboardingTour';
 import AddLearnerModal, { type AddLearnerFormState } from './ParentDashboard/modals/AddLearnerModal';
+import { ParentElaAdaptationPanel, ParentElaWeeklyRecordPanel } from './ParentDashboard/ParentElaPanels';
+import {
+    MathStrandPreferenceControl,
+    ParentMathAdaptationPanel,
+    ParentMathWeeklyRecordPanel,
+} from './ParentDashboard/ParentMathPanels';
 import { shouldShowParentOnboarding, markParentOnboardingDone } from '../../lib/parentOnboardingHelpers';
 import { defaultLearningPreferences } from '../../types';
 import { createLearnerForParent } from '../../services/parentService';
@@ -730,6 +736,27 @@ const ParentDashboardSimplified: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-8 scroll-mt-24"
                     >
+                        <MathStrandPreferenceControl
+                            childId={selectedChild.id}
+                            childName={selectedChild.name}
+                        />
+                        <ParentMathAdaptationPanel
+                            childId={selectedChild.id}
+                            childName={selectedChild.name}
+                        />
+                        <ParentMathWeeklyRecordPanel
+                            childId={selectedChild.id}
+                            childName={selectedChild.name}
+                        />
+                        <ParentElaAdaptationPanel
+                            childId={selectedChild.id}
+                            childName={selectedChild.name}
+                        />
+                        <ParentElaWeeklyRecordPanel
+                            childId={selectedChild.id}
+                            childName={selectedChild.name}
+                        />
+
                         {/* Subject Status Cards */}
                         {selectedChild.subjectStatuses && selectedChild.subjectStatuses.length > 0 && (
                             <SubjectStatusCards

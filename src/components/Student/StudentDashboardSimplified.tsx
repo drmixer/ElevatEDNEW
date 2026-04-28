@@ -17,13 +17,24 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchStudentDashboardData } from '../../services/dashboardService';
 import { updateLearningPreferences } from '../../services/profileService';
-import { useStudentPath, useStudentStats } from '../../hooks/useStudentData';
+import {
+    useElaDailyPlan,
+    useElaSubjectState,
+    useMathDailyPlan,
+    useMathSubjectState,
+    useStudentPath,
+    useStudentStats,
+} from '../../hooks/useStudentData';
 import { formatSubjectLabel, normalizeSubject } from '../../lib/subjects';
 import TutorOnboarding from './TutorOnboarding';
 import { shouldShowTutorOnboarding } from './TutorOnboardingStorage';
 import WeeklyPlanCard from './WeeklyPlanCard';
 import StudyModeSelector, { type StudyMode } from './StudyModeSelector';
 import CelebrationSystem from './CelebrationSystem';
+import MathDailyPlanCard from './MathDailyPlanCard';
+import MathAdaptationInsightCard from './MathAdaptationInsightCard';
+import ElaDailyPlanCard from './ElaDailyPlanCard';
+import ElaAdaptationInsightCard from './ElaAdaptationInsightCard';
 import type { DashboardLesson, Student, Subject } from '../../types';
 
 // ============================================================================
@@ -500,6 +511,26 @@ const StudentDashboardSimplified: React.FC = () => {
 
     // Fetch student stats
     const { data: studentStats } = useStudentStats(student?.id);
+    const {
+        data: mathDailyPlan,
+        isLoading: mathDailyPlanLoading,
+        error: mathDailyPlanError,
+    } = useMathDailyPlan(student?.id);
+    const {
+        data: mathSubjectState,
+        isLoading: mathSubjectStateLoading,
+        error: mathSubjectStateError,
+    } = useMathSubjectState(student?.id);
+    const {
+        data: elaDailyPlan,
+        isLoading: elaDailyPlanLoading,
+        error: elaDailyPlanError,
+    } = useElaDailyPlan(student?.id);
+    const {
+        data: elaSubjectState,
+        isLoading: elaSubjectStateLoading,
+        error: elaSubjectStateError,
+    } = useElaSubjectState(student?.id);
 
     // Student path is fetched but we use todaysPlan from dashboard for lesson recommendations
     useStudentPath(student?.id);
@@ -700,6 +731,39 @@ const StudentDashboardSimplified: React.FC = () => {
                             onIntensityChange={handleIntensityChange}
                             onFocusChange={handleFocusChange}
                             grade={student?.grade}
+                        />
+                    </section>
+
+                    {/* Homeschool subject plans */}
+                    <section className="mb-8">
+                        <MathDailyPlanCard
+                            plan={mathDailyPlan ?? null}
+                            isLoading={mathDailyPlanLoading}
+                            error={mathDailyPlanError instanceof Error ? mathDailyPlanError : null}
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <MathAdaptationInsightCard
+                            state={mathSubjectState ?? null}
+                            isLoading={mathSubjectStateLoading}
+                            error={mathSubjectStateError instanceof Error ? mathSubjectStateError : null}
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <ElaDailyPlanCard
+                            plan={elaDailyPlan ?? null}
+                            isLoading={elaDailyPlanLoading}
+                            error={elaDailyPlanError instanceof Error ? elaDailyPlanError : null}
+                        />
+                    </section>
+
+                    <section className="mb-8">
+                        <ElaAdaptationInsightCard
+                            state={elaSubjectState ?? null}
+                            isLoading={elaSubjectStateLoading}
+                            error={elaSubjectStateError instanceof Error ? elaSubjectStateError : null}
                         />
                     </section>
 

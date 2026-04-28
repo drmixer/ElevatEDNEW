@@ -1,75 +1,80 @@
 # Volume
 
 ## Learning Goal
-- I can explain why volume uses cubic units.
-- I can find the volume of a rectangular prism by counting cubes or using a formula.
-- I can connect length, width, and height to the structure of a prism.
+- I can explain the main idea of volume in my own words.
+- I can solve a grade 5 problem using a model, equation, or labeled diagram.
+- I can check whether my answer makes sense and explain my strategy.
 
 ## Introduction
-By Grade 5, volume is both a counting idea and a formula idea.
+Students pack unit cubes into a box. This is the kind of situation where volume becomes useful. The goal is not to memorize a trick. The goal is to slow down, name what the problem is asking, choose a representation, and use the numbers carefully.
 
-If a rectangular prism is built from equal cubes, then:
-
-- length tells cubes in a row
-- width tells rows in a layer
-- height tells layers
-
-That is why the formula `length x width x height` works.
-
-## Visual Model
-![Rectangular prism built from unit cubes](/images/lessons/math/volume_prism.svg)
-
-Students can connect each dimension of the prism to a row, a layer, and the total number of cubes.
-
-## Interactive Follow-Up
-Students can build prisms, organize cube layers, and compare solids in [Mathigon Polypad](https://mathigon.org/polypad).
-
-## Video Follow-Up
-Students who want another explanation can review a volume video set in the [Khan Academy volume unit](https://www.khanacademy.org/math/cc-fifth-grade-math/imp-measurement-and-data-3).
+Strong math work has three parts. First, identify the quantities and labels. Second, choose a model such as a drawing, table, number line, array, or equation. Third, explain why the answer fits the situation. If one of those parts is missing, the answer may be right by luck but hard to trust.
 
 ## Key Vocabulary
-**Length**: The number of cubes in one row.
+**Volume**: A key idea in this lesson that helps describe the problem accurately.
 
-**Width**: The number of rows in one layer.
+**Cubic unit**: A label or tool that helps organize the numbers before solving.
 
-**Height**: The number of layers.
+**Layer**: A way to describe the size, position, or relationship shown in the model.
 
-**Volume**: The number of cubic units inside a solid.
+**Rectangular prism**: A check that helps you decide whether the final answer is reasonable.
 
-## Worked Example 1: Use the Formula
-A rectangular prism has:
+## Learn The Big Idea
+When you see a problem about volume, start by asking, "What is being measured, counted, compared, or changed?" That question keeps the math connected to meaning.
 
-- length `4`
-- width `3`
-- height `2`
+For this lesson, use a three-step routine:
 
-Volume:
+1. Read the question and underline the labels.
+2. Build or sketch a model that shows the relationship.
+3. Write an equation or explanation that matches the model.
 
-`4 x 3 x 2 = 24`
+The model should not be decoration. It should help you see where the answer comes from. A table can show repeated structure. A diagram can show parts and wholes. An equation can show the operation. A sentence can explain the reasoning so another person can follow it.
 
-The prism has `24 cubic units`.
+## Worked Example
+A box has 5 cubes in each row, 6 rows in a layer, and 4 layers.
 
-## Worked Example 2: Check with Layers
-One layer has:
+Task: count cubes by rows, layers, and total volume.
 
-`4 x 3 = 12` cubes
+Step 1: Name the quantities. Write down each number with its label so the numbers do not float by themselves.
 
-There are `2` layers:
+Step 2: Choose a model. For grade 5, a clear model is often more useful than mental math because it shows the relationship. Sketch it simply and label the important parts.
 
-`12 x 2 = 24`
+Step 3: Solve. Use the model to decide which operation or comparison is needed. Then compute carefully.
 
-The formula answer matches the cube-layer reasoning.
+Step 4: Check. Ask whether the answer is the right kind of quantity. If the problem asks for a comparison, the answer should compare. If it asks for a total, the answer should combine parts. If it asks for a measurement, the answer should include a unit.
+
+## Guided Check
+Try this with a partner or as a self-check:
+
+- What are the labels in the problem?
+- Which model would make the relationship easiest to see?
+- What operation or comparison does the model suggest?
+- How can you tell whether the answer is reasonable?
+
+Explain your thinking in one complete sentence. A strong sentence might begin, "I know this because the model shows..."
 
 ## Common Mistake
-Students sometimes add the dimensions instead of multiplying.
+A common mistake is counting only the front face instead of all layers. This mistake usually happens when students move too quickly from the numbers to an operation.
 
-Adding `4 + 3 + 2` finds something else. It does not count the cubes inside the prism.
+To avoid it, pause before calculating. Say what each number means. Then point to the part of the model where that number appears. If you cannot point to it, the model or equation needs more labels.
+
+## Independent Practice
+Create your own problem about volume using a real classroom, sports, art, shopping, or science situation. Include at least two numbers and one clear question. Then solve it using:
+
+- a labeled model
+- an equation
+- a sentence that explains why the answer makes sense
+
+Swap with a partner if possible. Your partner should be able to solve the problem without asking what the numbers mean.
+
+## Explain It Like A Mathematician
+Before moving on, write a short explanation of the strategy. Use the words "because" and "so" at least once. The word "because" should connect your model to the operation or comparison. The word "so" should connect the computation to the final answer.
+
+If the explanation is hard to write, that is useful information. It usually means one label is missing, one step happened too quickly, or the model does not show the relationship clearly enough yet. Revise the model first, then revise the sentence.
 
 ## Summary
-Volume works best when students connect the formula to the cube structure.
+Volume is strongest when the numbers stay connected to meaning. Good mathematicians label quantities, choose a useful representation, solve with care, and check the answer against the situation.
 
-To solve volume problems well:
+Remember the routine: name the quantities, model the relationship, solve, and explain. That routine will help you with today's topic and with harder problems later in the year.
 
-1. identify length, width, and height
-2. multiply the dimensions
-3. label the answer in cubic units
+<!-- generated_by: harden_grades_3_5_curriculum.ts; source_slug: 5-mathematics-geometry-and-measurement-volume; standards: 5.MD.C.3 -->

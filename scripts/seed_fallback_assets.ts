@@ -180,6 +180,36 @@ const SUBJECT_TEMPLATES: Record<string, AssetTemplate[]> = {
       tags: ['social-studies', 'geography', 'reference'],
     },
   ],
+  Electives: [
+    {
+      sourceName: 'Smithsonian Open Access',
+      url: 'https://learninglab.si.edu/openaccess',
+      title: 'Smithsonian Open Access Collections',
+      description: 'Open images, artifacts, and artworks for creative, cultural, and design-based elective work.',
+      tags: ['electives', 'arts', 'artifact'],
+    },
+    {
+      sourceName: 'Library of Congress',
+      url: 'https://www.loc.gov/classroom-materials/',
+      title: 'Library of Congress Classroom Materials',
+      description: 'Primary sources, images, maps, and media that support arts, media, civics, and inquiry electives.',
+      tags: ['electives', 'media', 'primary-source'],
+    },
+    {
+      sourceName: 'Khan Academy',
+      url: 'https://www.khanacademy.org/computing',
+      title: 'Khan Academy Computing Library',
+      description: 'Computing, programming, and digital creation lessons for enrichment pathways.',
+      tags: ['electives', 'computer-science', 'practice'],
+    },
+    {
+      sourceName: 'CFPB',
+      url: 'https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/teach/activities/',
+      title: 'CFPB Youth Financial Education Activities',
+      description: 'Practical money, goal-setting, and decision-making activities for student enrichment.',
+      tags: ['electives', 'financial-literacy', 'planning'],
+    },
+  ],
   'Study Skills': [
     {
       sourceName: 'CFPB',

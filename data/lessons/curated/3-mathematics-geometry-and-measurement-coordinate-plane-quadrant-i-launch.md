@@ -1,87 +1,80 @@
 # Coordinate Plane (Quadrant I)
 
 ## Learning Goal
-- I can read an ordered pair as a location.
-- I can plot points in Quadrant I.
-- I can explain why the order of the coordinates matters.
+- I can explain the main idea of coordinate plane in my own words.
+- I can solve a grade 3 problem using a model, equation, or labeled diagram.
+- I can check whether my answer makes sense and explain my strategy.
 
 ## Introduction
-The coordinate plane is a map made of numbers.
+A treasure map uses ordered pairs to mark locations. This is the kind of situation where coordinate plane becomes useful. The goal is not to memorize a trick. The goal is to slow down, name what the problem is asking, choose a representation, and use the numbers carefully.
 
-An ordered pair such as `(3, 2)` tells you how to find one exact point.
-
-You always move in this order:
-
-1. move right on the `x`-axis
-2. move up on the `y`-axis
-
-In Quadrant I, both coordinates are positive.
-
-## Visual Model
-![Coordinate plane showing plotted points in multiple quadrants](/images/lessons/math/coordinate_plane.svg)
-
-This grid helps students see that the first number tells the horizontal move and the second number tells the vertical move.
-
-## Interactive Follow-Up
-Students can plot points and test ordered pairs in the [Desmos Graphing Calculator](https://www.desmos.com/calculator).
-
-## Video Follow-Up
-Students who need another model can watch a coordinate-plane video set in the [Khan Academy coordinate plane unit](https://www.khanacademy.org/math/cc-fifth-grade-math/imp-geometry/imp-coordinate-plane).
+Strong math work has three parts. First, identify the quantities and labels. Second, choose a model such as a drawing, table, number line, array, or equation. Third, explain why the answer fits the situation. If one of those parts is missing, the answer may be right by luck but hard to trust.
 
 ## Key Vocabulary
-**Ordered pair**: Two numbers written in order to name a point.
+**Coordinate plane**: A key idea in this lesson that helps describe the problem accurately.
 
-**x-axis**: The horizontal number line.
+**X-coordinate**: A label or tool that helps organize the numbers before solving.
 
-**y-axis**: The vertical number line.
+**Y-coordinate**: A way to describe the size, position, or relationship shown in the model.
 
-**Origin**: The point `(0, 0)`.
+**Origin**: A check that helps you decide whether the final answer is reasonable.
 
-## Worked Example 1: Plotting a Point
-Plot `(4, 1)`.
+## Learn The Big Idea
+When you see a problem about coordinate plane, start by asking, "What is being measured, counted, compared, or changed?" That question keeps the math connected to meaning.
 
-Start at the origin.
+For this lesson, use a three-step routine:
 
-- move `4` units right
-- move `1` unit up
+1. Read the question and underline the labels.
+2. Build or sketch a model that shows the relationship.
+3. Write an equation or explanation that matches the model.
 
-That point is `(4, 1)`.
+The model should not be decoration. It should help you see where the answer comes from. A table can show repeated structure. A diagram can show parts and wholes. An equation can show the operation. A sentence can explain the reasoning so another person can follow it.
 
-## Worked Example 2: Why Order Matters
-Compare `(2, 5)` and `(5, 2)`.
+## Worked Example
+The school garden is at (3, 5) and the library is at (6, 5).
 
-These are not the same point.
+Task: move horizontally first, then vertically, and name the ordered pair.
 
-- `(2, 5)` means right `2`, up `5`
-- `(5, 2)` means right `5`, up `2`
+Step 1: Name the quantities. Write down each number with its label so the numbers do not float by themselves.
 
-The numbers are the same, but the order changes the location.
+Step 2: Choose a model. For grade 3, a clear model is often more useful than mental math because it shows the relationship. Sketch it simply and label the important parts.
 
-## Worked Example 3: Make a Simple Shape
-Plot these points:
+Step 3: Solve. Use the model to decide which operation or comparison is needed. Then compute carefully.
 
-- `(1, 1)`
-- `(4, 1)`
-- `(4, 3)`
-- `(1, 3)`
+Step 4: Check. Ask whether the answer is the right kind of quantity. If the problem asks for a comparison, the answer should compare. If it asks for a total, the answer should combine parts. If it asks for a measurement, the answer should include a unit.
 
-If you connect the points in order, you make a rectangle.
+## Guided Check
+Try this with a partner or as a self-check:
 
-Coordinates can be used to place shapes exactly where you want them.
+- What are the labels in the problem?
+- Which model would make the relationship easiest to see?
+- What operation or comparison does the model suggest?
+- How can you tell whether the answer is reasonable?
+
+Explain your thinking in one complete sentence. A strong sentence might begin, "I know this because the model shows..."
 
 ## Common Mistake
-Students sometimes move up first and then right.
+A common mistake is switching the x-coordinate and y-coordinate. This mistake usually happens when students move too quickly from the numbers to an operation.
 
-Use this reminder:
+To avoid it, pause before calculating. Say what each number means. Then point to the part of the model where that number appears. If you cannot point to it, the model or equation needs more labels.
 
-- first number -> right
-- second number -> up
+## Independent Practice
+Create your own problem about coordinate plane using a real classroom, sports, art, shopping, or science situation. Include at least two numbers and one clear question. Then solve it using:
+
+- a labeled model
+- an equation
+- a sentence that explains why the answer makes sense
+
+Swap with a partner if possible. Your partner should be able to solve the problem without asking what the numbers mean.
+
+## Explain It Like A Mathematician
+Before moving on, write a short explanation of the strategy. Use the words "because" and "so" at least once. The word "because" should connect your model to the operation or comparison. The word "so" should connect the computation to the final answer.
+
+If the explanation is hard to write, that is useful information. It usually means one label is missing, one step happened too quickly, or the model does not show the relationship clearly enough yet. Revise the model first, then revise the sentence.
 
 ## Summary
-Quadrant I points are found by starting at the origin, moving right, and then moving up.
+Coordinate Plane (Quadrant I) is strongest when the numbers stay connected to meaning. Good mathematicians label quantities, choose a useful representation, solve with care, and check the answer against the situation.
 
-Strong coordinate thinking means:
+Remember the routine: name the quantities, model the relationship, solve, and explain. That routine will help you with today's topic and with harder problems later in the year.
 
-1. reading the pair in order
-2. plotting carefully on the grid
-3. checking that the point matches the numbers
+<!-- generated_by: harden_grades_3_5_curriculum.ts; source_slug: 3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i; standards: 3.G.A.1 -->

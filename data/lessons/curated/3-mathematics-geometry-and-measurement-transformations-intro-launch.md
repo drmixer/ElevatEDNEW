@@ -1,77 +1,80 @@
 # Transformations (intro)
 
 ## Learning Goal
-- I can identify a slide, flip, or turn.
-- I can explain what stays the same when a shape moves.
-- I can use the words translation, reflection, and rotation.
+- I can explain the main idea of transformations in my own words.
+- I can solve a grade 3 problem using a model, equation, or labeled diagram.
+- I can check whether my answer makes sense and explain my strategy.
 
 ## Introduction
-Shapes can move without changing size.
+A quilt pattern repeats the same shape in different positions. This is the kind of situation where transformations becomes useful. The goal is not to memorize a trick. The goal is to slow down, name what the problem is asking, choose a representation, and use the numbers carefully.
 
-In this lesson, students learn three common moves:
-
-- slide
-- flip
-- turn
-
-These are called transformations.
-
-## Visual Model
-![Diagram showing rotation, reflection, translation, and dilation](/images/lessons/math/geometry_transformations.svg)
-
-This diagram gives students a picture of how a shape can move while still staying the same shape.
-
-## Interactive Follow-Up
-Students can drag shapes and test slides, flips, and turns in the [Desmos Geometry tool](https://www.desmos.com/geometry).
-
-## Video Follow-Up
-Students who need another model can watch a short transformations video set in the [Khan Academy transformations unit](https://www.khanacademy.org/math/geometry-home/transformations).
+Strong math work has three parts. First, identify the quantities and labels. Second, choose a model such as a drawing, table, number line, array, or equation. Third, explain why the answer fits the situation. If one of those parts is missing, the answer may be right by luck but hard to trust.
 
 ## Key Vocabulary
-**Translation**: A slide.
+**Translate**: A key idea in this lesson that helps describe the problem accurately.
 
-**Reflection**: A flip.
+**Rotate**: A label or tool that helps organize the numbers before solving.
 
-**Rotation**: A turn.
+**Reflect**: A way to describe the size, position, or relationship shown in the model.
 
-## Worked Example 1: A Slide
-A triangle moves `3` spaces to the right without turning.
+**Congruent**: A check that helps you decide whether the final answer is reasonable.
 
-That move is a translation.
+## Learn The Big Idea
+When you see a problem about transformations, start by asking, "What is being measured, counted, compared, or changed?" That question keeps the math connected to meaning.
 
-The shape stays the same size and the same shape.
+For this lesson, use a three-step routine:
 
-## Worked Example 2: A Flip
-A heart shape appears on the other side of a line like a mirror image.
+1. Read the question and underline the labels.
+2. Build or sketch a model that shows the relationship.
+3. Write an equation or explanation that matches the model.
 
-That move is a reflection.
+The model should not be decoration. It should help you see where the answer comes from. A table can show repeated structure. A diagram can show parts and wholes. An equation can show the operation. A sentence can explain the reasoning so another person can follow it.
 
-The shape still matches the original.
+## Worked Example
+One triangle slides right, one turns around a point, and one flips across a line.
 
-## Worked Example 3: A Turn
-A square turns one-quarter turn around its center.
+Task: describe the motion and explain what stayed the same.
 
-That move is a rotation.
+Step 1: Name the quantities. Write down each number with its label so the numbers do not float by themselves.
 
-The square still has:
+Step 2: Choose a model. For grade 3, a clear model is often more useful than mental math because it shows the relationship. Sketch it simply and label the important parts.
 
-- the same side lengths
-- the same angles
+Step 3: Solve. Use the model to decide which operation or comparison is needed. Then compute carefully.
+
+Step 4: Check. Ask whether the answer is the right kind of quantity. If the problem asks for a comparison, the answer should compare. If it asks for a total, the answer should combine parts. If it asks for a measurement, the answer should include a unit.
+
+## Guided Check
+Try this with a partner or as a self-check:
+
+- What are the labels in the problem?
+- Which model would make the relationship easiest to see?
+- What operation or comparison does the model suggest?
+- How can you tell whether the answer is reasonable?
+
+Explain your thinking in one complete sentence. A strong sentence might begin, "I know this because the model shows..."
 
 ## Common Mistake
-Students sometimes say every moved shape is a translation.
+A common mistake is saying a shape changed size when it only moved. This mistake usually happens when students move too quickly from the numbers to an operation.
 
-Check the motion:
+To avoid it, pause before calculating. Say what each number means. Then point to the part of the model where that number appears. If you cannot point to it, the model or equation needs more labels.
 
-- slide -> translation
-- flip -> reflection
-- turn -> rotation
+## Independent Practice
+Create your own problem about transformations using a real classroom, sports, art, shopping, or science situation. Include at least two numbers and one clear question. Then solve it using:
+
+- a labeled model
+- an equation
+- a sentence that explains why the answer makes sense
+
+Swap with a partner if possible. Your partner should be able to solve the problem without asking what the numbers mean.
+
+## Explain It Like A Mathematician
+Before moving on, write a short explanation of the strategy. Use the words "because" and "so" at least once. The word "because" should connect your model to the operation or comparison. The word "so" should connect the computation to the final answer.
+
+If the explanation is hard to write, that is useful information. It usually means one label is missing, one step happened too quickly, or the model does not show the relationship clearly enough yet. Revise the model first, then revise the sentence.
 
 ## Summary
-Transformations help describe how shapes move.
+Transformations (intro) is strongest when the numbers stay connected to meaning. Good mathematicians label quantities, choose a useful representation, solve with care, and check the answer against the situation.
 
-To identify them well:
+Remember the routine: name the quantities, model the relationship, solve, and explain. That routine will help you with today's topic and with harder problems later in the year.
 
-1. look at the motion
-2. decide whether it slides, flips, or turns
-3. check that the size and shape stayed the same
+<!-- generated_by: harden_grades_3_5_curriculum.ts; source_slug: 3-mathematics-geometry-and-measurement-transformations-intro; standards: 3.G.A.2 -->

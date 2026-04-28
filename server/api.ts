@@ -89,6 +89,27 @@ import { upsertPlanOptOut, listPlanOptOutsApi } from './optOuts.js';
 import { getContentCoverage, getCoverageSummary } from './contentCoverage.js';
 import { getContentQualityMetrics } from './contentQuality.js';
 import { listRecentCatPlacementAttempts } from './adminPlacement.js';
+import {
+  fetchMathAdaptiveVariant,
+  fetchStudentMathDailyPlan,
+  fetchStudentMathParentPreference,
+  fetchStudentMathSubjectState,
+  fetchStudentMathWeeklyRecord,
+  updateStudentMathParentPreference,
+} from './homeschoolPlans.js';
+import {
+  fetchStudentElaDailyPlan,
+  fetchStudentElaSubjectState,
+  fetchStudentElaWeeklyRecord,
+} from './elaHomeschoolPlans.js';
+import { fetchStudentElaBlockContent } from './elaBlockContentService.js';
+import { updateMathSubjectStateFromAdaptiveVariantEvent } from './mathSubjectState.js';
+import {
+  extractElaCompletionEvent,
+  updateElaSubjectStateFromCompletionEvent,
+} from './elaSubjectState.js';
+import { recordElaWorkSampleFromSubjectStateUpdate } from './elaWorkSamples.js';
+import type { MathAdaptiveStrand } from '../shared/mathAdaptivePolicy.js';
 
 type ApiServerOptions = {
   startImportQueue?: boolean;
@@ -99,6 +120,15 @@ const API_PREFIX = '/api';
 const VERSIONED_PREFIX = `${API_PREFIX}/${API_VERSION}`;
 const DEFAULT_PREMIUM_PLAN_SLUG = process.env.DEFAULT_PREMIUM_PLAN_SLUG ?? 'individual-pro';
 const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:5173';
+const MATH_ADAPTIVE_STRANDS = new Set<MathAdaptiveStrand>([
+  'place_value_operations',
+  'fractions_decimals',
+  'ratios_rates_percent',
+  'expressions_equations_functions',
+  'geometry_measurement',
+  'data_probability_statistics',
+  'problem_solving_modeling',
+]);
 
 type ApiContext = {
   serviceSupabase: SupabaseClient;
@@ -1501,6 +1531,188 @@ export const createApiHandler = (context: ApiContext) => {
       }, { actorId: actor.id });
     }
 
+    if (method === 'GET' && path === '/student/homeschool/math-plan') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const date = typeof url.query.date === 'string' && url.query.date.trim().length > 0
+          ? url.query.date.trim()
+          : undefined;
+        const plan = await fetchStudentMathDailyPlan(supabase, actor.id, { date });
+        sendJson(res, 200, { plan }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/ela-plan') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const date = typeof url.query.date === 'string' && url.query.date.trim().length > 0
+          ? url.query.date.trim()
+          : undefined;
+        const plan = await fetchStudentElaDailyPlan(supabase, actor.id, { date });
+        sendJson(res, 200, { plan }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/ela-block-content') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const blockId = typeof url.query.blockId === 'string' ? url.query.blockId.trim() : '';
+        const date = typeof url.query.date === 'string' && url.query.date.trim().length > 0
+          ? url.query.date.trim()
+          : undefined;
+        if (!blockId) {
+          throw new HttpError(400, 'blockId query parameter is required.', 'invalid_parameter');
+        }
+        const resolution = await fetchStudentElaBlockContent(supabase, actor.id, blockId, { date });
+        if (!resolution) {
+          throw new HttpError(404, 'ELA block was not found in the current daily plan.', 'not_found');
+        }
+        sendJson(res, 200, resolution, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/math-state') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const queryStudentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        const studentId = actor.role === 'student' ? actor.id : queryStudentId;
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const state = await fetchStudentMathSubjectState(supabase, studentId);
+        sendJson(res, 200, { state }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/ela-state') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student', 'parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const queryStudentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        const studentId = actor.role === 'student' ? actor.id : queryStudentId;
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const state = await fetchStudentElaSubjectState(supabase, studentId);
+        sendJson(res, 200, { state }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/parent/homeschool/math-preference') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const studentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const preference = await fetchStudentMathParentPreference(supabase, studentId);
+        sendJson(res, 200, { preference }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/parent/homeschool/math-weekly-record') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const studentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        const weekStart =
+          typeof url.query.weekStart === 'string' && url.query.weekStart.trim().length > 0
+            ? url.query.weekStart.trim()
+            : undefined;
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const record = await fetchStudentMathWeeklyRecord(supabase, studentId, { weekStart });
+        sendJson(res, 200, { record }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/parent/homeschool/ela-weekly-record') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const studentId = typeof url.query.studentId === 'string' ? url.query.studentId.trim() : '';
+        const weekStart =
+          typeof url.query.weekStart === 'string' && url.query.weekStart.trim().length > 0
+            ? url.query.weekStart.trim()
+            : undefined;
+        if (!studentId) {
+          throw new HttpError(400, 'studentId query parameter is required.', 'invalid_parameter');
+        }
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const record = await fetchStudentElaWeeklyRecord(supabase, studentId, { weekStart });
+        sendJson(res, 200, { record }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'PUT' && path === '/parent/homeschool/math-preference') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['parent']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const body = await readValidatedJson<{
+          studentId?: string | null;
+          preferredStrand?: string | null;
+        }>(req);
+        const studentId = typeof body.studentId === 'string' ? body.studentId.trim() : '';
+        if (!studentId) {
+          throw new HttpError(400, 'studentId is required.', 'invalid_payload');
+        }
+        const preferredStrand =
+          typeof body.preferredStrand === 'string' && body.preferredStrand.trim().length > 0
+            ? body.preferredStrand.trim()
+            : null;
+        if (preferredStrand && !MATH_ADAPTIVE_STRANDS.has(preferredStrand as MathAdaptiveStrand)) {
+          throw new HttpError(400, 'preferredStrand is not a supported math strand.', 'invalid_payload');
+        }
+
+        await ensureGuardianAccess(supabase, actor, [studentId]);
+        const preference = await updateStudentMathParentPreference(
+          serviceSupabase ?? supabase,
+          studentId,
+          actor.id,
+          preferredStrand as MathAdaptiveStrand | null,
+        );
+        sendJson(res, 200, { preference }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
+    if (method === 'GET' && path === '/student/homeschool/math-variant') {
+      const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
+      if (!actor) return true;
+
+      return handleRoute(async () => {
+        const variantId = typeof url.query.id === 'string' ? url.query.id.trim() : '';
+        if (!variantId) {
+          throw new HttpError(400, 'id query parameter is required.', 'invalid_parameter');
+        }
+
+        const variant = fetchMathAdaptiveVariant(variantId);
+        if (!variant) {
+          throw new HttpError(404, 'Math adaptive variant not found.', 'not_found');
+        }
+
+        sendJson(res, 200, { variant }, API_VERSION);
+      }, { actorId: actor.id });
+    }
+
     if (method === 'GET' && path === '/student/paths') {
       const actor = await requireUser(supabase, token, res, sendErrorResponse, ['student']);
       if (!actor) return true;
@@ -1704,6 +1916,39 @@ export const createApiHandler = (context: ApiContext) => {
           timeSpentSeconds,
           payload: enrichedPayload,
         });
+
+        if (
+          enrichedPayload.subject === 'math' &&
+          typeof enrichedPayload.adaptive_variant_id === 'string' &&
+          typeof enrichedPayload.module_slug === 'string' &&
+          score != null
+        ) {
+          await updateMathSubjectStateFromAdaptiveVariantEvent(serviceSupabase ?? supabase, actor.id, {
+            adaptiveVariantId: enrichedPayload.adaptive_variant_id,
+            adaptiveVariantKind:
+              typeof enrichedPayload.adaptive_variant_kind === 'string'
+                ? enrichedPayload.adaptive_variant_kind
+                : null,
+            moduleSlug: enrichedPayload.module_slug,
+            score,
+            accuracy: typeof body.accuracy === 'number' ? body.accuracy : score,
+            payload: enrichedPayload,
+          });
+        }
+
+        const elaCompletion = extractElaCompletionEvent(enrichedPayload, score, {
+          accuracy: typeof body.accuracy === 'number' ? body.accuracy : score,
+          completedAt: eventResult.eventCreatedAt,
+          timeSpentSeconds,
+        });
+        if (elaCompletion) {
+          const elaUpdate = await updateElaSubjectStateFromCompletionEvent(serviceSupabase ?? supabase, actor.id, elaCompletion);
+          await recordElaWorkSampleFromSubjectStateUpdate(serviceSupabase ?? supabase, actor.id, elaUpdate, {
+            eventType,
+            eventCreatedAt: eventResult.eventCreatedAt,
+            payload: enrichedPayload,
+          });
+        }
 
         const stats = await getStudentStats(supabase, actor.id);
         sendJson(res, 200, { event: eventResult, stats, path: adaptive.path, next: adaptive.next, adaptive: adaptive.adaptive }, API_VERSION);

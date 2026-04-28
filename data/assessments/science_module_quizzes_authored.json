@@ -18823,5 +18823,4013 @@
         "explanation": "Explanation for this physical science waves and electromagnetic spectrum question."
       }
     ]
+  },
+  "3-science-science-and-engineering-practices-data-tables-and-graphs": {
+    "title": "Data Tables and Graphs Checkpoint",
+    "description": "Baseline quiz for grade 3 Science: Data Tables and Graphs.",
+    "estimatedDuration": 10,
+    "standards": [
+      "3-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Data Tables and Graphs, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Data Tables and Graphs feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Data Tables and Graphs during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Data Tables and Graphs strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "3-science-science-and-engineering-practices-variables-and-fair-tests": {
+    "title": "Variables and Fair Tests Checkpoint",
+    "description": "Baseline quiz for grade 3 Science: Variables and Fair Tests.",
+    "estimatedDuration": 10,
+    "standards": [
+      "3-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Variables and Fair Tests, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Variables and Fair Tests feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Variables and Fair Tests during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Variables and Fair Tests strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "3-science-science-and-engineering-practices-systems-and-interactions": {
+    "title": "Systems and Interactions Checkpoint",
+    "description": "Baseline quiz for grade 3 Science: Systems and Interactions.",
+    "estimatedDuration": 10,
+    "standards": [
+      "3-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Systems and Interactions, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Systems and Interactions feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Systems and Interactions during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Systems and Interactions strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "3-science-science-and-engineering-practices-model-revision": {
+    "title": "Model Revision Checkpoint",
+    "description": "Baseline quiz for grade 3 Science: Model Revision.",
+    "estimatedDuration": 10,
+    "standards": [
+      "3-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Model Revision, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Model Revision feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Model Revision during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Model Revision strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "3-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-science-science-and-engineering-practices-data-tables-and-graphs": {
+    "title": "Data Tables and Graphs Checkpoint",
+    "description": "Baseline quiz for grade 4 Science: Data Tables and Graphs.",
+    "estimatedDuration": 10,
+    "standards": [
+      "4-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Data Tables and Graphs, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Data Tables and Graphs feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Data Tables and Graphs during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Data Tables and Graphs strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-science-science-and-engineering-practices-variables-and-fair-tests": {
+    "title": "Variables and Fair Tests Checkpoint",
+    "description": "Baseline quiz for grade 4 Science: Variables and Fair Tests.",
+    "estimatedDuration": 10,
+    "standards": [
+      "4-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Variables and Fair Tests, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Variables and Fair Tests feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Variables and Fair Tests during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Variables and Fair Tests strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-science-science-and-engineering-practices-systems-and-interactions": {
+    "title": "Systems and Interactions Checkpoint",
+    "description": "Baseline quiz for grade 4 Science: Systems and Interactions.",
+    "estimatedDuration": 10,
+    "standards": [
+      "4-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Systems and Interactions, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Systems and Interactions feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Systems and Interactions during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Systems and Interactions strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-science-science-and-engineering-practices-model-revision": {
+    "title": "Model Revision Checkpoint",
+    "description": "Baseline quiz for grade 4 Science: Model Revision.",
+    "estimatedDuration": 10,
+    "standards": [
+      "4-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Model Revision, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Model Revision feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Model Revision during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Model Revision strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "4-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-science-science-and-engineering-practices-data-tables-and-graphs": {
+    "title": "Data Tables and Graphs Checkpoint",
+    "description": "Baseline quiz for grade 5 Science: Data Tables and Graphs.",
+    "estimatedDuration": 10,
+    "standards": [
+      "5-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Data Tables and Graphs, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Data Tables and Graphs feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Data Tables and Graphs during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Data Tables and Graphs strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-science-science-and-engineering-practices-variables-and-fair-tests": {
+    "title": "Variables and Fair Tests Checkpoint",
+    "description": "Baseline quiz for grade 5 Science: Variables and Fair Tests.",
+    "estimatedDuration": 10,
+    "standards": [
+      "5-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Variables and Fair Tests, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Variables and Fair Tests feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Variables and Fair Tests during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Variables and Fair Tests strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-science-science-and-engineering-practices-systems-and-interactions": {
+    "title": "Systems and Interactions Checkpoint",
+    "description": "Baseline quiz for grade 5 Science: Systems and Interactions.",
+    "estimatedDuration": 10,
+    "standards": [
+      "5-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Systems and Interactions, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Systems and Interactions feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Systems and Interactions during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Systems and Interactions strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-science-science-and-engineering-practices-model-revision": {
+    "title": "Model Revision Checkpoint",
+    "description": "Baseline quiz for grade 5 Science: Model Revision.",
+    "estimatedDuration": 10,
+    "standards": [
+      "5-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Model Revision, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Model Revision feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Model Revision during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Model Revision strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "5-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-science-science-and-engineering-practices-data-tables-and-graphs": {
+    "title": "Data Tables and Graphs Checkpoint",
+    "description": "Baseline quiz for grade 6 Science: Data Tables and Graphs.",
+    "estimatedDuration": 10,
+    "standards": [
+      "6-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Data Tables and Graphs, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Data Tables and Graphs feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Data Tables and Graphs during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Data Tables and Graphs strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-science-science-and-engineering-practices-variables-and-fair-tests": {
+    "title": "Variables and Fair Tests Checkpoint",
+    "description": "Baseline quiz for grade 6 Science: Variables and Fair Tests.",
+    "estimatedDuration": 10,
+    "standards": [
+      "6-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Variables and Fair Tests, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Variables and Fair Tests feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Variables and Fair Tests during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Variables and Fair Tests strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-science-science-and-engineering-practices-systems-and-interactions": {
+    "title": "Systems and Interactions Checkpoint",
+    "description": "Baseline quiz for grade 6 Science: Systems and Interactions.",
+    "estimatedDuration": 10,
+    "standards": [
+      "6-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Systems and Interactions, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Systems and Interactions feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Systems and Interactions during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Systems and Interactions strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-science-science-and-engineering-practices-model-revision": {
+    "title": "Model Revision Checkpoint",
+    "description": "Baseline quiz for grade 6 Science: Model Revision.",
+    "estimatedDuration": 10,
+    "standards": [
+      "6-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Model Revision, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Model Revision feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Model Revision during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Model Revision strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "6-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-science-science-and-engineering-practices-data-tables-and-graphs": {
+    "title": "Data Tables and Graphs Checkpoint",
+    "description": "Baseline quiz for grade 7 Science: Data Tables and Graphs.",
+    "estimatedDuration": 10,
+    "standards": [
+      "7-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Data Tables and Graphs, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Data Tables and Graphs feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Data Tables and Graphs during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Data Tables and Graphs strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-science-science-and-engineering-practices-variables-and-fair-tests": {
+    "title": "Variables and Fair Tests Checkpoint",
+    "description": "Baseline quiz for grade 7 Science: Variables and Fair Tests.",
+    "estimatedDuration": 10,
+    "standards": [
+      "7-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Variables and Fair Tests, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Variables and Fair Tests feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Variables and Fair Tests during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Variables and Fair Tests strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-science-science-and-engineering-practices-systems-and-interactions": {
+    "title": "Systems and Interactions Checkpoint",
+    "description": "Baseline quiz for grade 7 Science: Systems and Interactions.",
+    "estimatedDuration": 10,
+    "standards": [
+      "7-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Systems and Interactions, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Systems and Interactions feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Systems and Interactions during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Systems and Interactions strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-science-science-and-engineering-practices-model-revision": {
+    "title": "Model Revision Checkpoint",
+    "description": "Baseline quiz for grade 7 Science: Model Revision.",
+    "estimatedDuration": 10,
+    "standards": [
+      "7-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Model Revision, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Model Revision feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Model Revision during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Model Revision strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "7-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-science-science-and-engineering-practices-data-tables-and-graphs": {
+    "title": "Data Tables and Graphs Checkpoint",
+    "description": "Baseline quiz for grade 8 Science: Data Tables and Graphs.",
+    "estimatedDuration": 10,
+    "standards": [
+      "8-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Data Tables and Graphs, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Data Tables and Graphs feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Data Tables and Graphs during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Data Tables and Graphs strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_data_tables_and_graphs"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-science-science-and-engineering-practices-variables-and-fair-tests": {
+    "title": "Variables and Fair Tests Checkpoint",
+    "description": "Baseline quiz for grade 8 Science: Variables and Fair Tests.",
+    "estimatedDuration": 10,
+    "standards": [
+      "8-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Variables and Fair Tests, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Variables and Fair Tests feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Variables and Fair Tests during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Variables and Fair Tests strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_variables_and_fair_tests"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-science-science-and-engineering-practices-systems-and-interactions": {
+    "title": "Systems and Interactions Checkpoint",
+    "description": "Baseline quiz for grade 8 Science: Systems and Interactions.",
+    "estimatedDuration": 10,
+    "standards": [
+      "8-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Systems and Interactions, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Systems and Interactions feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Systems and Interactions during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Systems and Interactions strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_systems_and_interactions"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-science-science-and-engineering-practices-model-revision": {
+    "title": "Model Revision Checkpoint",
+    "description": "Baseline quiz for grade 8 Science: Model Revision.",
+    "estimatedDuration": 10,
+    "standards": [
+      "8-SCI-PRACTICE",
+      "3-5-ETS1-3"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Model Revision, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Model Revision feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Model Revision during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Model Revision strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "science_science_and_engineering_practices_model_revision"
+        ],
+        "standards": [
+          "8-SCI-PRACTICE",
+          "3-5-ETS1-3"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
   }
 }

@@ -297,7 +297,7 @@
       },
       {
         "id": "3mn006",
-        "prompt": "What is the purpose of bar lines in sheet music?",
+        "prompt": "A rhythm pattern needs to be divided into clear measures. Which notation mark separates the measures on the staff?",
         "type": "multiple_choice",
         "difficulty": 2,
         "standards": [
@@ -1007,7 +1007,7 @@
       },
       {
         "id": "5mn006",
-        "prompt": "What is the purpose of ledger lines in sheet music?",
+        "prompt": "A melody has notes higher than the five staff lines can show. Which notation tool lets the composer write those extra-high notes accurately?",
         "type": "multiple_choice",
         "difficulty": 2,
         "standards": [
@@ -2126,6 +2126,1008 @@
           }
         ],
         "explanation": "The answer is typically a fourth or fifth above/below the original subject."
+      }
+    ]
+  },
+  "3-electives-arts-and-music-creative-composition-studio": {
+    "title": "Creative Composition Studio Checkpoint",
+    "description": "Baseline quiz for grade 3 Arts & Music: Creative Composition Studio.",
+    "estimatedDuration": 10,
+    "standards": [
+      "VA.3.CR.1",
+      "MU.3.RE.7"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 3 Creative Composition Studio, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.3.CR.1",
+          "MU.3.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 3 task for Creative Composition Studio feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.3.CR.1",
+          "MU.3.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 3 work on Creative Composition Studio during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.3.CR.1",
+          "MU.3.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 3 Creative Composition Studio strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.3.CR.1",
+          "MU.3.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "4-electives-arts-and-music-creative-composition-studio": {
+    "title": "Creative Composition Studio Checkpoint",
+    "description": "Baseline quiz for grade 4 Arts & Music: Creative Composition Studio.",
+    "estimatedDuration": 10,
+    "standards": [
+      "VA.4.CR.1",
+      "MU.4.RE.7"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 4 Creative Composition Studio, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.4.CR.1",
+          "MU.4.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 4 task for Creative Composition Studio feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.4.CR.1",
+          "MU.4.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 4 work on Creative Composition Studio during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.4.CR.1",
+          "MU.4.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 4 Creative Composition Studio strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.4.CR.1",
+          "MU.4.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "5-electives-arts-and-music-creative-composition-studio": {
+    "title": "Creative Composition Studio Checkpoint",
+    "description": "Baseline quiz for grade 5 Arts & Music: Creative Composition Studio.",
+    "estimatedDuration": 10,
+    "standards": [
+      "VA.5.CR.1",
+      "MU.5.RE.7"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 5 Creative Composition Studio, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.5.CR.1",
+          "MU.5.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 5 task for Creative Composition Studio feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.5.CR.1",
+          "MU.5.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 5 work on Creative Composition Studio during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.5.CR.1",
+          "MU.5.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 5 Creative Composition Studio strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.5.CR.1",
+          "MU.5.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "6-electives-arts-and-music-creative-composition-studio": {
+    "title": "Creative Composition Studio Checkpoint",
+    "description": "Baseline quiz for grade 6 Arts & Music: Creative Composition Studio.",
+    "estimatedDuration": 10,
+    "standards": [
+      "VA.6.CR.1",
+      "MU.6.RE.7"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 6 Creative Composition Studio, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.6.CR.1",
+          "MU.6.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 6 task for Creative Composition Studio feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.6.CR.1",
+          "MU.6.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 6 work on Creative Composition Studio during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.6.CR.1",
+          "MU.6.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 6 Creative Composition Studio strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.6.CR.1",
+          "MU.6.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "7-electives-arts-and-music-creative-composition-studio": {
+    "title": "Creative Composition Studio Checkpoint",
+    "description": "Baseline quiz for grade 7 Arts & Music: Creative Composition Studio.",
+    "estimatedDuration": 10,
+    "standards": [
+      "VA.7.CR.1",
+      "MU.7.RE.7"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 7 Creative Composition Studio, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.7.CR.1",
+          "MU.7.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 7 task for Creative Composition Studio feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.7.CR.1",
+          "MU.7.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 7 work on Creative Composition Studio during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.7.CR.1",
+          "MU.7.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 7 Creative Composition Studio strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.7.CR.1",
+          "MU.7.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      }
+    ]
+  },
+  "8-electives-arts-and-music-creative-composition-studio": {
+    "title": "Creative Composition Studio Checkpoint",
+    "description": "Baseline quiz for grade 8 Arts & Music: Creative Composition Studio.",
+    "estimatedDuration": 10,
+    "standards": [
+      "VA.8.CR.1",
+      "MU.8.RE.7"
+    ],
+    "questions": [
+      {
+        "prompt": "In grade 8 Creative Composition Studio, during guided practice, which response best shows that the student used evidence rather than guessing?",
+        "type": "multiple_choice",
+        "difficulty": 1,
+        "explanation": "A strong response names specific evidence and connects it to the answer.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.8.CR.1",
+          "MU.8.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "evidence"
+        ],
+        "options": [
+          {
+            "text": "The student names specific evidence and explains how it supports the answer.",
+            "isCorrect": true,
+            "feedback": "Correct. Evidence plus explanation makes the response stronger."
+          },
+          {
+            "text": "The student writes only that the answer looks right.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "The student chooses the longest answer without checking it.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "The student ignores the task and gives an unrelated fact.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "A grade 8 task for Creative Composition Studio feels confusing during guided practice. What should the student do first?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The first step is to restate the task and identify the useful information.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.8.CR.1",
+          "MU.8.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "strategy"
+        ],
+        "options": [
+          {
+            "text": "Restate the task and identify the useful information.",
+            "isCorrect": true,
+            "feedback": "Correct. Clarifying the task makes the strategy easier to choose."
+          },
+          {
+            "text": "Skip the evidence and write any answer.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Change the topic to something easier.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Copy a sentence without checking whether it fits.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "Which revision would most improve grade 8 work on Creative Composition Studio during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 2,
+        "explanation": "The best revision adds clarity, accuracy, or stronger support.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.8.CR.1",
+          "MU.8.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "revision"
+        ],
+        "options": [
+          {
+            "text": "Add a specific example, label, quote, data point, or source detail.",
+            "isCorrect": true,
+            "feedback": "Correct. Revision should strengthen the reasoning or support."
+          },
+          {
+            "text": "Remove the explanation because the answer is enough.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "Make the response shorter by deleting all evidence.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "Add a decorative detail that does not support the answer.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
+      },
+      {
+        "prompt": "How does grade 8 Creative Composition Studio strengthen transfer during guided practice?",
+        "type": "multiple_choice",
+        "difficulty": 3,
+        "explanation": "The module builds transfer by asking students to apply, explain, and revise.",
+        "skills": [
+          "electives_arts_and_music_creative_composition_studio"
+        ],
+        "standards": [
+          "VA.8.CR.1",
+          "MU.8.RE.7"
+        ],
+        "tags": [
+          "depth-expansion",
+          "transfer"
+        ],
+        "options": [
+          {
+            "text": "It asks students to apply a skill, explain reasoning, and revise work.",
+            "isCorrect": true,
+            "feedback": "Correct. Fuller curriculum needs application and transfer, not only exposure."
+          },
+          {
+            "text": "It only adds more vocabulary to memorize.",
+            "isCorrect": false,
+            "feedback": "This choice does not match the lesson evidence."
+          },
+          {
+            "text": "It replaces all other modules in the subject.",
+            "isCorrect": false,
+            "feedback": "Check the task, labels, and reasoning before choosing."
+          },
+          {
+            "text": "It avoids evidence so the task is faster.",
+            "isCorrect": false,
+            "feedback": "Try again by naming the main concept first."
+          }
+        ]
       }
     ]
   }

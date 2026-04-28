@@ -1,0 +1,3913 @@
+{
+  "version": 1,
+  "scope": {
+    "subject": "Mathematics",
+    "grades": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "purpose": "Prerequisite-aware adaptive routing for a 3-8 homeschool math spine. Grade is a placement prior; mastery evidence can move a student up, down, or across strands."
+  },
+  "adaptive_strands": [
+    {
+      "id": "place_value_operations",
+      "label": "Place Value and Operations",
+      "placement_priority": 1,
+      "description": "Whole-number size, operations, rounding, estimation, and fluency foundations."
+    },
+    {
+      "id": "fractions_decimals",
+      "label": "Fractions and Decimals",
+      "placement_priority": 2,
+      "description": "Fraction concepts, equivalence, decimal notation, and rational-number readiness."
+    },
+    {
+      "id": "ratios_rates_percent",
+      "label": "Ratios, Rates, and Percent",
+      "placement_priority": 3,
+      "description": "Ratio reasoning, proportional relationships, rates, and percent applications."
+    },
+    {
+      "id": "expressions_equations_functions",
+      "label": "Expressions, Equations, and Functions",
+      "placement_priority": 4,
+      "description": "Patterns, variables, equations, functions, and symbolic reasoning."
+    },
+    {
+      "id": "geometry_measurement",
+      "label": "Geometry and Measurement",
+      "placement_priority": 5,
+      "description": "Shapes, measurement, coordinate geometry, transformations, similarity, and volume."
+    },
+    {
+      "id": "data_probability_statistics",
+      "label": "Data, Probability, and Statistics",
+      "placement_priority": 6,
+      "description": "Tables, graphs, center, probability, two-way tables, scatterplots, and sampling."
+    },
+    {
+      "id": "problem_solving_modeling",
+      "label": "Problem Solving and Modeling",
+      "placement_priority": 7,
+      "description": "Multi-step word problems, modeling, error analysis, performance tasks, and applications."
+    }
+  ],
+  "policy": {
+    "root_module_rule": "Modules with no prerequisites are valid diagnostic roots or backfill roots. They should be short enough to verify quickly before assigning later content.",
+    "prerequisite_rule": "A module may depend on prior-grade same-concept content and same-grade enabling concepts. Same-grade dependencies must point to lower sequence_order modules.",
+    "adaptation_rule": "Use diagnostics and recent evidence to choose the next module by strand. Strong mastery can advance to challenge_targets; repeated misses should assign remediation_targets first."
+  },
+  "modules": [
+    {
+      "slug": "3-mathematics-number-and-operations-place-value-thousands-millions",
+      "grade": 3,
+      "title": "Place Value (thousands/millions)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "place_value",
+      "sequence_order": 3010,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "place_value",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [],
+      "challenge_targets": [
+        "3-mathematics-number-and-operations-multiplication-division",
+        "3-mathematics-depth-and-application-estimation-strategies",
+        "3-mathematics-number-and-operations-rounding-and-estimation",
+        "3-mathematics-number-and-operations-decimals-intro",
+        "3-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "3-mathematics-number-and-operations-multiplication-division",
+      "grade": 3,
+      "title": "Multiplication/Division",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "multiplication_division",
+      "sequence_order": 3020,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "multiplication_division",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "3-mathematics-geometry-and-measurement-area-perimeter",
+        "3-mathematics-data-and-probability-statistics-mean-median-mode",
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ]
+    },
+    {
+      "slug": "3-mathematics-depth-and-application-estimation-strategies",
+      "grade": 3,
+      "title": "Estimation Strategies",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 3030,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "3-mathematics-number-and-operations-rounding-and-estimation",
+      "grade": 3,
+      "title": "Rounding & Estimation",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 3030,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "3-mathematics-depth-and-application-error-analysis-and-revision",
+        "3-mathematics-depth-and-application-mathematical-modeling",
+        "3-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "4-mathematics-depth-and-application-estimation-strategies",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ]
+    },
+    {
+      "slug": "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "grade": 3,
+      "title": "Fractions (concepts, equivalence)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "fractions",
+      "sequence_order": 3040,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "fractions",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "3-mathematics-number-and-operations-decimals-intro",
+        "3-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ]
+    },
+    {
+      "slug": "3-mathematics-number-and-operations-decimals-intro",
+      "grade": 3,
+      "title": "Decimals (intro)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "decimals",
+      "sequence_order": 3050,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions",
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "decimals",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions",
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-decimals-intro"
+      ]
+    },
+    {
+      "slug": "3-mathematics-depth-and-application-patterns-and-rules",
+      "grade": 3,
+      "title": "Patterns and Rules",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "patterns_rules",
+      "sequence_order": 3090,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "patterns_rules",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "4-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "3-mathematics-geometry-and-measurement-angles-and-lines",
+      "grade": 3,
+      "title": "Angles & Lines",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "angles_lines",
+      "sequence_order": 3120,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "angles_lines",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [],
+      "challenge_targets": [
+        "3-mathematics-geometry-and-measurement-transformations-intro",
+        "4-mathematics-geometry-and-measurement-angles-and-lines"
+      ]
+    },
+    {
+      "slug": "3-mathematics-geometry-and-measurement-area-perimeter",
+      "grade": 3,
+      "title": "Area/Perimeter",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "area_perimeter",
+      "sequence_order": 3130,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "area_perimeter",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "3-mathematics-geometry-and-measurement-volume",
+        "4-mathematics-geometry-and-measurement-area-perimeter"
+      ]
+    },
+    {
+      "slug": "3-mathematics-geometry-and-measurement-volume",
+      "grade": 3,
+      "title": "Volume",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "volume",
+      "sequence_order": 3140,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "volume",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "challenge_targets": [
+        "4-mathematics-geometry-and-measurement-volume"
+      ]
+    },
+    {
+      "slug": "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+      "grade": 3,
+      "title": "Coordinate Plane (Quadrant I)",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "coordinate_geometry",
+      "sequence_order": 3150,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "coordinate_geometry",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "3-mathematics-geometry-and-measurement-transformations-intro",
+        "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ]
+    },
+    {
+      "slug": "3-mathematics-geometry-and-measurement-transformations-intro",
+      "grade": 3,
+      "title": "Transformations (intro)",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "transformations",
+      "sequence_order": 3160,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-angles-and-lines",
+        "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "transformations",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-angles-and-lines",
+        "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ],
+      "challenge_targets": [
+        "4-mathematics-geometry-and-measurement-transformations-intro"
+      ]
+    },
+    {
+      "slug": "3-mathematics-data-and-probability-statistics-bar-line-plots",
+      "grade": 3,
+      "title": "Bar/Line Plots",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "bar_line_plots",
+      "sequence_order": 3200,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "bar_line_plots",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-data-and-probability-statistics-bar-line-plots"
+      ]
+    },
+    {
+      "slug": "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+      "grade": 3,
+      "title": "Interpreting Tables/Charts",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "tables_charts",
+      "sequence_order": 3210,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-data-and-probability-statistics-bar-line-plots"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "tables_charts",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-data-and-probability-statistics-bar-line-plots"
+      ],
+      "challenge_targets": [
+        "3-mathematics-data-and-probability-statistics-mean-median-mode",
+        "3-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ]
+    },
+    {
+      "slug": "3-mathematics-data-and-probability-statistics-mean-median-mode",
+      "grade": 3,
+      "title": "Mean/Median/Mode",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "center_spread",
+      "sequence_order": 3220,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "3-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "center_spread",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "3-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "4-mathematics-data-and-probability-statistics-mean-median-mode"
+      ]
+    },
+    {
+      "slug": "3-mathematics-data-and-probability-statistics-intro-probability-experimental",
+      "grade": 3,
+      "title": "Intro Probability (experimental)",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "probability",
+      "sequence_order": 3230,
+      "difficulty": 2,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "probability",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "4-mathematics-data-and-probability-statistics-intro-probability-experimental"
+      ]
+    },
+    {
+      "slug": "3-mathematics-problem-solving-multi-step-word-problems",
+      "grade": 3,
+      "title": "Multi-Step Word Problems",
+      "source_strand": "Problem Solving",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "multi_step_word_problems",
+      "sequence_order": 3270,
+      "difficulty": 2,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-multiplication-division",
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "3-mathematics-number-and-operations-decimals-intro"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "multi_step_word_problems",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-multiplication-division",
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "3-mathematics-number-and-operations-decimals-intro"
+      ],
+      "challenge_targets": [
+        "3-mathematics-depth-and-application-mathematical-modeling",
+        "4-mathematics-problem-solving-multi-step-word-problems"
+      ]
+    },
+    {
+      "slug": "3-mathematics-depth-and-application-error-analysis-and-revision",
+      "grade": 3,
+      "title": "Error Analysis and Revision",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "error_analysis",
+      "sequence_order": 3280,
+      "difficulty": 2,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "error_analysis",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "4-mathematics-depth-and-application-error-analysis-and-revision"
+      ]
+    },
+    {
+      "slug": "3-mathematics-depth-and-application-mathematical-modeling",
+      "grade": 3,
+      "title": "Mathematical Modeling",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "mathematical_modeling",
+      "sequence_order": 3290,
+      "difficulty": 2,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "3-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "mathematical_modeling",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "3-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "3-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "4-mathematics-depth-and-application-mathematical-modeling"
+      ]
+    },
+    {
+      "slug": "3-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+      "grade": 3,
+      "title": "Performance Task: Plan a Field Trip",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "performance_task",
+      "sequence_order": 3300,
+      "difficulty": 4,
+      "estimated_time_minutes": 50,
+      "prerequisites": [
+        "3-mathematics-depth-and-application-mathematical-modeling",
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "3-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "performance_task",
+        "grade_3"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-depth-and-application-mathematical-modeling",
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "3-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "4-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "4-mathematics-number-and-operations-place-value-thousands-millions",
+      "grade": 4,
+      "title": "Place Value (thousands/millions)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "place_value",
+      "sequence_order": 4010,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "place_value",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "4-mathematics-number-and-operations-multiplication-division",
+        "4-mathematics-depth-and-application-estimation-strategies",
+        "4-mathematics-number-and-operations-rounding-and-estimation",
+        "4-mathematics-number-and-operations-decimals-intro",
+        "4-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "4-mathematics-number-and-operations-multiplication-division",
+      "grade": 4,
+      "title": "Multiplication/Division",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "multiplication_division",
+      "sequence_order": 4020,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-multiplication-division",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "multiplication_division",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-multiplication-division",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "4-mathematics-geometry-and-measurement-area-perimeter",
+        "4-mathematics-data-and-probability-statistics-mean-median-mode",
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ]
+    },
+    {
+      "slug": "4-mathematics-depth-and-application-estimation-strategies",
+      "grade": 4,
+      "title": "Estimation Strategies",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 4030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-rounding-and-estimation",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-rounding-and-estimation",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "4-mathematics-number-and-operations-rounding-and-estimation",
+      "grade": 4,
+      "title": "Rounding & Estimation",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 4030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-rounding-and-estimation",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-rounding-and-estimation",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "4-mathematics-depth-and-application-error-analysis-and-revision",
+        "4-mathematics-depth-and-application-mathematical-modeling",
+        "4-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "5-mathematics-depth-and-application-estimation-strategies",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ]
+    },
+    {
+      "slug": "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "grade": 4,
+      "title": "Fractions (concepts, equivalence)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "fractions",
+      "sequence_order": 4040,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "fractions",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "4-mathematics-number-and-operations-decimals-intro",
+        "4-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ]
+    },
+    {
+      "slug": "4-mathematics-number-and-operations-decimals-intro",
+      "grade": 4,
+      "title": "Decimals (intro)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "decimals",
+      "sequence_order": 4050,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-number-and-operations-decimals-intro",
+        "4-mathematics-number-and-operations-place-value-thousands-millions",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "decimals",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-number-and-operations-decimals-intro",
+        "4-mathematics-number-and-operations-place-value-thousands-millions",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-decimals-intro"
+      ]
+    },
+    {
+      "slug": "4-mathematics-depth-and-application-patterns-and-rules",
+      "grade": 4,
+      "title": "Patterns and Rules",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "patterns_rules",
+      "sequence_order": 4090,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-depth-and-application-patterns-and-rules",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "patterns_rules",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-depth-and-application-patterns-and-rules",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "5-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "4-mathematics-geometry-and-measurement-angles-and-lines",
+      "grade": 4,
+      "title": "Angles & Lines",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "angles_lines",
+      "sequence_order": 4120,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-angles-and-lines"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "angles_lines",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-angles-and-lines"
+      ],
+      "challenge_targets": [
+        "4-mathematics-geometry-and-measurement-transformations-intro",
+        "5-mathematics-geometry-and-measurement-angles-and-lines"
+      ]
+    },
+    {
+      "slug": "4-mathematics-geometry-and-measurement-area-perimeter",
+      "grade": 4,
+      "title": "Area/Perimeter",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "area_perimeter",
+      "sequence_order": 4130,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-area-perimeter",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "area_perimeter",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-area-perimeter",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "4-mathematics-geometry-and-measurement-volume",
+        "5-mathematics-geometry-and-measurement-area-perimeter"
+      ]
+    },
+    {
+      "slug": "4-mathematics-geometry-and-measurement-volume",
+      "grade": 4,
+      "title": "Volume",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "volume",
+      "sequence_order": 4140,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-volume",
+        "4-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "volume",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-volume",
+        "4-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "challenge_targets": [
+        "5-mathematics-geometry-and-measurement-volume"
+      ]
+    },
+    {
+      "slug": "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+      "grade": 4,
+      "title": "Coordinate Plane (Quadrant I)",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "coordinate_geometry",
+      "sequence_order": 4150,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "coordinate_geometry",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "4-mathematics-geometry-and-measurement-transformations-intro",
+        "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ]
+    },
+    {
+      "slug": "4-mathematics-geometry-and-measurement-transformations-intro",
+      "grade": 4,
+      "title": "Transformations (intro)",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "transformations",
+      "sequence_order": 4160,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-geometry-and-measurement-transformations-intro",
+        "4-mathematics-geometry-and-measurement-angles-and-lines",
+        "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "transformations",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-geometry-and-measurement-transformations-intro",
+        "4-mathematics-geometry-and-measurement-angles-and-lines",
+        "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ],
+      "challenge_targets": [
+        "5-mathematics-geometry-and-measurement-transformations-intro"
+      ]
+    },
+    {
+      "slug": "4-mathematics-data-and-probability-statistics-bar-line-plots",
+      "grade": 4,
+      "title": "Bar/Line Plots",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "bar_line_plots",
+      "sequence_order": 4200,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-data-and-probability-statistics-bar-line-plots",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "bar_line_plots",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-data-and-probability-statistics-bar-line-plots",
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-data-and-probability-statistics-bar-line-plots"
+      ]
+    },
+    {
+      "slug": "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+      "grade": 4,
+      "title": "Interpreting Tables/Charts",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "tables_charts",
+      "sequence_order": 4210,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-data-and-probability-statistics-bar-line-plots"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "tables_charts",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-data-and-probability-statistics-bar-line-plots"
+      ],
+      "challenge_targets": [
+        "4-mathematics-data-and-probability-statistics-mean-median-mode",
+        "4-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ]
+    },
+    {
+      "slug": "4-mathematics-data-and-probability-statistics-mean-median-mode",
+      "grade": 4,
+      "title": "Mean/Median/Mode",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "center_spread",
+      "sequence_order": 4220,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-data-and-probability-statistics-mean-median-mode",
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "center_spread",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-data-and-probability-statistics-mean-median-mode",
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "5-mathematics-data-and-probability-statistics-mean-median-mode"
+      ]
+    },
+    {
+      "slug": "4-mathematics-data-and-probability-statistics-intro-probability-experimental",
+      "grade": 4,
+      "title": "Intro Probability (experimental)",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "probability",
+      "sequence_order": 4230,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "3-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "probability",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "5-mathematics-data-and-probability-statistics-intro-probability-experimental"
+      ]
+    },
+    {
+      "slug": "4-mathematics-problem-solving-multi-step-word-problems",
+      "grade": 4,
+      "title": "Multi-Step Word Problems",
+      "source_strand": "Problem Solving",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "multi_step_word_problems",
+      "sequence_order": 4270,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-multiplication-division",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "4-mathematics-number-and-operations-decimals-intro"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "multi_step_word_problems",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-multiplication-division",
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "4-mathematics-number-and-operations-decimals-intro"
+      ],
+      "challenge_targets": [
+        "4-mathematics-depth-and-application-mathematical-modeling",
+        "5-mathematics-problem-solving-multi-step-word-problems"
+      ]
+    },
+    {
+      "slug": "4-mathematics-depth-and-application-error-analysis-and-revision",
+      "grade": 4,
+      "title": "Error Analysis and Revision",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "error_analysis",
+      "sequence_order": 4280,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "3-mathematics-depth-and-application-error-analysis-and-revision",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "error_analysis",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-depth-and-application-error-analysis-and-revision",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "5-mathematics-depth-and-application-error-analysis-and-revision"
+      ]
+    },
+    {
+      "slug": "4-mathematics-depth-and-application-mathematical-modeling",
+      "grade": 4,
+      "title": "Mathematical Modeling",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "mathematical_modeling",
+      "sequence_order": 4290,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "3-mathematics-depth-and-application-mathematical-modeling",
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "mathematical_modeling",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-depth-and-application-mathematical-modeling",
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "4-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "5-mathematics-depth-and-application-mathematical-modeling"
+      ]
+    },
+    {
+      "slug": "4-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+      "grade": 4,
+      "title": "Performance Task: Plan a Field Trip",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "performance_task",
+      "sequence_order": 4300,
+      "difficulty": 4,
+      "estimated_time_minutes": 50,
+      "prerequisites": [
+        "3-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "4-mathematics-depth-and-application-mathematical-modeling",
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "performance_task",
+        "grade_4"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "3-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "4-mathematics-depth-and-application-mathematical-modeling",
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "4-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "5-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "5-mathematics-number-and-operations-place-value-thousands-millions",
+      "grade": 5,
+      "title": "Place Value (thousands/millions)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "place_value",
+      "sequence_order": 5010,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "place_value",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "5-mathematics-number-and-operations-multiplication-division",
+        "5-mathematics-depth-and-application-estimation-strategies",
+        "5-mathematics-number-and-operations-rounding-and-estimation",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "5-mathematics-number-and-operations-multiplication-division",
+      "grade": 5,
+      "title": "Multiplication/Division",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "multiplication_division",
+      "sequence_order": 5020,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-number-and-operations-multiplication-division",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "multiplication_division",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-number-and-operations-multiplication-division",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-geometry-and-measurement-area-perimeter",
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-problem-solving-multi-step-word-problems",
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ]
+    },
+    {
+      "slug": "5-mathematics-depth-and-application-estimation-strategies",
+      "grade": 5,
+      "title": "Estimation Strategies",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 5030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-number-and-operations-rounding-and-estimation",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-number-and-operations-rounding-and-estimation",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "5-mathematics-number-and-operations-rounding-and-estimation",
+      "grade": 5,
+      "title": "Rounding & Estimation",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 5030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-number-and-operations-rounding-and-estimation",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-number-and-operations-rounding-and-estimation",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "5-mathematics-depth-and-application-error-analysis-and-revision",
+        "5-mathematics-depth-and-application-mathematical-modeling",
+        "5-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ]
+    },
+    {
+      "slug": "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+      "grade": 5,
+      "title": "Fractions (concepts, equivalence)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "fractions",
+      "sequence_order": 5040,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "fractions",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "5-mathematics-problem-solving-multi-step-word-problems",
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "6-mathematics-number-and-operations-integers-and-rational-numbers"
+      ]
+    },
+    {
+      "slug": "5-mathematics-number-and-operations-decimals-intro",
+      "grade": 5,
+      "title": "Decimals (intro)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "decimals",
+      "sequence_order": 5050,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-place-value-thousands-millions",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "decimals",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-place-value-thousands-millions",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "5-mathematics-problem-solving-multi-step-word-problems",
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "6-mathematics-number-and-operations-integers-and-rational-numbers",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "7-mathematics-number-and-operations-integers-and-rational-numbers"
+      ]
+    },
+    {
+      "slug": "5-mathematics-depth-and-application-patterns-and-rules",
+      "grade": 5,
+      "title": "Patterns and Rules",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "patterns_rules",
+      "sequence_order": 5090,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-depth-and-application-patterns-and-rules",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "patterns_rules",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-depth-and-application-patterns-and-rules",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "6-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "5-mathematics-geometry-and-measurement-angles-and-lines",
+      "grade": 5,
+      "title": "Angles & Lines",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "angles_lines",
+      "sequence_order": 5120,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-geometry-and-measurement-angles-and-lines"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "angles_lines",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-geometry-and-measurement-angles-and-lines"
+      ],
+      "challenge_targets": [
+        "5-mathematics-geometry-and-measurement-transformations-intro"
+      ]
+    },
+    {
+      "slug": "5-mathematics-geometry-and-measurement-area-perimeter",
+      "grade": 5,
+      "title": "Area/Perimeter",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "area_perimeter",
+      "sequence_order": 5130,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-geometry-and-measurement-area-perimeter",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "area_perimeter",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-geometry-and-measurement-area-perimeter",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "5-mathematics-geometry-and-measurement-volume",
+        "6-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ]
+    },
+    {
+      "slug": "5-mathematics-geometry-and-measurement-volume",
+      "grade": 5,
+      "title": "Volume",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "volume",
+      "sequence_order": 5140,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-geometry-and-measurement-volume",
+        "5-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "volume",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-geometry-and-measurement-volume",
+        "5-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+      "grade": 5,
+      "title": "Coordinate Plane (Quadrant I)",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "coordinate_geometry",
+      "sequence_order": 5150,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "coordinate_geometry",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "5-mathematics-geometry-and-measurement-transformations-intro",
+        "6-mathematics-geometry-and-measurement-coordinate-geometry"
+      ]
+    },
+    {
+      "slug": "5-mathematics-geometry-and-measurement-transformations-intro",
+      "grade": 5,
+      "title": "Transformations (intro)",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "transformations",
+      "sequence_order": 5160,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-geometry-and-measurement-transformations-intro",
+        "5-mathematics-geometry-and-measurement-angles-and-lines",
+        "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "transformations",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-geometry-and-measurement-transformations-intro",
+        "5-mathematics-geometry-and-measurement-angles-and-lines",
+        "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i"
+      ],
+      "challenge_targets": [
+        "6-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ]
+    },
+    {
+      "slug": "5-mathematics-data-and-probability-statistics-bar-line-plots",
+      "grade": 5,
+      "title": "Bar/Line Plots",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "bar_line_plots",
+      "sequence_order": 5200,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-data-and-probability-statistics-bar-line-plots",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "bar_line_plots",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-data-and-probability-statistics-bar-line-plots",
+        "5-mathematics-number-and-operations-place-value-thousands-millions"
+      ],
+      "challenge_targets": [
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ]
+    },
+    {
+      "slug": "5-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+      "grade": 5,
+      "title": "Interpreting Tables/Charts",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "tables_charts",
+      "sequence_order": 5210,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-data-and-probability-statistics-bar-line-plots"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "tables_charts",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-data-and-probability-statistics-bar-line-plots"
+      ],
+      "challenge_targets": [
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "6-mathematics-data-and-probability-statistics-two-way-tables",
+        "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro"
+      ]
+    },
+    {
+      "slug": "5-mathematics-data-and-probability-statistics-mean-median-mode",
+      "grade": 5,
+      "title": "Mean/Median/Mode",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "center_spread",
+      "sequence_order": 5220,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "center_spread",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "8-mathematics-data-and-probability-statistics-sampling-and-inference-intro"
+      ]
+    },
+    {
+      "slug": "5-mathematics-data-and-probability-statistics-intro-probability-experimental",
+      "grade": 5,
+      "title": "Intro Probability (experimental)",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "probability",
+      "sequence_order": 5230,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "4-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "probability",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "6-mathematics-data-and-probability-statistics-probability-rules"
+      ]
+    },
+    {
+      "slug": "5-mathematics-problem-solving-multi-step-word-problems",
+      "grade": 5,
+      "title": "Multi-Step Word Problems",
+      "source_strand": "Problem Solving",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "multi_step_word_problems",
+      "sequence_order": 5270,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-multiplication-division",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "multi_step_word_problems",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-multiplication-division",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro"
+      ],
+      "challenge_targets": [
+        "5-mathematics-depth-and-application-mathematical-modeling"
+      ]
+    },
+    {
+      "slug": "5-mathematics-depth-and-application-error-analysis-and-revision",
+      "grade": 5,
+      "title": "Error Analysis and Revision",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "error_analysis",
+      "sequence_order": 5280,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "4-mathematics-depth-and-application-error-analysis-and-revision",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "error_analysis",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-depth-and-application-error-analysis-and-revision",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "6-mathematics-depth-and-application-error-analysis-and-revision"
+      ]
+    },
+    {
+      "slug": "5-mathematics-depth-and-application-mathematical-modeling",
+      "grade": 5,
+      "title": "Mathematical Modeling",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "mathematical_modeling",
+      "sequence_order": 5290,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "4-mathematics-depth-and-application-mathematical-modeling",
+        "5-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "mathematical_modeling",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-depth-and-application-mathematical-modeling",
+        "5-mathematics-problem-solving-multi-step-word-problems",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "5-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "6-mathematics-depth-and-application-mathematical-modeling"
+      ]
+    },
+    {
+      "slug": "5-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+      "grade": 5,
+      "title": "Performance Task: Plan a Field Trip",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "performance_task",
+      "sequence_order": 5300,
+      "difficulty": 4,
+      "estimated_time_minutes": 50,
+      "prerequisites": [
+        "4-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "5-mathematics-depth-and-application-mathematical-modeling",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "performance_task",
+        "grade_5"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "4-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "5-mathematics-depth-and-application-mathematical-modeling",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts",
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "6-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "6-mathematics-depth-and-application-estimation-strategies",
+      "grade": 6,
+      "title": "Estimation Strategies",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 6030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-number-and-operations-rounding-and-estimation"
+      ],
+      "challenge_targets": [
+        "6-mathematics-depth-and-application-error-analysis-and-revision",
+        "6-mathematics-depth-and-application-mathematical-modeling",
+        "6-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ]
+    },
+    {
+      "slug": "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "grade": 6,
+      "title": "Ratios & Proportional Reasoning",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "ratios_rates_percent",
+      "concept": "ratios",
+      "sequence_order": 6060,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "ratios_rates_percent",
+        "ratios",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "6-mathematics-number-and-operations-percent-and-rates",
+        "6-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "6-mathematics-data-and-probability-statistics-probability-rules",
+        "6-mathematics-data-and-probability-statistics-two-way-tables",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ]
+    },
+    {
+      "slug": "6-mathematics-number-and-operations-percent-and-rates",
+      "grade": 6,
+      "title": "Percent & Rates",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "ratios_rates_percent",
+      "concept": "percent_rates",
+      "sequence_order": 6070,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "diagnostic_tags": [
+        "ratios_rates_percent",
+        "percent_rates",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "challenge_targets": [
+        "7-mathematics-number-and-operations-percent-and-rates"
+      ]
+    },
+    {
+      "slug": "6-mathematics-number-and-operations-integers-and-rational-numbers",
+      "grade": 6,
+      "title": "Integers & Rational Numbers",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "integers_rational_numbers",
+      "sequence_order": 6080,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "integers_rational_numbers",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "6-mathematics-number-and-operations-expressions-and-equations",
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "7-mathematics-number-and-operations-integers-and-rational-numbers"
+      ]
+    },
+    {
+      "slug": "6-mathematics-depth-and-application-patterns-and-rules",
+      "grade": 6,
+      "title": "Patterns and Rules",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "patterns_rules",
+      "sequence_order": 6090,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-depth-and-application-patterns-and-rules"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "patterns_rules",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-depth-and-application-patterns-and-rules"
+      ],
+      "challenge_targets": [
+        "6-mathematics-number-and-operations-expressions-and-equations",
+        "7-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "6-mathematics-number-and-operations-expressions-and-equations",
+      "grade": 6,
+      "title": "Expressions & Equations",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "expressions_equations",
+      "sequence_order": 6100,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-depth-and-application-patterns-and-rules",
+        "6-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "expressions_equations",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-depth-and-application-patterns-and-rules",
+        "6-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "challenge_targets": [
+        "6-mathematics-number-and-operations-functions-intro",
+        "6-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "7-mathematics-number-and-operations-expressions-and-equations"
+      ]
+    },
+    {
+      "slug": "6-mathematics-number-and-operations-functions-intro",
+      "grade": 6,
+      "title": "Functions (intro)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "functions",
+      "sequence_order": 6110,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "functions",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "challenge_targets": [
+        "7-mathematics-number-and-operations-functions-intro"
+      ]
+    },
+    {
+      "slug": "6-mathematics-geometry-and-measurement-volume-and-surface-area",
+      "grade": 6,
+      "title": "Volume & Surface Area",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "area_perimeter",
+      "sequence_order": 6130,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "area_perimeter",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-geometry-and-measurement-area-perimeter"
+      ],
+      "challenge_targets": [
+        "7-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ]
+    },
+    {
+      "slug": "6-mathematics-geometry-and-measurement-coordinate-geometry",
+      "grade": 6,
+      "title": "Coordinate Geometry",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "coordinate_geometry",
+      "sequence_order": 6150,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+        "6-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "coordinate_geometry",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-geometry-and-measurement-coordinate-plane-quadrant-i",
+        "6-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "challenge_targets": [
+        "6-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "6-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry"
+      ]
+    },
+    {
+      "slug": "6-mathematics-geometry-and-measurement-transformations-and-symmetry",
+      "grade": 6,
+      "title": "Transformations & Symmetry",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "transformations",
+      "sequence_order": 6160,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-geometry-and-measurement-transformations-intro",
+        "6-mathematics-geometry-and-measurement-coordinate-geometry"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "transformations",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-geometry-and-measurement-transformations-intro",
+        "6-mathematics-geometry-and-measurement-coordinate-geometry"
+      ],
+      "challenge_targets": [
+        "6-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "7-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ]
+    },
+    {
+      "slug": "6-mathematics-geometry-and-measurement-similarity-and-congruence",
+      "grade": 6,
+      "title": "Similarity & Congruence",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "similarity_congruence",
+      "sequence_order": 6170,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "6-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "similarity_congruence",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "6-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ],
+      "challenge_targets": [
+        "7-mathematics-geometry-and-measurement-similarity-and-congruence"
+      ]
+    },
+    {
+      "slug": "6-mathematics-geometry-and-measurement-pythagorean-theorem",
+      "grade": 6,
+      "title": "Pythagorean Theorem",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "pythagorean_theorem",
+      "sequence_order": 6180,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "6-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "pythagorean_theorem",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "6-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "challenge_targets": [
+        "7-mathematics-geometry-and-measurement-pythagorean-theorem"
+      ]
+    },
+    {
+      "slug": "6-mathematics-data-and-probability-statistics-probability-rules",
+      "grade": 6,
+      "title": "Probability Rules",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "probability",
+      "sequence_order": 6230,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "probability",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-data-and-probability-statistics-intro-probability-experimental",
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "challenge_targets": [
+        "7-mathematics-data-and-probability-statistics-probability-rules"
+      ]
+    },
+    {
+      "slug": "6-mathematics-data-and-probability-statistics-two-way-tables",
+      "grade": 6,
+      "title": "Two-way Tables",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "two_way_tables",
+      "sequence_order": 6240,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "two_way_tables",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": [
+        "7-mathematics-data-and-probability-statistics-two-way-tables"
+      ]
+    },
+    {
+      "slug": "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+      "grade": 6,
+      "title": "Scatterplots & Correlation",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "scatterplots",
+      "sequence_order": 6250,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "scatterplots",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": [
+        "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation"
+      ]
+    },
+    {
+      "slug": "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+      "grade": 6,
+      "title": "Sampling & Inference (intro)",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "sampling_inference",
+      "sequence_order": 6260,
+      "difficulty": 4,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "sampling_inference",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": [
+        "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro"
+      ]
+    },
+    {
+      "slug": "6-mathematics-depth-and-application-error-analysis-and-revision",
+      "grade": 6,
+      "title": "Error Analysis and Revision",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "error_analysis",
+      "sequence_order": 6280,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "5-mathematics-depth-and-application-error-analysis-and-revision",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "error_analysis",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-depth-and-application-error-analysis-and-revision",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "7-mathematics-depth-and-application-error-analysis-and-revision"
+      ]
+    },
+    {
+      "slug": "6-mathematics-depth-and-application-mathematical-modeling",
+      "grade": 6,
+      "title": "Mathematical Modeling",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "mathematical_modeling",
+      "sequence_order": 6290,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "5-mathematics-depth-and-application-mathematical-modeling",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "mathematical_modeling",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-depth-and-application-mathematical-modeling",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "6-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "7-mathematics-depth-and-application-mathematical-modeling"
+      ]
+    },
+    {
+      "slug": "6-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+      "grade": 6,
+      "title": "Performance Task: Plan a Field Trip",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "performance_task",
+      "sequence_order": 6300,
+      "difficulty": 5,
+      "estimated_time_minutes": 50,
+      "prerequisites": [
+        "5-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "6-mathematics-depth-and-application-mathematical-modeling",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "performance_task",
+        "grade_6"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "5-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "6-mathematics-depth-and-application-mathematical-modeling",
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "7-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "7-mathematics-depth-and-application-estimation-strategies",
+      "grade": 7,
+      "title": "Estimation Strategies",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 7030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "7-mathematics-depth-and-application-error-analysis-and-revision",
+        "7-mathematics-depth-and-application-mathematical-modeling",
+        "7-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ]
+    },
+    {
+      "slug": "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "grade": 7,
+      "title": "Ratios & Proportional Reasoning",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "ratios_rates_percent",
+      "concept": "ratios",
+      "sequence_order": 7060,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "ratios_rates_percent",
+        "ratios",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "7-mathematics-number-and-operations-percent-and-rates",
+        "7-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "7-mathematics-data-and-probability-statistics-probability-rules",
+        "7-mathematics-data-and-probability-statistics-two-way-tables",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ]
+    },
+    {
+      "slug": "7-mathematics-number-and-operations-percent-and-rates",
+      "grade": 7,
+      "title": "Percent & Rates",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "ratios_rates_percent",
+      "concept": "percent_rates",
+      "sequence_order": 7070,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-percent-and-rates",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "diagnostic_tags": [
+        "ratios_rates_percent",
+        "percent_rates",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-percent-and-rates",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "challenge_targets": [
+        "8-mathematics-number-and-operations-percent-and-rates"
+      ]
+    },
+    {
+      "slug": "7-mathematics-number-and-operations-integers-and-rational-numbers",
+      "grade": 7,
+      "title": "Integers & Rational Numbers",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "integers_rational_numbers",
+      "sequence_order": 7080,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-integers-and-rational-numbers",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "integers_rational_numbers",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-integers-and-rational-numbers",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "7-mathematics-number-and-operations-expressions-and-equations",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "8-mathematics-number-and-operations-integers-and-rational-numbers"
+      ]
+    },
+    {
+      "slug": "7-mathematics-depth-and-application-patterns-and-rules",
+      "grade": 7,
+      "title": "Patterns and Rules",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "patterns_rules",
+      "sequence_order": 7090,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-depth-and-application-patterns-and-rules"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "patterns_rules",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-depth-and-application-patterns-and-rules"
+      ],
+      "challenge_targets": [
+        "7-mathematics-number-and-operations-expressions-and-equations",
+        "8-mathematics-depth-and-application-patterns-and-rules"
+      ]
+    },
+    {
+      "slug": "7-mathematics-number-and-operations-expressions-and-equations",
+      "grade": 7,
+      "title": "Expressions & Equations",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "expressions_equations",
+      "sequence_order": 7100,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-expressions-and-equations",
+        "7-mathematics-depth-and-application-patterns-and-rules",
+        "7-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "expressions_equations",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-expressions-and-equations",
+        "7-mathematics-depth-and-application-patterns-and-rules",
+        "7-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "challenge_targets": [
+        "7-mathematics-number-and-operations-functions-intro",
+        "7-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "8-mathematics-number-and-operations-expressions-and-equations"
+      ]
+    },
+    {
+      "slug": "7-mathematics-number-and-operations-functions-intro",
+      "grade": 7,
+      "title": "Functions (intro)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "functions",
+      "sequence_order": 7110,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-number-and-operations-functions-intro",
+        "7-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "functions",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-number-and-operations-functions-intro",
+        "7-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "challenge_targets": [
+        "8-mathematics-number-and-operations-functions-intro"
+      ]
+    },
+    {
+      "slug": "7-mathematics-geometry-and-measurement-volume-and-surface-area",
+      "grade": 7,
+      "title": "Volume & Surface Area",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "area_perimeter",
+      "sequence_order": 7130,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "area_perimeter",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ],
+      "challenge_targets": [
+        "8-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ]
+    },
+    {
+      "slug": "7-mathematics-geometry-and-measurement-coordinate-geometry",
+      "grade": 7,
+      "title": "Coordinate Geometry",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "coordinate_geometry",
+      "sequence_order": 7150,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "7-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "coordinate_geometry",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-coordinate-geometry",
+        "7-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "challenge_targets": [
+        "7-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "7-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry"
+      ]
+    },
+    {
+      "slug": "7-mathematics-geometry-and-measurement-transformations-and-symmetry",
+      "grade": 7,
+      "title": "Transformations & Symmetry",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "transformations",
+      "sequence_order": 7160,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "transformations",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry"
+      ],
+      "challenge_targets": [
+        "7-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "8-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ]
+    },
+    {
+      "slug": "7-mathematics-geometry-and-measurement-similarity-and-congruence",
+      "grade": 7,
+      "title": "Similarity & Congruence",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "similarity_congruence",
+      "sequence_order": 7170,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "7-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "similarity_congruence",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "7-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ],
+      "challenge_targets": [
+        "8-mathematics-geometry-and-measurement-similarity-and-congruence"
+      ]
+    },
+    {
+      "slug": "7-mathematics-geometry-and-measurement-pythagorean-theorem",
+      "grade": 7,
+      "title": "Pythagorean Theorem",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "pythagorean_theorem",
+      "sequence_order": 7180,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "7-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "pythagorean_theorem",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "7-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "challenge_targets": [
+        "8-mathematics-geometry-and-measurement-pythagorean-theorem"
+      ]
+    },
+    {
+      "slug": "7-mathematics-data-and-probability-statistics-probability-rules",
+      "grade": 7,
+      "title": "Probability Rules",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "probability",
+      "sequence_order": 7230,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-data-and-probability-statistics-probability-rules",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "probability",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-data-and-probability-statistics-probability-rules",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "challenge_targets": [
+        "8-mathematics-data-and-probability-statistics-probability-rules"
+      ]
+    },
+    {
+      "slug": "7-mathematics-data-and-probability-statistics-two-way-tables",
+      "grade": 7,
+      "title": "Two-way Tables",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "two_way_tables",
+      "sequence_order": 7240,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-data-and-probability-statistics-two-way-tables",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "two_way_tables",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-data-and-probability-statistics-two-way-tables",
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": [
+        "8-mathematics-data-and-probability-statistics-two-way-tables"
+      ]
+    },
+    {
+      "slug": "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+      "grade": 7,
+      "title": "Scatterplots & Correlation",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "scatterplots",
+      "sequence_order": 7250,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "scatterplots",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": [
+        "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation"
+      ]
+    },
+    {
+      "slug": "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+      "grade": 7,
+      "title": "Sampling & Inference (intro)",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "sampling_inference",
+      "sequence_order": 7260,
+      "difficulty": 4,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "sampling_inference",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": [
+        "8-mathematics-data-and-probability-statistics-sampling-and-inference-intro"
+      ]
+    },
+    {
+      "slug": "7-mathematics-depth-and-application-error-analysis-and-revision",
+      "grade": 7,
+      "title": "Error Analysis and Revision",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "error_analysis",
+      "sequence_order": 7280,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-depth-and-application-error-analysis-and-revision",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "error_analysis",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-depth-and-application-error-analysis-and-revision",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "8-mathematics-depth-and-application-error-analysis-and-revision"
+      ]
+    },
+    {
+      "slug": "7-mathematics-depth-and-application-mathematical-modeling",
+      "grade": 7,
+      "title": "Mathematical Modeling",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "mathematical_modeling",
+      "sequence_order": 7290,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "6-mathematics-depth-and-application-mathematical-modeling",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "mathematical_modeling",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-depth-and-application-mathematical-modeling",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "7-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "8-mathematics-depth-and-application-mathematical-modeling"
+      ]
+    },
+    {
+      "slug": "7-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+      "grade": 7,
+      "title": "Performance Task: Plan a Field Trip",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "performance_task",
+      "sequence_order": 7300,
+      "difficulty": 5,
+      "estimated_time_minutes": 50,
+      "prerequisites": [
+        "6-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "7-mathematics-depth-and-application-mathematical-modeling",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "performance_task",
+        "grade_7"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "6-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "7-mathematics-depth-and-application-mathematical-modeling",
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "8-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "8-mathematics-depth-and-application-estimation-strategies",
+      "grade": 8,
+      "title": "Estimation Strategies",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "place_value_operations",
+      "concept": "estimation",
+      "sequence_order": 8030,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "place_value_operations",
+        "estimation",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "8-mathematics-depth-and-application-error-analysis-and-revision",
+        "8-mathematics-depth-and-application-mathematical-modeling",
+        "8-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+      "grade": 8,
+      "title": "Ratios & Proportional Reasoning",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "ratios_rates_percent",
+      "concept": "ratios",
+      "sequence_order": 8060,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "diagnostic_tags": [
+        "ratios_rates_percent",
+        "ratios",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-multiplication-division"
+      ],
+      "challenge_targets": [
+        "8-mathematics-number-and-operations-percent-and-rates",
+        "8-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "8-mathematics-data-and-probability-statistics-probability-rules",
+        "8-mathematics-data-and-probability-statistics-two-way-tables"
+      ]
+    },
+    {
+      "slug": "8-mathematics-number-and-operations-percent-and-rates",
+      "grade": 8,
+      "title": "Percent & Rates",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "ratios_rates_percent",
+      "concept": "percent_rates",
+      "sequence_order": 8070,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-number-and-operations-percent-and-rates",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "diagnostic_tags": [
+        "ratios_rates_percent",
+        "percent_rates",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-number-and-operations-percent-and-rates",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-number-and-operations-integers-and-rational-numbers",
+      "grade": 8,
+      "title": "Integers & Rational Numbers",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "fractions_decimals",
+      "concept": "integers_rational_numbers",
+      "sequence_order": 8080,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-number-and-operations-integers-and-rational-numbers",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "diagnostic_tags": [
+        "fractions_decimals",
+        "integers_rational_numbers",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-number-and-operations-integers-and-rational-numbers",
+        "5-mathematics-number-and-operations-decimals-intro",
+        "5-mathematics-number-and-operations-fractions-concepts-equivalence"
+      ],
+      "challenge_targets": [
+        "8-mathematics-number-and-operations-expressions-and-equations",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry"
+      ]
+    },
+    {
+      "slug": "8-mathematics-depth-and-application-patterns-and-rules",
+      "grade": 8,
+      "title": "Patterns and Rules",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "patterns_rules",
+      "sequence_order": 8090,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-depth-and-application-patterns-and-rules"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "patterns_rules",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-depth-and-application-patterns-and-rules"
+      ],
+      "challenge_targets": [
+        "8-mathematics-number-and-operations-expressions-and-equations"
+      ]
+    },
+    {
+      "slug": "8-mathematics-number-and-operations-expressions-and-equations",
+      "grade": 8,
+      "title": "Expressions & Equations",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "expressions_equations",
+      "sequence_order": 8100,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "7-mathematics-number-and-operations-expressions-and-equations",
+        "8-mathematics-depth-and-application-patterns-and-rules",
+        "8-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "expressions_equations",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-number-and-operations-expressions-and-equations",
+        "8-mathematics-depth-and-application-patterns-and-rules",
+        "8-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "challenge_targets": [
+        "8-mathematics-number-and-operations-functions-intro",
+        "8-mathematics-geometry-and-measurement-pythagorean-theorem"
+      ]
+    },
+    {
+      "slug": "8-mathematics-number-and-operations-functions-intro",
+      "grade": 8,
+      "title": "Functions (intro)",
+      "source_strand": "Number & Operations",
+      "adaptive_strand": "expressions_equations_functions",
+      "concept": "functions",
+      "sequence_order": 8110,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "7-mathematics-number-and-operations-functions-intro",
+        "8-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "diagnostic_tags": [
+        "expressions_equations_functions",
+        "functions",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-number-and-operations-functions-intro",
+        "8-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-geometry-and-measurement-volume-and-surface-area",
+      "grade": 8,
+      "title": "Volume & Surface Area",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "area_perimeter",
+      "sequence_order": 8130,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "area_perimeter",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-geometry-and-measurement-volume-and-surface-area"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-geometry-and-measurement-coordinate-geometry",
+      "grade": 8,
+      "title": "Coordinate Geometry",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "coordinate_geometry",
+      "sequence_order": 8150,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "8-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "coordinate_geometry",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-geometry-and-measurement-coordinate-geometry",
+        "8-mathematics-number-and-operations-integers-and-rational-numbers"
+      ],
+      "challenge_targets": [
+        "8-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "8-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation"
+      ]
+    },
+    {
+      "slug": "8-mathematics-geometry-and-measurement-transformations-and-symmetry",
+      "grade": 8,
+      "title": "Transformations & Symmetry",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "transformations",
+      "sequence_order": 8160,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "transformations",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-geometry-and-measurement-transformations-and-symmetry",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry"
+      ],
+      "challenge_targets": [
+        "8-mathematics-geometry-and-measurement-similarity-and-congruence"
+      ]
+    },
+    {
+      "slug": "8-mathematics-geometry-and-measurement-similarity-and-congruence",
+      "grade": 8,
+      "title": "Similarity & Congruence",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "similarity_congruence",
+      "sequence_order": 8170,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "7-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "8-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "similarity_congruence",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-geometry-and-measurement-similarity-and-congruence",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "8-mathematics-geometry-and-measurement-transformations-and-symmetry"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-geometry-and-measurement-pythagorean-theorem",
+      "grade": 8,
+      "title": "Pythagorean Theorem",
+      "source_strand": "Geometry & Measurement",
+      "adaptive_strand": "geometry_measurement",
+      "concept": "pythagorean_theorem",
+      "sequence_order": 8180,
+      "difficulty": 4,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "7-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry",
+        "8-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "diagnostic_tags": [
+        "geometry_measurement",
+        "pythagorean_theorem",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-geometry-and-measurement-pythagorean-theorem",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry",
+        "8-mathematics-number-and-operations-expressions-and-equations"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-data-and-probability-statistics-probability-rules",
+      "grade": 8,
+      "title": "Probability Rules",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "probability",
+      "sequence_order": 8230,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-data-and-probability-statistics-probability-rules",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "probability",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-data-and-probability-statistics-probability-rules",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-data-and-probability-statistics-two-way-tables",
+      "grade": 8,
+      "title": "Two-way Tables",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "two_way_tables",
+      "sequence_order": 8240,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-data-and-probability-statistics-two-way-tables",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "two_way_tables",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-data-and-probability-statistics-two-way-tables",
+        "8-mathematics-number-and-operations-ratios-and-proportional-reasoning",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+      "grade": 8,
+      "title": "Scatterplots & Correlation",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "scatterplots",
+      "sequence_order": 8250,
+      "difficulty": 3,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "scatterplots",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-data-and-probability-statistics-scatterplots-and-correlation",
+        "8-mathematics-geometry-and-measurement-coordinate-geometry",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+      "grade": 8,
+      "title": "Sampling & Inference (intro)",
+      "source_strand": "Data & Probability / Statistics",
+      "adaptive_strand": "data_probability_statistics",
+      "concept": "sampling_inference",
+      "sequence_order": 8260,
+      "difficulty": 4,
+      "estimated_time_minutes": 35,
+      "prerequisites": [
+        "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "diagnostic_tags": [
+        "data_probability_statistics",
+        "sampling_inference",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-data-and-probability-statistics-sampling-and-inference-intro",
+        "5-mathematics-data-and-probability-statistics-mean-median-mode",
+        "5-mathematics-data-and-probability-statistics-interpreting-tables-charts"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-depth-and-application-error-analysis-and-revision",
+      "grade": 8,
+      "title": "Error Analysis and Revision",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "error_analysis",
+      "sequence_order": 8280,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "7-mathematics-depth-and-application-error-analysis-and-revision",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "error_analysis",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-depth-and-application-error-analysis-and-revision",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": []
+    },
+    {
+      "slug": "8-mathematics-depth-and-application-mathematical-modeling",
+      "grade": 8,
+      "title": "Mathematical Modeling",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "mathematical_modeling",
+      "sequence_order": 8290,
+      "difficulty": 3,
+      "estimated_time_minutes": 40,
+      "prerequisites": [
+        "7-mathematics-depth-and-application-mathematical-modeling",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "mathematical_modeling",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-depth-and-application-mathematical-modeling",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": [
+        "8-mathematics-depth-and-application-performance-task-plan-a-field-trip"
+      ]
+    },
+    {
+      "slug": "8-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+      "grade": 8,
+      "title": "Performance Task: Plan a Field Trip",
+      "source_strand": "Depth and Application",
+      "adaptive_strand": "problem_solving_modeling",
+      "concept": "performance_task",
+      "sequence_order": 8300,
+      "difficulty": 5,
+      "estimated_time_minutes": 50,
+      "prerequisites": [
+        "7-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "8-mathematics-depth-and-application-mathematical-modeling",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "diagnostic_tags": [
+        "problem_solving_modeling",
+        "performance_task",
+        "grade_8"
+      ],
+      "mastery_evidence": [
+        "explains the strategy in words",
+        "solves aligned problems without step-by-step hints",
+        "checks the answer for reasonableness"
+      ],
+      "remediation_targets": [
+        "7-mathematics-depth-and-application-performance-task-plan-a-field-trip",
+        "8-mathematics-depth-and-application-mathematical-modeling",
+        "8-mathematics-depth-and-application-estimation-strategies"
+      ],
+      "challenge_targets": []
+    }
+  ]
+}

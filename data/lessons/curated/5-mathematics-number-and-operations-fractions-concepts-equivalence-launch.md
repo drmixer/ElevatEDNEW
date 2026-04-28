@@ -1,62 +1,80 @@
 # Fractions (concepts, equivalence)
 
 ## Learning Goal
-- I can generate equivalent fractions.
-- I can use models to justify why fractions are equivalent.
-- I can compare fractions by reasoning about size.
+- I can explain the main idea of fractions in my own words.
+- I can solve a grade 5 problem using a model, equation, or labeled diagram.
+- I can check whether my answer makes sense and explain my strategy.
 
 ## Introduction
-By Grade 5, students should see equivalent fractions as a multiplicative pattern, not just as matching pictures.
+Students share trays of same-size granola bars. This is the kind of situation where fractions becomes useful. The goal is not to memorize a trick. The goal is to slow down, name what the problem is asking, choose a representation, and use the numbers carefully.
 
-If you multiply the numerator and denominator by the same number, the amount stays the same.
-
-## Visual Model
-![Fraction bars showing equal parts of a whole](/images/lessons/math/fraction_concepts.svg)
-
-This visual helps students connect the symbolic rule for equivalence to a picture of the same whole split in different ways.
-
-## Interactive Follow-Up
-Students can test equivalent fractions and compare bars in [Mathigon Polypad](https://mathigon.org/polypad).
-
-## Video Follow-Up
-Students who need another explanation can review a fraction video set in the [Khan Academy equivalent fractions unit](https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2).
+Strong math work has three parts. First, identify the quantities and labels. Second, choose a model such as a drawing, table, number line, array, or equation. Third, explain why the answer fits the situation. If one of those parts is missing, the answer may be right by luck but hard to trust.
 
 ## Key Vocabulary
-**Equivalent fractions**: Fractions that have the same value.
+**Fraction**: A key idea in this lesson that helps describe the problem accurately.
 
-**Simplify**: Rewrite a fraction in an equivalent form with smaller numbers.
+**Numerator**: A label or tool that helps organize the numbers before solving.
 
-## Worked Example 1: Generate an Equivalent Fraction
-Find an equivalent fraction for `3/4`.
+**Denominator**: A way to describe the size, position, or relationship shown in the model.
 
-Multiply both numbers by `2`:
+**Equivalent fraction**: A check that helps you decide whether the final answer is reasonable.
 
-`3/4 = 6/8`
+## Learn The Big Idea
+When you see a problem about fractions, start by asking, "What is being measured, counted, compared, or changed?" That question keeps the math connected to meaning.
 
-The amount does not change because both the numerator and denominator were scaled by the same factor.
+For this lesson, use a three-step routine:
 
-## Worked Example 2: Compare Two Fractions
-Which is greater: `4/6` or `3/6`?
+1. Read the question and underline the labels.
+2. Build or sketch a model that shows the relationship.
+3. Write an equation or explanation that matches the model.
 
-The denominators are the same, so compare the numerators.
+The model should not be decoration. It should help you see where the answer comes from. A table can show repeated structure. A diagram can show parts and wholes. An equation can show the operation. A sentence can explain the reasoning so another person can follow it.
 
-Because `4` is greater than `3`, `4/6` is greater.
+## Worked Example
+One tray shows 5/8 shaded and another shows an equivalent model with twice as many parts.
 
-## Worked Example 3: Use a Benchmark
-Is `5/8` greater or less than `1/2`?
+Task: compare the size of the parts and explain whether two fractions name the same amount.
 
-Since `1/2 = 4/8`, and `5/8` is more than `4/8`, `5/8` is greater than `1/2`.
+Step 1: Name the quantities. Write down each number with its label so the numbers do not float by themselves.
+
+Step 2: Choose a model. For grade 5, a clear model is often more useful than mental math because it shows the relationship. Sketch it simply and label the important parts.
+
+Step 3: Solve. Use the model to decide which operation or comparison is needed. Then compute carefully.
+
+Step 4: Check. Ask whether the answer is the right kind of quantity. If the problem asks for a comparison, the answer should compare. If it asks for a total, the answer should combine parts. If it asks for a measurement, the answer should include a unit.
+
+## Guided Check
+Try this with a partner or as a self-check:
+
+- What are the labels in the problem?
+- Which model would make the relationship easiest to see?
+- What operation or comparison does the model suggest?
+- How can you tell whether the answer is reasonable?
+
+Explain your thinking in one complete sentence. A strong sentence might begin, "I know this because the model shows..."
 
 ## Common Mistake
-Students sometimes multiply only one part of the fraction.
+A common mistake is comparing only numerators without checking denominators. This mistake usually happens when students move too quickly from the numbers to an operation.
 
-To keep the amount the same, multiply both the numerator and denominator by the same number.
+To avoid it, pause before calculating. Say what each number means. Then point to the part of the model where that number appears. If you cannot point to it, the model or equation needs more labels.
+
+## Independent Practice
+Create your own problem about fractions using a real classroom, sports, art, shopping, or science situation. Include at least two numbers and one clear question. Then solve it using:
+
+- a labeled model
+- an equation
+- a sentence that explains why the answer makes sense
+
+Swap with a partner if possible. Your partner should be able to solve the problem without asking what the numbers mean.
+
+## Explain It Like A Mathematician
+Before moving on, write a short explanation of the strategy. Use the words "because" and "so" at least once. The word "because" should connect your model to the operation or comparison. The word "so" should connect the computation to the final answer.
+
+If the explanation is hard to write, that is useful information. It usually means one label is missing, one step happened too quickly, or the model does not show the relationship clearly enough yet. Revise the model first, then revise the sentence.
 
 ## Summary
-Equivalent fractions make sense when students connect models and number patterns.
+Fractions (concepts, equivalence) is strongest when the numbers stay connected to meaning. Good mathematicians label quantities, choose a useful representation, solve with care, and check the answer against the situation.
 
-A strong explanation includes:
+Remember the routine: name the quantities, model the relationship, solve, and explain. That routine will help you with today's topic and with harder problems later in the year.
 
-1. a visual model or benchmark
-2. a correct equivalent fraction
-3. a reason why the amount stayed the same
+<!-- generated_by: harden_grades_3_5_curriculum.ts; source_slug: 5-mathematics-number-and-operations-fractions-concepts-equivalence; standards: 5.NF.A.1 -->
