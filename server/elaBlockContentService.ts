@@ -4,6 +4,7 @@ import {
   buildElaBlockContent,
   type ElaBlockContent,
 } from '../shared/elaBlockContent.js';
+import { findElaBlockContentPack } from '../shared/elaBlockContentPacks.js';
 import type { DailyPlanBlock, DailyPlanBlockKind } from '../shared/homeschoolDailyPlan.js';
 import type { ElaStrand } from '../shared/elaHomeschool.js';
 import {
@@ -163,17 +164,21 @@ const lessonRank = (
   };
 };
 
+type LessonSelection = {
+  lesson: LessonRow;
+  rank: LessonRank;
+};
+
 const selectLesson = (
   lessons: LessonRow[],
   block: DailyPlanBlock,
   module: ModuleRow | null,
-): LessonRow | null =>
+): LessonSelection | null =>
   lessons
     .filter((lesson) => lessonParagraphs(lesson.content).length > 0)
+    .map((lesson) => ({ lesson, rank: lessonRank(lesson, block, module) }))
     .sort((a, b) => {
-      const aRank = lessonRank(a, block, module);
-      const bRank = lessonRank(b, block, module);
-      return bRank.score - aRank.score || a.id - b.id;
+      return b.rank.score - a.rank.score || a.lesson.id - b.lesson.id;
     })[0] ?? null;
 
 const contentKindForBlock = (
@@ -242,15 +247,29 @@ export const resolveElaBlockContent = async (
 ): Promise<ElaBlockContent> => {
   const module = await fetchModule(supabase, block.moduleSlug);
   const strand = inferStrand(block, module);
+  const fallbackPack = findElaBlockContentPack({
+    blockKind: block.kind,
+    moduleSlug: block.moduleSlug,
+    moduleTitle: module?.title,
+    strand,
+  });
 
   if (!module) {
+    if (fallbackPack) return fallbackPack;
     return fallbackContent(block, null, strand);
   }
 
   const lessons = await fetchLessons(supabase, module.id);
-  const lesson = selectLesson(lessons, block, module);
-  if (!lesson) {
+  const selected = selectLesson(lessons, block, module);
+
+  if (!selected) {
+    if (fallbackPack) return fallbackPack;
     return fallbackContent(block, module.title, strand);
+  }
+
+  const { lesson, rank } = selected;
+  if (fallbackPack && block.kind !== 'lesson' && rank.blockKindScore <= 0) {
+    return fallbackPack;
   }
 
   const body = lessonParagraphs(lesson.content);

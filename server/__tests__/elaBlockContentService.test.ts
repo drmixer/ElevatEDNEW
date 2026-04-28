@@ -28,6 +28,15 @@ const moduleRow = {
   topic: 'Science/Tech Articles',
 };
 
+const grade3ModuleRow = {
+  id: 43,
+  slug: '3-english-language-arts-reading-informational-nonfiction-articles-open-licensed',
+  title: 'Nonfiction Articles',
+  subject: 'English Language Arts',
+  strand: 'reading_informational',
+  topic: 'Nonfiction Articles',
+};
+
 const lessonContent = (topic: string): string =>
   [
     `Students read a short ${topic} passage and identify the clearest claim before answering.`,
@@ -204,6 +213,81 @@ describe('elaBlockContentService', () => {
     expect(content.id).toBe(`ela-authored-lesson::112::${reflectionBlock.id}`);
     expect(content.title).toBe('Science article reflection wrap');
     expect(content.contentKind).toBe('reflection_note');
+  });
+
+  it('uses a Grade 3 authored ELA content pack when no database lesson exists', async () => {
+    const diagnosticBlock: DailyPlanBlock = {
+      ...blockWithKind('diagnostic'),
+      id: `ela-diagnostic-${grade3ModuleRow.slug}`,
+      moduleSlug: grade3ModuleRow.slug,
+    };
+    const supabase = createSupabaseClientMock({
+      modules: {
+        maybeSingle: async () => ({ data: grade3ModuleRow, error: null }),
+      },
+      lessons: {
+        query: async () => ({ data: [], error: null }),
+      },
+    });
+
+    const content = await resolveElaBlockContent(supabase as never, diagnosticBlock);
+
+    expect(content.id).toBe(`ela-content-pack::${grade3ModuleRow.slug}::diagnostic`);
+    expect(content.sourceType).toBe('authored_lesson');
+    expect(content.sourceLabel).toBe('ElevatED authored ELA content pack');
+    expect(content.focus).toBe('show the current starting point');
+    expect(content.body.join(' ')).toContain('Write the main idea');
+  });
+
+  it('uses a Grade 3 authored ELA content pack when the module row is unavailable', async () => {
+    const diagnosticBlock: DailyPlanBlock = {
+      ...blockWithKind('diagnostic'),
+      id: `ela-diagnostic-${grade3ModuleRow.slug}`,
+      moduleSlug: grade3ModuleRow.slug,
+    };
+    const supabase = createSupabaseClientMock({
+      modules: {
+        maybeSingle: async () => ({ data: null, error: null }),
+      },
+    });
+
+    const content = await resolveElaBlockContent(supabase as never, diagnosticBlock);
+
+    expect(content.id).toBe(`ela-content-pack::${grade3ModuleRow.slug}::diagnostic`);
+    expect(content.sourceLabel).toBe('ElevatED authored ELA content pack');
+  });
+
+  it('prefers a block-specific content pack over generic launch content for Grade 3 repair', async () => {
+    const repairBlock: DailyPlanBlock = {
+      ...blockWithKind('repair'),
+      id: `ela-repair-${grade3ModuleRow.slug}`,
+      moduleSlug: grade3ModuleRow.slug,
+    };
+    const supabase = createSupabaseClientMock({
+      modules: {
+        maybeSingle: async () => ({ data: grade3ModuleRow, error: null }),
+      },
+      lessons: {
+        query: async () => ({
+          data: [
+            {
+              id: 100,
+              title: 'Nonfiction article launch',
+              slug: 'nonfiction-article-launch',
+              content: lessonContent('launch'),
+              metadata: { lesson_type: 'launch' },
+            },
+          ],
+          error: null,
+        }),
+      },
+    });
+
+    const content = await resolveElaBlockContent(supabase as never, repairBlock);
+
+    expect(content.id).toBe(`ela-content-pack::${grade3ModuleRow.slug}::repair`);
+    expect(content.title).toBe('Nonfiction Articles repair');
+    expect(content.parentSummary).toContain('authored repair pack');
   });
 
   it('returns null when the requested block is not in the daily plan', async () => {

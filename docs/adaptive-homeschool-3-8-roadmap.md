@@ -301,11 +301,14 @@ Start here in the next session:
 10. Teach the lesson player to open/render a selected adaptive variant. `Done: /student/math/variant/:variantId opens variants from the math daily plan and records scored practice completion.`
 11. Add the first ELA homeschool daily loop. `Done: live ELA plan cards, /student/ela/block/:blockId, deterministic prompts/content, rubric scoring, student ELA adaptation state, and parent weekly ELA work samples.`
 12. Store ELA work samples durably instead of relying only on subject-state metadata. `Done: supabase/migrations/051_student_work_samples.sql, server/elaWorkSamples.ts, event write-through, and weekly ELA record reads that prefer durable samples with metadata fallback.`
+13. Apply and verify the durable ELA work-sample migration in the target Supabase environment. `Done: supabase db push completed through 051_student_work_samples.sql; service-role read check confirmed public.student_work_samples is reachable.`
+14. Add the first authored ELA content-pack layer. `Done: shared/elaBlockContentPacks.ts covers diagnostic, mini-lesson, repair, evidence-practice, and reflection content for the first Grade 3 ELA modules; the resolver prefers these packs when the DB only has generic launch content.`
+15. Split parent homeschool panels out of ParentDashboardSimplified. `Done: math panels live in ParentDashboard/ParentMathPanels.tsx and ELA panels live in ParentDashboard/ParentElaPanels.tsx.`
 
 Next ELA tasks:
-- apply migration `051_student_work_samples.sql` in the target Supabase environment
-- add authored ELA diagnostic, mini-lesson, repair, evidence-practice, and reflection content for the first 3-5 Grade 3 modules
-- split ParentDashboardSimplified ELA/math panels into dedicated files before adding science/social studies loops
+- add more ELA authored content packs for Grade 4-8 once the first Grade 3 loop feels good in real use
+- add a dedicated parent work-sample route or modal if inline detail becomes too crowded
+- add export/reporting views on top of `student_work_samples` once daily use creates enough real samples
 
 Highest-priority math strands:
 - place value and operations
@@ -316,6 +319,15 @@ Highest-priority math strands:
 - expressions and equations
 - word problems and mathematical modeling
 
+Next subject decision:
+- Build Science next as the first lightweight non-ELA loop. It should reuse the durable work-sample pattern, but the completion artifact should be a short CER response, home investigation note, model revision, or data-table explanation.
+- Add Social Studies after Science. Its loop should reuse the same subject-state/work-sample foundation with source-analysis, map/timeline, cause-effect, and civic reasoning prompts.
+
+Storage decision:
+- Keep `student_subject_state` as the current adaptive state snapshot.
+- Keep `student_work_samples` as the durable homeschool portfolio source of truth for written or constructed-response work across ELA, Science, and Social Studies.
+- Add export/report tables only when parent reporting needs exceed what can be derived from `student_work_samples`.
+
 ---
 
 ## 10. New Chat Handoff Prompt
@@ -323,7 +335,7 @@ Highest-priority math strands:
 Use this prompt to resume work in a fresh chat:
 
 ```text
-We are building ElevatED into a 3-8 adaptive homeschool replacement for my son first. Read docs/adaptive-homeschool-3-8-roadmap.md and docs/adaptive-foundation-plan.md, then continue with the next task from the roadmap. Math has the first adaptive spine. ELA now has a lighter homeschool loop with durable work samples. Start by applying/verifying the student_work_samples migration in the target Supabase environment, then add authored ELA content packs for the first Grade 3 modules or refactor ParentDashboardSimplified before adding more subject loops.
+We are building ElevatED into a 3-8 adaptive homeschool replacement for my son first. Read docs/adaptive-homeschool-3-8-roadmap.md and docs/adaptive-foundation-plan.md, then continue with the next task from the roadmap. Math has the first adaptive spine. ELA now has a lighter homeschool loop with durable work samples and first Grade 3 authored content packs. Parent math/ELA homeschool panels have been split out of ParentDashboardSimplified. Start by running a signed-in post-migration ELA smoke if needed, then expand ELA content packs or begin the Science lightweight homeschool loop using student_work_samples as the durable portfolio layer.
 ```
 
 Suggested first commands:
